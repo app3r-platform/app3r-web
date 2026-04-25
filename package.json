@@ -1,0 +1,18 @@
+{
+  "name": "app3r-web",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:admin": "turbo dev --filter=admin",
+    "dev:weeer": "turbo dev --filter=weeer",
+    "dev:weeeu": "turbo dev --filter=weeeu",
+    "dev:weeet": "turbo dev --filter=weeet",
+    "dev:app3r": "turbo dev --filter=app3r",
+    "build": "turbo build",
+    "lint": "turbo lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  },
+  "packageManager": "pnpm@10.8.1"
+}
