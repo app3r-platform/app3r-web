@@ -7,16 +7,18 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 interface User { id: number; full_name: string; role: string; is_approved: boolean; }
+interface PaginatedUsers { items: User[]; total: number; }
 
 export default function Dashboard() {
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
-    api.get<User[]>("/admin/users?limit=5")
-      .then(setUsers)
+    api.get<PaginatedUsers>("/admin/users?limit=5")
+      .then((data) => { setUsers(data.items); setTotal(data.total); })
       .catch(() => router.push("/login"))
       .finally(() => setLoading(false));
   }, [router]);
@@ -36,7 +38,7 @@ export default function Dashboard() {
           <>
             {/* Stat cards */}
             <div className="grid grid-cols-3 gap-4 mb-8">
-              <StatCard icon="👥" label="ผู้ใช้ทั้งหมด" value={users.length} sub="5 ล่าสุด" />
+              <StatCard icon="👥" label="ผู้ใช้ทั้งหมด" value={total} sub="ทั้งระบบ" />
               <StatCard icon="⏳" label="WeeeR รออนุมัติ" value={pending} sub="รอดำเนินการ" alert={pending > 0} />
               <StatCard icon="✅" label="API Status" value="Online" sub="port 8000" green />
             </div>
