@@ -105,6 +105,20 @@ export default function UsersPage() {
     }
   }
 
+  async function handleReactivate(userId: number) {
+    if (!confirm("ต้องการเปิดใช้งานบัญชีนี้อีกครั้ง?")) return;
+    setActionLoading(userId);
+    try {
+      await api.patch(`/admin/users/${userId}/reactivate`);
+      showToast("เปิดใช้งานสำเร็จ ✓", "ok");
+      fetchUsers();
+    } catch (e: unknown) {
+      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   function showToast(msg: string, type: "ok" | "err") {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3500);
@@ -285,7 +299,18 @@ export default function UsersPage() {
                           </button>
                         )}
 
-                        {/* Deactivate — แสดงเฉพาะ user ที่ active และไม่ใช่ตัวเอง */}
+                        {/* Reactivate — แสดงเฉพาะ user ที่ถูกระงับ */}
+                        {!user.is_active && (
+                          <button
+                            onClick={() => handleReactivate(user.id)}
+                            disabled={actionLoading === user.id}
+                            className="px-3 py-1.5 text-xs bg-blue-700 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                          >
+                            {actionLoading === user.id ? "..." : "✓ เปิดใช้งาน"}
+                          </button>
+                        )}
+
+                        {/* Deactivate — แสดงเฉพาะ user ที่ active */}
                         {user.is_active && (
                           <button
                             onClick={() => handleDeactivate(user.id)}
