@@ -5,10 +5,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { removeToken } from "@/lib/auth";
 
 const navItems = [
-  { href: "/",        label: "Dashboard",     icon: "📊" },
-  { href: "/users",   label: "ผู้ใช้งาน",      icon: "👥" },
-  { href: "/config",  label: "ตั้งค่าระบบ",    icon: "⚙️" },
-  { href: "/points",  label: "Point Ledger",   icon: "💰" },
+  { href: "/",           label: "Dashboard",      icon: "📊" },
+  { href: "/users",      label: "ผู้ใช้งาน",       icon: "👥" },
+  { href: "/topup",      label: "อนุมัติเติม Point", icon: "💳" },
+  { href: "/withdrawal", label: "อนุมัติถอนเงิน",   icon: "🏦" },
+  { href: "/disputes",   label: "ข้อพิพาท",         icon: "⚖️" },
+  { href: "/points",     label: "Point Ledger",    icon: "💰" },
+  { href: "/config",     label: "ตั้งค่าระบบ",     icon: "⚙️" },
 ];
 
 export function Sidebar() {
