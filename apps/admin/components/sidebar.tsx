@@ -9,9 +9,10 @@ const navItems = [
   { href: "/users",      label: "ผู้ใช้งาน",       icon: "👥" },
   { href: "/topup",      label: "อนุมัติเติม Point", icon: "💳" },
   { href: "/withdrawal", label: "อนุมัติถอนเงิน",   icon: "🏦" },
-  { href: "/disputes",   label: "ข้อพิพาท",         icon: "⚖️" },
-  { href: "/points",     label: "Point Ledger",    icon: "💰" },
-  { href: "/config",     label: "ตั้งค่าระบบ",     icon: "⚙️" },
+  { href: "/disputes",    label: "ข้อพิพาท",          icon: "⚖️" },
+  { href: "/points",      label: "Point Ledger",    icon: "💰" },
+  { href: "/promotions",  label: "Point & โปรโมชัน", icon: "🎁" },
+  { href: "/config",      label: "ตั้งค่าระบบ",     icon: "⚙️" },
 ];
 
 export function Sidebar() {
