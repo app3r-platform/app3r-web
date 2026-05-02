@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-primary: #1D4ED8;
+  --color-primary-light: #3B82F6;
+  --color-primary-dark: #1E3A8A;
+  --color-accent: #06B6D4;
+  --color-silver: #9CA3AF;
+  --color-gold: #F59E0B;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --sidebar-width: 240px;
+  --header-height: 60px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Sarabun', 'Inter', sans-serif;
+  background-color: #F8FAFC;
+  color: #1E293B;
+}
+
+@layer utilities {
+  .wallet-silver {
+    background: linear-gradient(135deg, #64748B 0%, #94A3B8 50%, #CBD5E1 100%);
+  }
+  .wallet-gold {
+    background: linear-gradient(135deg, #B45309 0%, #D97706 50%, #F59E0B 100%);
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+  }
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+  .badge-new {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700;
+  }
+}
