@@ -1,9 +1,75 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+"use client";
 
-export const metadata: Metadata = { title: "เข้าสู่ระบบ" };
+import { useState } from "react";
+import Link from "next/link";
+import PasswordInput from "@/components/shared/PasswordInput";
+
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MINUTES = 30;
 
 export default function LoginPage() {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const [lockedUntil, setLockedUntil] = useState<Date | null>(null);
+
+  const isLocked = lockedUntil ? new Date() < lockedUntil : false;
+  const lockMinsLeft = lockedUntil
+    ? Math.ceil((lockedUntil.getTime() - Date.now()) / 60000)
+    : 0;
+
+  const set = (key: string, val: string) => {
+    setForm((f) => ({ ...f, [key]: val }));
+    if (errors[key]) setErrors((e) => { const c = { ...e }; delete c[key]; return c; });
+    if (errors.general) setErrors((e) => { const c = { ...e }; delete c.general; return c; });
+  };
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!form.email) e.email = "กรุณากรอก Email";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "รูปแบบ Email ไม่ถูกต้อง";
+    if (!form.password) e.password = "กรุณากรอกรหัสผ่าน";
+    return e;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isLocked) return;
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setErrors({});
+    setLoading(true);
+    try {
+      // Production: POST /api/v1/auth/login
+      await new Promise((r) => setTimeout(r, 800));
+      // Simulate failed login (demo)
+      if (form.password !== "Correct1") {
+        const newAttempts = attempts + 1;
+        setAttempts(newAttempts);
+        if (newAttempts >= MAX_ATTEMPTS) {
+          const until = new Date(Date.now() + LOCKOUT_MINUTES * 60 * 1000);
+          setLockedUntil(until);
+          setErrors({ general: `เข้าสู่ระบบผิดพลาดเกิน ${MAX_ATTEMPTS} ครั้ง — บัญชีถูกล็อคชั่วคราว ${LOCKOUT_MINUTES} นาที` });
+        } else {
+          setErrors({
+            general: `อีเมลหรือรหัสผ่านไม่ถูกต้อง (ครั้งที่ ${newAttempts}/${MAX_ATTEMPTS})`,
+          });
+        }
+        return;
+      }
+      // Success → redirect
+      window.location.href = "/dashboard";
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const inputCls = (field: string) =>
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+      errors[field] ? "border-red-400 bg-red-50" : "border-gray-200"
+    }`;
+
   return (
     <div className="space-y-6">
       <div>
@@ -11,77 +77,105 @@ export default function LoginPage() {
         <p className="text-gray-500 text-sm mt-1">ยินดีต้อนรับกลับมา</p>
       </div>
 
-      <form className="space-y-4">
-        {/* Phone / Email */}
+      {/* Lockout banner */}
+      {isLocked && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-center">
+          <p className="text-sm font-semibold text-red-700">🔒 บัญชีถูกล็อคชั่วคราว</p>
+          <p className="text-xs text-red-600 mt-1">
+            กรุณารอ {lockMinsLeft} นาทีก่อนลองอีกครั้ง
+          </p>
+        </div>
+      )}
+
+      {/* General error */}
+      {errors.general && !isLocked && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-3">
+          <p className="text-sm text-red-700">{errors.general}</p>
+          {attempts > 0 && attempts < MAX_ATTEMPTS && (
+            <p className="text-xs text-red-500 mt-1">
+              เหลืออีก {MAX_ATTEMPTS - attempts} ครั้งก่อนล็อคบัญชี
+            </p>
+          )}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            เบอร์โทรศัพท์ หรือ อีเมล
+            Email
           </label>
           <input
-            type="text"
-            placeholder="0812345678 หรือ email@example.com"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            type="email"
+            placeholder="email@example.com"
+            value={form.email}
+            onChange={(e) => set("email", e.target.value)}
+            className={inputCls("email")}
+            autoComplete="email"
+            disabled={isLocked || loading}
           />
+          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
 
         {/* Password */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
-          <div className="relative">
-            <input
-              type="password"
-              placeholder="รหัสผ่านของคุณ"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12"
-            />
-            <button
-              type="button"
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
+            <Link
+              href="/forgot-password"
+              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
             >
-              👁
-            </button>
+              ลืมรหัสผ่าน?
+            </Link>
           </div>
+          <PasswordInput
+            placeholder="รหัสผ่านของคุณ"
+            value={form.password}
+            onChange={(e) => set("password", e.target.value)}
+            className={errors.password ? "border-red-400 bg-red-50" : ""}
+            autoComplete="current-password"
+          />
+          {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
         </div>
 
-        {/* Forgot password */}
-        <div className="flex justify-end">
-          <Link
-            href="/forgot-password"
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-          >
-            ลืมรหัสผ่าน?
-          </Link>
-        </div>
-
-        {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200"
+          disabled={loading || isLocked}
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
         >
-          เข้าสู่ระบบ
+          {loading ? <><span className="animate-spin">⟳</span> กำลังเข้าสู่ระบบ...</> : "เข้าสู่ระบบ"}
         </button>
       </form>
 
       {/* Divider */}
       <div className="relative flex items-center">
         <div className="flex-grow border-t border-gray-200" />
-        <span className="mx-4 text-sm text-gray-400">หรือ</span>
+        <span className="mx-4 text-xs text-gray-400">หรือ</span>
         <div className="flex-grow border-t border-gray-200" />
       </div>
 
-      {/* Social Login (placeholder) */}
-      <button
-        type="button"
-        className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-      >
-        <span className="text-lg">🔷</span>
-        เข้าสู่ระบบด้วย LINE
-      </button>
+      {/* Social login — D12 disabled */}
+      <div className="space-y-2">
+        {[
+          { icon: "🔴", label: "เข้าสู่ระบบด้วย Google" },
+          { icon: "🔵", label: "เข้าสู่ระบบด้วย Facebook" },
+        ].map((s) => (
+          <div
+            key={s.label}
+            title="เร็วๆ นี้จะมา (post-Phase 2b)"
+            className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-2xl py-3 text-sm font-medium text-gray-300 cursor-not-allowed select-none bg-gray-50"
+          >
+            <span className="text-lg opacity-40">{s.icon}</span>
+            <span>{s.label}</span>
+            <span className="ml-auto mr-4 text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">เร็วๆ นี้</span>
+          </div>
+        ))}
+      </div>
 
-      {/* Register link */}
       <p className="text-center text-sm text-gray-500">
         ยังไม่มีบัญชี?{" "}
-        <Link href="/register" className="text-blue-600 hover:text-blue-800 font-semibold">
-          สมัครสมาชิก
+        <Link href="/signup/method" className="text-blue-600 font-semibold hover:text-blue-800">
+          สมัครสมาชิกฟรี
         </Link>
       </p>
     </div>
