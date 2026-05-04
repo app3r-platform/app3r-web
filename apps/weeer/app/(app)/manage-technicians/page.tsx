@@ -170,7 +170,17 @@ function CredentialsModal({ username, password, onClose }: { username: string; p
 // ===== Reset Password Modal =====
 function ResetPasswordModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => void }) {
   const [done, setDone] = useState(false);
-  const mockNewPw = "rBv7Xm2kQ9";
+  // Generate random 10-char password on mount (not hardcoded)
+  const [newPw] = useState(() =>
+    (Math.random().toString(36).slice(2, 7) + Math.random().toString(36).slice(2, 7).toUpperCase()).slice(0, 10)
+  );
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(newPw);
+    setCopied(true);
+  }
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl p-5 space-y-4">
@@ -189,14 +199,66 @@ function ResetPasswordModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => v
         ) : (
           <>
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 font-mono text-sm">
-              Password ใหม่: <strong>{mockNewPw}</strong>
+              Password ใหม่: <strong>{newPw}</strong>
             </div>
             <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-xs text-red-600">
               ⚠️ บันทึก password ไว้ก่อน — ไม่สามารถดูอีกได้
             </div>
+            <button onClick={handleCopy}
+              className="w-full border border-green-600 text-green-700 font-medium py-2.5 rounded-xl text-sm hover:bg-green-50 transition-colors">
+              {copied ? "✅ คัดลอกแล้ว" : "📋 คัดลอก Password ใหม่"}
+            </button>
+            <p className="text-xs text-gray-400 text-center">(D16: ไม่มีระบบ SMS — ส่งให้ช่างด้วยตนเอง)</p>
             <button onClick={onClose} className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-xl text-sm">ปิด</button>
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ===== Switch to WeeeT Modal (HQ-7: JWT sub_account context switch) =====
+function SwitchWeeeTModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => void }) {
+  const [loading, setLoading] = useState(false);
+
+  function handleConfirm() {
+    setLoading(true);
+    // GET /api/v1/weeer/switch-to-weeet/{id} → JWT sub_account → redirect WeeeT app (HQ-7)
+    setTimeout(() => {
+      setLoading(false);
+      onClose();
+      // In production: router.push() to WeeeT app with sub_account JWT
+    }, 800);
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl p-5 space-y-4">
+        {/* Orange banner preview — same as WeeeT app impersonation UI */}
+        <div className="bg-orange-500 text-white rounded-xl px-4 py-2.5 text-sm text-center font-medium">
+          🔄 WeeeT Mode — session ชั่วคราว 30 นาที
+        </div>
+        <h2 className="font-bold text-gray-900">สลับเข้าบัญชี WeeeT</h2>
+        <p className="text-sm text-gray-600">
+          คุณกำลังจะสลับเข้าใช้งานในฐานะ <strong>{weeet.full_name}</strong>
+          <span className="text-gray-400"> ({weeet.username})</span>
+        </p>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700 space-y-1">
+          <div className="font-semibold">⚠️ หมายเหตุ</div>
+          <div>• Session ชั่วคราว 30 นาที — หมดเวลาแล้ว logout อัตโนมัติ</div>
+          <div>• ระบบจะออก JWT sub_account context ใหม่ (HQ-7)</div>
+          <div>• คุณจะถูก redirect ไปยัง WeeeT app</div>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={onClose}
+            className="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors">
+            ยกเลิก
+          </button>
+          <button onClick={handleConfirm} disabled={loading}
+            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
+            {loading ? "กำลังสลับ…" : "ยืนยัน — เข้า WeeeT Mode"}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -208,6 +270,7 @@ export default function ManageTechniciansPage() {
   const [showAdd, setShowAdd] = useState(false);
   const [credentials, setCredentials] = useState<{ username: string; password: string } | null>(null);
   const [resetTarget, setResetTarget] = useState<WeeeT | null>(null);
+  const [switchTarget, setSwitchTarget] = useState<WeeeT | null>(null);
   const goldBalance = 1800;
 
   function handleAdd(name: string, phone: string, skills: string[]) {
@@ -228,8 +291,7 @@ export default function ManageTechniciansPage() {
   }
 
   function handleSwitch(t: WeeeT) {
-    // GET /api/v1/weeer/switch-to-weeet/{id} → JWT ใหม่ → redirect WeeeT app
-    alert(`[Mock] สลับเข้าบัญชี ${t.username} — ในระบบจริงจะ redirect ไป WeeeT app`);
+    setSwitchTarget(t);
   }
 
   const canAddMore = goldBalance >= GOLD_PER_WEEET;
@@ -338,6 +400,7 @@ export default function ManageTechniciansPage() {
       {showAdd && <AddWeeeTModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />}
       {credentials && <CredentialsModal {...credentials} onClose={() => setCredentials(null)} />}
       {resetTarget && <ResetPasswordModal weeet={resetTarget} onClose={() => setResetTarget(null)} />}
+      {switchTarget && <SwitchWeeeTModal weeet={switchTarget} onClose={() => setSwitchTarget(null)} />}
     </div>
   );
 }
