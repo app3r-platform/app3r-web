@@ -100,7 +100,7 @@ export default function DashboardPage() {
               <p className="text-sm text-gray-300 mt-1 font-medium">รายงาน</p>
             </div>
           </Link>
-          <Link href="/profile">
+          <Link href="/settings">
             <div className="bg-gray-800 border border-gray-700 hover:border-orange-600 rounded-xl p-4 text-center transition-colors">
               <span className="text-2xl">⚙️</span>
               <p className="text-sm text-gray-300 mt-1 font-medium">ตั้งค่า</p>

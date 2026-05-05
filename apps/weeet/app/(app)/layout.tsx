@@ -12,13 +12,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!auth.isAuthenticated) {
       router.replace("/login");
+      return;
     }
-  }, [auth.isAuthenticated, router]);
+    // Rented WeeeT must change password first
+    if (auth.forceChangePassword) {
+      router.replace("/change-password-first");
+    }
+  }, [auth.isAuthenticated, auth.forceChangePassword, router]);
 
   if (!auth.isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
         <span className="text-gray-400">กำลังตรวจสอบ...</span>
+      </div>
+    );
+  }
+
+  if (auth.forceChangePassword) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <span className="text-gray-400">กำลังนำไปยังหน้าเปลี่ยนรหัสผ่าน...</span>
       </div>
     );
   }

@@ -8,6 +8,38 @@ export const mockTechnician: Technician = {
   shopName: "FixPro Service",
   shopId: "shop-001",
   specialties: ["แอร์", "เครื่องซักผ้า", "ตู้เย็น"],
+  birthDate: "1990-05-15",
+  address: "123/10 ซ.ลาดพร้าว 55",
+  subDistrict: "วังทองหลาง",
+  district: "วังทองหลาง",
+  province: "กรุงเทพมหานคร",
+  postalCode: "10310",
+  educationLevel: "ปวส.",
+  certificates: [],
+};
+
+// Available specialties (from WeeeR's service menu — mock)
+export const availableSpecialties = [
+  "แอร์", "เครื่องซักผ้า", "ตู้เย็น", "เครื่องทำน้ำอุ่น",
+  "ไมโครเวฟ", "ทีวี", "พัดลม", "เครื่องดูดฝุ่น",
+];
+
+// Education levels
+export const educationLevels = [
+  "ประถมศึกษา", "มัธยมศึกษาตอนต้น", "มัธยมศึกษาตอนปลาย",
+  "ปวช.", "ปวส.", "ปริญญาตรี", "ปริญญาโท", "อื่นๆ",
+];
+
+// Mock postal code → address lookup
+export const postalCodeMap: Record<string, { subDistrict: string; district: string; province: string }> = {
+  "10310": { subDistrict: "วังทองหลาง", district: "วังทองหลาง", province: "กรุงเทพมหานคร" },
+  "10110": { subDistrict: "คลองเตย", district: "คลองเตย", province: "กรุงเทพมหานคร" },
+  "10240": { subDistrict: "หัวหมาก", district: "บางกะปิ", province: "กรุงเทพมหานคร" },
+  "10230": { subDistrict: "ลาดพร้าว", district: "ลาดพร้าว", province: "กรุงเทพมหานคร" },
+  "50000": { subDistrict: "ช้างคลาน", district: "เมืองเชียงใหม่", province: "เชียงใหม่" },
+  "40000": { subDistrict: "ในเมือง", district: "เมืองขอนแก่น", province: "ขอนแก่น" },
+  "90000": { subDistrict: "บ่อยาง", district: "เมืองสงขลา", province: "สงขลา" },
+  "20000": { subDistrict: "บางปลาสร้อย", district: "เมืองชลบุรี", province: "ชลบุรี" },
 };
 
 export const mockJobs: Job[] = [

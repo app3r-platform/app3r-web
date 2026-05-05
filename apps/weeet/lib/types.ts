@@ -28,13 +28,26 @@ export interface Technician {
   shopId: string;
   avatarUrl?: string;
   specialties: string[];
+  // Extended profile fields (R-02)
+  birthDate?: string;
+  address?: string;
+  subDistrict?: string;
+  district?: string;
+  province?: string;
+  postalCode?: string;
+  educationLevel?: string;
+  certificates?: string[]; // file names
 }
+
+export type AccountType = "default" | "rented";
 
 export interface AuthState {
   isAuthenticated: boolean;
   technician: Technician | null;
   isImpersonated: boolean; // WeeeR logged in as this WeeeT
   impersonatedByShop?: string;
+  accountType?: AccountType;
+  forceChangePassword?: boolean; // rented only — must change on first login
 }
 
 export interface Part {
@@ -45,4 +58,9 @@ export interface Part {
   unit: string;
   stockQty: number;
   price: number;
+}
+
+export interface LoginLockout {
+  count: number;
+  lockedUntil?: number; // epoch ms
 }
