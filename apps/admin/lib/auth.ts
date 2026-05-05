@@ -16,3 +16,14 @@ export function removeToken(): void {
 export function isAuthenticated(): boolean {
   return !!getToken();
 }
+
+export function isSuperAdmin(): boolean {
+  const token = getToken();
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.role === "super_admin";
+  } catch {
+    return false;
+  }
+}
