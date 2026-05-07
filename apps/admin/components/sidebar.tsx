@@ -49,6 +49,14 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Repair",
+    items: [
+      { href: "/repair/jobs",      label: "Repair Jobs",    icon: "🔧" },
+      { href: "/repair/analytics", label: "Analytics",      icon: "📊" },
+      { href: "/repair/disputes",  label: "Disputes",       icon: "⚖️" },
+    ],
+  },
+  {
     label: "ระบบ",
     items: [
       { href: "/system/storage", label: "Storage",         icon: "💾" },
