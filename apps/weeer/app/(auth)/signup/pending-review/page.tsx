@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "รอการอนุมัติ
 type KycStatus = "pending" | "reviewing" | "approved" | "rejected" | "additional_required";
 
 // Mock status — จะดึงจาก GET /api/v1/weeer/approval-status
-const MOCK_STATUS: KycStatus = "reviewing";
+const MOCK_STATUS = "reviewing" as KycStatus;
 const MOCK_REJECTION_REASON = "เอกสารไม่ชัดเจน — กรุณาอัปโหลดใหม่";
 
 const STATUS_CONFIG: Record<KycStatus, { icon: string; title: string; desc: string; color: string }> = {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { SignupSteps } from "../page";
+import { SignupSteps } from "../_components/SignupSteps";
 
 const MOCK_POSTAL: Record<string, { subdistrict: string; district: string; province: string }> = {
   "10110": { subdistrict: "คลองเตย", district: "คลองเตย", province: "กรุงเทพมหานคร" },

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { SignupSteps } from "../page";
+import { SignupSteps } from "../_components/SignupSteps";
 
 const THAI_BANKS = [
   "ธนาคารกรุงเทพ (BBL)",

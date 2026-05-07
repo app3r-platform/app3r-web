@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SignupSteps } from "../page";
+import { SignupSteps } from "../_components/SignupSteps";
 
 type BizType = "individual" | "company";
 

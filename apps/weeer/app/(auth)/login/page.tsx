@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -40,7 +41,9 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">♻️</div>
+          <div className="flex justify-center mb-3">
+            <Image src="/logo/WeeeR.png" alt="WeeeR" width={72} height={72} priority />
+          </div>
           <h1 className="text-2xl font-bold text-green-800">เข้าสู่ระบบ</h1>
           <p className="text-sm text-gray-500 mt-1">WeeeR — แพลตฟอร์มผู้ประกอบการ</p>
         </div>

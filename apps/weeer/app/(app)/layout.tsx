@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const navItems = [
@@ -24,9 +25,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <aside className="w-60 bg-white border-r border-gray-100 flex flex-col shadow-sm fixed inset-y-0 left-0 z-30">
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-gray-100 gap-3">
-          <div className="w-9 h-9 bg-green-700 rounded-xl flex items-center justify-center">
-            <span className="text-white text-sm font-bold">3R</span>
-          </div>
+          <Image src="/logo/WeeeR.png" alt="WeeeR" width={36} height={36} className="rounded-xl" />
           <div>
             <div className="text-sm font-bold text-gray-900">App3R WeeeR</div>
             <div className="text-xs text-gray-400">ร้าน / บริษัท</div>

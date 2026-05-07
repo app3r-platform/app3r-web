@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SignupSteps } from "../page";
+import { SignupSteps } from "../_components/SignupSteps";
 
 export default function SignupVerifyPage() {
   const router = useRouter();

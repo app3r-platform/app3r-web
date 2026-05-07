@@ -10,8 +10,9 @@ const MODULE_INFO: Record<string, { label: string; icon: string; desc: string }>
   parts:    { label: "อะไหล่ B2B (Type E)", icon: "🔩", desc: "ซื้อ-ขายอะไหล่ระหว่างธุรกิจ" },
 };
 
-export default function ModulePage({ params }: { params: { module: string } }) {
-  const info = MODULE_INFO[params.module] ?? { label: params.module, icon: "🔧", desc: "" };
+export default async function ModulePage({ params }: { params: Promise<{ module: string }> }) {
+  const { module } = await params;
+  const info = MODULE_INFO[module] ?? { label: module, icon: "🔧", desc: "" };
   return (
     <div className="flex flex-col items-center justify-center h-64 text-center">
       <div className="text-5xl mb-4">{info.icon}</div>
