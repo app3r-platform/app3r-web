@@ -1,85 +1,188 @@
 "use client";
-import { useState } from "react";
-import { mockJobs } from "@/lib/mock-data";
-import { JobCard } from "@/components/JobCard";
-import type { JobStatus } from "@/lib/types";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { repairApi } from "@/lib/api";
+import type { RepairJob, RepairJobStatus } from "@/lib/types";
 
-const TABS: { key: JobStatus | "all"; label: string }[] = [
+type TabKey = "all" | "active" | "awaiting" | "done";
+
+const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "ทั้งหมด" },
-  { key: "assigned", label: "รอดำเนินการ" },
-  { key: "in_progress", label: "กำลังทำ" },
-  { key: "completed", label: "เสร็จสิ้น" },
+  { key: "active", label: "กำลังทำ" },
+  { key: "awaiting", label: "รอ" },
+  { key: "done", label: "เสร็จ/ปิด" },
 ];
 
+const ACTIVE_STATUSES: RepairJobStatus[] = [
+  "assigned", "traveling", "arrived", "awaiting_entry",
+  "inspecting", "in_progress", "awaiting_review",
+];
+const AWAITING_STATUSES: RepairJobStatus[] = ["awaiting_decision", "awaiting_user"];
+const DONE_STATUSES: RepairJobStatus[] = ["completed", "closed", "cancelled", "converted_scrap"];
+
+function statusLabel(s: RepairJobStatus): string {
+  const map: Record<RepairJobStatus, string> = {
+    assigned: "รับงาน",
+    traveling: "กำลังเดินทาง",
+    arrived: "ถึงที่แล้ว",
+    awaiting_entry: "รออนุมัติเข้า",
+    inspecting: "กำลังตรวจสอบ",
+    awaiting_decision: "รอตัดสินใจ",
+    awaiting_user: "รอลูกค้า",
+    in_progress: "กำลังซ่อม",
+    completed: "ซ่อมเสร็จ",
+    awaiting_review: "รอตรวจ",
+    closed: "ปิดงาน",
+    cancelled: "ยกเลิก",
+    converted_scrap: "โอนรับซื้อ",
+  };
+  return map[s] ?? s;
+}
+
+function statusColor(s: RepairJobStatus): string {
+  if (DONE_STATUSES.includes(s)) {
+    if (s === "cancelled") return "bg-red-900/60 text-red-300";
+    if (s === "converted_scrap") return "bg-purple-900/60 text-purple-300";
+    return "bg-green-900/60 text-green-300";
+  }
+  if (AWAITING_STATUSES.includes(s)) return "bg-amber-900/60 text-amber-300";
+  return "bg-blue-900/60 text-blue-300";
+}
+
+function nextActionLabel(s: RepairJobStatus): string | null {
+  const map: Partial<Record<RepairJobStatus, string>> = {
+    assigned: "ออกเดินทาง →",
+    traveling: "บันทึกถึงที่ →",
+    arrived: "ขอเข้าบ้าน / ตรวจสอบ →",
+    awaiting_entry: "รออนุมัติ...",
+    inspecting: "ส่งรายงานตรวจสอบ →",
+    awaiting_decision: "วินิจฉัย →",
+    awaiting_user: "รอลูกค้า...",
+    in_progress: "บันทึกหลังซ่อม →",
+    awaiting_review: "รอ WeeeR ตรวจ...",
+  };
+  return map[s] ?? null;
+}
+
 export default function JobsPage() {
-  const [activeTab, setActiveTab] = useState<JobStatus | "all">("all");
+  const router = useRouter();
+  const [jobs, setJobs] = useState<RepairJob[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabKey>("all");
   const [search, setSearch] = useState("");
 
-  const filtered = mockJobs.filter((job) => {
-    const matchTab = activeTab === "all" || job.status === activeTab;
+  useEffect(() => {
+    repairApi
+      .listMyJobs()
+      .then(setJobs)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = jobs.filter((job) => {
+    const matchTab =
+      activeTab === "all" ||
+      (activeTab === "active" && ACTIVE_STATUSES.includes(job.status)) ||
+      (activeTab === "awaiting" && AWAITING_STATUSES.includes(job.status)) ||
+      (activeTab === "done" && DONE_STATUSES.includes(job.status));
+    const q = search.toLowerCase();
     const matchSearch =
-      !search ||
-      job.customer.name.includes(search) ||
-      job.jobNo.includes(search) ||
-      job.serviceType.includes(search);
+      !q ||
+      (job.customer_name ?? "").toLowerCase().includes(q) ||
+      job.job_no.toLowerCase().includes(q) ||
+      (job.appliance_name ?? "").toLowerCase().includes(q);
     return matchTab && matchSearch;
   });
 
+  function tabCount(key: TabKey): number {
+    if (key === "all") return jobs.length;
+    if (key === "active") return jobs.filter((j) => ACTIVE_STATUSES.includes(j.status)).length;
+    if (key === "awaiting") return jobs.filter((j) => AWAITING_STATUSES.includes(j.status)).length;
+    return jobs.filter((j) => DONE_STATUSES.includes(j.status)).length;
+  }
+
   return (
     <div className="px-4 pt-5 pb-4 space-y-4">
-      {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-white">รายการงาน</h1>
-        <p className="text-xs text-gray-400 mt-0.5">ทั้งหมด {mockJobs.length} รายการ</p>
+        <h1 className="text-xl font-bold text-white">รายการงานซ่อม</h1>
+        <p className="text-xs text-gray-400 mt-0.5">ทั้งหมด {jobs.length} รายการ</p>
       </div>
 
-      {/* Search */}
       <div className="relative">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
         <input
           type="text"
-          placeholder="ค้นหา ชื่อลูกค้า / เลขงาน / ประเภท"
+          placeholder="ค้นหา ชื่อลูกค้า / เลขงาน / เครื่องใช้ไฟฟ้า"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full bg-gray-800 border border-gray-600 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
         />
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-1 bg-gray-800 p-1 rounded-xl overflow-x-auto">
-        {TABS.map((tab) => {
-          const count =
-            tab.key === "all"
-              ? mockJobs.length
-              : mockJobs.filter((j) => j.status === tab.key).length;
-          return (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                activeTab === tab.key
-                  ? "bg-orange-600 text-white"
-                  : "text-gray-400 hover:text-gray-200"
-              }`}
-            >
-              {tab.label}
-              <span className="ml-1 opacity-70">({count})</span>
-            </button>
-          );
-        })}
+        {TABS.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              activeTab === tab.key
+                ? "bg-orange-600 text-white"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            {tab.label}
+            <span className="ml-1 opacity-70">({tabCount(tab.key)})</span>
+          </button>
+        ))}
       </div>
 
-      {/* List */}
-      {filtered.length > 0 ? (
-        <div className="space-y-3">
-          {filtered.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
+      {loading && (
+        <div className="text-center py-12 text-gray-400 text-sm">กำลังโหลด...</div>
+      )}
+
+      {error && (
+        <div className="bg-red-950/50 border border-red-800 rounded-xl p-4 text-sm text-red-300">
+          โหลดรายการไม่สำเร็จ: {error}
         </div>
-      ) : (
+      )}
+
+      {!loading && !error && filtered.length === 0 && (
         <div className="bg-gray-800 rounded-xl p-8 text-center border border-gray-700">
-          <p className="text-3xl mb-2">🔍</p>
-          <p className="text-gray-400 text-sm">ไม่พบรายการที่ค้นหา</p>
+          <p className="text-3xl mb-2">📋</p>
+          <p className="text-gray-400 text-sm">ไม่พบรายการ</p>
+        </div>
+      )}
+
+      {!loading && !error && filtered.length > 0 && (
+        <div className="space-y-3">
+          {filtered.map((job) => {
+            const action = nextActionLabel(job.status);
+            return (
+              <button
+                key={job.id}
+                onClick={() => router.push(`/jobs/${job.id}`)}
+                className="w-full bg-gray-800 border border-gray-700 hover:border-orange-500/50 rounded-xl p-4 text-left space-y-2 transition-colors"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-xs text-gray-500 font-mono">{job.job_no}</p>
+                    <p className="text-white font-semibold text-sm mt-0.5">
+                      {job.customer_name ?? "ลูกค้า"}
+                    </p>
+                    <p className="text-gray-400 text-xs">{job.appliance_name ?? job.service_type}</p>
+                  </div>
+                  <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColor(job.status)}`}>
+                    {statusLabel(job.status)}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 truncate">{job.customer_address ?? ""}</p>
+                {action && (
+                  <p className="text-xs text-orange-400 font-medium">{action}</p>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
