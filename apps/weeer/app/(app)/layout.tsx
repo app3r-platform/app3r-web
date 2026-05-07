@@ -13,7 +13,9 @@ const navItems = [
   { type: "divider", label: "โมดูล" },
   { href: "/modules/resell",  icon: "💸", label: "ขายต่อ (A)",    module: true },
   { href: "/modules/scrap",   icon: "♻️", label: "รับซาก (B)",    module: true },
-  { href: "/modules/repair",  icon: "🔧", label: "ซ่อม (C)",      module: true },
+  { href: "/repair/dashboard", icon: "🔧", label: "ซ่อม (C)",      module: true },
+  { href: "/repair/jobs",      icon: "📋", label: "  งานซ่อม",      module: true, sub: true },
+  { href: "/repair/announcements", icon: "📢", label: "  ประกาศรับงาน", module: true, sub: true },
   { href: "/modules/maintain",icon: "🛠️", label: "บำรุง (D)",     module: true },
   { href: "/modules/parts",   icon: "🔩", label: "อะไหล่ (E)",    module: true },
 ];
@@ -53,15 +55,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
               );
             }
+            const isSub = "sub" in item && item.sub;
             return (
               <Link key={item.href} href={item.href as string}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-green-50 hover:text-green-800 transition-all duration-150">
-                <span className="text-base">{item.icon}</span>
+                className={`flex items-center gap-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-green-50 hover:text-green-800 transition-all duration-150
+                  ${isSub ? "px-3 py-1.5 ml-2 text-xs" : "px-3 py-2.5"}`}>
+                <span className={isSub ? "text-sm" : "text-base"}>{item.icon}</span>
                 <span className="flex-1">{item.label}</span>
                 {"badge" in item && item.badge ? (
                   <span className="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">{item.badge}</span>
                 ) : null}
-                {"module" in item && item.module ? (
+                {"module" in item && item.module && !isSub ? (
                   <span className="text-xs text-gray-300">›</span>
                 ) : null}
               </Link>
