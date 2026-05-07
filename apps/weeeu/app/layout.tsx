@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "WeeeU — จัดการเครื่องใช้ไฟฟ้า ซ่อม ขาย ฝาก ครบในที่เดียว",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo/WeeeU.png",
   },
 };
 

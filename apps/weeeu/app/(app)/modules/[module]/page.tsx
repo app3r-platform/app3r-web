@@ -29,6 +29,11 @@ const moduleConfig: Record<string, {
     description: "จองล้างแอร์ ล้างเครื่องซักผ้า บำรุงรักษาเครื่องใช้ไฟฟ้าประจำปี",
     color: "from-purple-500 to-violet-400",
   },
+  parts: {
+    icon: "🔩", title: "อะไหล่", comingSoon: false,
+    description: "ค้นหาและสั่งซื้ออะไหล่เครื่องใช้ไฟฟ้า ตรวจสอบราคา เปรียบเทียบร้านค้า",
+    color: "from-slate-500 to-gray-400",
+  },
 };
 
 type Props = { params: Promise<{ module: string }> };
@@ -111,6 +116,13 @@ export default async function ModulePage({ params }: Props) {
             "🏪 เลือกร้านบำรุงรักษาใกล้บ้าน",
             "⏰ เลือกวันเวลาที่สะดวก",
             "🔔 รับแจ้งเตือนเมื่อถึงเวลาบำรุงรักษา",
+          ].map((item, i) => <li key={i} className="flex items-start gap-2"><span>•</span>{item}</li>)}
+
+          {module === "parts" && [
+            "🔍 ค้นหาอะไหล่ตามรุ่น/ยี่ห้อเครื่องใช้ไฟฟ้า",
+            "💰 เปรียบเทียบราคาจากหลายร้านค้า",
+            "🛒 สั่งซื้ออะไหล่โดยตรง",
+            "🚚 ติดตามการจัดส่ง",
           ].map((item, i) => <li key={i} className="flex items-start gap-2"><span>•</span>{item}</li>)}
         </ul>
       </div>

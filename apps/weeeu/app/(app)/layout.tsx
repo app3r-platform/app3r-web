@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const navItems = [
   { href: "/dashboard", icon: "🏠", label: "หน้าหลัก" },
@@ -12,6 +13,7 @@ const navItems = [
   { href: "/modules/resell", icon: "💰", label: "ขาย/ซื้อ มือสอง", module: true },
   { href: "/modules/scrap", icon: "♻️", label: "ขายซาก/ทิ้งซาก", module: true },
   { href: "/modules/maintain", icon: "🛠️", label: "บำรุงรักษา", module: true },
+  { href: "/modules/parts", icon: "🔩", label: "อะไหล่", module: true },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -21,7 +23,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <aside className="w-60 bg-white border-r border-gray-100 flex flex-col shadow-sm fixed inset-y-0 left-0 z-30">
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-gray-100">
-          <span className="text-2xl mr-2">👤</span>
+          <Image src="/logo/WeeeU.png" alt="WeeeU" width={32} height={32} className="rounded-lg mr-2" />
           <span className="text-lg font-bold text-blue-700">WeeeU</span>
         </div>
 

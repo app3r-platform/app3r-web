@@ -253,7 +253,7 @@ export default function SecuritySettingsPage() {
                   ยกเลิก
                 </button>
                 <button
-                  disabled={deleteConfirmText !== "ลบบัญชี" || pageState === "deleting"}
+                  disabled={deleteConfirmText !== "ลบบัญชี" || (pageState as PageState) === "deleting"}
                   onClick={async () => {
                     setPageState("deleting");
                     // Production: DELETE /api/v1/users/me
@@ -262,7 +262,7 @@ export default function SecuritySettingsPage() {
                   }}
                   className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white font-medium py-2.5 rounded-xl text-sm transition-colors"
                 >
-                  {pageState === "deleting" ? "กำลังลบ..." : "ยืนยันลบบัญชี"}
+                  {(pageState as PageState) === "deleting" ? "กำลังลบ..." : "ยืนยันลบบัญชี"}
                 </button>
               </div>
             </div>
