@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "WeeeT — แอปช่าง",
   description: "WeeeT — แอปสำหรับช่างในร้านซ่อม | App3R Platform",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/logo/WeeeT.png",
+    apple: "/logo/WeeeT.png",
+  },
 };
 
 export const viewport: Viewport = {

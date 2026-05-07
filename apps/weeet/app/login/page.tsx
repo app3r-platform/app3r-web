@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, Suspense } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import type { LoginLockout } from "@/lib/types";
@@ -142,7 +143,14 @@ function LoginForm() {
         <div className="w-full max-w-sm space-y-8">
           {/* Logo */}
           <div className="text-center space-y-2">
-            <div className="text-6xl">🔧</div>
+            <Image
+              src="/logo/WeeeT.png"
+              alt="WeeeT"
+              width={72}
+              height={72}
+              className="mx-auto"
+              priority
+            />
             <h1 className="text-3xl font-bold text-white">WeeeT</h1>
             <p className="text-gray-400 text-sm">แอปสำหรับช่าง | App3R Platform</p>
             {isImpersonation && (
