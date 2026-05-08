@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 
 type Appliance = { id: string; name: string; brand: string; model: string };
-type ServiceType = "on_site" | "walk_in";
+type ServiceType = "on_site" | "walk_in" | "pickup";
 
 export default function RepairNewPage() {
   const router = useRouter();
@@ -37,6 +37,7 @@ export default function RepairNewPage() {
     const sid = params.get("shop_id");
     const sname = params.get("shop_name");
     if (st === "walk_in") setServiceType("walk_in");
+    if (st === "pickup") setServiceType("pickup");
     if (sid) setSelectedShopId(sid);
     if (sname) setSelectedShopName(decodeURIComponent(sname));
   }, []);
@@ -70,6 +71,8 @@ export default function RepairNewPage() {
     if (photos.length < 1) e.photos = "กรุณาถ่ายรูปอาการเสียอย่างน้อย 1 รูป (R-01.5)";
     if (serviceType === "on_site" && !form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
     if (serviceType === "walk_in" && !selectedShopId) e.shop = "กรุณาเลือกร้านซ่อม";
+    // pickup: photos not validated here — schedule page handles it
+    if (serviceType === "pickup") delete e.photos;
     return e;
   };
 
@@ -93,6 +96,18 @@ export default function RepairNewPage() {
       }
       if (form.budget_max) body.append("budget_max", form.budget_max);
       photos.forEach(f => body.append("photos", f));
+
+      // Pickup → go to schedule page with URL params (schedule page does full POST)
+      if (serviceType === "pickup") {
+        const p = new URLSearchParams({
+          appliance_id: form.appliance_id,
+          issue_summary: form.issue_summary,
+          issue_detail: form.issue_detail,
+          ...(form.budget_max && { budget_max: form.budget_max }),
+        });
+        router.push(`/repair/pickup/schedule?${p.toString()}`);
+        return;
+      }
 
       const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
       if (!res.ok) throw new Error(await res.text());
@@ -133,7 +148,7 @@ export default function RepairNewPage() {
         {/* Service type toggle */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ประเภทบริการ</p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
               onClick={() => { setServiceType("on_site"); setErrors({}); }}
@@ -144,8 +159,7 @@ export default function RepairNewPage() {
               }`}
             >
               <span className="text-lg">🏠</span>
-              <span>นอกสถานที่ (On-site)</span>
-              <span className="text-xs opacity-75">ช่างมาบ้านคุณ</span>
+              <span className="text-xs text-center leading-tight">On-site<br/>ช่างมาบ้าน</span>
             </button>
             <button
               type="button"
@@ -157,8 +171,19 @@ export default function RepairNewPage() {
               }`}
             >
               <span className="text-lg">🚶</span>
-              <span>Walk-in</span>
-              <span className="text-xs opacity-75">นำเครื่องไปร้าน</span>
+              <span className="text-xs text-center leading-tight">Walk-in<br/>ไปร้านเอง</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setServiceType("pickup"); setErrors({}); }}
+              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
+                serviceType === "pickup"
+                  ? "bg-purple-600 border-purple-600 text-white"
+                  : "border-gray-200 text-gray-500 hover:border-purple-300"
+              }`}
+            >
+              <span className="text-lg">🚛</span>
+              <span className="text-xs text-center leading-tight">Pickup<br/>ช่างมารับ-ส่ง</span>
             </button>
           </div>
         </div>
@@ -286,47 +311,64 @@ export default function RepairNewPage() {
           </div>
         )}
 
-        {/* On-site schedule / Walk-in budget */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            {serviceType === "on_site" ? "นัดหมาย" : "งบประมาณ"}
-          </p>
-          {serviceType === "on_site" && (
+        {/* On-site schedule (not shown for walk_in / pickup) */}
+        {serviceType !== "pickup" && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              {serviceType === "on_site" ? "นัดหมาย" : "งบประมาณ"}
+            </p>
+            {serviceType === "on_site" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  วันที่สะดวก <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="datetime-local"
+                  value={form.scheduled_at}
+                  min={minDate.toISOString().slice(0, 16)}
+                  onChange={e => { setForm(f => ({ ...f, scheduled_at: e.target.value })); clearErr("scheduled_at"); }}
+                  className={inputCls("scheduled_at")}
+                />
+                {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
+              </div>
+            )}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                วันที่สะดวก <span className="text-red-500">*</span>
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">งบประมาณสูงสุด (Point)</label>
               <input
-                type="datetime-local"
-                value={form.scheduled_at}
-                min={minDate.toISOString().slice(0, 16)}
-                onChange={e => { setForm(f => ({ ...f, scheduled_at: e.target.value })); clearErr("scheduled_at"); }}
-                className={inputCls("scheduled_at")}
+                type="number"
+                value={form.budget_max}
+                onChange={e => setForm(f => ({ ...f, budget_max: e.target.value }))}
+                placeholder="ไม่ระบุ = ไม่จำกัด"
+                min={0}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
             </div>
-          )}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">งบประมาณสูงสุด (Point)</label>
-            <input
-              type="number"
-              value={form.budget_max}
-              onChange={e => setForm(f => ({ ...f, budget_max: e.target.value }))}
-              placeholder="ไม่ระบุ = ไม่จำกัด"
-              min={0}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
           </div>
-        </div>
+        )}
 
-        {serviceType === "on_site" ? (
+        {/* Pickup: info box */}
+        {serviceType === "pickup" && (
+          <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 space-y-2">
+            <p className="text-sm font-semibold text-purple-800">🚛 Pickup — ช่างมารับเครื่องถึงบ้าน</p>
+            <p className="text-xs text-purple-600">ขั้นตอนถัดไป: กรอกที่อยู่รับเครื่อง + เลือกวัน/เวลานัดรับ</p>
+            <ol className="space-y-1 pl-1">
+              {["ช่างมารับเครื่องตามนัด", "นำไปซ่อมที่ร้าน", "ช่างส่งคืนถึงบ้านเมื่อเสร็จ"].map((s, i) => (
+                <li key={i} className="flex gap-1.5 text-xs text-purple-700">
+                  <span className="font-bold">{i + 1}.</span><span>{s}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {serviceType === "on_site" && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
             <p className="text-xs text-blue-700">
-              🔧 <strong>บริการนอกสถานที่ (On-site)</strong> — ช่างจะออกมาซ่อมถึงบ้านคุณ
-              ค่าตรวจ 100 Point (ไม่คืน)
+              🔧 <strong>On-site</strong> — ช่างจะออกมาซ่อมถึงบ้านคุณ ค่าตรวจ 100 Point (ไม่คืน)
             </p>
           </div>
-        ) : (
+        )}
+        {serviceType === "walk_in" && (
           <div className="bg-green-50 border border-green-100 rounded-xl p-3">
             <p className="text-xs text-green-700">
               🚶 <strong>Walk-in</strong> — นำเครื่องไปที่ร้านซ่อมได้เลย รับ Receipt code เพื่อติดตามสถานะ
@@ -340,12 +382,18 @@ export default function RepairNewPage() {
           className={`w-full font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 ${
             serviceType === "walk_in"
               ? "bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white"
+              : serviceType === "pickup"
+              ? "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white"
               : "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white"
           }`}
         >
           {submitting
-            ? <><span className="animate-spin">⟳</span> กำลังส่งคำขอ...</>
-            : serviceType === "walk_in" ? "🚶 ส่งคำขอ Walk-in" : "ส่งคำขอซ่อม"
+            ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</>
+            : serviceType === "walk_in"
+            ? "🚶 ส่งคำขอ Walk-in"
+            : serviceType === "pickup"
+            ? "🚛 ถัดไป — กรอกที่อยู่และนัดหมาย"
+            : "ส่งคำขอซ่อม"
           }
         </button>
       </form>
