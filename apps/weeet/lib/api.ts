@@ -89,8 +89,15 @@ export const pickupApi = {
     apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/delivery/complete`, { method: "POST" }),
 };
 
+// --- Parts API (Phase C-2.2) ---
+import type { MaintainJob, Part } from "./types";
+
+export const partsApi = {
+  list: () => apiFetch<Part[]>(`${API_BASE}/parts/`),
+  get: (id: string) => apiFetch<Part>(`${API_BASE}/parts/${id}/`),
+};
+
 // --- Maintain API (Phase C-2.1) ---
-import type { MaintainJob } from "./types";
 
 export const maintainApi = {
   listMyJobs: () =>

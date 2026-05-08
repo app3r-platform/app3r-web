@@ -1,16 +1,16 @@
 "use client";
-import { use, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { maintainApi } from "@/lib/api";
+import { maintainApi, partsApi } from "@/lib/api";
 import { MAINTAIN_CHECKLIST_ITEMS } from "@/lib/types";
-import { mockParts } from "@/lib/mock-data";
+import type { Part } from "@/lib/types";
 
 const MAX_PHOTOS = 4;
 const MIN_PHOTOS = 2;
 const MAX_FILE_MB = 3;
 
 type PhotoEntry = { file: File; previewUrl: string };
-type PartUsed = { name: string; qty: number };
+type PartUsed = { partId?: string; name: string; qty: number; unitPrice?: number };
 
 // cleaningType passed via searchParams (optional — default to general)
 export default function MaintainChecklistPage({
@@ -32,10 +32,29 @@ export default function MaintainChecklistPage({
   const [photos, setPhotos] = useState<PhotoEntry[]>([]);
   const [partsUsed, setPartsUsed] = useState<PartUsed[]>([]);
   const [showPartModal, setShowPartModal] = useState(false);
+  const [partsList, setPartsList] = useState<Part[]>([]);
+  const [partsLoading, setPartsLoading] = useState(false);
+  const [partsApiError, setPartsApiError] = useState(false);
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Load parts when modal opens (lazy)
+  useEffect(() => {
+    if (!showPartModal || partsList.length > 0) return;
+    setPartsLoading(true);
+    setPartsApiError(false);
+    partsApi.list()
+      .then((data) => {
+        setPartsList(data);
+        setPartsLoading(false);
+      })
+      .catch(() => {
+        setPartsApiError(true);
+        setPartsLoading(false);
+      });
+  }, [showPartModal, partsList.length]);
 
   const allChecked = checklistItems.every((_, i) => checked[i]);
   const canSubmit = allChecked && photos.length >= MIN_PHOTOS && !submitting;
@@ -65,13 +84,13 @@ export default function MaintainChecklistPage({
     });
   };
 
-  const addPartFromMock = (name: string) => {
+  const addPart = (part: Part) => {
     setPartsUsed((prev) => {
-      const existing = prev.findIndex((p) => p.name === name);
+      const existing = prev.findIndex((p) => p.partId === part.id);
       if (existing >= 0) {
         return prev.map((p, i) => i === existing ? { ...p, qty: p.qty + 1 } : p);
       }
-      return [...prev, { name, qty: 1 }];
+      return [...prev, { partId: part.id, name: part.name, qty: 1, unitPrice: part.unitPrice }];
     });
     setShowPartModal(false);
   };
@@ -90,8 +109,10 @@ export default function MaintainChecklistPage({
     photos.forEach((p) => fd.append("checklist_photos", p.file));
     checklistItems.forEach((item) => fd.append("checklist", item));
     partsUsed.forEach((p, i) => {
+      if (p.partId) fd.append(`parts_used[${i}][part_id]`, p.partId);
       fd.append(`parts_used[${i}][name]`, p.name);
       fd.append(`parts_used[${i}][qty]`, String(p.qty));
+      if (p.unitPrice != null) fd.append(`parts_used[${i}][unit_price]`, String(p.unitPrice));
     });
     if (notes.trim()) fd.append("notes", notes.trim());
     try {
@@ -186,7 +207,7 @@ export default function MaintainChecklistPage({
           )}
         </div>
 
-        {/* Parts usage (mock D50) */}
+        {/* Parts usage */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-white">🔩 อะไหล่/น้ำยาที่ใช้</h2>
@@ -203,7 +224,12 @@ export default function MaintainChecklistPage({
             <div className="space-y-2">
               {partsUsed.map((p, i) => (
                 <div key={i} className="flex items-center gap-2 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2">
-                  <span className="flex-1 text-sm text-white">{p.name}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-white truncate">{p.name}</p>
+                    {p.unitPrice != null && (
+                      <p className="text-xs text-teal-400">฿{p.unitPrice.toLocaleString()}/หน่วย</p>
+                    )}
+                  </div>
                   <button
                     onClick={() => updatePartQty(i, p.qty - 1)}
                     className="w-6 h-6 bg-gray-700 rounded text-white text-xs"
@@ -249,7 +275,7 @@ export default function MaintainChecklistPage({
         </button>
       </div>
 
-      {/* Parts modal */}
+      {/* Parts modal — real API */}
       {showPartModal && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-end">
           <div className="w-full bg-gray-900 border-t border-gray-700 rounded-t-2xl p-4 space-y-3 max-h-[70vh] overflow-y-auto">
@@ -257,17 +283,39 @@ export default function MaintainChecklistPage({
               <h3 className="font-semibold text-white">เลือกอะไหล่/น้ำยา</h3>
               <button onClick={() => setShowPartModal(false)} className="text-gray-400 text-lg">✕</button>
             </div>
-            {mockParts.map((part) => (
+
+            {partsLoading && (
+              <div className="space-y-2">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-gray-800 rounded-xl p-3 animate-pulse h-14" />
+                ))}
+              </div>
+            )}
+
+            {!partsLoading && partsApiError && (
+              <div className="text-center py-6 space-y-1">
+                <p className="text-2xl">🔩</p>
+                <p className="text-gray-400 text-sm">ระบบอะไหล่กำลังพัฒนา</p>
+                <p className="text-gray-600 text-xs">ไม่สามารถโหลดรายการได้ในขณะนี้</p>
+              </div>
+            )}
+
+            {!partsLoading && !partsApiError && partsList.length === 0 && (
+              <p className="text-center text-gray-500 text-sm py-4">ไม่มีรายการอะไหล่</p>
+            )}
+
+            {!partsLoading && !partsApiError && partsList.map((part) => (
               <button
                 key={part.id}
-                onClick={() => addPartFromMock(part.name)}
-                className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 hover:border-teal-600 rounded-xl px-4 py-3 text-left transition-colors"
+                onClick={() => addPart(part)}
+                disabled={part.stockQty === 0}
+                className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 hover:border-teal-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl px-4 py-3 text-left transition-colors"
               >
                 <div>
                   <p className="text-sm text-white">{part.name}</p>
-                  <p className="text-xs text-gray-400">{part.sku} • {part.unit}</p>
+                  <p className="text-xs text-gray-400">{part.sku} • {part.unit} • คงเหลือ {part.stockQty}</p>
                 </div>
-                <span className="text-xs text-teal-400 font-medium">฿{part.price}</span>
+                <span className="text-xs text-teal-400 font-medium">฿{part.unitPrice.toLocaleString()}</span>
               </button>
             ))}
           </div>

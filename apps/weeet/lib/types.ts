@@ -75,7 +75,7 @@ export interface RepairJob {
   proposed_price?: number;
   final_price?: number;
   parts_added?: Array<{ name: string; qty: number; price: number }>;
-  parts_used?: Array<{ name: string; qty: number }>;
+  parts_used?: Array<{ partId?: string; name: string; qty: number; unitPrice?: number }>;
   scrap_agreed_price?: number;
   arrival_files?: string[];
   pre_inspection_files?: string[];
@@ -159,14 +159,41 @@ export interface AuthState {
   token?: string; // JWT from backend (null in mock/dev-bypass mode)
 }
 
+// --- Parts Module (Phase C-2.2 — D52 verbatim) ---
 export interface Part {
   id: string;
+  shopId: string;
   name: string;
   sku: string;
   category: string;
   unit: string;
+  condition: "new" | "used" | "refurbished";
   stockQty: number;
-  price: number;
+  reservedQty: number;
+  unitPrice: number;
+  imageUrl?: string;
+  source?: { type: "purchase" | "disassembly"; refId?: string };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type StockMovementType = "STOCK_IN" | "STOCK_OUT" | "STOCK_ADJUSTMENT";
+export type StockMovementReason =
+  | "purchase" | "receive_from_disassembly"
+  | "sell" | "use_for_repair" | "use_for_maintain" | "scrap"
+  | "manual";
+
+export interface StockMovement {
+  id: string;
+  partId: string;
+  type: StockMovementType;
+  qty: number;
+  reason: StockMovementReason;
+  refId?: string;
+  note?: string;
+  performedBy: string;
+  performedAt: string;
+  balanceAfter: number;
 }
 
 export interface LoginLockout {
@@ -193,7 +220,7 @@ export interface MaintainJob {
     interval: "3_months" | "6_months" | "12_months";
     nextScheduledAt: string;
   };
-  parts_used?: Array<{ name: string; qty: number }>;
+  parts_used?: Array<{ partId?: string; name: string; qty: number; unitPrice?: number }>;
   totalPrice: number;
   createdAt: string;
   updatedAt: string;
