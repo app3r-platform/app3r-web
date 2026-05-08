@@ -173,3 +173,69 @@ export interface LoginLockout {
   count: number;
   lockedUntil?: number; // epoch ms
 }
+
+// --- Maintain Module (Phase C-2.1) ---
+export interface MaintainJob {
+  id: string;
+  serviceCode: string;             // "M-2026-001"
+  customerId: string;
+  shopId?: string;
+  technicianId?: string;
+  status: "pending" | "assigned" | "departed" | "arrived" | "in_progress" | "completed" | "cancelled";
+  applianceType: "AC" | "WashingMachine";
+  cleaningType: "general" | "deep" | "sanitize";
+  serviceMethod: "on_site";
+  scheduledAt: string;             // ISO datetime
+  estimatedDuration: number;       // 2-4 hours
+  address: { lat: number; lng: number; address: string; };
+  recurring?: {
+    enabled: boolean;
+    interval: "3_months" | "6_months" | "12_months";
+    nextScheduledAt: string;
+  };
+  parts_used?: Array<{ name: string; qty: number }>;
+  totalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+  // Display / denormalized
+  customer_name?: string;
+  customer_phone?: string;
+}
+
+export const CLEANING_TYPE_LABELS: Record<MaintainJob["cleaningType"], string> = {
+  general: "ล้างทั่วไป",
+  deep: "ล้างลึก",
+  sanitize: "ล้าง+ฆ่าเชื้อ",
+};
+
+export const APPLIANCE_TYPE_LABELS: Record<MaintainJob["applianceType"], string> = {
+  AC: "เครื่องปรับอากาศ",
+  WashingMachine: "เครื่องซักผ้า",
+};
+
+export const MAINTAIN_CHECKLIST_ITEMS: Record<MaintainJob["cleaningType"], string[]> = {
+  general: [
+    "ถอดและล้างแผ่นกรองอากาศ",
+    "ทำความสะอาดคอยล์เย็น (ฉีดน้ำ)",
+    "ทำความสะอาดถาดน้ำทิ้ง",
+    "ตรวจท่อน้ำทิ้ง",
+    "ทดสอบการทำงานหลังล้าง",
+  ],
+  deep: [
+    "ถอดและล้างแผ่นกรองอากาศ",
+    "ฉีดน้ำยาล้างคอยล์เย็น (แรงดันสูง)",
+    "ทำความสะอาดคอยล์ร้อน (outdoor)",
+    "ทำความสะอาดถาดน้ำทิ้ง + ล้างท่อ",
+    "ตรวจน้ำยาแอร์ (เติมถ้าน้อย)",
+    "ทดสอบการทำงานและวัดอุณหภูมิ",
+  ],
+  sanitize: [
+    "ถอดและล้างแผ่นกรองอากาศ",
+    "ฉีดน้ำยาล้างคอยล์เย็น (แรงดันสูง)",
+    "ฉีดน้ำยาฆ่าเชื้อ (ทุกพื้นผิว)",
+    "ทำความสะอาดคอยล์ร้อน (outdoor)",
+    "ทำความสะอาดถาดน้ำทิ้ง + ล้างท่อ",
+    "ตรวจน้ำยาแอร์ (เติมถ้าน้อย)",
+    "ทดสอบการทำงานและวัดอุณหภูมิ",
+  ],
+};

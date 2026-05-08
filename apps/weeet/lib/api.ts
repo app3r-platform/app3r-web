@@ -88,3 +88,29 @@ export const pickupApi = {
   deliveryComplete: (id: string) =>
     apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/delivery/complete`, { method: "POST" }),
 };
+
+// --- Maintain API (Phase C-2.1) ---
+import type { MaintainJob } from "./types";
+
+export const maintainApi = {
+  listMyJobs: () =>
+    apiFetch<MaintainJob[]>(`${API_BASE}/maintain/jobs/weeet/`),
+  getJob: (id: string) =>
+    apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/`),
+  depart: (id: string, body: { departure_location: { lat: number; lng: number } }) =>
+    apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/depart/`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  arrive: (id: string, fd: FormData) =>
+    apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/arrive/`, { method: "POST", body: fd }),
+  inProgress: (id: string, fd: FormData) =>
+    apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/in-progress/`, { method: "POST", body: fd }),
+  complete: (id: string, fd: FormData) =>
+    apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/complete/`, { method: "POST", body: fd }),
+  usePart: (id: string, body: { part_name: string; qty: number }) =>
+    apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/use-part/`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+};
