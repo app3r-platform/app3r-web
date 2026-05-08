@@ -88,7 +88,7 @@ function LoginForm() {
     setLoading(true);
     await new Promise((r) => setTimeout(r, 600));
 
-    const ok = login(email, password, isImpersonation, shopName);
+    const ok = await login(email, password, isImpersonation, shopName);
     if (ok) {
       clearLockout();
       setLockout({ count: 0 });

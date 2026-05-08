@@ -120,6 +120,7 @@ export interface AuthState {
   impersonatedByShop?: string;
   accountType?: AccountType;
   forceChangePassword?: boolean; // rented only — must change on first login
+  token?: string; // JWT from backend (null in mock/dev-bypass mode)
 }
 
 export interface Part {
