@@ -9,7 +9,10 @@ type RepairStatus =
   | "assigned" | "traveling" | "arrived" | "awaiting_entry"
   | "inspecting" | "awaiting_decision" | "awaiting_user"
   | "in_progress" | "completed" | "awaiting_review"
-  | "closed" | "cancelled" | "converted_scrap";
+  | "closed" | "cancelled" | "converted_scrap"
+  // Pickup workflow states
+  | "en_route_pickup" | "picked_up" | "appliance_at_shop"
+  | "ready" | "en_route_delivery" | "delivered" | "confirmed";
 
 type TimelineEvent = {
   id: string;
@@ -64,6 +67,14 @@ const STATUS_LABEL: Record<RepairStatus, string> = {
   closed: "สำเร็จ",
   cancelled: "ยกเลิก",
   converted_scrap: "เปลี่ยนเป็นซาก",
+  // Pickup workflow
+  en_route_pickup: "ช่างกำลังออกรับเครื่อง",
+  picked_up: "รับเครื่องแล้ว — รอเซ็นรับ",
+  appliance_at_shop: "เครื่องอยู่ที่ร้านแล้ว",
+  ready: "ซ่อมเสร็จ — รอส่งคืน",
+  en_route_delivery: "ช่างกำลังส่งคืน",
+  delivered: "ส่งคืนแล้ว — รอยืนยัน",
+  confirmed: "ยืนยันรับเครื่องแล้ว",
 };
 
 const STATUS_COLOR: Record<RepairStatus, string> = {
@@ -80,6 +91,14 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   closed: "bg-green-100 text-green-700",
   cancelled: "bg-gray-100 text-gray-500",
   converted_scrap: "bg-teal-100 text-teal-700",
+  // Pickup workflow
+  en_route_pickup: "bg-purple-100 text-purple-700",
+  picked_up: "bg-purple-100 text-purple-700",
+  appliance_at_shop: "bg-indigo-100 text-indigo-700",
+  ready: "bg-green-100 text-green-700",
+  en_route_delivery: "bg-purple-100 text-purple-700",
+  delivered: "bg-yellow-100 text-yellow-700",
+  confirmed: "bg-green-100 text-green-700",
 };
 
 function formatDate(iso: string | null) {
@@ -127,6 +146,9 @@ export default function RepairJobDetailPage() {
     if (job.status === "awaiting_user")
       return job.decision_branch === "B2.2" ? `/repair/${id}/decision/b2-2` : `/repair/${id}/decision/b1-2`;
     if (job.status === "awaiting_review") return `/repair/${id}/review`;
+    // Pickup workflow actions
+    if (job.status === "picked_up") return `/repair/${id}/pickup-receipt`;
+    if (job.status === "delivered") return `/repair/${id}/delivery-receipt`;
     return null;
   })();
 
@@ -135,6 +157,9 @@ export default function RepairJobDetailPage() {
     if (job.status === "awaiting_user" && job.decision_branch === "B2.2") return "💬 ตอบรับข้อเสนอขายซาก";
     if (job.status === "awaiting_user") return "💬 ตอบรับข้อเสนอราคาใหม่";
     if (job.status === "awaiting_review") return "🔍 ตรวจรับงาน + รีวิว";
+    // Pickup workflow actions
+    if (job.status === "picked_up") return "🚛 เซ็นรับมอบเครื่องให้ช่าง";
+    if (job.status === "delivered") return "🚛 ยืนยันรับเครื่องคืน";
     return null;
   })();
 
@@ -253,7 +278,11 @@ export default function RepairJobDetailPage() {
             )}
             {job.final_price && <Row label="ราคาสุดท้าย" value={`${job.final_price.toLocaleString()} Point`} />}
             <Row
-              label={job.service_type === "walk_in" ? "ค่าตรวจ (Walk-in)" : "ค่าตรวจ (On-site)"}
+              label={
+                job.service_type === "walk_in" ? "ค่าตรวจ (Walk-in)"
+                : job.service_type === "pickup" ? "ค่าตรวจ (Pickup)"
+                : "ค่าตรวจ (On-site)"
+              }
               value={`${job.inspection_fee.toLocaleString()} Point`}
             />
             {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} Point`} />}
@@ -286,11 +315,39 @@ export default function RepairJobDetailPage() {
         </div>
       )}
 
-      {/* GPS tracking (traveling state) */}
+      {/* GPS tracking (on-site traveling state) */}
       {(job.status === "traveling" || job.status === "arrived") && (
         <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
           <p className="text-sm font-semibold text-amber-800">📍 ติดตามช่าง Real-time</p>
           <p className="text-xs text-amber-600 mt-1">ช่างกำลังเดินทางมาหาคุณ — จะแจ้งเตือนเมื่อถึง</p>
+        </div>
+      )}
+
+      {/* Pickup: en_route_pickup tracking */}
+      {job.status === "en_route_pickup" && (
+        <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-purple-800">🚛 ช่างกำลังออกมารับเครื่อง</p>
+          <p className="text-xs text-purple-600 mt-1">เตรียมเครื่องให้พร้อม — ช่างจะมาถึงตามนัด</p>
+        </div>
+      )}
+
+      {/* Pickup: appliance_at_shop / in_progress / ready */}
+      {(job.status === "appliance_at_shop" || job.status === "ready") && (
+        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-indigo-800">
+            {job.status === "ready" ? "✅ ซ่อมเสร็จแล้ว — กำลังนัดส่งคืน" : "🏪 เครื่องอยู่ที่ร้านซ่อมแล้ว"}
+          </p>
+          <p className="text-xs text-indigo-600 mt-1">
+            {job.status === "ready" ? "ช่างจะติดต่อนัดเวลาส่งคืนเครื่อง" : "รอผลการตรวจสอบจากร้านซ่อม"}
+          </p>
+        </div>
+      )}
+
+      {/* Pickup: en_route_delivery tracking */}
+      {job.status === "en_route_delivery" && (
+        <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-purple-800">🚛 ช่างกำลังส่งเครื่องคืน</p>
+          <p className="text-xs text-purple-600 mt-1">เตรียมตัวรับเครื่อง — ช่างกำลังเดินทางมาส่ง</p>
         </div>
       )}
     </div>
