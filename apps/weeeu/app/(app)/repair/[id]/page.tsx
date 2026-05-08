@@ -12,7 +12,12 @@ type RepairStatus =
   | "closed" | "cancelled" | "converted_scrap"
   // Pickup workflow states
   | "en_route_pickup" | "picked_up" | "appliance_at_shop"
-  | "ready" | "en_route_delivery" | "delivered" | "confirmed";
+  | "ready" | "en_route_delivery" | "delivered" | "confirmed"
+  // Parcel workflow states (10)
+  | "awaiting_shipping_details" | "shipping_confirmed"
+  | "in_transit_to_shop" | "received_at_shop" | "parcel_inspecting"
+  | "parcel_in_progress" | "ready_to_ship_back"
+  | "in_transit_to_customer" | "parcel_delivered" | "parcel_confirmed";
 
 type TimelineEvent = {
   id: string;
@@ -50,6 +55,10 @@ type RepairJobDetail = {
   storage_fee_total: number | null;
   pickup_deadline: string | null;
   receipt_code: string | null;
+  // Parcel fields
+  parcel_courier: string | null;
+  parcel_tracking_out: string | null;
+  parcel_tracking_back: string | null;
   timeline: TimelineEvent[];
 };
 
@@ -75,6 +84,17 @@ const STATUS_LABEL: Record<RepairStatus, string> = {
   en_route_delivery: "ช่างกำลังส่งคืน",
   delivered: "ส่งคืนแล้ว — รอยืนยัน",
   confirmed: "ยืนยันรับเครื่องแล้ว",
+  // Parcel workflow
+  awaiting_shipping_details: "รอตกลงรายละเอียดขนส่ง",
+  shipping_confirmed: "ตกลงขนส่งแล้ว — รอส่งพัสดุ",
+  in_transit_to_shop: "พัสดุกำลังเดินทางไปร้าน",
+  received_at_shop: "ร้านรับพัสดุแล้ว",
+  parcel_inspecting: "กำลังตรวจสอบสภาพเครื่อง",
+  parcel_in_progress: "กำลังซ่อม (Parcel)",
+  ready_to_ship_back: "ซ่อมเสร็จ — เตรียมส่งคืน",
+  in_transit_to_customer: "พัสดุกำลังส่งคืน",
+  parcel_delivered: "พัสดุถึงมือคุณแล้ว — รอยืนยัน",
+  parcel_confirmed: "ยืนยันรับพัสดุแล้ว",
 };
 
 const STATUS_COLOR: Record<RepairStatus, string> = {
@@ -99,6 +119,17 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   en_route_delivery: "bg-purple-100 text-purple-700",
   delivered: "bg-yellow-100 text-yellow-700",
   confirmed: "bg-green-100 text-green-700",
+  // Parcel workflow
+  awaiting_shipping_details: "bg-orange-100 text-orange-700",
+  shipping_confirmed: "bg-orange-100 text-orange-700",
+  in_transit_to_shop: "bg-amber-100 text-amber-700",
+  received_at_shop: "bg-indigo-100 text-indigo-700",
+  parcel_inspecting: "bg-indigo-100 text-indigo-700",
+  parcel_in_progress: "bg-blue-100 text-blue-700",
+  ready_to_ship_back: "bg-green-100 text-green-700",
+  in_transit_to_customer: "bg-amber-100 text-amber-700",
+  parcel_delivered: "bg-yellow-100 text-yellow-700",
+  parcel_confirmed: "bg-green-100 text-green-700",
 };
 
 function formatDate(iso: string | null) {
@@ -127,6 +158,9 @@ export default function RepairJobDetailPage() {
         storage_fee_total: d.storage_fee_total ?? null,
         pickup_deadline: d.pickup_deadline ?? null,
         receipt_code: d.receipt_code ?? null,
+        parcel_courier: d.parcel_courier ?? null,
+        parcel_tracking_out: d.parcel_tracking_out ?? null,
+        parcel_tracking_back: d.parcel_tracking_back ?? null,
       }))
       .catch(() => setError("ไม่พบข้อมูลงานซ่อม"))
       .finally(() => setLoading(false));
@@ -149,6 +183,10 @@ export default function RepairJobDetailPage() {
     // Pickup workflow actions
     if (job.status === "picked_up") return `/repair/${id}/pickup-receipt`;
     if (job.status === "delivered") return `/repair/${id}/delivery-receipt`;
+    // Parcel workflow actions
+    if (job.status === "awaiting_shipping_details") return `/repair/${id}/shipping-details`;
+    if (job.status === "shipping_confirmed") return `/repair/${id}/ship-out`;
+    if (job.status === "parcel_delivered") return `/repair/${id}/parcel-receipt`;
     return null;
   })();
 
@@ -160,6 +198,10 @@ export default function RepairJobDetailPage() {
     // Pickup workflow actions
     if (job.status === "picked_up") return "🚛 เซ็นรับมอบเครื่องให้ช่าง";
     if (job.status === "delivered") return "🚛 ยืนยันรับเครื่องคืน";
+    // Parcel workflow actions
+    if (job.status === "awaiting_shipping_details") return "📦 ตกลงรายละเอียดการขนส่ง";
+    if (job.status === "shipping_confirmed") return "📦 กรอก Tracking + ยืนยันส่งพัสดุ";
+    if (job.status === "parcel_delivered") return "📦 ยืนยันรับพัสดุคืน";
     return null;
   })();
 
@@ -281,6 +323,7 @@ export default function RepairJobDetailPage() {
               label={
                 job.service_type === "walk_in" ? "ค่าตรวจ (Walk-in)"
                 : job.service_type === "pickup" ? "ค่าตรวจ (Pickup)"
+                : job.service_type === "parcel" ? "ค่าตรวจ (Parcel)"
                 : "ค่าตรวจ (On-site)"
               }
               value={`${job.inspection_fee.toLocaleString()} Point`}
@@ -348,6 +391,66 @@ export default function RepairJobDetailPage() {
         <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
           <p className="text-sm font-semibold text-purple-800">🚛 ช่างกำลังส่งเครื่องคืน</p>
           <p className="text-xs text-purple-600 mt-1">เตรียมตัวรับเครื่อง — ช่างกำลังเดินทางมาส่ง</p>
+        </div>
+      )}
+
+      {/* Parcel: in_transit_to_shop — show outbound tracking */}
+      {job.status === "in_transit_to_shop" && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
+          <p className="text-sm font-semibold text-amber-800">🚚 พัสดุกำลังเดินทางไปร้านซ่อม</p>
+          {job.parcel_tracking_out && (
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-amber-700 font-mono font-bold">{job.parcel_tracking_out}</p>
+              {job.parcel_courier && (
+                <a
+                  href={`https://track.${job.parcel_courier === "kerry" ? "kerry" : job.parcel_courier === "flash" ? "flashexpress" : "jtexpress"}.co.th`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-orange-600 font-medium hover:underline"
+                >
+                  ติดตามพัสดุ →
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Parcel: at shop states */}
+      {(job.status === "received_at_shop" || job.status === "parcel_inspecting" || job.status === "parcel_in_progress" || job.status === "ready_to_ship_back") && (
+        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-indigo-800">
+            {job.status === "received_at_shop" && "🏪 ร้านรับพัสดุแล้ว — รอตรวจสภาพ"}
+            {job.status === "parcel_inspecting" && "🔍 กำลังตรวจสอบสภาพเครื่อง"}
+            {job.status === "parcel_in_progress" && "🔧 กำลังซ่อมเครื่อง"}
+            {job.status === "ready_to_ship_back" && "✅ ซ่อมเสร็จแล้ว — รอส่งคืน"}
+          </p>
+          <p className="text-xs text-indigo-600 mt-1">
+            {job.status === "ready_to_ship_back" ? "ร้านจะส่งพัสดุคืนและแจ้ง Tracking ให้คุณ" : "ระบบจะแจ้งเตือนเมื่อมีความคืบหน้า"}
+          </p>
+        </div>
+      )}
+
+      {/* Parcel: in_transit_to_customer — show return tracking */}
+      {job.status === "in_transit_to_customer" && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
+          <p className="text-sm font-semibold text-amber-800">🚚 พัสดุกำลังส่งคืนถึงคุณ</p>
+          {job.parcel_tracking_back && (
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-amber-700 font-mono font-bold">{job.parcel_tracking_back}</p>
+              {job.parcel_courier && (
+                <a
+                  href={`https://track.${job.parcel_courier === "kerry" ? "kerry" : job.parcel_courier === "flash" ? "flashexpress" : "jtexpress"}.co.th`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-orange-600 font-medium hover:underline"
+                >
+                  ติดตามพัสดุ →
+                </a>
+              )}
+            </div>
+          )}
+          <p className="text-xs text-amber-600">เตรียมรับพัสดุ — ตรวจสอบสภาพเครื่องเมื่อได้รับ</p>
         </div>
       )}
     </div>
