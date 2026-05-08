@@ -169,3 +169,88 @@ export const WALKIN_STATUS_COLOR: Record<WalkInStatus, string> = {
   closed: "bg-emerald-100 text-emerald-700",
   abandoned: "bg-red-100 text-red-600",
 };
+
+// ── Pickup types ───────────────────────────────────────────────────────────────
+
+export type PickupStatus =
+  | "pending_dispatch"   // รอมอบหมายช่าง
+  | "dispatched"         // มอบหมายแล้ว รอช่างออกรับ
+  | "en_route"           // ช่างกำลังเดินทางรับ
+  | "at_customer"        // ช่างถึงบ้านลูกค้า
+  | "appliance_at_shop"  // เครื่องถึงร้านแล้ว
+  | "diagnosing"         // กำลังวินิจฉัย
+  | "repairing"          // กำลังซ่อม
+  | "ready"              // ซ่อมเสร็จ รอส่งคืน
+  | "out_for_delivery"   // ช่างกำลังส่งคืน
+  | "delivered"          // ส่งคืนแล้ว ปิดงาน
+  | "cancelled";
+
+export interface PickupJob {
+  id: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_address: string;
+  appliance_name: string;
+  problem_description: string;
+  status: PickupStatus;
+  weeet_id?: string;
+  weeet_name?: string;
+  scheduled_pickup_time?: string;
+  scheduled_delivery_time?: string;
+  picked_up_at?: string;
+  arrived_at_shop_at?: string;
+  diagnosis_notes?: string;
+  estimated_price?: number;
+  final_price?: number;
+  parts_added?: { name: string; qty: number; price: number }[];
+  intake_photos?: string[];
+  condition_notes?: string;
+  gps_track?: { lat: number; lng: number; timestamp: string }[];
+  created_at: string;
+}
+
+export interface PickupQueue {
+  items: PickupJob[];
+  total: number;
+  pending_dispatch: number;
+  in_transit: number;
+  at_shop: number;
+  ready: number;
+}
+
+export interface WeeeTStaff {
+  id: string;
+  name: string;
+  phone: string;
+  available: boolean;
+  active_jobs: number;
+  distance_km?: number;
+}
+
+export const PICKUP_STATUS_LABEL: Record<PickupStatus, string> = {
+  pending_dispatch: "รอมอบหมายช่าง",
+  dispatched: "มอบหมายแล้ว",
+  en_route: "ช่างเดินทางรับ",
+  at_customer: "ช่างถึงบ้านลูกค้า",
+  appliance_at_shop: "เครื่องถึงร้าน",
+  diagnosing: "กำลังวินิจฉัย",
+  repairing: "กำลังซ่อม",
+  ready: "พร้อมส่งคืน",
+  out_for_delivery: "กำลังส่งคืน",
+  delivered: "ส่งคืนแล้ว",
+  cancelled: "ยกเลิก",
+};
+
+export const PICKUP_STATUS_COLOR: Record<PickupStatus, string> = {
+  pending_dispatch: "bg-orange-100 text-orange-700",
+  dispatched: "bg-blue-100 text-blue-700",
+  en_route: "bg-indigo-100 text-indigo-700",
+  at_customer: "bg-cyan-100 text-cyan-700",
+  appliance_at_shop: "bg-yellow-100 text-yellow-700",
+  diagnosing: "bg-purple-100 text-purple-700",
+  repairing: "bg-green-100 text-green-700",
+  ready: "bg-teal-100 text-teal-700",
+  out_for_delivery: "bg-emerald-100 text-emerald-700",
+  delivered: "bg-gray-100 text-gray-600",
+  cancelled: "bg-red-100 text-red-600",
+};

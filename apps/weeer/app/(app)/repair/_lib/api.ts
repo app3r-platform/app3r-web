@@ -1,4 +1,4 @@
-import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue } from "./types";
+import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue, PickupJob, PickupQueue, WeeeTStaff } from "./types";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -123,6 +123,59 @@ export const repairApi = {
     notes?: string;
   }) =>
     apiFetch<WalkInJob>(`/repair/walk-in/${id}/abandon`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  // ── Pickup ─────────────────────────────────────────────────────────────────
+
+  getPickupQueue: () =>
+    apiFetch<PickupQueue>("/repair/shops/me/pickup-queue"),
+
+  getPickupJob: (id: string) =>
+    apiFetch<PickupJob>(`/repair/jobs/${id}`),
+
+  getAvailableStaff: () =>
+    apiFetch<WeeeTStaff[]>("/repair/shops/me/available-staff"),
+
+  dispatchPickup: (id: string, body: {
+    tech_id: string;
+    scheduled_pickup_time: string;
+  }) =>
+    apiFetch<PickupJob>(`/repair/jobs/${id}/dispatch`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  trackPickup: (id: string) =>
+    apiFetch<{ job: PickupJob; timeline: { status: string; timestamp: string; note?: string }[] }>(
+      `/repair/jobs/${id}/track`
+    ),
+
+  intakePickup: (id: string, body: {
+    condition_notes: string;
+    intake_photos?: string[];
+  }) =>
+    apiFetch<PickupJob>(`/repair/jobs/${id}/intake`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  diagnosePickup: (id: string, body: {
+    diagnosis_notes: string;
+    parts: { name: string; qty: number; price: number }[];
+    total_cost: number;
+  }) =>
+    apiFetch<PickupJob>(`/repair/jobs/${id}/diagnose`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  dispatchDelivery: (id: string, body: {
+    tech_id: string;
+    scheduled_delivery_time: string;
+  }) =>
+    apiFetch<PickupJob>(`/repair/jobs/${id}/dispatch-delivery`, {
       method: "POST",
       body: JSON.stringify(body),
     }),

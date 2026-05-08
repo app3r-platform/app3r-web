@@ -16,7 +16,8 @@ const navItems = [
   { href: "/repair/dashboard", icon: "🔧", label: "ซ่อม (C)",      module: true },
   { href: "/repair/jobs",      icon: "📋", label: "  งานซ่อม",      module: true, sub: true },
   { href: "/repair/announcements", icon: "📢", label: "  ประกาศรับงาน", module: true, sub: true },
-  { href: "/repair/walk-in/queue", icon: "🚶", label: "  Walk-in Queue", module: true, sub: true },
+  { href: "/repair/walk-in/queue",  icon: "🚶", label: "  Walk-in Queue",  module: true, sub: true },
+  { href: "/repair/pickup/queue",   icon: "🚛", label: "  Pickup Queue",   module: true, sub: true },
   { href: "/modules/maintain",icon: "🛠️", label: "บำรุง (D)",     module: true },
   { href: "/modules/parts",   icon: "🔩", label: "อะไหล่ (E)",    module: true },
 ];
