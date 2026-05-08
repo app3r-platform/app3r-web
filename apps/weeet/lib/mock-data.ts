@@ -134,12 +134,12 @@ export const mockJobs: Job[] = [
 ];
 
 export const mockParts: Part[] = [
-  { id: "p001", name: "น้ำยาแอร์ R32", sku: "REF-R32-1KG", category: "น้ำยา", unit: "กระป๋อง", stockQty: 12, price: 850 },
-  { id: "p002", name: "แผ่นกรองอากาศ (ทั่วไป)", sku: "FILT-GEN-01", category: "อะไหล่", unit: "ชิ้น", stockQty: 25, price: 120 },
-  { id: "p003", name: "สายรัด PVC 4นิ้ว", sku: "PIPE-PVC-4IN", category: "อุปกรณ์", unit: "เมตร", stockQty: 50, price: 45 },
-  { id: "p004", name: "มอเตอร์พัดลม (Universal)", sku: "MTR-FAN-UNI", category: "อะไหล่", unit: "ตัว", stockQty: 3, price: 1200 },
-  { id: "p005", name: "คาปาซิเตอร์ 35/5 MFD", sku: "CAP-35-5MFD", category: "อะไหล่", unit: "ตัว", stockQty: 8, price: 180 },
-  { id: "p006", name: "น้ำยาล้างคอยล์", sku: "CLN-COIL-500ML", category: "น้ำยา", unit: "ขวด", stockQty: 15, price: 95 },
+  { id: "p001", shopId: "shop-001", name: "น้ำยาแอร์ R32", sku: "REF-R32-1KG", category: "น้ำยา", unit: "กระป๋อง", condition: "new", stockQty: 12, reservedQty: 0, unitPrice: 850, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "p002", shopId: "shop-001", name: "แผ่นกรองอากาศ (ทั่วไป)", sku: "FILT-GEN-01", category: "อะไหล่", unit: "ชิ้น", condition: "new", stockQty: 25, reservedQty: 0, unitPrice: 120, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "p003", shopId: "shop-001", name: "สายรัด PVC 4นิ้ว", sku: "PIPE-PVC-4IN", category: "อุปกรณ์", unit: "เมตร", condition: "new", stockQty: 50, reservedQty: 0, unitPrice: 45, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "p004", shopId: "shop-001", name: "มอเตอร์พัดลม (Universal)", sku: "MTR-FAN-UNI", category: "อะไหล่", unit: "ตัว", condition: "used", stockQty: 3, reservedQty: 1, unitPrice: 1200, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "p005", shopId: "shop-001", name: "คาปาซิเตอร์ 35/5 MFD", sku: "CAP-35-5MFD", category: "อะไหล่", unit: "ตัว", condition: "new", stockQty: 8, reservedQty: 0, unitPrice: 180, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
+  { id: "p006", shopId: "shop-001", name: "น้ำยาล้างคอยล์", sku: "CLN-COIL-500ML", category: "น้ำยา", unit: "ขวด", condition: "new", stockQty: 15, reservedQty: 0, unitPrice: 95, createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-01-01T00:00:00Z" },
 ];
 
 export const todayJobs = mockJobs.filter(
