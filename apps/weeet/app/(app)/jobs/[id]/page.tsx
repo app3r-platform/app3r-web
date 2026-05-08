@@ -25,6 +25,8 @@ const STATUS_LABEL: Record<RepairJobStatus, string> = {
   tested_ok: "ทดสอบผ่าน",
   en_route_delivery: "กำลังส่งคืน",
   delivered: "ส่งคืนแล้ว",
+  // Parcel states
+  handed_off_to_weeer: "ส่งกลับ WeeeR",
 };
 
 const STATUS_COLOR: Record<RepairJobStatus, string> = {
@@ -48,6 +50,8 @@ const STATUS_COLOR: Record<RepairJobStatus, string> = {
   tested_ok: "bg-teal-900/60 text-teal-300",
   en_route_delivery: "bg-blue-900/60 text-blue-300",
   delivered: "bg-green-900/60 text-green-300",
+  // Parcel states
+  handed_off_to_weeer: "bg-green-900/60 text-green-300",
 };
 
 function InfoRow({ label, value }: { label: string; value?: string | null }) {
@@ -198,6 +202,30 @@ function ActionButton({
     }
   }
 
+  // ── Parcel flow (in-shop repair only, no GPS/signature) ──
+  if (service_type === "parcel") {
+    if (status === "assigned" || status === "in_progress") {
+      return (
+        <button
+          onClick={() => go("parcel/in-progress")}
+          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+        >
+          🔧 บันทึกการซ่อม (Parcel)
+        </button>
+      );
+    }
+    if (status === "tested_ok") {
+      return (
+        <button
+          onClick={() => go("parcel/tested")}
+          className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors"
+        >
+          ✅ บันทึกผลทดสอบ + ส่งกลับ WeeeR
+        </button>
+      );
+    }
+  }
+
   return null;
 }
 
@@ -262,7 +290,7 @@ export default function JobDetailPage({
       })
     : null;
 
-  const CLOSED_STATUSES = ["closed", "cancelled", "converted_scrap", "delivered"];
+  const CLOSED_STATUSES = ["closed", "cancelled", "converted_scrap", "delivered", "handed_off_to_weeer"];
 
   return (
     <div className="pb-6">
@@ -389,6 +417,7 @@ export default function JobDetailPage({
             {job.status === "converted_scrap" && "โอนเป็นงานรับซื้อของเก่าแล้ว"}
             {job.status === "closed" && "งานปิดแล้ว"}
             {job.status === "delivered" && "ส่งคืนเครื่องเรียบร้อยแล้ว"}
+            {job.status === "handed_off_to_weeer" && "ส่งพัสดุกลับ WeeeR เรียบร้อยแล้ว"}
           </div>
         )}
       </div>

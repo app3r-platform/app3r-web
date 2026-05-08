@@ -7,17 +7,19 @@ import type { RepairJob, RepairJobStatus } from "@/lib/types";
 // walk_in jobs belong to WeeeR (in-store) — never show on WeeeT
 const EXCLUDED_SERVICE_TYPES = ["walk_in"] as const;
 
-type TabKey = "all" | "on_site" | "pickup" | "done";
+type TabKey = "all" | "on_site" | "pickup" | "parcel" | "done";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "ทั้งหมด" },
   { key: "on_site", label: "On-site" },
   { key: "pickup", label: "🚛 Pickup" },
+  { key: "parcel", label: "📦 Parcel" },
   { key: "done", label: "เสร็จ/ปิด" },
 ];
 
 const DONE_STATUSES: RepairJobStatus[] = [
   "completed", "closed", "cancelled", "converted_scrap", "delivered",
+  "handed_off_to_weeer",
 ];
 const AWAITING_STATUSES: RepairJobStatus[] = [
   "awaiting_entry", "awaiting_decision", "awaiting_user", "awaiting_review",
@@ -45,6 +47,8 @@ function statusLabel(s: RepairJobStatus): string {
     tested_ok: "ทดสอบผ่าน",
     en_route_delivery: "กำลังส่งคืน",
     delivered: "ส่งคืนแล้ว",
+    // Parcel states
+    handed_off_to_weeer: "ส่งกลับ WeeeR",
   };
   return map[s] ?? s;
 }
@@ -116,6 +120,9 @@ export default function JobsPage() {
       (activeTab === "pickup" &&
         job.service_type === "pickup" &&
         !DONE_STATUSES.includes(job.status)) ||
+      (activeTab === "parcel" &&
+        job.service_type === "parcel" &&
+        !DONE_STATUSES.includes(job.status)) ||
       (activeTab === "done" && DONE_STATUSES.includes(job.status));
     const q = search.toLowerCase();
     const matchSearch =
@@ -135,6 +142,10 @@ export default function JobsPage() {
     if (key === "pickup")
       return jobs.filter(
         (j) => j.service_type === "pickup" && !DONE_STATUSES.includes(j.status)
+      ).length;
+    if (key === "parcel")
+      return jobs.filter(
+        (j) => j.service_type === "parcel" && !DONE_STATUSES.includes(j.status)
       ).length;
     return jobs.filter((j) => DONE_STATUSES.includes(j.status)).length;
   }
