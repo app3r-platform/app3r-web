@@ -19,7 +19,9 @@ const navItems = [
   { href: "/repair/walk-in/queue",  icon: "🚶", label: "  Walk-in Queue",  module: true, sub: true },
   { href: "/repair/pickup/queue",   icon: "🚛", label: "  Pickup Queue",   module: true, sub: true },
   { href: "/repair/parcel/queue",   icon: "📦", label: "  Parcel Queue",   module: true, sub: true },
-  { href: "/modules/maintain",icon: "🛠️", label: "บำรุง (D)",     module: true },
+  { href: "/maintain/queue",   icon: "🛠️", label: "บำรุง (D)",     module: true },
+  { href: "/maintain/queue",   icon: "🗓", label: "  คิวงานใหม่",   module: true, sub: true },
+  { href: "/maintain/jobs",    icon: "📋", label: "  งานของฉัน",    module: true, sub: true },
   { href: "/modules/parts",   icon: "🔩", label: "อะไหล่ (E)",    module: true },
 ];
 
