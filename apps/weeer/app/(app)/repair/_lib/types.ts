@@ -102,3 +102,70 @@ export const BRANCH_LABEL: Record<DecisionBranch, string> = {
   "B2.1": "ซ่อมไม่ได้ — ยกเลิกงาน",
   "B2.2": "ซ่อมไม่ได้ — เสนอซื้อซาก",
 };
+
+// ── Walk-in types ──────────────────────────────────────────────────────────────
+
+export type WalkInStatus =
+  | "waiting"       // รอรับเครื่อง
+  | "received"      // รับเครื่องแล้ว รอตรวจ
+  | "inspecting"    // กำลังตรวจสภาพ
+  | "in_progress"   // กำลังซ่อม
+  | "ready"         // ซ่อมเสร็จ รอลูกค้ามารับ
+  | "closed"        // ปิดงาน (ลูกค้ารับไปแล้ว)
+  | "abandoned";    // ไม่มารับ — Abandoned Device Protocol
+
+export interface WalkInJob {
+  id: string;
+  receipt_code: string;           // รหัส 8 หลัก เช่น WI-A3F9K2
+  customer_name: string;
+  customer_phone: string;
+  appliance_name: string;
+  problem_description: string;
+  status: WalkInStatus;
+  received_at?: string;
+  inspected_at?: string;
+  started_at?: string;
+  ready_at?: string;
+  closed_at?: string;
+  abandoned_at?: string;
+  estimated_price?: number;
+  final_price?: number;
+  parts_added?: { name: string; qty: number; price: number }[];
+  intake_files?: string[];        // รูปถ่ายตอนรับเครื่อง
+  diagnosis_notes?: string;
+  storage_fee_rate?: number;      // pts/วัน หลังจาก ready_at
+  storage_fee_accrued?: number;   // ยอดสะสมปัจจุบัน
+  storage_fee_days?: number;      // จำนวนวันที่ค้างอยู่
+  abandoned_notified_at?: string; // วันที่แจ้งลูกค้า
+  abandoned_grace_days?: number;  // 7 / 14 / 30 วัน
+  abandoned_action?: "scrap" | "disposal" | "pending";
+  created_at: string;
+}
+
+export interface WalkInQueue {
+  items: WalkInJob[];
+  total: number;
+  waiting: number;
+  ready_for_pickup: number;
+  storage_fee_total: number;
+}
+
+export const WALKIN_STATUS_LABEL: Record<WalkInStatus, string> = {
+  waiting: "รอรับเครื่อง",
+  received: "รับเครื่องแล้ว",
+  inspecting: "กำลังตรวจ",
+  in_progress: "กำลังซ่อม",
+  ready: "พร้อมรับคืน",
+  closed: "ปิดงาน",
+  abandoned: "ไม่มารับ",
+};
+
+export const WALKIN_STATUS_COLOR: Record<WalkInStatus, string> = {
+  waiting: "bg-gray-100 text-gray-600",
+  received: "bg-blue-100 text-blue-700",
+  inspecting: "bg-purple-100 text-purple-700",
+  in_progress: "bg-green-100 text-green-700",
+  ready: "bg-teal-100 text-teal-700",
+  closed: "bg-emerald-100 text-emerald-700",
+  abandoned: "bg-red-100 text-red-600",
+};

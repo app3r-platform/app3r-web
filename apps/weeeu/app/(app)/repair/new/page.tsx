@@ -6,10 +6,14 @@ import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 
 type Appliance = { id: string; name: string; brand: string; model: string };
+type ServiceType = "on_site" | "walk_in";
 
 export default function RepairNewPage() {
   const router = useRouter();
   const [appliances, setAppliances] = useState<Appliance[]>([]);
+  const [serviceType, setServiceType] = useState<ServiceType>("on_site");
+  const [selectedShopId, setSelectedShopId] = useState("");
+  const [selectedShopName, setSelectedShopName] = useState("");
   const [form, setForm] = useState({
     appliance_id: "",
     issue_summary: "",
@@ -27,6 +31,14 @@ export default function RepairNewPage() {
     apiFetch("/api/v1/appliances")
       .then(r => r.ok ? r.json() : { items: [] })
       .then(d => setAppliances(d.items ?? []));
+    // Read back shop selection from select-shop page (via URL params)
+    const params = new URLSearchParams(window.location.search);
+    const st = params.get("service_type");
+    const sid = params.get("shop_id");
+    const sname = params.get("shop_name");
+    if (st === "walk_in") setServiceType("walk_in");
+    if (sid) setSelectedShopId(sid);
+    if (sname) setSelectedShopName(decodeURIComponent(sname));
   }, []);
 
   const clearErr = (key: string) =>
@@ -56,7 +68,8 @@ export default function RepairNewPage() {
     if (!form.appliance_id) e.appliance_id = "กรุณาเลือกเครื่องใช้ไฟฟ้า";
     if (!form.issue_summary.trim()) e.issue_summary = "กรุณาระบุอาการเสียเบื้องต้น";
     if (photos.length < 1) e.photos = "กรุณาถ่ายรูปอาการเสียอย่างน้อย 1 รูป (R-01.5)";
-    if (!form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
+    if (serviceType === "on_site" && !form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
+    if (serviceType === "walk_in" && !selectedShopId) e.shop = "กรุณาเลือกร้านซ่อม";
     return e;
   };
 
@@ -71,15 +84,24 @@ export default function RepairNewPage() {
       body.append("appliance_id", form.appliance_id);
       body.append("issue_summary", form.issue_summary);
       body.append("issue_detail", form.issue_detail);
-      body.append("service_type", "on_site");
-      body.append("scheduled_at", new Date(form.scheduled_at).toISOString());
+      body.append("service_type", serviceType);
+      if (serviceType === "on_site") {
+        body.append("scheduled_at", new Date(form.scheduled_at).toISOString());
+      }
+      if (serviceType === "walk_in") {
+        body.append("shop_id", selectedShopId);
+      }
       if (form.budget_max) body.append("budget_max", form.budget_max);
       photos.forEach(f => body.append("photos", f));
 
       const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
-      router.push(`/repair/${data.id}/offers`);
+      // Walk-in → receipt page; On-site → offers list
+      router.push(serviceType === "walk_in"
+        ? `/repair/${data.id}/walk-in-receipt`
+        : `/repair/${data.id}/offers`
+      );
     } catch {
       setErrors({ general: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง" });
     } finally {
@@ -108,6 +130,39 @@ export default function RepairNewPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+        {/* Service type toggle */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ประเภทบริการ</p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => { setServiceType("on_site"); setErrors({}); }}
+              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
+                serviceType === "on_site"
+                  ? "bg-blue-600 border-blue-600 text-white"
+                  : "border-gray-200 text-gray-500 hover:border-blue-300"
+              }`}
+            >
+              <span className="text-lg">🏠</span>
+              <span>นอกสถานที่ (On-site)</span>
+              <span className="text-xs opacity-75">ช่างมาบ้านคุณ</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setServiceType("walk_in"); setErrors({}); }}
+              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
+                serviceType === "walk_in"
+                  ? "bg-green-600 border-green-600 text-white"
+                  : "border-gray-200 text-gray-500 hover:border-green-300"
+              }`}
+            >
+              <span className="text-lg">🚶</span>
+              <span>Walk-in</span>
+              <span className="text-xs opacity-75">นำเครื่องไปร้าน</span>
+            </button>
+          </div>
+        </div>
+
         {/* Appliance */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">เครื่องใช้ไฟฟ้า</p>
@@ -199,22 +254,58 @@ export default function RepairNewPage() {
           <p className="text-xs text-gray-400">ต้องมีอย่างน้อย 1 รูป, สูงสุด 5 รูป (Media Constraints R-01.5)</p>
         </div>
 
-        {/* Schedule */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">นัดหมาย</p>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              วันที่สะดวก <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="datetime-local"
-              value={form.scheduled_at}
-              min={minDate.toISOString().slice(0, 16)}
-              onChange={e => { setForm(f => ({ ...f, scheduled_at: e.target.value })); clearErr("scheduled_at"); }}
-              className={inputCls("scheduled_at")}
-            />
-            {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
+        {/* Walk-in: shop selector */}
+        {serviceType === "walk_in" && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ร้านซ่อม</p>
+            {selectedShopId ? (
+              <div className="flex items-center justify-between gap-3 bg-green-50 rounded-xl p-3">
+                <div>
+                  <p className="text-sm font-semibold text-green-800">✅ {selectedShopName}</p>
+                  <p className="text-xs text-green-600 mt-0.5">ร้านที่เลือกแล้ว</p>
+                </div>
+                <Link
+                  href={`/repair/walk-in/select-shop?service_type=walk_in`}
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  เปลี่ยนร้าน
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <Link
+                  href="/repair/walk-in/select-shop?service_type=walk_in"
+                  className="w-full flex items-center justify-between gap-3 border-2 border-dashed border-green-300 rounded-xl p-4 text-green-600 hover:border-green-500 hover:bg-green-50 transition-colors"
+                >
+                  <span className="text-sm font-medium">🏪 เลือกร้านซ่อมที่จะไป</span>
+                  <span className="text-lg">›</span>
+                </Link>
+                {errors.shop && <p className="text-red-500 text-xs mt-1">{errors.shop}</p>}
+              </div>
+            )}
           </div>
+        )}
+
+        {/* On-site schedule / Walk-in budget */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            {serviceType === "on_site" ? "นัดหมาย" : "งบประมาณ"}
+          </p>
+          {serviceType === "on_site" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                วันที่สะดวก <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="datetime-local"
+                value={form.scheduled_at}
+                min={minDate.toISOString().slice(0, 16)}
+                onChange={e => { setForm(f => ({ ...f, scheduled_at: e.target.value })); clearErr("scheduled_at"); }}
+                className={inputCls("scheduled_at")}
+              />
+              {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">งบประมาณสูงสุด (Point)</label>
             <input
@@ -228,19 +319,34 @@ export default function RepairNewPage() {
           </div>
         </div>
 
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-          <p className="text-xs text-blue-700">
-            🔧 <strong>บริการนอกสถานที่ (On-site)</strong> — ช่างจะออกมาซ่อมถึงบ้านคุณ
-            ค่าตรวจ 100 Point (ไม่คืน)
-          </p>
-        </div>
+        {serviceType === "on_site" ? (
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            <p className="text-xs text-blue-700">
+              🔧 <strong>บริการนอกสถานที่ (On-site)</strong> — ช่างจะออกมาซ่อมถึงบ้านคุณ
+              ค่าตรวจ 100 Point (ไม่คืน)
+            </p>
+          </div>
+        ) : (
+          <div className="bg-green-50 border border-green-100 rounded-xl p-3">
+            <p className="text-xs text-green-700">
+              🚶 <strong>Walk-in</strong> — นำเครื่องไปที่ร้านซ่อมได้เลย รับ Receipt code เพื่อติดตามสถานะ
+            </p>
+          </div>
+        )}
 
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+          className={`w-full font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 ${
+            serviceType === "walk_in"
+              ? "bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white"
+              : "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white"
+          }`}
         >
-          {submitting ? <><span className="animate-spin">⟳</span> กำลังส่งคำขอ...</> : "ส่งคำขอซ่อม"}
+          {submitting
+            ? <><span className="animate-spin">⟳</span> กำลังส่งคำขอ...</>
+            : serviceType === "walk_in" ? "🚶 ส่งคำขอ Walk-in" : "ส่งคำขอซ่อม"
+          }
         </button>
       </form>
     </div>

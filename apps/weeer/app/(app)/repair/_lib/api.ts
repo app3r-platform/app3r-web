@@ -1,4 +1,4 @@
-import type { RepairJob, RepairAnnouncement, RepairDashboard } from "./types";
+import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue } from "./types";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -74,6 +74,55 @@ export const repairApi = {
     notes?: string;
   }) =>
     apiFetch<{ offer_id: string }>(`/repair/announcements/${announcementId}/offers`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  // ── Walk-in ────────────────────────────────────────────────────────────────
+
+  getWalkInQueue: () =>
+    apiFetch<WalkInQueue>("/repair/walk-in/queue"),
+
+  getWalkIn: (id: string) =>
+    apiFetch<WalkInJob>(`/repair/walk-in/${id}`),
+
+  receiveWalkIn: (id: string, body: {
+    customer_name: string;
+    customer_phone: string;
+    appliance_name: string;
+    problem_description: string;
+    intake_files?: string[];
+  }) =>
+    apiFetch<WalkInJob>(`/repair/walk-in/${id}/receive`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  inspectWalkIn: (id: string, body: {
+    diagnosis_notes: string;
+    estimated_price: number;
+    parts_added?: { name: string; qty: number; price: number }[];
+  }) =>
+    apiFetch<WalkInJob>(`/repair/walk-in/${id}/inspect`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  startWalkIn: (id: string) =>
+    apiFetch<WalkInJob>(`/repair/walk-in/${id}/start`, { method: "POST", body: JSON.stringify({}) }),
+
+  readyWalkIn: (id: string) =>
+    apiFetch<WalkInJob>(`/repair/walk-in/${id}/ready`, { method: "POST", body: JSON.stringify({}) }),
+
+  getStorageFee: (id: string) =>
+    apiFetch<{ fee_accrued: number; days: number; rate: number }>(`/repair/walk-in/${id}/storage-fee`),
+
+  abandonWalkIn: (id: string, body: {
+    grace_days: 7 | 14 | 30;
+    action: "scrap" | "disposal";
+    notes?: string;
+  }) =>
+    apiFetch<WalkInJob>(`/repair/walk-in/${id}/abandon`, {
       method: "POST",
       body: JSON.stringify(body),
     }),

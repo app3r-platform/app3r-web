@@ -42,6 +42,11 @@ type RepairJobDetail = {
   final_price: number | null;
   inspection_fee: number;
   deposit_amount: number | null;
+  // Walk-in storage fee fields
+  storage_fee_per_day: number | null;
+  storage_fee_total: number | null;
+  pickup_deadline: string | null;
+  receipt_code: string | null;
   timeline: TimelineEvent[];
 };
 
@@ -97,7 +102,13 @@ export default function RepairJobDetailPage() {
         if (!r.ok) throw new Error("not found");
         return r.json();
       })
-      .then(setJob)
+      .then(d => setJob({
+        ...d,
+        storage_fee_per_day: d.storage_fee_per_day ?? null,
+        storage_fee_total: d.storage_fee_total ?? null,
+        pickup_deadline: d.pickup_deadline ?? null,
+        receipt_code: d.receipt_code ?? null,
+      }))
       .catch(() => setError("ไม่พบข้อมูลงานซ่อม"))
       .finally(() => setLoading(false));
   }, [id]);
@@ -146,6 +157,56 @@ export default function RepairJobDetailPage() {
         </Link>
       )}
 
+      {/* Walk-in receipt link */}
+      {job.service_type === "walk_in" && job.receipt_code && (
+        <Link
+          href={`/repair/${id}/walk-in-receipt`}
+          className="block bg-green-50 border border-green-200 rounded-2xl p-4 hover:bg-green-100 transition-colors"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-green-800">🚶 Walk-in — ใบรับเครื่อง</p>
+              <p className="font-mono text-lg font-bold text-green-700 mt-0.5 tracking-widest">{job.receipt_code}</p>
+            </div>
+            <span className="text-green-500 text-xl">›</span>
+          </div>
+        </Link>
+      )}
+
+      {/* Walk-in storage fee accrual warning */}
+      {job.service_type === "walk_in" && job.storage_fee_per_day && (
+        <div className={`rounded-2xl p-4 border ${
+          job.storage_fee_total && job.storage_fee_total > 0
+            ? "bg-red-50 border-red-200"
+            : "bg-amber-50 border-amber-200"
+        }`}>
+          <p className={`text-sm font-semibold ${
+            job.storage_fee_total && job.storage_fee_total > 0 ? "text-red-800" : "text-amber-800"
+          }`}>
+            ⏳ ค่าฝากเครื่อง
+          </p>
+          {job.pickup_deadline && (
+            <p className={`text-xs mt-1 ${
+              job.storage_fee_total && job.storage_fee_total > 0 ? "text-red-600" : "text-amber-600"
+            }`}>
+              กำหนดรับ: {formatDate(job.pickup_deadline)}
+            </p>
+          )}
+          {job.storage_fee_total && job.storage_fee_total > 0 ? (
+            <p className="text-sm font-bold text-red-700 mt-1">
+              ค่าฝากสะสม: {job.storage_fee_total.toLocaleString()} Point
+              <span className="text-xs font-normal text-red-500 ml-1">
+                ({job.storage_fee_per_day.toLocaleString()} Point/วัน)
+              </span>
+            </p>
+          ) : (
+            <p className="text-xs text-amber-600 mt-1">
+              หากไม่รับตามกำหนด จะมีค่าฝาก {job.storage_fee_per_day.toLocaleString()} Point/วัน
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Status card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
         <div className="flex items-start justify-between gap-3">
@@ -191,7 +252,10 @@ export default function RepairJobDetailPage() {
               <Row label="ราคาที่เสนอใหม่" value={`${job.proposed_price.toLocaleString()} Point`} highlight />
             )}
             {job.final_price && <Row label="ราคาสุดท้าย" value={`${job.final_price.toLocaleString()} Point`} />}
-            <Row label="ค่าตรวจ (On-site)" value={`${job.inspection_fee.toLocaleString()} Point`} />
+            <Row
+              label={job.service_type === "walk_in" ? "ค่าตรวจ (Walk-in)" : "ค่าตรวจ (On-site)"}
+              value={`${job.inspection_fee.toLocaleString()} Point`}
+            />
             {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} Point`} />}
           </div>
         </div>
