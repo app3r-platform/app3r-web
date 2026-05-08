@@ -12,7 +12,8 @@ const navItems = [
   { href: "/modules/repair", icon: "🔧", label: "แจ้งซ่อม", module: true },
   { href: "/modules/resell", icon: "💰", label: "ขาย/ซื้อ มือสอง", module: true },
   { href: "/modules/scrap", icon: "♻️", label: "ขายซาก/ทิ้งซาก", module: true },
-  { href: "/modules/maintain", icon: "🛠️", label: "บำรุงรักษา", module: true },
+  { href: "/maintain/book", icon: "🛁", label: "จองล้าง" },
+  { href: "/maintain/jobs", icon: "🛠️", label: "งานล้างของฉัน" },
   { href: "/modules/parts", icon: "🔩", label: "อะไหล่", module: true },
 ];
 
