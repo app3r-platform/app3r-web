@@ -1,9 +1,14 @@
 import { getToken } from "./auth";
+// TODO: REMOVE BEFORE PROD — TD-04 dev auth bypass
+import { getDevTestToken } from "./dev-auth";
 
 const BASE = "/api/v1";
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = getToken();
+  // TODO: REMOVE BEFORE PROD — use dev test token in development mode
+  const token = process.env.NODE_ENV === "development"
+    ? await getDevTestToken()
+    : getToken();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),

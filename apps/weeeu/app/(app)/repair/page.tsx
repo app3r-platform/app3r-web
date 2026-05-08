@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { apiFetch } from "@/lib/api-client";
 
 type RepairStatus =
   | "draft" | "open" | "matching" | "assigned"
@@ -98,11 +99,9 @@ export default function RepairListPage() {
   const [filter, setFilter] = useState<"active" | "closed">("active");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
     Promise.all([
-      fetch("/api/v1/repair/listings?role=weeeu", { headers }).then(r => r.ok ? r.json() : { items: [] }),
-      fetch("/api/v1/repair/jobs?role=weeeu", { headers }).then(r => r.ok ? r.json() : { items: [] }),
+      apiFetch("/api/v1/repair/listings?role=weeeu").then(r => r.ok ? r.json() : { items: [] }),
+      apiFetch("/api/v1/repair/jobs?role=weeeu").then(r => r.ok ? r.json() : { items: [] }),
     ]).then(([ld, jd]) => {
       setListings(ld.items ?? []);
       setJobs(jd.items ?? []);

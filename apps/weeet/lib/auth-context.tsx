@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import type { AuthState, Technician, AccountType } from "./types";
 import { mockTechnician } from "./mock-data";
-import { getDevToken } from "./api";
+import { getDevTestToken } from "./dev-auth"; // TODO: REMOVE BEFORE PROD
 
 interface AuthContextValue {
   auth: AuthState;
@@ -28,11 +28,6 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 const SESSION_KEY = "weeet_auth";
-
-// Dev token credentials from env (TD-04)
-const DEV_USER_ID = process.env.NEXT_PUBLIC_DEV_USER_ID ?? "";
-const DEV_SHOP_ID = process.env.NEXT_PUBLIC_DEV_SHOP_ID ?? "";
-const DEV_PHONE = process.env.NEXT_PUBLIC_DEV_PHONE ?? "+66812345678";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [auth, setAuth] = useState<AuthState>({
@@ -65,16 +60,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isRented = password === "changeme123";
     const accountType: AccountType = isRented ? "rented" : "default";
 
-    // TD-04: Attempt to get a real dev token from backend
+    // TODO: REMOVE BEFORE PROD — populate token via dev bypass
     let token: string | undefined;
-    if (DEV_USER_ID && DEV_SHOP_ID) {
+    if (process.env.NODE_ENV === "development") {
       try {
-        token = await getDevToken({
-          user_id: DEV_USER_ID,
-          role: "weeet",
-          phone: DEV_PHONE,
-          shop_id: DEV_SHOP_ID,
-        });
+        token = await getDevTestToken();
       } catch {
         // Dev token unavailable — continue with mock (null token)
         token = undefined;

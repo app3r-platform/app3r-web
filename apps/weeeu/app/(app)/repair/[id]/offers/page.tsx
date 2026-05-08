@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 type RepairOffer = {
   id: string;
@@ -42,11 +43,9 @@ export default function RepairOffersPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
     Promise.all([
-      fetch(`/api/v1/repair/listings/${id}`, { headers }).then(r => r.ok ? r.json() : null),
-      fetch(`/api/v1/repair/listings/${id}/offers`, { headers }).then(r => r.ok ? r.json() : { items: [] }),
+      apiFetch(`/api/v1/repair/listings/${id}`).then(r => r.ok ? r.json() : null),
+      apiFetch(`/api/v1/repair/listings/${id}/offers`).then(r => r.ok ? r.json() : { items: [] }),
     ]).then(([ld, od]) => {
       setListing(ld);
       setOffers(od.items ?? []);
@@ -57,13 +56,8 @@ export default function RepairOffersPage() {
   const handleSelect = async (offerId: string) => {
     setSelecting(offerId);
     try {
-      const token = localStorage.getItem("access_token");
-      const res = await fetch(`/api/v1/repair/offers/${offerId}/select`, {
+      const res = await apiFetch(`/api/v1/repair/offers/${offerId}/select`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
         body: JSON.stringify({ listing_id: id }),
       });
       if (!res.ok) throw new Error(await res.text());

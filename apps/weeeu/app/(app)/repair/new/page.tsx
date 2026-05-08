@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 type Appliance = { id: string; name: string; brand: string; model: string };
 
@@ -23,10 +24,7 @@ export default function RepairNewPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch("/api/v1/appliances", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    apiFetch("/api/v1/appliances")
       .then(r => r.ok ? r.json() : { items: [] })
       .then(d => setAppliances(d.items ?? []));
   }, []);
@@ -69,7 +67,6 @@ export default function RepairNewPage() {
     setErrors({});
     setSubmitting(true);
     try {
-      const token = localStorage.getItem("access_token");
       const body = new FormData();
       body.append("appliance_id", form.appliance_id);
       body.append("issue_summary", form.issue_summary);
@@ -79,11 +76,7 @@ export default function RepairNewPage() {
       if (form.budget_max) body.append("budget_max", form.budget_max);
       photos.forEach(f => body.append("photos", f));
 
-      const res = await fetch("/api/v1/repair/listings", {
-        method: "POST",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-        body,
-      });
+      const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       router.push(`/repair/${data.id}/offers`);

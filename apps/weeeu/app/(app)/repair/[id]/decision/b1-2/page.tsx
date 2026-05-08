@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 type PartItem = { name: string; qty: number; price: number };
 
@@ -39,10 +40,7 @@ export default function DecisionB12Page() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch(`/api/v1/repair/jobs/${id}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    apiFetch(`/api/v1/repair/jobs/${id}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d) { setError("ไม่พบข้อมูล"); return; }
@@ -71,19 +69,14 @@ export default function DecisionB12Page() {
     setSubmitting(true);
     setError("");
     try {
-      const token = localStorage.getItem("access_token");
       const endpoint = `/api/v1/repair/jobs/${id}/quote/${type}`;
       const body =
         type === "counter"
           ? { counter_price: parseFloat(counterPrice), round: (data?.negotiation_round ?? 1) + 1 }
           : {};
 
-      const res = await fetch(endpoint, {
+      const res = await apiFetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
         body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error(await res.text());

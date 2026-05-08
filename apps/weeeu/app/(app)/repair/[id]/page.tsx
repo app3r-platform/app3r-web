@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 type RepairStatus =
   | "assigned" | "traveling" | "arrived" | "awaiting_entry"
@@ -91,10 +92,7 @@ export default function RepairJobDetailPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch(`/api/v1/repair/jobs/${id}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    apiFetch(`/api/v1/repair/jobs/${id}`)
       .then(r => {
         if (!r.ok) throw new Error("not found");
         return r.json();

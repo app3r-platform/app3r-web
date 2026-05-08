@@ -1,18 +1,20 @@
 import type { RepairJob, DiagnosePayload } from "./types";
+import { getDevTestToken } from "./dev-auth"; // TODO: REMOVE BEFORE PROD
 
 export const API_BASE = "/api/v1";
 
-function getToken(): string | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const stored = sessionStorage.getItem("weeet_auth");
-    if (stored) return JSON.parse(stored).token ?? null;
-  } catch {}
-  return null;
-}
-
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = getToken();
+  // TODO: REMOVE BEFORE PROD — dev auth bypass
+  let token: string | null = null;
+  if (process.env.NODE_ENV === "development") {
+    try {
+      token = await getDevTestToken();
+    } catch {
+      // Dev token unavailable — proceed without token
+    }
+  }
+  // Production: token จะมาจาก real auth (future phase)
+
   const isFormData = options?.body instanceof FormData;
   const headers: Record<string, string> = {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -22,31 +24,6 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(path, { ...options, headers });
   if (!res.ok) throw new Error(`${res.status}`);
   return res.json() as Promise<T>;
-}
-
-// --- Dev token (TD-04) ---
-export interface DevTokenPayload {
-  user_id: string;
-  role: "weeet";
-  phone: string;
-  shop_id: string;
-  weeer_id?: string;
-}
-
-export interface DevTokenResponse {
-  access_token: string;
-  token_type: string;
-}
-
-export async function getDevToken(payload: DevTokenPayload): Promise<string> {
-  const res = await fetch(`${API_BASE}/_dev/get-test-token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) throw new Error(`dev-token: ${res.status}`);
-  const data: DevTokenResponse = await res.json();
-  return data.access_token;
 }
 
 // --- Repair API ---

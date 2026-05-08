@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 type PostRepairFile = { url: string };
 
@@ -40,10 +41,7 @@ export default function ReviewPage() {
   const [ratingError, setRatingError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch(`/api/v1/repair/jobs/${id}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    apiFetch(`/api/v1/repair/jobs/${id}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d) return;
@@ -68,13 +66,8 @@ export default function ReviewPage() {
     setInspectSubmitting(true);
     setInspectError("");
     try {
-      const token = localStorage.getItem("access_token");
-      const res = await fetch(`/api/v1/repair/jobs/${id}/review/accept`, {
+      const res = await apiFetch(`/api/v1/repair/jobs/${id}/review/accept`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
         body: JSON.stringify({}),
       });
       if (!res.ok) throw new Error(await res.text());
@@ -90,13 +83,8 @@ export default function ReviewPage() {
     setInspectSubmitting(true);
     setInspectError("");
     try {
-      const token = localStorage.getItem("access_token");
-      const res = await fetch(`/api/v1/repair/jobs/${id}/dispute`, {
+      const res = await apiFetch(`/api/v1/repair/jobs/${id}/dispute`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
         body: JSON.stringify({ reason: "quality_dispute" }),
       });
       if (!res.ok) throw new Error(await res.text());
@@ -113,14 +101,9 @@ export default function ReviewPage() {
     setRatingSubmitting(true);
     setRatingError("");
     try {
-      const token = localStorage.getItem("access_token");
-      const headers = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
       await Promise.all([
-        fetch(`/api/v1/repair/jobs/${id}/review`, {
-          method: "POST", headers,
+        apiFetch(`/api/v1/repair/jobs/${id}/review`, {
+          method: "POST",
           body: JSON.stringify({
             target_type: "weeer",
             target_id: data?.weeer_id,
@@ -129,8 +112,8 @@ export default function ReviewPage() {
           }),
         }),
         weeetRating > 0
-          ? fetch(`/api/v1/repair/jobs/${id}/review`, {
-              method: "POST", headers,
+          ? apiFetch(`/api/v1/repair/jobs/${id}/review`, {
+              method: "POST",
               body: JSON.stringify({
                 target_type: "weeet",
                 target_id: data?.weeet_id,

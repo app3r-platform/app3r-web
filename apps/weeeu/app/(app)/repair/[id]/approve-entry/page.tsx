@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 type ArrivalData = {
   id: string;
@@ -23,10 +24,7 @@ export default function ApproveEntryPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch(`/api/v1/repair/jobs/${id}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    apiFetch(`/api/v1/repair/jobs/${id}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d) { setError("ไม่พบข้อมูล"); return; }
@@ -48,13 +46,8 @@ export default function ApproveEntryPage() {
     setSubmitting("approve");
     setError("");
     try {
-      const token = localStorage.getItem("access_token");
-      const res = await fetch(`/api/v1/repair/jobs/${id}/onsite/approve-entry`, {
+      const res = await apiFetch(`/api/v1/repair/jobs/${id}/onsite/approve-entry`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
         body: JSON.stringify({ approved: true }),
       });
       if (!res.ok) throw new Error(await res.text());
@@ -70,13 +63,8 @@ export default function ApproveEntryPage() {
     setSubmitting("reject");
     setError("");
     try {
-      const token = localStorage.getItem("access_token");
-      const res = await fetch(`/api/v1/repair/jobs/${id}/onsite/approve-entry`, {
+      const res = await apiFetch(`/api/v1/repair/jobs/${id}/onsite/approve-entry`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
         body: JSON.stringify({ approved: false, reason: "reject_identity" }),
       });
       if (!res.ok) throw new Error(await res.text());

@@ -1,11 +1,23 @@
 import type { RepairJob, RepairAnnouncement, RepairDashboard } from "./types";
+// TODO: REMOVE BEFORE PROD — dev auth bypass
+import { getDevTestToken } from "../../../../lib/dev-auth";
 
 const BASE = "/api/v1";
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  // TODO: REMOVE BEFORE PROD — dev auth bypass
+  const token =
+    process.env.NODE_ENV === "development"
+      ? await getDevTestToken()
+      : null; // production จะใช้ token จริงจาก auth-context
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
     ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
