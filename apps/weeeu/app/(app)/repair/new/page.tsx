@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 
 type Appliance = { id: string; name: string; brand: string; model: string };
-type ServiceType = "on_site" | "walk_in" | "pickup";
+type ServiceType = "on_site" | "walk_in" | "pickup" | "parcel";
 
 export default function RepairNewPage() {
   const router = useRouter();
@@ -38,6 +38,7 @@ export default function RepairNewPage() {
     const sname = params.get("shop_name");
     if (st === "walk_in") setServiceType("walk_in");
     if (st === "pickup") setServiceType("pickup");
+    if (st === "parcel") setServiceType("parcel");
     if (sid) setSelectedShopId(sid);
     if (sname) setSelectedShopName(decodeURIComponent(sname));
   }, []);
@@ -71,8 +72,8 @@ export default function RepairNewPage() {
     if (photos.length < 1) e.photos = "กรุณาถ่ายรูปอาการเสียอย่างน้อย 1 รูป (R-01.5)";
     if (serviceType === "on_site" && !form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
     if (serviceType === "walk_in" && !selectedShopId) e.shop = "กรุณาเลือกร้านซ่อม";
-    // pickup: photos not validated here — schedule page handles it
-    if (serviceType === "pickup") delete e.photos;
+    // pickup/parcel: photos not validated here — handled by downstream pages
+    if (serviceType === "pickup" || serviceType === "parcel") delete e.photos;
     return e;
   };
 
@@ -112,7 +113,11 @@ export default function RepairNewPage() {
       const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
-      // Walk-in → receipt page; On-site → offers list
+      // Parcel → shipping-details; Walk-in → receipt page; On-site → offers list
+      if (serviceType === "parcel") {
+        router.push(`/repair/${data.id}/shipping-details`);
+        return;
+      }
       router.push(serviceType === "walk_in"
         ? `/repair/${data.id}/walk-in-receipt`
         : `/repair/${data.id}/offers`
@@ -148,7 +153,7 @@ export default function RepairNewPage() {
         {/* Service type toggle */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ประเภทบริการ</p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => { setServiceType("on_site"); setErrors({}); }}
@@ -184,6 +189,18 @@ export default function RepairNewPage() {
             >
               <span className="text-lg">🚛</span>
               <span className="text-xs text-center leading-tight">Pickup<br/>ช่างมารับ-ส่ง</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setServiceType("parcel"); setErrors({}); }}
+              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
+                serviceType === "parcel"
+                  ? "bg-orange-500 border-orange-500 text-white"
+                  : "border-gray-200 text-gray-500 hover:border-orange-300"
+              }`}
+            >
+              <span className="text-lg">📦</span>
+              <span className="text-xs text-center leading-tight">Parcel<br/>ส่งพัสดุ</span>
             </button>
           </div>
         </div>
@@ -311,7 +328,7 @@ export default function RepairNewPage() {
           </div>
         )}
 
-        {/* On-site schedule (not shown for walk_in / pickup) */}
+        {/* On-site schedule / budget (not shown for pickup; parcel shows budget only) */}
         {serviceType !== "pickup" && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -361,6 +378,21 @@ export default function RepairNewPage() {
           </div>
         )}
 
+        {/* Parcel: info box */}
+        {serviceType === "parcel" && (
+          <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 space-y-2">
+            <p className="text-sm font-semibold text-orange-800">📦 Parcel — ส่งพัสดุไปร้านซ่อม</p>
+            <p className="text-xs text-orange-600">ขั้นตอนถัดไป: ตกลงบริษัทขนส่ง + แพ็คพัสดุ + กรอก Tracking</p>
+            <ol className="space-y-1 pl-1">
+              {["ตกลงบริษัทขนส่งและผู้รับผิดชอบค่าส่ง", "แพ็คเครื่องส่งไปร้านซ่อม", "ร้านซ่อม → ส่งคืนเมื่อเสร็จ"].map((s, i) => (
+                <li key={i} className="flex gap-1.5 text-xs text-orange-700">
+                  <span className="font-bold">{i + 1}.</span><span>{s}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
         {serviceType === "on_site" && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
             <p className="text-xs text-blue-700">
@@ -384,6 +416,8 @@ export default function RepairNewPage() {
               ? "bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white"
               : serviceType === "pickup"
               ? "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white"
+              : serviceType === "parcel"
+              ? "bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white"
               : "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white"
           }`}
         >
@@ -393,6 +427,8 @@ export default function RepairNewPage() {
             ? "🚶 ส่งคำขอ Walk-in"
             : serviceType === "pickup"
             ? "🚛 ถัดไป — กรอกที่อยู่และนัดหมาย"
+            : serviceType === "parcel"
+            ? "📦 ส่งคำขอ — ตกลงรายละเอียดขนส่ง"
             : "ส่งคำขอซ่อม"
           }
         </button>
