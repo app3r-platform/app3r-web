@@ -26,10 +26,13 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// Service types that WeeeT technicians handle (walk_in excluded — shop handles in-store)
+export const WEEET_SERVICE_TYPES = ["on_site", "pickup", "parcel"] as const;
+
 // --- Repair API ---
 export const repairApi = {
   listMyJobs: () =>
-    apiFetch<RepairJob[]>(`${API_BASE}/repair/jobs/weeet/`),
+    apiFetch<RepairJob[]>(`${API_BASE}/repair/jobs/weeet/?service_type=on_site&service_type=pickup&service_type=parcel`),
   getJob: (id: string) =>
     apiFetch<RepairJob>(`${API_BASE}/repair/jobs/${id}/`),
   depart: (id: string, body: { departure_location: { lat: number; lng: number } }) =>

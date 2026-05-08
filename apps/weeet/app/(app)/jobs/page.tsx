@@ -1,8 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { repairApi } from "@/lib/api";
+import { repairApi, WEEET_SERVICE_TYPES } from "@/lib/api";
 import type { RepairJob, RepairJobStatus } from "@/lib/types";
+
+// walk_in jobs belong to WeeeR (in-store) — never show on WeeeT
+const EXCLUDED_SERVICE_TYPES = ["walk_in"] as const;
 
 type TabKey = "all" | "active" | "awaiting" | "done";
 
@@ -75,7 +78,10 @@ export default function JobsPage() {
   useEffect(() => {
     repairApi
       .listMyJobs()
-      .then(setJobs)
+      .then((data) => {
+        // Safety filter: exclude walk_in even if backend returns them
+        setJobs(data.filter((j) => !EXCLUDED_SERVICE_TYPES.includes(j.service_type as typeof EXCLUDED_SERVICE_TYPES[number])));
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
