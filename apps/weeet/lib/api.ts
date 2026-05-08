@@ -55,6 +55,14 @@ export const repairApi = {
     apiFetch<RepairJob>(`${API_BASE}/repair/jobs/${id}/complete/`, { method: "POST" }),
 };
 
+// --- Parcel API (Phase C-1.4) ---
+export const parcelApi = {
+  inProgress: (id: string, fd: FormData) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/parcel/in-progress`, { method: "POST", body: fd }),
+  tested: (id: string, fd: FormData) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/parcel/tested`, { method: "POST", body: fd }),
+};
+
 // --- Pickup API (Phase C-1.3) ---
 export const pickupApi = {
   listPickupJobs: () =>

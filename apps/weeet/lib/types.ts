@@ -22,7 +22,9 @@ export type RepairJobStatus =
   | "appliance_at_shop"
   | "tested_ok"
   | "en_route_delivery"
-  | "delivered";
+  | "delivered"
+  // Parcel states (Phase C-1.4)
+  | "handed_off_to_weeer";
 
 // --- Pickup Module (Phase C-1.3) ---
 export const PICKUP_CONDITION_ITEMS = [
