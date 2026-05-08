@@ -71,6 +71,14 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Parts",
+    items: [
+      { href: "/parts",              label: "Inventory",       icon: "🔩" },
+      { href: "/parts/movements",    label: "Movements",       icon: "📦" },
+      { href: "/parts/analytics",    label: "Analytics",       icon: "📊" },
+    ],
+  },
+  {
     label: "ระบบ",
     items: [
       { href: "/system/storage", label: "Storage",         icon: "💾" },
