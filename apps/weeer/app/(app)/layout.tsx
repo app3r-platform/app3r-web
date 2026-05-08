@@ -22,7 +22,10 @@ const navItems = [
   { href: "/maintain/queue",   icon: "🛠️", label: "บำรุง (D)",     module: true },
   { href: "/maintain/queue",   icon: "🗓", label: "  คิวงานใหม่",   module: true, sub: true },
   { href: "/maintain/jobs",    icon: "📋", label: "  งานของฉัน",    module: true, sub: true },
-  { href: "/modules/parts",   icon: "🔩", label: "อะไหล่ (E)",    module: true },
+  { href: "/parts/dashboard",  icon: "🔩", label: "อะไหล่ (E)",    module: true },
+  { href: "/parts",            icon: "📦", label: "  คลังอะไหล่",   module: true, sub: true },
+  { href: "/parts/movements",  icon: "📊", label: "  ความเคลื่อนไหว", module: true, sub: true },
+  { href: "/parts/reservations", icon: "🔒", label: "  ที่จองอยู่",   module: true, sub: true },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
