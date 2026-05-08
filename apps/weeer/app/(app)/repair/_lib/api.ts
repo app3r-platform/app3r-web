@@ -1,4 +1,4 @@
-import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue, PickupJob, PickupQueue, WeeeTStaff } from "./types";
+import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue, PickupJob, PickupQueue, WeeeTStaff, ParcelJob, ParcelQueue } from "./types";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -176,6 +176,62 @@ export const repairApi = {
     scheduled_delivery_time: string;
   }) =>
     apiFetch<PickupJob>(`/repair/jobs/${id}/dispatch-delivery`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  // ── Parcel ─────────────────────────────────────────────────────────────────
+
+  getParcelQueue: () =>
+    apiFetch<ParcelQueue>("/repair/shops/me/parcel-queue"),
+
+  getParcelJob: (id: string) =>
+    apiFetch<ParcelJob>(`/repair/jobs/${id}`),
+
+  confirmShippingDetails: (id: string, body: {
+    shop_address: string;
+    courier: string;
+    cost_split: "customer" | "shop" | "split";
+    notes?: string;
+  }) =>
+    apiFetch<ParcelJob>(`/repair/jobs/${id}/parcel/shipping-details`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  receiveParcel: (id: string, body: {
+    receive_photos?: string[];
+    inbound_tracking?: string;
+    condition_notes?: string;
+  }) =>
+    apiFetch<ParcelJob>(`/repair/jobs/${id}/parcel/receive`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  inspectParcel: (id: string, body: {
+    condition_notes: string;
+    inspect_photos?: string[];
+    estimated_price?: number;
+    parts_added?: { name: string; qty: number; price: number }[];
+  }) =>
+    apiFetch<ParcelJob>(`/repair/jobs/${id}/parcel/inspect`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  dispatchParcelTech: (id: string, body: { tech_id: string }) =>
+    apiFetch<ParcelJob>(`/repair/jobs/${id}/parcel/dispatch-tech`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  shipBack: (id: string, body: {
+    return_tracking: string;
+    post_photos?: string[];
+    packing_photos?: string[];
+  }) =>
+    apiFetch<ParcelJob>(`/repair/jobs/${id}/parcel/ship-back`, {
       method: "POST",
       body: JSON.stringify(body),
     }),

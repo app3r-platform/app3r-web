@@ -254,3 +254,82 @@ export const PICKUP_STATUS_COLOR: Record<PickupStatus, string> = {
   delivered: "bg-gray-100 text-gray-600",
   cancelled: "bg-red-100 text-red-600",
 };
+
+// ── Parcel types ───────────────────────────────────────────────────────────────
+
+export type ParcelStatus =
+  | "awaiting_shipping_details"  // รอตกลง shipping
+  | "in_transit_to_shop"         // พัสดุกำลังส่งมาร้าน
+  | "received"                   // รับพัสดุแล้ว
+  | "inspecting"                 // กำลังตรวจสภาพ
+  | "repairing"                  // กำลังซ่อม
+  | "ready_to_ship_back"         // พร้อมส่งคืน
+  | "in_transit_to_customer"     // ส่งคืนแล้ว อยู่ระหว่างทาง
+  | "completed";                 // ปิดงาน
+
+export interface ParcelJob {
+  id: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_address: string;
+  appliance_name: string;
+  problem_description: string;
+  status: ParcelStatus;
+  service_type: "parcel";
+  // Shipping
+  courier?: string;
+  cost_split?: "customer" | "shop" | "split";
+  shop_address?: string;
+  inbound_tracking?: string;
+  return_tracking?: string;
+  // Tech
+  weeet_id?: string;
+  weeet_name?: string;
+  // Inspection / Repair
+  condition_notes?: string;
+  diagnosis_notes?: string;
+  estimated_price?: number;
+  final_price?: number;
+  parts_added?: { name: string; qty: number; price: number }[];
+  // Photos
+  receive_photos?: string[];
+  inspect_photos?: string[];
+  post_photos?: string[];
+  packing_photos?: string[];
+  // Timestamps
+  received_at?: string;
+  inspected_at?: string;
+  shipped_back_at?: string;
+  created_at: string;
+}
+
+export interface ParcelQueue {
+  items: ParcelJob[];
+  total: number;
+  awaiting_shipping: number;
+  in_transit_in: number;
+  at_shop: number;
+  ready_to_ship: number;
+}
+
+export const PARCEL_STATUS_LABEL: Record<ParcelStatus, string> = {
+  awaiting_shipping_details: "รอตกลง Shipping",
+  in_transit_to_shop:        "พัสดุกำลังมา",
+  received:                  "รับพัสดุแล้ว",
+  inspecting:                "กำลังตรวจสภาพ",
+  repairing:                 "กำลังซ่อม",
+  ready_to_ship_back:        "พร้อมส่งคืน",
+  in_transit_to_customer:    "กำลังส่งคืน",
+  completed:                 "ปิดงานแล้ว",
+};
+
+export const PARCEL_STATUS_COLOR: Record<ParcelStatus, string> = {
+  awaiting_shipping_details: "bg-orange-100 text-orange-700",
+  in_transit_to_shop:        "bg-indigo-100 text-indigo-700",
+  received:                  "bg-blue-100 text-blue-700",
+  inspecting:                "bg-purple-100 text-purple-700",
+  repairing:                 "bg-green-100 text-green-700",
+  ready_to_ship_back:        "bg-teal-100 text-teal-700",
+  in_transit_to_customer:    "bg-emerald-100 text-emerald-700",
+  completed:                 "bg-gray-100 text-gray-600",
+};
