@@ -54,3 +54,29 @@ export const repairApi = {
   complete: (id: string) =>
     apiFetch<RepairJob>(`${API_BASE}/repair/jobs/${id}/complete/`, { method: "POST" }),
 };
+
+// --- Pickup API (Phase C-1.3) ---
+export const pickupApi = {
+  listPickupJobs: () =>
+    apiFetch<RepairJob[]>(`${API_BASE}/jobs/me?service_type=pickup`),
+  enRoutePickup: (id: string, body: { gps_location: { lat: number; lng: number } }) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/pickup/en-route`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  arrivedPickup: (id: string, fd: FormData) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/pickup/arrived`, { method: "POST", body: fd }),
+  pickupReceipt: (id: string, fd: FormData) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/pickup/receipt`, { method: "POST", body: fd }),
+  atShop: (id: string) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/pickup/at-shop`, { method: "POST" }),
+  enRouteDelivery: (id: string, body: { gps_location: { lat: number; lng: number } }) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/delivery/en-route`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  deliveryReceipt: (id: string, fd: FormData) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/delivery/receipt`, { method: "POST", body: fd }),
+  deliveryComplete: (id: string) =>
+    apiFetch<RepairJob>(`${API_BASE}/jobs/${id}/delivery/complete`, { method: "POST" }),
+};

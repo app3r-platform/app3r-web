@@ -1,27 +1,27 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { repairApi, WEEET_SERVICE_TYPES } from "@/lib/api";
+import { repairApi } from "@/lib/api";
 import type { RepairJob, RepairJobStatus } from "@/lib/types";
 
 // walk_in jobs belong to WeeeR (in-store) — never show on WeeeT
 const EXCLUDED_SERVICE_TYPES = ["walk_in"] as const;
 
-type TabKey = "all" | "active" | "awaiting" | "done";
+type TabKey = "all" | "on_site" | "pickup" | "done";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "ทั้งหมด" },
-  { key: "active", label: "กำลังทำ" },
-  { key: "awaiting", label: "รอ" },
+  { key: "on_site", label: "On-site" },
+  { key: "pickup", label: "🚛 Pickup" },
   { key: "done", label: "เสร็จ/ปิด" },
 ];
 
-const ACTIVE_STATUSES: RepairJobStatus[] = [
-  "assigned", "traveling", "arrived", "awaiting_entry",
-  "inspecting", "in_progress", "awaiting_review",
+const DONE_STATUSES: RepairJobStatus[] = [
+  "completed", "closed", "cancelled", "converted_scrap", "delivered",
 ];
-const AWAITING_STATUSES: RepairJobStatus[] = ["awaiting_decision", "awaiting_user"];
-const DONE_STATUSES: RepairJobStatus[] = ["completed", "closed", "cancelled", "converted_scrap"];
+const AWAITING_STATUSES: RepairJobStatus[] = [
+  "awaiting_entry", "awaiting_decision", "awaiting_user", "awaiting_review",
+];
 
 function statusLabel(s: RepairJobStatus): string {
   const map: Record<RepairJobStatus, string> = {
@@ -38,6 +38,13 @@ function statusLabel(s: RepairJobStatus): string {
     closed: "ปิดงาน",
     cancelled: "ยกเลิก",
     converted_scrap: "โอนรับซื้อ",
+    // Pickup states
+    en_route_pickup: "กำลังไปรับ",
+    picked_up: "รับเครื่องแล้ว",
+    appliance_at_shop: "เครื่องถึงร้าน",
+    tested_ok: "ทดสอบผ่าน",
+    en_route_delivery: "กำลังส่งคืน",
+    delivered: "ส่งคืนแล้ว",
   };
   return map[s] ?? s;
 }
@@ -54,6 +61,7 @@ function statusColor(s: RepairJobStatus): string {
 
 function nextActionLabel(s: RepairJobStatus): string | null {
   const map: Partial<Record<RepairJobStatus, string>> = {
+    // On-site
     assigned: "ออกเดินทาง →",
     traveling: "บันทึกถึงที่ →",
     arrived: "ขอเข้าบ้าน / ตรวจสอบ →",
@@ -63,6 +71,12 @@ function nextActionLabel(s: RepairJobStatus): string | null {
     awaiting_user: "รอลูกค้า...",
     in_progress: "บันทึกหลังซ่อม →",
     awaiting_review: "รอ WeeeR ตรวจ...",
+    // Pickup
+    en_route_pickup: "บันทึกถึงที่ (รับเครื่อง) →",
+    picked_up: "ยืนยันถึงร้าน →",
+    appliance_at_shop: "รอซ่อม / บันทึกผล →",
+    tested_ok: "ออกเดินทางส่งคืน →",
+    en_route_delivery: "บันทึกส่งคืน →",
   };
   return map[s] ?? null;
 }
@@ -80,7 +94,14 @@ export default function JobsPage() {
       .listMyJobs()
       .then((data) => {
         // Safety filter: exclude walk_in even if backend returns them
-        setJobs(data.filter((j) => !EXCLUDED_SERVICE_TYPES.includes(j.service_type as typeof EXCLUDED_SERVICE_TYPES[number])));
+        setJobs(
+          data.filter(
+            (j) =>
+              !EXCLUDED_SERVICE_TYPES.includes(
+                j.service_type as typeof EXCLUDED_SERVICE_TYPES[number]
+              )
+          )
+        );
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
@@ -89,8 +110,12 @@ export default function JobsPage() {
   const filtered = jobs.filter((job) => {
     const matchTab =
       activeTab === "all" ||
-      (activeTab === "active" && ACTIVE_STATUSES.includes(job.status)) ||
-      (activeTab === "awaiting" && AWAITING_STATUSES.includes(job.status)) ||
+      (activeTab === "on_site" &&
+        job.service_type === "on_site" &&
+        !DONE_STATUSES.includes(job.status)) ||
+      (activeTab === "pickup" &&
+        job.service_type === "pickup" &&
+        !DONE_STATUSES.includes(job.status)) ||
       (activeTab === "done" && DONE_STATUSES.includes(job.status));
     const q = search.toLowerCase();
     const matchSearch =
@@ -103,8 +128,14 @@ export default function JobsPage() {
 
   function tabCount(key: TabKey): number {
     if (key === "all") return jobs.length;
-    if (key === "active") return jobs.filter((j) => ACTIVE_STATUSES.includes(j.status)).length;
-    if (key === "awaiting") return jobs.filter((j) => AWAITING_STATUSES.includes(j.status)).length;
+    if (key === "on_site")
+      return jobs.filter(
+        (j) => j.service_type === "on_site" && !DONE_STATUSES.includes(j.status)
+      ).length;
+    if (key === "pickup")
+      return jobs.filter(
+        (j) => j.service_type === "pickup" && !DONE_STATUSES.includes(j.status)
+      ).length;
     return jobs.filter((j) => DONE_STATUSES.includes(j.status)).length;
   }
 
@@ -176,13 +207,19 @@ export default function JobsPage() {
                     <p className="text-white font-semibold text-sm mt-0.5">
                       {job.customer_name ?? "ลูกค้า"}
                     </p>
-                    <p className="text-gray-400 text-xs">{job.appliance_name ?? job.service_type}</p>
+                    <p className="text-gray-400 text-xs">
+                      {job.appliance_name ?? job.service_type}
+                    </p>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColor(job.status)}`}>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColor(job.status)}`}
+                  >
                     {statusLabel(job.status)}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 truncate">{job.customer_address ?? ""}</p>
+                <p className="text-xs text-gray-500 truncate">
+                  {job.customer_address ?? ""}
+                </p>
                 {action && (
                   <p className="text-xs text-orange-400 font-medium">{action}</p>
                 )}
