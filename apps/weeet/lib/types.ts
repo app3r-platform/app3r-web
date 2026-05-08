@@ -2,6 +2,7 @@ export type JobStatus = "assigned" | "in_progress" | "completed" | "cancelled";
 
 // --- Repair Module (Phase C-1.1) ---
 export type RepairJobStatus =
+  // On-site states
   | "assigned"
   | "traveling"
   | "arrived"
@@ -14,7 +15,40 @@ export type RepairJobStatus =
   | "awaiting_review"
   | "closed"
   | "cancelled"
-  | "converted_scrap";
+  | "converted_scrap"
+  // Pickup states (Phase C-1.3)
+  | "en_route_pickup"
+  | "picked_up"
+  | "appliance_at_shop"
+  | "tested_ok"
+  | "en_route_delivery"
+  | "delivered";
+
+// --- Pickup Module (Phase C-1.3) ---
+export const PICKUP_CONDITION_ITEMS = [
+  "ไม่มีรอยแตก / บุบ",
+  "ไม่มีรอยไหม้",
+  "อุปกรณ์ครบตามที่ระบุ",
+  "ปลั๊กและสายไฟสมบูรณ์",
+] as const;
+
+export type PickupConditionItem = typeof PICKUP_CONDITION_ITEMS[number];
+
+export interface PickupReceiptPayload {
+  serial_number?: string;
+  accessories: string[];
+  tech_signature: string; // base64 data URL
+  customer_signature: string; // base64 data URL
+  condition_check: string[];
+  notes?: string;
+}
+
+export interface DeliveryReceiptPayload {
+  post_photos?: string[]; // filenames after upload
+  tech_signature: string;
+  customer_signature: string;
+  notes?: string;
+}
 
 export type RepairBranch = "B1.1" | "B1.2" | "B2.1" | "B2.2";
 
