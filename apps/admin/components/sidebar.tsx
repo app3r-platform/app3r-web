@@ -54,8 +54,10 @@ const navGroups: NavGroup[] = [
       { href: "/repair/jobs",              label: "Repair Jobs",    icon: "🔧" },
       { href: "/repair/analytics",         label: "Analytics",      icon: "📊" },
       { href: "/repair/disputes",          label: "Disputes",       icon: "⚖️" },
-      { href: "/repair/walk-in/queue",     label: "Walk-in Queue",  icon: "🚶" },
-      { href: "/repair/walk-in/abandoned", label: "Abandoned",      icon: "📦" },
+      { href: "/repair/walk-in/queue",          label: "Walk-in Queue",     icon: "🚶" },
+      { href: "/repair/walk-in/abandoned",      label: "Abandoned",         icon: "📦" },
+      { href: "/repair/pickup/queue",           label: "Pickup Queue",      icon: "🚛" },
+      { href: "/repair/pickup/dispatch-monitor", label: "Dispatch Monitor", icon: "📡" },
     ],
   },
   {
