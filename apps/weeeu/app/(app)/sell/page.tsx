@@ -31,7 +31,7 @@ const STATUS_COLOR: Record<string, string> = {
   disputed: "bg-red-100 text-red-700",
 };
 
-const ACTIVE_TABS = [
+const STATUS_TABS = [
   { value: "", label: "ทั้งหมด" },
   { value: "announced", label: "ประกาศขาย" },
   { value: "receiving_offers", label: "รับข้อเสนอ" },
@@ -39,18 +39,26 @@ const ACTIVE_TABS = [
   { value: "cancelled", label: "ยกเลิก" },
 ];
 
+type ListingTypeTab = "" | "used_appliance" | "scrap";
+
 export default function SellPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState("");
+  const [statusTab, setStatusTab] = useState("");
+  const [typeTab, setTypeTab] = useState<ListingTypeTab>("");
 
   useEffect(() => {
     setLoading(true);
-    listingsApi.mine(tab ? { status: tab } : {})
+    listingsApi.mine({
+      status: statusTab || undefined,
+      listingType: typeTab || undefined,
+    })
       .then(setListings)
       .catch(() => setListings([]))
       .finally(() => setLoading(false));
-  }, [tab]);
+  }, [statusTab, typeTab]);
+
+  const isScrapMode = typeTab === "scrap";
 
   return (
     <div className="max-w-xl space-y-5">
@@ -65,14 +73,36 @@ export default function SellPage() {
         </Link>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1">
-        {ACTIVE_TABS.map(t => (
+      {/* Type toggle — ของมือสอง / ขายซาก */}
+      <div className="grid grid-cols-3 gap-1.5 bg-gray-100 p-1 rounded-xl">
+        {([
+          { value: "" as ListingTypeTab, label: "ทั้งหมด", icon: "📦" },
+          { value: "used_appliance" as ListingTypeTab, label: "ของมือสอง", icon: "📱" },
+          { value: "scrap" as ListingTypeTab, label: "ขายซาก", icon: "♻️" },
+        ] as const).map(t => (
           <button
             key={t.value}
-            onClick={() => setTab(t.value)}
+            onClick={() => setTypeTab(t.value)}
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-colors ${
+              typeTab === t.value
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            <span>{t.icon}</span>
+            <span>{t.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Status tabs */}
+      <div className="flex gap-1.5 overflow-x-auto pb-1">
+        {STATUS_TABS.map(t => (
+          <button
+            key={t.value}
+            onClick={() => setStatusTab(t.value)}
             className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              tab === t.value
+              statusTab === t.value
                 ? "bg-indigo-600 text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
@@ -86,9 +116,13 @@ export default function SellPage() {
         <div className="text-center py-12 text-gray-400">กำลังโหลด...</div>
       ) : listings.length === 0 ? (
         <div className="text-center py-16 space-y-3">
-          <p className="text-4xl">📦</p>
-          <p className="text-gray-500 font-medium">ยังไม่มีประกาศขาย</p>
-          <p className="text-sm text-gray-400">เริ่มขายเครื่องใช้ไฟฟ้ามือสองได้เลย</p>
+          <p className="text-4xl">{isScrapMode ? "♻️" : "📦"}</p>
+          <p className="text-gray-500 font-medium">
+            {isScrapMode ? "ยังไม่มีประกาศขายซาก" : "ยังไม่มีประกาศขาย"}
+          </p>
+          <p className="text-sm text-gray-400">
+            {isScrapMode ? "ขายซากเครื่องใช้ไฟฟ้าเก่าได้เงิน" : "เริ่มขายเครื่องใช้ไฟฟ้ามือสองได้เลย"}
+          </p>
           <Link
             href="/sell/new"
             className="inline-block mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
@@ -107,7 +141,7 @@ export default function SellPage() {
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-800 truncate">
-                    {l.listingType === "scrap" ? "🔩 ชิ้นส่วน/ซากเครื่อง" : "📱 เครื่องใช้ไฟฟ้ามือสอง"}
+                    {l.listingType === "scrap" ? "♻️ ขายซาก / ชิ้นส่วน" : "📱 เครื่องใช้ไฟฟ้ามือสอง"}
                   </p>
                   <p className="text-xs text-gray-400">{new Date(l.createdAt).toLocaleDateString("th-TH")}</p>
                 </div>

@@ -3,8 +3,11 @@ import type { Listing } from "@/lib/types";
 
 export const listingsApi = {
   // My sell listings
-  mine: (params?: { status?: string }) => {
-    const q = params?.status ? `?status=${params.status}` : "";
+  mine: (params?: { status?: string; listingType?: string }) => {
+    const sp = new URLSearchParams();
+    if (params?.status) sp.set("status", params.status);
+    if (params?.listingType) sp.set("listing_type", params.listingType);
+    const q = sp.toString() ? `?${sp}` : "";
     return apiFetch(`/api/v1/listings/mine${q}`).then(r => r.json()) as Promise<Listing[]>;
   },
 
@@ -44,7 +47,7 @@ export const listingsApi = {
       body: JSON.stringify(body),
     }),
 
-  update: (id: string, body: Partial<{ price: number; delivery_methods: string[]; description: string }>) =>
+  update: (id: string, body: Partial<{ price: number; delivery_methods: string[]; description: string; working_parts: string[] }>) =>
     apiFetch(`/api/v1/listings/${id}/`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
