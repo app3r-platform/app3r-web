@@ -66,3 +66,46 @@ export interface StockMovement {
   performedAt: string;
   balanceAfter: number;
 }
+
+// D59 verbatim — Listing type (Phase C-3.1)
+// Source: CMD-022i Master CMD — ทุก chat copy ลงไฟล์นี้
+
+export interface Listing {
+  id: string;
+  sellerId: string;
+  sellerType: "WeeeU" | "WeeeR";
+  listingType: "used_appliance" | "scrap";
+
+  // used_appliance fields (C-3.1)
+  applianceId?: string;
+  warranty?: { sourceWarranty: number; additionalWarranty: number };
+
+  // scrap fields (C-3.2 — additive, ยังไม่สร้างใน C-3.1)
+  scrapItemId?: string;
+  conditionGrade?: "grade_A" | "grade_B" | "grade_C";
+  workingParts?: string[];
+
+  // shared
+  price: number;
+  deliveryMethods: string[];
+  status: "announced" | "receiving_offers" | "offer_selected" | "buyer_confirmed" | "in_progress" | "delivered" | "inspection_period" | "completed" | "cancelled" | "disputed";
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// D61 verbatim — Offer type (Phase C-3.1)
+// Source: CMD-022i Master CMD — ทุก chat copy ลงไฟล์นี้
+
+export interface Offer {
+  id: string;
+  listingId: string;
+  buyerId: string;
+  buyerType: "WeeeU" | "WeeeR";
+  offerPrice: number;
+  deliveryMethod: string;
+  message?: string;
+  status: "pending" | "selected" | "rejected" | "withdrawn";
+  expiresAt: string;
+  createdAt: string;
+}
