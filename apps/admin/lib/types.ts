@@ -109,3 +109,54 @@ export interface Offer {
   expiresAt: string;
   createdAt: string;
 }
+
+// D62 verbatim — ScrapItem / ScrapJob / ScrapJobOption / EWasteCertificate (Phase C-3.2)
+// Source: CMD-022j Master CMD — ทุก chat copy ลงไฟล์นี้
+
+export interface ScrapItem {
+  id: string;
+  sellerId: string;
+  sellerType: "WeeeU";
+  applianceId?: string;
+  conditionGrade: "grade_A" | "grade_B" | "grade_C";
+  workingParts: string[];
+  description: string;
+  photos: string[];
+  price: number;
+  status: "available" | "sold" | "removed";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScrapJob {
+  id: string;
+  scrapItemId: string;
+  buyerId: string;
+  buyerType: "WeeeR";
+  decision: ScrapJobOption;
+  decisionAt?: string;
+  status: "pending_decision" | "in_progress" | "completed" | "cancelled";
+  partsCreatedIds?: string[];
+  newListingId?: string;
+  certificateId?: string;
+  repairJobId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ScrapJobOption =
+  | "resell_parts"
+  | "repair_and_sell"
+  | "resell_as_scrap"
+  | "dispose";
+
+export interface EWasteCertificate {
+  id: string;
+  scrapJobId: string;
+  issuedById: string;
+  issuedAt: string;
+  certNumber: string;
+  itemDescription: string;
+  status: "pending" | "issued" | "rejected";
+  htmlUrl?: string;
+}

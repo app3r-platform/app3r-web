@@ -88,6 +88,15 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Scrap",
+    items: [
+      { href: "/scrap/listings",    label: "Listings",        icon: "♻️" },
+      { href: "/scrap/jobs",        label: "Jobs",            icon: "🔨" },
+      { href: "/scrap/disputes",    label: "Disputes",        icon: "⚖️" },
+      { href: "/scrap/certificates",label: "Certificates",    icon: "📜" },
+    ],
+  },
+  {
     label: "ระบบ",
     items: [
       { href: "/system/storage", label: "Storage",         icon: "💾" },
