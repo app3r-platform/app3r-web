@@ -158,6 +158,23 @@ export default function SellDetailPage() {
           )}
         </div>
 
+        {/* Working parts — scrap only */}
+        {listing.listingType === "scrap" && listing.workingParts && listing.workingParts.length > 0 && (
+          <div className="border-t border-gray-50 pt-3">
+            <p className="text-xs text-gray-500 mb-2">ชิ้นส่วนที่ใช้งานได้</p>
+            <div className="flex flex-wrap gap-1.5">
+              {listing.workingParts.map((p, i) => (
+                <span
+                  key={i}
+                  className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full"
+                >
+                  {p}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {listing.description && (
           <div className="border-t border-gray-50 pt-3">
             <p className="text-xs text-gray-500 mb-1">รายละเอียด</p>

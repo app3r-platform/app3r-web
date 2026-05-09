@@ -52,6 +52,44 @@ export interface Offer {
   createdAt: string;
 }
 
+// ─── ScrapItem (D62 verbatim — App3R-Advisor Gen 20) ─────────────────────────
+
+export interface ScrapItem {
+  id: string;
+  sellerId: string;
+  sellerType: "WeeeU";              // C-3.2: WeeeU ขายเท่านั้น — ซื้อไม่ได้
+  applianceId?: string;
+  conditionGrade: "grade_A" | "grade_B" | "grade_C";
+  workingParts: string[];
+  description: string;
+  photos: string[];
+  price: number;
+  status: "available" | "sold" | "removed";
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── ScrapJobOption (D62 verbatim — App3R-Advisor Gen 20) ────────────────────
+
+export type ScrapJobOption =
+  | "resell_parts"      // แยกอะไหล่ → STOCK_IN entries (D54 swap)
+  | "repair_and_sell"   // ซ่อมขาย → disabled UI (C-3.3 placeholder)
+  | "resell_as_scrap"   // ขายต่อซาก → relist whole unit
+  | "dispose";          // รีไซเคิล → e-waste cert (HTML mock)
+
+// ─── EWasteCertificate (D62 verbatim — App3R-Advisor Gen 20) ─────────────────
+
+export interface EWasteCertificate {
+  id: string;
+  scrapJobId: string;
+  issuedById: string;               // Admin user id
+  issuedAt: string;
+  certNumber: string;
+  itemDescription: string;
+  status: "pending" | "issued" | "rejected";
+  htmlUrl?: string;                 // C-3.2 = HTML mock | Phase D = real PDF
+}
+
 // ─── MaintainJob (D48 verbatim — App3R-Advisor Gen 18) ───────────────────────
 
 export interface MaintainJob {
