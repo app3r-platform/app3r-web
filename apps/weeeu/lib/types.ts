@@ -1,3 +1,57 @@
+// ─── Appliance ────────────────────────────────────────────────────────────────
+
+export interface Appliance {
+  id: string;
+  name: string;
+  brand: string;
+  model: string;
+}
+
+// ─── Listing (D59 verbatim — App3R-Advisor Gen 18) ────────────────────────────
+
+export interface Listing {
+  id: string;
+  sellerId: string;
+  sellerType: "WeeeU" | "WeeeR";
+  listingType: "used_appliance" | "scrap";
+  applianceId?: string;
+  warranty?: { sourceWarranty: number; additionalWarranty: number };
+  scrapItemId?: string;
+  conditionGrade?: "grade_A" | "grade_B" | "grade_C";
+  workingParts?: string[];
+  price: number;
+  deliveryMethods: string[];
+  status:
+    | "announced"
+    | "receiving_offers"
+    | "offer_selected"
+    | "buyer_confirmed"
+    | "in_progress"
+    | "delivered"
+    | "inspection_period"
+    | "completed"
+    | "cancelled"
+    | "disputed";
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Offer (D61 verbatim — App3R-Advisor Gen 18) ─────────────────────────────
+
+export interface Offer {
+  id: string;
+  listingId: string;
+  buyerId: string;
+  buyerType: "WeeeU" | "WeeeR";
+  offerPrice: number;
+  deliveryMethod: string;
+  message?: string;
+  status: "pending" | "selected" | "rejected" | "withdrawn";
+  expiresAt: string;
+  createdAt: string;
+}
+
 // ─── MaintainJob (D48 verbatim — App3R-Advisor Gen 18) ───────────────────────
 
 export interface MaintainJob {
