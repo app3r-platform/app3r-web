@@ -11,7 +11,11 @@ const navItems = [
   { href: "/profile",        icon: "⚙️", label: "โปรไฟล์" },
   // ── Module placeholders (Phase 2b) ──
   { type: "divider", label: "โมดูล" },
-  { href: "/modules/resell",  icon: "💸", label: "ขายต่อ (A)",    module: true },
+  { href: "/resell",           icon: "💸", label: "ขายต่อ (A)",     module: true },
+  { href: "/resell/inventory", icon: "📦", label: "  คลังสินค้า",   module: true, sub: true },
+  { href: "/resell/listings",  icon: "📢", label: "  ประกาศของฉัน", module: true, sub: true },
+  { href: "/resell/marketplace", icon: "🛒", label: "  Marketplace", module: true, sub: true },
+  { href: "/resell/transactions", icon: "🔄", label: "  ซื้อขาย",   module: true, sub: true },
   { href: "/modules/scrap",   icon: "♻️", label: "รับซาก (B)",    module: true },
   { href: "/repair/dashboard", icon: "🔧", label: "ซ่อม (C)",      module: true },
   { href: "/repair/jobs",      icon: "📋", label: "  งานซ่อม",      module: true, sub: true },
