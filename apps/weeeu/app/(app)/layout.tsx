@@ -10,7 +10,9 @@ const navItems = [
   // ─── Module placeholders (Phase 2b) ───
   { type: "divider", label: "บริการ" },
   { href: "/modules/repair", icon: "🔧", label: "แจ้งซ่อม", module: true },
-  { href: "/modules/resell", icon: "💰", label: "ขาย/ซื้อ มือสอง", module: true },
+  { href: "/sell", icon: "💰", label: "ประกาศขาย" },
+  { href: "/listings", icon: "🛒", label: "ตลาดซื้อ-ขาย" },
+  { href: "/offers", icon: "🤝", label: "ข้อเสนอของฉัน" },
   { href: "/modules/scrap", icon: "♻️", label: "ขายซาก/ทิ้งซาก", module: true },
   { href: "/maintain/book", icon: "🛁", label: "จองล้าง" },
   { href: "/maintain/jobs", icon: "🛠️", label: "งานล้างของฉัน" },
