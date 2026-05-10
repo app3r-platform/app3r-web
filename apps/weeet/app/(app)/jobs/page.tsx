@@ -221,6 +221,16 @@ export default function JobsPage() {
                     <p className="text-gray-400 text-xs">
                       {job.appliance_name ?? job.service_type}
                     </p>
+                    {/* Source badge — D64 */}
+                    {job.source?.type === "purchased_scrap" ? (
+                      <span className="inline-block mt-1 bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+                        ซื้อจากซาก{job.source.refId ? `: ${job.source.refId}` : ""}
+                      </span>
+                    ) : (
+                      <span className="inline-block mt-1 bg-blue-900/40 border border-blue-700 text-blue-300 text-xs px-2 py-0.5 rounded">
+                        ลูกค้า
+                      </span>
+                    )}
                   </div>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColor(job.status)}`}

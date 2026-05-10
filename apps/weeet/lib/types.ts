@@ -92,6 +92,11 @@ export interface RepairJob {
   appliance_name?: string;
   problem_description?: string;
   weeer_shop_name?: string;
+  // --- C-3.3 / D64: source of appliance ---
+  source?: {
+    type: "customer" | "purchased_scrap";
+    refId?: string; // scrapJobId when type = "purchased_scrap"
+  };
 }
 
 export interface DiagnosePayload {
