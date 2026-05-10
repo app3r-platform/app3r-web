@@ -16,6 +16,7 @@ interface RepairAnalytics {
 
   by_status: { status: string; count: number }[];
   by_branch: { branch: string; count: number }[];
+  by_source?: { type: string; count: number }[];  // D64 source breakdown
 
   avg_completion_hours: number | null;
   conversion_rate_b22: number | null;
@@ -199,6 +200,42 @@ export default function RepairAnalyticsPage() {
                 </div>
               </section>
             </div>
+
+            {/* By Source — D64 */}
+            <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                🔍 Jobs by Source (D64)
+              </h2>
+              {!data.by_source || data.by_source.length === 0 ? (
+                <p className="text-xs text-gray-600">ยังไม่มีข้อมูล by_source — รอ Backend C-3.3</p>
+              ) : (
+                <div className="space-y-3">
+                  {data.by_source.map(row => {
+                    const sourceTotal = data.by_source!.reduce((s, r) => s + r.count, 0);
+                    const pct = sourceTotal > 0 ? (row.count / sourceTotal) * 100 : 0;
+                    const isScrap = row.type === "purchased_scrap";
+                    return (
+                      <div key={row.type} className="flex items-center gap-3">
+                        <span className={`text-xs px-2 py-0.5 rounded border shrink-0 w-36 text-center ${
+                          isScrap
+                            ? "bg-orange-900/40 border-orange-700 text-orange-300"
+                            : "bg-blue-900/40 border-blue-700 text-blue-300"
+                        }`}>
+                          {isScrap ? "ซื้อจากซาก" : "ลูกค้า"}
+                        </span>
+                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                          <div className={`${isScrap ? "bg-orange-500" : "bg-blue-500"} h-2 rounded-full transition-all`}
+                            style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-xs text-gray-300 w-20 text-right font-mono">
+                          {row.count} ({pct.toFixed(1)}%)
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
 
             {/* Top WeeeR */}
             {data.top_weeer?.length > 0 && (

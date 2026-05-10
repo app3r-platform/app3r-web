@@ -49,6 +49,11 @@ interface RepairJob {
   decision_branch: string | null;
   scheduled_at: string;
   created_at: string;
+  // D64 RepairJob source additive
+  source?: {
+    type: "customer" | "purchased_scrap";
+    refId?: string;
+  };
 }
 
 const PAGE_SIZE = 20;
@@ -59,6 +64,7 @@ export default function RepairJobsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("");
+  const [filterSource, setFilterSource] = useState("all");
   const [page, setPage] = useState(1);
 
   const fetchData = useCallback(async () => {
@@ -88,6 +94,14 @@ export default function RepairJobsPage() {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
+  // D64 client-side source filter (backward-compat: no source → customer)
+  const displayItems = items.filter(job => {
+    if (filterSource === "all") return true;
+    if (filterSource === "customer") return !job.source || job.source.type === "customer";
+    if (filterSource === "purchased_scrap") return job.source?.type === "purchased_scrap";
+    return true;
+  });
+
   return (
     <div className="flex min-h-screen bg-gray-950 text-white">
       <Sidebar />
@@ -109,6 +123,25 @@ export default function RepairJobsPage() {
           ดูและ oversight งานซ่อม On-site ทั้งหมด — filter ตาม state machine
         </p>
 
+        {/* Source filter (D64) */}
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-xs text-gray-500 shrink-0">แหล่งที่มา:</span>
+          <select
+            value={filterSource}
+            onChange={e => { setFilterSource(e.target.value); setPage(1); }}
+            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-48 focus:outline-none focus:border-blue-500">
+            <option value="all">ทั้งหมด</option>
+            <option value="customer">ลูกค้า (customer)</option>
+            <option value="purchased_scrap">ซื้อจากซาก (purchased_scrap)</option>
+          </select>
+          {filterSource !== "all" && (
+            <button onClick={() => setFilterSource("all")}
+              className="text-xs text-gray-500 hover:text-white bg-gray-800 px-2 py-1 rounded">
+              ล้าง
+            </button>
+          )}
+        </div>
+
         {/* Status filter */}
         <div className="flex flex-wrap gap-1 mb-6 bg-gray-900 rounded-xl p-1 border border-gray-800">
           {FILTER_GROUPS.map(fg => (
@@ -124,7 +157,7 @@ export default function RepairJobsPage() {
 
         <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
           <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
-            <span>พบ {total.toLocaleString()} รายการ</span>
+            <span>พบ {total.toLocaleString()} รายการ{filterSource !== "all" ? ` (แสดง ${displayItems.length})` : ""}</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
@@ -147,14 +180,16 @@ export default function RepairJobsPage() {
                   <th className="px-6 py-3">WeeeR (ร้าน)</th>
                   <th className="px-6 py-3">WeeeT (ช่าง)</th>
                   <th className="px-6 py-3">สถานะ</th>
+                  <th className="px-6 py-3">แหล่งที่มา</th>
                   <th className="px-6 py-3">Branch</th>
                   <th className="px-6 py-3">นัดหมาย</th>
                   <th className="px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {items.map(job => {
+                {displayItems.map(job => {
                   const sc = JOB_STATUS[job.status] ?? { label: job.status, color: "bg-gray-800 text-gray-300" };
+                  const isPurchasedScrap = job.source?.type === "purchased_scrap";
                   return (
                     <tr key={job.id} className="hover:bg-gray-800/40">
                       <td className="px-6 py-3">
@@ -165,6 +200,17 @@ export default function RepairJobsPage() {
                       <td className="px-6 py-3 text-sm text-gray-300">{job.weeet_name}</td>
                       <td className="px-6 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sc.color}`}>{sc.label}</span>
+                      </td>
+                      <td className="px-6 py-3">
+                        {isPurchasedScrap ? (
+                          <span className="bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+                            ซื้อจากซาก
+                          </span>
+                        ) : (
+                          <span className="bg-blue-900/40 border border-blue-700 text-blue-300 text-xs px-2 py-0.5 rounded">
+                            ลูกค้า
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-3">
                         {job.decision_branch
@@ -183,9 +229,9 @@ export default function RepairJobsPage() {
                     </tr>
                   );
                 })}
-                {items.length === 0 && (
+                {displayItems.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="px-6 py-10 text-center text-gray-500">ไม่มีรายการ</td>
+                    <td colSpan={9} className="px-6 py-10 text-center text-gray-500">ไม่มีรายการ</td>
                   </tr>
                 )}
               </tbody>
