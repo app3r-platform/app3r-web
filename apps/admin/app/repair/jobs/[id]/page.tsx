@@ -61,6 +61,11 @@ interface RepairJobDetail {
   post_repair_files:     EvidenceFile[] | null;
   state_history:         StateEvent[];
   audit_log:             AuditEvent[];
+  // D64 RepairJob source additive
+  source?: {
+    type: "customer" | "purchased_scrap";
+    refId?: string;
+  };
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -168,8 +173,18 @@ export default function RepairJobDetailPage() {
             <h1 className="text-2xl font-bold">🔧 Job Detail</h1>
             <p className="text-xs font-mono text-gray-500 mt-1">{job.id}</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <span className={`text-sm px-3 py-1 rounded-full font-medium ${sc.color}`}>{sc.label}</span>
+            {/* D64 source badge */}
+            {job.source?.type === "purchased_scrap" ? (
+              <span className="bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+                ซื้อจากซาก: {job.source.refId ?? "—"}
+              </span>
+            ) : (
+              <span className="bg-blue-900/40 border border-blue-700 text-blue-300 text-xs px-2 py-0.5 rounded">
+                ลูกค้า
+              </span>
+            )}
             {superAdmin && (
               <Link href={`/repair/jobs/${job.id}/manual-override`}
                 className="px-4 py-2 text-sm bg-red-900/40 hover:bg-red-900/60 border border-red-800 text-red-300 rounded-lg transition-colors">
