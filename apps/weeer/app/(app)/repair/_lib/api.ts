@@ -1,4 +1,5 @@
 import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue, PickupJob, PickupQueue, WeeeTStaff, ParcelJob, ParcelQueue } from "./types";
+import type { ScrapJob } from "../../scrap/_lib/types";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -235,4 +236,32 @@ export const repairApi = {
       method: "POST",
       body: JSON.stringify(body),
     }),
+
+  // ── D64: Create RepairJob from ScrapJob (Phase C-3.3) ─────────────────────
+  // source: { type: "purchased_scrap", refId: scrapJob.id } — set automatically
+  createFromScrap(scrapJob: ScrapJob, formData: {
+    appliance_name: string;
+    weeet_id: string;
+    scheduled_at: string;
+    original_price: number;
+    decision_notes?: string;
+  }): Promise<RepairJob> {
+    return apiFetch<RepairJob>("/repair/jobs", {
+      method: "POST",
+      body: JSON.stringify({
+        appliance_name: formData.appliance_name,
+        weeet_id: formData.weeet_id,
+        scheduled_at: formData.scheduled_at,
+        original_price: formData.original_price,
+        decision_notes: formData.decision_notes,
+        service_type: "on_site",
+        customer_name: "WeeeR Internal",
+        customer_address: "",
+        source: {
+          type: "purchased_scrap",
+          refId: scrapJob.id,
+        },
+      }),
+    });
+  },
 };

@@ -16,7 +16,7 @@ const OPTIONS: {
   desc: string;
 }[] = [
   { value: "resell_parts",    label: "แยกอะไหล่",          route: "resell-parts",    disabled: false, icon: "🔩", desc: "สร้างชิ้นส่วนเข้าสต๊อก Parts" },
-  { value: "repair_and_sell", label: "ซ่อมขาย (รอ C-3.3)", route: "repair-and-sell", disabled: true,  icon: "🛠", desc: "ส่งซ่อมแล้วขายใน Marketplace" },
+  { value: "repair_and_sell", label: "ซ่อมขาย",             route: "repair-and-sell", disabled: false, icon: "🛠", desc: "ส่งซ่อมแล้วขายใน Marketplace" },
   { value: "resell_as_scrap", label: "ขายต่อซาก",           route: "resell-as-scrap", disabled: false, icon: "🏷", desc: "ประกาศขายซากต่อใน Marketplace" },
   { value: "dispose",         label: "รีไซเคิล",             route: "dispose",         disabled: false, icon: "♻️", desc: "ออกใบรับรองการทำลาย e-waste" },
 ];
