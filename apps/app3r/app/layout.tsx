@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import DevAuthBanner from "../components/dev/DevAuthBanner";
 
 export const metadata: Metadata = {
   title: {
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        {process.env.NODE_ENV === "development" && <DevAuthBanner />}
       </body>
     </html>
   );

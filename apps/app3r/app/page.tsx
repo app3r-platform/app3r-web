@@ -1,70 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ListingCard from "../components/ListingCard";
+import Image from "next/image";
+import { getFeaturedListings } from "../lib/api/listings";
+import TypeBadge from "../components/listings/TypeBadge";
 
 export const metadata: Metadata = {
   title: "App3R — แพลตฟอร์มเครื่องใช้ไฟฟ้าครบวงจร",
   description:
     "ซื้อขายเครื่องใช้ไฟฟ้ามือสอง จ้างซ่อม จัดบำรุงรักษา ง่ายๆ ในแพลตฟอร์มเดียว",
 };
-
-// Mock listings data
-const featuredListings = [
-  {
-    id: "r001",
-    title: "เครื่องซักผ้า Samsung 10 kg สภาพดี ใช้งาน 2 ปี",
-    type: "resell" as const,
-    location: "กรุงเทพฯ",
-    priceLabel: "3,500 บาท",
-    postedAt: "2 ชม. ที่แล้ว",
-    imageEmoji: "🫧",
-  },
-  {
-    id: "p001",
-    title: "แอร์ Mitsubishi 12,000 BTU ต้องการซ่อมไม่เย็น",
-    type: "repair" as const,
-    location: "นนทบุรี",
-    priceLabel: "รับ offer",
-    postedAt: "4 ชม. ที่แล้ว",
-    imageEmoji: "❄️",
-  },
-  {
-    id: "m001",
-    title: "ล้างแอร์ 2 เครื่อง พร้อมเติมน้ำยา",
-    type: "maintain" as const,
-    location: "ปทุมธานี",
-    priceLabel: "รับ offer",
-    postedAt: "6 ชม. ที่แล้ว",
-    imageEmoji: "🧹",
-  },
-  {
-    id: "r002",
-    title: "ตู้เย็น LG 2 ประตู 14 คิว ราคาพิเศษ",
-    type: "resell" as const,
-    location: "สมุทรปราการ",
-    priceLabel: "4,200 บาท",
-    postedAt: "8 ชม. ที่แล้ว",
-    imageEmoji: "🧊",
-  },
-  {
-    id: "p002",
-    title: "ทีวี Sony 55 นิ้ว จอมีเส้น ต้องการซ่อม",
-    type: "repair" as const,
-    location: "กรุงเทพฯ",
-    priceLabel: "รับ offer",
-    postedAt: "1 วัน ที่แล้ว",
-    imageEmoji: "📺",
-  },
-  {
-    id: "m002",
-    title: "ล้างเครื่องซักผ้าฝาบน พร้อมฆ่าเชื้อ",
-    type: "maintain" as const,
-    location: "กรุงเทพฯ",
-    priceLabel: "รับ offer",
-    postedAt: "1 วัน ที่แล้ว",
-    imageEmoji: "🫧",
-  },
-];
 
 const stats = [
   { value: "12,000+", label: "ประกาศทั้งหมด" },
@@ -128,6 +72,8 @@ const userTypes = [
 ];
 
 export default function HomePage() {
+  const featuredListings = getFeaturedListings(4);
+
   return (
     <>
       {/* Hero Section */}
@@ -205,7 +151,35 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredListings.map((listing) => (
-            <ListingCard key={listing.id} {...listing} limited={true} />
+            <Link
+              key={listing.id}
+              href={`/listings/resell/${listing.id}`}
+              className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
+            >
+              <div className="relative h-44 bg-gray-100">
+                <Image
+                  src={listing.images[0]}
+                  alt={listing.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              </div>
+              <div className="p-4 space-y-2">
+                <TypeBadge type="resell" />
+                <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-purple-700 transition-colors">
+                  {listing.title}
+                </h3>
+                <div className="flex items-center justify-between text-xs text-gray-500 pt-1">
+                  <span>{listing.location}</span>
+                  <span>{listing.postedAt}</span>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                  <span className="font-bold text-purple-700 text-sm">{listing.priceLabel}</span>
+                  <span className="text-xs text-purple-700 font-medium">ดูรายละเอียด →</span>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
 
