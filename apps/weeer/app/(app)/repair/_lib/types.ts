@@ -37,6 +37,11 @@ export interface RepairJob {
   post_repair_files?: string[];
   customer_address: string;
   customer_name: string;
+  // D64 RepairJob source additive (Phase C-3.3)
+  source?: {
+    type: "customer" | "purchased_scrap";
+    refId?: string;  // scrapJobId เมื่อ type = "purchased_scrap"
+  };
 }
 
 export interface RepairAnnouncement {
