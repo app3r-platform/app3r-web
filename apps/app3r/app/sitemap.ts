@@ -5,7 +5,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes = [
     { url: "/", priority: 1.0, changeFrequency: "daily" as const },
+    { url: "/listings", priority: 0.8, changeFrequency: "daily" as const },
     { url: "/listings/resell", priority: 0.9, changeFrequency: "hourly" as const },
+    { url: "/listings/scrap", priority: 0.8, changeFrequency: "hourly" as const },
     { url: "/listings/repair", priority: 0.9, changeFrequency: "hourly" as const },
     { url: "/listings/maintain", priority: 0.9, changeFrequency: "hourly" as const },
     { url: "/articles", priority: 0.8, changeFrequency: "daily" as const },
