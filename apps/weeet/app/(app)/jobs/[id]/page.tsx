@@ -324,6 +324,22 @@ export default function JobDetailPage({
           </div>
         )}
 
+        {/* Source of appliance — D64 */}
+        {job.source && (
+          <div className="bg-gray-800/60 border border-gray-700/60 rounded-xl px-4 py-2.5 flex items-center gap-2">
+            <span className="text-gray-400 text-xs shrink-0">แหล่งที่มาของเครื่อง:</span>
+            {job.source.type === "purchased_scrap" ? (
+              <span className="bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+                ซื้อจากซาก{job.source.refId ? ` (${job.source.refId})` : ""}
+              </span>
+            ) : (
+              <span className="bg-blue-900/40 border border-blue-700 text-blue-300 text-xs px-2 py-0.5 rounded">
+                ลูกค้า
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Customer */}
         <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 space-y-3">
           <h2 className="font-semibold text-white text-sm flex items-center gap-2">
