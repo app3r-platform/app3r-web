@@ -93,6 +93,9 @@ function RepairJobsContent() {
                     <span className="text-xs font-medium text-orange-700">WeeeT ส่งผลตรวจมา — รออนุมัติ</span>
                   </div>
                 )}
+                <div className="mt-1.5">
+                  <span className="text-xs text-green-600 font-medium">📊 ดู Progress</span>
+                </div>
               </div>
             </div>
           </Link>

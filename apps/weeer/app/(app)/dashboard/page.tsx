@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { MultiJobDashboard } from "../../../components/service-progress/MultiJobDashboard";
 
 export const metadata: Metadata = { title: "Dashboard — WeeeR" };
 
@@ -38,6 +39,16 @@ const SHOP = {
   status: "active", // active / pending / suspended
   gold: 1800,
 };
+
+const ACTIVE_REPAIR_JOBS = [
+  { id: "RJ-001", appliance_name: "แอร์ Mitsubishi",     status: "awaiting_decision" as const, weeet_name: "นายวิทยา ซ่อมเก่ง" },
+  { id: "RJ-002", appliance_name: "ตู้เย็น Samsung",      status: "in_progress"        as const, weeet_name: "นายสมชาย ช่างดี"   },
+];
+
+const ACTIVE_MAINTAIN_JOBS = [
+  { id: "MJ-001", serviceCode: "M-2026-001", applianceType: "AC" as const,            status: "in_progress" as const, technicianId: "R001-T01" },
+  { id: "MJ-002", serviceCode: "M-2026-002", applianceType: "WashingMachine" as const, status: "assigned"    as const, technicianId: undefined    },
+];
 
 export default function DashboardPage() {
   return (
@@ -102,6 +113,12 @@ export default function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Active Jobs Progress (D79 C-5) */}
+      <MultiJobDashboard
+        repairJobs={ACTIVE_REPAIR_JOBS}
+        maintainJobs={ACTIVE_MAINTAIN_JOBS}
+      />
 
       {/* WeeeT summary */}
       <div className="space-y-3">

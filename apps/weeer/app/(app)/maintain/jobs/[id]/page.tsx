@@ -140,6 +140,12 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         </div>
       )}
 
+      {/* Progress link */}
+      <Link href={`/maintain/jobs/${id}/progress`}
+        className="w-full block text-center bg-white border border-green-200 text-green-700 hover:bg-green-50 font-medium py-2.5 rounded-xl transition-colors text-sm">
+        📊 ดูความคืบหน้า (Progress)
+      </Link>
+
       {/* Action */}
       {canAssign && (
         <Link href={`/maintain/jobs/${id}/assign`}
