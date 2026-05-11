@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getArticleById, articles } from '@/lib/mock/articles'
+import RelatedArticles from '@/components/articles/RelatedArticles'
 
 export async function generateStaticParams() {
   return articles.map((a) => ({ id: a.id }))
@@ -93,6 +94,12 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           ))}
         </ul>
       </div>
+
+      <RelatedArticles
+        articles={articles}
+        currentId={article.id}
+        currentCategory={article.category}
+      />
 
       <div className="mt-10">
         <Link href="/articles"
