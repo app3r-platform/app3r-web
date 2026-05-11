@@ -41,4 +41,5 @@ export interface AuthenticatedJobProjection extends PublicJobProjection {
   // Phase D: real customer name/phone — mock only shows placeholder
   customerName: string;  // 'รอยืนยัน (Phase D)' for mock
   customerPhone: string; // '0xx-xxx-xxxx (Phase D)' for mock
+  featured?: boolean;
 }

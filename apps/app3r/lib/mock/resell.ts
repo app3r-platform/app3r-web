@@ -34,6 +34,7 @@ export const mockResellListings: ResellListing[] = [
     postedAt: "2 ชม. ที่แล้ว",
     postedDaysAgo: 0,
     viewCount: 45,
+    featured: true,
   },
   {
     id: "r002",
@@ -56,6 +57,7 @@ export const mockResellListings: ResellListing[] = [
     postedAt: "8 ชม. ที่แล้ว",
     postedDaysAgo: 0,
     viewCount: 87,
+    featured: true,
   },
   {
     id: "r003",

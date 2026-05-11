@@ -37,6 +37,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     estimatedBudget: 1500,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
+    featured: true,
   }),
 
   makeRepairJob({
@@ -57,6 +58,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     estimatedBudget: 3500,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
+    featured: true,
   }),
 
   makeRepairJob({
