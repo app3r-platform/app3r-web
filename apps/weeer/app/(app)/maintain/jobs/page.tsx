@@ -105,6 +105,7 @@ export default function MaintainJobsPage() {
                 {!job.technicianId && job.status === "assigned" && (
                   <p className="text-xs text-orange-600 mt-1 font-medium">⚠️ ยังไม่ได้มอบหมายช่าง</p>
                 )}
+                <p className="text-xs text-green-600 mt-1 font-medium">📊 ดู Progress</p>
               </div>
               <div className="shrink-0 text-right">
                 <p className="text-sm font-bold text-green-700">{job.totalPrice.toLocaleString()} pts</p>

@@ -177,6 +177,10 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
       {/* Actions */}
       {!isTerminal && (
         <div className="flex flex-col gap-2">
+          <Link href={`/repair/jobs/${job.id}/progress`}
+            className="w-full bg-white border border-green-200 text-green-700 hover:bg-green-50 font-medium py-2.5 rounded-xl text-center transition-colors text-sm">
+            📊 ดูความคืบหน้า (Progress)
+          </Link>
           {job.status === "awaiting_decision" && (
             <Link href={`/repair/jobs/${job.id}/approve`}
               className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl text-center transition-colors">
