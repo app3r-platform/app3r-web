@@ -1,0 +1,113 @@
+﻿"use client";
+import { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { loadProgress, saveProgress, advanceSubStage } from "@/lib/utils/service-progress-sync";
+import { WEEET_SEED_PROGRESS } from "@/lib/mock-data/service-progress";
+import type { ServiceProgress, ProgressStep } from "@/lib/types/service-progress";
+import { ServiceProgressTimeline } from "@/components/service-progress/ServiceProgressTimeline";
+import { StepUpdateWizard } from "@/components/service-progress/StepUpdateWizard";
+
+const TECH_ID = "tech-001";
+
+export default function JobProgressPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const router = useRouter();
+  const [job, setJob] = useState<ServiceProgress | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    let all = loadProgress();
+    if (all.length === 0) {
+      saveProgress(WEEET_SEED_PROGRESS);
+      all = WEEET_SEED_PROGRESS;
+    }
+    const found = all.find((j) => j.jobId === id);
+    setJob(found ?? null);
+  }, [id, refreshKey]);
+
+  function handleAdvance(
+    jobId: string,
+    nextSubStage: string,
+    step: ProgressStep,
+    markComplete?: boolean
+  ) {
+    advanceSubStage(jobId, nextSubStage, step, markComplete ? "completed" : undefined);
+    setRefreshKey((k) => k + 1);
+  }
+
+  if (!job) {
+    return (
+      <div className="px-4 pt-5">
+        <button onClick={() => router.back()} className="text-gray-400 hover:text-white mb-4">
+          {"←"} กลับ
+        </button>
+        <div className="bg-gray-800 rounded-xl p-8 text-center border border-gray-700">
+          <p className="text-gray-400 text-sm">ไม่พบงานนี้ใน Progress Tracker</p>
+          <p className="text-xs text-gray-600 mt-1">(ID: {id})</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="px-4 pt-5 pb-6 space-y-5">
+      <div className="flex items-center gap-3">
+        <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">
+          {"←"}
+        </button>
+        <div>
+          <p className="text-xs text-gray-500 font-mono">{job.jobNo}</p>
+          <h1 className="text-white font-bold text-lg">{job.customerName ?? "ลูกค้า"}</h1>
+          <p className="text-gray-400 text-xs">{job.applianceName}</p>
+        </div>
+      </div>
+
+      <div className="bg-gray-800/40 border border-gray-700/40 rounded-xl px-3 py-2">
+        <p className="text-xs text-gray-600">
+          Phase 2: localStorage — multi-tab WeeeT sync BroadcastChannel (port 3003)
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-sm font-semibold text-gray-300">Timeline</p>
+        <ServiceProgressTimeline job={job} />
+      </div>
+
+      {job.currentStage === "in_progress" && (
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-gray-300">อัปเดตขั้นตอน</p>
+          <StepUpdateWizard
+            job={job}
+            technicianId={TECH_ID}
+            onAdvance={handleAdvance}
+          />
+        </div>
+      )}
+
+      {job.currentStage === "completed" && (
+        <div className="bg-green-950/40 border border-green-800 rounded-xl p-4 text-center space-y-1">
+          <p className="text-green-300 font-semibold text-sm">{"✅"} งานเสร็จสิ้นแล้ว</p>
+          {job.serviceFeeRounded != null && (
+            <p className="text-xs text-green-400">
+              ค่าบริการ: {job.serviceFeeRounded.toLocaleString()} บาท
+            </p>
+          )}
+          <p className="text-xs text-gray-500">รอลูกค้า review (WeeeU — Phase D)</p>
+        </div>
+      )}
+
+      {job.shopName && (
+        <div className="bg-gray-800/60 rounded-xl px-4 py-2.5 border border-gray-700/60">
+          <p className="text-xs text-gray-500">
+            ร้าน: <span className="text-gray-300">{job.shopName}</span>
+            <span className="text-gray-600 ml-2">(D60 — text ref only)</span>
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
