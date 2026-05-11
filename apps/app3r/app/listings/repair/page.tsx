@@ -1,22 +1,35 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import ListingCard from "../../../components/ListingCard";
+// ============================================================
+// app/listings/repair/page.tsx — Repair listings (Server Component)
+// Phase C-4.1b
+// ============================================================
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Suspense } from 'react';
+import { getRepairJobs } from '../../../lib/api/customer-jobs';
+import RepairJobCard from '../../../components/listings/RepairJobCard';
+import ServiceTypeFilter from '../../../components/listings/ServiceTypeFilter';
+import { ALL_SERVICE_TYPES } from '../../../lib/constants/service-types';
 
 export const metadata: Metadata = {
-  title: "ประกาศซ่อมเครื่องใช้ไฟฟ้า",
-  description: "หาช่างซ่อมเครื่องใช้ไฟฟ้าคุณภาพดี ราคาโปร่งใส ผ่านระบบ Escrow ที่ปลอดภัยบน App3R",
+  title: 'ประกาศซ่อมเครื่องใช้ไฟฟ้า — App3R',
+  description:
+    'หาช่างซ่อมเครื่องใช้ไฟฟ้าคุณภาพดี ราคาโปร่งใส ผ่านระบบ Escrow ที่ปลอดภัยบน App3R',
 };
 
-const mockListings = [
-  { id: "p001", title: "แอร์ Mitsubishi 12,000 BTU ต้องการซ่อมไม่เย็น", type: "repair" as const, location: "นนทบุรี", priceLabel: "รับ offer", postedAt: "4 ชม. ที่แล้ว", imageEmoji: "❄️" },
-  { id: "p002", title: "ทีวี Sony 55 นิ้ว จอมีเส้น ต้องการซ่อม", type: "repair" as const, location: "กรุงเทพฯ", priceLabel: "รับ offer", postedAt: "1 วัน ที่แล้ว", imageEmoji: "📺" },
-  { id: "p003", title: "เครื่องซักผ้า LG ฝาบน ปั่นไม่หมุน", type: "repair" as const, location: "สมุทรปราการ", priceLabel: "รับ offer", postedAt: "1 วัน ที่แล้ว", imageEmoji: "🫧" },
-  { id: "p004", title: "ตู้เย็น Hitachi ไม่เย็น คอมเพรสเซอร์ดัง", type: "repair" as const, location: "กรุงเทพฯ", priceLabel: "รับ offer", postedAt: "2 วัน ที่แล้ว", imageEmoji: "🧊" },
-  { id: "p005", title: "เครื่องดูดฝุ่น Dyson ไม่ดูด แบตเสื่อม", type: "repair" as const, location: "ปทุมธานี", priceLabel: "รับ offer", postedAt: "2 วัน ที่แล้ว", imageEmoji: "🌀" },
-  { id: "p006", title: "ไมโครเวฟ Panasonic ไม่ร้อน เครื่องดับ", type: "repair" as const, location: "กรุงเทพฯ", priceLabel: "รับ offer", postedAt: "3 วัน ที่แล้ว", imageEmoji: "📟" },
-];
+interface PageProps {
+  searchParams: Promise<Record<string, string | undefined>>;
+}
 
-export default function RepairListingsPage() {
+export default async function RepairListingsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const serviceTypeParam = params.serviceType ? Number(params.serviceType) : undefined;
+  const areaParam = params.area;
+
+  const jobs = getRepairJobs({
+    serviceType: serviceTypeParam,
+    area: areaParam,
+  });
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
@@ -46,9 +59,9 @@ export default function RepairListingsPage() {
         {/* How escrow works */}
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { icon: "📝", label: "1. ลงประกาศฟรี", desc: "ระบุปัญหา รับ offer" },
-            { icon: "💰", label: "2. จ่าย Escrow 30%", desc: "ล็อคเงินก่อน งานไม่เสร็จ-คืนเงิน" },
-            { icon: "✅", label: "3. งานเสร็จ จ่าย 70%", desc: "ยืนยัน → โอนเงินให้ร้าน" },
+            { icon: '📝', label: '1. ลงประกาศฟรี', desc: 'ระบุปัญหา รับ offer' },
+            { icon: '💰', label: '2. จ่าย Escrow 30%', desc: 'ล็อคเงินก่อน งานไม่เสร็จ-คืนเงิน' },
+            { icon: '✅', label: '3. งานเสร็จ จ่าย 70%', desc: 'ยืนยัน → โอนเงินให้ร้าน' },
           ].map((step) => (
             <div key={step.label} className="bg-white rounded-lg p-3 flex items-center gap-3">
               <span className="text-2xl">{step.icon}</span>
@@ -66,30 +79,44 @@ export default function RepairListingsPage() {
         <aside className="lg:w-64 flex-shrink-0">
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5 sticky top-20">
             <h3 className="font-semibold text-gray-900">กรองประกาศ</h3>
+
+            {/* Area filter */}
             <div>
               <label className="block text-sm text-gray-700 font-medium mb-2">จังหวัด</label>
-              <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option>ทุกจังหวัด</option>
-                <option>กรุงเทพฯ</option>
-                <option>นนทบุรี</option>
-                <option>ปทุมธานี</option>
-                <option>สมุทรปราการ</option>
+              <select
+                defaultValue={areaParam ?? ''}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => {
+                  const url = new URL(window.location.href);
+                  if (e.target.value) url.searchParams.set('area', e.target.value);
+                  else url.searchParams.delete('area');
+                  window.location.href = url.toString();
+                }}
+              >
+                <option value="">ทุกจังหวัด</option>
+                {['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'].map(
+                  (p) => (
+                    <option key={p} value={p}>{p}</option>
+                  )
+                )}
               </select>
             </div>
+
+            {/* Appliance filter */}
             <div>
-              <label className="block text-sm text-gray-700 font-medium mb-2">ประเภทเครื่องใช้ไฟฟ้า</label>
+              <label className="block text-sm text-gray-700 font-medium mb-2">ประเภทเครื่อง</label>
               <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>ทุกประเภท</option>
-                <option>แอร์</option>
-                <option>ทีวี</option>
-                <option>เครื่องซักผ้า</option>
-                <option>ตู้เย็น</option>
-                <option>ไมโครเวฟ</option>
+                {['แอร์', 'ทีวี', 'เครื่องซักผ้า', 'ตู้เย็น', 'ไมโครเวฟ', 'พัดลม', 'หม้อหุงข้าว'].map(
+                  (t) => <option key={t}>{t}</option>
+                )}
               </select>
             </div>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">
-              ค้นหา
-            </button>
+
+            {/* Service type filter */}
+            <Suspense>
+              <ServiceTypeFilter allowedTypes={ALL_SERVICE_TYPES} accentColor="blue" />
+            </Suspense>
           </div>
         </aside>
 
@@ -97,25 +124,32 @@ export default function RepairListingsPage() {
         <div className="flex-1">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-gray-900">ประกาศซ่อมทั้งหมด</h2>
-            <span className="text-gray-500 text-sm">{mockListings.length} รายการ</span>
+            <span className="text-gray-500 text-sm">{jobs.length} รายการ</span>
           </div>
 
-          {/* Limited info notice */}
+          {/* Auth notice */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-start gap-3">
             <span className="text-amber-500 text-lg">ℹ️</span>
             <div className="text-sm text-amber-800">
-              <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ยื่น offer ให้งานซ่อมได้หลังจาก{" "}
+              <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดและยื่น offer ได้หลังจาก{' '}
               <Link href="/register/weeer" className="underline font-semibold text-amber-900">
                 สมัคร WeeeR
               </Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-            {mockListings.map((listing) => (
-              <ListingCard key={listing.id} {...listing} limited={true} />
-            ))}
-          </div>
+          {jobs.length === 0 ? (
+            <div className="text-center py-16 text-gray-400">
+              <div className="text-4xl mb-3">🔍</div>
+              <p>ไม่พบประกาศที่ตรงกับเงื่อนไข</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              {jobs.map((job) => (
+                <RepairJobCard key={job.id} job={job} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
