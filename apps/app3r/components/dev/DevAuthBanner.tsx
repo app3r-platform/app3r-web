@@ -2,19 +2,23 @@
 
 // ============================================================
 // components/dev/DevAuthBanner.tsx — Dev-only role switcher
+// Phase C-4.1b: added weeet + admin, cookie sync
 // ============================================================
 
 import { useState, useEffect } from "react";
 
-type MockRole = "anonymous" | "weeeu" | "weeer" | "weeeu-owner";
+type MockRole = "anonymous" | "weeeu" | "weeer" | "weeet" | "weeeu-owner" | "admin";
 
 const STORAGE_KEY = "app3r-mock-role";
+const COOKIE_KEY = "app3r-mock-role";
 
 const roles: { value: MockRole; label: string; color: string }[] = [
-  { value: "anonymous", label: "ผู้เยี่ยมชม", color: "bg-gray-200 text-gray-800" },
-  { value: "weeeu", label: "WeeeU", color: "bg-blue-200 text-blue-800" },
-  { value: "weeer", label: "WeeeR", color: "bg-green-200 text-green-800" },
-  { value: "weeeu-owner", label: "เจ้าของประกาศ", color: "bg-purple-200 text-purple-800" },
+  { value: "anonymous",    label: "ผู้เยี่ยมชม",    color: "bg-gray-200 text-gray-800" },
+  { value: "weeeu",        label: "WeeeU",           color: "bg-blue-200 text-blue-800" },
+  { value: "weeer",        label: "WeeeR",           color: "bg-green-200 text-green-800" },
+  { value: "weeet",        label: "WeeeT",           color: "bg-yellow-200 text-yellow-800" },
+  { value: "weeeu-owner",  label: "เจ้าของประกาศ",  color: "bg-purple-200 text-purple-800" },
+  { value: "admin",        label: "Admin",           color: "bg-red-200 text-red-800" },
 ];
 
 export default function DevAuthBanner() {
@@ -34,6 +38,8 @@ export default function DevAuthBanner() {
   function handleRoleChange(role: MockRole) {
     setCurrentRole(role);
     localStorage.setItem(STORAGE_KEY, role);
+    // Sync to cookie so Server Components can read via getMockRoleFromCookie()
+    document.cookie = `${COOKIE_KEY}=${role}; path=/; SameSite=Lax`;
   }
 
   const current = roles.find((r) => r.value === currentRole);
@@ -65,6 +71,9 @@ export default function DevAuthBanner() {
         <span className={`font-semibold px-1 rounded ${current?.color}`}>
           {current?.label}
         </span>
+      </div>
+      <div className="mt-1 text-gray-300 text-[10px]">
+        * เปลี่ยน role แล้ว reload หน้า
       </div>
     </div>
   );
