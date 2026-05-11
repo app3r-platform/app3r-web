@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { repairJobs } from '../lib/mock/repair-jobs';
 import { maintainJobs } from '../lib/mock/maintain-jobs';
+import { staticPages } from '../lib/content/static-pages';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://app3r.com';
@@ -17,7 +18,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: '/register/weeer',     priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/contact',            priority: 0.6, changeFrequency: 'monthly' as const },
     { url: '/download',           priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/about',              priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/faq',                priority: 0.7, changeFrequency: 'monthly' as const },
   ];
+
+  const legalRoutes = Object.keys(staticPages).map((slug) => ({
+    url: `/legal/${slug}`,
+    priority: 0.4,
+    changeFrequency: 'yearly' as const,
+  }));
 
   const repairRoutes = repairJobs.map((j) => ({
     url: `/listings/repair/${j.id}`,
@@ -31,7 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'daily' as const,
   }));
 
-  return [...staticRoutes, ...repairRoutes, ...maintainRoutes].map((route) => ({
+  return [...staticRoutes, ...legalRoutes, ...repairRoutes, ...maintainRoutes].map((route) => ({
     url: `${baseUrl}${route.url}`,
     lastModified: new Date(),
     changeFrequency: route.changeFrequency,

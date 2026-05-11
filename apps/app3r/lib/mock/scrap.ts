@@ -34,6 +34,7 @@ export const mockScrapListings: ScrapListing[] = [
     postedAt: "1 วัน ที่แล้ว",
     postedDaysAgo: 1,
     viewCount: 22,
+    featured: true,
   },
   {
     id: "s002",
@@ -58,6 +59,7 @@ export const mockScrapListings: ScrapListing[] = [
     postedDaysAgo: 2,
     viewCount: 67,
     sponsored: true,
+    featured: true,
   },
   {
     id: "s003",

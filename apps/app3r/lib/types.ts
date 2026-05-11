@@ -38,6 +38,7 @@ export interface ResellListing {
   postedDaysAgo: number;
   viewCount: number;
   sponsored?: boolean;
+  featured?: boolean;
 }
 
 export interface ScrapListing {
@@ -61,6 +62,7 @@ export interface ScrapListing {
   postedDaysAgo: number;
   viewCount: number;
   sponsored?: boolean;
+  featured?: boolean;
 }
 
 export type PublicListing = ResellListing | ScrapListing;

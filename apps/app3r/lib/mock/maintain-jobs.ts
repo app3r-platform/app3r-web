@@ -37,6 +37,7 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
     estimatedBudget: 1200,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
+    featured: true,
   }),
 
   makeMaintainJob({
@@ -53,6 +54,7 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
     estimatedBudget: 800,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
+    featured: true,
   }),
 
   makeMaintainJob({

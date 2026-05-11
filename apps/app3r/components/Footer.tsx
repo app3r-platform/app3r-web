@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { footerContent } from "@/lib/content/footer";
 
 const footerLinks = {
   ประกาศ: [
@@ -7,10 +8,10 @@ const footerLinks = {
     { href: "/listings/maintain", label: "บำรุงรักษา" },
   ],
   "เกี่ยวกับ App3R": [
+    { href: "/about", label: "เกี่ยวกับเรา" },
+    { href: "/faq", label: "คำถามที่พบบ่อย" },
     { href: "/articles", label: "บทความ" },
-    { href: "/products", label: "สินค้า" },
     { href: "/contact", label: "ติดต่อเรา" },
-    { href: "/download", label: "ดาวน์โหลดแอป" },
   ],
   สมาชิก: [
     { href: "http://localhost:3002/register", label: "สมัคร WeeeU (ผู้ใช้ทั่วไป)" },
@@ -19,7 +20,16 @@ const footerLinks = {
   ],
 };
 
+const socialIcons: Record<string, string> = {
+  facebook: 'f',
+  line: 'L',
+  instagram: 'ig',
+};
+
 export default function Footer() {
+  const year = new Date().getFullYear();
+  const copyright = footerContent.copyrightTemplate.replace('{year}', String(year));
+
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -31,8 +41,26 @@ export default function Footer() {
               <span className="font-extrabold text-xl text-white">App3R</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
+              {footerContent.tagline}
+            </p>
+            <p className="text-xs text-gray-500">
               แพลตฟอร์มตัวกลางด้านเครื่องใช้ไฟฟ้าครบวงจร — ซื้อขาย ซ่อม บำรุงรักษา ในที่เดียว
             </p>
+            {/* Social links */}
+            <div className="flex gap-2">
+              {footerContent.socialLinks.map((s) => (
+                <a
+                  key={s.platform}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="bg-gray-800 hover:bg-gray-700 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition"
+                >
+                  {socialIcons[s.platform] ?? s.platform[0].toUpperCase()}
+                </a>
+              ))}
+            </div>
             <div className="flex gap-3">
               <a
                 href="/download"
@@ -70,10 +98,17 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <p>© 2026 App3R Platform. สงวนลิขสิทธิ์.</p>
-          <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-gray-300 transition">นโยบายความเป็นส่วนตัว</Link>
-            <Link href="/terms" className="hover:text-gray-300 transition">ข้อกำหนดการใช้งาน</Link>
+          <p>{copyright}</p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            {footerContent.legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:text-gray-300 transition"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
