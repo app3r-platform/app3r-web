@@ -37,6 +37,16 @@ export default function PartsListPage() {
 
   return (
     <div className="space-y-5">
+      {/* B2B Marketplace shortcut (C-6) */}
+      <Link href="/parts/marketplace"
+        className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3 hover:bg-green-100 transition-colors">
+        <div>
+          <p className="text-sm font-semibold text-green-800">🛒 ตลาดอะไหล่ B2B</p>
+          <p className="text-xs text-green-600">ซื้อ-ขายอะไหล่กับร้านอื่น</p>
+        </div>
+        <span className="text-green-600 text-sm">›</span>
+      </Link>
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">คลังอะไหล่</h1>
