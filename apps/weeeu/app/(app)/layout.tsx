@@ -17,6 +17,7 @@ const navItems = [
   { href: "/maintain/book", icon: "🛁", label: "จองล้าง" },
   { href: "/maintain/jobs", icon: "🛠️", label: "งานล้างของฉัน" },
   { href: "/modules/parts", icon: "🔩", label: "อะไหล่", module: true },
+  { href: "/jobs", icon: "📋", label: "งานซ่อมของฉัน" },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
