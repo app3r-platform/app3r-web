@@ -13,6 +13,9 @@ export default function robots(): MetadataRoute.Robots {
           "/contact",
           "/download",
           "/register/weeer",
+          "/about",
+          "/faq",
+          "/legal/",
         ],
         disallow: [
           "/api/",
