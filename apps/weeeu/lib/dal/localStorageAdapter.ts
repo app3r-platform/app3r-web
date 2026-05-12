@@ -10,6 +10,16 @@ import type {
   IWeeeuApplianceDAL,
   IWeeeuRepairRequestDAL,
   IWeeeuDAL,
+  IUploadDAL,
+  IPushDAL,
+  IPaymentDAL,
+  ILocationDAL,
+  UploadPresignResult,
+  UploadFinalizeResult,
+  PaymentIntentResult,
+  PaymentStatus,
+  GeocodeResult,
+  SavedLocation,
   WeeeuAppliance,
   WeeeuRepairRequest,
 } from "@app3r/shared/dal/weeeu";
@@ -125,6 +135,118 @@ const repairRequestsAdapter: IWeeeuRepairRequestDAL = {
   },
 };
 
+// ─── Upload mock (D87) — Phase C: fake presign + finalize ────────────────────
+
+const SAVED_LOCATIONS_KEY = "weeeu_saved_locations";
+
+const uploadAdapter: IUploadDAL = {
+  async presign(params): Promise<Result<UploadPresignResult>> {
+    const uploadId = `upload-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    // Phase C mock: presignedUrl ไม่ใช่ URL จริง (PUT จะ fail ได้ แต่ flow ยังดำเนินต่อ)
+    const presignedUrl = `https://mock-r2.example.com/${params.context ?? "file"}/${uploadId}/${encodeURIComponent(params.filename)}`;
+    return { ok: true, data: { uploadId, presignedUrl } };
+  },
+
+  async finalize(uploadId: string): Promise<Result<UploadFinalizeResult>> {
+    const fileId = `file-${uploadId}`;
+    return {
+      ok: true,
+      data: {
+        fileId,
+        signedGetUrl: `https://picsum.photos/seed/${fileId}/400/300`,
+        scanStatus: "clean",
+      },
+    };
+  },
+
+  async getScanStatus(fileId: string): Promise<Result<{ status: 'pending' | 'clean' | 'infected' }>> {
+    return { ok: true, data: { status: "clean" } };
+  },
+};
+
+// ─── Push mock (D88) — Phase C: no-op subscribe ───────────────────────────────
+
+const pushAdapter: IPushDAL = {
+  async subscribe(_params): Promise<Result<{ subscriptionId: string }>> {
+    const subscriptionId = `sub-mock-${Date.now()}`;
+    return { ok: true, data: { subscriptionId } };
+  },
+
+  async unsubscribe(_subscriptionId: string): Promise<Result<void>> {
+    return { ok: true, data: undefined };
+  },
+};
+
+// ─── Payment mock (D89) — Phase C: fake checkout URL ─────────────────────────
+
+const paymentAdapter: IPaymentDAL = {
+  async createIntent(params): Promise<Result<PaymentIntentResult>> {
+    const intentId = `intent-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const checkoutUrl = `/payment/mock-success?intentId=${intentId}&amount=${params.amount}`;
+    return { ok: true, data: { intentId, checkoutUrl } };
+  },
+
+  async getStatus(intentId: string): Promise<Result<PaymentStatus>> {
+    return {
+      ok: true,
+      data: {
+        intentId,
+        status: "paid",
+        paidAt: new Date().toISOString(),
+        amount: 0,
+        currency: "THB",
+      },
+    };
+  },
+};
+
+// ─── Location mock (D90) — Phase C: hardcoded Bangkok locations ───────────────
+
+const MOCK_GEOCODE: Record<string, GeocodeResult> = {
+  "place-001": { placeId: "place-001", formattedAddress: "สยามพารากอน, กรุงเทพมหานคร", lat: 13.7465, lng: 100.5347 },
+  "place-002": { placeId: "place-002", formattedAddress: "จตุจักร, กรุงเทพมหานคร", lat: 13.7998, lng: 100.5499 },
+  "place-003": { placeId: "place-003", formattedAddress: "อนุสาวรีย์ชัยสมรภูมิ, กรุงเทพมหานคร", lat: 13.7646, lng: 100.5370 },
+  "place-004": { placeId: "place-004", formattedAddress: "เซ็นทรัลเวิลด์, กรุงเทพมหานคร", lat: 13.7469, lng: 100.5390 },
+  "place-005": { placeId: "place-005", formattedAddress: "ท่าอากาศยานสุวรรณภูมิ, สมุทรปราการ", lat: 13.6900, lng: 100.7501 },
+};
+
+const locationAdapter: ILocationDAL = {
+  async geocode(placeId: string): Promise<Result<GeocodeResult>> {
+    const result = MOCK_GEOCODE[placeId];
+    if (!result) {
+      // Generic fallback สำหรับ placeId ที่ไม่รู้จัก
+      return {
+        ok: true,
+        data: { placeId, formattedAddress: "สถานที่ที่เลือก", lat: 13.7563, lng: 100.5018 },
+      };
+    }
+    return { ok: true, data: result };
+  },
+
+  async save(params): Promise<Result<SavedLocation>> {
+    if (typeof window === "undefined") return { ok: false, error: "ไม่รองรับ server-side" };
+    const existing: SavedLocation[] = JSON.parse(localStorage.getItem(SAVED_LOCATIONS_KEY) ?? "[]");
+    const saved: SavedLocation = {
+      id: `loc-${Date.now()}`,
+      userId: "u-001",
+      label: params.label,
+      formattedAddress: params.formattedAddress,
+      lat: params.lat,
+      lng: params.lng,
+      createdAt: new Date().toISOString(),
+    };
+    existing.push(saved);
+    localStorage.setItem(SAVED_LOCATIONS_KEY, JSON.stringify(existing));
+    return { ok: true, data: saved };
+  },
+
+  async list(): Promise<Result<SavedLocation[]>> {
+    if (typeof window === "undefined") return { ok: true, data: [] };
+    const items: SavedLocation[] = JSON.parse(localStorage.getItem(SAVED_LOCATIONS_KEY) ?? "[]");
+    return { ok: true, data: items };
+  },
+};
+
 // ─── LocalStorageAdapter (รวมทุก module) ─────────────────────────────────────
 
 class LocalStorageAdapter implements IDataAccessLayer, IWeeeuDAL {
@@ -134,6 +256,10 @@ class LocalStorageAdapter implements IDataAccessLayer, IWeeeuDAL {
   readonly serviceProgress = serviceProgressAdapter;
   readonly appliances = appliancesAdapter;
   readonly repairRequests = repairRequestsAdapter;
+  readonly upload = uploadAdapter;
+  readonly push = pushAdapter;
+  readonly payment = paymentAdapter;
+  readonly location = locationAdapter;
 
   isAvailable(): boolean {
     return typeof window !== "undefined";
