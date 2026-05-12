@@ -14,5 +14,8 @@
   "devDependencies": {
     "turbo": "^2.3.3"
   },
-  "packageManager": "pnpm@10.8.1"
+  "packageManager": "pnpm@10.8.1",
+  "pnpm": {
+    "onlyBuiltDependencies": ["bcrypt", "esbuild"]
+  }
 }
