@@ -1,0 +1,11 @@
+{
+  "name": "@app3r/dal",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./index.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}
