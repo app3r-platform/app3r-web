@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@app3r/shared": "workspace:*",
     "@app3r/ui": "workspace:*",
     "next": "^15.3.1",
     "react": "^19",

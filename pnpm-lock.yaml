@@ -223,6 +223,9 @@ importers:
 
   apps/weeeu:
     dependencies:
+      '@app3r/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@app3r/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -254,6 +257,12 @@ importers:
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19(tsx@4.21.0)(yaml@2.9.0)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/shared:
+    devDependencies:
       typescript:
         specifier: ^5
         version: 5.9.3
