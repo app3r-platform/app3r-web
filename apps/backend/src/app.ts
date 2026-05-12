@@ -1,13 +1,25 @@
 /**
  * app.ts — Hono OpenAPI app factory
  * D82: Hono framework | D85: OpenAPI 3.1 + Swagger UI
+ * Phase D-2: D87 Files + D88 Push/WS + D89 Payment + D90 Location + D91 Email
+ *            + services stub + parts (NOTE-SUB4)
  */
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { swaggerUI } from '@hono/swagger-ui'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+
+// D-1 routes
 import { healthRouter } from './routes/health'
 import { authRouter } from './routes/auth'
+
+// D-2 routes
+import { filesRouter } from './routes/files'
+import { pushRouter } from './routes/push'
+import { paymentRouter } from './routes/payment'
+import { locationRouter } from './routes/location'
+import { servicesRouter } from './routes/services'
+import { partsRouter } from './routes/parts'
 
 export const app = new OpenAPIHono()
 
@@ -29,13 +41,31 @@ app.use(
   }),
 )
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+// ── Routes D-1 ───────────────────────────────────────────────────────────────
 app.route('/health', healthRouter)
 app.route('/api/v1', authRouter)
 
+// ── Routes D-2 ───────────────────────────────────────────────────────────────
+// D87: File Upload (R2 + ClamAV)
+app.route('/api/v1/files', filesRouter)
+
+// D88: Push Notifications + in-app notifications list
+app.route('/api/v1/push', pushRouter)
+
+// D89: Payment (2C2P + Stripe + TrueMoney)
+app.route('/api/v1/payment', paymentRouter)
+
+// D90: Location (Google Maps proxy + live location NOTE-SUB5)
+app.route('/api/v1/location', locationRouter)
+
+// D90 NOTE-D90-1: Services stub CRUD
+app.route('/api/v1/services', servicesRouter)
+
+// NOTE-SUB4: Parts inventory + orders (escrow)
+app.route('/api/v1/parts', partsRouter)
+
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
-// Register bearerAuth security scheme via registry (correct @hono/zod-openapi API)
 app.openAPIRegistry.registerComponent('securitySchemes', 'bearerAuth', {
   type: 'http',
   scheme: 'bearer',
@@ -46,10 +76,12 @@ app.doc('/openapi.json', {
   openapi: '3.1.0',
   info: {
     title: 'App3R API',
-    version: '0.1.0',
+    version: '0.2.0',
     description:
-      'App3R Platform Backend — Phase D-1 Foundation\n\n' +
+      'App3R Platform Backend — Phase D-2 Real Integrations\n\n' +
       'Auth: JWT access token (15 min) + HttpOnly refresh cookie (7 days)\n\n' +
+      'D-2 New: Files(D87) + Push/WS(D88) + Payment(D89) + Location(D90) + Email(D91)\n' +
+      '        + Services stub(D90-NOTE-D90-1) + Parts(NOTE-SUB4)\n\n' +
       'Error format: `{error: {code: string, message: string, details?: any}}`',
   },
 })
