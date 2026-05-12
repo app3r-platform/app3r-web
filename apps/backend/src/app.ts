@@ -35,6 +35,13 @@ app.route('/api/v1', authRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
+// Register bearerAuth security scheme via registry (correct @hono/zod-openapi API)
+app.openAPIRegistry.registerComponent('securitySchemes', 'bearerAuth', {
+  type: 'http',
+  scheme: 'bearer',
+  bearerFormat: 'JWT',
+})
+
 app.doc('/openapi.json', {
   openapi: '3.1.0',
   info: {
@@ -44,15 +51,6 @@ app.doc('/openapi.json', {
       'App3R Platform Backend — Phase D-1 Foundation\n\n' +
       'Auth: JWT access token (15 min) + HttpOnly refresh cookie (7 days)\n\n' +
       'Error format: `{error: {code: string, message: string, details?: any}}`',
-  },
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
-    },
   },
 })
 

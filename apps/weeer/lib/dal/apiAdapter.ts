@@ -10,8 +10,8 @@ const SCOPE = "D-2 scope";
 
 /** @migrate-to-backend-d2 ทั้งไฟล์ */
 export const weeerApiAdapter: IWeeerDAL = {
-  adapterType: "api",
-  isReady: () => false, // D-1: ยังไม่พร้อม
+  adapterName: "api",
+  isAvailable: () => false, // D-1: ยังไม่พร้อม
 
   offer: {
     /** @migrate-to-backend-d2 GET /api/v1/offers?shopId= */

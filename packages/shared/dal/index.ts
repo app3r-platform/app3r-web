@@ -55,6 +55,17 @@ export interface IDataAccessLayer {
   isAvailable(): boolean;
 }
 
+/**
+ * NotImplementedError — ใช้ใน apiAdapter skeleton
+ * D84: throw จากทุก method ที่ยังไม่ implement (รอ Phase D-2)
+ */
+export class NotImplementedError extends Error {
+  constructor(scope: string) {
+    super(`Not implemented — scope: ${scope}`);
+    this.name = 'NotImplementedError';
+  }
+}
+
 // ─── Re-export module types (per-app) ─────────────────────────────────────────
 // แต่ละ app สร้าง types ไฟล์ของตัวเอง — import แยกกันตาม path
 

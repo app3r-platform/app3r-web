@@ -3,9 +3,13 @@
 // WeeeR สร้าง primitives.ts stub เพื่อหลีกเลี่ยง circular import
 // P3 จะย้าย/ขยาย definitions เหล่านี้ตาม architecture ที่กำหนด
 
-export type Result<T, E = Error> =
-  | { success: true;  data: T }
-  | { success: false; error: E };
+// primitives.ts — stub สร้างโดย P4 WeeeR (parallel dev)
+// อัพเดตให้ตรงกับ authoritative types ใน index.ts (WeeeU เจ้าของ)
+// ใช้โดย weeer.types.ts เท่านั้น — ห้าม import จากที่อื่น
+
+export type Result<T> =
+  | { ok: true;  data: T }
+  | { ok: false; error: string; code?: string };
 
 export interface User {
   id: string;
@@ -16,8 +20,8 @@ export interface User {
 export type Role = "weeer" | "weeeu" | "weeet" | "admin";
 
 export interface IDataAccessLayer {
-  readonly adapterType: "localStorage" | "api";
-  isReady(): boolean;
+  readonly adapterName: string;
+  isAvailable(): boolean;
 }
 
 export class NotImplementedError extends Error {

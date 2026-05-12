@@ -29,8 +29,8 @@ function lsSet<T>(key: string, value: T): void {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota */ }
 }
 
-function ok<T>(data: T): Result<T> { return { success: true, data }; }
-function fail<T>(msg: string): Result<T> { return { success: false, error: new Error(msg) }; }
+function ok<T>(data: T): Result<T> { return { ok: true, data }; }
+function fail<T>(msg: string): Result<T> { return { ok: false, error: msg }; }
 
 // ── Storage Keys (ต้อง match กับ Phase C ที่มีอยู่) ───────────────────────────
 const KEYS = {
@@ -260,8 +260,8 @@ const partsDAL: IPartsDAL = {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export const weeerLocalStorageAdapter: IWeeerDAL = {
-  adapterType: "localStorage",
-  isReady: () => isBrowser,
+  adapterName: "localStorage",
+  isAvailable: () => isBrowser,
   offer: offerDAL,
   repairJob: repairJobDAL,
   maintenance: maintenanceDAL,
