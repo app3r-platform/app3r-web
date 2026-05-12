@@ -76,6 +76,106 @@ export interface IWeeeuRepairRequestDAL {
   get(id: string): Result<WeeeuRepairRequest>;
 }
 
+// ─── Upload DAL (D87 — อัพโหลดไฟล์ผ่าน presigned URL) ────────────────────────
+
+export interface UploadPresignResult {
+  uploadId: string;
+  presignedUrl: string;
+}
+
+export interface UploadFinalizeResult {
+  fileId: string;
+  signedGetUrl: string;
+  scanStatus: 'pending' | 'clean' | 'infected';
+}
+
+export interface IUploadDAL {
+  /** ขอ presigned URL สำหรับอัพโหลดไฟล์ไปยัง R2 (cloud storage) */
+  presign(params: {
+    filename: string;
+    contentType: string;
+    sizeBytes: number;
+    context?: string;
+  }): Promise<Result<UploadPresignResult>>;
+  /** แจ้ง backend ว่าอัพโหลดเสร็จแล้ว → trigger scan (ตรวจสอบไวรัส) */
+  finalize(uploadId: string): Promise<Result<UploadFinalizeResult>>;
+  /** ตรวจสอบสถานะการ scan ไวรัส */
+  getScanStatus(fileId: string): Promise<Result<{ status: 'pending' | 'clean' | 'infected' }>>;
+}
+
+// ─── Push DAL (D88 — Web Push Notification / FCM) ────────────────────────────
+
+export interface IPushDAL {
+  /** ส่ง FCM token ไป backend เพื่อ register การแจ้งเตือน (push notification) */
+  subscribe(params: {
+    token: string;
+    platform: 'web' | 'ios' | 'android';
+  }): Promise<Result<{ subscriptionId: string }>>;
+  /** ยกเลิกการแจ้งเตือน */
+  unsubscribe(subscriptionId: string): Promise<Result<void>>;
+}
+
+// ─── Payment DAL (D89 — 2C2P Payment Gateway) ────────────────────────────────
+// NOTE-D89-2: WeeeU = customer เท่านั้น — ไม่มี withdrawal UI
+
+export interface PaymentIntentResult {
+  intentId: string;
+  checkoutUrl: string;
+}
+
+export interface PaymentStatus {
+  intentId: string;
+  status: 'pending' | 'paid' | 'failed' | 'cancelled';
+  paidAt?: string;
+  amount: number;
+  currency: string;
+}
+
+export interface IPaymentDAL {
+  /** สร้าง Payment Intent และรับ checkout URL สำหรับ redirect ไป 2C2P */
+  createIntent(params: {
+    serviceId: string;
+    amount: number;
+    currency?: string;
+    description?: string;
+  }): Promise<Result<PaymentIntentResult>>;
+  /** ตรวจสอบสถานะการชำระเงิน */
+  getStatus(intentId: string): Promise<Result<PaymentStatus>>;
+}
+
+// ─── Location DAL (D90 — Google Places + Geocode + Saved Locations) ───────────
+
+export interface GeocodeResult {
+  placeId: string;
+  formattedAddress: string;
+  lat: number;
+  lng: number;
+}
+
+export interface SavedLocation {
+  id: string;
+  userId: string;
+  label?: string;
+  formattedAddress: string;
+  lat: number;
+  lng: number;
+  createdAt: string;
+}
+
+export interface ILocationDAL {
+  /** แปลง placeId เป็นพิกัด (lat/lng) ผ่าน Geocoding API */
+  geocode(placeId: string): Promise<Result<GeocodeResult>>;
+  /** บันทึกสถานที่ที่เลือก */
+  save(params: {
+    lat: number;
+    lng: number;
+    formattedAddress: string;
+    label?: string;
+  }): Promise<Result<SavedLocation>>;
+  /** ดึงรายการสถานที่ที่บันทึกไว้ */
+  list(): Promise<Result<SavedLocation[]>>;
+}
+
 // ─── WeeeU DAL (รวม modules ทั้งหมด) ─────────────────────────────────────────
 
 export interface IWeeeuDAL {
@@ -83,4 +183,8 @@ export interface IWeeeuDAL {
   serviceProgress: IServiceProgressDAL;
   appliances: IWeeeuApplianceDAL;
   repairRequests: IWeeeuRepairRequestDAL;
+  upload: IUploadDAL;
+  push: IPushDAL;
+  payment: IPaymentDAL;
+  location: ILocationDAL;
 }
