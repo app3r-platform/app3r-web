@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { LocationPickerSection } from "@/components/location/LocationPickerSection";
+import { PushPermissionBanner } from "@/components/push/PushPermissionBanner";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -91,10 +93,21 @@ export default function SettingsPage() {
             <Toggle value={gpsEnabled} onChange={setGpsEnabled} />
           }
         />
+        {auth.technician?.id && (
+          <div className="px-4 py-3 space-y-1 border-t border-gray-700">
+            <p className="text-xs text-gray-400 font-medium mb-2">ตำแหน่งฐาน + รัศมีให้บริการ</p>
+            <LocationPickerSection technicianId={auth.technician.id} />
+          </div>
+        )}
       </SettingSection>
 
       {/* Notifications */}
       <SettingSection title="การแจ้งเตือน">
+        {auth.technician?.id && (
+          <div className="border-b border-gray-700">
+            <PushPermissionBanner technicianId={auth.technician.id} compact />
+          </div>
+        )}
         <SettingRow
           icon="🔔"
           label="งานใหม่ / อัปเดตงาน"

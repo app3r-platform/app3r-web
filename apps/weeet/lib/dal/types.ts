@@ -1,8 +1,7 @@
 /**
  * apps/weeet/lib/dal/types.ts
- * Phase D-1 — WeeeT DAL types (in-app copy)
+ * Phase D-2 — WeeeT DAL types (in-app mirror)
  * Mirror ของ packages/shared/dal/weeet.types.ts — define inline เพื่อให้ build ผ่าน
- * TODO D-2: เปลี่ยนเป็น re-export จาก @app3r/shared/dal เมื่อ P3 index.ts merged
  */
 
 export type Result<T> =
@@ -36,12 +35,58 @@ export interface TechnicianRecord {
   shopId: string;
   shopName?: string;
   specialties?: string[];
+  homeBaseLat?: number;
+  homeBaseLng?: number;
+  serviceRadiusKm?: number;
 }
 
 export interface WarrantyRecord {
   jobId: JobId;
   expiresAt: string;
   terms: string;
+}
+
+export interface WalletBalance {
+  available: number;
+  pending: number;
+  currency: string;
+  updatedAt: string;
+}
+
+export interface WalletTransaction {
+  id: string;
+  type: "credit" | "debit";
+  amount: number;
+  description: string;
+  jobId?: JobId;
+  createdAt: string;
+}
+
+export interface UploadedFile {
+  fileId: string;
+  url: string;
+  mimeType: string;
+  sizeBytes: number;
+  uploadedAt: string;
+}
+
+export interface PushSubscriptionData {
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+  technicianId: UserId;
+}
+
+export interface PushSubscriptionStatus {
+  isSubscribed: boolean;
+  endpoint?: string;
+}
+
+export interface LiveLocationUpdate {
+  serviceId: JobId;
+  lat: number;
+  lng: number;
+  timestamp: string;
+  accuracy?: number;
 }
 
 export interface JobAssignDAL {
@@ -64,9 +109,36 @@ export interface WarrantyDAL {
   getWarranty(jobId: JobId): Promise<Result<WarrantyRecord | null>>;
 }
 
+export interface PaymentDAL {
+  getWalletBalance(): Promise<Result<WalletBalance>>;
+  getTransactions(limit?: number): Promise<Result<WalletTransaction[]>>;
+}
+
+export interface UploadDAL {
+  uploadServicePhoto(jobId: JobId, file: File, caption?: string): Promise<Result<UploadedFile>>;
+  uploadReceipt(jobId: JobId, file: File): Promise<Result<UploadedFile>>;
+}
+
+export interface PushDAL {
+  subscribePush(subscription: PushSubscriptionData): Promise<Result<void>>;
+  unsubscribePush(): Promise<Result<void>>;
+  getSubscriptionStatus(): Promise<Result<PushSubscriptionStatus>>;
+}
+
+/** @needs-backend-sync Backend Sub-CMD-P1: POST /api/location/live */
+export interface LiveLocationDAL {
+  emitLocation(update: LiveLocationUpdate): Promise<Result<void>>;
+  saveConsentStatus(technicianId: UserId, consented: boolean): Promise<Result<void>>;
+  getConsentStatus(technicianId: UserId): Promise<Result<boolean>>;
+}
+
 export interface WeeeTDAL {
   jobAssign: JobAssignDAL;
   jobStatus: JobStatusDAL;
   technician: TechnicianDAL;
   warranty: WarrantyDAL;
+  payment: PaymentDAL;
+  upload: UploadDAL;
+  push: PushDAL;
+  liveLocation: LiveLocationDAL;
 }

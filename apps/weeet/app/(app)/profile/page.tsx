@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { availableSpecialties, educationLevels, postalCodeMap } from "@/lib/mock-data";
 import type { Technician } from "@/lib/types";
+import { PaymentWalletCard } from "@/components/payment/PaymentWalletCard";
 
 const MAX_CERT_SIZE_MB = 3;
 const MAX_CERT_FILES = 10;
@@ -389,6 +390,13 @@ export default function ProfilePage() {
               {editing && <p className="text-xs text-orange-400 mt-0.5">แตะเพื่ออัปโหลด</p>}
             </div>
           )}
+        </div>
+      </Section>
+
+      {/* Payment Wallet (Phase D-2) */}
+      <Section title="กระเป๋าเงิน">
+        <div className="px-4 py-3">
+          <PaymentWalletCard />
         </div>
       </Section>
 
