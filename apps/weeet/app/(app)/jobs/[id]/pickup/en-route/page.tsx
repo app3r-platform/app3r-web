@@ -2,6 +2,8 @@
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { pickupApi } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
+import { LiveLocationShareControl } from "@/components/live-location/LiveLocationShareControl";
 
 export default function PickupEnRoutePage({
   params,
@@ -9,6 +11,8 @@ export default function PickupEnRoutePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { auth } = useAuth();
+  const technicianId = auth.technician?.id ?? "unknown";
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +78,12 @@ export default function PickupEnRoutePage({
         <p className="text-xs text-gray-400">
           กรุณาอนุญาตการเข้าถึงตำแหน่ง เพื่อความแม่นยำในการติดตามงาน
         </p>
+      </div>
+
+      {/* Live Location Share (D88+D90) */}
+      <div className="space-y-2">
+        <p className="text-xs text-gray-400 font-medium">แชร์ตำแหน่ง real-time</p>
+        <LiveLocationShareControl serviceId={id} technicianId={technicianId} isMoving={true} />
       </div>
 
       {error && (

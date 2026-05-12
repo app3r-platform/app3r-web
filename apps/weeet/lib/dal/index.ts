@@ -1,16 +1,11 @@
 /**
  * apps/weeet/lib/dal/index.ts
- * Phase D-1 — DAL (Data Access Layer) entry point + feature flag
- *
- * Feature flag (ตัวเลือกเปิด/ปิดฟีเจอร์):
- *   NEXT_PUBLIC_WEEET_DAL_ADAPTER=localStorage  (default — Phase D-1)
- *   NEXT_PUBLIC_WEEET_DAL_ADAPTER=api           (Phase D-2 เมื่อ backend พร้อม)
+ * Phase D-2 — DAL entry point + per-module feature flags
  *
  * Per-module flags:
- *   NEXT_PUBLIC_WEEET_DAL_JOB_ASSIGN=localStorage
- *   NEXT_PUBLIC_WEEET_DAL_JOB_STATUS=localStorage
- *   NEXT_PUBLIC_WEEET_DAL_TECHNICIAN=localStorage
- *   NEXT_PUBLIC_WEEET_DAL_WARRANTY=localStorage
+ *   NEXT_PUBLIC_WEEET_DAL_JOB_ASSIGN, JOB_STATUS, TECHNICIAN, WARRANTY
+ *   NEXT_PUBLIC_WEEET_DAL_PAYMENT, UPLOAD, PUSH, LIVE_LOCATION
+ * Values: "localStorage" (default) | "api"
  */
 
 import type { WeeeTDAL } from "./types";
@@ -21,40 +16,42 @@ type AdapterType = "localStorage" | "api";
 
 function resolveAdapter(moduleKey?: string): AdapterType {
   if (typeof process === "undefined") return "localStorage";
-  // Per-module flag (ถ้ามี) มีความสำคัญเหนือ global flag
   if (moduleKey) {
     const perModule = process.env[`NEXT_PUBLIC_WEEET_DAL_${moduleKey.toUpperCase()}`];
     if (perModule === "api") return "api";
     if (perModule === "localStorage") return "localStorage";
   }
-  // Global flag
   const global = process.env.NEXT_PUBLIC_WEEET_DAL_ADAPTER;
   if (global === "api") return "api";
-  return "localStorage"; // default OFF — Phase D-1
+  return "localStorage";
 }
 
-/**
- * getAdapter — ดึง DAL adapter ตาม feature flag
- * Default: localStorage (Phase D-1)
- */
 export function getAdapter(): WeeeTDAL {
-  const adapterType = resolveAdapter();
-  if (adapterType === "api") return apiAdapter;
-  return localStorageAdapter;
+  return {
+    jobAssign: resolveAdapter("JOB_ASSIGN") === "api" ? apiAdapter.jobAssign : localStorageAdapter.jobAssign,
+    jobStatus: resolveAdapter("JOB_STATUS") === "api" ? apiAdapter.jobStatus : localStorageAdapter.jobStatus,
+    technician: resolveAdapter("TECHNICIAN") === "api" ? apiAdapter.technician : localStorageAdapter.technician,
+    warranty: resolveAdapter("WARRANTY") === "api" ? apiAdapter.warranty : localStorageAdapter.warranty,
+    payment: resolveAdapter("PAYMENT") === "api" ? apiAdapter.payment : localStorageAdapter.payment,
+    upload: resolveAdapter("UPLOAD") === "api" ? apiAdapter.upload : localStorageAdapter.upload,
+    push: resolveAdapter("PUSH") === "api" ? apiAdapter.push : localStorageAdapter.push,
+    liveLocation: resolveAdapter("LIVE_LOCATION") === "api" ? apiAdapter.liveLocation : localStorageAdapter.liveLocation,
+  };
 }
 
-/**
- * getModuleAdapter — ดึง adapter สำหรับ module เฉพาะ
- * ให้ override per-module ได้โดยไม่ต้อง flip ทั้งหมด
- */
-export function getModuleAdapter<K extends keyof WeeeTDAL>(
-  module: K
-): WeeeTDAL[K] {
-  const adapterType = resolveAdapter(module);
+export function getModuleAdapter<K extends keyof WeeeTDAL>(module: K): WeeeTDAL[K] {
+  const key = module.replace(/([A-Z])/g, "_$1").toUpperCase();
+  const adapterType = resolveAdapter(key);
   if (adapterType === "api") return apiAdapter[module];
   return localStorageAdapter[module];
 }
 
-// Re-export types
+export function getActiveFlags() {
+  return Object.fromEntries(
+    ["JOB_ASSIGN","JOB_STATUS","TECHNICIAN","WARRANTY","PAYMENT","UPLOAD","PUSH","LIVE_LOCATION"]
+      .map((m) => [m, resolveAdapter(m)])
+  );
+}
+
 export type { WeeeTDAL, Result } from "./types";
 export { NotImplementedError, DALError } from "./errors";

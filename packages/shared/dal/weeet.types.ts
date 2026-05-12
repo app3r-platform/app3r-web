@@ -1,14 +1,9 @@
 /**
  * packages/shared/dal/weeet.types.ts
- * Phase D-1 — WeeeT-specific DAL (Data Access Layer) types
+ * Phase D-2 — WeeeT-specific DAL (Data Access Layer) types
  * File owner: App3R-WeeeT (ห้ามแก้ไขโดย P3/P4)
- *
- * TODO D-2: เมื่อ P3 push index.ts แล้ว ให้ import shared primitives จาก '.'
- *   import type { IDataAccessLayer, User, Role, Result } from '.'
- * ตอนนี้ใช้ inline definitions เพื่อให้ build ผ่าน (parallel-safe ก่อน HUB merge)
  */
 
-// ---- Shared primitives (inline ชั่วคราว — P3 จะเป็นเจ้าของ canonical copy) ----
 export type Result<T> =
   | { ok: true; data: T }
   | { ok: false; error: string };
@@ -16,9 +11,6 @@ export type Result<T> =
 export type UserId = string;
 export type JobId = string;
 
-// ---- WeeeT module-specific DAL interfaces ----
-
-/** JobAssignDAL — งานที่มอบหมายให้ช่าง */
 export interface JobAssignDAL {
   getAssignedJobs(technicianId: UserId): Promise<Result<JobAssignRecord[]>>;
   updateJobStatus(jobId: JobId, status: string): Promise<Result<void>>;
@@ -34,14 +26,9 @@ export interface JobAssignRecord {
   serviceType?: string;
 }
 
-/** JobStatusDAL — สถานะ progress (ความคืบหน้า) ของงาน */
 export interface JobStatusDAL {
   getJobProgress(jobId: JobId): Promise<Result<JobProgressRecord | null>>;
-  advanceSubStage(
-    jobId: JobId,
-    subStage: string,
-    step: unknown
-  ): Promise<Result<void>>;
+  advanceSubStage(jobId: JobId, subStage: string, step: unknown): Promise<Result<void>>;
   markCompleted(jobId: JobId, step: unknown): Promise<Result<void>>;
 }
 
@@ -52,13 +39,9 @@ export interface JobProgressRecord {
   updatedAt: string;
 }
 
-/** TechnicianDAL — ข้อมูลช่าง */
 export interface TechnicianDAL {
   getProfile(technicianId: UserId): Promise<Result<TechnicianRecord | null>>;
-  updateProfile(
-    technicianId: UserId,
-    data: Partial<TechnicianRecord>
-  ): Promise<Result<void>>;
+  updateProfile(technicianId: UserId, data: Partial<TechnicianRecord>): Promise<Result<void>>;
 }
 
 export interface TechnicianRecord {
@@ -68,9 +51,11 @@ export interface TechnicianRecord {
   shopId: string;
   shopName?: string;
   specialties?: string[];
+  homeBaseLat?: number;
+  homeBaseLng?: number;
+  serviceRadiusKm?: number;
 }
 
-/** WarrantyDAL — ข้อมูลการรับประกัน */
 export interface WarrantyDAL {
   getWarranty(jobId: JobId): Promise<Result<WarrantyRecord | null>>;
 }
@@ -81,10 +66,81 @@ export interface WarrantyRecord {
   terms: string;
 }
 
-/** WeeeTDAL — รวม interface ทั้งหมดของ WeeeT */
+// Phase D-2 new modules
+
+export interface PaymentDAL {
+  getWalletBalance(): Promise<Result<WalletBalance>>;
+  getTransactions(limit?: number): Promise<Result<WalletTransaction[]>>;
+}
+
+export interface WalletBalance {
+  available: number;
+  pending: number;
+  currency: string;
+  updatedAt: string;
+}
+
+export interface WalletTransaction {
+  id: string;
+  type: "credit" | "debit";
+  amount: number;
+  description: string;
+  jobId?: JobId;
+  createdAt: string;
+}
+
+export interface UploadDAL {
+  uploadServicePhoto(jobId: JobId, file: File, caption?: string): Promise<Result<UploadedFile>>;
+  uploadReceipt(jobId: JobId, file: File): Promise<Result<UploadedFile>>;
+}
+
+export interface UploadedFile {
+  fileId: string;
+  url: string;
+  mimeType: string;
+  sizeBytes: number;
+  uploadedAt: string;
+}
+
+export interface PushDAL {
+  subscribePush(subscription: PushSubscriptionData): Promise<Result<void>>;
+  unsubscribePush(): Promise<Result<void>>;
+  getSubscriptionStatus(): Promise<Result<PushSubscriptionStatus>>;
+}
+
+export interface PushSubscriptionData {
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+  technicianId: UserId;
+}
+
+export interface PushSubscriptionStatus {
+  isSubscribed: boolean;
+  endpoint?: string;
+}
+
+/** @needs-backend-sync Backend Sub-CMD-P1: POST /api/location/live + WebSocket broadcast */
+export interface LiveLocationDAL {
+  emitLocation(update: LiveLocationUpdate): Promise<Result<void>>;
+  saveConsentStatus(technicianId: UserId, consented: boolean): Promise<Result<void>>;
+  getConsentStatus(technicianId: UserId): Promise<Result<boolean>>;
+}
+
+export interface LiveLocationUpdate {
+  serviceId: JobId;
+  lat: number;
+  lng: number;
+  timestamp: string;
+  accuracy?: number;
+}
+
 export interface WeeeTDAL {
   jobAssign: JobAssignDAL;
   jobStatus: JobStatusDAL;
   technician: TechnicianDAL;
   warranty: WarrantyDAL;
+  payment: PaymentDAL;
+  upload: UploadDAL;
+  push: PushDAL;
+  liveLocation: LiveLocationDAL;
 }
