@@ -1,0 +1,12 @@
+{
+  "name": "@app3r/shared",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./dal": "./dal/index.ts",
+    "./dal/weeeu": "./dal/weeeu.types.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}
