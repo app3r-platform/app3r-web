@@ -1,25 +1,38 @@
+// ── Wallet — WeeeR (D-2 Earner Payment UI) ────────────────────────────────────
+// WeeeR = ผู้รับเงิน (earner) — รับเงินจาก WeeeU escrow release
+// NOTE-D89-2: ไม่มีระบบถอนเงิน (withdrawal) ใน Phase D-2
+//             การถอนเงินผ่าน manual process — Phase D-5 เท่านั้น
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "กระเป๋าเงิน — WeeeR" };
 
 const TX = [
-  { type: "credit", currency: "silver", amount: 500,  desc: "ค่าบริการซ่อมแอร์ (JOB-0421)", date: "2026-05-02" },
-  { type: "debit",  currency: "silver", amount: 50,   desc: "ค่าลงประกาศ (LIST-092)",        date: "2026-05-01" },
-  { type: "credit", currency: "gold",   amount: 200,  desc: "โบนัสรีวิว 5 ดาว",             date: "2026-04-30" },
-  { type: "debit",  currency: "gold",   amount: 5000, desc: "ค่าสมัคร WeeeT Mode 2",        date: "2026-04-28" },
+  { type: "credit", currency: "silver", amount: 500,  desc: "ค่าบริการซ่อมแอร์ (JOB-0421) — WeeeU escrow release", date: "2026-05-02", source: "escrow" },
+  { type: "credit", currency: "silver", amount: 1455, desc: "ค่าอะไหล่ B2B Parts — ORDER-0089 (net หลังหัก 3%)",       date: "2026-05-01", source: "parts" },
+  { type: "debit",  currency: "silver", amount: 50,   desc: "ค่าลงประกาศ (LIST-092)",                                  date: "2026-05-01", source: "fee" },
+  { type: "credit", currency: "gold",   amount: 200,  desc: "โบนัสรีวิว 5 ดาว",                                       date: "2026-04-30", source: "bonus" },
+  { type: "debit",  currency: "gold",   amount: 5000, desc: "ค่าสมัคร WeeeT Mode 2",                                   date: "2026-04-28", source: "fee" },
 ];
+
+const sourceIcon: Record<string, string> = {
+  escrow: "🔓",
+  parts:  "📦",
+  fee:    "🧾",
+  bonus:  "⭐",
+};
 
 export default function WalletPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <h1 className="text-xl font-bold text-gray-900">กระเป๋าเงิน</h1>
 
+      {/* ยอดคงเหลือ */}
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-5 border border-gray-200">
           <div className="text-2xl mb-1">🪙</div>
-          <div className="text-3xl font-bold text-gray-900">4,250</div>
+          <div className="text-3xl font-bold text-gray-900">6,205</div>
           <div className="text-sm text-gray-600 mt-1">Silver Points</div>
-          <div className="text-xs text-gray-500 mt-2">ใช้สำหรับค่าประกาศ / ค่าบริการระบบ</div>
+          <div className="text-xs text-gray-500 mt-2">รวมยอดรับจากงานบริการ + B2B Parts</div>
         </div>
         <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl p-5 border border-yellow-200">
           <div className="text-2xl mb-1">⭐</div>
@@ -29,13 +42,44 @@ export default function WalletPage() {
         </div>
       </div>
 
+      {/* Payment Earner Info (D-2) */}
+      <div className="bg-green-50 rounded-2xl border border-green-100 p-4">
+        <div className="flex items-start gap-3">
+          <span className="text-2xl shrink-0">💰</span>
+          <div>
+            <div className="text-sm font-semibold text-green-800 mb-1">วิธีรับเงิน (WeeeR Earner)</div>
+            <ul className="text-xs text-green-700 space-y-1">
+              <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → escrow release → ได้รับ Silver อัตโนมัติ</li>
+              <li>• B2B Parts (D81): ผู้ซื้อกด "รับของ" → escrow release → หักค่าธรรมเนียม 3% → รับ Silver</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* NOTE-D89-2: ไม่มี Withdrawal UI */}
+      <div className="bg-amber-50 rounded-2xl border border-amber-200 p-4">
+        <div className="flex items-start gap-3">
+          <span className="text-xl shrink-0">ℹ️</span>
+          <div>
+            <div className="text-sm font-semibold text-amber-800 mb-1">การถอนเงิน (Withdrawal)</div>
+            <p className="text-xs text-amber-700">
+              ระบบถอนเงินอัตโนมัติจะเปิดใช้งานใน <strong>Phase D-5</strong> (ยังไม่พร้อม)
+            </p>
+            <p className="text-xs text-amber-600 mt-1">
+              หากต้องการถอนเงินในขณะนี้ กรุณาติดต่อทีม App3R ผ่าน Manual Process
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ประวัติธุรกรรม */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">ประวัติธุรกรรม</h3>
         <div className="space-y-2">
           {TX.map((tx, i) => (
             <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50">
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center ${tx.type === "credit" ? "bg-green-100" : "bg-red-100"}`}>
-                {tx.type === "credit" ? <span className="text-green-600 font-bold text-sm">↓</span> : <span className="text-red-600 font-bold text-sm">↑</span>}
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm ${tx.type === "credit" ? "bg-green-100" : "bg-red-100"}`}>
+                {sourceIcon[tx.source] ?? (tx.type === "credit" ? "↓" : "↑")}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-800 truncate">{tx.desc}</div>
