@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: app3r_d1_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app3r
+      POSTGRES_PASSWORD: app3r
+      POSTGRES_DB: app3r_dev
+    ports:
+      - "5433:5432"   # port 5433 เพื่อไม่ชนกับ Python backend (5432)
+    volumes:
+      - app3r_d1_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app3r -d app3r_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  app3r_d1_postgres_data:
