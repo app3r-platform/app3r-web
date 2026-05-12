@@ -1,6 +1,6 @@
 // ─── DAL (Data Access Layer) Contract — D84 Adapter Pattern ──────────────────
 // เจ้าของ: App3R-WeeeU แต่เพียงผู้เดียว (Sub-CMD-P3 HUB NOTE-1)
-// ห้ามแก้ weeer.types.ts / weeet.types.ts — P4/P5 สร้างเอง
+// primitives.ts: stub สร้างโดย P4 WeeeR (parallel dev) — ใช้โดย weeer.types.ts
 
 // ─── Shared Primitive Types ────────────────────────────────────────────────────
 
@@ -59,5 +59,5 @@ export interface IDataAccessLayer {
 // แต่ละ app สร้าง types ไฟล์ของตัวเอง — import แยกกันตาม path
 
 export type * from './weeeu.types';
-// export type * from './weeer.types'; // P4 (App3R-WeeeR) จะสร้าง
-// export type * from './weeet.types'; // P5 (App3R-WeeeT) จะสร้าง
+export type * from './weeer.types'; // P4 App3R-WeeeR ✅ merged
+export type * from './weeet.types'; // P5 App3R-WeeeT ✅ merged

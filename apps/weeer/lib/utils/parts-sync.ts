@@ -1,6 +1,17 @@
 // ── Parts B2B Sync — D81 (Phase C-6) ─────────────────────────────────────────
 // localStorage + BroadcastChannel (ช่องสัญญาณระหว่าง tab) สำหรับ Parts B2B
 // SSR-safe (ทำงานได้ทั้ง server และ browser)
+//
+// @migrate-to-backend-d2
+// ────────────────────────────────────────────────────────────────────────────
+// MIGRATION NOTE (Phase D-2):
+//   - localStorage read/write functions (readStorage, writeStorage, getListings,
+//     saveListings, upsertListing, updateListingStock, getOrders, saveOrders,
+//     upsertOrder) จะถูกแทนที่ด้วย DAL adapter calls (weeerLocalStorageAdapter → weeerApiAdapter)
+//   - BroadcastChannel logic (PartsSyncManager, partsSync, usePartsSync) จะยังคงอยู่
+//     ใน frontend — แต่จะ emit events หลังจาก API call สำเร็จ ไม่ใช่หลัง localStorage write
+//   - getCurrentShopId / setCurrentShopId จะเปลี่ยนเป็น auth context D-2
+// ────────────────────────────────────────────────────────────────────────────
 
 import type { PartListing, PartOrder } from "../../app/(app)/parts/_lib/types";
 

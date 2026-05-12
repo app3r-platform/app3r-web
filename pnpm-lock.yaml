@@ -149,6 +149,9 @@ importers:
 
   apps/weeer:
     dependencies:
+      '@app3r/dal':
+        specifier: workspace:*
+        version: link:../../packages/shared/dal
       '@app3r/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -262,6 +265,12 @@ importers:
         version: 5.9.3
 
   packages/shared:
+    devDependencies:
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/shared/dal:
     devDependencies:
       typescript:
         specifier: ^5

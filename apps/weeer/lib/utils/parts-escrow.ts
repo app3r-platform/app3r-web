@@ -1,6 +1,18 @@
 // ── Parts Escrow — D81 (Phase C-6) ───────────────────────────────────────────
 // ระบบพักเงิน/คะแนนระหว่างกลาง (escrow) + D75 roundPoint() + audit log
 // D75 = กฎการปัดเศษ: Math.round() — ≥0.5 ปัดขึ้น, <0.5 ปัดลง
+//
+// @migrate-to-backend-d2
+// ────────────────────────────────────────────────────────────────────────────
+// MIGRATION NOTE (Phase D-2):
+//   - BUSINESS LOGIC (roundPoint, calcFee, hasEnoughBalance) จะ REMAIN ใน frontend
+//     หรือ move ไป shared util — ไม่ใช่ backend responsibility ทั้งหมด
+//   - STORAGE LAYER (escrowHold, escrowRelease, escrowRefund, getEscrowRecords,
+//     appendAuditLog) จะ migrate ไป backend escrow service D-2
+//     → แทนที่ lsGet/lsSet ด้วย weeerApiAdapter.parts.saveEscrowRecord()
+//   - getEscrowHeldByShop จะกลายเป็น API call ไป /api/v1/parts/escrow?shopId=
+//   - roundPoint() และ calcFee() คงอยู่ ไม่ migrate (frontend display ต้องใช้)
+// ────────────────────────────────────────────────────────────────────────────
 
 import type { EscrowRecord, FeeAuditEntry } from "../../app/(app)/parts/_lib/types";
 import { PLATFORM_FEE_RATE } from "../../app/(app)/parts/_lib/types";
