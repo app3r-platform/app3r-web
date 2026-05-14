@@ -39,7 +39,8 @@ const navGroups: NavGroup[] = [
       { href: "/platform/gold-management",   label: "Gold Management",    icon: "🥇" },
       { href: "/platform/silver",            label: "Silver Points",      icon: "🥈" },
       { href: "/platform/transactions",      label: "Audit Trail",        icon: "📋" },
-      { href: "/platform/reconciliation",    label: "Reconciliation",     icon: "🔍" },
+      { href: "/platform/reconciliation",    label: "Point Reconcile",    icon: "🔍" },
+      { href: "/reconciliation",             label: "Settlement Recon",   icon: "⚙️" },
     ],
   },
   {
