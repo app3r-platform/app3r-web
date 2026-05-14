@@ -26,6 +26,8 @@ const FLAGS = {
   useApiPayment: process.env.NEXT_PUBLIC_USE_API_PAYMENT === "true",
   /** NEXT_PUBLIC_USE_API_LOCATION=true → ใช้ apiAdapter สำหรับ location (D90) */
   useApiLocation: process.env.NEXT_PUBLIC_USE_API_LOCATION === "true",
+  /** NEXT_PUBLIC_USE_API_TRANSFER=true → ใช้ apiAdapter สำหรับ manual bank transfer (Decision Record C) */
+  useApiTransfer: process.env.NEXT_PUBLIC_USE_API_TRANSFER === "true",
 } as const;
 
 /**
@@ -54,6 +56,7 @@ export function getAdapter(): IWeeeuDAL {
     push: FLAGS.useApiPush ? apiAdapter.push : localStorageAdapter.push,
     payment: FLAGS.useApiPayment ? apiAdapter.payment : localStorageAdapter.payment,
     location: FLAGS.useApiLocation ? apiAdapter.location : localStorageAdapter.location,
+    transfer: FLAGS.useApiTransfer ? apiAdapter.transfer : localStorageAdapter.transfer,
   };
 }
 

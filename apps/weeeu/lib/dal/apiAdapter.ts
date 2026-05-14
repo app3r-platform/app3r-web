@@ -13,14 +13,26 @@ import type {
   IPushDAL,
   IPaymentDAL,
   ILocationDAL,
+  ITransferDAL,
   UploadPresignResult,
   UploadFinalizeResult,
   PaymentIntentResult,
   PaymentStatus,
   GeocodeResult,
   SavedLocation,
+  Transfer,
+  DepositInfo,
 } from "@app3r/shared/dal/weeeu";
 import type { ServiceProgress } from "@/lib/types/service-progress";
+
+// ─── NotImplementedError — ใช้สำหรับ backward compatibility + future stubs ────
+
+class NotImplementedError extends Error {
+  constructor(method: string) {
+    super(`[apiAdapter] ${method} → ยังไม่ implement`);
+    this.name = "NotImplementedError";
+  }
+}
 
 // ─── Base URL (proxy ผ่าน Next.js rewrites → http://localhost:8000) ───────────
 
@@ -70,11 +82,11 @@ const authApi: IAuthDAL = {
     localStorage.removeItem(TOKEN_KEY);
   },
   getCurrentUser(): Result<User> {
-    // sync wrapper — async version: authApiAsync.me()
+    // sync stub — ใช้ authApiAsync.me() สำหรับข้อมูลจริง (D-2 async pattern)
     const token = authApi.getToken();
     if (!token) return { ok: false, error: "ไม่ได้เข้าสู่ระบบ", code: "UNAUTHENTICATED" };
-    // คืน placeholder — component ควรใช้ authApiAsync.me() สำหรับข้อมูลจริง
-    return { ok: true, data: { id: "", role: "weeeu", name: "", phone: "", createdAt: "" } };
+    // คืน USE_ASYNC_ME error เพื่อบังคับให้ component ใช้ authApiAsync.me() แทน
+    return { ok: false, error: "ใช้ authApiAsync.me() สำหรับข้อมูล user จริง", code: "USE_ASYNC_ME" };
   },
 };
 
@@ -255,6 +267,43 @@ const locationApi: ILocationDAL = {
   },
 };
 
+// ─── Transfer API (Manual Bank Transfer — Decision Record C) ─────────────────
+
+const transferApi: ITransferDAL = {
+  async getDepositInfo(): Promise<Result<DepositInfo>> {
+    const res = await fetch(`${API_BASE}/transfers/deposit-info`, {
+      headers: authHeader(),
+    });
+    return parseJson(res);
+  },
+
+  async deposit(params): Promise<Result<Transfer>> {
+    const res = await fetch(`${API_BASE}/transfers/deposit`, {
+      method: "POST",
+      headers: authHeader(),
+      body: JSON.stringify(params),
+    });
+    return parseJson(res);
+  },
+
+  async withdraw(params): Promise<Result<Transfer>> {
+    const res = await fetch(`${API_BASE}/transfers/withdraw`, {
+      method: "POST",
+      headers: authHeader(),
+      body: JSON.stringify(params),
+    });
+    return parseJson(res);
+  },
+
+  async history(params?): Promise<Result<Transfer[]>> {
+    const qs = params?.type ? `?type=${params.type}` : "";
+    const res = await fetch(`${API_BASE}/transfers/history${qs}`, {
+      headers: authHeader(),
+    });
+    return parseJson(res);
+  },
+};
+
 // ─── ApiAdapter (รวมทุก module) ───────────────────────────────────────────────
 
 class ApiAdapter implements IDataAccessLayer, IWeeeuDAL {
@@ -274,6 +323,7 @@ class ApiAdapter implements IDataAccessLayer, IWeeeuDAL {
   readonly push = pushApi;
   readonly payment = paymentApi;
   readonly location = locationApi;
+  readonly transfer = transferApi;
 
   isAvailable(): boolean {
     // ตรวจสอบ backend ด้วย health check (async) ใน production
@@ -284,11 +334,3 @@ class ApiAdapter implements IDataAccessLayer, IWeeeuDAL {
 export const apiAdapter = new ApiAdapter();
 export { NotImplementedError };
 export type { ApiAdapter };
-
-/** NotImplementedError — คงไว้เพื่อ backward compatibility */
-class NotImplementedError extends Error {
-  constructor(method: string) {
-    super(`[apiAdapter] ${method} → ยังไม่ implement`);
-    this.name = "NotImplementedError";
-  }
-}

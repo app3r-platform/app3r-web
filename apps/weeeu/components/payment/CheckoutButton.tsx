@@ -2,7 +2,7 @@
 // ─── CheckoutButton (D89) — 2C2P Payment Intent → Redirect ────────────────────
 // NOTE-D89-2: WeeeU = customer เท่านั้น — ไม่มี withdrawal UI
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getAdapter } from "@/lib/dal";
 
 interface Props {
@@ -93,6 +93,7 @@ export function CheckoutButton({ serviceId, amount, description, onSuccess, onEr
 
 export function PaymentStatusCard({ intentId }: { intentId: string }) {
   const [status, setStatus] = useState<"loading" | "paid" | "failed" | "pending">("loading");
+  const [error, setError] = useState("");
 
   const STATUS_CONFIG = {
     loading: { icon: "⏳", label: "กำลังตรวจสอบ...", cls: "bg-gray-50 text-gray-600" },
@@ -101,7 +102,22 @@ export function PaymentStatusCard({ intentId }: { intentId: string }) {
     pending: { icon: "⏳", label: "รอการยืนยัน",     cls: "bg-yellow-50 text-yellow-700" },
   };
 
-  // ตรวจสอบ status จาก DAL
+  // ดึงสถานะการชำระเงินจาก DAL เมื่อ component mount
+  useEffect(() => {
+    if (!intentId) return;
+    const dal = getAdapter();
+    dal.payment.getStatus(intentId).then((result) => {
+      if (result.ok) {
+        const s = result.data.status;
+        // map "cancelled" → "failed" เพราะ UI ไม่มี cancelled state
+        setStatus(s === "cancelled" ? "failed" : s);
+      } else {
+        setError(result.error);
+        setStatus("failed");
+      }
+    });
+  }, [intentId]);
+
   const cfg = STATUS_CONFIG[status];
 
   return (
@@ -109,6 +125,7 @@ export function PaymentStatusCard({ intentId }: { intentId: string }) {
       <p className="text-3xl">{cfg.icon}</p>
       <p className="font-semibold text-sm">{cfg.label}</p>
       <p className="text-xs opacity-70">Intent ID: {intentId}</p>
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>
   );
 }
