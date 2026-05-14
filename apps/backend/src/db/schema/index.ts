@@ -49,3 +49,6 @@ export * from './email-preferences'
 // Phase D-2: NOTE-SUB4 Parts
 export * from './parts-inventory'
 export * from './parts-orders'
+
+// Sub-CMD-2: Manual Bank Transfer Module (อ.PP decision 2026-05-14)
+export * from './bank-transfers'
