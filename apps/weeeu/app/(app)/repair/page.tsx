@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api-client";
 
+// Sub-4: inline type — TODO: import from @app3r/types/services when Backend exports
+type ServicePriority = "normal" | "urgent" | "vip";
+// Sub-4: inline config — TODO: import from @app3r/types/services when Backend exports
+const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string }> = {
+  normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪" },
+  urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶" },
+  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑" },
+};
+
 type RepairStatus =
   | "draft" | "open" | "matching" | "assigned"
   | "traveling" | "arrived" | "awaiting_entry"
@@ -29,6 +38,9 @@ type RepairJob = {
   weeer_name: string;
   decision_branch: string | null;
   scheduled_at: string;
+  // Sub-4: expanded fields — TODO: import from @app3r/types/services when Backend exports
+  priority?: ServicePriority | null;
+  progress_percent?: number | null;
 };
 
 const STATUS_LABEL: Record<RepairStatus, string> = {
@@ -186,10 +198,34 @@ export default function RepairListPage() {
                         ต้องดำเนินการ
                       </span>
                     )}
+                    {/* Sub-4: priority badge */}
+                    {job.priority && job.priority !== "normal" && (
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${PRIORITY_CONFIG[job.priority].cls}`}>
+                        {PRIORITY_CONFIG[job.priority].icon} {PRIORITY_CONFIG[job.priority].label}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-gray-500 truncate mt-0.5">{job.issue_summary}</p>
                   {job.weeer_name && (
                     <p className="text-xs text-gray-400 mt-1">🏪 {job.weeer_name}</p>
+                  )}
+                  {/* Sub-4: inline progress bar */}
+                  {job.progress_percent != null && job.progress_percent > 0 && (
+                    <div className="mt-2">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-indigo-400 rounded-full"
+                            style={{ width: `${job.progress_percent}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-indigo-500 font-medium">{job.progress_percent}%</span>
+                      </div>
+                    </div>
+                  )}
+                  {/* Sub-5: link to progress timeline */}
+                  {["in_progress", "inspecting", "assigned", "traveling", "arrived"].includes(job.status) && (
+                    <p className="text-xs text-indigo-600 font-medium mt-1.5">📍 ดูความคืบหน้า →</p>
                   )}
                 </div>
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${STATUS_COLOR[job.status]}`}>
