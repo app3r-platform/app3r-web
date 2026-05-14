@@ -57,7 +57,7 @@ export default function WalletPage() {
         </div>
       </div>
 
-      {/* D-3 Manual Bank Transfer — Quick actions */}
+      {/* Quick actions — Sub-6: เพิ่ม Settlements (Settlement API) */}
       <div className="grid grid-cols-3 gap-3">
         <Link
           href="/wallet/deposit"
@@ -73,15 +73,15 @@ export default function WalletPage() {
         >
           <div className="text-2xl mb-1">📤</div>
           <div className="text-xs font-semibold text-gray-800">ถอนแต้ม</div>
-          <div className="text-xs text-gray-500 mt-0.5">Manual</div>
+          <div className="text-xs text-gray-500 mt-0.5">Settlement</div>
         </Link>
         <Link
-          href="/wallet/history"
+          href="/wallet/settlements"
           className="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center hover:bg-gray-100 transition-colors"
         >
-          <div className="text-2xl mb-1">📋</div>
-          <div className="text-xs font-semibold text-gray-800">ประวัติ</div>
-          <div className="text-xs text-gray-500 mt-0.5">เติม/ถอน</div>
+          <div className="text-2xl mb-1">💸</div>
+          <div className="text-xs font-semibold text-gray-800">ประวัติถอน</div>
+          <div className="text-xs text-gray-500 mt-0.5">Settlements</div>
         </Link>
       </div>
 
