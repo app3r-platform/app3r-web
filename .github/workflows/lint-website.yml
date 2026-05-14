@@ -1,0 +1,41 @@
+name: Lint & Typecheck — Website (app3r)
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/app3r/**'
+      - 'packages/**'
+      - '.github/workflows/lint-website.yml'
+      - 'turbo.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+
+jobs:
+  lint-typecheck:
+    name: Lint + Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (app3r)
+        run: pnpm turbo lint --filter=app3r
+
+      - name: Typecheck (app3r)
+        run: pnpm turbo typecheck --filter=app3r
