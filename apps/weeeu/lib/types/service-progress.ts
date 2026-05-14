@@ -1,53 +1,52 @@
-// ─── Service Progress Types (D79 verbatim — App3R-Advisor Gen 23) ─────────────
-// Per-app verbatim: WeeeU copy — identical across WeeeU / WeeeR / WeeeT
+/**
+ * lib/types/service-progress.ts — WeeeU local mirror
+ *
+ * ★ SOURCE-OF-TRUTH: apps/backend/src/types/service-progress.ts
+ *   (merged: Sub-CMD-5, main HEAD 9aa64a1)
+ *
+ * กฎ (Carry-over F1 Ruling: 360813ec-7277-8187-a1b4-f38a11cb8539):
+ *   - ห้าม edit โดยตรง — ต้อง update Backend ก่อน แล้ว sync ที่นี่
+ *   - ห้ามเพิ่ม field ที่ Backend ไม่มี (ahead-of-spec = F1 Warning ซ้ำ)
+ *   - ถ้า Backend เพิ่ม field ใหม่ → sync พร้อม PR ที่ Backend merge แล้วเท่านั้น
+ *
+ * DEPRECATED (ลบแล้ว): MainStage, ServiceType, OnSiteSubStage, PickupSubStage,
+ * WalkInSubStage, ParcelSubStage, ProgressStepMedia, ProgressStep, ServiceProgress
+ * → ถูกแทนที่ด้วย Backend types จาก Sub-CMD-5
+ */
+
+// ── Legacy client-side types (jobs/ flow — localStorage-based) ───────────────
+// ใช้ใน: app/(app)/jobs/, lib/dal/, lib/utils/service-progress-sync
+// หมายเหตุ: ยังอยู่ใน codebase — F1 Ruling ไม่ได้สั่งลบ (เป็น client model ไม่ใช่ Backend stub)
+// TODO: Sub-6 — migrate jobs/ flow ไปใช้ Backend API เมื่อ spec พร้อม
 
 export type MainStage = 'posted' | 'offer_accepted' | 'in_progress' | 'completed' | 'reviewed';
 export type ServiceType = 'on_site' | 'pickup' | 'walk_in' | 'parcel';
 
-export type OnSiteSubStage =
-  | 'technician_assigned' | 'technician_dispatched' | 'technician_arrived'
-  | 'inspection_started' | 'inspection_logged' | 'repair_pre_check'
-  | 'repair_in_progress' | 'repair_finished' | 'handover';
-
-export type PickupSubStage =
-  | 'pickup_scheduled' | 'pickup_in_transit' | 'picked_up'
-  | 'in_shop_inspection' | 'in_shop_repair' | 'repair_finished'
-  | 'delivery_scheduled' | 'delivery_in_transit' | 'delivered';
-
-export type WalkInSubStage =
-  | 'dropped_off' | 'in_shop_inspection' | 'in_shop_repair'
-  | 'repair_finished' | 'ready_for_pickup' | 'picked_up_by_customer';
-
-export type ParcelSubStage =
-  | 'courier_to_pickup' | 'courier_pickup_done' | 'arrived_at_shop'
-  | 'in_shop_inspection' | 'in_shop_repair' | 'repair_finished'
-  | 'courier_to_delivery' | 'delivered_to_customer';
-
 export interface ProgressStepMedia {
   images: Array<{
     id: string;
-    url: string;          // Lorem Picsum mock URL
-    caption?: string;
-    uploaded_by: 'weeeu' | 'weeer' | 'weeet';
-    uploaded_at: string;  // ISO-8601
+    url: string;
+    caption: string;
+    uploaded_by: string;
+    uploaded_at: string;
   }>;
   videos: Array<{
     id: string;
     url: string;
-    duration_seconds?: number;
     caption?: string;
-    uploaded_by: 'weeeu' | 'weeer' | 'weeet';
-    uploaded_at: string;
+    duration_seconds?: number;
+    uploaded_by?: string;
+    uploaded_at?: string;
   }>;
 }
 
 export interface ProgressStep {
   stage: MainStage;
-  subStage?: OnSiteSubStage | PickupSubStage | WalkInSubStage | ParcelSubStage;
+  subStage?: string;
   enteredAt: string;
   exitedAt?: string;
-  recordedBy: { role: 'weeeu' | 'weeer' | 'weeet'; userId: string; name: string };
-  notes?: string;
+  recordedBy: { role: string; userId: string; name: string };
+  notes: string;
   media: ProgressStepMedia;
 }
 
@@ -56,13 +55,57 @@ export interface ServiceProgress {
   serviceType: ServiceType;
   currentStage: MainStage;
   currentSubStage?: string;
-  history: ProgressStep[];
   createdAt: string;
   updatedAt: string;
-  // Stage 5: review (WeeeU authority — customer submits)
+  history: ProgressStep[];
   review?: {
     rating: 1 | 2 | 3 | 4 | 5;
     comment: string;
     submittedAt: string;
   };
+}
+
+// ── Enum strings — mirror of Backend ServiceProgressStatus ───────────────────
+export type ServiceProgressStatus =
+  | 'pending'
+  | 'accepted'
+  | 'in_progress'
+  | 'paused'
+  | 'completed'
+  | 'cancelled'
+
+// ── Status → Thai label (สำหรับ UI display) ──────────────────────────────────
+export const SERVICE_PROGRESS_STATUS_LABEL: Record<ServiceProgressStatus, string> = {
+  pending:     'รอดำเนินการ',
+  accepted:    'รับงานแล้ว',
+  in_progress: 'กำลังดำเนินการ',
+  paused:      'หยุดพักชั่วคราว',
+  completed:   'เสร็จสิ้น',
+  cancelled:   'ยกเลิก',
+}
+
+// ── API Response DTO — mirror of Backend ServiceProgressDto ───────────────────
+export interface ServiceProgressDto {
+  id: string
+  serviceId: string
+  status: ServiceProgressStatus
+  progressPercent: number       // 0–100
+  note: string | null
+  photoR2Key: string | null     // R2 key (ไม่ใช่ URL — ใช้ presign endpoint)
+  updatedBy: string             // userId ของ WeeeT ที่ update
+  createdAt: string             // ISO-8601
+}
+
+// ── WS event payload — mirror of Backend ProgressUpdatedPayload ───────────────
+export interface ProgressUpdatedPayload {
+  serviceId: string
+  progress: ServiceProgressDto
+}
+
+// ── Timeline response — mirror of Backend ServiceProgressTimelineDto ──────────
+export interface ServiceProgressTimelineDto {
+  serviceId: string
+  entries: ServiceProgressDto[] // เรียงจากเก่าไปใหม่ (ASC created_at)
+  latestStatus: ServiceProgressStatus | null
+  latestPercent: number         // 0–100, 0 ถ้าไม่มี entry
 }
