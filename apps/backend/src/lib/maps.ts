@@ -139,7 +139,8 @@ export const googleMapsAdapter: LocationServiceAdapter = {
         key: GOOGLE_MAPS_KEY(),
       },
     })
-    return res.data.predictions.map((p) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return res.data.predictions.map((p: any) => ({
       placeId: p.place_id,
       description: p.description,
       mainText: p.structured_formatting.main_text,

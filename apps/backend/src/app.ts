@@ -20,6 +20,7 @@ import { paymentRouter } from './routes/payment'
 import { locationRouter } from './routes/location'
 import { servicesRouter } from './routes/services'
 import { partsRouter } from './routes/parts'
+import { transfersRouter } from './routes/transfers'
 
 export const app = new OpenAPIHono()
 
@@ -64,6 +65,9 @@ app.route('/api/v1/services', servicesRouter)
 // NOTE-SUB4: Parts inventory + orders (escrow)
 app.route('/api/v1/parts', partsRouter)
 
+// Sub-CMD-2: Manual Bank Transfer (อ.PP decision — primary Phase D-2)
+app.route('/api/v1/transfers', transfersRouter)
+
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
 app.openAPIRegistry.registerComponent('securitySchemes', 'bearerAuth', {
@@ -81,7 +85,7 @@ app.doc('/openapi.json', {
       'App3R Platform Backend — Phase D-2 Real Integrations\n\n' +
       'Auth: JWT access token (15 min) + HttpOnly refresh cookie (7 days)\n\n' +
       'D-2 New: Files(D87) + Push/WS(D88) + Payment(D89) + Location(D90) + Email(D91)\n' +
-      '        + Services stub(D90-NOTE-D90-1) + Parts(NOTE-SUB4)\n\n' +
+      '        + Services stub(D90-NOTE-D90-1) + Parts(NOTE-SUB4) + Transfers(Sub-CMD-2)\n\n' +
       'Error format: `{error: {code: string, message: string, details?: any}}`',
   },
 })
