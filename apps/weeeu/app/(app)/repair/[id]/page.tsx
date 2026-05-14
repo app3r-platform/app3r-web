@@ -5,6 +5,14 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 
+// Sub-4: inline type — TODO: import from @app3r/types/services when Backend exports
+type ServicePriority = "normal" | "urgent" | "vip";
+const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string }> = {
+  normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪" },
+  urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶" },
+  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑" },
+};
+
 type RepairStatus =
   | "assigned" | "traveling" | "arrived" | "awaiting_entry"
   | "inspecting" | "awaiting_decision" | "awaiting_user"
@@ -60,6 +68,18 @@ type RepairJobDetail = {
   parcel_tracking_out: string | null;
   parcel_tracking_back: string | null;
   timeline: TimelineEvent[];
+  // Sub-4: expanded fields — TODO: import from @app3r/types/services when Backend exports
+  priority?: ServicePriority | null;
+  progress_percent?: number | null;
+  diagnosis_note?: string | null;
+  technician_note?: string | null;
+  labor_cost?: number | null;
+  parts_cost?: number | null;
+  warranty_days?: number | null;
+  warranty_expires_at?: string | null;
+  customer_note?: string | null;
+  cancelled_reason?: string | null;
+  cancelled_at?: string | null;
 };
 
 const STATUS_LABEL: Record<RepairStatus, string> = {
@@ -277,14 +297,40 @@ export default function RepairJobDetailPage() {
       {/* Status card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="font-bold text-gray-900">{job.appliance_name}</p>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="font-bold text-gray-900">{job.appliance_name}</p>
+              {/* Sub-4: priority badge */}
+              {job.priority && job.priority !== "normal" && (
+                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${PRIORITY_CONFIG[job.priority].cls}`}>
+                  {PRIORITY_CONFIG[job.priority].icon} {PRIORITY_CONFIG[job.priority].label}
+                </span>
+              )}
+            </div>
             <p className="text-sm text-gray-500 mt-0.5">{job.issue_summary}</p>
           </div>
           <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${STATUS_COLOR[job.status]}`}>
             {STATUS_LABEL[job.status]}
           </span>
         </div>
+        {/* Sub-4: progress bar */}
+        {job.progress_percent != null && job.progress_percent > 0 && (
+          <div className="border-t border-gray-100 pt-3">
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-indigo-400 rounded-full transition-all"
+                  style={{ width: `${job.progress_percent}%` }}
+                />
+              </div>
+              <span className="text-xs text-indigo-600 font-medium">{job.progress_percent}%</span>
+            </div>
+          </div>
+        )}
+        {/* Sub-4: customer_note */}
+        {job.customer_note && (
+          <p className="text-xs text-gray-400 border-t border-gray-100 pt-2 italic">💬 หมายเหตุของคุณ: {job.customer_note}</p>
+        )}
         {job.issue_detail && (
           <p className="text-sm text-gray-600 border-t border-gray-100 pt-3">{job.issue_detail}</p>
         )}
@@ -329,9 +375,79 @@ export default function RepairJobDetailPage() {
               value={`${job.inspection_fee.toLocaleString()} Point`}
             />
             {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} Point`} />}
+            {/* Sub-4: labor/parts breakdown */}
+            {job.labor_cost != null && <Row label="ค่าแรง" value={`${job.labor_cost.toLocaleString()} Point`} />}
+            {job.parts_cost != null && <Row label="ค่าอะไหล่" value={`${job.parts_cost.toLocaleString()} Point`} />}
           </div>
         </div>
       ) : null}
+
+      {/* Sub-4: Diagnosis note */}
+      {(job.diagnosis_note || job.technician_note) && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">บันทึกจากช่าง</p>
+          </div>
+          <div className="p-5 space-y-3">
+            {job.diagnosis_note && (
+              <div>
+                <p className="text-xs text-gray-400 mb-1">ผลการตรวจสอบ</p>
+                <p className="text-sm text-gray-800">{job.diagnosis_note}</p>
+              </div>
+            )}
+            {job.technician_note && (
+              <div>
+                <p className="text-xs text-gray-400 mb-1">หมายเหตุช่าง</p>
+                <p className="text-sm text-gray-800">{job.technician_note}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Sub-4: Warranty card */}
+      {job.warranty_days != null && job.warranty_days > 0 && (
+        <div className="bg-green-50 border border-green-100 rounded-2xl p-4 flex items-center gap-3">
+          <span className="text-2xl">🛡️</span>
+          <div>
+            <p className="text-sm font-semibold text-green-700">รับประกัน {job.warranty_days} วัน</p>
+            {job.warranty_expires_at && (
+              <p className="text-xs text-green-600 mt-0.5">
+                หมดอายุ: {new Date(job.warranty_expires_at).toLocaleDateString("th-TH")}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Sub-4: Cancellation card */}
+      {job.status === "cancelled" && job.cancelled_reason && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-red-700 mb-1">❌ ยกเลิกงาน</p>
+          <p className="text-sm text-red-600">{job.cancelled_reason}</p>
+          {job.cancelled_at && (
+            <p className="text-xs text-red-400 mt-1">เวลา: {new Date(job.cancelled_at).toLocaleString("th-TH")}</p>
+          )}
+        </div>
+      )}
+
+      {/* Sub-5: Progress Tracker link */}
+      {["assigned", "traveling", "arrived", "awaiting_entry", "inspecting",
+        "in_progress", "appliance_at_shop", "en_route_delivery",
+        "in_transit_to_shop", "parcel_inspecting", "parcel_in_progress"].includes(job.status) && (
+        <Link
+          href={`/repair/${job.id}/progress`}
+          className="block bg-indigo-50 border border-indigo-100 rounded-2xl p-4 hover:bg-indigo-100 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-indigo-700">📍 ติดตามความคืบหน้า</p>
+              <p className="text-xs text-indigo-500 mt-0.5">ดู timeline งานซ่อมแบบละเอียด</p>
+            </div>
+            <span className="text-indigo-400 text-lg">›</span>
+          </div>
+        </Link>
+      )}
 
       {/* Timeline */}
       {job.timeline.length > 0 && (
