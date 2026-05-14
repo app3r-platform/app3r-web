@@ -61,3 +61,6 @@ export * from './settlements'
 
 // Sub-CMD-7: Reconciliation Worker (Wave 2)
 export * from './reconciliation'
+
+// Sub-CMD-8: Parts B2B Marketplace (Wave 3)
+export * from './parts-b2b'
