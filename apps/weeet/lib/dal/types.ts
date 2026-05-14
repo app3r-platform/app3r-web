@@ -130,6 +130,56 @@ export interface PushDAL {
   getSubscriptionStatus(): Promise<Result<PushSubscriptionStatus>>;
 }
 
+// ─── Sub-5 Wave 2: Service Progress Tracker (D79) ──────────────────────────
+// Mirror ของ Backend types/service-progress.ts (Lesson #34: ไม่ import ข้ามแอป)
+// Source-of-truth: apps/backend/src/types/service-progress.ts
+// เมื่อ Backend merge แล้ว จะอัพเดต import path (TODO: Sub-5)
+
+// Mirror ของ Backend ServiceProgressStatus (Backend Sub-5 ยังไม่ merge)
+// TODO: Sub-5 — เมื่อ Backend merge → อาจ refactor ให้ import จาก shared package
+export type ServiceProgressStatus =
+  | 'pending'
+  | 'accepted'
+  | 'in_progress'
+  | 'paused'
+  | 'completed'
+  | 'cancelled';
+
+export interface ServiceProgressRecord {
+  id: string;
+  serviceId: string;
+  status: ServiceProgressStatus;
+  progressPercent: number;   // 0–100
+  note: string | null;
+  photoR2Key: string | null; // R2 key (ไม่ใช่ full URL)
+  updatedBy: string;
+  createdAt: string;         // ISO-8601
+}
+
+export interface CreateProgressInput {
+  serviceId: string;
+  status: ServiceProgressStatus;
+  progressPercent: number;
+  note?: string;
+  photoFile?: File;          // WeeeT อัพโหลดก่อน → ได้ R2 key
+}
+
+export interface UpdateProgressInput {
+  status?: ServiceProgressStatus;
+  progressPercent?: number;
+  note?: string;
+  photoFile?: File | null;   // null = ลบ photo, undefined = ไม่เปลี่ยน
+}
+
+export interface ServiceProgressDAL {
+  /** GET /service-progress/:serviceId — รายการ progress entries */
+  getProgress(serviceId: string): Promise<Result<ServiceProgressRecord[]>>;
+  /** POST /service-progress — สร้าง entry ใหม่ (พร้อม upload photo ถ้ามี) */
+  createProgress(input: CreateProgressInput): Promise<Result<ServiceProgressRecord>>;
+  /** PATCH /service-progress/:id — อัพเดต entry (พร้อม upload photo ถ้ามี) */
+  updateProgress(progressId: string, input: UpdateProgressInput): Promise<Result<ServiceProgressRecord>>;
+}
+
 /** @needs-backend-sync Backend Sub-CMD-P1: POST /api/location/live */
 export interface LiveLocationDAL {
   emitLocation(update: LiveLocationUpdate): Promise<Result<void>>;
@@ -146,4 +196,5 @@ export interface WeeeTDAL {
   upload: UploadDAL;
   push: PushDAL;
   liveLocation: LiveLocationDAL;
+  serviceProgress: ServiceProgressDAL; // Sub-5 Wave 2
 }
