@@ -373,6 +373,29 @@ export default function JobDetailPage({
           )}
         </div>
 
+        {/* Sub-4: Service info (title / description / point_amount / deadline) */}
+        {(job.title || job.description || job.point_amount != null || job.deadline) && (
+          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 space-y-2">
+            <h2 className="font-semibold text-white text-sm flex items-center gap-2">
+              <span>📋</span> ข้อมูลงาน
+            </h2>
+            <InfoRow label="ชื่องาน" value={job.title} />
+            <InfoRow label="รายละเอียด" value={job.description} />
+            {job.point_amount != null && (
+              <InfoRow label="มูลค่า" value={`${job.point_amount.toLocaleString()} pts`} />
+            )}
+            {job.deadline && (
+              <InfoRow
+                label="กำหนดเสร็จ"
+                value={new Date(job.deadline).toLocaleString("th-TH", {
+                  year: "numeric", month: "short", day: "numeric",
+                  hour: "2-digit", minute: "2-digit",
+                })}
+              />
+            )}
+          </div>
+        )}
+
         {/* Problem */}
         {job.problem_description && (
           <div className="bg-yellow-950/40 border border-yellow-800/60 rounded-xl p-4 text-sm">
