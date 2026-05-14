@@ -58,3 +58,6 @@ export * from './service-progress'
 
 // Sub-CMD-6: Settlement API + Audit Log (D-2 Debt #3 Wave 2)
 export * from './settlements'
+
+// Sub-CMD-7: Reconciliation Worker (Wave 2)
+export * from './reconciliation'
