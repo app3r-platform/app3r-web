@@ -336,7 +336,7 @@ partsRouter.openapi(refundOrderRoute, async (c) => {
   const [updated] = await db
     .update(partsOrders)
     .set({ status: 'refunded', updatedAt: new Date() })
-    .where(eq(partsOrders.id, id))
+    .where(and(eq(partsOrders.id, id), eq(partsOrders.buyerId, user.userId)))  // SECURITY-FIX: buyerId check (was missing — any user could refund any order)
     .returning({ id: partsOrders.id })
 
   if (!updated) return c.json({ error: { code: 'NOT_FOUND', message: 'Order not found' } }, 404)
