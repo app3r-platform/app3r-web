@@ -57,6 +57,15 @@ export const partsOrders = pgTable(
     // idempotency key กัน double-order
     idempotencyKey: text('idempotency_key').notNull(),
     metadata: jsonb('metadata'),
+
+    // ── Sub-CMD-8 Wave 3: B2B Fulfillment fields ──────────────────────────────
+    // เพิ่มผ่าน Migration 0008_parts_b2b.sql (⚠️ R2 pending)
+    // status เพิ่ม: 'fulfilled' | 'closed' | 'disputed' | 'resolved'
+    fulfillmentNote: text('fulfillment_note'),
+    trackingNumber: text('tracking_number'),
+    fulfilledAt: timestamp('fulfilled_at', { withTimezone: true }),
+    closedAt: timestamp('closed_at', { withTimezone: true }),
+
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },

@@ -24,6 +24,7 @@ import { transfersRouter } from './routes/transfers'
 import { serviceProgressRouter } from './routes/service-progress'
 import { settlementsRouter } from './routes/settlements'
 import { reconciliationRouter } from './routes/reconciliation'
+import { partsOrdersRouter } from './routes/parts-orders'
 
 export const app = new OpenAPIHono()
 
@@ -79,6 +80,9 @@ app.route('/api/v1/settlements', settlementsRouter)
 
 // Sub-CMD-7: Reconciliation Worker (Wave 2)
 app.route('/api/v1/reconciliation', reconciliationRouter)
+
+// Sub-CMD-8: Parts B2B Marketplace (Wave 3)
+app.route('/api/v1/parts/orders', partsOrdersRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
