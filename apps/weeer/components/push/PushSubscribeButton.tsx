@@ -125,6 +125,7 @@ export default function PushSubscribeButton() {
           <span className="text-sm font-medium text-green-800">การแจ้งเตือนเปิดใช้งานอยู่</span>
         </div>
         <button
+          type="button"
           onClick={handleUnsubscribe}
           className="text-xs text-red-600 hover:underline"
         >

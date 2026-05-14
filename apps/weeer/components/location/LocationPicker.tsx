@@ -3,7 +3,7 @@
 // เลือกตำแหน่งที่ตั้งร้าน (shop address) + พื้นที่ให้บริการ (service area)
 // PATCH /api/v1/profile/location — บันทึก lat/lng + address text
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiFetch } from "../../lib/api-client";
 
 export interface LocationData {
@@ -30,6 +30,9 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // mounted ref — ป้องกัน setState หลัง component unmount (D-3 F4)
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
 
   // ตรวจจับตำแหน่งด้วย browser Geolocation API
   async function detectLocation() {
@@ -49,24 +52,30 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
         setLocation((prev) => ({ ...prev, lat, lng }));
 
         // Reverse geocode — ใช้ Nominatim (OpenStreetMap) — ไม่ต้อง API key
+        // User-Agent บังคับตาม OSM ToS: https://operations.osmfoundation.org/policies/nominatim/
         try {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=th`,
+            { headers: { "User-Agent": "App3R-WeeeR/1.0 (contact@app3r.co)" } },
           );
           if (res.ok) {
             const data = await res.json() as { display_name?: string };
             const addr = data.display_name ?? `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-            setAddressInput(addr);
-            setLocation((prev) => ({ ...prev, address: addr }));
+            if (mountedRef.current) {
+              setAddressInput(addr);
+              setLocation((prev) => ({ ...prev, address: addr }));
+            }
           }
         } catch {
           // Geocode ล้มเหลว — ใช้ coordinate แทน
           const coordStr = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-          setAddressInput(coordStr);
-          setLocation((prev) => ({ ...prev, address: coordStr }));
+          if (mountedRef.current) {
+            setAddressInput(coordStr);
+            setLocation((prev) => ({ ...prev, address: coordStr }));
+          }
         }
 
-        setDetecting(false);
+        if (mountedRef.current) setDetecting(false);
       },
       (err) => {
         setDetecting(false);
@@ -89,17 +98,23 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
     setSaving(true);
     setError(null);
 
+    // D-3 F3: ป้องกัน null-island (0,0) — ส่ง lat/lng เฉพาะเมื่อ detect GPS แล้วเท่านั้น
+    const hasCoords = location.lat != null && location.lng != null;
     const payload: LocationData = {
-      lat: location.lat ?? 0,
-      lng: location.lng ?? 0,
+      lat: hasCoords ? (location.lat as number) : 0,
+      lng: hasCoords ? (location.lng as number) : 0,
       address: addressInput.trim(),
       serviceAreaKm: serviceArea,
     };
+    // API payload — omit lat/lng ถ้าไม่มีพิกัด GPS (backend ใช้ address geocode เอง)
+    const apiPayload = hasCoords
+      ? payload
+      : { address: payload.address, serviceAreaKm: payload.serviceAreaKm };
 
     try {
       const res = await apiFetch("/api/v1/profile/location", {
         method: "PATCH",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(apiPayload),
       });
 
       if (!res.ok) {
@@ -107,7 +122,7 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
       }
 
       setSaved(true);
-      onSave?.(payload);
+      if (hasCoords) onSave?.(payload);
       setTimeout(() => setSaved(false), 3000);
     } catch (e) {
       setError(e instanceof Error ? e.message : "บันทึกล้มเหลว — กรุณาลองอีกครั้ง");

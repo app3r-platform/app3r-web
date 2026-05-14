@@ -84,8 +84,8 @@ export default function ServicePhotoUpload({
     }
   }
 
-  function removePhoto(index: number) {
-    const updated = photos.filter((_, i) => i !== index);
+  function removePhoto(url: string) {
+    const updated = photos.filter((p) => p.url !== url);
     setPhotos(updated);
     onUpload?.(updated.map((p) => p.url));
   }
@@ -142,8 +142,8 @@ export default function ServicePhotoUpload({
       {/* Photo thumbnails */}
       {photos.length > 0 && (
         <div className="grid grid-cols-3 gap-2">
-          {photos.map((photo, i) => (
-            <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-gray-100 group">
+          {photos.map((photo) => (
+            <div key={photo.url} className="relative aspect-square rounded-xl overflow-hidden border border-gray-100 group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={photo.url}
@@ -152,7 +152,7 @@ export default function ServicePhotoUpload({
               />
               <button
                 type="button"
-                onClick={() => removePhoto(i)}
+                onClick={() => removePhoto(photo.url)}
                 className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 ×
