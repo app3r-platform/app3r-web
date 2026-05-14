@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api-client";
-import type { ServicePriority } from "@/lib/types/service-expanded.stub";
-import { PRIORITY_CONFIG } from "@/lib/types/service-expanded.stub";
 
 type RepairStatus =
   | "draft" | "open" | "matching" | "assigned"
@@ -31,9 +29,6 @@ type RepairJob = {
   weeer_name: string;
   decision_branch: string | null;
   scheduled_at: string;
-  // Sub-4: expanded fields (stub — รอ Backend @app3r/types/services)
-  priority?: ServicePriority | null;
-  progress_percent?: number | null;
 };
 
 const STATUS_LABEL: Record<RepairStatus, string> = {
@@ -191,30 +186,10 @@ export default function RepairListPage() {
                         ต้องดำเนินการ
                       </span>
                     )}
-                    {/* Sub-4: Priority badge */}
-                    {job.priority && job.priority !== "normal" && (
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${PRIORITY_CONFIG[job.priority].cls}`}>
-                        {PRIORITY_CONFIG[job.priority].icon} {PRIORITY_CONFIG[job.priority].label}
-                      </span>
-                    )}
                   </div>
                   <p className="text-sm text-gray-500 truncate mt-0.5">{job.issue_summary}</p>
                   {job.weeer_name && (
                     <p className="text-xs text-gray-400 mt-1">🏪 {job.weeer_name}</p>
-                  )}
-                  {/* Sub-4: inline progress bar for active jobs */}
-                  {job.progress_percent != null && job.progress_percent > 0 && (
-                    <div className="mt-2">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-indigo-400 rounded-full"
-                            style={{ width: `${job.progress_percent}%` }}
-                          />
-                        </div>
-                        <span className="text-xs text-indigo-500 font-medium">{job.progress_percent}%</span>
-                      </div>
-                    </div>
                   )}
                 </div>
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${STATUS_COLOR[job.status]}`}>

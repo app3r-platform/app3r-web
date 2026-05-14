@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
-import type { ExpandedRepairFields, ServicePriority } from "@/lib/types/service-expanded.stub";
-import { PRIORITY_CONFIG } from "@/lib/types/service-expanded.stub";
 
 type RepairStatus =
   | "assigned" | "traveling" | "arrived" | "awaiting_entry"
@@ -62,8 +60,7 @@ type RepairJobDetail = {
   parcel_tracking_out: string | null;
   parcel_tracking_back: string | null;
   timeline: TimelineEvent[];
-  // ─── Sub-4 Expanded fields (stub — รอ Backend @app3r/types/services) ──────────
-} & ExpandedRepairFields;
+};
 
 const STATUS_LABEL: Record<RepairStatus, string> = {
   assigned: "มอบหมายแล้ว",
@@ -280,16 +277,8 @@ export default function RepairJobDetailPage() {
       {/* Status card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <p className="font-bold text-gray-900">{job.appliance_name}</p>
-              {/* Sub-4: Priority badge */}
-              {job.priority && job.priority !== "normal" && (
-                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${PRIORITY_CONFIG[job.priority as ServicePriority].cls}`}>
-                  {PRIORITY_CONFIG[job.priority as ServicePriority].icon} {PRIORITY_CONFIG[job.priority as ServicePriority].label}
-                </span>
-              )}
-            </div>
+          <div>
+            <p className="font-bold text-gray-900">{job.appliance_name}</p>
             <p className="text-sm text-gray-500 mt-0.5">{job.issue_summary}</p>
           </div>
           <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${STATUS_COLOR[job.status]}`}>
@@ -299,70 +288,7 @@ export default function RepairJobDetailPage() {
         {job.issue_detail && (
           <p className="text-sm text-gray-600 border-t border-gray-100 pt-3">{job.issue_detail}</p>
         )}
-        {/* Sub-4: customer_note */}
-        {job.customer_note && (
-          <div className="border-t border-gray-100 pt-3">
-            <p className="text-xs text-gray-400 mb-1">หมายเหตุจากคุณ</p>
-            <p className="text-sm text-gray-600 italic">"{job.customer_note}"</p>
-          </div>
-        )}
-        {/* Sub-4: progress_percent bar */}
-        {job.progress_percent != null && job.progress_percent > 0 && (
-          <div className="border-t border-gray-100 pt-3">
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-xs text-gray-500">ความคืบหน้า</p>
-              <p className="text-xs font-semibold text-indigo-600">{job.progress_percent}%</p>
-            </div>
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-indigo-500 rounded-full transition-all"
-                style={{ width: `${job.progress_percent}%` }}
-              />
-            </div>
-          </div>
-        )}
       </div>
-
-      {/* Sub-4: Cancellation card */}
-      {job.status === "cancelled" && job.cancelled_reason && (
-        <div className="bg-red-50 border border-red-100 rounded-2xl p-4">
-          <p className="text-sm font-semibold text-red-800">🚫 สาเหตุการยกเลิก</p>
-          <p className="text-sm text-red-600 mt-1">{job.cancelled_reason}</p>
-          {job.cancelled_at && (
-            <p className="text-xs text-red-400 mt-1">ยกเลิกเมื่อ: {formatDate(job.cancelled_at)}</p>
-          )}
-        </div>
-      )}
-
-      {/* Sub-4: Diagnosis note card */}
-      {job.diagnosis_note && (
-        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
-          <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1.5">
-            🔍 ผลการวินิจฉัยจากช่าง
-          </p>
-          <p className="text-sm text-blue-800">{job.diagnosis_note}</p>
-          {job.technician_note && (
-            <p className="text-xs text-blue-500 mt-2 italic">หมายเหตุช่าง: {job.technician_note}</p>
-          )}
-        </div>
-      )}
-
-      {/* Sub-4: Warranty card */}
-      {(job.warranty_days != null && job.warranty_days > 0) && (
-        <div className="bg-green-50 border border-green-100 rounded-2xl p-4 flex items-center gap-3">
-          <span className="text-2xl">🛡️</span>
-          <div>
-            <p className="text-sm font-semibold text-green-800">
-              ประกันงานซ่อม {job.warranty_days} วัน
-            </p>
-            {job.warranty_expires_at && (
-              <p className="text-xs text-green-600 mt-0.5">
-                หมดอายุ: {formatDate(job.warranty_expires_at)}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Job info */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -403,9 +329,6 @@ export default function RepairJobDetailPage() {
               value={`${job.inspection_fee.toLocaleString()} Point`}
             />
             {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} Point`} />}
-            {/* Sub-4: breakdown labor + parts */}
-            {job.labor_cost != null && <Row label="ค่าแรง" value={`${job.labor_cost.toLocaleString()} Point`} />}
-            {job.parts_cost != null && <Row label="ค่าอะไหล่" value={`${job.parts_cost.toLocaleString()} Point`} />}
           </div>
         </div>
       ) : null}
