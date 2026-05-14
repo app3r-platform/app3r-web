@@ -147,4 +147,10 @@ export const localStorageAdapter: WeeeTDAL = {
   upload: uploadAdapter,
   push: pushAdapter,
   liveLocation: liveLocationAdapter,
+  // Sub-5 Wave 2: localStorage stub — API only (ไม่มี localStorage fallback สำหรับ serviceProgress)
+  serviceProgress: {
+    async getProgress() { return { ok: false, error: "serviceProgress requires API adapter" }; },
+    async createProgress() { return { ok: false, error: "serviceProgress requires API adapter" }; },
+    async updateProgress() { return { ok: false, error: "serviceProgress requires API adapter" }; },
+  },
 };

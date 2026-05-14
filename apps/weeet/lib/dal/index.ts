@@ -36,6 +36,8 @@ export function getAdapter(): WeeeTDAL {
     upload: resolveAdapter("UPLOAD") === "api" ? apiAdapter.upload : localStorageAdapter.upload,
     push: resolveAdapter("PUSH") === "api" ? apiAdapter.push : localStorageAdapter.push,
     liveLocation: resolveAdapter("LIVE_LOCATION") === "api" ? apiAdapter.liveLocation : localStorageAdapter.liveLocation,
+    // Sub-5: serviceProgress = API only (localStorage stub แค่ error message)
+    serviceProgress: resolveAdapter("SERVICE_PROGRESS") === "api" ? apiAdapter.serviceProgress : localStorageAdapter.serviceProgress,
   };
 }
 

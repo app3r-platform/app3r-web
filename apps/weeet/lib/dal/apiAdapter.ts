@@ -8,6 +8,7 @@ import type {
   WeeeTDAL, Result, JobAssignRecord, JobProgressRecord, TechnicianRecord,
   WarrantyRecord, WalletBalance, WalletTransaction, UploadedFile,
   PushSubscriptionData, PushSubscriptionStatus, LiveLocationUpdate,
+  ServiceProgressRecord, CreateProgressInput, UpdateProgressInput,
 } from "./types";
 import { NotImplementedError } from "./errors";
 
@@ -219,6 +220,108 @@ const liveLocationApi = {
   },
 };
 
+// Sub-5 Wave 2: Service Progress Tracker (D79)
+// @needs-backend-sync: /api/v1/service-progress/* (Backend Sub-CMD-5)
+const serviceProgressApi = {
+  async getProgress(serviceId: string): Promise<Result<ServiceProgressRecord[]>> {
+    return apiCall(async () => {
+      const raw = await apiFetch<{
+        id: string; service_id: string; status: string;
+        progress_percent: number; note: string | null;
+        photo_r2_key: string | null; updated_by: string; created_at: string;
+      }[]>(`${API_BASE}/service-progress/${serviceId}/`);
+      return raw.map((r) => ({
+        id: r.id, serviceId: r.service_id,
+        status: r.status as ServiceProgressRecord['status'],
+        progressPercent: r.progress_percent,
+        note: r.note, photoR2Key: r.photo_r2_key,
+        updatedBy: r.updated_by, createdAt: r.created_at,
+      }));
+    });
+  },
+
+  async createProgress(input: CreateProgressInput): Promise<Result<ServiceProgressRecord>> {
+    return apiCall(async () => {
+      // Step 1: Upload photo to R2 ถ้ามี → ได้ r2Key
+      let photoR2Key: string | undefined;
+      if (input.photoFile) {
+        const fd = new FormData();
+        fd.append('file', input.photoFile);
+        const uploadRaw = await apiFetch<{ r2_key: string }>(
+          `${API_BASE}/service-progress/photos`,
+          { method: 'POST', body: fd }
+        );
+        photoR2Key = uploadRaw.r2_key;
+      }
+      // Step 2: POST ข้อมูล progress
+      const raw = await apiFetch<{
+        id: string; service_id: string; status: string;
+        progress_percent: number; note: string | null;
+        photo_r2_key: string | null; updated_by: string; created_at: string;
+      }>(`${API_BASE}/service-progress/`, {
+        method: 'POST',
+        body: JSON.stringify({
+          service_id: input.serviceId,
+          status: input.status,
+          progress_percent: input.progressPercent,
+          ...(input.note !== undefined && { note: input.note }),
+          ...(photoR2Key !== undefined && { photo_r2_key: photoR2Key }),
+        }),
+      });
+      return {
+        id: raw.id, serviceId: raw.service_id,
+        status: raw.status as ServiceProgressRecord['status'],
+        progressPercent: raw.progress_percent,
+        note: raw.note, photoR2Key: raw.photo_r2_key,
+        updatedBy: raw.updated_by, createdAt: raw.created_at,
+      };
+    });
+  },
+
+  async updateProgress(
+    progressId: string,
+    input: UpdateProgressInput
+  ): Promise<Result<ServiceProgressRecord>> {
+    return apiCall(async () => {
+      // Step 1: Upload photo ถ้ามี → ได้ r2Key
+      let photoR2Key: string | null | undefined;
+      if (input.photoFile === null) {
+        photoR2Key = null; // ลบ photo
+      } else if (input.photoFile !== undefined) {
+        const fd = new FormData();
+        fd.append('file', input.photoFile);
+        const uploadRaw = await apiFetch<{ r2_key: string }>(
+          `${API_BASE}/service-progress/photos`,
+          { method: 'POST', body: fd }
+        );
+        photoR2Key = uploadRaw.r2_key;
+      }
+      // Step 2: PATCH ข้อมูล progress
+      const body: Record<string, unknown> = {};
+      if (input.status !== undefined) body['status'] = input.status;
+      if (input.progressPercent !== undefined) body['progress_percent'] = input.progressPercent;
+      if (input.note !== undefined) body['note'] = input.note;
+      if (photoR2Key !== undefined) body['photo_r2_key'] = photoR2Key;
+
+      const raw = await apiFetch<{
+        id: string; service_id: string; status: string;
+        progress_percent: number; note: string | null;
+        photo_r2_key: string | null; updated_by: string; created_at: string;
+      }>(`${API_BASE}/service-progress/${progressId}/`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      });
+      return {
+        id: raw.id, serviceId: raw.service_id,
+        status: raw.status as ServiceProgressRecord['status'],
+        progressPercent: raw.progress_percent,
+        note: raw.note, photoR2Key: raw.photo_r2_key,
+        updatedBy: raw.updated_by, createdAt: raw.created_at,
+      };
+    });
+  },
+};
+
 export const apiAdapter: WeeeTDAL = {
   jobAssign: jobAssignApi,
   jobStatus: jobStatusApi,
@@ -228,6 +331,7 @@ export const apiAdapter: WeeeTDAL = {
   upload: uploadApi,
   push: pushApi,
   liveLocation: liveLocationApi,
+  serviceProgress: serviceProgressApi, // Sub-5 Wave 2
 };
 
 export { NotImplementedError };
