@@ -218,9 +218,16 @@ export default function JobsPage() {
                     <p className="text-white font-semibold text-sm mt-0.5">
                       {job.customer_name ?? "ลูกค้า"}
                     </p>
+                    {/* Sub-4: แสดง title ถ้ามี ไม่งั้นใช้ appliance_name */}
                     <p className="text-gray-400 text-xs">
-                      {job.appliance_name ?? job.service_type}
+                      {job.title ?? job.appliance_name ?? job.service_type}
                     </p>
+                    {/* Sub-4: แสดง point_amount ถ้ามี */}
+                    {job.point_amount != null && (
+                      <p className="text-orange-400 text-xs mt-0.5">
+                        💰 {job.point_amount.toLocaleString()} pts
+                      </p>
+                    )}
                     {/* Source badge — D64 */}
                     {job.source?.type === "purchased_scrap" ? (
                       <span className="inline-block mt-1 bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
@@ -232,11 +239,19 @@ export default function JobsPage() {
                       </span>
                     )}
                   </div>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColor(job.status)}`}
-                  >
-                    {statusLabel(job.status)}
-                  </span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${statusColor(job.status)}`}
+                    >
+                      {statusLabel(job.status)}
+                    </span>
+                    {/* Sub-4: แสดง deadline ถ้ามี */}
+                    {job.deadline && (
+                      <span className="text-xs text-amber-400 shrink-0">
+                        ⏰ {new Date(job.deadline).toLocaleDateString("th-TH", { month: "short", day: "numeric" })}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <p className="text-xs text-gray-500 truncate">
                   {job.customer_address ?? ""}

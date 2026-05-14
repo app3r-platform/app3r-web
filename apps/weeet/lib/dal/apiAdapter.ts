@@ -48,7 +48,15 @@ async function apiCall<T>(fn: () => Promise<T>): Promise<Result<T>> {
 const jobAssignApi = {
   async getAssignedJobs(technicianId: string): Promise<Result<JobAssignRecord[]>> {
     return apiCall(async () => {
-      const raw = await apiFetch<{ id: string; technician_id: string; status: string; scheduled_at?: string; customer_name?: string; appliance_name?: string; service_type?: string }[]>(
+      // Sub-4 Wave 2: includes new services table fields (title, description, point_amount, deadline)
+      const raw = await apiFetch<{
+        id: string; technician_id: string; status: string;
+        scheduled_at?: string; customer_name?: string;
+        appliance_name?: string; service_type?: string;
+        // New fields from Sub-4 services table expand
+        title?: string; description?: string;
+        point_amount?: number; deadline?: string;
+      }[]>(
         `${API_BASE}/repair/jobs/weeet/?technician_id=${technicianId}`
       );
       return raw.map((j) => ({
@@ -56,6 +64,9 @@ const jobAssignApi = {
         status: j.status, scheduledAt: j.scheduled_at,
         customerName: j.customer_name, applianceName: j.appliance_name,
         serviceType: j.service_type,
+        // Sub-4 new fields
+        title: j.title, description: j.description,
+        pointAmount: j.point_amount, deadline: j.deadline,
       }));
     });
   },

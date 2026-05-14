@@ -97,6 +97,11 @@ export interface RepairJob {
     type: "customer" | "purchased_scrap";
     refId?: string; // scrapJobId when type = "purchased_scrap"
   };
+  // --- Sub-4 Wave 2: Services table expand fields ---
+  title?: string;           // ชื่อ service (ALTER ADD COLUMN)
+  description?: string;     // รายละเอียดงาน (ต่างจาก problem_description ที่เป็นปัญหาลูกค้า)
+  point_amount?: number;    // มูลค่างาน (points) — รายได้ช่าง
+  deadline?: string;        // กำหนดเสร็จงาน (ISO timestamptz)
 }
 
 export interface DiagnosePayload {

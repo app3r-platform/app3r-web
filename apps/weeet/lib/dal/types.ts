@@ -19,6 +19,11 @@ export interface JobAssignRecord {
   customerName?: string;
   applianceName?: string;
   serviceType?: string;
+  // Sub-4 Wave 2: Services table expand fields
+  title?: string;        // ชื่อ service
+  description?: string;  // รายละเอียดงาน
+  pointAmount?: number;  // มูลค่างาน (points)
+  deadline?: string;     // กำหนดเสร็จงาน (ISO timestamptz)
 }
 
 export interface JobProgressRecord {
