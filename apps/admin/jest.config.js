@@ -23,7 +23,7 @@ const config = {
     '!**/*.d.ts',
     '!**/node_modules/**',
   ],
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       lines: 60,
       functions: 60,
