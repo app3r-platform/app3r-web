@@ -7,6 +7,10 @@ import { serve } from '@hono/node-server'
 import { app } from './app'
 import { env } from './env'
 import { startAllCronJobs } from './lib/cron'
+import { validateSdkConfig } from './lib/config'
+
+// Issue B: Boot-time Config Validator — fail-fast in production
+validateSdkConfig(env.NODE_ENV)
 
 serve(
   {
