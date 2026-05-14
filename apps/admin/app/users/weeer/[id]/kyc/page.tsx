@@ -321,7 +321,7 @@ export default function KYCReviewPage() {
                 {newStatus === "reviewing" && (
                   <button onClick={handleUpdateStatus} disabled={submitting}
                     className="w-full py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 rounded-lg text-sm font-medium transition-colors">
-                    เปลี่ยนเป็น "กำลังตรวจ"
+                    เปลี่ยนเป็น &quot;กำลังตรวจ&quot;
                   </button>
                 )}
               </div>
