@@ -14,12 +14,15 @@ import type {
   IPushDAL,
   IPaymentDAL,
   ILocationDAL,
+  ITransferDAL,
   UploadPresignResult,
   UploadFinalizeResult,
   PaymentIntentResult,
   PaymentStatus,
   GeocodeResult,
   SavedLocation,
+  Transfer,
+  DepositInfo,
   WeeeuAppliance,
   WeeeuRepairRequest,
 } from "@app3r/shared/dal/weeeu";
@@ -247,6 +250,71 @@ const locationAdapter: ILocationDAL = {
   },
 };
 
+// ─── Transfer mock (Decision Record C) — Phase C: manual bank transfer ────────
+
+const TRANSFER_HISTORY_KEY = "weeeu_transfer_history";
+
+const transferAdapter: ITransferDAL = {
+  async getDepositInfo(): Promise<Result<DepositInfo>> {
+    return {
+      ok: true,
+      data: {
+        promptPayId: "0812345678",
+        accountName: "บริษัท แอพ3อาร์ จำกัด",
+        accountNumber: "123-4-56789-0",
+        bankName: "ธนาคารกสิกรไทย",
+        pointRate: 1, // 1 บาท = 1 point
+      },
+    };
+  },
+
+  async deposit(params): Promise<Result<Transfer>> {
+    if (typeof window === "undefined") return { ok: false, error: "ไม่รองรับ server-side" };
+    const transfer: Transfer = {
+      id: `dep-${Date.now()}`,
+      userId: "u-001",
+      type: "deposit",
+      amount: params.amount,
+      points: params.amount, // 1:1 rate ใน Phase C
+      status: "pending",
+      slipFileId: params.slipFileId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const history: Transfer[] = JSON.parse(localStorage.getItem(TRANSFER_HISTORY_KEY) ?? "[]");
+    history.unshift(transfer);
+    localStorage.setItem(TRANSFER_HISTORY_KEY, JSON.stringify(history));
+    return { ok: true, data: transfer };
+  },
+
+  async withdraw(params): Promise<Result<Transfer>> {
+    if (typeof window === "undefined") return { ok: false, error: "ไม่รองรับ server-side" };
+    const transfer: Transfer = {
+      id: `wdr-${Date.now()}`,
+      userId: "u-001",
+      type: "withdraw",
+      amount: params.points, // 1:1 rate ใน Phase C
+      points: params.points,
+      status: "pending",
+      bankName: params.bankName,
+      bankAccount: params.bankAccount,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const history: Transfer[] = JSON.parse(localStorage.getItem(TRANSFER_HISTORY_KEY) ?? "[]");
+    history.unshift(transfer);
+    localStorage.setItem(TRANSFER_HISTORY_KEY, JSON.stringify(history));
+    return { ok: true, data: transfer };
+  },
+
+  async history(params): Promise<Result<Transfer[]>> {
+    if (typeof window === "undefined") return { ok: true, data: [] };
+    const all: Transfer[] = JSON.parse(localStorage.getItem(TRANSFER_HISTORY_KEY) ?? "[]");
+    const filtered = params?.type ? all.filter((t) => t.type === params.type) : all;
+    return { ok: true, data: filtered };
+  },
+};
+
 // ─── LocalStorageAdapter (รวมทุก module) ─────────────────────────────────────
 
 class LocalStorageAdapter implements IDataAccessLayer, IWeeeuDAL {
@@ -260,6 +328,7 @@ class LocalStorageAdapter implements IDataAccessLayer, IWeeeuDAL {
   readonly push = pushAdapter;
   readonly payment = paymentAdapter;
   readonly location = locationAdapter;
+  readonly transfer = transferAdapter;
 
   isAvailable(): boolean {
     return typeof window !== "undefined";

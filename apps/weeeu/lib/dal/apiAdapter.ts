@@ -13,12 +13,15 @@ import type {
   IPushDAL,
   IPaymentDAL,
   ILocationDAL,
+  ITransferDAL,
   UploadPresignResult,
   UploadFinalizeResult,
   PaymentIntentResult,
   PaymentStatus,
   GeocodeResult,
   SavedLocation,
+  Transfer,
+  DepositInfo,
 } from "@app3r/shared/dal/weeeu";
 import type { ServiceProgress } from "@/lib/types/service-progress";
 
@@ -264,6 +267,43 @@ const locationApi: ILocationDAL = {
   },
 };
 
+// ─── Transfer API (Manual Bank Transfer — Decision Record C) ─────────────────
+
+const transferApi: ITransferDAL = {
+  async getDepositInfo(): Promise<Result<DepositInfo>> {
+    const res = await fetch(`${API_BASE}/transfers/deposit-info`, {
+      headers: authHeader(),
+    });
+    return parseJson(res);
+  },
+
+  async deposit(params): Promise<Result<Transfer>> {
+    const res = await fetch(`${API_BASE}/transfers/deposit`, {
+      method: "POST",
+      headers: authHeader(),
+      body: JSON.stringify(params),
+    });
+    return parseJson(res);
+  },
+
+  async withdraw(params): Promise<Result<Transfer>> {
+    const res = await fetch(`${API_BASE}/transfers/withdraw`, {
+      method: "POST",
+      headers: authHeader(),
+      body: JSON.stringify(params),
+    });
+    return parseJson(res);
+  },
+
+  async history(params?): Promise<Result<Transfer[]>> {
+    const qs = params?.type ? `?type=${params.type}` : "";
+    const res = await fetch(`${API_BASE}/transfers/history${qs}`, {
+      headers: authHeader(),
+    });
+    return parseJson(res);
+  },
+};
+
 // ─── ApiAdapter (รวมทุก module) ───────────────────────────────────────────────
 
 class ApiAdapter implements IDataAccessLayer, IWeeeuDAL {
@@ -283,6 +323,7 @@ class ApiAdapter implements IDataAccessLayer, IWeeeuDAL {
   readonly push = pushApi;
   readonly payment = paymentApi;
   readonly location = locationApi;
+  readonly transfer = transferApi;
 
   isAvailable(): boolean {
     // ตรวจสอบ backend ด้วย health check (async) ใน production

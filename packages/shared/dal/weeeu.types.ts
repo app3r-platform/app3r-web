@@ -176,6 +176,50 @@ export interface ILocationDAL {
   list(): Promise<Result<SavedLocation[]>>;
 }
 
+// ─── Transfer DAL (Manual Bank Transfer — Decision Record C) ─────────────────
+// ระยะแรก: โอนตรง (QR PromptPay + สลิป) — ไม่ผ่าน gateway ภายนอก
+
+export type TransferStatus = 'pending' | 'approved' | 'rejected';
+export type TransferType = 'deposit' | 'withdraw';
+
+export interface Transfer {
+  id: string;
+  userId: string;
+  type: TransferType;
+  amount: number;       // หน่วย: บาท
+  points: number;       // หน่วย: point ที่แปลงแล้ว
+  status: TransferStatus;
+  slipFileId?: string;  // fileId จาก D87 upload (deposit เท่านั้น)
+  bankName?: string;    // ชื่อธนาคารปลายทาง (withdraw เท่านั้น)
+  bankAccount?: string; // เลขบัญชีปลายทาง (withdraw เท่านั้น)
+  note?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DepositInfo {
+  promptPayId: string;       // เลข PromptPay ของบริษัท
+  accountName: string;       // ชื่อบัญชีบริษัท
+  accountNumber: string;     // เลขบัญชี
+  bankName: string;          // ชื่อธนาคาร
+  pointRate: number;         // อัตรา: 1 บาท = N point
+}
+
+export interface ITransferDAL {
+  /** ดึงข้อมูล PromptPay + บัญชีธนาคารของบริษัท สำหรับแสดง QR */
+  getDepositInfo(): Promise<Result<DepositInfo>>;
+  /** ส่งคำขอเติมเงิน + สลิป → backend รอ admin ยืนยัน */
+  deposit(params: { amount: number; slipFileId: string }): Promise<Result<Transfer>>;
+  /** ส่งคำขอถอนแต้มเป็นเงิน → backend admin โอนให้ */
+  withdraw(params: {
+    points: number;
+    bankName: string;
+    bankAccount: string;
+  }): Promise<Result<Transfer>>;
+  /** ดึงประวัติรายการเติม/ถอน */
+  history(params?: { type?: TransferType; page?: number }): Promise<Result<Transfer[]>>;
+}
+
 // ─── WeeeU DAL (รวม modules ทั้งหมด) ─────────────────────────────────────────
 
 export interface IWeeeuDAL {
@@ -187,4 +231,5 @@ export interface IWeeeuDAL {
   push: IPushDAL;
   payment: IPaymentDAL;
   location: ILocationDAL;
+  transfer: ITransferDAL;
 }
