@@ -33,7 +33,7 @@ type GeoErrorCb = (err: GeolocationPositionError) => void;
 let geoSuccessCb: GeoSuccessCb | null = null;
 let geoErrorCb: GeoErrorCb | null = null;
 
-const MOCK_POSITION: GeolocationPosition = {
+const MOCK_POSITION = {
   coords: {
     latitude: 13.7563,
     longitude: 100.5018,
@@ -42,9 +42,11 @@ const MOCK_POSITION: GeolocationPosition = {
     altitudeAccuracy: null,
     heading: null,
     speed: null,
+    toJSON: () => ({}),
   } as GeolocationCoordinates,
   timestamp: Date.now(),
-};
+  toJSON: () => ({}),
+} satisfies GeolocationPosition;
 
 beforeEach(() => {
   jest.clearAllMocks();
