@@ -66,6 +66,9 @@ export function FileUpload({
         headers: { "Content-Type": file.type },
       });
       // Phase C mock: presignedUrl = mock URL → PUT จะ fail แต่ยังคง flow ต่อไป
+      // TODO(Phase-D-R2): ตรวจสอบ putRes.ok เมื่อ R2 presigned URL จริงพร้อม
+      // if (!putRes.ok) throw new Error(`PUT R2 ล้มเหลว: HTTP ${putRes.status}`);
+      void putRes; // suppress unused warning ใน Phase C
       setProgress(70);
 
       // Step 3: แจ้ง backend ว่าอัพโหลดเสร็จแล้ว → trigger scan
