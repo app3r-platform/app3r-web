@@ -55,3 +55,6 @@ export * from './bank-transfers'
 
 // Sub-CMD-5: Service Progress Tracker (D79 Wave 2)
 export * from './service-progress'
+
+// Sub-CMD-6: Settlement API + Audit Log (D-2 Debt #3 Wave 2)
+export * from './settlements'
