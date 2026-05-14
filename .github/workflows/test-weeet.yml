@@ -1,0 +1,51 @@
+name: WeeeT — Jest Tests (Sub-CMD-2 Wave 1)
+
+on:
+  push:
+    branches: [main, "sub-*", "fix/*", "feat/*"]
+    paths:
+      - "apps/weeet/**"
+      - ".github/workflows/test-weeet.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/weeet/**"
+
+jobs:
+  test-weeet:
+    name: WeeeT Component Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run WeeeT Jest Tests
+        working-directory: apps/weeet
+        run: pnpm test:ci
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_WS_URL: ws://localhost:8000
+          NEXT_PUBLIC_VAPID_PUBLIC_KEY: BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jest-coverage-weeet
+          path: apps/weeet/coverage/
+          retention-days: 7

@@ -25,9 +25,11 @@ const navGroups: NavGroup[] = [
   {
     label: "การเงิน",
     items: [
-      { href: "/topup",      label: "อนุมัติเติม Point",   icon: "💳" },
-      { href: "/withdrawal", label: "อนุมัติถอนเงิน",      icon: "🏦" },
-      { href: "/disputes",   label: "ข้อพิพาท",             icon: "⚖️" },
+      { href: "/topup",                    label: "อนุมัติเติม Point",   icon: "💳" },
+      { href: "/withdrawal",               label: "อนุมัติถอนเงิน",      icon: "🏦" },
+      { href: "/transfers/deposits",       label: "ตรวจสลิปโอนเงิน",    icon: "🧾" },
+      { href: "/transfers/withdrawals",    label: "คำขอถอนเงิน",         icon: "💸" },
+      { href: "/disputes",                 label: "ข้อพิพาท",             icon: "⚖️" },
     ],
   },
   {

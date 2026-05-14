@@ -1,0 +1,40 @@
+name: Test Admin (jest)
+
+on:
+  push:
+    branches: [main, 'sub-*-wave*/**', 'worktree-*/**']
+    paths:
+      - 'apps/admin/**'
+  pull_request:
+    paths:
+      - 'apps/admin/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run jest tests (Admin)
+        working-directory: apps/admin
+        run: pnpm test:ci
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_WS_URL: ws://localhost:8000
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage-admin
+          path: apps/admin/coverage/
+          retention-days: 7
