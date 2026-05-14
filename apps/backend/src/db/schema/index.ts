@@ -52,3 +52,6 @@ export * from './parts-orders'
 
 // Sub-CMD-2: Manual Bank Transfer Module (อ.PP decision 2026-05-14)
 export * from './bank-transfers'
+
+// Sub-CMD-5: Service Progress Tracker (D79 Wave 2)
+export * from './service-progress'

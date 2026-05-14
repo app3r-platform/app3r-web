@@ -21,6 +21,7 @@ import { locationRouter } from './routes/location'
 import { servicesRouter } from './routes/services'
 import { partsRouter } from './routes/parts'
 import { transfersRouter } from './routes/transfers'
+import { serviceProgressRouter } from './routes/service-progress'
 
 export const app = new OpenAPIHono()
 
@@ -67,6 +68,9 @@ app.route('/api/v1/parts', partsRouter)
 
 // Sub-CMD-2: Manual Bank Transfer (อ.PP decision — primary Phase D-2)
 app.route('/api/v1/transfers', transfersRouter)
+
+// Sub-CMD-5: Service Progress Tracker (D79 Wave 2)
+app.route('/api/v1/service-progress', serviceProgressRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)

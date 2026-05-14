@@ -15,7 +15,13 @@ import type { WSContext } from 'hono/ws'
 // ---------------------------------------------------------------------------
 // WS event types
 // ---------------------------------------------------------------------------
-export type WsEventType = 'notification.new' | 'service.update' | 'location.update' | 'ping' | 'pong'
+export type WsEventType =
+  | 'notification.new'
+  | 'service.update'
+  | 'location.update'
+  | 'progress:updated'   // Sub-CMD-5: Service Progress Tracker real-time event
+  | 'ping'
+  | 'pong'
 
 export interface WsEvent<T = unknown> {
   type: WsEventType
