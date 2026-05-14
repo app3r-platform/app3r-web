@@ -54,6 +54,11 @@ export function useLiveLocation({ serviceId, technicianId, isMoving = true, enab
     dal.liveLocation.getConsentStatus(technicianId).then((r) => { if (r.ok) setHasConsent(r.data); });
   }, [technicianId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // stopInterval ต้อง declare ก่อน emitCurrentLocation เพราะ emitCurrentLocation ขึ้นอยู่กับ stopInterval (F3 fix)
+  const stopInterval = useCallback(() => {
+    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+  }, []);
+
   const emitCurrentLocation = useCallback(async () => {
     if (!activeRef.current) return;
     if (!navigator.geolocation) { setState("error"); setError("เบราว์เซอร์ไม่รองรับ Geolocation API"); return; }
@@ -64,14 +69,16 @@ export function useLiveLocation({ serviceId, technicianId, isMoving = true, enab
         const result = await dal.liveLocation.emitLocation({ serviceId, lat: latitude, lng: longitude, timestamp: new Date().toISOString(), accuracy });
         if (result.ok) { setEmitCount((c) => c + 1); setError(null); } else { setError(result.error); }
       },
-      (geoErr) => { setError(`Geolocation error: ${geoErr.message}`); setState("error"); stopSharing(); },
+      (geoErr) => {
+        // F3 fix: ใช้ activeRef + stopInterval โดยตรง แทน stopSharing() เพื่อหลีกเลี่ยง stale closure
+        setError(`Geolocation error: ${geoErr.message}`);
+        setState("error");
+        activeRef.current = false;
+        stopInterval();
+      },
       { enableHighAccuracy: true, timeout: GEO_TIMEOUT_MS, maximumAge: GEO_MAX_AGE_MS }
     );
-  }, [serviceId, dal.liveLocation]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const stopInterval = useCallback(() => {
-    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
-  }, []);
+  }, [serviceId, dal.liveLocation, stopInterval]);
 
   const startInterval = useCallback(() => {
     stopInterval();

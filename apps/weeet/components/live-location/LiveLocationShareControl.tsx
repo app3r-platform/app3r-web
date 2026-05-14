@@ -6,12 +6,16 @@
  */
 import { useLiveLocation } from "@/lib/utils/live-location";
 
+import { useState } from "react";
+
 interface Props { serviceId: string; technicianId: string; isMoving?: boolean; }
 
 export function LiveLocationShareControl({ serviceId, technicianId, isMoving = true }: Props) {
   const { state, lastLat, lastLng, lastUpdated, error, hasConsent, emitCount, startSharing, stopSharing, grantConsent, revokeConsent } = useLiveLocation({ serviceId, technicianId, isMoving });
+  // F5 fix: track ว่า user กด "ปฏิเสธ" แล้ว — ซ่อน dialog แทนที่จะค้างไว้
+  const [declined, setDeclined] = useState(false);
 
-  if (!hasConsent) {
+  if (!hasConsent && !declined) {
     return (
       <div className="bg-amber-950/40 border border-amber-800 rounded-xl p-4 space-y-4">
         <div className="flex items-start gap-3">
@@ -23,12 +27,14 @@ export function LiveLocationShareControl({ serviceId, technicianId, isMoving = t
         </div>
         <div className="flex gap-2">
           <button onClick={() => grantConsent()} className="flex-1 bg-orange-600 hover:bg-orange-500 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">✅ ยินยอม</button>
-          <button className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium py-2.5 rounded-xl text-sm transition-colors">ปฏิเสธ</button>
+          <button onClick={() => setDeclined(true)} className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium py-2.5 rounded-xl text-sm transition-colors">ปฏิเสธ</button>
         </div>
         <p className="text-xs text-gray-500 text-center">หากปฏิเสธ ลูกค้าจะไม่เห็นตำแหน่งของคุณ</p>
       </div>
     );
   }
+
+  if (declined && !hasConsent) return null;
 
   return (
     <div className="space-y-3">
