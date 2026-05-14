@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { PRIORITY_CONFIG } from "@/lib/types/service-expanded.stub";
+import type { ServicePriority } from "@/lib/types/service-expanded.stub";
 
 type Appliance = { id: string; name: string; brand: string; model: string };
 type ServiceType = "on_site" | "walk_in" | "pickup" | "parcel";
@@ -18,8 +20,10 @@ export default function RepairNewPage() {
     appliance_id: "",
     issue_summary: "",
     issue_detail: "",
+    customer_note: "",
     scheduled_at: "",
     budget_max: "",
+    priority: "normal" as ServicePriority,
   });
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
@@ -96,6 +100,8 @@ export default function RepairNewPage() {
         body.append("shop_id", selectedShopId);
       }
       if (form.budget_max) body.append("budget_max", form.budget_max);
+      body.append("priority", form.priority);
+      if (form.customer_note.trim()) body.append("customer_note", form.customer_note.trim());
       photos.forEach(f => body.append("photos", f));
 
       // Pickup → go to schedule page with URL params (schedule page does full POST)
@@ -104,7 +110,9 @@ export default function RepairNewPage() {
           appliance_id: form.appliance_id,
           issue_summary: form.issue_summary,
           issue_detail: form.issue_detail,
+          priority: form.priority,
           ...(form.budget_max && { budget_max: form.budget_max }),
+          ...(form.customer_note.trim() && { customer_note: form.customer_note.trim() }),
         });
         router.push(`/repair/pickup/schedule?${p.toString()}`);
         return;
@@ -257,6 +265,42 @@ export default function RepairNewPage() {
               rows={3}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             />
+          </div>
+          {/* Sub-4: customer_note */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">หมายเหตุเพิ่มเติมถึงช่าง</label>
+            <textarea
+              value={form.customer_note}
+              onChange={e => setForm(f => ({ ...f, customer_note: e.target.value }))}
+              placeholder="เช่น ต้องการให้แจ้งก่อนเปลี่ยนอะไหล่ / ใช้อะไหล่แท้เท่านั้น"
+              rows={2}
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            />
+          </div>
+          {/* Sub-4: priority selector */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">ลำดับความสำคัญ</label>
+            <div className="flex gap-2">
+              {(["normal", "urgent", "vip"] as ServicePriority[]).map(p => {
+                const cfg = PRIORITY_CONFIG[p];
+                const active = form.priority === p;
+                return (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setForm(f => ({ ...f, priority: p }))}
+                    className={`flex-1 py-2 px-3 rounded-xl border text-xs font-medium transition-colors flex flex-col items-center gap-0.5 ${
+                      active
+                        ? `${cfg.cls} border-current ring-1 ring-current`
+                        : "border-gray-200 text-gray-500 hover:border-gray-300"
+                    }`}
+                  >
+                    <span className="text-base leading-none">{cfg.icon}</span>
+                    <span>{cfg.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
