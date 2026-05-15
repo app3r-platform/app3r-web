@@ -1,7 +1,9 @@
 "use client";
 
-// ── Parts Marketplace Detail — Phase C-6 ─────────────────────────────────────
+// ── Parts Marketplace Detail — Phase C-6 + Sub-CMD-8 Wave 3 ──────────────────
 // หน้ารายละเอียดอะไหล่ + ปุ่มสั่งซื้อ
+// Sub-CMD-8: handleOrder ส่ง POST /api/v1/parts/orders/ (real Backend B2B escrow)
+//            fallback → localStorage mock เมื่อ API ไม่พร้อม
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
@@ -10,10 +12,12 @@ import { PART_LISTINGS_MOCK } from "../../_lib/mock-data";
 import { PartDetailHeader } from "../../../../../components/parts/PartDetailHeader";
 import { PartImageGallery } from "../../../../../components/parts/PartImageGallery";
 import { PlaceOrderModal } from "../../../../../components/parts/PlaceOrderModal";
-import { getCurrentShopId, getListings, getOrders, upsertOrder, updateListingStock, partsSync, usePartsSync } from "../../../../../lib/utils/parts-sync";
+import { getCurrentShopId, getListings, upsertOrder, updateListingStock, partsSync, usePartsSync } from "../../../../../lib/utils/parts-sync";
 import { escrowHold } from "../../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../../lib/mock-data/shops";
 import type { PartOrder, DeliveryMethod } from "../../_lib/types";
+// Sub-CMD-8: typed adapter สำหรับ real Backend B2B orders API
+import { createPartsOrder } from "../../../../../lib/parts-api";
 
 export default function MarketplaceDetailPage({
   params,
@@ -25,6 +29,8 @@ export default function MarketplaceDetailPage({
   const [shopId, setShopId] = useState("S001");
   const [showModal, setShowModal] = useState(false);
   const [ordered, setOrdered] = useState(false);
+  const [ordering, setOrdering] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   useEffect(() => {
     setShopId(getCurrentShopId());
@@ -42,44 +48,64 @@ export default function MarketplaceDetailPage({
     }
   });
 
+  // Sub-CMD-8: ส่ง order ผ่าน real Backend API (fallback → localStorage mock)
   const handleOrder = (qty: number, delivery: DeliveryMethod) => {
-    if (!listing) return;
-    const shop = SHOPS_MOCK.find((s) => s.id === shopId);
-    const sellerShop = SHOPS_MOCK.find((s) => s.id === listing.shopId);
-    if (!shop || !sellerShop) return;
+    if (!listing || ordering) return;
+    setOrdering(true);
+    setOrderError(null);
 
-    const total = qty * listing.pricePoints;
-    const fee = Math.round(total * 0.03);
-    const orderId = `O${Date.now()}`;
-
-    const order: PartOrder = {
-      id: orderId,
+    // Try real Backend B2B orders API ก่อน
+    createPartsOrder({
       partId: listing.id,
-      partName: listing.name,
-      sellerShopId: listing.shopId,
-      sellerShopName: listing.shopName,
-      buyerShopId: shopId,
-      buyerShopName: shop.name,
       quantity: qty,
-      pricePoints: listing.pricePoints,
-      totalPoints: total,
-      platformFee: fee,
-      netToSeller: total - fee,
-      deliveryMethod: delivery,
-      stage: "ordered",
-      orderedAt: new Date().toISOString(),
-    };
+      idempotencyKey: `${listing.id}-${shopId}-${Date.now()}`,
+    })
+      .then(() => {
+        // Backend order created — update UI
+        const updated = { ...listing, stock: listing.stock - qty };
+        setListing(updated);
+        setShowModal(false);
+        setOrdered(true);
+        partsSync.emit({ type: "order_placed", orderId: `api-${Date.now()}`, partId: listing.id, buyerShopId: shopId });
+      })
+      .catch(() => {
+        // Fallback to localStorage mock (Backend ยังไม่ deploy / dev mode)
+        const shop = SHOPS_MOCK.find((s) => s.id === shopId);
+        if (!shop) { setOrderError("ไม่พบข้อมูลร้านค้า"); setOrdering(false); return; }
 
-    upsertOrder(order);
-    escrowHold(orderId, shopId, total);
-    updateListingStock(listing.id, -qty);
-    partsSync.emit({ type: "order_placed", orderId, partId: listing.id, buyerShopId: shopId });
+        const total = qty * listing.pricePoints;
+        const fee = Math.round(total * 0.03);
+        const orderId = `O${Date.now()}`;
 
-    // อัปเดต listing ที่แสดง
-    const updated = { ...listing, stock: listing.stock - qty };
-    setListing(updated);
-    setShowModal(false);
-    setOrdered(true);
+        const order: PartOrder = {
+          id: orderId,
+          partId: listing.id,
+          partName: listing.name,
+          sellerShopId: listing.shopId,
+          sellerShopName: listing.shopName ?? "",
+          buyerShopId: shopId,
+          buyerShopName: shop.name,
+          quantity: qty,
+          pricePoints: listing.pricePoints,
+          totalPoints: total,
+          platformFee: fee,
+          netToSeller: total - fee,
+          deliveryMethod: delivery,
+          stage: "ordered",
+          orderedAt: new Date().toISOString(),
+        };
+
+        upsertOrder(order);
+        escrowHold(orderId, shopId, total);
+        updateListingStock(listing.id, -qty);
+        partsSync.emit({ type: "order_placed", orderId, partId: listing.id, buyerShopId: shopId });
+
+        const updated = { ...listing, stock: listing.stock - qty };
+        setListing(updated);
+        setShowModal(false);
+        setOrdered(true);
+      })
+      .finally(() => setOrdering(false));
   };
 
   if (!listing) {
@@ -113,8 +139,15 @@ export default function MarketplaceDetailPage({
           <span>✅</span>
           <div>
             <p className="text-sm font-medium text-green-700">สั่งซื้อสำเร็จ!</p>
-            <Link href="/parts/my-orders" className="text-xs text-green-600 hover:underline">ดูคำสั่งซื้อ →</Link>
+            <Link href="/parts/orders" className="text-xs text-green-600 hover:underline">ดูคำสั่งซื้อ B2B →</Link>
           </div>
+        </div>
+      )}
+
+      {/* Error */}
+      {orderError && (
+        <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-3 text-xs text-red-600">
+          ⚠️ {orderError}
         </div>
       )}
 
@@ -122,10 +155,10 @@ export default function MarketplaceDetailPage({
       {!isOwn && !ordered && (
         <button
           onClick={() => setShowModal(true)}
-          disabled={listing.stock === 0}
+          disabled={listing.stock === 0 || ordering}
           className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
         >
-          {listing.stock === 0 ? "หมดสต็อก" : `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`}
+          {ordering ? "กำลังสั่งซื้อ…" : listing.stock === 0 ? "หมดสต็อก" : `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`}
         </button>
       )}
 
