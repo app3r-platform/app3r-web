@@ -28,6 +28,7 @@ import {
   rateOrder,
   listPartsOrders,
 } from '../dal/parts-b2b'
+import type { PartsOrderStatus } from '../types/parts-b2b'
 
 export const partsOrdersRouter = new OpenAPIHono()
 
@@ -99,13 +100,19 @@ const OrderDetailSchema = OrderSchema.extend({
   rating: RatingSchema.nullable(),
 })
 
-// ── GET / — list B2B orders (deferred Sub-CMD-8, implemented Sub-CMD-9) ───────
-// Note: query params parsed manually to avoid Hono OpenAPI coercion edge cases
-const listOrdersRoute = createRoute({
+const ListOrderSchema = z.object({
+  items: z.array(OrderSchema),
+  total: z.number(),
+  limit: z.number(),
+  offset: z.number(),
+})
+
+// ── GET / — list B2B orders (Sub-CMD-9) ──────────────────────────────────────
+const listOrderRoute = createRoute({
   method: 'get',
   path: '/',
   tags: ['Parts B2B'],
-  summary: 'List B2B parts orders (filter by buyer/seller/status, paginated)',
+  summary: 'List B2B parts orders with pagination + filters (Sub-CMD-9)',
   security: [{ bearerAuth: [] }],
   request: {
     query: z.object({
@@ -118,69 +125,41 @@ const listOrdersRoute = createRoute({
   },
   responses: {
     200: {
-      description: 'Paginated list of B2B orders',
-      content: {
-        'application/json': {
-          schema: z.object({
-            items: z.array(OrderSchema),
-            total: z.number(),
-            limit: z.number(),
-            offset: z.number(),
-          }),
-        },
-      },
+      description: 'Paginated order list',
+      content: { 'application/json': { schema: ListOrderSchema } },
     },
     401: { description: 'Unauthorized' },
   },
 })
 
-partsOrdersRouter.openapi(listOrdersRoute, async (c) => {
+partsOrdersRouter.openapi(listOrderRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
 
   const q = c.req.valid('query')
+  const limitRaw = q.limit ? parseInt(q.limit, 10) : 20
+  const offsetRaw = q.offset ? parseInt(q.offset, 10) : 0
+  const limit = isNaN(limitRaw) ? 20 : limitRaw
+  const offset = isNaN(offsetRaw) ? 0 : offsetRaw
 
-  // Validate status enum manually
-  const VALID_STATUSES = ['pending', 'held', 'fulfilled', 'closed', 'disputed', 'resolved', 'refunded', 'cancelled']
-  if (q.status && !VALID_STATUSES.includes(q.status)) {
+  const VALID_STATUSES: PartsOrderStatus[] = [
+    'pending', 'held', 'fulfilled', 'closed', 'disputed', 'resolved', 'refunded', 'cancelled',
+  ]
+  if (q.status && !VALID_STATUSES.includes(q.status as PartsOrderStatus)) {
     return c.json(err(`Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`), 400)
   }
 
   const result = await listPartsOrders({
     buyerId: q.buyerId,
     sellerId: q.sellerId,
-    status: q.status as any,
-    limit: q.limit ? Math.min(parseInt(q.limit, 10) || 20, 100) : 20,
-    offset: q.offset ? (parseInt(q.offset, 10) || 0) : 0,
+    status: q.status as PartsOrderStatus | undefined,
+    limit,
+    offset,
   })
 
   return c.json(result, 200)
 })
 
-// Trailing-slash alias: ensure GET /api/v1/parts/orders/ works the same as GET /api/v1/parts/orders
-// Hono's prefix matching can fall through to partsRouter's GET /:id/ for the trailing slash case
-// This explicit handler anchors the route at both paths
-partsOrdersRouter.get('/', async (c) => {
-  const auth = c.req.header('Authorization')
-  const user = auth?.startsWith('Bearer ')
-    ? await verifyAccessToken(auth.slice(7)).catch(() => null)
-    : null
-  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
-
-  const q = c.req.query()
-  const VALID_STATUSES = ['pending', 'held', 'fulfilled', 'closed', 'disputed', 'resolved', 'refunded', 'cancelled']
-  if (q['status'] && !VALID_STATUSES.includes(q['status']!)) {
-    return c.json(err(`Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`), 400)
-  }
-  const result = await listPartsOrders({
-    buyerId: q['buyerId'],
-    sellerId: q['sellerId'],
-    status: q['status'] as any,
-    limit: q['limit'] ? Math.min(parseInt(q['limit']!, 10) || 20, 100) : 20,
-    offset: q['offset'] ? (parseInt(q['offset']!, 10) || 0) : 0,
-  })
-  return c.json(result, 200)
-})
 
 // ── POST / — create B2B order ─────────────────────────────────────────────────
 const createOrderRoute = createRoute({

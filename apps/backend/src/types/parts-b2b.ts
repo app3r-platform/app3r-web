@@ -140,3 +140,11 @@ export interface RateOrderInput {
   score: number    // 1–5
   comment?: string
 }
+
+// ── List DTO (GET /orders?...) ────────────────────────────────────────────────
+export interface PartsOrderListDto {
+  items: PartsOrderDto[]
+  total: number
+  limit: number
+  offset: number
+}

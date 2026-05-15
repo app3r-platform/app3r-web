@@ -118,6 +118,7 @@ import type {
   PartsOrderStatus,
   PartsOrderEventType,
   PartsDisputeStatus,
+  PartsOrderListDto,
 } from '../../src/types/parts-b2b'
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -729,5 +730,138 @@ describe('Migration SQL — 0008_parts_b2b.sql', () => {
     expect(content).toContain('Rollback')
     expect(content).toContain('DROP TABLE')
     expect(content).toContain('DROP COLUMN')
+  })
+})
+
+// ── Types — PartsOrderListDto (Sub-CMD-9 list endpoint) ──────────────────────
+describe('PartsOrderListDto — pagination shape (Sub-CMD-9)', () => {
+  it('has items array, total, limit, offset fields', () => {
+    const list: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    expect(list).toHaveProperty('items')
+    expect(list).toHaveProperty('total')
+    expect(list).toHaveProperty('limit')
+    expect(list).toHaveProperty('offset')
+    expect(Array.isArray(list.items)).toBe(true)
+  })
+
+  it('items contains valid PartsOrderDto objects', () => {
+    const list: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    expect(list.items[0]).toHaveProperty('id')
+    expect(list.items[0]).toHaveProperty('status')
+    expect(list.items[0]).toHaveProperty('totalThb')
+    expect(typeof list.items[0].totalThb).toBe('string')
+  })
+
+  it('empty list has zero total', () => {
+    const empty: PartsOrderListDto = { items: [], total: 0, limit: 20, offset: 0 }
+    expect(empty.items).toHaveLength(0)
+    expect(empty.total).toBe(0)
+  })
+})
+
+// ── DAL — listPartsOrders() (Sub-CMD-9) ──────────────────────────────────────
+describe('DAL — listPartsOrders()', () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it('returns list with items and total', async () => {
+    const list: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({})
+    expect(result.items).toHaveLength(1)
+    expect(result.total).toBe(1)
+    expect(result.limit).toBe(20)
+    expect(result.offset).toBe(0)
+  })
+
+  it('returns empty list when no orders match filter', async () => {
+    const empty: PartsOrderListDto = { items: [], total: 0, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(empty)
+    const result = await dal.listPartsOrders({ status: 'closed' })
+    expect(result.items).toHaveLength(0)
+    expect(result.total).toBe(0)
+  })
+
+  it('respects limit and offset for pagination', async () => {
+    const page: PartsOrderListDto = { items: [], total: 50, limit: 10, offset: 20 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(page)
+    const result = await dal.listPartsOrders({ limit: 10, offset: 20 })
+    expect(result.limit).toBe(10)
+    expect(result.offset).toBe(20)
+    expect(result.total).toBe(50)
+  })
+
+  it('filters by buyerId', async () => {
+    const list: PartsOrderListDto = { items: [sampleOrderDto], total: 1, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({ buyerId: 'buyer-001' })
+    expect(result.items[0].buyerId).toBe('buyer-001')
+  })
+
+  it('filters by status', async () => {
+    const heldOrder = { ...sampleOrderDto, status: 'held' as PartsOrderStatus }
+    const list: PartsOrderListDto = { items: [heldOrder], total: 1, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({ status: 'held' })
+    expect(result.items[0].status).toBe('held')
+  })
+
+  it('returns empty when sellerId has no parts', async () => {
+    const empty: PartsOrderListDto = { items: [], total: 0, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(empty)
+    const result = await dal.listPartsOrders({ sellerId: 'seller-no-parts' })
+    expect(result.items).toHaveLength(0)
+    expect(result.total).toBe(0)
+  })
+
+  it('returns multiple items when orders exist', async () => {
+    const order2 = { ...sampleOrderDto, id: 'order-uuid-002', idempotencyKey: 'idem-002' }
+    const list: PartsOrderListDto = {
+      items: [sampleOrderDto, order2],
+      total: 2,
+      limit: 20,
+      offset: 0,
+    }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({})
+    expect(result.items).toHaveLength(2)
+    expect(result.total).toBe(2)
+  })
+
+  it('limit is capped at 100 (business rule)', async () => {
+    const list: PartsOrderListDto = { items: [], total: 0, limit: 100, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({ limit: 999 })
+    expect(result.limit).toBe(100)
+  })
+
+  it('default offset is 0 when not provided', async () => {
+    const list: PartsOrderListDto = { items: [sampleOrderDto], total: 1, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({ buyerId: 'buyer-001' })
+    expect(result.offset).toBe(0)
+  })
+
+  it('filters by sellerId returns correct items', async () => {
+    const sellerOrder = { ...sampleOrderDto, partId: 'part-seller-001' }
+    const list: PartsOrderListDto = { items: [sellerOrder], total: 1, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(list)
+    const result = await dal.listPartsOrders({ sellerId: 'seller-001' })
+    expect(result.items).toHaveLength(1)
+    expect(result.total).toBe(1)
   })
 })

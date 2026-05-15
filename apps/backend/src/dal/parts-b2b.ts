@@ -16,7 +16,7 @@ import { db } from '../db/client'
 import { partsOrders } from '../db/schema/parts-orders'
 import { partsInventory } from '../db/schema/parts-inventory'
 import { partsOrderEvents, partsDisputes, partsRatings } from '../db/schema/parts-b2b'
-import { eq, and, desc, sql } from 'drizzle-orm'
+import { eq, and, desc, sql, inArray } from 'drizzle-orm'
 import type {
   PartsOrderDto,
   PartsOrderDetailDto,
@@ -336,7 +336,7 @@ export async function resolveDispute(
   return mapDisputeToDto(updatedDispute)
 }
 
-// ── List orders (filter by buyer / seller / status, paginated) ────────────────
+// ── List orders with pagination + filters ────────────────────────────────────
 export async function listPartsOrders(filters: {
   buyerId?: string
   sellerId?: string
@@ -347,45 +347,42 @@ export async function listPartsOrders(filters: {
   const limit = Math.min(filters.limit ?? 20, 100)
   const offset = filters.offset ?? 0
 
-  // Build WHERE conditions dynamically
-  const conditions: ReturnType<typeof eq>[] = []
+  // Build WHERE conditions
+  const conditions = []
   if (filters.buyerId) conditions.push(eq(partsOrders.buyerId, filters.buyerId))
-  if (filters.status) conditions.push(eq(partsOrders.status, filters.status))
+  if (filters.status) conditions.push(eq(partsOrders.status, filters.status as string))
 
-  // sellerId filter requires joining parts_inventory.owner_id
+  // sellerId requires lookup into parts_inventory first (safe inArray — no SQL injection)
   if (filters.sellerId) {
-    // subquery: orderId in (SELECT id FROM parts_orders JOIN parts_inventory ON part_id = parts_inventory.id WHERE owner_id = sellerId)
-    const sellerPartIds = await db
+    const sellerParts = await db
       .select({ id: partsInventory.id })
       .from(partsInventory)
       .where(eq(partsInventory.ownerId, filters.sellerId))
-
-    const partIds = sellerPartIds.map((r) => r.id)
+    const partIds = sellerParts.map((p) => p.id)
     if (partIds.length === 0) {
       return { items: [], total: 0, limit, offset }
     }
-    conditions.push(sql`${partsOrders.partId} = ANY(${sql.raw(`ARRAY[${partIds.map((id) => `'${id}'`).join(',')}]::uuid[]`)})`)
+    conditions.push(inArray(partsOrders.partId, partIds))
   }
 
-  const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+  const where = conditions.length > 0 ? and(...conditions) : undefined
 
-  const [rows, countResult] = await Promise.all([
-    db
-      .select()
-      .from(partsOrders)
-      .where(whereClause)
-      .orderBy(desc(partsOrders.createdAt))
-      .limit(limit)
-      .offset(offset),
-    db
-      .select({ count: sql<string>`COUNT(*)` })
-      .from(partsOrders)
-      .where(whereClause),
-  ])
+  const [countRow] = await db
+    .select({ count: sql<string>`count(*)` })
+    .from(partsOrders)
+    .where(where)
+
+  const rows = await db
+    .select()
+    .from(partsOrders)
+    .where(where)
+    .orderBy(desc(partsOrders.createdAt))
+    .limit(limit)
+    .offset(offset)
 
   return {
     items: rows.map(mapOrderToDto),
-    total: parseInt(countResult[0]?.count ?? '0', 10),
+    total: parseInt(countRow?.count ?? '0', 10),
     limit,
     offset,
   }

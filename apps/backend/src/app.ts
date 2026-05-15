@@ -66,14 +66,15 @@ app.route('/api/v1/location', locationRouter)
 // D90 NOTE-D90-1: Services stub CRUD
 app.route('/api/v1/services', servicesRouter)
 
-// Sub-CMD-8: Parts B2B Marketplace (Wave 3) — registered BEFORE partsRouter
-// Mounted at BOTH paths: with and without trailing slash to fix Hono trie routing.
-// Without this, GET /api/v1/parts/orders/ falls through to partsRouter's GET /:id/
-// and fails UUID validation (id='orders').
+// Sub-CMD-8/9: Parts B2B Marketplace (Wave 3)
+// HONO-TRIE-FIX: partsOrdersRouter MUST be registered BEFORE partsRouter.
+// partsRouter mounts GET /:id/ which matches the "orders" path segment and
+// causes UUID validation failure on GET /api/v1/parts/orders/.
+// Both with and without trailing slash are mounted to handle Hono trie routing.
 app.route('/api/v1/parts/orders', partsOrdersRouter)
 app.route('/api/v1/parts/orders/', partsOrdersRouter)
 
-// NOTE-SUB4: Parts inventory + orders (escrow)
+// NOTE-SUB4: Parts inventory (registered AFTER partsOrdersRouter — see HONO-TRIE-FIX above)
 app.route('/api/v1/parts', partsRouter)
 
 // Sub-CMD-2: Manual Bank Transfer (อ.PP decision — primary Phase D-2)
