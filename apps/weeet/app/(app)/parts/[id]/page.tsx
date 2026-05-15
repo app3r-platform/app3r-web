@@ -1,7 +1,7 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { partsApi } from "@/lib/api";
+import { partsApi, partsOrdersApi } from "@/lib/api";
 import type { Part } from "@/lib/types";
 
 const CONDITION_LABELS: Record<Part["condition"], string> = {
@@ -22,6 +22,37 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
   const [part, setPart] = useState<Part | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
+  // Sub-8: B2B order form state
+  const [orderQty, setOrderQty] = useState(1);
+  const [orderServiceId, setOrderServiceId] = useState("");
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
+
+  const handleOrder = useCallback(async () => {
+    if (!part) return;
+    setOrderLoading(true);
+    setOrderError(null);
+    // idempotency key: partId + timestamp (ป้องกัน double submit)
+    const idempotencyKey = `${part.id}-${Date.now()}`;
+    try {
+      const order = await partsOrdersApi.createOrder({
+        partId: part.id,
+        quantity: orderQty,
+        ...(orderServiceId.trim() ? { serviceId: orderServiceId.trim() } : {}),
+        idempotencyKey: idempotencyKey,
+      });
+      // บันทึก order ID ใน localStorage สำหรับ "my orders"
+      if (typeof window !== "undefined") {
+        const existing = JSON.parse(localStorage.getItem("weeet_part_order_ids") ?? "[]") as string[];
+        localStorage.setItem("weeet_part_order_ids", JSON.stringify([order.id, ...existing].slice(0, 50)));
+      }
+      router.push(`/parts/orders/${order.id}`);
+    } catch (e) {
+      setOrderError(String(e));
+    } finally {
+      setOrderLoading(false);
+    }
+  }, [part, orderQty, orderServiceId, router]);
 
   useEffect(() => {
     partsApi.get(id)
@@ -122,9 +153,70 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
               </div>
             )}
 
-            <div className="bg-amber-950/30 border border-amber-800/50 rounded-xl p-3 text-xs text-amber-300">
-              📋 หน้านี้แสดงข้อมูลอ่านอย่างเดียว — การเบิกอะไหล่ทำผ่านหน้า checklist งาน
-            </div>
+            {/* Sub-8: B2B Order Form — Buyer UI */}
+            {part.stockQty > 0 ? (
+              <div className="bg-gray-800 border border-orange-800/40 rounded-xl p-4 space-y-3">
+                <p className="text-sm font-semibold text-white flex items-center gap-2">
+                  🛒 สั่งซื้ออะไหล่ B2B
+                </p>
+
+                {/* Quantity */}
+                <div className="space-y-1">
+                  <label className="text-xs text-gray-400">จำนวน (สูงสุด {part.stockQty} {part.unit})</label>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setOrderQty((q) => Math.max(1, q - 1))}
+                      className="w-9 h-9 rounded-xl bg-gray-700 hover:bg-gray-600 text-white font-bold transition-colors"
+                    >
+                      −
+                    </button>
+                    <span className="text-white font-bold text-lg w-8 text-center">{orderQty}</span>
+                    <button
+                      type="button"
+                      onClick={() => setOrderQty((q) => Math.min(part.stockQty, q + 1))}
+                      className="w-9 h-9 rounded-xl bg-gray-700 hover:bg-gray-600 text-white font-bold transition-colors"
+                    >
+                      +
+                    </button>
+                    <span className="text-orange-400 font-semibold ml-auto">
+                      รวม ฿{(part.unitPrice * orderQty).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Optional service ID */}
+                <div className="space-y-1">
+                  <label className="text-xs text-gray-400">เชื่อมกับงานซ่อม (ไม่บังคับ — ใส่ Job ID)</label>
+                  <input
+                    type="text"
+                    value={orderServiceId}
+                    onChange={(e) => setOrderServiceId(e.target.value)}
+                    placeholder="เช่น job-abc123"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+
+                {orderError && (
+                  <p className="text-xs text-red-400 bg-red-950/30 border border-red-800/50 rounded-lg px-3 py-2">
+                    ⚠️ {orderError}
+                  </p>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleOrder}
+                  disabled={orderLoading}
+                  className="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-sm transition-colors disabled:opacity-50"
+                >
+                  {orderLoading ? "กำลังสั่งซื้อ..." : `🛒 สั่งซื้อ ${orderQty} ${part.unit}`}
+                </button>
+              </div>
+            ) : (
+              <div className="bg-red-950/30 border border-red-800/50 rounded-xl p-3 text-sm text-red-300 text-center">
+                ❌ อะไหล่หมดสต็อก — ไม่สามารถสั่งซื้อได้
+              </div>
+            )}
           </>
         )}
       </div>

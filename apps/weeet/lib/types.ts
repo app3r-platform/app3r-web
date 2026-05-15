@@ -211,6 +211,86 @@ export interface LoginLockout {
   lockedUntil?: number; // epoch ms
 }
 
+// ─── Sub-8 Wave 3: Parts B2B Marketplace types ────────────────────────────────
+// Mirror จาก apps/backend/src/types/parts-b2b.ts (Lesson #34 — ไม่ import ข้ามแอป)
+// Source-of-truth: Backend. TODO: Sub-8 — refactor ถ้า Backend export shared pkg
+
+export type PartsOrderStatus =
+  | 'pending'   // สร้างแล้ว รอ escrow hold
+  | 'held'      // escrow ถือเงินแล้ว
+  | 'fulfilled' // seller ส่งของแล้ว
+  | 'closed'    // buyer ยืนยันรับของ
+  | 'disputed'  // มีข้อพิพาท
+  | 'resolved'  // admin แก้ไขแล้ว
+  | 'refunded'  // คืนเงิน
+  | 'cancelled';
+
+export type PartsOrderEventType =
+  | 'created' | 'held' | 'fulfilled' | 'closed'
+  | 'disputed' | 'resolved_buyer' | 'resolved_seller'
+  | 'refunded' | 'rated' | 'cancelled';
+
+export type PartsDisputeStatus =
+  | 'open' | 'admin_reviewing'
+  | 'resolved_buyer' | 'resolved_seller' | 'withdrawn';
+
+export interface PartsOrderEventDto {
+  id: string;
+  orderId: string;
+  eventType: PartsOrderEventType;
+  actorId: string | null;
+  oldStatus: string | null;
+  newStatus: string | null;
+  detail: string | null;
+  createdAt: string;
+}
+
+export interface PartsDisputeDto {
+  id: string;
+  orderId: string;
+  raisedBy: string;
+  reason: string;
+  status: PartsDisputeStatus;
+  resolution: string | null;
+  resolvedBy: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
+}
+
+export interface PartsRatingDto {
+  id: string;
+  orderId: string;
+  ratedBy: string;
+  sellerId: string;
+  score: number; // 1–5
+  comment: string | null;
+  createdAt: string;
+}
+
+export interface PartsOrderDto {
+  id: string;
+  partId: string;
+  buyerId: string;
+  serviceId: string | null;
+  quantity: number;
+  unitPriceThb: string; // numeric as string (JSON safe)
+  totalThb: string;
+  status: PartsOrderStatus;
+  fulfillmentNote: string | null;
+  trackingNumber: string | null;
+  fulfilledAt: string | null;
+  closedAt: string | null;
+  idempotencyKey: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PartsOrderDetailDto extends PartsOrderDto {
+  events: PartsOrderEventDto[];
+  dispute: PartsDisputeDto | null;
+  rating: PartsRatingDto | null;
+}
+
 // --- Maintain Module (Phase C-2.1) ---
 export interface MaintainJob {
   id: string;
