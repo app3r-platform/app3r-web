@@ -10,7 +10,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:ci": "jest --coverage --ci --forceExit"
+    "test:ci": "jest --coverage --ci --forceExit",
+    "test:e2e": "playwright test --config=playwright.config.ts",
+    "test:e2e:ui": "playwright test --config=playwright.config.ts --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@app3r/shared": "workspace:*",
@@ -20,6 +23,7 @@
     "react-dom": "^19"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@swc/core": "^1.15.33",
     "@swc/jest": "^0.2.39",
     "@testing-library/jest-dom": "^6.9.1",
