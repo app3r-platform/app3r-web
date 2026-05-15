@@ -90,7 +90,7 @@ export const pickupApi = {
 };
 
 // --- Parts API (Phase C-2.2) ---
-import type { MaintainJob, Part } from "./types";
+import type { MaintainJob, Part, PartsOrderDto, PartsOrderDetailDto } from "./types";
 
 export const partsApi = {
   list: () => apiFetch<Part[]>(`${API_BASE}/parts/`),
@@ -119,5 +119,38 @@ export const maintainApi = {
     apiFetch<MaintainJob>(`${API_BASE}/maintain/jobs/${id}/use-part/`, {
       method: "POST",
       body: JSON.stringify(body),
+    }),
+};
+
+// --- Parts B2B Orders API (Sub-8 Wave 3) ---
+// WeeeT = Buyer role เท่านั้น (ห้าม seller actions)
+export const partsOrdersApi = {
+  /** POST /api/v1/parts/orders/ — สร้างคำสั่งซื้อ */
+  createOrder: (body: { partId: string; quantity: number; serviceId?: string; idempotencyKey: string }) =>
+    apiFetch<PartsOrderDto>(`${API_BASE}/parts/orders/`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  /** GET /api/v1/parts/orders/:id/ — ดูรายละเอียดออเดอร์ + audit trail */
+  getOrder: (id: string) =>
+    apiFetch<PartsOrderDetailDto>(`${API_BASE}/parts/orders/${id}/`),
+
+  /** PATCH /api/v1/parts/orders/:id/close/ — buyer ยืนยันรับของ */
+  closeOrder: (id: string) =>
+    apiFetch<PartsOrderDto>(`${API_BASE}/parts/orders/${id}/close/`, { method: "PATCH" }),
+
+  /** POST /api/v1/parts/orders/:id/dispute/ — buyer แจ้งข้อพิพาท */
+  disputeOrder: (id: string, reason: string) =>
+    apiFetch<PartsOrderDto>(`${API_BASE}/parts/orders/${id}/dispute/`, {
+      method: "POST",
+      body: JSON.stringify({ reason }),
+    }),
+
+  /** POST /api/v1/parts/orders/:id/rate/ — buyer ให้คะแนน seller (หลัง close) */
+  rateOrder: (id: string, score: number, comment?: string) =>
+    apiFetch<PartsOrderDto>(`${API_BASE}/parts/orders/${id}/rate/`, {
+      method: "POST",
+      body: JSON.stringify({ score, ...(comment ? { comment } : {}) }),
     }),
 };

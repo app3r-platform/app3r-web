@@ -1,7 +1,31 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { partsApi } from "@/lib/api";
 import type { Part } from "@/lib/types";
+
+function MyOrdersChip({ router }: { router: ReturnType<typeof useRouter> }) {
+  const [orderIds, setOrderIds] = useState<string[]>([]);
+  useEffect(() => {
+    try {
+      const ids = JSON.parse(localStorage.getItem("weeet_part_order_ids") ?? "[]") as string[];
+      setOrderIds(ids);
+    } catch {
+      // ignore
+    }
+  }, []);
+  if (orderIds.length === 0) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => router.push(`/parts/orders/${orderIds[0]}`)}
+      className="w-full flex items-center justify-between bg-blue-900/30 border border-blue-700/40 rounded-xl px-4 py-2.5 text-sm"
+    >
+      <span className="text-blue-300 font-medium">📦 ออเดอร์ล่าสุดของฉัน</span>
+      <span className="text-xs text-gray-500">{orderIds.length} รายการ →</span>
+    </button>
+  );
+}
 
 const CONDITION_LABELS: Record<Part["condition"], string> = {
   new: "ใหม่",
@@ -16,6 +40,7 @@ const CONDITION_COLORS: Record<Part["condition"], string> = {
 };
 
 export default function PartsPage() {
+  const router = useRouter();
   const [parts, setParts] = useState<Part[]>([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
@@ -51,6 +76,9 @@ export default function PartsPage() {
         <h1 className="text-xl font-bold text-white">อะไหล่ / วัสดุ</h1>
         <p className="text-xs text-gray-400 mt-0.5">คลังอะไหล่ของร้าน</p>
       </div>
+
+      {/* My orders shortcut */}
+      <MyOrdersChip router={router} />
 
       {/* Search */}
       <div className="relative">
@@ -107,9 +135,11 @@ export default function PartsPage() {
           {/* Parts list */}
           <div className="space-y-3">
             {filtered.map((part) => (
-              <div
+              <button
                 key={part.id}
-                className="bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2"
+                type="button"
+                onClick={() => router.push(`/parts/${part.id}`)}
+                className="w-full text-left bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2 hover:border-orange-600/50 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1">
@@ -141,7 +171,7 @@ export default function PartsPage() {
                     จอง {part.reservedQty}
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 
