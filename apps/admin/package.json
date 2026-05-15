@@ -11,7 +11,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:ci": "jest --coverage --ci --forceExit"
+    "test:ci": "jest --coverage --ci --forceExit",
+    "test:e2e": "playwright test --config=../../e2e/admin/playwright.config.ts",
+    "test:e2e:report": "playwright show-report ../../playwright-report/admin"
   },
   "dependencies": {
     "@app3r/ui": "workspace:*",
@@ -35,6 +37,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.4.9",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@playwright/test": "^1.50.1"
   }
 }
