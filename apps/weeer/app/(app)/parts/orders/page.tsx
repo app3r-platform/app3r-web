@@ -1,21 +1,22 @@
 "use client";
-// ── Parts B2B Orders — WeeeR (Sub-CMD-8 Wave 3) ───────────────────────────────
+// ── Parts B2B Orders — WeeeR (Sub-CMD-9 Wave 3) ───────────────────────────────
 // แสดงคำสั่งซื้อ B2B ทั้งฝั่งผู้ซื้อและผู้ขาย
-// Backend: GET /api/v1/parts/orders/:id/ + PATCH /fulfill/ + PATCH /close/
-// R3: happy flow only — dispute/resolve ใน Sub-CMD ต่อไป
+// Sub-CMD-9: ใช้ GET /api/v1/parts/orders/ list endpoint จริง (deferred จาก Sub-8)
+// Backend: listMyOrders + PATCH /fulfill/ + PATCH /close/
+// W3 carry-over: dispute link + rate link
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
-  getPartsOrderDetail,
+  listMyOrders,
   fulfillPartsOrder,
   closePartsOrder,
   ORDER_STATUS_LABEL,
   ORDER_STATUS_COLOR,
 } from "../../../../lib/parts-api";
-import type { PartsOrderDto, PartsOrderDetailDto } from "../../../../lib/parts-api";
+import type { PartsOrderDto } from "../../../../lib/parts-api";
 
-// ── Mock fallback ─────────────────────────────────────────────────────────────
+// ── Mock fallback (ใช้เมื่อ API ล้มเหลวหรือ dev offline) ─────────────────────
 const MOCK_ORDERS: PartsOrderDto[] = [
   {
     id: "ord-mock-0001",
@@ -51,11 +52,27 @@ const MOCK_ORDERS: PartsOrderDto[] = [
     createdAt: "2026-05-12T08:00:00Z",
     updatedAt: "2026-05-13T12:00:00Z",
   },
+  {
+    id: "ord-mock-0003",
+    partId: "part-gggg-hhhh-iiii",
+    buyerId: "usr-buyer-0001",
+    serviceId: null,
+    quantity: 3,
+    unitPriceThb: "1500.00",
+    totalThb: "4500.00",
+    status: "closed",
+    fulfillmentNote: "ส่ง Flash ค่ะ",
+    trackingNumber: "FL9876543210",
+    fulfilledAt: "2026-05-10T12:00:00Z",
+    closedAt: "2026-05-11T09:00:00Z",
+    idempotencyKey: "idem-mock-003",
+    createdAt: "2026-05-09T08:00:00Z",
+    updatedAt: "2026-05-11T09:00:00Z",
+  },
 ];
 
-// ── หมายเหตุ: Sub-CMD-8 ใช้ order IDs ที่รู้อยู่แล้ว (real flow ดึงจาก list API)
-// TODO Sub-CMD-9+: เพิ่ม GET /api/v1/parts/orders/ list endpoint เมื่อ Backend เพิ่ม
-const DEMO_ORDER_IDS = ["ord-mock-0001", "ord-mock-0002"];
+// TODO Sub-CMD-10+: ดึง userId จริงจาก auth context
+const PLACEHOLDER_USER_ID = "usr-weeer-current";
 
 type Tab = "buyer" | "seller";
 
@@ -65,34 +82,41 @@ export default function PartsOrdersPage() {
   const [loading, setLoading]   = useState(true);
   const [actionId, setActionId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [useMock, setUseMock]   = useState(false);
 
-  useEffect(() => {
-    loadOrders();
-  }, []);
-
-  async function loadOrders() {
+  const loadOrders = useCallback(async (currentTab: Tab) => {
     setLoading(true);
     setErrorMsg(null);
     try {
-      // Try to load each demo order from Backend
-      const results = await Promise.allSettled(
-        DEMO_ORDER_IDS.map((id) => getPartsOrderDetail(id))
-      );
-      const loaded = results
-        .filter((r): r is PromiseFulfilledResult<PartsOrderDetailDto> => r.status === "fulfilled")
-        .map((r) => r.value as PartsOrderDto);
-
-      setOrders(loaded.length > 0 ? loaded : MOCK_ORDERS);
+      // Sub-CMD-9: ใช้ list endpoint จริง
+      const params =
+        currentTab === "buyer"
+          ? { buyerId: PLACEHOLDER_USER_ID, limit: 50 }
+          : { sellerId: PLACEHOLDER_USER_ID, limit: 50 };
+      const result = await listMyOrders(params);
+      setOrders(result.items);
+      setUseMock(false);
     } catch {
-      setOrders(MOCK_ORDERS);
+      // fallback to mock data
+      const mockFiltered = MOCK_ORDERS.filter((o) =>
+        currentTab === "buyer"
+          ? o.buyerId === "usr-buyer-0001"
+          : o.buyerId !== "usr-buyer-0001"
+      );
+      setOrders(mockFiltered.length > 0 ? mockFiltered : MOCK_ORDERS);
+      setUseMock(true);
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    void loadOrders(tab);
+  }, [tab, loadOrders]);
 
   async function handleFulfill(orderId: string) {
     const trackingNumber = prompt("กรอก Tracking Number (ถ้ามี):");
-    if (trackingNumber === null) return; // cancelled
+    if (trackingNumber === null) return;
     setActionId(orderId);
     setErrorMsg(null);
     try {
@@ -126,9 +150,6 @@ export default function PartsOrdersPage() {
     }
   }
 
-  // TODO Sub-CMD-9+: filter by buyer/seller when list API available
-  const displayed = orders;
-
   return (
     <div className="space-y-5 max-w-2xl">
       <div className="flex items-center justify-between">
@@ -136,7 +157,7 @@ export default function PartsOrdersPage() {
         <Link href="/parts" className="text-sm text-gray-400 hover:text-gray-600">← คลังอะไหล่</Link>
       </div>
 
-      {/* Tab */}
+      {/* Tabs */}
       <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
         {(["buyer", "seller"] as Tab[]).map((t) => (
           <button
@@ -151,12 +172,12 @@ export default function PartsOrdersPage() {
         ))}
       </div>
 
-      {/* Info note */}
-      <div className="bg-blue-50 rounded-2xl border border-blue-100 p-4 text-xs text-blue-700">
-        <div className="font-semibold text-blue-800 mb-1">⚡ Parts B2B Order Workflow — Sub-CMD-8</div>
-        <div>• ผู้ซื้อสั่งซื้อ → escrow ถือเงิน → ผู้ขายส่งของ → ผู้ซื้อยืนยันรับ → release เงิน</div>
-        <div>• Dispute / Rating ใน Sub-CMD ถัดไป</div>
-      </div>
+      {/* Mock notice */}
+      {useMock && (
+        <div className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+          ⚠️ แสดงข้อมูลตัวอย่าง — ไม่สามารถเชื่อมต่อ Backend ได้
+        </div>
+      )}
 
       {/* Error */}
       {errorMsg && (
@@ -165,24 +186,26 @@ export default function PartsOrdersPage() {
         </div>
       )}
 
-      {/* Orders */}
+      {/* Orders list */}
       {loading ? (
         <div className="p-8 text-center text-sm text-gray-400">กำลังโหลด…</div>
-      ) : displayed.length === 0 ? (
+      ) : orders.length === 0 ? (
         <div className="p-8 text-center space-y-2">
           <div className="text-3xl">🔄</div>
-          <p className="text-sm text-gray-500">ไม่มีคำสั่งซื้อ</p>
+          <p className="text-sm text-gray-500">
+            {tab === "buyer" ? "ไม่มีคำสั่งซื้อของคุณ" : "ไม่มีคำสั่งซื้อที่คุณเป็นผู้ขาย"}
+          </p>
           <Link href="/parts/marketplace" className="text-sm text-green-600 underline">
             เปิดตลาดอะไหล่
           </Link>
         </div>
       ) : (
         <div className="space-y-3">
-          {displayed.map((order) => {
+          {orders.map((order) => {
             const statusLabel = ORDER_STATUS_LABEL[order.status];
             const statusColor = ORDER_STATUS_COLOR[order.status];
             const total = Number(order.totalThb);
-            const unit = Number(order.unitPriceThb);
+            const unit  = Number(order.unitPriceThb);
             const isActing = actionId === order.id;
 
             return (
@@ -222,13 +245,13 @@ export default function PartsOrdersPage() {
                     📦 Tracking: <span className="font-mono font-medium">{order.trackingNumber}</span>
                   </div>
                 )}
-                {order.fulfillmentNote && (
+                {order.fulfillmentNote && !order.trackingNumber && (
                   <div className="text-xs text-gray-500">หมายเหตุ: {order.fulfillmentNote}</div>
                 )}
 
                 {/* Actions */}
-                <div className="flex gap-2 pt-1">
-                  {/* Seller actions */}
+                <div className="flex gap-2 pt-1 flex-wrap">
+                  {/* Seller: ยืนยันส่งของ */}
                   {tab === "seller" && order.status === "held" && (
                     <button
                       onClick={() => void handleFulfill(order.id)}
@@ -238,7 +261,8 @@ export default function PartsOrdersPage() {
                       {isActing ? "กำลังดำเนินการ…" : "📦 ยืนยันส่งของ"}
                     </button>
                   )}
-                  {/* Buyer actions */}
+
+                  {/* Buyer: ยืนยันรับของ */}
                   {tab === "buyer" && order.status === "fulfilled" && (
                     <button
                       onClick={() => void handleClose(order.id)}
@@ -248,7 +272,29 @@ export default function PartsOrdersPage() {
                       {isActing ? "กำลังดำเนินการ…" : "✅ ยืนยันรับของ"}
                     </button>
                   )}
-                  {(order.status === "closed" || order.status === "cancelled" || order.status === "refunded") && (
+
+                  {/* Buyer: dispute link (held/fulfilled) — W3 carry-over */}
+                  {tab === "buyer" && (order.status === "held" || order.status === "fulfilled") && (
+                    <Link
+                      href={`/parts/orders/${order.id}/dispute`}
+                      className="text-xs text-red-500 hover:text-red-700 underline py-2.5 px-2"
+                    >
+                      ⚠️ แจ้งปัญหา
+                    </Link>
+                  )}
+
+                  {/* Buyer: rate link (closed, not yet rated) — W3 carry-over */}
+                  {tab === "buyer" && order.status === "closed" && (
+                    <Link
+                      href={`/parts/orders/${order.id}/rate`}
+                      className="text-xs text-yellow-600 hover:text-yellow-800 underline py-2.5 px-2"
+                    >
+                      ⭐ ให้คะแนน
+                    </Link>
+                  )}
+
+                  {/* Terminal states */}
+                  {(order.status === "cancelled" || order.status === "refunded" || order.status === "resolved") && (
                     <div className="flex-1 text-center text-xs text-gray-400 py-2.5">
                       ดำเนินการเสร็จสิ้น
                     </div>
