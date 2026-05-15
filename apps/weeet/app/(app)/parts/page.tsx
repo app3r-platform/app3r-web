@@ -14,15 +14,16 @@ function MyOrdersChip({ router }: { router: ReturnType<typeof useRouter> }) {
       // ignore
     }
   }, []);
-  if (orderIds.length === 0) return null;
   return (
     <button
       type="button"
-      onClick={() => router.push(`/parts/orders/${orderIds[0]}`)}
+      onClick={() => router.push("/parts/orders")}
       className="w-full flex items-center justify-between bg-blue-900/30 border border-blue-700/40 rounded-xl px-4 py-2.5 text-sm"
     >
-      <span className="text-blue-300 font-medium">📦 ออเดอร์ล่าสุดของฉัน</span>
-      <span className="text-xs text-gray-500">{orderIds.length} รายการ →</span>
+      <span className="text-blue-300 font-medium">📦 ออเดอร์ของฉัน</span>
+      <span className="text-xs text-gray-500">
+        {orderIds.length > 0 ? `${orderIds.length} รายการ` : "ดูทั้งหมด"} →
+      </span>
     </button>
   );
 }

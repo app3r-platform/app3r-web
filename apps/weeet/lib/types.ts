@@ -291,6 +291,14 @@ export interface PartsOrderDetailDto extends PartsOrderDto {
   rating: PartsRatingDto | null;
 }
 
+// Sub-9: Buyer Order List (GET /api/v1/parts/orders/)
+export interface PartsOrderListDto {
+  items: PartsOrderDto[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
 // --- Maintain Module (Phase C-2.1) ---
 export interface MaintainJob {
   id: string;
