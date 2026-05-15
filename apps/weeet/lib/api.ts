@@ -90,7 +90,7 @@ export const pickupApi = {
 };
 
 // --- Parts API (Phase C-2.2) ---
-import type { MaintainJob, Part, PartsOrderDto, PartsOrderDetailDto } from "./types";
+import type { MaintainJob, Part, PartsOrderDto, PartsOrderDetailDto, PartsOrderListDto } from "./types";
 
 export const partsApi = {
   list: () => apiFetch<Part[]>(`${API_BASE}/parts/`),
@@ -153,4 +153,14 @@ export const partsOrdersApi = {
       method: "POST",
       body: JSON.stringify({ score, ...(comment ? { comment } : {}) }),
     }),
+
+  /** GET /api/v1/parts/orders/ — list buyer's orders (Sub-9) */
+  listMyOrders: (params?: { status?: string; limit?: number; offset?: number }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set("status", params.status);
+    if (params?.limit != null) qs.set("limit", String(params.limit));
+    if (params?.offset != null) qs.set("offset", String(params.offset));
+    const query = qs.toString() ? `?${qs.toString()}` : "";
+    return apiFetch<PartsOrderListDto>(`${API_BASE}/parts/orders/${query}`);
+  },
 };
