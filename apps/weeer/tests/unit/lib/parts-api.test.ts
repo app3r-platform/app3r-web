@@ -1,8 +1,9 @@
-// ── parts-api.test.ts — Sub-CMD-8 Wave 3 ─────────────────────────────────────
+// ── parts-api.test.ts — Sub-CMD-8/9 Wave 3 ───────────────────────────────────
 // ทดสอบ parts-api.ts: types aligned กับ Backend PartSchema + PartsOrderDto
 // Coverage: display helpers, listMyParts, createPart, getPart, updatePart,
 //           deletePart, createPartsOrder, getPartsOrderDetail,
-//           fulfillPartsOrder, closePartsOrder
+//           fulfillPartsOrder, closePartsOrder,
+//           listMyOrders, raiseDispute, rateOrder (Sub-CMD-9)
 
 import {
   listMyParts,
@@ -15,12 +16,15 @@ import {
   getPartsOrderDetail,
   fulfillPartsOrder,
   closePartsOrder,
+  listMyOrders,
+  raiseDispute,
+  rateOrder,
   CONDITION_LABEL,
   CONDITION_COLOR,
   ORDER_STATUS_LABEL,
   ORDER_STATUS_COLOR,
 } from "@/lib/parts-api";
-import type { Part, PartsOrderDto, PartsOrderDetailDto } from "@/lib/parts-api";
+import type { Part, PartsOrderDto, PartsOrderDetailDto, PartsOrderListDto, PartsDisputeDto, PartsRatingDto } from "@/lib/parts-api";
 
 // ── Mock api-client ────────────────────────────────────────────────────────────
 jest.mock("@/lib/api-client", () => ({
@@ -441,5 +445,156 @@ describe("closePartsOrder", () => {
   it("throw error เมื่อ 400 (order not in fulfilled state)", async () => {
     mockApiFetch.mockResolvedValue(makeResponse({ detail: "Order not found, not in fulfilled status, or you are not the buyer." }, 400));
     await expect(closePartsOrder("ord-xxx")).rejects.toThrow(/not in fulfilled status/);
+  });
+});
+
+// ── Sub-CMD-9: listMyOrders ───────────────────────────────────────────────────
+
+const MOCK_ORDER_LIST: PartsOrderListDto = {
+  items: [MOCK_ORDER],
+  total: 1,
+  limit: 50,
+  offset: 0,
+};
+
+describe("listMyOrders", () => {
+  beforeEach(() => { mockApiFetch.mockReset(); });
+
+  it("GET /api/v1/parts/orders/ ไม่มี params → ดึง list ทั้งหมด", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse(MOCK_ORDER_LIST));
+
+    const result = await listMyOrders();
+
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      "/api/v1/parts/orders/"
+    );
+    expect(result.items).toHaveLength(1);
+    expect(result.total).toBe(1);
+    expect(result.limit).toBe(50);
+  });
+
+  it("GET /api/v1/parts/orders/?buyerId=xxx — ส่ง query string ถูกต้อง", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse(MOCK_ORDER_LIST));
+
+    await listMyOrders({ buyerId: "usr-buyer-0001" });
+
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      "/api/v1/parts/orders/?buyerId=usr-buyer-0001"
+    );
+  });
+
+  it("GET /api/v1/parts/orders/?sellerId=xxx — ส่ง sellerId ถูกต้อง", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse(MOCK_ORDER_LIST));
+
+    await listMyOrders({ sellerId: "usr-seller-0001" });
+
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      expect.stringContaining("sellerId=usr-seller-0001")
+    );
+  });
+
+  it("รองรับ status filter", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse({ ...MOCK_ORDER_LIST, items: [] }));
+
+    await listMyOrders({ status: "held", limit: 10, offset: 0 });
+
+    const calledUrl = mockApiFetch.mock.calls[0][0] as string;
+    expect(calledUrl).toContain("status=held");
+    expect(calledUrl).toContain("limit=10");
+    expect(calledUrl).toContain("offset=0");
+  });
+
+  it("throw error เมื่อ API ล้มเหลว", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse({}, 401));
+    await expect(listMyOrders()).rejects.toThrow(/โหลดคำสั่งซื้อล้มเหลว/);
+  });
+});
+
+// ── Sub-CMD-9: raiseDispute ───────────────────────────────────────────────────
+
+const MOCK_DISPUTE: PartsDisputeDto = {
+  id: "disp-001",
+  orderId: "ord-dddd-eeee-ffff",
+  raisedBy: "usr-buyer-0001",
+  reason: "สินค้าไม่ตรงตามที่สั่ง ขอเปิด dispute",
+  status: "open",
+  resolution: null,
+  resolvedBy: null,
+  createdAt: "2026-05-15T10:00:00Z",
+  resolvedAt: null,
+};
+
+describe("raiseDispute", () => {
+  beforeEach(() => { mockApiFetch.mockReset(); });
+
+  it("POST /api/v1/parts/orders/:id/dispute/ — แจ้งปัญหาสำเร็จ", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse(MOCK_DISPUTE, 201));
+
+    const result = await raiseDispute("ord-dddd-eeee-ffff", "สินค้าไม่ตรงตามที่สั่ง ขอเปิด dispute");
+
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      "/api/v1/parts/orders/ord-dddd-eeee-ffff/dispute/",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ reason: "สินค้าไม่ตรงตามที่สั่ง ขอเปิด dispute" }),
+      })
+    );
+    expect(result.status).toBe("open");
+    expect(result.orderId).toBe("ord-dddd-eeee-ffff");
+  });
+
+  it("throw error เมื่อ order ไม่ใช่สถานะ held/fulfilled (400)", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse({}, 400));
+    await expect(raiseDispute("ord-xxx", "reason ยาวพอแล้ว")).rejects.toThrow(/แจ้งปัญหาล้มเหลว/);
+  });
+});
+
+// ── Sub-CMD-9: rateOrder ──────────────────────────────────────────────────────
+
+const MOCK_RATING: PartsRatingDto = {
+  id: "rate-001",
+  orderId: "ord-dddd-eeee-ffff",
+  ratedBy: "usr-buyer-0001",
+  sellerId: "usr-seller-0001",
+  score: 5,
+  comment: "ส่งเร็ว สินค้าดีมาก",
+  createdAt: "2026-05-15T12:00:00Z",
+};
+
+describe("rateOrder", () => {
+  beforeEach(() => { mockApiFetch.mockReset(); });
+
+  it("POST /api/v1/parts/orders/:id/rate/ — ให้คะแนน 5 ดาว + comment", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse(MOCK_RATING, 201));
+
+    const result = await rateOrder("ord-dddd-eeee-ffff", 5, "ส่งเร็ว สินค้าดีมาก");
+
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      "/api/v1/parts/orders/ord-dddd-eeee-ffff/rate/",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ score: 5, comment: "ส่งเร็ว สินค้าดีมาก" }),
+      })
+    );
+    expect(result.score).toBe(5);
+    expect(result.comment).toBe("ส่งเร็ว สินค้าดีมาก");
+  });
+
+  it("POST ไม่มี comment — body ส่งแค่ score", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse({ ...MOCK_RATING, comment: null }, 201));
+
+    await rateOrder("ord-dddd-eeee-ffff", 3);
+
+    expect(mockApiFetch).toHaveBeenCalledWith(
+      "/api/v1/parts/orders/ord-dddd-eeee-ffff/rate/",
+      expect.objectContaining({
+        body: JSON.stringify({ score: 3 }),
+      })
+    );
+  });
+
+  it("throw error เมื่อ order ไม่ได้ปิด (400)", async () => {
+    mockApiFetch.mockResolvedValue(makeResponse({}, 400));
+    await expect(rateOrder("ord-xxx", 4)).rejects.toThrow(/ให้คะแนนล้มเหลว/);
   });
 });

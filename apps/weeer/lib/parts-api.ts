@@ -355,3 +355,79 @@ export async function closePartsOrder(id: string): Promise<PartsOrderDto> {
   }
   return res.json() as Promise<PartsOrderDto>;
 }
+
+// ── Sub-CMD-9 additions ────────────────────────────────────────────────────────
+
+/** Paginated list response — Backend Sub-9 GET /api/v1/parts/orders/ */
+export interface PartsOrderListDto {
+  items: PartsOrderDto[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+/**
+ * GET /api/v1/parts/orders/ — list orders (buyer/seller, filter by status)
+ * Sub-CMD-9: Backend deferred from Sub-8, now implemented
+ */
+export async function listMyOrders(params?: {
+  buyerId?: string;
+  sellerId?: string;
+  status?: PartsOrderStatus;
+  limit?: number;
+  offset?: number;
+}): Promise<PartsOrderListDto> {
+  const qs = new URLSearchParams();
+  if (params?.buyerId)  qs.set("buyerId",  params.buyerId);
+  if (params?.sellerId) qs.set("sellerId", params.sellerId);
+  if (params?.status)   qs.set("status",   params.status);
+  if (params?.limit  != null) qs.set("limit",  String(params.limit));
+  if (params?.offset != null) qs.set("offset", String(params.offset));
+
+  const url = `/api/v1/parts/orders/${qs.toString() ? `?${qs.toString()}` : ""}`;
+  const res = await apiFetch(url);
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({})) as { detail?: string };
+    throw new Error(data.detail ?? `โหลดคำสั่งซื้อล้มเหลว (HTTP ${res.status})`);
+  }
+  return res.json() as Promise<PartsOrderListDto>;
+}
+
+/**
+ * POST /api/v1/parts/orders/:id/dispute/ — buyer แจ้งปัญหา
+ * Sub-CMD-9 carry-over: Dispute UI
+ */
+export async function raiseDispute(
+  id: string,
+  reason: string,
+): Promise<PartsDisputeDto> {
+  const res = await apiFetch(`/api/v1/parts/orders/${encodeURIComponent(id)}/dispute/`, {
+    method: "POST",
+    body: JSON.stringify({ reason }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({})) as { detail?: string };
+    throw new Error(data.detail ?? `แจ้งปัญหาล้มเหลว (HTTP ${res.status})`);
+  }
+  return res.json() as Promise<PartsDisputeDto>;
+}
+
+/**
+ * POST /api/v1/parts/orders/:id/rate/ — buyer ให้คะแนน seller
+ * Sub-CMD-9 carry-over: Rating UI
+ */
+export async function rateOrder(
+  id: string,
+  score: number,
+  comment?: string,
+): Promise<PartsRatingDto> {
+  const res = await apiFetch(`/api/v1/parts/orders/${encodeURIComponent(id)}/rate/`, {
+    method: "POST",
+    body: JSON.stringify({ score, ...(comment ? { comment } : {}) }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({})) as { detail?: string };
+    throw new Error(data.detail ?? `ให้คะแนนล้มเหลว (HTTP ${res.status})`);
+  }
+  return res.json() as Promise<PartsRatingDto>;
+}
