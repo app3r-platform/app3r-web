@@ -1,0 +1,112 @@
+name: Playwright E2E Tests (Sub-CMD-9)
+
+# ⚠️ W4: Backend = sole owner of this file — FE chats ห้ามแตะ
+# ⚠️ W5: E2E retry max 2 — fail ซ้ำ = block merge (retries: 2 in playwright.config.ts)
+
+on:
+  push:
+    branches: [main, 'sub-*']
+    paths:
+      - 'apps/backend/**'
+      - 'e2e/**'
+      - 'playwright.config.ts'
+      - '.github/workflows/playwright-tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/backend/**'
+      - 'e2e/**'
+      - 'playwright.config.ts'
+
+jobs:
+  e2e:
+    name: Playwright E2E (API smoke tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: app3r
+          POSTGRES_PASSWORD: app3r_test
+          POSTGRES_DB: app3r_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U app3r"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://app3r:app3r_test@localhost:5432/app3r_test
+      JWT_SECRET: test-jwt-secret-at-least-32-characters-long
+      NODE_ENV: test
+      PORT: 8787
+      API_BASE_URL: http://localhost:8787
+      # SDK placeholder vars (unit tests mock these)
+      R2_ENDPOINT: https://placeholder.r2.cloudflarestorage.com
+      R2_ACCESS_KEY_ID: placeholder-key
+      R2_SECRET_ACCESS_KEY: placeholder-secret
+      R2_BUCKET: app3r-test
+      MAPS_API_KEY: placeholder-maps-key
+      RESEND_API_KEY: re_placeholder
+      TWILIO_SMS_FROM: "+66000000000"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright (no browser — API tests only)
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run DB migrations
+        working-directory: apps/backend
+        run: pnpm db:migrate:all
+
+      - name: Start backend server (background)
+        working-directory: apps/backend
+        run: pnpm dev &
+        env:
+          PORT: 8787
+
+      - name: Wait for backend to be ready
+        run: |
+          echo "Waiting for backend on port 8787..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8787/health > /dev/null 2>&1; then
+              echo "Backend is up!"
+              break
+            fi
+            echo "Attempt $i/30..."
+            sleep 2
+          done
+
+      - name: Run Playwright E2E tests
+        run: pnpm exec playwright test
+        env:
+          CI: true
+          API_BASE_URL: http://localhost:8787
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

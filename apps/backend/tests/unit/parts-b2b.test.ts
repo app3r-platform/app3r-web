@@ -51,6 +51,7 @@ vi.mock('../../src/dal/parts-b2b', () => ({
   raiseDispute: vi.fn(),
   resolveDispute: vi.fn(),
   rateOrder: vi.fn(),
+  listPartsOrders: vi.fn(),
   mapOrderToDto: vi.fn((row) => ({
     id: row.id,
     partId: row.partId,
@@ -113,6 +114,7 @@ import type {
   PartsOrderEventDto,
   PartsDisputeDto,
   PartsRatingDto,
+  PartsOrderListDto,
   PartsOrderStatus,
   PartsOrderEventType,
   PartsDisputeStatus,
@@ -511,6 +513,161 @@ describe('DAL — rateOrder()', () => {
     vi.mocked(dal.rateOrder).mockResolvedValueOnce(null)
     const result = await dal.rateOrder('order-uuid-001', 'buyer-001', 4)
     expect(result).toBeNull()
+  })
+})
+
+// ── DAL — listPartsOrders() (Sub-CMD-9) ───────────────────────────────────────
+describe('DAL — listPartsOrders()', () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it('returns paginated list with default limit/offset', async () => {
+    const listResult: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(listResult)
+    const result = await dal.listPartsOrders({})
+    expect(result.items).toHaveLength(1)
+    expect(result.total).toBe(1)
+    expect(result.limit).toBe(20)
+    expect(result.offset).toBe(0)
+  })
+
+  it('returns empty list when no orders match filter', async () => {
+    const listResult: PartsOrderListDto = { items: [], total: 0, limit: 20, offset: 0 }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(listResult)
+    const result = await dal.listPartsOrders({ buyerId: 'nonexistent-buyer' })
+    expect(result.items).toHaveLength(0)
+    expect(result.total).toBe(0)
+  })
+
+  it('filters by status correctly', async () => {
+    const heldOrder = { ...sampleOrderDto, status: 'held' as PartsOrderStatus }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce({
+      items: [heldOrder], total: 1, limit: 20, offset: 0,
+    })
+    const result = await dal.listPartsOrders({ status: 'held' })
+    expect(result.items[0].status).toBe('held')
+  })
+
+  it('respects custom limit and offset', async () => {
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce({
+      items: [], total: 50, limit: 5, offset: 10,
+    })
+    const result = await dal.listPartsOrders({ limit: 5, offset: 10 })
+    expect(result.limit).toBe(5)
+    expect(result.offset).toBe(10)
+    expect(result.total).toBe(50)
+  })
+
+  it('returns empty list when sellerId has no parts', async () => {
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce({
+      items: [], total: 0, limit: 20, offset: 0,
+    })
+    const result = await dal.listPartsOrders({ sellerId: 'seller-no-parts' })
+    expect(result.items).toHaveLength(0)
+  })
+})
+
+// ── Route — GET / list orders (Sub-CMD-9) ─────────────────────────────────────
+import { app } from '../../src/app'
+
+describe('Route — GET /api/v1/parts/orders/ (Sub-CMD-9 list endpoint)', () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it('returns 401 when no Authorization header', async () => {
+    const res = await app.request('/api/v1/parts/orders/')
+    expect(res.status).toBe(401)
+    const body = await res.json() as { detail: string }
+    expect(body.detail).toContain('Authentication')
+  })
+
+  it('returns 200 with pagination shape on authenticated request', async () => {
+    const listResult: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce(listResult)
+
+    const res = await app.request('/api/v1/parts/orders/', {
+      headers: { Authorization: 'Bearer valid-token' },
+    })
+    expect(res.status).toBe(200)
+    const body = await res.json() as PartsOrderListDto
+    expect(body).toHaveProperty('items')
+    expect(body).toHaveProperty('total')
+    expect(body).toHaveProperty('limit')
+    expect(body).toHaveProperty('offset')
+    expect(Array.isArray(body.items)).toBe(true)
+  })
+
+  it('passes buyerId filter to DAL', async () => {
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce({
+      items: [], total: 0, limit: 20, offset: 0,
+    })
+    const buyerId = 'buyer-filter-001'
+    // Use a valid UUID for the buyerId query param
+    const validUuid = '00000000-0000-0000-0000-000000000001'
+    const res = await app.request(`/api/v1/parts/orders/?buyerId=${validUuid}`, {
+      headers: { Authorization: 'Bearer valid-token' },
+    })
+    expect(res.status).toBe(200)
+  })
+
+  it('passes status filter to DAL', async () => {
+    vi.mocked(dal.listPartsOrders).mockResolvedValueOnce({
+      items: [], total: 0, limit: 20, offset: 0,
+    })
+    const res = await app.request('/api/v1/parts/orders/?status=fulfilled', {
+      headers: { Authorization: 'Bearer valid-token' },
+    })
+    expect(res.status).toBe(200)
+  })
+
+  it('returns 400 for invalid status value', async () => {
+    const res = await app.request('/api/v1/parts/orders/?status=invalid-status', {
+      headers: { Authorization: 'Bearer valid-token' },
+    })
+    expect([400, 422]).toContain(res.status)
+  })
+})
+
+// ── Types — PartsOrderListDto shape (Sub-CMD-9) ───────────────────────────────
+describe('PartsOrderListDto — type shape (Sub-CMD-9)', () => {
+  it('has required pagination fields', () => {
+    const listDto: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    expect(listDto).toHaveProperty('items')
+    expect(listDto).toHaveProperty('total')
+    expect(listDto).toHaveProperty('limit')
+    expect(listDto).toHaveProperty('offset')
+    expect(Array.isArray(listDto.items)).toBe(true)
+  })
+
+  it('items are PartsOrderDto instances', () => {
+    const listDto: PartsOrderListDto = {
+      items: [sampleOrderDto],
+      total: 1,
+      limit: 20,
+      offset: 0,
+    }
+    const item = listDto.items[0]
+    expect(item).toHaveProperty('id')
+    expect(item).toHaveProperty('status')
+    expect(item).toHaveProperty('buyerId')
+  })
+
+  it('limit is capped at reasonable value', () => {
+    const listDto: PartsOrderListDto = { items: [], total: 0, limit: 100, offset: 0 }
+    expect(listDto.limit).toBeLessThanOrEqual(100)
   })
 })
 

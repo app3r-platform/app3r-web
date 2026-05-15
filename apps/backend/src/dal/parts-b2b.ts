@@ -16,7 +16,7 @@ import { db } from '../db/client'
 import { partsOrders } from '../db/schema/parts-orders'
 import { partsInventory } from '../db/schema/parts-inventory'
 import { partsOrderEvents, partsDisputes, partsRatings } from '../db/schema/parts-b2b'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, desc, sql } from 'drizzle-orm'
 import type {
   PartsOrderDto,
   PartsOrderDetailDto,
@@ -25,6 +25,7 @@ import type {
   PartsRatingDto,
   PartsOrderStatus,
   PartsOrderEventType,
+  PartsOrderListDto,
 } from '../types/parts-b2b'
 
 // ── Mappers ───────────────────────────────────────────────────────────────────
@@ -333,6 +334,61 @@ export async function resolveDispute(
   })
 
   return mapDisputeToDto(updatedDispute)
+}
+
+// ── List orders (filter by buyer / seller / status, paginated) ────────────────
+export async function listPartsOrders(filters: {
+  buyerId?: string
+  sellerId?: string
+  status?: PartsOrderStatus
+  limit?: number
+  offset?: number
+}): Promise<PartsOrderListDto> {
+  const limit = Math.min(filters.limit ?? 20, 100)
+  const offset = filters.offset ?? 0
+
+  // Build WHERE conditions dynamically
+  const conditions: ReturnType<typeof eq>[] = []
+  if (filters.buyerId) conditions.push(eq(partsOrders.buyerId, filters.buyerId))
+  if (filters.status) conditions.push(eq(partsOrders.status, filters.status))
+
+  // sellerId filter requires joining parts_inventory.owner_id
+  if (filters.sellerId) {
+    // subquery: orderId in (SELECT id FROM parts_orders JOIN parts_inventory ON part_id = parts_inventory.id WHERE owner_id = sellerId)
+    const sellerPartIds = await db
+      .select({ id: partsInventory.id })
+      .from(partsInventory)
+      .where(eq(partsInventory.ownerId, filters.sellerId))
+
+    const partIds = sellerPartIds.map((r) => r.id)
+    if (partIds.length === 0) {
+      return { items: [], total: 0, limit, offset }
+    }
+    conditions.push(sql`${partsOrders.partId} = ANY(${sql.raw(`ARRAY[${partIds.map((id) => `'${id}'`).join(',')}]::uuid[]`)})`)
+  }
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+  const [rows, countResult] = await Promise.all([
+    db
+      .select()
+      .from(partsOrders)
+      .where(whereClause)
+      .orderBy(desc(partsOrders.createdAt))
+      .limit(limit)
+      .offset(offset),
+    db
+      .select({ count: sql<string>`COUNT(*)` })
+      .from(partsOrders)
+      .where(whereClause),
+  ])
+
+  return {
+    items: rows.map(mapOrderToDto),
+    total: parseInt(countResult[0]?.count ?? '0', 10),
+    limit,
+    offset,
+  }
 }
 
 // ── Rate order (buyer rates seller after close) ───────────────────────────────

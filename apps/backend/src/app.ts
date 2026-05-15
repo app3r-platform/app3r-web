@@ -66,6 +66,13 @@ app.route('/api/v1/location', locationRouter)
 // D90 NOTE-D90-1: Services stub CRUD
 app.route('/api/v1/services', servicesRouter)
 
+// Sub-CMD-8: Parts B2B Marketplace (Wave 3) — registered BEFORE partsRouter
+// Mounted at BOTH paths: with and without trailing slash to fix Hono trie routing.
+// Without this, GET /api/v1/parts/orders/ falls through to partsRouter's GET /:id/
+// and fails UUID validation (id='orders').
+app.route('/api/v1/parts/orders', partsOrdersRouter)
+app.route('/api/v1/parts/orders/', partsOrdersRouter)
+
 // NOTE-SUB4: Parts inventory + orders (escrow)
 app.route('/api/v1/parts', partsRouter)
 
@@ -80,9 +87,6 @@ app.route('/api/v1/settlements', settlementsRouter)
 
 // Sub-CMD-7: Reconciliation Worker (Wave 2)
 app.route('/api/v1/reconciliation', reconciliationRouter)
-
-// Sub-CMD-8: Parts B2B Marketplace (Wave 3)
-app.route('/api/v1/parts/orders', partsOrdersRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)

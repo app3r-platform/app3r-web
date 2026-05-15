@@ -26,6 +26,7 @@ import {
   raiseDispute,
   resolveDispute,
   rateOrder,
+  listPartsOrders,
 } from '../dal/parts-b2b'
 
 export const partsOrdersRouter = new OpenAPIHono()
@@ -96,6 +97,89 @@ const OrderDetailSchema = OrderSchema.extend({
   events: z.array(OrderEventSchema),
   dispute: DisputeSchema.nullable(),
   rating: RatingSchema.nullable(),
+})
+
+// ── GET / — list B2B orders (deferred Sub-CMD-8, implemented Sub-CMD-9) ───────
+// Note: query params parsed manually to avoid Hono OpenAPI coercion edge cases
+const listOrdersRoute = createRoute({
+  method: 'get',
+  path: '/',
+  tags: ['Parts B2B'],
+  summary: 'List B2B parts orders (filter by buyer/seller/status, paginated)',
+  security: [{ bearerAuth: [] }],
+  request: {
+    query: z.object({
+      buyerId: z.string().optional(),
+      sellerId: z.string().optional(),
+      status: z.string().optional(),
+      limit: z.string().optional(),
+      offset: z.string().optional(),
+    }),
+  },
+  responses: {
+    200: {
+      description: 'Paginated list of B2B orders',
+      content: {
+        'application/json': {
+          schema: z.object({
+            items: z.array(OrderSchema),
+            total: z.number(),
+            limit: z.number(),
+            offset: z.number(),
+          }),
+        },
+      },
+    },
+    401: { description: 'Unauthorized' },
+  },
+})
+
+partsOrdersRouter.openapi(listOrdersRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+
+  const q = c.req.valid('query')
+
+  // Validate status enum manually
+  const VALID_STATUSES = ['pending', 'held', 'fulfilled', 'closed', 'disputed', 'resolved', 'refunded', 'cancelled']
+  if (q.status && !VALID_STATUSES.includes(q.status)) {
+    return c.json(err(`Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`), 400)
+  }
+
+  const result = await listPartsOrders({
+    buyerId: q.buyerId,
+    sellerId: q.sellerId,
+    status: q.status as any,
+    limit: q.limit ? Math.min(parseInt(q.limit, 10) || 20, 100) : 20,
+    offset: q.offset ? (parseInt(q.offset, 10) || 0) : 0,
+  })
+
+  return c.json(result, 200)
+})
+
+// Trailing-slash alias: ensure GET /api/v1/parts/orders/ works the same as GET /api/v1/parts/orders
+// Hono's prefix matching can fall through to partsRouter's GET /:id/ for the trailing slash case
+// This explicit handler anchors the route at both paths
+partsOrdersRouter.get('/', async (c) => {
+  const auth = c.req.header('Authorization')
+  const user = auth?.startsWith('Bearer ')
+    ? await verifyAccessToken(auth.slice(7)).catch(() => null)
+    : null
+  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+
+  const q = c.req.query()
+  const VALID_STATUSES = ['pending', 'held', 'fulfilled', 'closed', 'disputed', 'resolved', 'refunded', 'cancelled']
+  if (q['status'] && !VALID_STATUSES.includes(q['status']!)) {
+    return c.json(err(`Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`), 400)
+  }
+  const result = await listPartsOrders({
+    buyerId: q['buyerId'],
+    sellerId: q['sellerId'],
+    status: q['status'] as any,
+    limit: q['limit'] ? Math.min(parseInt(q['limit']!, 10) || 20, 100) : 20,
+    offset: q['offset'] ? (parseInt(q['offset']!, 10) || 0) : 0,
+  })
+  return c.json(result, 200)
 })
 
 // ── POST / — create B2B order ─────────────────────────────────────────────────
