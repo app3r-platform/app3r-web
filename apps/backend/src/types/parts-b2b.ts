@@ -102,6 +102,14 @@ export interface PartsRatingDto {
   createdAt: string
 }
 
+// ── Order List (GET /orders/) ─────────────────────────────────────────────────
+export interface PartsOrderListDto {
+  items: PartsOrderDto[]
+  total: number
+  limit: number
+  offset: number
+}
+
 // ── Create Order Input (POST /orders) ────────────────────────────────────────
 export interface CreatePartsOrderInput {
   partId: string
@@ -131,4 +139,12 @@ export interface ResolveDisputeInput {
 export interface RateOrderInput {
   score: number    // 1–5
   comment?: string
+}
+
+// ── List DTO (GET /orders?...) ────────────────────────────────────────────────
+export interface PartsOrderListDto {
+  items: PartsOrderDto[]
+  total: number
+  limit: number
+  offset: number
 }

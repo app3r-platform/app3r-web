@@ -68,7 +68,7 @@ jobs:
 
       - name: Run DB migrations
         working-directory: apps/backend
-        run: pnpm db:migrate
+        run: pnpm db:migrate:all
 
       - name: Run tests with coverage
         working-directory: apps/backend
@@ -132,7 +132,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - working-directory: apps/backend
-        run: pnpm db:migrate
+        run: pnpm db:migrate:all
       - name: Run sandbox smoke tests
         working-directory: apps/backend
         run: pnpm vitest run tests/sandbox/

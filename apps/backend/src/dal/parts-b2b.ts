@@ -16,7 +16,7 @@ import { db } from '../db/client'
 import { partsOrders } from '../db/schema/parts-orders'
 import { partsInventory } from '../db/schema/parts-inventory'
 import { partsOrderEvents, partsDisputes, partsRatings } from '../db/schema/parts-b2b'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, desc, sql, inArray } from 'drizzle-orm'
 import type {
   PartsOrderDto,
   PartsOrderDetailDto,
@@ -25,6 +25,7 @@ import type {
   PartsRatingDto,
   PartsOrderStatus,
   PartsOrderEventType,
+  PartsOrderListDto,
 } from '../types/parts-b2b'
 
 // ── Mappers ───────────────────────────────────────────────────────────────────
@@ -333,6 +334,58 @@ export async function resolveDispute(
   })
 
   return mapDisputeToDto(updatedDispute)
+}
+
+// ── List orders with pagination + filters ────────────────────────────────────
+export async function listPartsOrders(filters: {
+  buyerId?: string
+  sellerId?: string
+  status?: PartsOrderStatus
+  limit?: number
+  offset?: number
+}): Promise<PartsOrderListDto> {
+  const limit = Math.min(filters.limit ?? 20, 100)
+  const offset = filters.offset ?? 0
+
+  // Build WHERE conditions
+  const conditions = []
+  if (filters.buyerId) conditions.push(eq(partsOrders.buyerId, filters.buyerId))
+  if (filters.status) conditions.push(eq(partsOrders.status, filters.status as string))
+
+  // sellerId requires lookup into parts_inventory first (safe inArray — no SQL injection)
+  if (filters.sellerId) {
+    const sellerParts = await db
+      .select({ id: partsInventory.id })
+      .from(partsInventory)
+      .where(eq(partsInventory.ownerId, filters.sellerId))
+    const partIds = sellerParts.map((p) => p.id)
+    if (partIds.length === 0) {
+      return { items: [], total: 0, limit, offset }
+    }
+    conditions.push(inArray(partsOrders.partId, partIds))
+  }
+
+  const where = conditions.length > 0 ? and(...conditions) : undefined
+
+  const [countRow] = await db
+    .select({ count: sql<string>`count(*)` })
+    .from(partsOrders)
+    .where(where)
+
+  const rows = await db
+    .select()
+    .from(partsOrders)
+    .where(where)
+    .orderBy(desc(partsOrders.createdAt))
+    .limit(limit)
+    .offset(offset)
+
+  return {
+    items: rows.map(mapOrderToDto),
+    total: parseInt(countRow?.count ?? '0', 10),
+    limit,
+    offset,
+  }
 }
 
 // ── Rate order (buyer rates seller after close) ───────────────────────────────
