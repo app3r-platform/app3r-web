@@ -93,6 +93,7 @@ vi.mock('../../src/lib/r2', () => ({
 import { db } from '../../src/db/client'
 import * as contentService from '../../src/services/content-service'
 import { previewTokenMap } from '../../src/services/content-service'
+import { verifyAccessToken } from '../../src/lib/jwt'
 import type {
   ContentPageDto,
   ContentPageDetailDto,
@@ -762,6 +763,87 @@ describe('HTTP routes — POST /api/admin/content/:id/preview (Rule #3)', () => 
       headers: { Authorization: 'Bearer valid-token' },
     })
     expect(res.status).toBe(404)
+  })
+})
+
+// ── HTTP Routes: S5 — Role check (non-admin → 403) ────────────────────────────
+describe('HTTP routes — S5 Role check: non-admin role → 403 (all 7 admin endpoints)', () => {
+  const nonAdminUser = { userId: AUTHOR_ID, role: 'weeer' }
+
+  it('GET /api/admin/content/ returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const { app } = await import('../../src/app')
+    const res = await app.request('/api/admin/content/', {
+      method: 'GET',
+      headers: { Authorization: 'Bearer non-admin-token' },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('POST /api/admin/content/ returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const { app } = await import('../../src/app')
+    const res = await app.request('/api/admin/content/', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer non-admin-token', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: 'test-role-check', type: 'hero', title: 'Test', body: {} }),
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('PUT /api/admin/content/:id returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const { app } = await import('../../src/app')
+    const res = await app.request(`/api/admin/content/${PAGE_ID}`, {
+      method: 'PUT',
+      headers: { Authorization: 'Bearer non-admin-token', 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('DELETE /api/admin/content/:id returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const { app } = await import('../../src/app')
+    const res = await app.request(`/api/admin/content/${PAGE_ID}`, {
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer non-admin-token' },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('POST /api/admin/content/:id/publish returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const { app } = await import('../../src/app')
+    const res = await app.request(`/api/admin/content/${PAGE_ID}/publish`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer non-admin-token' },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('POST /api/admin/content/:id/preview returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const { app } = await import('../../src/app')
+    const res = await app.request(`/api/admin/content/${PAGE_ID}/preview`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer non-admin-token' },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('POST /api/admin/content/upload-image returns 403 for non-admin', async () => {
+    vi.mocked(verifyAccessToken).mockResolvedValueOnce(nonAdminUser)
+    const formData = new FormData()
+    formData.append('file', new Blob(['data'], { type: 'image/jpeg' }), 'test.jpg')
+    formData.append('contentPageId', PAGE_ID)
+    const { app } = await import('../../src/app')
+    const res = await app.request('/api/admin/content/upload-image', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer non-admin-token' },
+      body: formData,
+    })
+    expect(res.status).toBe(403)
   })
 })
 

@@ -70,12 +70,14 @@ const listAllRoute = createRoute({
       content: { 'application/json': { schema: z.array(PageDtoSchema) } },
     },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
   },
 })
 
 contentAdminRouter.openapi(listAllRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
   const pages = await listAllPages()
   return c.json(pages, 200)
 })
@@ -107,6 +109,7 @@ const createRoute_ = createRoute({
       content: { 'application/json': { schema: PageDtoSchema } },
     },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
     409: { description: 'Slug conflict' },
   },
 })
@@ -114,6 +117,7 @@ const createRoute_ = createRoute({
 contentAdminRouter.openapi(createRoute_, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
   const input = c.req.valid('json')
   const result = await createPage(user.userId, input)
   if (result === 'conflict') return c.json(err('Slug already exists.'), 409)
@@ -147,6 +151,7 @@ const updateRoute_ = createRoute({
       content: { 'application/json': { schema: PageDtoSchema } },
     },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
     404: { description: 'Not found' },
   },
 })
@@ -154,6 +159,7 @@ const updateRoute_ = createRoute({
 contentAdminRouter.openapi(updateRoute_, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
   const { id } = c.req.valid('param')
   const input = c.req.valid('json')
   const result = await updatePage(id, input)
@@ -174,6 +180,7 @@ const deleteRoute_ = createRoute({
   responses: {
     204: { description: 'Deleted' },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
     404: { description: 'Not found' },
     409: { description: 'Cannot delete published page' },
   },
@@ -182,6 +189,7 @@ const deleteRoute_ = createRoute({
 contentAdminRouter.openapi(deleteRoute_, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
   const { id } = c.req.valid('param')
   const result = await deletePage(id)
   if (result === 'not_found') return c.json(err('Not found.'), 404)
@@ -205,6 +213,7 @@ const publishRoute_ = createRoute({
       content: { 'application/json': { schema: PageDtoSchema } },
     },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
     404: { description: 'Not found' },
   },
 })
@@ -212,6 +221,7 @@ const publishRoute_ = createRoute({
 contentAdminRouter.openapi(publishRoute_, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
   const { id } = c.req.valid('param')
   const result = await publishPage(id)
   if (!result) return c.json(err('Not found.'), 404)
@@ -242,6 +252,7 @@ const previewRoute_ = createRoute({
       },
     },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
     404: { description: 'Not found' },
   },
 })
@@ -249,6 +260,7 @@ const previewRoute_ = createRoute({
 contentAdminRouter.openapi(previewRoute_, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
   const { id } = c.req.valid('param')
   const result = await createPreviewToken(id)
   if (!result) return c.json(err('Not found.'), 404)
@@ -297,6 +309,7 @@ const uploadImageRoute = createRoute({
     },
     400: { description: 'Missing file or invalid data' },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden (insufficient role)' },
     404: { description: 'Content page not found' },
   },
 })
@@ -307,6 +320,7 @@ const R2_PUBLIC_BASE = process.env.R2_PUBLIC_BASE_URL ?? 'https://cdn.app3r.com'
 contentAdminRouter.openapi(uploadImageRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+  if (user.role !== 'admin') return c.json(err('Forbidden.'), 403)
 
   const formData = await c.req.formData()
   const file = formData.get('file') as File | null
