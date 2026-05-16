@@ -1,13 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { aboutContent } from '@/lib/content/about';
+import { getAboutContent } from '@/lib/content-api';
+
+export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
 
 export const metadata: Metadata = {
   title: 'เกี่ยวกับเรา — App3R',
   description: 'App3R คือแพลตฟอร์มตัวกลางด้านเครื่องใช้ไฟฟ้าครบวงจรแห่งแรกในไทย เชื่อมต่อผู้ใช้งาน ร้านซ่อม และช่างมืออาชีพ',
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // ดึง about content จาก CMS — fallback → static ถ้า API ไม่ตอบสนอง
+  const aboutContent = await getAboutContent();
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* Breadcrumb */}

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { faqItems } from '@/lib/content/faq';
+import { getFaqItems } from '@/lib/content-api';
 import type { FAQItem } from '@/lib/content/types';
+
+export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
 
 export const metadata: Metadata = {
   title: 'คำถามที่พบบ่อย — App3R',
@@ -19,9 +21,12 @@ const categoryLabels: Record<FAQItem['category'], string> = {
 
 const categoryOrder: FAQItem['category'][] = ['general', 'weeeu', 'weeer', 'weeet', 'payment', 'service'];
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  // ดึง FAQ items จาก CMS — fallback → static ถ้า API ไม่ตอบสนอง
+  const items = await getFaqItems();
+
   const grouped = categoryOrder.reduce<Record<string, FAQItem[]>>((acc, cat) => {
-    acc[cat] = faqItems.filter((f) => f.category === cat).sort((a, b) => a.order - b.order);
+    acc[cat] = items.filter((f) => f.category === cat).sort((a, b) => a.order - b.order);
     return acc;
   }, {});
 
@@ -53,8 +58,8 @@ export default function FAQPage() {
       {/* FAQ Sections */}
       <div className="space-y-10">
         {categoryOrder.map((cat) => {
-          const items = grouped[cat];
-          if (!items || items.length === 0) return null;
+          const catItems = grouped[cat];
+          if (!catItems || catItems.length === 0) return null;
           return (
             <section key={cat} id={cat}>
               <h2 className="text-lg font-bold text-purple-700 mb-4 flex items-center gap-2">
@@ -62,7 +67,7 @@ export default function FAQPage() {
                 {categoryLabels[cat]}
               </h2>
               <div className="space-y-3">
-                {items.map((item) => (
+                {catItems.map((item) => (
                   <details
                     key={item.id}
                     className="bg-white border border-gray-200 rounded-xl overflow-hidden group"
