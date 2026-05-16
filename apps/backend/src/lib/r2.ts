@@ -26,6 +26,7 @@ export interface FileStorageAdapter {
   presignPut(r2Key: string, mimeType: string, expiresIn?: number): Promise<PresignPutResult>
   presignGet(r2Key: string, expiresIn?: number): Promise<string>
   delete(r2Key: string): Promise<void>
+  putObject(r2Key: string, body: Uint8Array | Buffer, contentType: string): Promise<void>
 }
 
 // ---------------------------------------------------------------------------
@@ -73,6 +74,11 @@ export const r2Adapter: FileStorageAdapter = {
   async delete(r2Key: string): Promise<void> {
     const client = getR2Client()
     await client.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: r2Key }))
+  },
+
+  async putObject(r2Key: string, body: Uint8Array | Buffer, contentType: string): Promise<void> {
+    const client = getR2Client()
+    await client.send(new PutObjectCommand({ Bucket: BUCKET, Key: r2Key, Body: body, ContentType: contentType }))
   },
 }
 

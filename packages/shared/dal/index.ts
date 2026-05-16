@@ -72,3 +72,4 @@ export class NotImplementedError extends Error {
 export type * from './weeeu.types';
 export type * from './weeer.types'; // P4 App3R-WeeeR ✅ merged
 export type * from './weeet.types'; // P5 App3R-WeeeT ✅ merged
+export type * from './content.types'; // Phase D-4 Sub-3: Content CMS

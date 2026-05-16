@@ -26,6 +26,10 @@ import { settlementsRouter } from './routes/settlements'
 import { reconciliationRouter } from './routes/reconciliation'
 import { partsOrdersRouter } from './routes/parts-orders'
 
+// Phase D-4 Sub-3: Content CMS
+import { contentPublicRouter } from './routes/content-public'
+import { contentAdminRouter } from './routes/content-admin'
+
 export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -88,6 +92,14 @@ app.route('/api/v1/settlements', settlementsRouter)
 
 // Sub-CMD-7: Reconciliation Worker (Wave 2)
 app.route('/api/v1/reconciliation', reconciliationRouter)
+
+// Phase D-4 Sub-3: Platform Content CMS
+// HONO-TRIE-FIX: double-mount (with + without trailing slash)
+// upload-image MUST be registered BEFORE /:id routes (HONO-TRIE-FIX order)
+app.route('/api/content', contentPublicRouter)
+app.route('/api/content/', contentPublicRouter)
+app.route('/api/admin/content', contentAdminRouter)
+app.route('/api/admin/content/', contentAdminRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
