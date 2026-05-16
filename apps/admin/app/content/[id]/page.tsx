@@ -19,7 +19,7 @@ const ImageUploader = dynamic(() => import('@/components/cms/ImageUploader'), { 
 
 function getToken(): string {
   if (typeof window === 'undefined') return ''
-  return localStorage.getItem('admin_token') ?? ''
+  return localStorage.getItem('app3r_admin_token') ?? ''  // Bug B fix: align with lib/auth.ts TOKEN_KEY
 }
 
 interface EditContentPageProps {
