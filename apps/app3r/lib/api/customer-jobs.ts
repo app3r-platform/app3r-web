@@ -20,7 +20,10 @@ export function getRepairJobs(filters?: { serviceType?: number; area?: string })
   if (filters?.area) {
     jobs = jobs.filter((j) => j.area === filters.area);
   }
-  return jobs.map(getPublicProjection);
+  // D3: sort by postedAt desc (newest first) — [...] ไม่ mutate original array (Risk R3)
+  return [...jobs]
+    .sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime())
+    .map(getPublicProjection);
 }
 
 export function getMaintainJobs(filters?: { area?: string }): PublicJobProjection[] {
@@ -28,7 +31,10 @@ export function getMaintainJobs(filters?: { area?: string }): PublicJobProjectio
   if (filters?.area) {
     jobs = jobs.filter((j) => j.area === filters.area);
   }
-  return jobs.map(getPublicProjection);
+  // D3: sort by postedAt desc (newest first) — [...] ไม่ mutate original array (Risk R3)
+  return [...jobs]
+    .sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime())
+    .map(getPublicProjection);
 }
 
 export function getJob(type: 'repair' | 'maintain', id: string): AuthenticatedJobProjection | undefined {
