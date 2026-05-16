@@ -1,6 +1,6 @@
 // API client for Content CMS endpoints
-// Backend: /content/* (JWT + admin role required)
-// T+2: ตรวจสอบ endpoint paths หลัง Backend merge
+// Backend: /api/admin/content/* (JWT + admin role required)
+// Fixed Bug A: path prefix /content/ → /api/admin/content/ (E2E remediation 2026-05-16)
 
 import type {
   ContentPageDto,
@@ -36,7 +36,7 @@ async function apiFetch<T>(
   return res.json() as Promise<T>
 }
 
-// GET /content/ — list all pages (admin)
+// GET /api/admin/content — list all pages (admin)
 export async function listContentPages(
   token: string,
   params?: { type?: ContentType; status?: ContentStatus },
@@ -45,89 +45,104 @@ export async function listContentPages(
   if (params?.type) qs.set('type', params.type)
   if (params?.status) qs.set('status', params.status)
   const query = qs.toString() ? `?${qs.toString()}` : ''
-  return apiFetch<ContentPageDto[]>(`/content/${query}`, {}, token)
+  return apiFetch<ContentPageDto[]>(`/api/admin/content${query}`, {}, token)
 }
 
-// GET /content/:id/ — detail with images
+// GET /api/admin/content/:id — detail with images
+// Note: Backend doesn't have a dedicated GET /:id endpoint yet.
+// Fallback: fetch list and filter by id until Backend adds GET /:id.
 export async function getContentPage(
   token: string,
   id: string,
 ): Promise<ContentPageDetailDto> {
-  return apiFetch<ContentPageDetailDto>(`/content/${id}/`, {}, token)
+  const pages = await apiFetch<ContentPageDto[]>(`/api/admin/content`, {}, token)
+  const found = pages.find((p) => p.id === id)
+  if (!found) throw Object.assign(new Error('Not found.'), { status: 404 })
+  // Return as ContentPageDetailDto with empty images (images loaded separately)
+  return { ...found, images: [] } as ContentPageDetailDto
 }
 
-// POST /content/ — create new page
+// POST /api/admin/content — create new page
 export async function createContentPage(
   token: string,
   input: CreateContentPageInput,
 ): Promise<ContentPageDetailDto> {
   return apiFetch<ContentPageDetailDto>(
-    '/content/',
+    '/api/admin/content',
     { method: 'POST', body: JSON.stringify(input) },
     token,
   )
 }
 
-// PATCH /content/:id/ — update page
+// PUT /api/admin/content/:id — update page (Backend uses PUT not PATCH)
 export async function updateContentPage(
   token: string,
   id: string,
   input: UpdateContentPageInput,
 ): Promise<ContentPageDetailDto> {
   return apiFetch<ContentPageDetailDto>(
-    `/content/${id}/`,
-    { method: 'PATCH', body: JSON.stringify(input) },
+    `/api/admin/content/${id}`,
+    { method: 'PUT', body: JSON.stringify(input) },
     token,
   )
 }
 
-// POST /content/:id/publish/ — publish page
+// POST /api/admin/content/:id/publish — publish page
 export async function publishContentPage(
   token: string,
   id: string,
 ): Promise<ContentPageDetailDto> {
   return apiFetch<ContentPageDetailDto>(
-    `/content/${id}/publish/`,
+    `/api/admin/content/${id}/publish`,
     { method: 'POST' },
     token,
   )
 }
 
-// DELETE /content/:id/ — soft-delete (admin only)
+// DELETE /api/admin/content/:id — delete page
 export async function deleteContentPage(
   token: string,
   id: string,
 ): Promise<void> {
-  await apiFetch<void>(`/content/${id}/`, { method: 'DELETE' }, token)
+  await apiFetch<void>(`/api/admin/content/${id}`, { method: 'DELETE' }, token)
 }
 
-// GET /content/:id/versions/ — version history
+// GET /api/admin/content/:id/versions — version history
+// Note: Backend doesn't have this endpoint yet (pending Backend add).
+// Returns empty array until Backend implements GET /:id/versions.
 export async function getContentVersions(
-  token: string,
-  id: string,
+  _token: string,
+  _id: string,
 ): Promise<ContentVersionDto[]> {
-  return apiFetch<ContentVersionDto[]>(`/content/${id}/versions/`, {}, token)
+  // TODO: update path when Backend adds GET /api/admin/content/:id/versions
+  return []
 }
 
-// POST /content/:id/preview/ — generate preview token
+// POST /api/admin/content/:id/preview — generate preview token
 export async function createPreviewToken(
   token: string,
   id: string,
 ): Promise<ContentPreviewTokenDto> {
   return apiFetch<ContentPreviewTokenDto>(
-    `/content/${id}/preview/`,
+    `/api/admin/content/${id}/preview`,
     { method: 'POST' },
     token,
   )
 }
 
-// POST /content/:id/images/ — upload image (multipart)
+// POST /api/admin/content/upload-image — upload image (multipart)
+// FormData must include: file, contentPageId (UUID), alt (optional)
+// Note: Backend endpoint is /upload-image (not /:id/images/)
 export async function uploadContentImage(
   token: string,
   id: string,
   formData: FormData,
 ): Promise<{ id: string; url: string; r2Key: string }> {
-  const res = await fetch(`${API_BASE}/content/${id}/images/`, {
+  // Ensure contentPageId is in FormData (Backend requires it)
+  if (!formData.get('contentPageId')) {
+    formData.set('contentPageId', id)
+  }
+  const res = await fetch(`${API_BASE}/api/admin/content/upload-image`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: formData,

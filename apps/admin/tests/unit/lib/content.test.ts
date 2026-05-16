@@ -147,11 +147,11 @@ beforeEach(() => {
 })
 
 describe('listContentPages', () => {
-  it('calls GET /content/ with auth header', async () => {
+  it('calls GET /api/admin/content with auth header', async () => {
     mockFetch.mockReturnValue(makeRes([]))
     const result = await listContentPages(TOKEN)
     expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining('/content/'),
+      expect.stringContaining('/api/admin/content'),
       expect.objectContaining({ headers: expect.objectContaining({ Authorization: `Bearer ${TOKEN}` }) }),
     )
     expect(result).toEqual([])
@@ -167,85 +167,92 @@ describe('listContentPages', () => {
 })
 
 describe('getContentPage', () => {
-  it('calls GET /content/:id/ and returns detail', async () => {
-    const detail = { id: 'page-1', slug: 'hero', images: [] }
-    mockFetch.mockReturnValue(makeRes(detail))
+  it('calls GET /api/admin/content (list+filter fallback) and returns detail', async () => {
+    const pages = [
+      { id: 'page-1', slug: 'hero', type: 'hero', title: 'Hero', body: {}, status: 'draft',
+        version: 1, authorId: null, publishedAt: null, createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z' },
+    ]
+    mockFetch.mockReturnValue(makeRes(pages))
     const result = await getContentPage(TOKEN, 'page-1')
     expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining('/content/page-1/'),
+      expect.stringContaining('/api/admin/content'),
       expect.anything(),
     )
-    expect(result).toEqual(detail)
+    expect(result.id).toBe('page-1')
+    expect(result.images).toEqual([])
+  })
+
+  it('throws 404 when page not found in list', async () => {
+    mockFetch.mockReturnValue(makeRes([]))
+    await expect(getContentPage(TOKEN, 'missing')).rejects.toMatchObject({ message: 'Not found.' })
   })
 })
 
 describe('createContentPage', () => {
-  it('calls POST /content/ with body', async () => {
+  it('calls POST /api/admin/content with body', async () => {
     const created = { id: 'new-1' }
     mockFetch.mockReturnValue(makeRes(created))
     await createContentPage(TOKEN, {
       slug: 'new-page', type: 'static', title: 'New', body: {},
     })
-    const [, opts] = mockFetch.mock.calls[0]
+    const [url, opts] = mockFetch.mock.calls[0]
+    expect(url).toContain('/api/admin/content')
     expect(opts.method).toBe('POST')
     expect(JSON.parse(opts.body as string).slug).toBe('new-page')
   })
 })
 
 describe('updateContentPage', () => {
-  it('calls PATCH /content/:id/ with partial body', async () => {
+  it('calls PUT /api/admin/content/:id with partial body (PUT not PATCH)', async () => {
     mockFetch.mockReturnValue(makeRes({ id: 'page-1' }))
     await updateContentPage(TOKEN, 'page-1', { title: 'Updated' })
-    const [, opts] = mockFetch.mock.calls[0]
-    expect(opts.method).toBe('PATCH')
+    const [url, opts] = mockFetch.mock.calls[0]
+    expect(url).toContain('/api/admin/content/page-1')
+    expect(opts.method).toBe('PUT')
     expect(JSON.parse(opts.body as string).title).toBe('Updated')
   })
 })
 
 describe('publishContentPage', () => {
-  it('calls POST /content/:id/publish/', async () => {
+  it('calls POST /api/admin/content/:id/publish', async () => {
     mockFetch.mockReturnValue(makeRes({ id: 'page-1', status: 'published' }))
     const result = await publishContentPage(TOKEN, 'page-1')
     const [url, opts] = mockFetch.mock.calls[0]
-    expect(url).toContain('/publish/')
+    expect(url).toContain('/api/admin/content/page-1/publish')
     expect(opts.method).toBe('POST')
     expect((result as { status: string }).status).toBe('published')
   })
 })
 
 describe('deleteContentPage', () => {
-  it('calls DELETE /content/:id/', async () => {
-    mockFetch.mockReturnValue(makeRes(null, 204))
-    // 204 is not ok by our makeRes helper — adjust for void:
+  it('calls DELETE /api/admin/content/:id', async () => {
     mockFetch.mockReturnValue(Promise.resolve({
       ok: true, status: 204, json: () => Promise.resolve(null), statusText: 'No Content',
     }))
     await deleteContentPage(TOKEN, 'page-1')
     const [url, opts] = mockFetch.mock.calls[0]
-    expect(url).toContain('/content/page-1/')
+    expect(url).toContain('/api/admin/content/page-1')
     expect(opts.method).toBe('DELETE')
   })
 })
 
 describe('getContentVersions', () => {
-  it('calls GET /content/:id/versions/', async () => {
-    mockFetch.mockReturnValue(makeRes([{ id: 'v1', version: 1 }]))
+  it('returns empty array (Backend endpoint pending)', async () => {
+    // Backend GET /:id/versions not implemented yet — stub returns []
     const result = await getContentVersions(TOKEN, 'page-1')
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining('/versions/'),
-      expect.anything(),
-    )
-    expect(result).toHaveLength(1)
+    expect(result).toEqual([])
+    // No fetch should be called
+    expect(mockFetch).not.toHaveBeenCalled()
   })
 })
 
 describe('createPreviewToken', () => {
-  it('calls POST /content/:id/preview/', async () => {
+  it('calls POST /api/admin/content/:id/preview', async () => {
     const token = { token: 'tok123', contentPageId: 'page-1', expiresAt: '2026-01-01T01:00:00Z' }
     mockFetch.mockReturnValue(makeRes(token))
     const result = await createPreviewToken(TOKEN, 'page-1')
     expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining('/preview/'),
+      expect.stringContaining('/api/admin/content/page-1/preview'),
       expect.objectContaining({ method: 'POST' }),
     )
     expect(result.token).toBe('tok123')
@@ -253,18 +260,26 @@ describe('createPreviewToken', () => {
 })
 
 describe('uploadContentImage', () => {
-  it('calls POST /content/:id/images/ with FormData (no Content-Type header)', async () => {
+  it('calls POST /api/admin/content/upload-image with FormData (no Content-Type header)', async () => {
     const uploaded = { id: 'img-1', url: 'https://r2.example.com/img.jpg', r2Key: 'img.jpg' }
     mockFetch.mockReturnValue(makeRes(uploaded))
     const fd = new FormData()
     fd.append('file', new Blob([''], { type: 'image/png' }), 'test.png')
     const result = await uploadContentImage(TOKEN, 'page-1', fd)
     const [url, opts] = mockFetch.mock.calls[0]
-    expect(url).toContain('/images/')
+    expect(url).toContain('/api/admin/content/upload-image')
     expect(opts.method).toBe('POST')
     // FormData — should NOT set Content-Type manually
     expect(opts.headers?.['Content-Type']).toBeUndefined()
     expect(result.id).toBe('img-1')
+  })
+
+  it('injects contentPageId into FormData if missing', async () => {
+    mockFetch.mockReturnValue(makeRes({ id: 'img-1', url: 'https://r2.com/img.jpg', r2Key: 'img.jpg' }))
+    const fd = new FormData()
+    fd.append('file', new Blob([''], { type: 'image/jpeg' }), 'img.jpg')
+    await uploadContentImage(TOKEN, 'page-99', fd)
+    expect(fd.get('contentPageId')).toBe('page-99')
   })
 
   it('throws on non-ok response', async () => {
