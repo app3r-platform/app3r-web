@@ -1,7 +1,14 @@
 import Link from 'next/link';
-import { heroContent } from '@/lib/content/hero';
+import { heroContent as staticHeroContent } from '@/lib/content/hero';
+import type { HeroContent } from '@/lib/content/types';
 
-export default function Hero() {
+interface HeroProps {
+  /** ถ้าไม่ส่ง → ใช้ staticHeroContent เป็น fallback */
+  content?: HeroContent;
+}
+
+export default function Hero({ content }: HeroProps) {
+  const heroContent = content ?? staticHeroContent;
   return (
     <section className="bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 text-white py-20 px-4">
       <div className="max-w-7xl mx-auto text-center space-y-6">
