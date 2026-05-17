@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Footer from "../../components/Footer";
 
 const navItems = [
   { href: "/dashboard",      icon: "🏠", label: "Dashboard" },
@@ -113,6 +114,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </header>
         {/* Page */}
         <main className="flex-1 p-6 max-w-5xl w-full mx-auto">{children}</main>
+        {/* Footer — Sub-4 D78 contact info */}
+        <Footer />
       </div>
     </div>
   );
