@@ -38,6 +38,12 @@ import {
   contactAdminInfoRouter,
 } from './routes/contact'
 
+// Phase D-4 Sub-2: Testimonials API
+import {
+  testimonialsPublicRouter,
+  testimonialsAdminRouter,
+} from './routes/testimonials'
+
 export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -120,6 +126,14 @@ app.route('/api/admin/contact-info', contactAdminInfoRouter)
 app.route('/api/admin/contact-info/', contactAdminInfoRouter)
 app.route('/api/admin/contact', contactAdminRouter)
 app.route('/api/admin/contact/', contactAdminRouter)
+
+// Phase D-4 Sub-2: Testimonials API
+// HONO-TRIE-FIX: double-mount (with + without trailing slash)
+// POST /:id/publish is registered BEFORE /:id inside the router (trie order safe)
+app.route('/api/testimonials', testimonialsPublicRouter)
+app.route('/api/testimonials/', testimonialsPublicRouter)
+app.route('/api/admin/testimonials', testimonialsAdminRouter)
+app.route('/api/admin/testimonials/', testimonialsAdminRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
