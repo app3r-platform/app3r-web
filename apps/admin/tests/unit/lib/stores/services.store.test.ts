@@ -3,11 +3,13 @@
  * Sub-5a D80 — Zustand store actions + filteredItems selector
  */
 import { useAdminServicesStore } from '@/lib/stores/services.store'
+import { useAdminAuditStore } from '@/lib/stores/audit.store'
 import { servicesSeed } from '@/lib/mocks/services.seed'
 
 // Reset store state between tests
 beforeEach(() => {
   useAdminServicesStore.getState().resetMockData()
+  useAdminAuditStore.getState().resetMockData()
 })
 
 describe('useAdminServicesStore — initial state', () => {
@@ -87,5 +89,40 @@ describe('useAdminServicesStore — resetMockData', () => {
     expect(filters.search).toBe('')
     expect(filters.status).toBeNull()
     expect(pagination.page).toBe(1)
+  })
+})
+
+describe('useAdminServicesStore — CRUD (Sub-5b)', () => {
+  it('createItem prepends, generates SVC- id, bumps totalCount + logs audit', () => {
+    const auditBefore = useAdminAuditStore.getState().items.length
+    const before = useAdminServicesStore.getState().items.length
+    const created = useAdminServicesStore.getState().createItem({
+      customerName: 'ทดสอบ', technicianName: 'ช่างทด',
+      serviceType: 'repair', status: 'requested',
+    })
+    const { items, pagination } = useAdminServicesStore.getState()
+    expect(items.length).toBe(before + 1)
+    expect(items[0].id).toBe(created.id)
+    expect(created.id).toMatch(/^SVC-\d{3}$/)
+    expect(pagination.totalCount).toBe(before + 1)
+    expect(useAdminAuditStore.getState().items.length).toBe(auditBefore + 1)
+    expect(useAdminAuditStore.getState().items[0].action).toBe('create')
+  })
+
+  it('updateItem patches the matching record + logs audit', () => {
+    const target = useAdminServicesStore.getState().items[0]
+    const updated = useAdminServicesStore.getState().updateItem(target.id, { status: 'completed' })
+    expect(updated.status).toBe('completed')
+    expect(useAdminServicesStore.getState().items.find((i) => i.id === target.id)?.status).toBe('completed')
+    expect(useAdminAuditStore.getState().items[0].action).toBe('update')
+  })
+
+  it('removeItem deletes the record + logs audit', () => {
+    const target = useAdminServicesStore.getState().items[0]
+    const before = useAdminServicesStore.getState().items.length
+    useAdminServicesStore.getState().removeItem(target.id)
+    expect(useAdminServicesStore.getState().items.length).toBe(before - 1)
+    expect(useAdminServicesStore.getState().items.find((i) => i.id === target.id)).toBeUndefined()
+    expect(useAdminAuditStore.getState().items[0].action).toBe('delete')
   })
 })

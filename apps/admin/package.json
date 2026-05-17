@@ -17,6 +17,9 @@
   },
   "dependencies": {
     "@app3r/ui": "workspace:*",
+    "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@tiptap/pm": "^3.23.4",
     "@tiptap/react": "^3.23.4",
@@ -24,6 +27,8 @@
     "next": "^15.3.1",
     "react": "^19",
     "react-dom": "^19",
+    "react-hook-form": "^7.76.0",
+    "zod": "^3.24.2",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
