@@ -102,7 +102,8 @@ const navGroups: NavGroup[] = [
   {
     label: "CMS",
     items: [
-      { href: "/content", label: "จัดการเนื้อหา", icon: "📝" },
+      { href: "/content",      label: "จัดการเนื้อหา", icon: "📝" },
+      { href: "/testimonials", label: "รีวิวลูกค้า",    icon: "⭐" },
     ],
   },
   {
