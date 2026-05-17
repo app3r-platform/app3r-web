@@ -100,6 +100,14 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Lists",
+    items: [
+      { href: "/services", label: "งานบริการ",    icon: "🔧" },
+      { href: "/listings", label: "ประกาศขาย",    icon: "🛍️" },
+      { href: "/audit",    label: "Audit Log",     icon: "📋" },
+    ],
+  },
+  {
     label: "CMS",
     items: [
       { href: "/content",      label: "จัดการเนื้อหา", icon: "📝" },

@@ -1,146 +1,88 @@
 'use client'
+// Sub-5a D80 Admin Lists Foundation — content list (mock)
+import { useMemo } from 'react'
+import { Sidebar } from '@/components/sidebar'
+import { AdminListPage } from '@/components/admin-list/AdminListPage'
+import { useAdminContentStore } from '@/lib/stores/content.store'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { listContentPages } from '@/lib/api/content'
-import type { ContentPageDto, ContentType, ContentStatus } from '@/lib/types/content'
+const STATUS_OPTIONS = [
+  { value: 'draft',     label: 'ฉบับร่าง' },
+  { value: 'published', label: 'เผยแพร่แล้ว' },
+  { value: 'archived',  label: 'จัดเก็บแล้ว' },
+]
 
-const TYPE_LABELS: Record<ContentType, string> = {
-  hero: 'Hero Banner',
-  about: 'เกี่ยวกับเรา',
-  faq: 'คำถามที่พบบ่อย',
-  static: 'หน้าคงที่',
+const TYPE_LABELS: Record<string, string> = {
+  article:   'บทความ',
+  marketing: 'การตลาด',
+  contact:   'ติดต่อ',
 }
 
-const STATUS_LABELS: Record<ContentStatus, string> = {
-  draft: 'ฉบับร่าง',
-  published: 'เผยแพร่แล้ว',
-}
+export default function ContentPage() {
+  const { filters, pagination, setFilters, setPage, resetMockData, filteredItems } = useAdminContentStore()
+  const items = filteredItems()
 
-function getToken(): string {
-  if (typeof window === 'undefined') return ''
-  return localStorage.getItem('app3r_admin_token') ?? ''  // Bug B fix: align with lib/auth.ts TOKEN_KEY
-}
-
-export default function ContentDashboardPage() {
-  const [pages, setPages] = useState<ContentPageDto[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [filterType, setFilterType] = useState<ContentType | ''>('')
-  const [filterStatus, setFilterStatus] = useState<ContentStatus | ''>('')
-
-  useEffect(() => {
-    const token = getToken()
-    setLoading(true)
-    listContentPages(
-      token,
-      {
-        type: filterType || undefined,
-        status: filterStatus || undefined,
-      },
-    )
-      .then(setPages)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false))
-  }, [filterType, filterStatus])
+  const paged = useMemo(() => {
+    const start = (pagination.page - 1) * pagination.pageSize
+    return items.slice(start, start + pagination.pageSize)
+  }, [items, pagination.page, pagination.pageSize])
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">จัดการเนื้อหา (CMS)</h1>
-        <Link
-          href="/content/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+    <div className="flex min-h-screen bg-gray-950 text-white">
+      <Sidebar />
+      <main className="flex-1 min-w-0">
+        <AdminListPage
+          title="จัดการเนื้อหา"
+          totalCount={items.length}
+          page={pagination.page}
+          pageSize={pagination.pageSize}
+          search={filters.search}
+          status={filters.status}
+          statusOptions={STATUS_OPTIONS}
+          onSearchChange={(s) => setFilters({ search: s })}
+          onStatusChange={(s) => setFilters({ status: s })}
+          onPageChange={setPage}
+          onReset={resetMockData}
         >
-          + สร้างเนื้อหาใหม่
-        </Link>
-      </div>
-
-      {/* filters */}
-      <div className="flex gap-3 flex-wrap">
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value as ContentType | '')}
-          className="border rounded px-3 py-1.5 text-sm text-gray-700 bg-white"
-          aria-label="กรองตามประเภท"
-        >
-          <option value="">ทุกประเภท</option>
-          {(Object.entries(TYPE_LABELS) as [ContentType, string][]).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
-        </select>
-
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value as ContentStatus | '')}
-          className="border rounded px-3 py-1.5 text-sm text-gray-700 bg-white"
-          aria-label="กรองตามสถานะ"
-        >
-          <option value="">ทุกสถานะ</option>
-          {(Object.entries(STATUS_LABELS) as [ContentStatus, string][]).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* table */}
-      {loading && <p className="text-gray-500">กำลังโหลด...</p>}
-      {error && <p className="text-red-600">เกิดข้อผิดพลาด: {error}</p>}
-
-      {!loading && !error && (
-        <div className="overflow-x-auto rounded-lg border">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
-              <tr>
-                <th className="px-4 py-3 text-left text-gray-600">Slug</th>
-                <th className="px-4 py-3 text-left text-gray-600">ชื่อ</th>
-                <th className="px-4 py-3 text-left text-gray-600">ประเภท</th>
-                <th className="px-4 py-3 text-left text-gray-600">สถานะ</th>
-                <th className="px-4 py-3 text-left text-gray-600">เวอร์ชัน</th>
-                <th className="px-4 py-3 text-left text-gray-600">อัปเดต</th>
-                <th className="px-4 py-3 text-left text-gray-600">จัดการ</th>
+            <thead>
+              <tr className="text-gray-500 text-left border-b border-gray-800">
+                <th className="px-4 py-3">ID</th>
+                <th className="px-4 py-3">ชื่อเรื่อง</th>
+                <th className="px-4 py-3">ประเภท</th>
+                <th className="px-4 py-3">ผู้เขียน</th>
+                <th className="px-4 py-3">สถานะ</th>
+                <th className="px-4 py-3">วันที่สร้าง</th>
               </tr>
             </thead>
-            <tbody className="divide-y">
-              {pages.length === 0 && (
+            <tbody className="divide-y divide-gray-800">
+              {paged.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
-                    ไม่พบเนื้อหา
+                  <td colSpan={6} className="px-4 py-10 text-center text-gray-600">
+                    ไม่พบรายการ
                   </td>
                 </tr>
+              ) : (
+                paged.map((row) => (
+                  <tr key={row.id} className="hover:bg-gray-800/40">
+                    <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
+                    <td className="px-4 py-3 max-w-[200px] truncate font-medium">{row.title}</td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">{TYPE_LABELS[row.type] ?? row.type}</td>
+                    <td className="px-4 py-3 text-gray-400">{row.author}</td>
+                    <td className="px-4 py-3">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-300">
+                        {row.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-gray-500 text-xs">
+                      {new Date(row.createdAt).toLocaleDateString('th-TH')}
+                    </td>
+                  </tr>
+                ))
               )}
-              {pages.map((page) => (
-                <tr key={page.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-mono text-xs text-gray-600">{page.slug}</td>
-                  <td className="px-4 py-3 font-medium text-gray-900">{page.title}</td>
-                  <td className="px-4 py-3 text-gray-600">{TYPE_LABELS[page.type]}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                      page.status === 'published'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}>
-                      {STATUS_LABELS[page.status]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600">v{page.version}</td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">
-                    {new Date(page.updatedAt).toLocaleDateString('th-TH')}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/content/${page.id}`}
-                      className="text-blue-600 hover:underline text-xs"
-                    >
-                      แก้ไข
-                    </Link>
-                  </td>
-                </tr>
-              ))}
             </tbody>
           </table>
-        </div>
-      )}
+        </AdminListPage>
+      </main>
     </div>
   )
 }
