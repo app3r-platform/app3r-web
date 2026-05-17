@@ -64,3 +64,6 @@ export * from './reconciliation'
 
 // Sub-CMD-8: Parts B2B Marketplace (Wave 3)
 export * from './parts-b2b'
+
+// Phase D-4 Sub-3: Platform Content CMS
+export * from './content'
