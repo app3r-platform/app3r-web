@@ -17,12 +17,14 @@
   },
   "dependencies": {
     "@app3r/ui": "workspace:*",
+    "@radix-ui/react-toggle-group": "^1.1.11",
     "@tiptap/pm": "^3.23.4",
     "@tiptap/react": "^3.23.4",
     "@tiptap/starter-kit": "^3.23.4",
     "next": "^15.3.1",
     "react": "^19",
-    "react-dom": "^19"
+    "react-dom": "^19",
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",

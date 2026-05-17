@@ -1,25 +1,27 @@
 'use client'
-// Sub-5a D80 Admin Lists Foundation — users list (mock)
+// Sub-5a D80 Admin Lists Foundation — services list
 import { useMemo } from 'react'
 import { Sidebar } from '@/components/sidebar'
 import { AdminListPage } from '@/components/admin-list/AdminListPage'
-import { useAdminUsersStore } from '@/lib/stores/users.store'
+import { useAdminServicesStore } from '@/lib/stores/services.store'
 
 const STATUS_OPTIONS = [
-  { value: 'active',         label: 'ใช้งานอยู่' },
-  { value: 'suspended',      label: 'ระงับแล้ว' },
-  { value: 'pending_verify', label: 'รอยืนยัน' },
-  { value: 'banned',         label: 'แบนแล้ว' },
+  { value: 'requested',   label: 'รอรับงาน' },
+  { value: 'accepted',    label: 'รับงานแล้ว' },
+  { value: 'in_progress', label: 'กำลังดำเนินการ' },
+  { value: 'completed',   label: 'เสร็จแล้ว' },
+  { value: 'cancelled',   label: 'ยกเลิก' },
 ]
 
-const ROLE_LABELS: Record<string, string> = {
-  weeeu: 'WeeeU',
-  weeer: 'WeeeR',
-  weeet: 'WeeeT',
+const TYPE_LABELS: Record<string, string> = {
+  repair:   'ซ่อม',
+  maintain: 'บำรุงรักษา',
+  resell:   'ขายต่อ',
+  scrap:    'ทิ้ง/รีไซเคิล',
 }
 
-export default function UsersPage() {
-  const { filters, pagination, setFilters, setPage, resetMockData, filteredItems } = useAdminUsersStore()
+export default function ServicesPage() {
+  const { filters, pagination, setFilters, setPage, resetMockData, filteredItems } = useAdminServicesStore()
   const items = filteredItems()
 
   const paged = useMemo(() => {
@@ -32,7 +34,7 @@ export default function UsersPage() {
       <Sidebar />
       <main className="flex-1 min-w-0">
         <AdminListPage
-          title="ผู้ใช้งานทั้งหมด"
+          title="งานบริการทั้งหมด"
           totalCount={items.length}
           page={pagination.page}
           pageSize={pagination.pageSize}
@@ -48,18 +50,17 @@ export default function UsersPage() {
             <thead>
               <tr className="text-gray-500 text-left border-b border-gray-800">
                 <th className="px-4 py-3">ID</th>
-                <th className="px-4 py-3">ชื่อ</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">เบอร์โทร</th>
-                <th className="px-4 py-3">Role</th>
+                <th className="px-4 py-3">ลูกค้า</th>
+                <th className="px-4 py-3">ช่าง</th>
+                <th className="px-4 py-3">ประเภท</th>
                 <th className="px-4 py-3">สถานะ</th>
-                <th className="px-4 py-3">วันที่สมัคร</th>
+                <th className="px-4 py-3">วันที่สร้าง</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
               {paged.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-10 text-center text-gray-600">
+                  <td colSpan={6} className="px-4 py-10 text-center text-gray-600">
                     ไม่พบรายการ
                   </td>
                 </tr>
@@ -67,17 +68,16 @@ export default function UsersPage() {
                 paged.map((row) => (
                   <tr key={row.id} className="hover:bg-gray-800/40">
                     <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
-                    <td className="px-4 py-3 font-medium">{row.name}</td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">{row.email}</td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">{row.phone}</td>
-                    <td className="px-4 py-3 text-xs">{ROLE_LABELS[row.role] ?? row.role}</td>
+                    <td className="px-4 py-3">{row.customerName}</td>
+                    <td className="px-4 py-3 text-gray-400">{row.technicianName}</td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">{TYPE_LABELS[row.serviceType] ?? row.serviceType}</td>
                     <td className="px-4 py-3">
                       <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-300">
                         {row.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">
-                      {new Date(row.registeredAt).toLocaleDateString('th-TH')}
+                      {new Date(row.createdAt).toLocaleDateString('th-TH')}
                     </td>
                   </tr>
                 ))
