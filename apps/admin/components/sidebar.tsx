@@ -106,6 +106,13 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Contact",
+    items: [
+      { href: "/contact",      label: "กล่องข้อความ",   icon: "📨" },
+      { href: "/contact/info", label: "ข้อมูลติดต่อ",    icon: "📇" },
+    ],
+  },
+  {
     label: "ระบบ",
     items: [
       { href: "/system/storage", label: "Storage",         icon: "💾" },
