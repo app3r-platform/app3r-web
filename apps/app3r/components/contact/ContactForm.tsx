@@ -1,13 +1,19 @@
 'use client';
 
+// ============================================================
+// components/contact/ContactForm.tsx — Contact Form (D78 8 topics)
+// Phase D-4 Sub-4 — real API POST /api/contact + error fallback
+// ============================================================
 import { useState } from 'react';
-import { topicLabels } from '@/lib/content/contact-routing';
-import type { ContactTopic, ContactFormSubmission } from '@/lib/types/contact';
+import { topicLabels, getPrimaryEmail } from '@/lib/content/contact-routing';
+import { submitContactForm, FALLBACK_CONTACT } from '@/lib/contact-api';
+import type { ContactTopic } from '@/lib/types/contact';
 import ContactSubmittedModal from './ContactSubmittedModal';
 
+/** D78 8 topics ตาม Backend authoritative list */
 const TOPICS: ContactTopic[] = [
-  'general', 'register-weeer', 'billing', 'dispute',
-  'technical', 'press', 'partnership', 'other',
+  'general', 'sales', 'support', 'partnership',
+  'press', 'feedback', 'careers', 'other',
 ];
 
 interface FormErrors {
@@ -27,6 +33,8 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  /** ข้อความ error จาก API — แสดง fallback info เมื่อไม่ใช่ null */
+  const [apiError, setApiError] = useState<string | null>(null);
 
   function validate(): FormErrors {
     const e: FormErrors = {};
@@ -45,7 +53,7 @@ export default function ContactForm() {
     return e;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
@@ -53,35 +61,39 @@ export default function ContactForm() {
       return;
     }
     setErrors({});
+    setApiError(null);
     setLoading(true);
 
-    const submission: ContactFormSubmission = {
-      topic: topic as ContactTopic,
+    // สร้าง subject จาก topic label อัตโนมัติ
+    const selectedTopic = topic as ContactTopic;
+    const subject = topicLabels[selectedTopic];
+
+    // ถ้ามี companyName → แนบท้าย body
+    const bodyText = companyName.trim()
+      ? `${message.trim()}\n\n[บริษัท/ร้าน: ${companyName.trim()}]`
+      : message.trim();
+
+    const result = await submitContactForm({
+      category: selectedTopic,
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim() || undefined,
-      companyName: companyName.trim() || undefined,
-      message: message.trim(),
-      submittedAt: new Date().toISOString(),
-    };
+      subject,
+      body: bodyText,
+    });
 
-    // Save to localStorage
-    try {
-      const existing = JSON.parse(localStorage.getItem('app3r-contact-submissions') || '[]');
-      existing.push(submission);
-      localStorage.setItem('app3r-contact-submissions', JSON.stringify(existing));
-    } catch {
-      // silently fail
-    }
+    setLoading(false);
 
-    setTimeout(() => {
-      setLoading(false);
+    if (result.ok) {
       setSubmitted(true);
-    }, 600);
+    } else {
+      setApiError(result.message);
+    }
   }
 
   function handleClose() {
     setSubmitted(false);
+    setApiError(null);
     setTopic('');
     setName('');
     setEmail('');
@@ -89,6 +101,10 @@ export default function ContactForm() {
     setCompanyName('');
     setMessage('');
   }
+
+  /** อีเมลสำรองตาม topic ที่เลือก (ถ้ายังไม่เลือก → fallback กลาง) */
+  const fallbackEmail =
+    topic ? getPrimaryEmail(topic as ContactTopic) : FALLBACK_CONTACT.email;
 
   return (
     <>
@@ -102,6 +118,29 @@ export default function ContactForm() {
 
       <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8">
         <h2 className="text-xl font-bold text-gray-900 mb-6">ส่งข้อความหาเรา</h2>
+
+        {/* API Error Banner */}
+        {apiError && (
+          <div className="mb-5 bg-red-50 border border-red-300 rounded-xl p-4 text-sm text-red-800 space-y-2">
+            <p className="font-semibold">⚠️ ไม่สามารถส่งข้อความได้: {apiError}</p>
+            <p className="text-red-700">
+              ติดต่อเราโดยตรง:{' '}
+              <a
+                href={`mailto:${fallbackEmail}`}
+                className="underline font-medium hover:text-red-900"
+              >
+                {fallbackEmail}
+              </a>
+              {' '}หรือโทร{' '}
+              <a
+                href={`tel:${FALLBACK_CONTACT.phone.replace(/-/g, '')}`}
+                className="underline font-medium hover:text-red-900"
+              >
+                {FALLBACK_CONTACT.phone}
+              </a>
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           {/* Topic */}
