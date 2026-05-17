@@ -67,3 +67,6 @@ export * from './parts-b2b'
 
 // Phase D-4 Sub-3: Platform Content CMS
 export * from './content'
+
+// Phase D-4 Sub-4: Contact Info + Form (D78)
+export * from './contact'
