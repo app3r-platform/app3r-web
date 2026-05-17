@@ -70,3 +70,6 @@ export * from './content'
 
 // Phase D-4 Sub-4: Contact Info + Form (D78)
 export * from './contact'
+
+// Phase D-4 Sub-2: Testimonials API
+export * from './testimonials'

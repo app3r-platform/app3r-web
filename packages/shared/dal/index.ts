@@ -74,3 +74,4 @@ export type * from './weeer.types'; // P4 App3R-WeeeR ✅ merged
 export type * from './weeet.types'; // P5 App3R-WeeeT ✅ merged
 export type * from './content.types'; // Phase D-4 Sub-3: Content CMS
 export type * from './contact.types'; // Phase D-4 Sub-4: Contact Info + Form (D78)
+export type * from './testimonial.types'; // Phase D-4 Sub-2: Testimonials API
