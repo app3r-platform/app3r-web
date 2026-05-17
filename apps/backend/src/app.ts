@@ -30,6 +30,14 @@ import { partsOrdersRouter } from './routes/parts-orders'
 import { contentPublicRouter } from './routes/content-public'
 import { contentAdminRouter } from './routes/content-admin'
 
+// Phase D-4 Sub-4: Contact Info + Form (D78)
+import {
+  contactPublicRouter,
+  contactInfoPublicRouter,
+  contactAdminRouter,
+  contactAdminInfoRouter,
+} from './routes/contact'
+
 export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -100,6 +108,18 @@ app.route('/api/content', contentPublicRouter)
 app.route('/api/content/', contentPublicRouter)
 app.route('/api/admin/content', contentAdminRouter)
 app.route('/api/admin/content/', contentAdminRouter)
+
+// Phase D-4 Sub-4: Contact Info + Form (D78)
+// HONO-TRIE-FIX: double-mount (with + without trailing slash)
+// contactAdminInfoRouter BEFORE contactAdminRouter (avoid /contact-info matching /contact/:id)
+app.route('/api/contact', contactPublicRouter)
+app.route('/api/contact/', contactPublicRouter)
+app.route('/api/contact-info', contactInfoPublicRouter)
+app.route('/api/contact-info/', contactInfoPublicRouter)
+app.route('/api/admin/contact-info', contactAdminInfoRouter)
+app.route('/api/admin/contact-info/', contactAdminInfoRouter)
+app.route('/api/admin/contact', contactAdminRouter)
+app.route('/api/admin/contact/', contactAdminRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
