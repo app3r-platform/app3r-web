@@ -4,6 +4,8 @@ import { persist } from 'zustand/middleware'
 import type { ListingRecord } from '@/lib/mocks/listings.seed'
 import { listingsSeed } from '@/lib/mocks/listings.seed'
 import type { FilterState, PaginationState } from './services.store'
+import { nextId } from './services.store'
+import { logAuditEntry, getActor } from '@/lib/audit/log'
 
 interface AdminListingsState {
   items: ListingRecord[]
@@ -13,6 +15,9 @@ interface AdminListingsState {
   setPage: (page: number) => void
   resetMockData: () => void
   filteredItems: () => ListingRecord[]
+  createItem: (input: Omit<ListingRecord, 'id' | 'listedAt'>) => ListingRecord
+  updateItem: (id: string, patch: Partial<ListingRecord>) => ListingRecord
+  removeItem: (id: string) => void
 }
 
 const defaultFilters: FilterState = { status: null, search: '', dateFrom: null, dateTo: null }
@@ -46,6 +51,35 @@ export const useAdminListingsStore = create<AdminListingsState>()(
           .filter((i) => !filters.status || i.status === filters.status)
           .filter((i) => !search || [i.id, i.title, i.sellerName]
             .some((f) => f.toLowerCase().includes(search)))
+      },
+
+      createItem: (input) => {
+        const item: ListingRecord = {
+          ...input,
+          id: nextId(get().items, 'LST'),
+          listedAt: new Date().toISOString(),
+        }
+        set((s) => ({
+          items: [item, ...s.items],
+          pagination: { ...s.pagination, totalCount: s.items.length + 1 },
+        }))
+        logAuditEntry({ actor: getActor(), action: 'create', module: 'listings', entityId: item.id })
+        return item
+      },
+
+      updateItem: (id, patch) => {
+        const updated = { ...get().items.find((i) => i.id === id)!, ...patch }
+        set((s) => ({ items: s.items.map((i) => (i.id === id ? updated : i)) }))
+        logAuditEntry({ actor: getActor(), action: 'update', module: 'listings', entityId: id })
+        return updated
+      },
+
+      removeItem: (id) => {
+        set((s) => ({
+          items: s.items.filter((i) => i.id !== id),
+          pagination: { ...s.pagination, totalCount: Math.max(0, s.items.length - 1) },
+        }))
+        logAuditEntry({ actor: getActor(), action: 'delete', module: 'listings', entityId: id })
       },
     }),
     {
