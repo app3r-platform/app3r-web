@@ -73,3 +73,9 @@ export * from './contact'
 
 // Phase D-4 Sub-2: Testimonials API
 export * from './testimonials'
+
+// Repair Domain — Gen 60 Reverse Design (Round 1-3)
+// Migration order: 0012 → 0013 → 0014 (→ 0015 trigger)
+export * from './repair-master-data'   // Round 1: D82 Master Data (9 domain + 1 audit)
+export * from './repair-workflow'      // Round 2: Workflow B3/B3.5/B2.5 (8 tables)
+export * from './repair-pricing'       // Round 3: B6 Used Pricing Wizard (8 tables)
