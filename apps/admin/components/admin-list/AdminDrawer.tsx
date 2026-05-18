@@ -1,5 +1,5 @@
 'use client'
-// Sub-5b D80 — shared drawer shell (mode-based: view/edit/create)
+// Sub-5b/5c D80 — drawer dispatcher (Sub-5c OBS-E v2 + OBS-T05-1: no hooks in dispatcher)
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,7 +10,9 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { AdminFormFields, formFieldsRegistry } from './AdminFormFields'
+import { AuditDetailView } from './AuditDetailView'
 import type { ModuleKey } from '@/lib/audit/log'
+import type { AuditRecord } from '@/lib/mocks/audit.seed'
 
 export type DrawerMode = 'view' | 'edit' | 'create' | 'closed'
 
@@ -21,8 +23,9 @@ export interface AdminDrawerProps<T extends { id: string }> {
   item: T | null
   onOpenChange: (open: boolean) => void
   onModeChange: (mode: DrawerMode) => void
-  onSubmit: (data: unknown) => Promise<void>
+  onSubmit?: (data: unknown) => Promise<void>
   onDelete?: (id: string) => Promise<void>
+  readOnly?: boolean
 }
 
 const TITLES: Record<ModuleKey, string> = {
@@ -31,9 +34,64 @@ const TITLES: Record<ModuleKey, string> = {
   users: 'ผู้ใช้',
   points: 'ธุรกรรมแต้ม',
   content: 'เนื้อหา',
+  audit: 'บันทึกการตรวจสอบ',
 }
 
+// ★ Pure dispatcher — NO useForm / NO useEffect here (OBS-E v2)
 export function AdminDrawer<T extends { id: string }>({
+  module,
+  readOnly,
+  ...rest
+}: AdminDrawerProps<T>) {
+  // discriminant guard (module === 'audit') → TS narrows module in fall-through (OBS-T05-1)
+  if (module === 'audit') {
+    return <AuditDetailDrawer {...rest} />
+  }
+  return <FormDrawer module={module} {...rest} />
+}
+
+// AuditDetailDrawer — no useForm/useEffect; read-only Close-only footer
+function AuditDetailDrawer<T extends { id: string }>({
+  item,
+  open,
+  onOpenChange,
+}: Omit<AdminDrawerProps<T>, 'module' | 'readOnly'>) {
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent>
+        <div className="px-6 py-4 border-b border-gray-800">
+          <SheetTitle className="text-lg font-semibold">
+            รายละเอียด{TITLES.audit}
+          </SheetTitle>
+          <SheetDescription className="text-xs text-gray-500">
+            {item ? item.id : '—'}
+          </SheetDescription>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <AuditDetailView entry={item as AuditRecord | null} />
+        </div>
+        <div className="px-6 py-4 border-t border-gray-800 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            className="px-4 py-2 text-sm rounded border border-gray-700 text-gray-300 hover:bg-gray-800"
+          >
+            ปิด
+          </button>
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+// FormDrawer props — narrow module only, keep generic <T> (OBS-T05-1)
+type FormDrawerProps<T extends { id: string }> = Omit<
+  AdminDrawerProps<T>,
+  'module' | 'readOnly'
+> & { module: Exclude<ModuleKey, 'audit'> }
+
+// FormDrawer — ★ all hooks (useForm + useEffect) live here, unconditional
+function FormDrawer<T extends { id: string }>({
   module,
   open,
   mode,
@@ -42,16 +100,15 @@ export function AdminDrawer<T extends { id: string }>({
   onModeChange,
   onSubmit,
   onDelete,
-}: AdminDrawerProps<T>) {
+}: FormDrawerProps<T>) {
   const config = formFieldsRegistry[module]
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: zodResolver(config.schema) })
+  } = useForm({ resolver: zodResolver(config.schema!) })
 
-  // Reset form whenever the target item or mode changes (no stale state on reopen)
   useEffect(() => {
     if (mode === 'create') {
       reset({})
@@ -68,7 +125,7 @@ export function AdminDrawer<T extends { id: string }>({
         : `รายละเอียด${TITLES[module]}`
 
   const submit = handleSubmit(async (data) => {
-    await onSubmit(data)
+    if (onSubmit) await onSubmit(data)
     if (mode === 'create') {
       onOpenChange(false)
     } else {

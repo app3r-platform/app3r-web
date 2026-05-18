@@ -3,7 +3,8 @@ import { useAdminAuditStore } from '@/lib/stores/audit.store'
 import type { AuditRecord } from '@/lib/mocks/audit.seed'
 import { getToken } from '@/lib/auth'
 
-export type ModuleKey = 'services' | 'listings' | 'users' | 'points' | 'content'
+// Sub-5c: 'audit' added (read-only module — detailView slot; logAuditEntry never called with module='audit')
+export type ModuleKey = 'services' | 'listings' | 'users' | 'points' | 'content' | 'audit'
 
 export interface AuditEntryInput {
   actor: string

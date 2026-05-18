@@ -1,5 +1,6 @@
 'use client'
 // Sub-5b D80 — form fields registry + renderer (react-hook-form)
+import type { ComponentType } from 'react'
 import type { UseFormRegister, FieldErrors, FieldValues } from 'react-hook-form'
 import type { z } from 'zod'
 import { servicesSchema } from '@/lib/schemas/services.schema'
@@ -8,6 +9,8 @@ import { usersSchema } from '@/lib/schemas/users.schema'
 import { pointsSchema } from '@/lib/schemas/points.schema'
 import { contentSchema } from '@/lib/schemas/content.schema'
 import type { ModuleKey } from '@/lib/audit/log'
+import type { AuditRecord } from '@/lib/mocks/audit.seed'
+import { AuditDetailView } from './AuditDetailView'
 
 export interface FieldConfig {
   name: string
@@ -19,7 +22,8 @@ export interface FieldConfig {
 
 export interface FormFieldsConfig {
   fields: FieldConfig[]
-  schema: z.ZodTypeAny
+  schema: z.ZodTypeAny | null
+  detailView?: ComponentType<{ entry: AuditRecord | null }>
 }
 
 const serviceTypeOpts = [
@@ -114,6 +118,11 @@ export const formFieldsRegistry: Record<ModuleKey, FormFieldsConfig> = {
         { value: 'archived', label: 'จัดเก็บ' },
       ] },
     ],
+  },
+  audit: {
+    fields: [],
+    schema: null,
+    detailView: AuditDetailView,
   },
 }
 

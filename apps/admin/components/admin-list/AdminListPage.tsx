@@ -1,7 +1,7 @@
 'use client'
 // Sub-5a D80 Admin Lists Foundation — generic list page shell
 import { ReactNode } from 'react'
-import { FilterBar } from './FilterBar'
+import { FilterBar, type ExtraChipConfig } from './FilterBar'
 
 interface AdminListPageProps {
   title: string
@@ -15,6 +15,7 @@ interface AdminListPageProps {
   onStatusChange: (value: string | null) => void
   onPageChange: (page: number) => void
   onReset: () => void
+  extraChips?: ExtraChipConfig[]
   children: ReactNode
 }
 
@@ -30,6 +31,7 @@ export function AdminListPage({
   onStatusChange,
   onPageChange,
   onReset,
+  extraChips,
   children,
 }: AdminListPageProps) {
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
@@ -48,6 +50,7 @@ export function AdminListPage({
         onSearchChange={onSearchChange}
         onStatusChange={onStatusChange}
         onReset={onReset}
+        extraChips={extraChips}
       />
 
       <div className="rounded-lg border border-gray-800 overflow-hidden">

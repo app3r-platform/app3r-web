@@ -3,6 +3,14 @@
 import { useCallback, useRef } from 'react'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 
+export interface ExtraChipConfig {
+  field: string
+  label: string
+  value: string | null
+  options: { value: string; label: string }[]
+  onChange: (next: string | null) => void
+}
+
 interface FilterBarProps {
   search: string
   status: string | null
@@ -10,6 +18,7 @@ interface FilterBarProps {
   onSearchChange: (value: string) => void
   onStatusChange: (value: string | null) => void
   onReset: () => void
+  extraChips?: ExtraChipConfig[]
 }
 
 export function FilterBar({
@@ -19,6 +28,7 @@ export function FilterBar({
   onSearchChange,
   onStatusChange,
   onReset,
+  extraChips,
 }: FilterBarProps) {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -59,6 +69,28 @@ export function FilterBar({
           ))}
         </ToggleGroup.Root>
       )}
+
+      {extraChips?.map((chip) => (
+        <div key={chip.field} className="flex flex-col gap-1">
+          <span className="text-xs text-gray-500">{chip.label}</span>
+          <ToggleGroup.Root
+            type="single"
+            value={chip.value ?? ''}
+            onValueChange={(val) => chip.onChange(val || null)}
+            className="flex flex-wrap gap-1"
+          >
+            {chip.options.map((opt) => (
+              <ToggleGroup.Item
+                key={opt.value}
+                value={opt.value}
+                className="rounded-full border border-gray-600 px-3 py-1 text-xs text-gray-300 data-[state=on]:border-indigo-500 data-[state=on]:bg-indigo-600 data-[state=on]:text-white hover:border-gray-400 transition-colors"
+              >
+                {opt.label}
+              </ToggleGroup.Item>
+            ))}
+          </ToggleGroup.Root>
+        </div>
+      ))}
 
       <button
         onClick={onReset}
