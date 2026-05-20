@@ -171,7 +171,7 @@ export default function InspectPage({ params }: { params: Promise<{ id: string }
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? <><span className="animate-spin">⏳</span> กำลังส่ง...</> : "🔍 ส่งรายงานตรวจสอบ"}
         </button>

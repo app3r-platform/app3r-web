@@ -51,7 +51,7 @@ export function LocationPickerSection({ technicianId }: { technicianId: string }
   return (
     <div className="space-y-3">
       <p className="text-xs text-gray-400">ตำแหน่งใช้สำหรับคำนวณระยะทางรับงาน</p>
-      <button type="button" onClick={useCurrentLocation} disabled={locating} className="w-full flex items-center justify-center gap-2 bg-indigo-950/50 border border-indigo-800 hover:border-indigo-600 text-indigo-300 text-sm font-medium py-2.5 rounded-xl transition-colors disabled:opacity-50">
+      <button type="button" onClick={useCurrentLocation} disabled={locating} className="w-full flex items-center justify-center gap-2 bg-weeet-surface border border-weeet-dark/40 hover:border-weeet-primary text-weeet-primary text-sm font-medium py-2.5 rounded-xl transition-colors disabled:opacity-50">
         {locating ? <><span className="animate-spin">⏳</span> กำลังระบุตำแหน่ง...</> : <>📍 ใช้ตำแหน่งปัจจุบัน</>}
       </button>
       <div className="grid grid-cols-2 gap-2">

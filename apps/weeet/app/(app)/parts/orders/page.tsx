@@ -30,7 +30,7 @@ const STATUS_COLORS: Record<PartsOrderStatus, string> = {
   fulfilled: "bg-cyan-900/40 text-cyan-300",
   closed: "bg-green-900/40 text-green-300",
   disputed: "bg-red-900/40 text-red-300",
-  resolved: "bg-purple-900/40 text-purple-300",
+  resolved: "bg-blue-900/40 text-blue-300",
   refunded: "bg-gray-700/40 text-gray-300",
   cancelled: "bg-gray-800/40 text-gray-500",
 };

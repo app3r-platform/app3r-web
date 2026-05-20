@@ -146,7 +146,7 @@ export default function MaintainChecklistPage({
               onClick={() => toggleItem(i)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-colors ${
                 checked[i]
-                  ? "bg-teal-900/40 border-teal-700 text-teal-200"
+                  ? "bg-weeet-surface/60 border-weeet-primary/50 text-weeet-text"
                   : "bg-gray-800 border-gray-700 text-gray-300"
               }`}
             >
@@ -192,7 +192,7 @@ export default function MaintainChecklistPage({
             {photos.length < MAX_PHOTOS && (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-teal-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-teal-400 transition-colors"
+                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-weeet-primary rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-weeet-primary transition-colors"
               >
                 <span className="text-2xl">📷</span>
                 <span className="text-xs">เพิ่มรูป</span>
@@ -213,7 +213,7 @@ export default function MaintainChecklistPage({
             <h2 className="text-sm font-semibold text-white">🔩 อะไหล่/น้ำยาที่ใช้</h2>
             <button
               onClick={() => setShowPartModal(true)}
-              className="text-xs text-teal-400 hover:text-teal-300 border border-teal-800 rounded-lg px-2 py-1"
+              className="text-xs text-weeet-primary hover:text-weeet-primary border border-weeet-dark/40 rounded-lg px-2 py-1"
             >
               + เลือกอะไหล่
             </button>
@@ -227,7 +227,7 @@ export default function MaintainChecklistPage({
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-white truncate">{p.name}</p>
                     {p.unitPrice != null && (
-                      <p className="text-xs text-teal-400">฿{p.unitPrice.toLocaleString()}/หน่วย</p>
+                      <p className="text-xs text-weeet-primary">฿{p.unitPrice.toLocaleString()}/หน่วย</p>
                     )}
                   </div>
                   <button
@@ -254,7 +254,7 @@ export default function MaintainChecklistPage({
             onChange={(e) => setNotes(e.target.value)}
             placeholder="สรุปงานที่ทำ สภาพเครื่องหลังล้าง..."
             rows={3}
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 resize-none"
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
           />
         </div>
 
@@ -265,7 +265,7 @@ export default function MaintainChecklistPage({
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="w-full bg-teal-600 hover:bg-teal-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><span className="animate-spin">⏳</span> กำลังส่ง...</>
@@ -309,13 +309,13 @@ export default function MaintainChecklistPage({
                 key={part.id}
                 onClick={() => addPart(part)}
                 disabled={part.stockQty === 0}
-                className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 hover:border-teal-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl px-4 py-3 text-left transition-colors"
+                className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 hover:border-weeet-primary disabled:opacity-50 disabled:cursor-not-allowed rounded-xl px-4 py-3 text-left transition-colors"
               >
                 <div>
                   <p className="text-sm text-white">{part.name}</p>
                   <p className="text-xs text-gray-400">{part.sku} • {part.unit} • คงเหลือ {part.stockQty}</p>
                 </div>
-                <span className="text-xs text-teal-400 font-medium">฿{part.unitPrice.toLocaleString()}</span>
+                <span className="text-xs text-weeet-primary font-medium">฿{part.unitPrice.toLocaleString()}</span>
               </button>
             ))}
           </div>

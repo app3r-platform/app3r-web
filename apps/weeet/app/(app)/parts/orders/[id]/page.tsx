@@ -23,8 +23,8 @@ const STATUS_COLORS: Record<PartsOrderStatus, string> = {
   fulfilled: "bg-yellow-900/40 border-yellow-700 text-yellow-300",
   closed:    "bg-green-900/40 border-green-700 text-green-300",
   disputed:  "bg-red-900/40 border-red-700 text-red-300",
-  resolved:  "bg-purple-900/40 border-purple-700 text-purple-300",
-  refunded:  "bg-teal-900/40 border-teal-700 text-teal-300",
+  resolved:  "bg-blue-900/40 border-blue-700 text-blue-300",
+  refunded:  "bg-weeet-surface/60 border-weeet-primary/50 text-weeet-primary",
   cancelled: "bg-gray-900/40 border-gray-700 text-gray-500",
 };
 
@@ -430,7 +430,7 @@ export default function PartsOrderDetailPage({
                 {order.dispute.resolution && (
                   <div className="mt-2 pt-2 border-t border-red-900/40">
                     <p className="text-xs text-gray-500 mb-0.5">ผลการแก้ไข</p>
-                    <p className="text-sm text-purple-300">{order.dispute.resolution}</p>
+                    <p className="text-sm text-blue-300">{order.dispute.resolution}</p>
                   </div>
                 )}
               </div>

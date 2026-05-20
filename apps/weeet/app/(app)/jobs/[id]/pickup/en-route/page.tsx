@@ -64,9 +64,9 @@ export default function PickupEnRoutePage({
       </div>
 
       {/* Info card */}
-      <div className="bg-indigo-950/50 border border-indigo-800/60 rounded-xl p-4 space-y-1">
-        <p className="text-indigo-300 text-sm font-semibold">🚛 งาน Pickup</p>
-        <p className="text-indigo-200 text-xs">
+      <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl p-4 space-y-1">
+        <p className="text-weeet-primary text-sm font-semibold">🚛 งาน Pickup</p>
+        <p className="text-weeet-text text-xs">
           กดปุ่มด้านล่างเพื่อบันทึก GPS และเปลี่ยนสถานะเป็น{" "}
           <span className="font-semibold">กำลังไปรับ</span>
         </p>

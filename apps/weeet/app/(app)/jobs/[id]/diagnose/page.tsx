@@ -10,7 +10,7 @@ const BRANCHES: { key: Branch; title: string; desc: string; color: string }[] = 
   { key: "B1.1", title: "B1.1 — ซ่อมได้ ราคาเดิม", desc: "ซ่อมได้ในราคาที่ประเมินไว้เดิม", color: "border-green-600 bg-green-950/40" },
   { key: "B1.2", title: "B1.2 — ซ่อมได้ ราคาใหม่", desc: "ซ่อมได้ แต่ราคาหรืออะไหล่เปลี่ยน ต้องขออนุมัติ WeeeR", color: "border-blue-600 bg-blue-950/40" },
   { key: "B2.1", title: "B2.1 — ซ่อมไม่ได้ / ยกเลิก", desc: "ไม่สามารถซ่อมได้ หรือลูกค้าขอยกเลิก", color: "border-amber-600 bg-amber-950/40" },
-  { key: "B2.2", title: "B2.2 — รับซื้อของเก่า", desc: "ลูกค้าต้องการขายเครื่องให้ App3R", color: "border-purple-600 bg-purple-950/40" },
+  { key: "B2.2", title: "B2.2 — รับซื้อของเก่า", desc: "ลูกค้าต้องการขายเครื่องให้ App3R", color: "border-gray-500 bg-gray-800/50" },
 ];
 
 type PartEntry = { name: string; qty: number; price: number };
@@ -167,19 +167,19 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
 
         {/* B2.2 fields */}
         {branch === "B2.2" && (
-          <div className="space-y-4 bg-purple-950/30 border border-purple-800/50 rounded-xl p-4">
-            <p className="text-sm font-semibold text-purple-300">B2.2 — รับซื้อของเก่า</p>
+          <div className="space-y-4 bg-gray-800/40 border border-gray-600/50 rounded-xl p-4">
+            <p className="text-sm font-semibold text-blue-300">B2.2 — รับซื้อของเก่า</p>
             <div className="space-y-2">
               <label className="text-xs text-gray-300">ราคารับซื้อ (บาท) <span className="text-red-400">*</span></label>
               <input type="number" min="0" value={scrapPrice} onChange={(e) => setScrapPrice(e.target.value)}
                 placeholder="0"
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-purple-500" />
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500" />
             </div>
             <div className="space-y-2">
               <label className="text-xs text-gray-300">น้ำหนัก (กก.) ถ้ามี</label>
               <input type="number" min="0" step="0.1" value={scrapWeight} onChange={(e) => setScrapWeight(e.target.value)}
                 placeholder="0.0"
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-purple-500" />
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500" />
             </div>
           </div>
         )}
@@ -191,7 +191,7 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
         <button
           onClick={handleSubmit}
           disabled={!canSubmit() || submitting}
-          className="w-full bg-purple-600 hover:bg-purple-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-gray-600 hover:bg-gray-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? <><span className="animate-spin">⏳</span> กำลังส่ง...</> : "🛠️ ยืนยันวินิจฉัย"}
         </button>

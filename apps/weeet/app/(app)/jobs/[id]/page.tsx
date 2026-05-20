@@ -42,12 +42,12 @@ const STATUS_COLOR: Record<RepairJobStatus, string> = {
   awaiting_review: "bg-amber-900/60 text-amber-300",
   closed: "bg-green-900/60 text-green-300",
   cancelled: "bg-red-900/60 text-red-300",
-  converted_scrap: "bg-purple-900/60 text-purple-300",
+  converted_scrap: "bg-gray-700/40 text-gray-300",
   // Pickup states
   en_route_pickup: "bg-blue-900/60 text-blue-300",
   picked_up: "bg-blue-900/60 text-blue-300",
-  appliance_at_shop: "bg-indigo-900/60 text-indigo-300",
-  tested_ok: "bg-teal-900/60 text-teal-300",
+  appliance_at_shop: "bg-weeet-surface/60 text-weeet-primary",
+  tested_ok: "bg-green-900/60 text-green-300",
   en_route_delivery: "bg-blue-900/60 text-blue-300",
   delivered: "bg-green-900/60 text-green-300",
   // Parcel states
@@ -100,7 +100,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("inspect")}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🔍 ส่งรายงานตรวจสอบ
         </button>
@@ -110,7 +110,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("diagnose")}
-          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🛠️ วินิจฉัย / เลือกสาขา
         </button>
@@ -164,7 +164,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("pickup/receipt")}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           📋 ใบรับมอบเครื่อง (เซ็นชื่อ)
         </button>
@@ -174,7 +174,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("repair/in-progress")}
-          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🔧 บันทึกการซ่อม
         </button>
@@ -184,7 +184,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("delivery/en-route")}
-          className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🚗 ออกเดินทางส่งคืนเครื่อง
         </button>
@@ -208,7 +208,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("parcel/in-progress")}
-          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🔧 บันทึกการซ่อม (Parcel)
         </button>
@@ -218,7 +218,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("parcel/tested")}
-          className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           ✅ บันทึกผลทดสอบ + ส่งกลับ WeeeR
         </button>
@@ -318,9 +318,9 @@ export default function JobDetailPage({
       <div className="px-4 pt-4 space-y-4">
         {/* Service type badge */}
         {job.service_type === "pickup" && (
-          <div className="bg-indigo-950/50 border border-indigo-800/60 rounded-xl px-4 py-2 flex items-center gap-2">
-            <span className="text-indigo-300 text-sm">🚛</span>
-            <span className="text-indigo-300 text-sm font-medium">งาน Pickup — รับ-ส่งซ่อม</span>
+          <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl px-4 py-2 flex items-center gap-2">
+            <span className="text-weeet-primary text-sm">🚛</span>
+            <span className="text-weeet-primary text-sm font-medium">งาน Pickup — รับ-ส่งซ่อม</span>
           </div>
         )}
 

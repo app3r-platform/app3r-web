@@ -161,7 +161,7 @@ export default function RepairInProgressPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !repairLog.trim()}
-        className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🔧 ยืนยันซ่อมเสร็จ + ทดสอบผ่าน"}
       </button>

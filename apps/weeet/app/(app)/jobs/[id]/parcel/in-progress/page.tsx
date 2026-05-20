@@ -68,9 +68,9 @@ export default function ParcelInProgressPage({
       </div>
 
       {/* Parcel badge */}
-      <div className="bg-purple-950/50 border border-purple-800/60 rounded-xl px-4 py-2 flex items-center gap-2">
-        <span className="text-purple-300 text-sm">📦</span>
-        <span className="text-purple-300 text-sm font-medium">พัสดุ — ซ่อมในร้านเท่านั้น</span>
+      <div className="bg-gray-800/60 border border-gray-600/60 rounded-xl px-4 py-2 flex items-center gap-2">
+        <span className="text-blue-300 text-sm">📦</span>
+        <span className="text-blue-300 text-sm font-medium">พัสดุ — ซ่อมในร้านเท่านั้น</span>
       </div>
 
       {/* Service log */}
@@ -165,7 +165,7 @@ export default function ParcelInProgressPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !serviceLog.trim()}
-        className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🔧 บันทึกการซ่อม"}
       </button>

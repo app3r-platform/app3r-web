@@ -156,7 +156,7 @@ export default function PickupReceiptPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !techSig || !custSig}
-        className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "📋 ยืนยันใบรับมอบเครื่อง"}
       </button>

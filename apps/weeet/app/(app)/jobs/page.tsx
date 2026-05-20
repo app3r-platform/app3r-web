@@ -56,7 +56,7 @@ function statusLabel(s: RepairJobStatus): string {
 function statusColor(s: RepairJobStatus): string {
   if (DONE_STATUSES.includes(s)) {
     if (s === "cancelled") return "bg-red-900/60 text-red-300";
-    if (s === "converted_scrap") return "bg-purple-900/60 text-purple-300";
+    if (s === "converted_scrap") return "bg-gray-700/40 text-gray-300";
     return "bg-green-900/60 text-green-300";
   }
   if (AWAITING_STATUSES.includes(s)) return "bg-amber-900/60 text-amber-300";

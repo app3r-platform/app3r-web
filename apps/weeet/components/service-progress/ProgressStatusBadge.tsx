@@ -6,7 +6,7 @@ const STAGE_COLORS: Record<MainStage, string> = {
   offer_accepted: "bg-blue-900/60 text-blue-300",
   in_progress: "bg-orange-900/60 text-orange-300",
   completed: "bg-green-900/60 text-green-300",
-  reviewed: "bg-purple-900/60 text-purple-300",
+  reviewed: "bg-blue-900/60 text-blue-300",
 };
 
 export function ProgressStatusBadge({ stage }: { stage: MainStage }) {

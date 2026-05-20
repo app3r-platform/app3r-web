@@ -129,11 +129,11 @@ export default function RepairTestedPage({
       </div>
 
       {/* Confirmation badge */}
-      <div className="bg-teal-950/50 border border-teal-800/60 rounded-xl p-4 flex items-center gap-3">
+      <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl p-4 flex items-center gap-3">
         <span className="text-2xl">✅</span>
         <div>
-          <p className="text-teal-300 font-semibold text-sm">ทดสอบผ่านแล้ว</p>
-          <p className="text-teal-200 text-xs">พร้อมส่งคืนให้ลูกค้า</p>
+          <p className="text-weeet-primary font-semibold text-sm">ทดสอบผ่านแล้ว</p>
+          <p className="text-weeet-text text-xs">พร้อมส่งคืนให้ลูกค้า</p>
         </div>
       </div>
 
@@ -146,7 +146,7 @@ export default function RepairTestedPage({
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "✅ ยืนยันทดสอบผ่าน — พร้อมส่งคืน"}
       </button>
