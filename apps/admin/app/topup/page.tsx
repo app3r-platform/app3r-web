@@ -340,7 +340,7 @@ export default function TopupPage() {
 function PaymentMethodBadge({ method }: { method: string }) {
   const map: Record<string, { label: string; cls: string }> = {
     bank_transfer: { label: "โอนธนาคาร", cls: "bg-blue-900 text-blue-300" },
-    promptpay:     { label: "PromptPay",  cls: "bg-purple-900 text-purple-300" },
+    promptpay:     { label: "PromptPay",  cls: "bg-admin-primary/15 text-admin-primary" },
     truemoney:     { label: "TrueMoney",  cls: "bg-orange-900 text-orange-300" },
   };
   const m = map[method] ?? { label: method, cls: "bg-gray-800 text-gray-400" };

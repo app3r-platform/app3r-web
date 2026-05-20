@@ -34,7 +34,7 @@ const STATUS_COLOR: Record<string, string> = {
   assigned:    "bg-blue-500",
   departed:    "bg-yellow-500",
   arrived:     "bg-cyan-500",
-  in_progress: "bg-indigo-500",
+  in_progress: "bg-brand-info",
   completed:   "bg-green-500",
   cancelled:   "bg-red-500",
 };
@@ -47,8 +47,8 @@ const CLEANING_LABEL: Record<string, string> = {
 
 const CLEANING_COLOR: Record<string, string> = {
   general:  "bg-blue-500",
-  deep:     "bg-purple-500",
-  sanitize: "bg-teal-500",
+  deep:     "bg-admin-primary",
+  sanitize: "bg-brand-success",
 };
 
 const APPLIANCE_LABEL: Record<string, string> = {
@@ -226,8 +226,8 @@ export default function MaintainAnalyticsPage() {
         </div>
 
         {/* Recurring conversion detail */}
-        <section className="bg-gray-900 rounded-xl border border-purple-900/40 p-5">
-          <h2 className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-4">
+        <section className="bg-gray-900 rounded-xl border border-admin-primary/30 p-5">
+          <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-4">
             🔁 Recurring Conversion
           </h2>
           <div className="space-y-3">
@@ -237,7 +237,7 @@ export default function MaintainAnalyticsPage() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">งาน recurring</span>
-              <span className="text-purple-300 font-mono">{data.recurring_count.toLocaleString()}</span>
+              <span className="text-admin-primary font-mono">{data.recurring_count.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Conversion Rate</span>
@@ -253,7 +253,7 @@ export default function MaintainAnalyticsPage() {
             </div>
             <div className="h-3 bg-gray-800 rounded-full overflow-hidden mt-2">
               <div
-                className="h-full rounded-full bg-purple-500 transition-all"
+                className="h-full rounded-full bg-admin-primary transition-all"
                 style={{ width: `${Math.min(data.recurring_conversion_rate * 100, 100)}%` }}
               />
             </div>

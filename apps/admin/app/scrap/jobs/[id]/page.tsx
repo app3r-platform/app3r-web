@@ -19,7 +19,7 @@ const OPTION_META: Record<ScrapJobOption, { label: string; desc: string; color: 
   resell_parts:    { label: "แยกอะไหล่ขาย",    desc: "แยกชิ้นส่วนที่ใช้ได้มาขายในระบบ Parts",      color: "text-green-400",  available: true },
   repair_and_sell: { label: "ซ่อมแล้วขาย",      desc: "ส่งซ่อม → ลงขาย Resell (C-3.3 — รอพัฒนา)",   color: "text-gray-500",   available: false },
   resell_as_scrap: { label: "ขายเป็นซากใหม่",   desc: "สร้าง Listing ซากใหม่บนระบบ Resell",          color: "text-blue-400",   available: true },
-  dispose:         { label: "ทิ้ง/E-Waste",      desc: "กำจัดอย่างถูกต้อง ออก E-Waste Certificate",   color: "text-purple-400", available: true },
+  dispose:         { label: "ทิ้ง/E-Waste",      desc: "กำจัดอย่างถูกต้อง ออก E-Waste Certificate",   color: "text-admin-primary", available: true },
 };
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {

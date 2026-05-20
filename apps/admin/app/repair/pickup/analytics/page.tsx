@@ -54,7 +54,8 @@ function StatCard({
     red:     "text-red-400",
     orange:  "text-orange-400",
     yellow:  "text-yellow-400",
-    purple:  "text-purple-400",
+    "admin-primary": "text-admin-primary",
+    "brand-info": "text-brand-info",
     cyan:    "text-cyan-400",
     default: "text-white",
   };
@@ -168,14 +169,14 @@ export default function PickupAnalyticsPage() {
                   label="ส่งถึง (avg)"
                   value={fmtTime(data.avg_shop_to_delivery_min)}
                   sub="picked_up → delivered"
-                  accent="indigo"
+                  accent="brand-info"
                 />
                 <StatCard
                   icon="⏱️"
                   label="รวมทั้งหมด (avg)"
                   value={fmtTime(data.avg_total_time_min)}
                   sub="assigned → completed"
-                  accent="purple"
+                  accent="admin-primary"
                 />
                 <StatCard
                   icon="💰"
@@ -286,11 +287,11 @@ export default function PickupAnalyticsPage() {
                     const isS2C = row.direction === "shop_to_customer";
                     return (
                       <div key={row.direction} className="flex items-center gap-3">
-                        <span className={`text-xs w-28 shrink-0 ${isS2C ? "text-teal-400" : "text-purple-400"}`}>
+                        <span className={`text-xs w-28 shrink-0 ${isS2C ? "text-brand-success" : "text-admin-primary"}`}>
                           {isS2C ? "ร้าน → ลูกค้า" : "ลูกค้า → ร้าน"}
                         </span>
                         <div className="flex-1 bg-gray-800 rounded-full h-2">
-                          <div className={`h-2 rounded-full transition-all ${isS2C ? "bg-teal-600" : "bg-purple-600"}`}
+                          <div className={`h-2 rounded-full transition-all ${isS2C ? "bg-brand-success" : "bg-admin-primary"}`}
                             style={{ width: `${pct}%` }} />
                         </div>
                         <span className="text-xs text-gray-300 w-10 text-right">{row.count}</span>
@@ -320,7 +321,7 @@ export default function PickupAnalyticsPage() {
                         <td className="py-2.5 text-gray-600 w-8">{i + 1}.</td>
                         <td className="py-2.5 text-gray-200">{row.weeet_name}</td>
                         <td className="py-2.5 text-right font-mono text-blue-400">{row.jobs}</td>
-                        <td className="py-2.5 text-right font-mono text-purple-400">
+                        <td className="py-2.5 text-right font-mono text-admin-primary">
                           {fmtTime(row.avg_time_min)}
                         </td>
                       </tr>

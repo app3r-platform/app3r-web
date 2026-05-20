@@ -79,7 +79,7 @@ export default function BalancesPage() {
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <BucketCard label="Listing Offer Fee Pool" value={fmtG(data.listing_offer_fee_pool)} accent="yellow" />
                 <BucketCard label="Platform Fee Pool" value={fmtG(data.platform_fee_pool)} accent="yellow" />
-                <BucketCard label="Advertising Pool" value={fmtG(data.advertising_pool)} accent="purple" />
+                <BucketCard label="Advertising Pool" value={fmtG(data.advertising_pool)} accent="admin-primary" />
                 <BucketCard label="Escrow Pool" value={fmtG(data.escrow_pool)} accent="blue" />
                 <BucketCard label="Reserve Pool" value={fmtG(data.reserve_pool)} accent="green" />
                 <BucketCard label="Written-Off" value={fmtG(data.written_off)} accent="red" />
@@ -158,7 +158,7 @@ export default function BalancesPage() {
 function BucketCard({ label, value, accent }: { label: string; value: string; accent: string }) {
   const borders: Record<string, string> = {
     yellow: "border-yellow-800/40",
-    purple: "border-purple-800/40",
+    "admin-primary": "border-admin-primary/30",
     blue:   "border-blue-800/40",
     green:  "border-green-800/40",
     red:    "border-red-800/40",
@@ -166,7 +166,7 @@ function BucketCard({ label, value, accent }: { label: string; value: string; ac
   };
   const texts: Record<string, string> = {
     yellow: "text-yellow-300",
-    purple: "text-purple-300",
+    "admin-primary": "text-admin-primary",
     blue:   "text-blue-300",
     green:  "text-green-300",
     red:    "text-red-300",

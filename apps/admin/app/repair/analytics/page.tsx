@@ -35,7 +35,7 @@ function StatCard({
     green:  "text-green-400",
     red:    "text-red-400",
     orange: "text-orange-400",
-    purple: "text-purple-400",
+    "admin-primary": "text-admin-primary",
     default: "text-white",
   };
   return (
@@ -132,7 +132,7 @@ export default function RepairAnalyticsPage() {
                     ? `${data.avg_completion_hours.toFixed(1)} ชั่วโมง`
                     : "—"}
                   sub="T0 → T7 เฉลี่ย"
-                  accent="purple"
+                  accent="admin-primary"
                 />
                 <StatCard
                   icon="♻️"
@@ -182,7 +182,7 @@ export default function RepairAnalyticsPage() {
                     };
                     return (
                       <div key={row.branch} className="flex items-center gap-3">
-                        <span className="text-xs font-mono text-purple-400 w-10 shrink-0">{row.branch}</span>
+                        <span className="text-xs font-mono text-admin-primary w-10 shrink-0">{row.branch}</span>
                         <span className="text-xs text-gray-500 w-32 shrink-0">
                           {BRANCH_LABELS[row.branch] ?? row.branch}
                         </span>

@@ -12,12 +12,12 @@ const JOB_STATUS: Record<string, { label: string; color: string }> = {
   traveling:         { label: "เดินทาง",           color: "bg-blue-900/50 text-blue-300" },
   arrived:           { label: "ถึงแล้ว",            color: "bg-blue-900/50 text-blue-400" },
   awaiting_entry:    { label: "รอเข้าบ้าน",        color: "bg-yellow-900/50 text-yellow-400" },
-  inspecting:        { label: "ตรวจสภาพ",          color: "bg-purple-900/50 text-purple-400" },
+  inspecting:        { label: "ตรวจสภาพ",          color: "bg-admin-primary/15 text-admin-primary" },
   awaiting_decision: { label: "รอ WeeeR อนุมัติ",  color: "bg-orange-900/50 text-orange-400" },
   awaiting_user:     { label: "รอ WeeeU ตอบ",      color: "bg-yellow-900/50 text-yellow-300" },
   in_progress:       { label: "กำลังซ่อม",         color: "bg-blue-900/50 text-blue-400" },
-  completed:         { label: "ซ่อมเสร็จ",         color: "bg-teal-900/50 text-teal-400" },
-  awaiting_review:   { label: "รอตรวจรับ",         color: "bg-teal-900/50 text-teal-300" },
+  completed:         { label: "ซ่อมเสร็จ",         color: "bg-brand-success/15 text-brand-success" },
+  awaiting_review:   { label: "รอตรวจรับ",         color: "bg-brand-success/15 text-brand-success" },
   closed:            { label: "ปิดงาน ✓",          color: "bg-green-900/50 text-green-400" },
   cancelled:         { label: "ยกเลิก",             color: "bg-red-900/50 text-red-400" },
   converted_scrap:   { label: "→ ซาก",             color: "bg-gray-700 text-gray-400" },
@@ -214,7 +214,7 @@ export default function RepairJobsPage() {
                       </td>
                       <td className="px-6 py-3">
                         {job.decision_branch
-                          ? <span className="text-xs font-mono font-bold text-purple-400">{job.decision_branch}</span>
+                          ? <span className="text-xs font-mono font-bold text-admin-primary">{job.decision_branch}</span>
                           : <span className="text-xs text-gray-600">—</span>}
                       </td>
                       <td className="px-6 py-3 text-xs text-gray-400">

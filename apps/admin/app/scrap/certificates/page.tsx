@@ -145,7 +145,7 @@ export default function CertificatesPage() {
                   const sm = STATUS_META[cert.status];
                   return (
                     <tr key={cert.id} className={`hover:bg-gray-800/40 ${cert.status === "pending" ? "bg-yellow-950/10" : ""}`}>
-                      <td className="px-4 py-3 font-mono text-xs text-purple-400">{cert.certNumber}</td>
+                      <td className="px-4 py-3 font-mono text-xs text-admin-primary">{cert.certNumber}</td>
                       <td className="px-4 py-3 text-sm text-gray-200 max-w-xs truncate">{cert.itemDescription}</td>
                       <td className="px-4 py-3">
                         <Link href={`/scrap/jobs/${cert.scrapJobId}`}

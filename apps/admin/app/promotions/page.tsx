@@ -54,7 +54,7 @@ const PROMOS = [
     label: "ฟรีค่าบริการ — บำรุงรักษาเครื่องใช้ไฟฟ้า",
     type: "D",
     desc: "ยกเว้น Platform Fee สำหรับงานบำรุงรักษา (Type D) ทั้งผู้ประกาศและผู้ยื่นข้อเสนอ",
-    color: "purple",
+    color: "admin-primary",
   },
   {
     key: "promo_free_scrap",

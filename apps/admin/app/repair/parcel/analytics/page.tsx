@@ -75,8 +75,9 @@ function StatCard({
     red:     "text-red-400",
     orange:  "text-orange-400",
     yellow:  "text-yellow-400",
-    purple:  "text-purple-400",
+    "admin-primary": "text-admin-primary",
     cyan:    "text-cyan-400",
+    "brand-info": "text-brand-info",
     default: "text-white",
   };
   return (
@@ -177,9 +178,9 @@ export default function ParcelAnalyticsPage() {
                 <StatCard icon="↗" label="ขาออก (avg)" value={fmtDays(data.avg_outbound_days)}
                   sub="ส่ง → ถึงร้าน" accent="cyan" />
                 <StatCard icon="↙" label="ขาคืน (avg)" value={fmtDays(data.avg_return_days)}
-                  sub="ส่งกลับ → ถึงลูกค้า" accent="indigo" />
+                  sub="ส่งกลับ → ถึงลูกค้า" accent="brand-info" />
                 <StatCard icon="⏱️" label="รวม (avg)" value={fmtDays(data.avg_total_days)}
-                  sub="ตั้งแต่ต้นจนจบ" accent="purple" />
+                  sub="ตั้งแต่ต้นจนจบ" accent="admin-primary" />
                 <StatCard icon="💰" label="ค่าส่ง/งาน (avg)"
                   value={data.avg_shipping_cost != null ? `${data.avg_shipping_cost.toFixed(0)} ฿` : "—"}
                   accent="yellow" />
@@ -306,7 +307,7 @@ export default function ParcelAnalyticsPage() {
                       <tr key={i} className="hover:bg-gray-800/30">
                         <td className="py-2.5 text-gray-200 font-medium">{row.courier_name}</td>
                         <td className="py-2.5 text-right font-mono text-blue-400">{row.jobs}</td>
-                        <td className="py-2.5 text-right font-mono text-purple-400">
+                        <td className="py-2.5 text-right font-mono text-admin-primary">
                           {fmtDays(row.avg_transit_days)}
                         </td>
                         <td className="py-2.5 text-right font-mono">

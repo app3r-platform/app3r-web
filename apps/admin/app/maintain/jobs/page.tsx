@@ -13,7 +13,7 @@ const STATUS_META: Record<MaintainJob["status"], { label: string; color: string 
   assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-900/50 text-blue-300" },
   departed:    { label: "ออกเดินทาง",  color: "bg-yellow-900/50 text-yellow-400" },
   arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-900/50 text-cyan-300" },
-  in_progress: { label: "กำลังทำงาน",  color: "bg-indigo-900/50 text-indigo-300" },
+  in_progress: { label: "กำลังทำงาน",  color: "bg-brand-info/15 text-brand-info" },
   completed:   { label: "เสร็จสิ้น",   color: "bg-green-900/50 text-green-400" },
   cancelled:   { label: "ยกเลิก",       color: "bg-red-900/50 text-red-400" },
 };
@@ -210,7 +210,7 @@ export default function MaintainJobsPage() {
                       </td>
                       <td className="px-4 py-3">
                         {job.recurring?.enabled ? (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-300">
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-admin-primary/15 text-admin-primary">
                             🔁 {job.recurring.interval.replace("_", " ")}
                           </span>
                         ) : (

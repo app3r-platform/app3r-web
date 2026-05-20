@@ -166,7 +166,7 @@ export default function ScrapDisputesPage() {
                   <tr key={item.listing_id} className="hover:bg-gray-800/50">
                     <td className="px-5 py-4">
                       <Link href={`/scrap/listings/${item.listing_id}`}
-                        className="font-medium text-purple-400 hover:text-purple-300 transition-colors">
+                        className="font-medium text-admin-primary hover:text-admin-primary/80 transition-colors">
                         {item.title}
                       </Link>
                       <div className="text-xs text-gray-500 mt-0.5">

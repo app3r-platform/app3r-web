@@ -48,7 +48,7 @@ export function FilterBar({
         defaultValue={search}
         onChange={handleSearch}
         placeholder="ค้นหา..."
-        className="rounded-md border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-56"
+        className="rounded-md border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-admin-primary w-56"
       />
 
       {statusOptions.length > 0 && (
@@ -62,7 +62,7 @@ export function FilterBar({
             <ToggleGroup.Item
               key={opt.value}
               value={opt.value}
-              className="rounded-full border border-gray-600 px-3 py-1 text-xs text-gray-300 data-[state=on]:border-indigo-500 data-[state=on]:bg-indigo-600 data-[state=on]:text-white hover:border-gray-400 transition-colors"
+              className="rounded-full border border-gray-600 px-3 py-1 text-xs text-gray-300 data-[state=on]:border-admin-primary data-[state=on]:bg-admin-primary data-[state=on]:text-white hover:border-gray-400 transition-colors"
             >
               {opt.label}
             </ToggleGroup.Item>
@@ -83,7 +83,7 @@ export function FilterBar({
               <ToggleGroup.Item
                 key={opt.value}
                 value={opt.value}
-                className="rounded-full border border-gray-600 px-3 py-1 text-xs text-gray-300 data-[state=on]:border-indigo-500 data-[state=on]:bg-indigo-600 data-[state=on]:text-white hover:border-gray-400 transition-colors"
+                className="rounded-full border border-gray-600 px-3 py-1 text-xs text-gray-300 data-[state=on]:border-admin-primary data-[state=on]:bg-admin-primary data-[state=on]:text-white hover:border-gray-400 transition-colors"
               >
                 {opt.label}
               </ToggleGroup.Item>

@@ -358,7 +358,7 @@ function ServiceTypeBadge({ type }: { type: string }) {
     A: { label: "Secondhand", cls: "bg-blue-900 text-blue-300" },
     B: { label: "Scrap",      cls: "bg-gray-800 text-gray-300" },
     C: { label: "Repair",     cls: "bg-orange-900 text-orange-300" },
-    D: { label: "Maintenance",cls: "bg-purple-900 text-purple-300" },
+    D: { label: "Maintenance",cls: "bg-admin-primary/15 text-admin-primary" },
   };
   const s = map[type] ?? { label: type, cls: "bg-gray-800 text-gray-400" };
   return (

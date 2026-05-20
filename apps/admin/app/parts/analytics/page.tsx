@@ -261,8 +261,8 @@ export default function PartsAnalyticsPage() {
         </section>
 
         {/* Disassembly conversion */}
-        <section className="bg-gray-900 rounded-xl border border-purple-900/30 p-5">
-          <h2 className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-4">
+        <section className="bg-gray-900 rounded-xl border border-admin-primary/20 p-5">
+          <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-4">
             ♻️ Disassembly Conversion (ซาก → อะไหล่)
           </h2>
           <div className="space-y-3">
@@ -279,7 +279,7 @@ export default function PartsAnalyticsPage() {
               </span>
             </div>
             <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
-              <div className="h-full rounded-full bg-purple-500 transition-all"
+              <div className="h-full rounded-full bg-admin-primary transition-all"
                 style={{ width: `${Math.min(data.disassembly_conversion_rate * 100, 100)}%` }} />
             </div>
             <p className="text-xs text-gray-600">

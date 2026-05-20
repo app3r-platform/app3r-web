@@ -149,7 +149,7 @@ export default function GoldManagementPage() {
               <div className="grid grid-cols-2 gap-4">
                 <InfoCard label="Listing Offer Fee Pool" value={fmtG(data.fee_pools.listing_offer_fee_pool)} accent="yellow" />
                 <InfoCard label="Platform Fee Pool" value={fmtG(data.fee_pools.platform_fee_pool)} accent="yellow" />
-                <InfoCard label="Advertising Pool" value={fmtG(data.fee_pools.advertising_pool)} accent="purple" />
+                <InfoCard label="Advertising Pool" value={fmtG(data.fee_pools.advertising_pool)} accent="admin-primary" />
                 <InfoCard label="Escrow Pool" value={fmtG(data.fee_pools.escrow_pool)} accent="blue" />
               </div>
             )}
@@ -218,7 +218,7 @@ export default function GoldManagementPage() {
 function InfoCard({ label, value, accent }: { label: string; value: string; accent: string }) {
   const colors: Record<string, string> = {
     green: "text-green-400", blue: "text-blue-400", red: "text-red-400",
-    yellow: "text-yellow-400", purple: "text-purple-400", gray: "text-gray-300",
+    yellow: "text-yellow-400", "admin-primary": "text-admin-primary", gray: "text-gray-300",
   };
   return (
     <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">

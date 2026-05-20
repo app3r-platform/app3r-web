@@ -195,7 +195,7 @@ export default function MaintainRecurringPage() {
                       <td className="px-4 py-3 text-sm">{APPLIANCE_LABEL[job.applianceType]}</td>
                       <td className="px-4 py-3 text-xs text-gray-300">{CLEANING_LABEL[job.cleaningType]}</td>
                       <td className="px-4 py-3">
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-300">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-admin-primary/15 text-admin-primary">
                           {INTERVAL_LABEL[job.recurring?.interval ?? ""] ?? "—"}
                         </span>
                       </td>
@@ -219,7 +219,7 @@ export default function MaintainRecurringPage() {
                           <button
                             onClick={() => handleTrigger(job.id)}
                             disabled={ts?.loading}
-                            className="px-2.5 py-1 text-xs bg-purple-700 hover:bg-purple-600 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white rounded-lg transition-colors whitespace-nowrap">
+                            className="px-2.5 py-1 text-xs bg-admin-dark hover:bg-admin-primary disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white rounded-lg transition-colors whitespace-nowrap">
                             {ts?.loading ? "..." : "▶ Trigger"}
                           </button>
                           {ts?.msg && (

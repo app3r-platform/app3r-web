@@ -188,7 +188,7 @@ export default function CertificateDetailPage() {
               <h1 className="text-2xl font-bold">📜 Certificate</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
             </div>
-            <p className="text-purple-400 text-sm font-mono font-bold">{cert.certNumber}</p>
+            <p className="text-admin-primary text-sm font-mono font-bold">{cert.certNumber}</p>
           </div>
           <Link href="/scrap/certificates"
             className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
@@ -199,7 +199,7 @@ export default function CertificateDetailPage() {
         {/* Cert info */}
         <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลใบรับรอง</h2>
-          <InfoRow label="เลขที่ใบรับรอง" value={<span className="font-mono text-purple-400">{cert.certNumber}</span>} />
+          <InfoRow label="เลขที่ใบรับรอง" value={<span className="font-mono text-admin-primary">{cert.certNumber}</span>} />
           <InfoRow label="Scrap Job" value={
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
               className="font-mono text-xs text-blue-400 hover:text-blue-300">
@@ -221,7 +221,7 @@ export default function CertificateDetailPage() {
               HTML Preview
             </h2>
             <button onClick={handleDownload}
-              className="px-3 py-1.5 text-xs bg-purple-900/50 hover:bg-purple-800/50 border border-purple-700 text-purple-300 rounded-lg transition-colors flex items-center gap-1.5">
+              className="px-3 py-1.5 text-xs bg-admin-primary/15 hover:bg-admin-primary/20 border border-admin-primary/30 text-admin-primary rounded-lg transition-colors flex items-center gap-1.5">
               ⬇️ ดาวน์โหลด .html
             </button>
           </div>
@@ -283,7 +283,7 @@ export default function CertificateDetailPage() {
         {cert.status === "issued" && (
           <div className="flex gap-3">
             <button onClick={handleDownload}
-              className="px-4 py-2 text-sm bg-purple-900/50 hover:bg-purple-800/50 border border-purple-700 text-purple-300 rounded-lg transition-colors">
+              className="px-4 py-2 text-sm bg-admin-primary/15 hover:bg-admin-primary/20 border border-admin-primary/30 text-admin-primary rounded-lg transition-colors">
               ⬇️ ดาวน์โหลดใบรับรอง (.html)
             </button>
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}

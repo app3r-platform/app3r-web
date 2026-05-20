@@ -37,8 +37,8 @@ const STATUS_META: Record<string, { label: string; color: string; dot: string }>
   assigned:          { label: "มอบหมายแล้ว",  color: "text-blue-300",   dot: "bg-blue-500" },
   en_route_pickup:   { label: "กำลังไปรับ",   color: "text-yellow-400", dot: "bg-yellow-500" },
   picked_up:         { label: "รับแล้ว",       color: "text-cyan-300",   dot: "bg-cyan-500" },
-  en_route_delivery: { label: "กำลังส่ง",      color: "text-indigo-300", dot: "bg-indigo-500" },
-  delivered:         { label: "ส่งแล้ว",       color: "text-teal-300",   dot: "bg-teal-500" },
+  en_route_delivery: { label: "กำลังส่ง",      color: "text-brand-info",    dot: "bg-brand-info" },
+  delivered:         { label: "ส่งแล้ว",       color: "text-brand-success", dot: "bg-brand-success" },
 };
 
 const REFRESH_INTERVAL = 30_000; // 30 seconds
@@ -182,8 +182,8 @@ export default function DispatchMonitorPage() {
                             </span>
                             <span className={`text-xs px-2 py-0.5 rounded-full ${
                               job.direction === "shop_to_customer"
-                                ? "bg-teal-900/40 text-teal-300"
-                                : "bg-purple-900/40 text-purple-300"
+                                ? "bg-brand-success/15 text-brand-success"
+                                : "bg-admin-primary/15 text-admin-primary"
                             }`}>
                               {dirLabel}
                             </span>

@@ -28,7 +28,7 @@ const TX_TYPE_COLORS: Record<string, string> = {
   "platform.points.manual_adjust":  "text-orange-400 bg-orange-900/30",
   "platform.silver.distributed":    "text-blue-400 bg-blue-900/30",
   "platform.silver.expired":        "text-gray-400 bg-gray-800",
-  "platform.silver.expiry_batch_run": "text-purple-400 bg-purple-900/30",
+  "platform.silver.expiry_batch_run": "text-admin-primary bg-admin-primary/10",
   "platform.reconciliation.run":    "text-cyan-400 bg-cyan-900/30",
   "platform.reconciliation.alert":  "text-red-400 bg-red-900/40",
 };

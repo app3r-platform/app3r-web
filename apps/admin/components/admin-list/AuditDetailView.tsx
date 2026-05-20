@@ -10,7 +10,7 @@ const ACTION_COLOR: Record<AuditRecord['action'], string> = {
   create: 'bg-green-600',
   update: 'bg-blue-600',
   delete: 'bg-red-600',
-  approve: 'bg-teal-600',
+  approve: 'bg-brand-success',
   reject: 'bg-orange-600',
 }
 

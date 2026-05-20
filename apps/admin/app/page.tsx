@@ -100,7 +100,7 @@ function StatCard({ icon, label, value, sub, alert, green }: {
 
 function RoleBadge({ role }: { role: string }) {
   const colors: Record<string, string> = {
-    admin: "bg-purple-900 text-purple-300",
+    admin: "bg-admin-primary/15 text-admin-primary",
     weeer: "bg-green-900 text-green-300",
     weeeu: "bg-blue-900 text-blue-300",
     weeet: "bg-orange-900 text-orange-300",

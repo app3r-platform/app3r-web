@@ -67,8 +67,8 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   assigned:            { label: "มอบหมายแล้ว",  color: "bg-blue-900/50 text-blue-300" },
   en_route_pickup:     { label: "กำลังไปรับ",   color: "bg-yellow-900/50 text-yellow-400" },
   picked_up:           { label: "รับแล้ว",       color: "bg-cyan-900/50 text-cyan-300" },
-  en_route_delivery:   { label: "กำลังส่ง",      color: "bg-indigo-900/50 text-indigo-300" },
-  delivered:           { label: "ส่งแล้ว",       color: "bg-teal-900/50 text-teal-300" },
+  en_route_delivery:   { label: "กำลังส่ง",      color: "bg-brand-info/15 text-brand-info" },
+  delivered:           { label: "ส่งแล้ว",       color: "bg-brand-success/15 text-brand-success" },
   completed:           { label: "เสร็จสิ้น",     color: "bg-green-900/50 text-green-400" },
   failed:              { label: "ล้มเหลว",       color: "bg-red-900/50 text-red-400" },
   cancelled:           { label: "ยกเลิก",        color: "bg-gray-800 text-gray-500" },
@@ -190,8 +190,8 @@ export default function PickupDetailPage() {
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               <span className={`text-xs px-2 py-0.5 rounded-full ${
                 job.direction === "shop_to_customer"
-                  ? "bg-teal-900/40 text-teal-300"
-                  : "bg-purple-900/40 text-purple-300"
+                  ? "bg-brand-success/15 text-brand-success"
+                  : "bg-admin-primary/15 text-admin-primary"
               }`}>
                 {dirLabel}
               </span>

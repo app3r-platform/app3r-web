@@ -57,12 +57,12 @@ interface WalkInJobDetail {
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
   checked_in:        { label: "เช็คอิน",        color: "bg-blue-900/50 text-blue-300" },
-  inspecting:        { label: "ตรวจสภาพ",        color: "bg-purple-900/50 text-purple-300" },
+  inspecting:        { label: "ตรวจสภาพ",        color: "bg-admin-primary/15 text-admin-primary" },
   awaiting_decision: { label: "รอตัดสินใจ",      color: "bg-yellow-900/50 text-yellow-400" },
   awaiting_parts:    { label: "รอชิ้นส่วน",      color: "bg-orange-900/50 text-orange-300" },
   in_progress:       { label: "กำลังซ่อม",       color: "bg-cyan-900/50 text-cyan-300" },
-  completed:         { label: "ซ่อมเสร็จ",       color: "bg-teal-900/50 text-teal-300" },
-  awaiting_pickup:   { label: "รอรับคืน",        color: "bg-indigo-900/50 text-indigo-300" },
+  completed:         { label: "ซ่อมเสร็จ",       color: "bg-brand-success/15 text-brand-success" },
+  awaiting_pickup:   { label: "รอรับคืน",        color: "bg-brand-info/15 text-brand-info" },
   closed:            { label: "ปิดงาน",          color: "bg-green-900/50 text-green-400" },
   abandoned:         { label: "ทิ้งแล้ว",        color: "bg-red-900/50 text-red-400" },
   cancelled:         { label: "ยกเลิก",          color: "bg-gray-800 text-gray-400" },

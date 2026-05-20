@@ -195,7 +195,7 @@ export default function ScrapJobsPage() {
                       </td>
                       <td className="px-4 py-3 text-xs font-mono text-gray-400">{job.buyerId}</td>
                       <td className="px-4 py-3">
-                        <span className="text-xs text-purple-300">{OPTION_LABEL[job.decision]}</span>
+                        <span className="text-xs text-admin-primary">{OPTION_LABEL[job.decision]}</span>
                       </td>
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>

@@ -52,7 +52,7 @@ function StatCard({
     red:     "text-red-400",
     orange:  "text-orange-400",
     yellow:  "text-yellow-400",
-    purple:  "text-purple-400",
+    "admin-primary": "text-admin-primary",
     default: "text-white",
   };
   return (
@@ -122,7 +122,7 @@ export default function WalkInAnalyticsPage() {
                 <StatCard icon="✅" label="ปิดงานแล้ว"     value={data.closed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="📦" label="Abandoned"      value={data.abandoned_jobs.toLocaleString()} accent="orange" />
                 <StatCard icon="❌" label="ยกเลิก"          value={data.cancelled_jobs.toLocaleString()} accent="red" />
-                <StatCard icon="🔧" label="ซ่อมเสร็จ"      value={data.completed_jobs.toLocaleString()} accent="purple" />
+                <StatCard icon="🔧" label="ซ่อมเสร็จ"      value={data.completed_jobs.toLocaleString()} accent="admin-primary" />
               </div>
             </section>
 
@@ -159,7 +159,7 @@ export default function WalkInAnalyticsPage() {
                     ? `${data.avg_repair_hours.toFixed(1)} ชม.`
                     : "—"}
                   sub="checked_in → completed"
-                  accent="purple"
+                  accent="admin-primary"
                 />
               </div>
             </section>
@@ -234,7 +234,7 @@ export default function WalkInAnalyticsPage() {
                           <span className="text-xs text-gray-600 w-4 text-right">{i + 1}.</span>
                           <span className="text-xs text-gray-300 w-40 shrink-0 truncate">{row.issue}</span>
                           <div className="flex-1 bg-gray-800 rounded-full h-2">
-                            <div className="bg-purple-600 h-2 rounded-full transition-all"
+                            <div className="bg-admin-primary h-2 rounded-full transition-all"
                               style={{ width: `${pct}%` }} />
                           </div>
                           <span className="text-xs text-gray-400 w-8 text-right">{row.count}</span>
