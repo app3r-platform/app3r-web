@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -145,7 +145,7 @@ export default function RepairNewPage() {
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1);
   const inputCls = (f: string) =>
-    `w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+    `w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary ${
       errors[f] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -172,8 +172,8 @@ export default function RepairNewPage() {
               onClick={() => { setServiceType("on_site"); setErrors({}); }}
               className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
                 serviceType === "on_site"
-                  ? "bg-blue-600 border-blue-600 text-white"
-                  : "border-gray-200 text-gray-500 hover:border-blue-300"
+                  ? "bg-weeeu-primary border-weeeu-primary text-white"
+                  : "border-gray-200 text-gray-500 hover:border-weeeu-dark"
               }`}
             >
               <span className="text-lg">🏠</span>
@@ -239,7 +239,7 @@ export default function RepairNewPage() {
             {appliances.length === 0 && (
               <p className="text-xs text-gray-400 mt-1">
                 ยังไม่มีเครื่องใช้ไฟฟ้า —{" "}
-                <Link href="/appliances" className="text-blue-600 hover:underline">เพิ่มเครื่องก่อน</Link>
+                <Link href="/appliances" className="text-weeeu-primary hover:underline">เพิ่มเครื่องก่อน</Link>
               </p>
             )}
           </div>
@@ -268,7 +268,7 @@ export default function RepairNewPage() {
               onChange={e => setForm(f => ({ ...f, issue_detail: e.target.value }))}
               placeholder="เริ่มเป็นตั้งแต่เมื่อไร / เกิดขึ้นบ่อยแค่ไหน"
               rows={3}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
             />
           </div>
           {/* Sub-4: customer_note */}
@@ -279,7 +279,7 @@ export default function RepairNewPage() {
               onChange={e => setForm(f => ({ ...f, customer_note: e.target.value }))}
               placeholder="เช่น ต้องการให้แจ้งก่อนเปลี่ยนอะไหล่ / ใช้อะไหล่แท้เท่านั้น"
               rows={2}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
             />
           </div>
           {/* Sub-4: priority selector */}
@@ -334,7 +334,7 @@ export default function RepairNewPage() {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-blue-300 hover:text-blue-500 transition-colors text-xs gap-1"
+                className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-weeeu-dark hover:text-weeeu-primary transition-colors text-xs gap-1"
               >
                 <span className="text-2xl leading-none">+</span>
                 <span>เพิ่มรูป</span>
@@ -357,7 +357,7 @@ export default function RepairNewPage() {
                 </div>
                 <Link
                   href={`/repair/walk-in/select-shop?service_type=walk_in`}
-                  className="text-xs text-blue-600 hover:underline"
+                  className="text-xs text-weeeu-primary hover:underline"
                 >
                   เปลี่ยนร้าน
                 </Link>
@@ -406,7 +406,7 @@ export default function RepairNewPage() {
                 onChange={e => setForm(f => ({ ...f, budget_max: e.target.value }))}
                 placeholder="ไม่ระบุ = ไม่จำกัด"
                 min={0}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
               />
             </div>
           </div>
@@ -443,8 +443,8 @@ export default function RepairNewPage() {
         )}
 
         {serviceType === "on_site" && (
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-            <p className="text-xs text-blue-700">
+          <div className="bg-weeeu-surface border border-weeeu-surface rounded-xl p-3">
+            <p className="text-xs text-weeeu-primary">
               🔧 <strong>On-site</strong> — ช่างจะออกมาซ่อมถึงบ้านคุณ ค่าตรวจ 100 Point (ไม่คืน)
             </p>
           </div>
@@ -467,7 +467,7 @@ export default function RepairNewPage() {
               ? "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white"
               : serviceType === "parcel"
               ? "bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white"
-              : "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white"
+              : "bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white"
           }`}
         >
           {submitting

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 
@@ -29,13 +29,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-gray-100">
           <Image src="/logo/WeeeU.png" alt="WeeeU" width={32} height={32} className="rounded-lg mr-2" />
-          <span className="text-lg font-bold text-blue-700">WeeeU</span>
+          <span className="text-lg font-bold text-weeeu-primary">WeeeU</span>
         </div>
 
         {/* User info */}
         <div className="px-4 py-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-sm">
+            <div className="w-10 h-10 bg-weeeu-surface rounded-full flex items-center justify-center text-weeeu-primary font-bold text-sm">
               สม
             </div>
             <div className="min-w-0">
@@ -61,7 +61,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href as string}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-150"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-weeeu-surface hover:text-weeeu-primary transition-all duration-150"
               >
                 <span className="text-base">{item.icon}</span>
                 <span className="flex-1">{item.label}</span>
@@ -105,9 +105,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
           </Link>
           {/* Wallet shortcut */}
-          <Link href="/wallet" className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl transition-colors">
+          <Link href="/wallet" className="flex items-center gap-2 bg-weeeu-surface hover:bg-weeeu-surface px-3 py-1.5 rounded-xl transition-colors">
             <span>👛</span>
-            <span className="text-sm font-semibold text-blue-700">฿ 1,250</span>
+            <span className="text-sm font-semibold text-weeeu-primary">฿ 1,250</span>
           </Link>
         </header>
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -20,7 +20,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 const STATUS_COLOR: Record<string, string> = {
   announced: "bg-indigo-100 text-indigo-700",
-  receiving_offers: "bg-blue-100 text-blue-700",
+  receiving_offers: "bg-weeeu-surface text-weeeu-primary",
   offer_selected: "bg-purple-100 text-purple-700",
   buyer_confirmed: "bg-orange-100 text-orange-700",
   in_progress: "bg-yellow-100 text-yellow-700",

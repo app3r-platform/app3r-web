@@ -105,7 +105,7 @@ export default function ApproveEntryPage() {
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ข้อมูลช่าง</p>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold">
+              <div className="w-12 h-12 bg-weeeu-surface rounded-full flex items-center justify-center text-weeeu-primary font-bold">
                 🧑‍🔧
               </div>
               <div>

@@ -33,7 +33,7 @@ const STATUS_ICON: Record<ServiceProgressStatus, string> = {
 // ── Status → ring color (สำหรับ timeline bullet) ──────────────────────────────
 const STATUS_COLOR: Record<ServiceProgressStatus, string> = {
   pending:     "border-gray-300 bg-gray-50",
-  accepted:    "border-blue-400 bg-blue-50",
+  accepted:    "border-weeeu-primary bg-weeeu-surface",
   in_progress: "border-indigo-500 bg-indigo-50",
   paused:      "border-yellow-400 bg-yellow-50",
   completed:   "border-green-500 bg-green-50",

@@ -18,7 +18,7 @@ const STATUS_LABEL: Record<MaintainJob["status"], string> = {
 
 const STATUS_COLOR: Record<MaintainJob["status"], string> = {
   pending: "bg-yellow-100 text-yellow-700",
-  assigned: "bg-blue-100 text-blue-700",
+  assigned: "bg-weeeu-surface text-weeeu-primary",
   departed: "bg-amber-100 text-amber-700",
   arrived: "bg-amber-100 text-amber-700",
   in_progress: "bg-teal-100 text-teal-700",

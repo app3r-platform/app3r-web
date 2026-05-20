@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { MainStage } from "@/lib/types/service-progress";
 
@@ -12,7 +12,7 @@ const STAGE_LABEL: Record<MainStage, string> = {
 
 const STAGE_COLOR: Record<MainStage, string> = {
   posted: "bg-gray-100 text-gray-600",
-  offer_accepted: "bg-blue-100 text-blue-700",
+  offer_accepted: "bg-weeeu-surface text-weeeu-primary",
   in_progress: "bg-yellow-100 text-yellow-700",
   completed: "bg-green-100 text-green-700",
   reviewed: "bg-indigo-100 text-indigo-700",

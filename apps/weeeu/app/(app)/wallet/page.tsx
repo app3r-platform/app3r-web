@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "กระเป๋าตังค์" };
 
@@ -71,7 +71,7 @@ export default function WalletPage() {
               {[100, 200, 500, 1000].map((amt) => (
                 <button
                   key={amt}
-                  className="border border-blue-200 text-blue-700 hover:bg-blue-50 text-sm font-medium py-2 rounded-xl transition-colors"
+                  className="border border-weeeu-dark text-weeeu-primary hover:bg-weeeu-surface text-sm font-medium py-2 rounded-xl transition-colors"
                 >
                   {amt.toLocaleString()}
                 </button>
@@ -81,9 +81,9 @@ export default function WalletPage() {
               <input
                 type="number"
                 placeholder="จำนวนที่ต้องการเติม"
-                className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
               />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
+              <button className="bg-weeeu-primary hover:bg-weeeu-primary text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
                 เติม
               </button>
             </div>
@@ -106,7 +106,7 @@ export default function WalletPage() {
               <input
                 type="number"
                 placeholder="จำนวนที่ต้องการถอน"
-                className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
               />
               <button className="bg-gray-700 hover:bg-gray-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
                 ถอน
@@ -127,7 +127,7 @@ export default function WalletPage() {
                 key={tab}
                 className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${
                   tab === "ทั้งหมด"
-                    ? "bg-blue-600 text-white"
+                    ? "bg-weeeu-primary text-white"
                     : "text-gray-500 hover:bg-gray-100"
                 }`}
               >

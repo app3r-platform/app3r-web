@@ -80,9 +80,9 @@ export default function RepairOffersPage() {
       </div>
 
       {listing && (
-        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
-          <p className="text-sm font-semibold text-blue-800">{listing.appliance_name}</p>
-          <p className="text-xs text-blue-600 mt-0.5">{listing.issue_summary}</p>
+        <div className="bg-weeeu-surface border border-weeeu-surface rounded-2xl p-4">
+          <p className="text-sm font-semibold text-weeeu-dark">{listing.appliance_name}</p>
+          <p className="text-xs text-weeeu-primary mt-0.5">{listing.issue_summary}</p>
         </div>
       )}
 
@@ -113,7 +113,7 @@ export default function RepairOffersPage() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-blue-700">{offer.quoted_price.toLocaleString()}</p>
+                    <p className="text-lg font-bold text-weeeu-primary">{offer.quoted_price.toLocaleString()}</p>
                     <p className="text-xs text-gray-400">Point</p>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export default function RepairOffersPage() {
                 <button
                   disabled={!!selecting}
                   onClick={() => handleSelect(offer.id)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
                 >
                   {selecting === offer.id ? (
                     <><span className="animate-spin">⟳</span> กำลังเลือก...</>

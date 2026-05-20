@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "ลืมรหัสผ่าน" };
@@ -25,22 +25,22 @@ export default function ForgotPasswordPage() {
           <input
             type="text"
             placeholder="0812345678 หรือ email@example.com"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
           />
         </div>
 
         {/* Submit → OTP */}
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200"
         >
           ส่ง OTP
         </button>
       </form>
 
       {/* Info */}
-      <div className="bg-blue-50 rounded-xl p-4">
-        <p className="text-sm text-blue-700">
+      <div className="bg-weeeu-surface rounded-xl p-4">
+        <p className="text-sm text-weeeu-primary">
           💡 หากเบอร์โทร/อีเมลที่กรอกตรงกับบัญชีในระบบ คุณจะได้รับ OTP ภายใน 2 นาที
         </p>
       </div>

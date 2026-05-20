@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "เครื่องใช้ไฟฟ้า" };
@@ -22,7 +22,7 @@ const appliances = [
   {
     id: "4", icon: "🧊", name: "ตู้เย็น Sharp", brand: "Sharp",
     model: "SJ-X420TP-SL", capacity: "420 ลิตร", installDate: "ธ.ค. 63",
-    status: "ประกาศขาย", statusColor: "text-blue-600 bg-blue-50",
+    status: "ประกาศขาย", statusColor: "text-weeeu-primary bg-weeeu-surface",
   },
 ];
 
@@ -34,7 +34,7 @@ export default function AppliancesPage() {
         <h1 className="text-2xl font-bold text-gray-900">เครื่องใช้ไฟฟ้า</h1>
         <Link
           href="/appliances/add"
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+          className="flex items-center gap-2 bg-weeeu-primary hover:bg-weeeu-primary text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
         >
           + เพิ่มเครื่อง
         </Link>
@@ -43,7 +43,7 @@ export default function AppliancesPage() {
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "ทั้งหมด", count: 4, icon: "🔌", color: "bg-blue-50 text-blue-700" },
+          { label: "ทั้งหมด", count: 4, icon: "🔌", color: "bg-weeeu-surface text-weeeu-primary" },
           { label: "ปกติ", count: 2, icon: "✅", color: "bg-green-50 text-green-700" },
           { label: "มีปัญหา/ประกาศ", count: 2, icon: "⚠️", color: "bg-orange-50 text-orange-700" },
         ].map((s) => (
@@ -60,9 +60,9 @@ export default function AppliancesPage() {
         <input
           type="search"
           placeholder="ค้นหาเครื่องใช้ไฟฟ้า..."
-          className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
         />
-        <select className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary">
           <option>ทุกประเภท</option>
           <option>แอร์</option>
           <option>ตู้เย็น</option>
@@ -76,7 +76,7 @@ export default function AppliancesPage() {
         {appliances.map((app) => (
           <div
             key={app.id}
-            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-start gap-4 hover:border-blue-200 transition-colors"
+            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-start gap-4 hover:border-weeeu-dark transition-colors"
           >
             {/* Icon */}
             <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
@@ -101,7 +101,7 @@ export default function AppliancesPage() {
 
               {/* Actions */}
               <div className="flex gap-2 mt-3">
-                <button className="text-xs px-3 py-1.5 border border-blue-200 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                <button className="text-xs px-3 py-1.5 border border-weeeu-dark text-weeeu-primary hover:bg-weeeu-surface rounded-lg transition-colors">
                   🔧 แจ้งซ่อม
                 </button>
                 <button className="text-xs px-3 py-1.5 border border-green-200 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
@@ -122,7 +122,7 @@ export default function AppliancesPage() {
       {/* Add appliance CTA */}
       <Link
         href="/appliances/add"
-        className="w-full flex flex-col items-center justify-center gap-2 py-8 border-2 border-dashed border-blue-200 rounded-2xl text-blue-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+        className="w-full flex flex-col items-center justify-center gap-2 py-8 border-2 border-dashed border-weeeu-dark rounded-2xl text-weeeu-primary hover:border-weeeu-primary hover:text-weeeu-primary hover:bg-weeeu-surface transition-all"
       >
         <span className="text-3xl">➕</span>
         <span className="text-sm font-medium">เพิ่มเครื่องใช้ไฟฟ้าใหม่</span>

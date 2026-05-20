@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "เลือกวิธีสมัคร" };
@@ -39,7 +39,7 @@ export default function SignupMethodPage() {
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
           <div
             key={s}
-            className={`h-1.5 flex-1 rounded-full ${s === 1 ? "bg-blue-600" : "bg-gray-200"}`}
+            className={`h-1.5 flex-1 rounded-full ${s === 1 ? "bg-weeeu-primary" : "bg-gray-200"}`}
           />
         ))}
       </div>
@@ -56,14 +56,14 @@ export default function SignupMethodPage() {
             <Link
               key={m.id}
               href={m.href!}
-              className="flex items-center gap-4 p-4 border-2 border-blue-600 rounded-2xl hover:bg-blue-50 transition-colors"
+              className="flex items-center gap-4 p-4 border-2 border-weeeu-primary rounded-2xl hover:bg-weeeu-surface transition-colors"
             >
               <span className="text-2xl">{m.icon}</span>
               <div className="flex-1">
                 <p className="font-semibold text-gray-900 text-sm">{m.label}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{m.desc}</p>
               </div>
-              <span className="text-blue-600 text-lg">›</span>
+              <span className="text-weeeu-primary text-lg">›</span>
             </Link>
           ) : (
             <div
@@ -83,7 +83,7 @@ export default function SignupMethodPage() {
 
       <p className="text-center text-sm text-gray-500">
         มีบัญชีแล้ว?{" "}
-        <Link href="/login" className="text-blue-600 font-semibold hover:text-blue-800">
+        <Link href="/login" className="text-weeeu-primary font-semibold hover:text-weeeu-dark">
           เข้าสู่ระบบ
         </Link>
       </p>

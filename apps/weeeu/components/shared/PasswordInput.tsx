@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -33,7 +33,7 @@ export default function PasswordInput({
         value={value}
         onChange={onChange}
         autoComplete={autoComplete}
-        className={`w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pr-12 ${className}`}
+        className={`w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary focus:border-transparent text-sm pr-12 ${className}`}
       />
       <button
         type="button"

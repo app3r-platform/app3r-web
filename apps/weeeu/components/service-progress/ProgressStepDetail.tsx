@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { ProgressStep } from "@/lib/types/service-progress";
@@ -11,7 +11,7 @@ const ROLE_LABEL: Record<string, string> = {
 };
 
 const ROLE_COLOR: Record<string, string> = {
-  weeeu: "bg-blue-100 text-blue-700",
+  weeeu: "bg-weeeu-surface text-weeeu-primary",
   weeer: "bg-green-100 text-green-700",
   weeet: "bg-orange-100 text-orange-700",
 };

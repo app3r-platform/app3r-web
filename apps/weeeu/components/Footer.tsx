@@ -1,4 +1,4 @@
-/**
+﻿/**
  * components/Footer.tsx
  * Sub-CMD-4 D78 — WeeeU Footer
  * Remediation v2: branch phase-d-4/weeeu-sub4-contact base 8be4344
@@ -100,7 +100,7 @@ function PhoneList({ phones }: { phones: ContactInfoPhone[] }) {
             <span className="text-gray-500">{p.label}: </span>
             <a
               href={`tel:${p.number.replace(/[^0-9+]/g, '')}`}
-              className="text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-weeeu-primary hover:text-weeeu-dark transition-colors"
             >
               {p.number}
             </a>
@@ -127,7 +127,7 @@ function EmailList({ emails }: { emails: ContactInfoEmail[] }) {
             <span className="text-gray-500">{e.label}: </span>
             <a
               href={`mailto:${e.address}`}
-              className="text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-weeeu-primary hover:text-weeeu-dark transition-colors"
             >
               {e.address}
             </a>

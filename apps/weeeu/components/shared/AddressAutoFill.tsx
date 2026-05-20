@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -80,7 +80,7 @@ export default function AddressAutoFill({ value, onChange, errors = {} }: Addres
   };
 
   const inputCls = (err?: string) =>
-    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary focus:border-transparent ${
       err ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -118,7 +118,7 @@ export default function AddressAutoFill({ value, onChange, errors = {} }: Addres
             className={inputCls(errors.postal_code) + " pr-10"}
           />
           {fetching && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500 text-sm animate-spin">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-weeeu-primary text-sm animate-spin">
               ⟳
             </span>
           )}

@@ -63,7 +63,7 @@ export default function WalkInReceiptPage() {
     <div className="text-center py-16">
       <p className="text-4xl mb-3">🔍</p>
       <p className="text-gray-600 font-medium">{error || "ไม่พบข้อมูล"}</p>
-      <Link href="/repair" className="mt-3 inline-block text-blue-600 text-sm font-medium hover:underline">← กลับรายการ</Link>
+      <Link href="/repair" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">← กลับรายการ</Link>
     </div>
   );
 
@@ -127,7 +127,7 @@ export default function WalkInReceiptPage() {
         {receipt.weeer_phone && (
           <div className="flex gap-2 text-sm text-gray-600">
             <span>📞</span>
-            <a href={`tel:${receipt.weeer_phone}`} className="text-blue-600 hover:underline">
+            <a href={`tel:${receipt.weeer_phone}`} className="text-weeeu-primary hover:underline">
               {receipt.weeer_phone}
             </a>
           </div>
@@ -152,8 +152,8 @@ export default function WalkInReceiptPage() {
       )}
 
       {/* Instructions */}
-      <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 space-y-2">
-        <p className="text-sm font-semibold text-blue-800">📋 ขั้นตอนต่อไป</p>
+      <div className="bg-weeeu-surface border border-weeeu-surface rounded-2xl p-4 space-y-2">
+        <p className="text-sm font-semibold text-weeeu-dark">📋 ขั้นตอนต่อไป</p>
         <ol className="space-y-1.5 pl-1">
           {[
             "นำเครื่องและ Receipt code ไปที่ร้านซ่อม",
@@ -161,7 +161,7 @@ export default function WalkInReceiptPage() {
             "รอการแจ้งเตือนผลการตรวจ",
             "อนุมัติราคา → รับเครื่องเมื่อซ่อมเสร็จ",
           ].map((step, i) => (
-            <li key={i} className="flex gap-2 text-xs text-blue-700">
+            <li key={i} className="flex gap-2 text-xs text-weeeu-primary">
               <span className="font-bold shrink-0">{i + 1}.</span>
               <span>{step}</span>
             </li>
@@ -173,7 +173,7 @@ export default function WalkInReceiptPage() {
       <div className="space-y-3">
         <Link
           href={`/repair/${id}`}
-          className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
+          className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
         >
           📊 ติดตามสถานะงานซ่อม
         </Link>
