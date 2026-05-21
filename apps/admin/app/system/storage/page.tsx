@@ -161,7 +161,7 @@ export default function StoragePage() {
           {TABS.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                tab === t.key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -338,7 +338,7 @@ export default function StoragePage() {
                   </p>
                   {isSuper ? (
                     <button onClick={runCleanup} disabled={runningCleanup}
-                      className="px-5 py-2.5 bg-red-700 hover:bg-red-600 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+                      className="px-5 py-2.5 bg-red-700 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                       {runningCleanup ? "กำลัง Cleanup..." : "▶ Run Cleanup Now"}
                     </button>
                   ) : (
@@ -463,7 +463,7 @@ function BigCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className="text-xl font-bold text-white">{value}</p>
+      <p className="text-xl font-bold text-gray-900">{value}</p>
     </div>
   );
 }

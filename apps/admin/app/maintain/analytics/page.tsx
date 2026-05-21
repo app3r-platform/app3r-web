@@ -84,7 +84,7 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className="text-2xl font-bold text-white">{value}</p>
+      <p className="text-2xl font-bold text-gray-900">{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
     </div>
   );
@@ -137,7 +137,7 @@ export default function MaintainAnalyticsPage() {
             </p>
           </div>
           <Link href="/maintain/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             🛁 Jobs →
           </Link>
         </div>
@@ -233,7 +233,7 @@ export default function MaintainAnalyticsPage() {
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">งานทั้งหมด</span>
-              <span className="text-white font-mono">{data.total_jobs.toLocaleString()}</span>
+              <span className="text-gray-900 font-mono">{data.total_jobs.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">งาน recurring</span>

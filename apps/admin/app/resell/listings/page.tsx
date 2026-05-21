@@ -106,7 +106,7 @@ export default function ResellListingsPage() {
             </p>
           </div>
           <Link href="/resell/analytics"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             📊 Analytics →
           </Link>
         </div>
@@ -117,7 +117,7 @@ export default function ResellListingsPage() {
             <button key={t.value}
               onClick={() => { setFilterStatus(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -128,26 +128,26 @@ export default function ResellListingsPage() {
         <div className="flex gap-3 flex-wrap">
           <select value={filterSellerType}
             onChange={e => { setFilterSellerType(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุก Seller</option>
             <option value="WeeeU">WeeeU</option>
             <option value="WeeeR">WeeeR</option>
           </select>
           <select value={filterListingType}
             onChange={e => { setFilterListingType(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุกประเภท</option>
             <option value="used_appliance">มือสอง</option>
             <option value="scrap">ซาก</option>
           </select>
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500" />
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500" />
           <span className="self-center text-gray-600 text-xs">ถึง</span>
           <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500" />
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500" />
           {hasSecondaryFilters && (
             <button onClick={() => { setFilterSellerType(""); setFilterListingType(""); setDateFrom(""); setDateTo(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
@@ -160,10 +160,10 @@ export default function ResellListingsPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

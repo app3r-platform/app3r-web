@@ -112,11 +112,11 @@ export default function DispatchMonitorPage() {
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-500">รีเฟรชใน {countdown}s</span>
             <button onClick={manualRefresh}
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               🔄 รีเฟรชเดี๋ยวนี้
             </button>
             <Link href="/repair/pickup/queue"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               ← Queue
             </Link>
           </div>

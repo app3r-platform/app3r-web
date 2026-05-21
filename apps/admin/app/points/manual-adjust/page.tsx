@@ -130,7 +130,7 @@ export default function ManualAdjustPage() {
                 {(["gold", "silver"] as const).map((c) => (
                   <button key={c} onClick={() => setCurrency(c)}
                     className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      currency === c ? "bg-admin-surface text-admin-primary" : "bg-gray-100 text-gray-500 hover:bg-gray-700"
+                      currency === c ? "bg-admin-surface text-admin-primary" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}>
                     {c === "gold" ? "🥇 Gold" : "🥈 Silver"}
                   </button>
@@ -157,7 +157,7 @@ export default function ManualAdjustPage() {
             <button
               onClick={() => setShowModal(true)}
               disabled={!userId || !amountValid || reason.length < 10}
-              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+              className="w-full py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
               ดำเนินการ
             </button>
           </div>
@@ -222,16 +222,16 @@ export default function ManualAdjustPage() {
 
               <p className="text-sm text-gray-500 mb-2">พิมพ์ <strong className="text-white">CONFIRM</strong> เพื่อยืนยัน:</p>
               <input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white font-mono mb-4"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-gray-900 font-mono mb-4"
                 placeholder="CONFIRM" />
 
               <div className="flex gap-3">
                 <button onClick={() => { setShowModal(false); setConfirmText(""); }}
-                  className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm transition-colors">
+                  className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
                   ยกเลิก
                 </button>
                 <button onClick={handleSubmit} disabled={confirmText !== "CONFIRM" || submitting}
-                  className="flex-1 py-2.5 bg-red-700 hover:bg-red-600 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+                  className="flex-1 py-2.5 bg-red-700 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                   {submitting ? "กำลังดำเนินการ..." : "ยืนยัน"}
                 </button>
               </div>

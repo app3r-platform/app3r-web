@@ -68,12 +68,12 @@ export default function KYCQueuePage() {
         {/* Status Filter Tabs */}
         <div className="flex flex-wrap gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           <button onClick={() => { setFilterStatus(""); setPage(1); }}
-            className={`px-4 py-2 rounded-lg text-sm transition-colors ${!filterStatus ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"}`}>
+            className={`px-4 py-2 rounded-lg text-sm transition-colors ${!filterStatus ? "bg-admin-surface text-admin-primary font-medium" : "text-gray-500 hover:bg-gray-50 hover:text-admin-text"}`}>
             ทั้งหมด
           </button>
           {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
             <button key={key} onClick={() => { setFilterStatus(key); setPage(1); }}
-              className={`px-4 py-2 rounded-lg text-sm transition-colors ${filterStatus === key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"}`}>
+              className={`px-4 py-2 rounded-lg text-sm transition-colors ${filterStatus === key ? "bg-admin-surface text-admin-primary font-medium" : "text-gray-500 hover:bg-gray-50 hover:text-admin-text"}`}>
               {cfg.label}
             </button>
           ))}
@@ -86,10 +86,10 @@ export default function KYCQueuePage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200 text-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200 text-gray-700">›</button>
               </div>
             )}
           </div>

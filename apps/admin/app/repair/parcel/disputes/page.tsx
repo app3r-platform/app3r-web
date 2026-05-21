@@ -126,7 +126,7 @@ export default function ParcelDisputesPage() {
             </p>
           </div>
           <Link href="/repair/parcel/queue"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Parcel Queue
           </Link>
         </div>
@@ -143,7 +143,7 @@ export default function ParcelDisputesPage() {
             <button key={f.value}
               onClick={() => { setFilterStatus(f.value); setPage(1); }}
               className={`px-4 py-2 rounded-lg text-xs transition-colors ${
-                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {f.label}
             </button>
@@ -176,7 +176,7 @@ export default function ParcelDisputesPage() {
                   onChange={e => setResolution(e.target.value)}
                   placeholder="อธิบายการแก้ไข (อย่างน้อย 10 ตัวอักษร)..."
                   rows={3}
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-orange-500 resize-none"
                 />
               </div>
               <div>
@@ -189,7 +189,7 @@ export default function ParcelDisputesPage() {
                   onChange={e => setRefundAmount(e.target.value)}
                   placeholder="0"
                   min="0"
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-orange-500"
                 />
                 {resolveDispute.insurance_value != null && (
                   <p className="text-xs text-gray-500 mt-1">
@@ -202,13 +202,13 @@ export default function ParcelDisputesPage() {
               <button
                 onClick={() => handleResolve(resolveId)}
                 disabled={resolution.trim().length < 10 || resolveLoading}
-                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
               >
                 {resolveLoading ? "กำลังบันทึก..." : "บันทึกการแก้ไข"}
               </button>
               <button
                 onClick={() => { setResolveId(null); setResolution(""); setRefundAmount(""); }}
-                className="px-4 py-2 text-sm text-gray-500 hover:text-white bg-gray-100 hover:bg-gray-700 rounded-lg transition-colors"
+                className="px-4 py-2 text-sm text-gray-500 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 ยกเลิก
               </button>
@@ -223,10 +223,10 @@ export default function ParcelDisputesPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

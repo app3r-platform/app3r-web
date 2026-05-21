@@ -107,7 +107,7 @@ export default function ScrapListingDetailPage() {
             <p className="text-gray-500 text-sm font-mono">{item.id}</p>
           </div>
           <Link href="/scrap/listings"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Listings
           </Link>
         </div>
@@ -168,7 +168,7 @@ export default function ScrapListingDetailPage() {
         {/* Quick links */}
         <div className="flex gap-3">
           <Link href={`/scrap/jobs?scrap_item_id=${item.id}`}
-            className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             🔨 ดู Jobs →
           </Link>
         </div>
@@ -190,7 +190,7 @@ export default function ScrapListingDetailPage() {
                   {removing ? "กำลังลบ..." : "ยืนยัน Force Remove"}
                 </button>
                 <button onClick={() => setRemoveConfirm(false)}
-                  className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 rounded-lg">
+                  className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg">
                   ยกเลิก
                 </button>
               </div>

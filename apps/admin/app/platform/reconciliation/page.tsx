@@ -87,7 +87,7 @@ export default function ReconciliationPage() {
           <h1 className="text-2xl font-bold">Reconciliation</h1>
           {isSuper && (
             <button onClick={runReconciliation} disabled={running}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+              className="px-5 py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
               {running ? "กำลังรัน..." : "▶ Run Now (Super Admin)"}
             </button>
           )}
@@ -215,7 +215,7 @@ function BreakdownRow({ label, value, highlight }: { label: string; value: strin
   return (
     <div className="flex justify-between items-center">
       <span className={`text-sm ${highlight ? "font-semibold text-white" : "text-gray-500"}`}>{label}</span>
-      <span className={`font-mono text-sm ${highlight ? "font-bold text-white" : "text-gray-700"}`}>{value}</span>
+      <span className={`font-mono text-sm ${highlight ? "font-bold text-gray-900" : "text-gray-700"}`}>{value}</span>
     </div>
   );
 }

@@ -98,7 +98,7 @@ export default function RepairAnalyticsPage() {
             <p className="text-gray-500 text-sm mt-1">ภาพรวมงานซ่อม On-site — jobs by status, branch, conversion rate</p>
           </div>
           <Link href="/repair/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← ดู Jobs List
           </Link>
         </div>

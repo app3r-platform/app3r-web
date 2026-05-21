@@ -118,7 +118,7 @@ export default function BalancesPage() {
                   )}
                 </div>
                 <Link href="/platform/reconciliation"
-                  className="px-4 py-2 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm transition-colors">
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
                   ดูรายละเอียด →
                 </Link>
               </div>

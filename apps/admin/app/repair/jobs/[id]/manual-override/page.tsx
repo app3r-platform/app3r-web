@@ -275,7 +275,7 @@ export default function ManualOverridePage() {
               onClick={handleSubmit}
               disabled={!action || reason.trim().length < 10 || !confirmed || submitting}
               className={`w-full py-3 rounded-xl font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
-                cfg?.btnColor ?? "bg-red-600 hover:bg-red-700 text-white"
+                cfg?.btnColor ?? "bg-red-600 hover:bg-red-50 text-red-700 border border-red-200"
               }`}>
               {submitting ? "กำลังดำเนินการ..." : `ยืนยัน ${cfg?.label ?? ""}`}
             </button>

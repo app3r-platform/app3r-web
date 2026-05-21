@@ -191,7 +191,7 @@ export default function CertificateDetailPage() {
             <p className="text-admin-primary text-sm font-mono font-bold">{cert.certNumber}</p>
           </div>
           <Link href="/scrap/certificates"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Certificates
           </Link>
         </div>
@@ -246,7 +246,7 @@ export default function CertificateDetailPage() {
             </h2>
             <div className="flex gap-3 flex-wrap">
               <button onClick={handleIssue} disabled={actionLoading !== null}
-                className="px-5 py-2.5 text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg transition-colors font-medium">
+                className="px-5 py-2.5 text-sm bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors font-medium">
                 {actionLoading === "issue" ? "กำลังออก..." : "✅ ออกใบรับรอง (Issue)"}
               </button>
               <button onClick={() => setShowRejectForm(v => !v)} disabled={actionLoading !== null}
@@ -269,7 +269,7 @@ export default function CertificateDetailPage() {
                     {actionLoading === "reject" ? "กำลังปฏิเสธ..." : "ยืนยันปฏิเสธ"}
                   </button>
                   <button onClick={() => { setShowRejectForm(false); setRejectNote(""); }}
-                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 rounded-lg">
+                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg">
                     ยกเลิก
                   </button>
                 </div>
@@ -287,7 +287,7 @@ export default function CertificateDetailPage() {
               ⬇️ ดาวน์โหลดใบรับรอง (.html)
             </button>
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
-              className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               🔨 ดู Scrap Job →
             </Link>
           </div>

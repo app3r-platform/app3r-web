@@ -138,14 +138,14 @@ export default function ParcelAnalyticsPage() {
               {["7d", "30d", "90d", "all"].map(p => (
                 <button key={p} onClick={() => setPeriod(p)}
                   className={`px-3 py-1 rounded text-xs transition-colors ${
-                    period === p ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                    period === p ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
                   }`}>
                   {p}
                 </button>
               ))}
             </div>
             <Link href="/repair/parcel/queue"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               ← Queue
             </Link>
           </div>

@@ -203,7 +203,7 @@ function FormDrawer<T extends { id: string }>({
                 type="submit"
                 form="admin-drawer-form"
                 disabled={isSubmitting}
-                className="px-4 py-2 text-sm rounded bg-green-600 text-white hover:bg-green-500 disabled:opacity-50"
+                className="px-4 py-2 text-sm rounded bg-brand-success hover:bg-brand-success/90 text-white disabled:opacity-50"
               >
                 {mode === 'create' ? 'สร้าง' : 'บันทึก'}
               </button>

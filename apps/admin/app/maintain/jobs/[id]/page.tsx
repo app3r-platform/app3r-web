@@ -145,7 +145,7 @@ export default function MaintainJobDetailPage() {
             </p>
           </div>
           <Link href="/maintain/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Jobs
           </Link>
         </div>
@@ -281,7 +281,7 @@ export default function MaintainJobDetailPage() {
               onChange={e => setCancelReason(e.target.value)}
               placeholder="เหตุผลยกเลิก (อย่างน้อย 10 ตัวอักษร)..."
               rows={3}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-red-500 resize-none mb-3"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-500 resize-none mb-3"
             />
             <label className="flex items-center gap-2 text-sm text-gray-700 mb-4 cursor-pointer">
               <input type="checkbox" checked={cancelConfirm}
@@ -290,7 +290,7 @@ export default function MaintainJobDetailPage() {
             </label>
             <button onClick={handleForceCancel}
               disabled={!cancelConfirm || cancelReason.trim().length < 10 || cancelLoading}
-              className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors">
+              className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors">
               {cancelLoading ? "กำลังดำเนินการ..." : "Force Cancel"}
             </button>
           </section>

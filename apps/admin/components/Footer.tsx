@@ -84,7 +84,7 @@ export default function Footer() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white"
+                  className="hover:text-gray-900"
                 >
                   {s.platform}: {s.handle}
                 </a>

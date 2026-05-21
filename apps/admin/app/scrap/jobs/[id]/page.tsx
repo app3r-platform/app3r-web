@@ -91,7 +91,7 @@ export default function ScrapJobDetailPage() {
             <p className="text-gray-500 text-sm font-mono">{job.id}</p>
           </div>
           <Link href="/scrap/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Jobs
           </Link>
         </div>

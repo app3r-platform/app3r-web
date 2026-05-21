@@ -110,7 +110,7 @@ export default function ListingDetailPage() {
             <p className="text-gray-500 text-sm font-mono">{listing.id}</p>
           </div>
           <Link href="/resell/listings"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Listings
           </Link>
         </div>
@@ -183,7 +183,7 @@ export default function ListingDetailPage() {
               <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3">⚖️ มีข้อพิพาท</h2>
               <p className="text-sm text-gray-500 mb-3">Listing นี้อยู่ในสถานะ DISPUTED — ต้องรอ Admin ตัดสิน</p>
               <Link href="/resell/disputes"
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-red-800 hover:bg-red-700 text-white rounded-lg transition-colors">
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-red-800 hover:bg-red-50 text-red-700 border border-red-200 rounded-lg transition-colors">
                 ⚖️ ไปหน้า Disputes →
               </Link>
             </section>

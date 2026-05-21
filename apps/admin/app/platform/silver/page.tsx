@@ -138,7 +138,7 @@ export default function SilverPage() {
           {TABS.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                tab === t.key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -204,7 +204,7 @@ export default function SilverPage() {
                       </div>
                     )}
                     <button onClick={saveSignupBonus}
-                      className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm transition-colors">
+                      className="px-4 py-1.5 bg-admin-primary hover:bg-admin-dark rounded-lg text-sm transition-colors">
                       บันทึก
                     </button>
                   </div>
@@ -221,7 +221,7 @@ export default function SilverPage() {
                     รัน batch หมดอายุ Silver Point ด้วยตนเอง (ปกติรันอัตโนมัติทุกคืน 02:00)
                   </p>
                   <button onClick={runExpiry} disabled={runningExpiry}
-                    className="px-5 py-2.5 bg-orange-700 hover:bg-orange-600 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+                    className="px-5 py-2.5 bg-orange-700 hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                     {runningExpiry ? "กำลังรัน..." : "▶ Run Expiry Batch Now"}
                   </button>
                 </div>
@@ -232,11 +232,11 @@ export default function SilverPage() {
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className="text-gray-500">จำนวน records</p>
-                        <p className="font-bold text-white">{expiryResult.expired_count.toLocaleString()}</p>
+                        <p className="font-bold text-gray-900">{expiryResult.expired_count.toLocaleString()}</p>
                       </div>
                       <div>
                         <p className="text-gray-500">Points หมดอายุ</p>
-                        <p className="font-bold text-white">{expiryResult.total_points_expired.toLocaleString()} S</p>
+                        <p className="font-bold text-gray-900">{expiryResult.total_points_expired.toLocaleString()} S</p>
                       </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-2">
@@ -333,7 +333,7 @@ function TriggerRow({
       </td>
       <td className="px-6 py-3">
         <button onClick={() => onSave(trigger.key, pts, enabled)}
-          className="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-xs transition-colors">
+          className="px-3 py-1 bg-admin-primary hover:bg-admin-dark rounded text-xs transition-colors">
           บันทึก
         </button>
       </td>

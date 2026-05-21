@@ -132,11 +132,11 @@ function MovementsInner() {
           </div>
           <div className="flex gap-2">
             <button onClick={handleExportCsv} disabled={exportLoading}
-              className="px-3 py-1.5 text-xs bg-green-800 hover:bg-green-700 disabled:bg-gray-700 disabled:text-gray-500 border border-green-700 disabled:border-gray-600 text-white rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-green-800 hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed border border-green-700 disabled:border-gray-600 text-white rounded-lg transition-colors">
               {exportLoading ? "กำลัง export..." : "⬇ Export CSV"}
             </button>
             <Link href="/parts"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               🔩 Inventory →
             </Link>
           </div>
@@ -148,7 +148,7 @@ function MovementsInner() {
             <button key={t.value}
               onClick={() => { setFilterType(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterType === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterType === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -159,22 +159,22 @@ function MovementsInner() {
         <div className="flex gap-3 flex-wrap">
           <input type="text" placeholder="Shop ID"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
           <input type="text" placeholder="Part ID"
             value={filterPartId} onChange={e => { setFilterPartId(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
           />
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500"
           />
           <span className="self-center text-gray-600 text-xs">ถึง</span>
           <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500"
           />
           {hasFilters && (
             <button onClick={() => { setFilterShop(""); setFilterPartId(""); setDateFrom(""); setDateTo(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
@@ -187,10 +187,10 @@ function MovementsInner() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

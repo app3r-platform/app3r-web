@@ -68,7 +68,7 @@ export default function ServicesPage() {
           <div className="flex justify-end p-3 bg-white/40 border-b border-gray-200">
             <button
               onClick={openCreate}
-              className="px-4 py-2 text-sm rounded bg-green-600 text-white hover:bg-green-500"
+              className="px-4 py-2 text-sm rounded bg-brand-success hover:bg-brand-success/90 text-white"
             >
               + เพิ่มงานบริการ
             </button>

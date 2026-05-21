@@ -119,7 +119,7 @@ export default function WalkInQueuePage() {
             </p>
           </div>
           <Link href="/repair/walk-in/analytics"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             📊 Analytics →
           </Link>
         </div>
@@ -130,7 +130,7 @@ export default function WalkInQueuePage() {
             <button key={t.value}
               onClick={() => { setFilterStatus(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -144,17 +144,17 @@ export default function WalkInQueuePage() {
             placeholder="ค้นหาร้าน (store_id)"
             value={filterStore}
             onChange={e => { setFilterStore(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-52 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-52 focus:outline-none focus:border-blue-500"
           />
           <input
             type="date"
             value={filterDate}
             onChange={e => { setFilterDate(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-blue-500"
           />
           {(filterStore || filterDate) && (
             <button onClick={resetFilters}
-              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg transition-colors">
               ล้าง filter
             </button>
           )}
@@ -167,10 +167,10 @@ export default function WalkInQueuePage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

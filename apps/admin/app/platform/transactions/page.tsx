@@ -93,7 +93,7 @@ export default function TransactionsPage() {
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-2xl font-bold">Platform Audit Trail</h1>
           <button onClick={exportCsv}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg text-sm transition-colors">
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors">
             📥 Export CSV
           </button>
         </div>
@@ -131,7 +131,7 @@ export default function TransactionsPage() {
               className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white" />
           </div>
           <button onClick={() => { setFilterType(""); setFilterCurrency(""); setFilterDateFrom(""); setFilterDateTo(""); setPage(1); }}
-            className="px-3 py-2 text-sm text-gray-500 hover:text-white transition-colors">
+            className="px-3 py-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
             ล้าง
           </button>
         </div>
@@ -143,10 +143,10 @@ export default function TransactionsPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700 transition-colors">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200 transition-colors">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700 transition-colors">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200 transition-colors">›</button>
               </div>
             )}
           </div>
@@ -204,7 +204,7 @@ export default function TransactionsPage() {
             <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold">Transaction Detail</h3>
-                <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white">✕</button>
+                <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-900">✕</button>
               </div>
               <div className="space-y-3 text-sm">
                 {[

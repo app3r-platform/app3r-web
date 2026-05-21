@@ -134,7 +134,7 @@ export default function ResellAnalyticsPage() {
             </p>
           </div>
           <Link href="/resell/listings"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             🛍️ Listings →
           </Link>
         </div>

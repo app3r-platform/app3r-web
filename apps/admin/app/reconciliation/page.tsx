@@ -145,13 +145,13 @@ function ResolveModal({
 
         <div className="flex gap-2">
           <button onClick={onClose}
-            className="flex-1 py-2 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm transition-colors">
+            className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
             ยกเลิก
           </button>
           <button
             onClick={() => onSubmit(settlement.id, { action, note })}
             disabled={loading || note.trim().length < 5}
-            className="flex-1 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+            className="flex-1 py-2 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
             {loading ? "กำลังส่ง..." : "ยืนยันแก้ไข"}
           </button>
         </div>
@@ -252,7 +252,7 @@ export default function SettlementReconciliationPage() {
             <button
               onClick={handleRunWorker}
               disabled={running}
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-5 py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
               {running ? (
                 <><span className="animate-spin">⟳</span> กำลังรัน...</>
               ) : (
@@ -297,7 +297,7 @@ export default function SettlementReconciliationPage() {
                   <button key={s}
                     onClick={() => setFilterStatus(s)}
                     className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                      filterStatus === s ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                      filterStatus === s ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
                     }`}>
                     {s === "all" ? "ทั้งหมด" : STATUS_META[s as SettlementStatus]?.label ?? s}
                   </button>
@@ -350,7 +350,7 @@ export default function SettlementReconciliationPage() {
                             {item.status !== "resolved" && item.status !== "completed" && (
                               <button
                                 onClick={() => setSelectedSettlement(item)}
-                                className="px-3 py-1 bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded text-xs transition-colors">
+                                className="px-3 py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded text-xs transition-colors">
                                 🔧 แก้ไข
                               </button>
                             )}

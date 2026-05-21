@@ -91,11 +91,11 @@ export default function PartsPage() {
           </div>
           <div className="flex gap-2">
             <Link href="/parts/movements"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               📦 Movements →
             </Link>
             <Link href="/parts/analytics"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               📊 Analytics →
             </Link>
           </div>
@@ -105,16 +105,16 @@ export default function PartsPage() {
         <div className="flex gap-3 flex-wrap items-center">
           <input type="text" placeholder="Shop ID"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
           <input type="text" placeholder="หมวดหมู่"
             value={filterCategory} onChange={e => { setFilterCategory(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
           <select
             value={filterCondition}
             onChange={e => { setFilterCondition(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500">
             <option value="">ทุกสภาพ</option>
             <option value="new">ใหม่</option>
             <option value="used">มือสอง</option>
@@ -128,7 +128,7 @@ export default function PartsPage() {
           </label>
           {hasFilters && (
             <button onClick={clearFilters}
-              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
@@ -141,10 +141,10 @@ export default function PartsPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

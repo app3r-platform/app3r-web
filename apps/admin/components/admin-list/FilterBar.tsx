@@ -94,7 +94,7 @@ export function FilterBar({
 
       <button
         onClick={onReset}
-        className="ml-auto rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-500 hover:text-white hover:border-gray-500 transition-colors"
+        className="ml-auto rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 hover:border-gray-500 transition-colors"
       >
         รีเซ็ต
       </button>

@@ -119,7 +119,7 @@ export default function MaintainRecurringPage() {
             </p>
           </div>
           <Link href="/maintain/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             🛁 Jobs →
           </Link>
         </div>
@@ -129,7 +129,7 @@ export default function MaintainRecurringPage() {
           <select
             value={filterInterval}
             onChange={e => { setFilterInterval(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-blue-500">
             <option value="">ทุก interval</option>
             <option value="3_months">3 เดือน</option>
             <option value="6_months">6 เดือน</option>
@@ -138,14 +138,14 @@ export default function MaintainRecurringPage() {
           <select
             value={filterAppliance}
             onChange={e => { setFilterAppliance(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-blue-500">
             <option value="">ทุกเครื่อง</option>
             <option value="AC">แอร์</option>
             <option value="WashingMachine">เครื่องซัก</option>
           </select>
           {(filterInterval || filterAppliance) && (
             <button onClick={() => { setFilterInterval(""); setFilterAppliance(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
@@ -158,10 +158,10 @@ export default function MaintainRecurringPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>
@@ -219,7 +219,7 @@ export default function MaintainRecurringPage() {
                           <button
                             onClick={() => handleTrigger(job.id)}
                             disabled={ts?.loading}
-                            className="px-2.5 py-1 text-xs bg-admin-dark hover:bg-admin-primary disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white rounded-lg transition-colors whitespace-nowrap">
+                            className="px-2.5 py-1 text-xs bg-admin-dark hover:bg-admin-primary disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white rounded-lg transition-colors whitespace-nowrap">
                             {ts?.loading ? "..." : "▶ Trigger"}
                           </button>
                           {ts?.msg && (

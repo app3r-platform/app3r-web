@@ -121,7 +121,7 @@ export default function PartsAnalyticsPage() {
             </p>
           </div>
           <Link href="/parts"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             🔩 Inventory →
           </Link>
         </div>
@@ -226,7 +226,7 @@ export default function PartsAnalyticsPage() {
                 <button key={k}
                   onClick={() => setTopPeriod(k)}
                   className={`px-2.5 py-1 rounded text-xs transition-colors ${
-                    topPeriod === k ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                    topPeriod === k ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
                   }`}>
                   {k === "top_moving_7d" ? "7 วัน" : k === "top_moving_30d" ? "30 วัน" : "90 วัน"}
                 </button>

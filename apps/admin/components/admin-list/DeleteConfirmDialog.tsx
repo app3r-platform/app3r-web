@@ -27,7 +27,7 @@ export function DeleteConfirmDialog({
       <AlertDialogContent>
         <AlertDialogTitle className="text-lg font-semibold">ยืนยันการลบ</AlertDialogTitle>
         <AlertDialogDescription className="mt-2 text-sm text-gray-500">
-          ต้องการลบ <span className="text-white font-mono">{entityLabel}</span> หรือไม่? การกระทำนี้ย้อนกลับไม่ได้
+          ต้องการลบ <span className="text-gray-900 font-mono">{entityLabel}</span> หรือไม่? การกระทำนี้ย้อนกลับไม่ได้
         </AlertDialogDescription>
         <div className="mt-6 flex justify-end gap-3">
           <AlertDialogCancelPrimitive className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100">

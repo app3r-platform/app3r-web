@@ -85,7 +85,7 @@ export default function CertificatesPage() {
               </span>
             )}
             <Link href="/scrap/jobs"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               🔨 Jobs →
             </Link>
           </div>
@@ -99,7 +99,7 @@ export default function CertificatesPage() {
               className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
                 filterStatus === s
                   ? "bg-blue-600 border-blue-500 text-white"
-                  : "border-gray-300 text-gray-500 hover:text-white hover:bg-gray-100"
+                  : "border-gray-300 text-gray-500 hover:text-gray-900 hover:bg-gray-100"
               }`}>
               {s === "" ? "ทั้งหมด" : STATUS_META[s].label}
             </button>
@@ -113,10 +113,10 @@ export default function CertificatesPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

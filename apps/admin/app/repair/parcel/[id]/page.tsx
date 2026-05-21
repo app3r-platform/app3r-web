@@ -191,7 +191,7 @@ export default function ParcelDetailPage() {
             </p>
           </div>
           <Link href="/repair/parcel/queue"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Queue
           </Link>
         </div>

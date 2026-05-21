@@ -101,7 +101,7 @@ export default function TransferWithdrawalsPage() {
             <button key={s}
               onClick={() => setFilterStatus(s)}
               className={`px-4 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === s ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterStatus === s ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {STATUS_META[s].label}
             </button>
@@ -167,7 +167,7 @@ export default function TransferWithdrawalsPage() {
                                 <button
                                   onClick={() => handleConfirmTransfer(item.id)}
                                   disabled={isProcessing}
-                                  className="px-3 py-1 bg-green-700 hover:bg-green-600 disabled:bg-gray-700 rounded text-xs transition-colors">
+                                  className="px-3 py-1 bg-brand-success hover:bg-brand-success/90 disabled:opacity-40 rounded text-xs transition-colors">
                                   ✅ ใช่
                                 </button>
                                 <button
@@ -181,7 +181,7 @@ export default function TransferWithdrawalsPage() {
                             <button
                               onClick={() => handleConfirmTransfer(item.id)}
                               disabled={isProcessing}
-                              className="px-3 py-1 bg-blue-700 hover:bg-blue-600 disabled:bg-gray-700 rounded text-xs font-medium transition-colors whitespace-nowrap">
+                              className="px-3 py-1 bg-blue-700 hover:bg-blue-600 disabled:opacity-40 rounded text-xs font-medium transition-colors whitespace-nowrap">
                               {isProcessing ? "..." : "✅ ยืนยันโอนแล้ว"}
                             </button>
                           )}

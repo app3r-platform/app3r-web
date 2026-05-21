@@ -102,7 +102,7 @@ export default function MovementDetailPage() {
             <p className="text-gray-500 text-sm font-mono">{movement.id}</p>
           </div>
           <Link href="/parts/movements"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Movements
           </Link>
         </div>

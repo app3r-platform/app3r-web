@@ -145,7 +145,7 @@ export default function TopupPage() {
               className={`px-4 py-2 text-sm rounded-lg transition-colors ${
                 statusFilter === val
                   ? "bg-admin-surface text-admin-primary"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-700 hover:text-white"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900"
               }`}
             >
               {label}
@@ -190,7 +190,7 @@ export default function TopupPage() {
                     </td>
 
                     <td className="px-5 py-3.5">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-lg font-bold text-gray-900">
                         {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </span>
                       <span className="text-xs text-gray-500 ml-1">Points</span>
@@ -241,14 +241,14 @@ export default function TopupPage() {
                           <button
                             onClick={() => handleApprove(req.id)}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1.5 text-xs bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-xs bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
                           >
                             {actionLoading === req.id ? "..." : "✓ อนุมัติ"}
                           </button>
                           <button
                             onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-white rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
                           >
                             ✕ ปฏิเสธ
                           </button>
@@ -272,14 +272,14 @@ export default function TopupPage() {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 disabled:opacity-40 text-white rounded-lg"
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg"
               >
                 ← ก่อนหน้า
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(data.pages, p + 1))}
                 disabled={page === data.pages}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 disabled:opacity-40 text-white rounded-lg"
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg"
               >
                 ถัดไป →
               </button>
@@ -307,7 +307,7 @@ export default function TopupPage() {
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => { setRejectModal(null); setRejectReason(""); }}
-                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-700 text-gray-700 rounded-lg transition-colors"
+                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
               >
                 ยกเลิก
               </button>
@@ -326,7 +326,7 @@ export default function TopupPage() {
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl shadow-xl text-sm font-medium ${
-          toast.type === "ok" ? "bg-green-700 text-white" : "bg-red-700 text-white"
+          toast.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
         }`}>
           {toast.msg}
         </div>

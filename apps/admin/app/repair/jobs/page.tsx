@@ -110,11 +110,11 @@ export default function RepairJobsPage() {
           <h1 className="text-2xl font-bold">🔧 Repair Jobs — On-site</h1>
           <div className="flex gap-2">
             <Link href="/repair/analytics"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               📊 Analytics
             </Link>
             <Link href="/repair/disputes"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               ⚖️ Disputes
             </Link>
           </div>
@@ -129,14 +129,14 @@ export default function RepairJobsPage() {
           <select
             value={filterSource}
             onChange={e => { setFilterSource(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-48 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-48 focus:outline-none focus:border-blue-500">
             <option value="all">ทั้งหมด</option>
             <option value="customer">ลูกค้า (customer)</option>
             <option value="purchased_scrap">ซื้อจากซาก (purchased_scrap)</option>
           </select>
           {filterSource !== "all" && (
             <button onClick={() => setFilterSource("all")}
-              className="text-xs text-gray-500 hover:text-white bg-gray-100 px-2 py-1 rounded">
+              className="text-xs text-gray-500 hover:text-gray-900 bg-gray-100 px-2 py-1 rounded">
               ล้าง
             </button>
           )}
@@ -148,7 +148,7 @@ export default function RepairJobsPage() {
             <button key={fg.value}
               onClick={() => { setFilterStatus(fg.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === fg.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterStatus === fg.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {fg.label}
             </button>
@@ -161,10 +161,10 @@ export default function RepairJobsPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

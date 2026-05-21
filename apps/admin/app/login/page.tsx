@@ -34,7 +34,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">⚙️</div>
-          <h1 className="text-2xl font-bold text-white">App3R Admin</h1>
+          <h1 className="text-2xl font-bold text-gray-900">App3R Admin</h1>
           <p className="text-gray-500 text-sm mt-1">เข้าสู่ระบบจัดการแพลตฟอร์ม</p>
         </div>
 
@@ -55,7 +55,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@app3r.com"
               required
-              className="w-full bg-gray-100 border border-gray-300 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              className="w-full bg-white border border-gray-300 text-gray-900 rounded-lg px-4 py-3 text-sm focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
             />
           </div>
 
@@ -67,14 +67,14 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full bg-gray-100 border border-gray-300 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              className="w-full bg-white border border-gray-300 text-gray-900 rounded-lg px-4 py-3 text-sm focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors"
+            className="w-full bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors"
           >
             {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
           </button>

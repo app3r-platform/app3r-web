@@ -258,7 +258,7 @@ export default function PromotionsPage() {
                   <div className="flex-1 min-w-0 mr-4">
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                        isOn ? "bg-green-700 text-white" : "bg-gray-100 text-gray-500"
+                        isOn ? "bg-green-50 text-green-700 border border-green-200" : "bg-gray-100 text-gray-500"
                       }`}>
                         Type {promo.type}
                       </span>
@@ -337,7 +337,7 @@ export default function PromotionsPage() {
                     min="0"
                     value={bonusPoints}
                     onChange={(e) => setBonusPoints(e.target.value)}
-                    className="w-40 bg-gray-100 border border-gray-300 text-white text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-40 bg-gray-100 border border-gray-300 text-white text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary"
                   />
                   <span className="text-gray-500 text-sm">Points</span>
                 </div>
@@ -373,7 +373,7 @@ export default function PromotionsPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="ชื่อ หรือ email หรือ เบอร์โทร..."
-                  className="flex-1 bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                  className="flex-1 bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
                 />
                 <button
                   onClick={handleSearch}
@@ -391,7 +391,7 @@ export default function PromotionsPage() {
                     <button
                       key={u.id}
                       onClick={() => { setSelectedUser(u); setSearchResults([]); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left border-b border-gray-300 last:border-0"
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-200 transition-colors text-left border-b border-gray-300 last:border-0"
                     >
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                         u.role === "weeeu" ? "bg-blue-900 text-blue-300" : "bg-green-900 text-green-700"
@@ -416,7 +416,7 @@ export default function PromotionsPage() {
               {selectedUser && (
                 <div className="flex items-center gap-3 bg-blue-950 border border-blue-800 rounded-xl px-4 py-3">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    selectedUser.role === "weeeu" ? "bg-blue-700 text-white" : "bg-green-700 text-white"
+                    selectedUser.role === "weeeu" ? "bg-blue-700 text-white" : "bg-green-50 text-green-700 border border-green-200"
                   }`}>
                     {selectedUser.role === "weeeu" ? "WeeeU" : "WeeeR"}
                   </span>
@@ -426,7 +426,7 @@ export default function PromotionsPage() {
                   </div>
                   <button
                     onClick={() => { setSelectedUser(null); setSearchQuery(""); }}
-                    className="text-gray-500 hover:text-white text-sm transition-colors"
+                    className="text-gray-500 hover:text-gray-900 text-sm transition-colors"
                   >
                     ✕ เปลี่ยน
                   </button>
@@ -445,8 +445,8 @@ export default function PromotionsPage() {
                     onClick={() => setAdjustDirection("credit")}
                     className={`flex-1 py-2.5 text-sm rounded-lg font-medium transition-colors ${
                       adjustDirection === "credit"
-                        ? "bg-green-700 text-white"
-                        : "bg-gray-100 text-gray-500 hover:bg-gray-700"
+                        ? "bg-green-50 text-green-700 border border-green-200"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}
                   >
                     ➕ เพิ่ม Point
@@ -455,8 +455,8 @@ export default function PromotionsPage() {
                     onClick={() => setAdjustDirection("debit")}
                     className={`flex-1 py-2.5 text-sm rounded-lg font-medium transition-colors ${
                       adjustDirection === "debit"
-                        ? "bg-red-700 text-white"
-                        : "bg-gray-100 text-gray-500 hover:bg-gray-700"
+                        ? "bg-red-50 text-red-700 border border-red-200"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}
                   >
                     ➖ หัก Point
@@ -473,7 +473,7 @@ export default function PromotionsPage() {
                   value={adjustAmount}
                   onChange={(e) => setAdjustAmount(e.target.value)}
                   placeholder="เช่น 100"
-                  className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                  className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
                 />
               </div>
             </div>
@@ -491,7 +491,7 @@ export default function PromotionsPage() {
                     className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
                       adjustCategory === cat
                         ? "bg-blue-700 text-white"
-                        : "bg-gray-100 text-gray-500 hover:bg-gray-700 hover:text-white"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900"
                     }`}
                   >
                     {cat}
@@ -510,7 +510,7 @@ export default function PromotionsPage() {
                 onChange={(e) => setAdjustDetail(e.target.value)}
                 placeholder="อธิบายเหตุผลให้ครบถ้วน เช่น เลขที่ transaction ที่เกิดปัญหา, วันที่เกิดเหตุ, การตกลงกับผู้ใช้..."
                 rows={3}
-                className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 resize-none"
+                className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400 resize-none"
               />
               <div className="text-xs text-gray-600 mt-1 text-right">
                 {adjustDetail.length} / 10 ตัวอักษรขั้นต่ำ
@@ -544,7 +544,7 @@ export default function PromotionsPage() {
               disabled={adjustLoading || !selectedUser || !adjustAmount || !adjustCategory || adjustDetail.length < 10}
               className={`w-full py-3 text-sm font-semibold rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                 adjustDirection === "credit"
-                  ? "bg-green-700 hover:bg-green-600 text-white"
+                  ? "bg-brand-success hover:bg-brand-success/90 text-white"
                   : "bg-red-700 hover:bg-red-600 text-white"
               }`}
             >
@@ -562,7 +562,7 @@ export default function PromotionsPage() {
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 max-w-sm px-5 py-3.5 rounded-xl shadow-xl text-sm font-medium ${
-          toast.type === "ok" ? "bg-green-700 text-white" : "bg-red-700 text-white"
+          toast.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
         }`}>
           {toast.msg}
         </div>

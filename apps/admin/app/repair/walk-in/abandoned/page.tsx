@@ -103,7 +103,7 @@ export default function AbandonedDevicesPage() {
             </p>
           </div>
           <Link href="/repair/walk-in/queue"
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Walk-in Queue
           </Link>
         </div>
@@ -120,7 +120,7 @@ export default function AbandonedDevicesPage() {
             <button key={f.value}
               onClick={() => { setFilterStatus(f.value); setPage(1); }}
               className={`px-4 py-2 rounded-lg text-xs transition-colors ${
-                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {f.label}
             </button>
@@ -145,10 +145,10 @@ export default function AbandonedDevicesPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>

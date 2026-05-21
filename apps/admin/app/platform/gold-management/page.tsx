@@ -97,7 +97,7 @@ export default function GoldManagementPage() {
           {(["reserve", "fee"] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
+                tab === t ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t === "reserve" ? "🏦 Reserve Pool" : "💰 Fee Pools"}
             </button>
@@ -129,7 +129,7 @@ export default function GoldManagementPage() {
                 {isSuper && (
                   <div className="flex flex-wrap gap-3">
                     <button onClick={() => setModal("mint")}
-                      className="px-5 py-2.5 bg-green-700 hover:bg-green-600 rounded-lg text-sm font-medium transition-colors">
+                      className="px-5 py-2.5 bg-brand-success hover:bg-brand-success/90 rounded-lg text-sm font-medium transition-colors">
                       ➕ Mint Gold
                     </button>
                     <button onClick={() => setModal("destroy")}
@@ -191,12 +191,12 @@ export default function GoldManagementPage() {
 
               <div className="flex gap-3 mt-6">
                 <button onClick={closeModal}
-                  className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm transition-colors">
+                  className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
                   ยกเลิก
                 </button>
                 <button onClick={handleSubmit}
                   disabled={!confirm2 || !amount || !reason || submitting}
-                  className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+                  className="flex-1 px-4 py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                   {submitting ? "กำลังดำเนินการ..." : "ยืนยัน"}
                 </button>
               </div>

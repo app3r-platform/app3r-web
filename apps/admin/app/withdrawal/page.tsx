@@ -185,7 +185,7 @@ export default function WithdrawalPage() {
               className={`px-4 py-2 text-sm rounded-lg transition-colors ${
                 statusFilter === val
                   ? "bg-admin-surface text-admin-primary"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-700 hover:text-white"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900"
               }`}
             >
               {label}
@@ -228,7 +228,7 @@ export default function WithdrawalPage() {
                     </td>
 
                     <td className="px-5 py-3.5">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-lg font-bold text-gray-900">
                         {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </span>
                       <span className="text-xs text-gray-500 ml-1">Points</span>
@@ -275,7 +275,7 @@ export default function WithdrawalPage() {
                             <button
                               onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
                               disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-white rounded-lg transition-colors"
+                              className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
                             >
                               ✕ ปฏิเสธ
                             </button>
@@ -292,14 +292,14 @@ export default function WithdrawalPage() {
                                 accountNo: req.account_no,
                               })}
                               disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg transition-colors"
+                              className="px-3 py-1.5 text-xs bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
                             >
                               {actionLoading === req.id ? "..." : "💸 Confirm Transfer"}
                             </button>
                             <button
                               onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
                               disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-white rounded-lg transition-colors"
+                              className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
                             >
                               ✕ ปฏิเสธ
                             </button>
@@ -322,11 +322,11 @@ export default function WithdrawalPage() {
             </p>
             <div className="flex gap-2">
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 disabled:opacity-40 text-white rounded-lg">
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg">
                 ← ก่อนหน้า
               </button>
               <button onClick={() => setPage((p) => Math.min(data.pages, p + 1))} disabled={page === data.pages}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 disabled:opacity-40 text-white rounded-lg">
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg">
                 ถัดไป →
               </button>
             </div>
@@ -357,7 +357,7 @@ export default function WithdrawalPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">บัญชี</span>
-                <span className="text-white font-mono">{transferModal.accountNo}</span>
+                <span className="text-gray-900 font-mono">{transferModal.accountNo}</span>
               </div>
             </div>
 
@@ -377,14 +377,14 @@ export default function WithdrawalPage() {
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => { setTransferModal(null); setTransferRef(""); }}
-                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-700 text-gray-700 rounded-lg transition-colors"
+                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
               >
                 ยกเลิก
               </button>
               <button
                 onClick={handleTransfer}
                 disabled={actionLoading !== null}
-                className="flex-1 py-2.5 text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg transition-colors"
+                className="flex-1 py-2.5 text-sm bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
               >
                 {actionLoading !== null ? "กำลังดำเนินการ..." : "✓ ยืนยันโอนแล้ว"}
               </button>
@@ -415,7 +415,7 @@ export default function WithdrawalPage() {
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => { setRejectModal(null); setRejectReason(""); }}
-                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-700 text-gray-700 rounded-lg"
+                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg"
               >
                 ยกเลิก
               </button>
@@ -434,7 +434,7 @@ export default function WithdrawalPage() {
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl shadow-xl text-sm font-medium ${
-          toast.type === "ok" ? "bg-green-700 text-white" : "bg-red-700 text-white"
+          toast.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
         }`}>
           {toast.msg}
         </div>

@@ -95,7 +95,7 @@ export default function ScrapListingsPage() {
           </div>
           <div className="flex gap-2">
             <Link href="/scrap/jobs"
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               🔨 Jobs →
             </Link>
           </div>
@@ -106,7 +106,7 @@ export default function ScrapListingsPage() {
           <select
             value={filterStatus}
             onChange={e => { setFilterStatus(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุกสถานะ</option>
             <option value="available">ขายได้</option>
             <option value="sold">ขายแล้ว</option>
@@ -115,7 +115,7 @@ export default function ScrapListingsPage() {
           <select
             value={filterGrade}
             onChange={e => { setFilterGrade(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุกเกรด</option>
             <option value="grade_A">Grade A</option>
             <option value="grade_B">Grade B</option>
@@ -123,11 +123,11 @@ export default function ScrapListingsPage() {
           </select>
           <input type="text" placeholder="Seller ID"
             value={filterSeller} onChange={e => { setFilterSeller(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
           />
           {hasFilters && (
             <button onClick={clearFilters}
-              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
@@ -140,10 +140,10 @@ export default function ScrapListingsPage() {
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>
