@@ -222,7 +222,7 @@ export default function PartsOrderDetailPage({
               {order.serviceId && (
                 <div className="border-t border-gray-700 pt-3">
                   <p className="text-xs text-gray-500 mb-0.5">เชื่อมกับงาน</p>
-                  <p className="text-sm text-blue-300 font-mono">{order.serviceId}</p>
+                  <p className="text-sm text-weeet-primary font-mono">{order.serviceId}</p>
                 </div>
               )}
 
@@ -376,6 +376,11 @@ export default function PartsOrderDetailPage({
                         {disputeReason.trim().length}/10 ตัวอักษรขั้นต่ำ
                       </p>
                     </div>
+
+                    {/* Blueprint §② dispute model: buyer แจ้ง → Admin ตัดสิน */}
+                    <p className="text-xs text-gray-500 bg-gray-900/60 border border-gray-700 rounded-lg px-3 py-2">
+                      💡 หลังส่ง Admin จะตรวจสอบและติดต่อกลับ — ไม่ใช่การแก้ไขอัตโนมัติ
+                    </p>
 
                     {disputeError && (
                       <p className="text-xs text-red-400 bg-red-950/30 border border-red-800/50 rounded-lg px-3 py-2">

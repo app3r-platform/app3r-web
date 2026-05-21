@@ -35,6 +35,8 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
     // idempotency key: partId + timestamp (ป้องกัน double submit)
     const idempotencyKey = `${part.id}-${Date.now()}`;
     try {
+      // ★ VERIFY Blueprint §④: buyerId ถูก derive server-side จาก JWT token
+      // ช่างซื้อในนามร้านที่สังกัด (shopId) — ไม่ได้ส่ง techId จาก client ✅
       const order = await partsOrdersApi.createOrder({
         partId: part.id,
         quantity: orderQty,

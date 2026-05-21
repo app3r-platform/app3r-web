@@ -18,9 +18,9 @@ function MyOrdersChip({ router }: { router: ReturnType<typeof useRouter> }) {
     <button
       type="button"
       onClick={() => router.push("/parts/orders")}
-      className="w-full flex items-center justify-between bg-blue-900/30 border border-blue-700/40 rounded-xl px-4 py-2.5 text-sm"
+      className="w-full flex items-center justify-between bg-weeet-primary/10 border border-weeet-dark/40 rounded-xl px-4 py-2.5 text-sm"
     >
-      <span className="text-blue-300 font-medium">📦 ออเดอร์ของฉัน</span>
+      <span className="text-weeet-primary font-medium">📦 ออเดอร์ของฉัน</span>
       <span className="text-xs text-gray-500">
         {orderIds.length > 0 ? `${orderIds.length} รายการ` : "ดูทั้งหมด"} →
       </span>
