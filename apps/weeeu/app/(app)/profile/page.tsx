@@ -32,11 +32,28 @@ const GENDER_MAP: Record<string, string> = {
 
 type Section = "view" | "personal" | "address" | "phone" | "email";
 
+// ── Notification preferences ──────────────────────────────────────────────────
+type NotifPrefs = {
+  repair_updates:  boolean; // สถานะงานซ่อม
+  promotions:      boolean; // โปรโมชั่น / Point bonus
+  system_notices:  boolean; // แจ้งเตือนระบบ (ไม่สามารถปิดได้)
+};
+
+const DEFAULT_NOTIF_PREFS: NotifPrefs = {
+  repair_updates: true,
+  promotions:     true,
+  system_notices: true, // always true — read-only
+};
+
 export default function ProfilePage() {
   const [section, setSection] = useState<Section>("view");
   const [user, setUser] = useState(MOCK_USER);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Notification preferences
+  const [notifPrefs, setNotifPrefs] = useState<NotifPrefs>(DEFAULT_NOTIF_PREFS);
+  const [savingNotif, setSavingNotif] = useState(false);
 
   // Personal form
   const [personal, setPersonal] = useState({
@@ -61,6 +78,17 @@ export default function ProfilePage() {
   const [emailSent, setEmailSent] = useState(false);
 
   const showSaved = () => { setSaved(true); setTimeout(() => setSaved(false), 2500); };
+
+  // ─── Save notification preferences ────────────────────────────────────────
+  const saveNotifPrefs = async (key: keyof NotifPrefs, val: boolean) => {
+    if (key === "system_notices") return; // always on — read-only
+    const updated = { ...notifPrefs, [key]: val };
+    setNotifPrefs(updated);
+    setSavingNotif(true);
+    await new Promise((r) => setTimeout(r, 400)); // Production: PATCH /api/v1/users/me/notifications
+    setSavingNotif(false);
+    showSaved();
+  };
 
   const maxDate = (() => {
     const d = new Date(); d.setFullYear(d.getFullYear() - 13);
@@ -238,6 +266,46 @@ export default function ProfilePage() {
           <div className="flex items-center gap-3"><span>🔒</span><span className="text-sm font-medium text-gray-700">เปลี่ยนรหัสผ่าน</span></div>
           <span className="text-gray-400">›</span>
         </Link>
+      </div>
+
+      {/* Notification preferences */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-100">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">การแจ้งเตือน</p>
+          {savingNotif && <span className="text-xs text-gray-400">กำลังบันทึก...</span>}
+        </div>
+        <div className="divide-y divide-gray-50">
+          {([
+            { key: "repair_updates" as const,  icon: "🔧", label: "สถานะงานซ่อม",      desc: "อัพเดตความคืบหน้าและการแจ้งเตือนจากช่าง" },
+            { key: "promotions"     as const,  icon: "🎁", label: "โปรโมชั่น / Point",  desc: "ข่าวสาร โปรโมชั่น และ Point bonus" },
+            { key: "system_notices" as const,  icon: "🔔", label: "แจ้งเตือนระบบ",       desc: "ความปลอดภัยและการเปลี่ยนแปลงบัญชี (ปิดไม่ได้)" },
+          ] as const).map((item) => (
+            <div key={item.key} className="flex items-center justify-between px-5 py-4 gap-3">
+              <div className="flex items-start gap-3 flex-1 min-w-0">
+                <span className="text-lg flex-shrink-0">{item.icon}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={item.key === "system_notices"}
+                onClick={() => saveNotifPrefs(item.key, !notifPrefs[item.key])}
+                aria-label={`${item.label} ${notifPrefs[item.key] ? "เปิด" : "ปิด"}`}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  notifPrefs[item.key] ? "bg-weeeu-primary" : "bg-gray-200"
+                } ${item.key === "system_notices" ? "opacity-60 cursor-not-allowed" : ""}`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transform transition duration-200 ease-in-out ${
+                    notifPrefs[item.key] ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Logout */}
