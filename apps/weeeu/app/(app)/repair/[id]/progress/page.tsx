@@ -11,7 +11,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 import type {
   ServiceProgressTimelineDto,
@@ -119,15 +119,35 @@ function EmptyTimeline() {
   );
 }
 
+// ── C7 abort reasons ──────────────────────────────────────────────────────────
+const ABORT_REASONS = [
+  { value: "changed_mind",       label: "เปลี่ยนใจ / ไม่ซ่อมแล้ว" },
+  { value: "too_expensive",      label: "ราคาสูงกว่าที่คาดไว้" },
+  { value: "taking_too_long",    label: "ใช้เวลานานเกินไป" },
+  { value: "found_other_shop",   label: "พบร้านอื่นที่ถูกกว่า" },
+  { value: "appliance_totaled",  label: "เครื่องเสียหายเพิ่มระหว่างซ่อม" },
+  { value: "other",              label: "เหตุผลอื่น" },
+] as const;
+
+type AbortReason = typeof ABORT_REASONS[number]["value"];
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 const POLL_INTERVAL_MS = 3000; // Backend comment: "Polling fallback: FE poll GET every 3s"
 
 export default function RepairProgressPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [timeline, setTimeline] = useState<ServiceProgressTimelineDto | null>(null);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState<string | null>(null);
   const [lastFetched, setLastFetched] = useState<Date | null>(null);
+
+  // ── C7: ยุติงาน abort flow ──────────────────────────────────────────────────
+  const [showAbortModal, setShowAbortModal] = useState(false);
+  const [abortReason, setAbortReason] = useState<AbortReason | "">("");
+  const [abortNote, setAbortNote] = useState("");
+  const [abortSubmitting, setAbortSubmitting] = useState(false);
+  const [abortError, setAbortError] = useState<string | null>(null);
 
   // ── Fetch helper ────────────────────────────────────────────────────────────
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -163,6 +183,26 @@ export default function RepairProgressPage() {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [id]);
+
+  // ── C7: submit abort ───────────────────────────────────────────────────────
+  const handleAbortSubmit = async () => {
+    if (!abortReason) { setAbortError("กรุณาเลือกเหตุผล"); return; }
+    setAbortSubmitting(true);
+    setAbortError(null);
+    try {
+      const res = await apiFetch(`/api/v1/repair/jobs/${id}/abort`, {
+        method: "POST",
+        body: JSON.stringify({ reason: abortReason, note: abortNote.trim() || undefined }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      // Notify WeeeR + redirect to repair home
+      router.push("/repair");
+    } catch {
+      setAbortError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+    } finally {
+      setAbortSubmitting(false);
+    }
+  };
 
   // Entries เรียงใหม่ → เก่า (UI แสดง latest ก่อน)
   const entries = timeline ? [...timeline.entries].reverse() : [];
@@ -249,7 +289,105 @@ export default function RepairProgressPage() {
               <p>อัพเดตล่าสุด: {lastFetched.toLocaleTimeString("th-TH", { timeStyle: "short" })}</p>
             )}
           </div>
+
+          {/* C7: ยุติงาน — แสดงเฉพาะสถานะที่ยังยุติได้ */}
+          {timeline.latestStatus &&
+            !["completed", "cancelled"].includes(timeline.latestStatus) && (
+              <div className="border border-red-100 rounded-2xl p-4 bg-red-50/40">
+                <p className="text-xs text-red-600 font-medium mb-2">⚠️ ต้องการยุติงานซ่อม?</p>
+                <p className="text-xs text-gray-500 mb-3">
+                  การยุติงานจะแจ้งให้ร้านซ่อมทราบทันที และระบบจะคำนวณค่าแรงยุติตามเงื่อนไขที่ตกลงไว้
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowAbortModal(true)}
+                  className="w-full border border-red-300 text-red-600 hover:bg-red-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
+                >
+                  ยุติงาน (C7)
+                </button>
+              </div>
+            )}
         </>
+      )}
+
+      {/* ── C7 Abort Modal ─────────────────────────────────────────────────── */}
+      {showAbortModal && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-gray-900">ยุติงานซ่อม</h3>
+              <button
+                type="button"
+                onClick={() => { setShowAbortModal(false); setAbortError(null); }}
+                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="text-xs text-gray-500">
+              เลือกเหตุผลการยุติงาน — ร้านซ่อมจะได้รับแจ้งและดำเนินการตามเงื่อนไข แกน 4 (ค่าแรงยุติ)
+            </p>
+
+            {/* เหตุผล */}
+            <div className="space-y-2">
+              {ABORT_REASONS.map(r => (
+                <label
+                  key={r.value}
+                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                    abortReason === r.value
+                      ? "border-red-400 bg-red-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="abort-reason"
+                    value={r.value}
+                    checked={abortReason === r.value}
+                    onChange={() => setAbortReason(r.value)}
+                    className="accent-red-500"
+                  />
+                  <span className="text-sm text-gray-700">{r.label}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* หมายเหตุเพิ่มเติม */}
+            <textarea
+              value={abortNote}
+              onChange={e => setAbortNote(e.target.value)}
+              placeholder="หมายเหตุเพิ่มเติม (ไม่บังคับ)"
+              rows={2}
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-300 resize-none"
+            />
+
+            {abortError && (
+              <p className="text-sm text-red-600">{abortError}</p>
+            )}
+
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                disabled={abortSubmitting}
+                onClick={handleAbortSubmit}
+                className="w-full bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white font-semibold py-3 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
+              >
+                {abortSubmitting
+                  ? <><span className="animate-spin">⟳</span> กำลังยุติงาน...</>
+                  : "ยืนยันยุติงาน"}
+              </button>
+              <button
+                type="button"
+                disabled={abortSubmitting}
+                onClick={() => { setShowAbortModal(false); setAbortError(null); }}
+                className="w-full text-gray-400 hover:text-gray-600 text-sm py-2 transition-colors"
+              >
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
