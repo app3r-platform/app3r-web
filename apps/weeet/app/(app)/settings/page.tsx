@@ -75,9 +75,18 @@ export default function SettingsPage() {
       {/* Account */}
       <SettingSection title="บัญชี">
         <SettingRow
+          icon={auth.accountType === "rented" ? "🔑" : "🆓"}
+          label="โหมดช่าง"
+          description={
+            auth.accountType === "rented"
+              ? "Mode 2 — เช่ารายปี (5,000 Gold) · Admin อนุมัติแล้ว"
+              : "Mode 1 — ฟรี 1 ตัว · สร้างอัตโนมัติโดยร้าน"
+          }
+          value={auth.accountType === "rented" ? "Mode 2" : "Mode 1"}
+        />
+        <SettingRow
           icon="🔒"
           label="เปลี่ยนรหัสผ่าน"
-          value={auth.accountType === "rented" ? "Rented" : "Default"}
           onClick={() => { setShowChangePass(true); resetChangePass(); }}
           arrow
         />
@@ -158,7 +167,11 @@ export default function SettingsPage() {
           <SettingRow
             icon="👤"
             label="ประเภทบัญชี"
-            value={auth.accountType === "rented" ? "Rented (เช่า)" : "Default (อัตโนมัติ)"}
+            value={
+              auth.accountType === "rented"
+                ? "Mode 2 · Rented (เช่า)"
+                : "Mode 1 · Default (อัตโนมัติ)"
+            }
           />
         )}
       </SettingSection>

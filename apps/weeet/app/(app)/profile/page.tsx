@@ -88,7 +88,6 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
-    if (!form.name?.trim()) return;
     setSaving(true);
     await new Promise((r) => setTimeout(r, 700));
     updateTechnician(form);
@@ -149,21 +148,49 @@ export default function ProfilePage() {
           {(form.name ?? tech.name)?.[0] ?? "ช"}
         </div>
         <div className="flex-1 min-w-0">
-          {editing ? (
-            <input
-              type="text"
-              value={form.name ?? ""}
-              onChange={(e) => set("name", e.target.value)}
-              placeholder="ชื่อ-นามสกุล"
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-weeet-primary"
-            />
-          ) : (
-            <h2 className="font-bold text-white text-lg truncate">{tech.name}</h2>
-          )}
+          <h2 className="font-bold text-white text-lg truncate">{tech.name}</h2>
           <p className="text-gray-400 text-sm mt-0.5">{tech.shopName}</p>
           <p className="text-xs text-gray-500">{tech.phone}</p>
         </div>
       </div>
+
+      {/* Shop affiliation — read-only, shop/admin controlled */}
+      <Section title="สังกัดร้าน">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <span className="text-lg flex-shrink-0">🏪</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500">ร้านที่สังกัด</p>
+            <p className="text-sm text-white">{tech.shopName || "—"}</p>
+          </div>
+          <span className="text-xs text-gray-600">ร้านคุม</span>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <span className="text-lg flex-shrink-0">👤</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500">ชื่อ-สกุลในระบบ</p>
+            <p className="text-sm text-white">{tech.name}</p>
+          </div>
+          <span className="text-xs text-gray-600">ร้านคุม</span>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <span className="text-lg flex-shrink-0">{auth.accountType === "rented" ? "🔑" : "🆓"}</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500">โหมดบัญชีช่าง</p>
+            {auth.accountType === "rented" ? (
+              <p className="text-sm text-white">
+                Mode 2 — เช่ารายปี{" "}
+                <span className="text-amber-400 text-xs">(5,000 Gold / ปี)</span>
+              </p>
+            ) : (
+              <p className="text-sm text-white">
+                Mode 1 — ฟรี{" "}
+                <span className="text-green-400 text-xs">(1 ตัว/ร้าน)</span>
+              </p>
+            )}
+          </div>
+          <span className="text-xs text-gray-600">Admin คุม</span>
+        </div>
+      </Section>
 
       {/* Basic info */}
       <Section title="ข้อมูลส่วนตัว">
@@ -416,7 +443,7 @@ export default function ProfilePage() {
       {editing && (
         <button
           onClick={handleSave}
-          disabled={saving || !form.name?.trim()}
+          disabled={saving}
           className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {saving ? (
