@@ -103,7 +103,7 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
             onChange={(e) => setNotes(e.target.value)}
             placeholder="อธิบายปัญหาและแนวทางการซ่อม..."
             rows={4}
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
           />
         </div>
 

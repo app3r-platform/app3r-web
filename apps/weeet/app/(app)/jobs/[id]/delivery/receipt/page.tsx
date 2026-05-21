@@ -139,7 +139,7 @@ export default function DeliveryReceiptPage({
           placeholder="บันทึกเพิ่มเติมการส่งมอบ..."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 

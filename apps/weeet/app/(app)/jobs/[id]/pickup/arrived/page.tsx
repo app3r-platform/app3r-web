@@ -81,7 +81,7 @@ export default function PickupArrivedPage({
               className={
                 photos.length >= MIN_PHOTOS
                   ? "text-green-400"
-                  : "text-orange-400"
+                  : "text-weeet-primary"
               }
             >
               ({photos.length}/{MIN_PHOTOS}+)
@@ -108,7 +108,7 @@ export default function PickupArrivedPage({
         {previews.length === 0 ? (
           <button
             onClick={() => fileRef.current?.click()}
-            className="w-full h-36 border-2 border-dashed border-gray-600 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-orange-500/60 transition-colors"
+            className="w-full h-36 border-2 border-dashed border-gray-600 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:border-weeet-primary/60 transition-colors"
           >
             <span className="text-3xl">📷</span>
             <span className="text-sm">แตะเพื่อถ่ายรูป</span>
@@ -133,7 +133,7 @@ export default function PickupArrivedPage({
             ))}
             <button
               onClick={() => fileRef.current?.click()}
-              className="aspect-square rounded-lg border-2 border-dashed border-gray-600 flex items-center justify-center text-gray-500 hover:border-orange-500/60 transition-colors"
+              className="aspect-square rounded-lg border-2 border-dashed border-gray-600 flex items-center justify-center text-gray-500 hover:border-weeet-primary/60 transition-colors"
             >
               <span className="text-2xl">+</span>
             </button>

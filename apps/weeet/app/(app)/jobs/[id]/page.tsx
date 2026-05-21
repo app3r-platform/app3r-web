@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
@@ -37,7 +37,7 @@ const STATUS_COLOR: Record<RepairJobStatus, string> = {
   inspecting: "bg-blue-900/60 text-blue-300",
   awaiting_decision: "bg-amber-900/60 text-amber-300",
   awaiting_user: "bg-amber-900/60 text-amber-300",
-  in_progress: "bg-orange-900/60 text-orange-300",
+  in_progress: "bg-weeet-surface/60 text-weeet-primary",
   completed: "bg-green-900/60 text-green-300",
   awaiting_review: "bg-amber-900/60 text-amber-300",
   closed: "bg-green-900/60 text-green-300",
@@ -80,7 +80,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("depart")}
-          className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🚗 ออกเดินทาง
         </button>
@@ -144,7 +144,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("pickup/en-route")}
-          className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🚗 ออกเดินทางรับเครื่อง
         </button>
@@ -265,7 +265,7 @@ export default function JobDetailPage({
         </p>
         <button
           onClick={() => router.back()}
-          className="text-orange-400 underline text-sm"
+          className="text-weeet-primary underline text-sm"
         >
           ← กลับ
         </button>
@@ -329,7 +329,7 @@ export default function JobDetailPage({
           <div className="bg-gray-800/60 border border-gray-700/60 rounded-xl px-4 py-2.5 flex items-center gap-2">
             <span className="text-gray-400 text-xs shrink-0">แหล่งที่มาของเครื่อง:</span>
             {job.source.type === "purchased_scrap" ? (
-              <span className="bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+              <span className="bg-weeet-surface/40 border border-weeet-dark text-weeet-primary text-xs px-2 py-0.5 rounded">
                 ซื้อจากซาก{job.source.refId ? ` (${job.source.refId})` : ""}
               </span>
             ) : (
@@ -352,7 +352,7 @@ export default function JobDetailPage({
                 <span className="text-gray-400 w-20 shrink-0">โทร</span>
                 <a
                   href={`tel:${job.customer_phone}`}
-                  className="text-orange-400 hover:text-orange-300"
+                  className="text-weeet-primary hover:text-weeet-dark"
                 >
                   {job.customer_phone}
                 </a>

@@ -95,7 +95,7 @@ export default function PickupEnRoutePage({
       <button
         onClick={handleDepart}
         disabled={loading}
-        className="w-full bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors text-base"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors text-base"
       >
         {loading ? "กำลังบันทึก..." : "🚗 ออกเดินทางรับเครื่อง"}
       </button>

@@ -15,7 +15,7 @@ export function ProgressMediaGallery({ media }: { media: ProgressStepMedia }) {
             <button
               key={img.id}
               onClick={() => setLightbox(img.url)}
-              className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-700 hover:border-orange-500 transition-colors"
+              className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-700 hover:border-weeet-primary transition-colors"
               type="button"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

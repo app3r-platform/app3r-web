@@ -138,7 +138,7 @@ export default function SettingsPage() {
                 onClick={() => setLanguage(lang)}
                 className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
                   language === lang
-                    ? "bg-orange-600 text-white"
+                    ? "bg-weeet-primary text-white"
                     : "text-gray-400 hover:text-gray-200"
                 }`}
               >
@@ -205,7 +205,7 @@ export default function SettingsPage() {
                       value={cpCurrent}
                       onChange={(e) => setCpCurrent(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 pr-10 text-white text-sm focus:outline-none focus:border-orange-500"
+                      className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 pr-10 text-white text-sm focus:outline-none focus:border-weeet-primary"
                     />
                     <button type="button" onClick={() => setShowPwCurrent(!showPwCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                       {showPwCurrent ? "🙈" : "👁️"}
@@ -221,7 +221,7 @@ export default function SettingsPage() {
                       value={cpNew}
                       onChange={(e) => setCpNew(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 pr-10 text-white text-sm focus:outline-none focus:border-orange-500"
+                      className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 pr-10 text-white text-sm focus:outline-none focus:border-weeet-primary"
                     />
                     <button type="button" onClick={() => setShowPwNew(!showPwNew)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                       {showPwNew ? "🙈" : "👁️"}
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                         ? "border-red-600"
                         : cpConfirm && cpNew === cpConfirm
                         ? "border-green-600"
-                        : "border-gray-600 focus:border-orange-500"
+                        : "border-gray-600 focus:border-weeet-primary"
                     }`}
                   />
                 </div>
@@ -255,7 +255,7 @@ export default function SettingsPage() {
                 <button
                   type="submit"
                   disabled={cpLoading || cpNew.length < 8 || cpNew !== cpConfirm}
-                  className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl transition-colors"
+                  className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl transition-colors"
                 >
                   {cpLoading ? "กำลังบันทึก..." : "บันทึก"}
                 </button>
@@ -320,7 +320,7 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
       type="button"
       onClick={() => onChange(!value)}
       className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-        value ? "bg-orange-600" : "bg-gray-600"
+        value ? "bg-weeet-primary" : "bg-gray-600"
       }`}
     >
       <span

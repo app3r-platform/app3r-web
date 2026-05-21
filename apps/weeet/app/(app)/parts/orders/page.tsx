@@ -1,4 +1,4 @@
-/**
+﻿/**
  * app/(app)/parts/orders/page.tsx
  * Sub-CMD-9 Wave 3 — WeeeT Buyer Order List Page
  *
@@ -153,7 +153,7 @@ export default function BuyerOrdersPage() {
             }}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               statusFilter === opt.value
-                ? "bg-orange-600 text-white"
+                ? "bg-weeet-primary text-white"
                 : "bg-gray-800 text-gray-400 border border-gray-700 hover:border-gray-500"
             }`}
           >
@@ -185,7 +185,7 @@ export default function BuyerOrdersPage() {
               key={order.id}
               type="button"
               onClick={() => router.push(`/parts/orders/${order.id}`)}
-              className="w-full text-left bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2 hover:border-orange-600/50 transition-colors"
+              className="w-full text-left bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2 hover:border-weeet-primary/50 transition-colors"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
@@ -216,7 +216,7 @@ export default function BuyerOrdersPage() {
                   </span>
                 </span>
                 {parseFloat(order.totalThb) > 0 && (
-                  <span className="text-orange-400 font-medium">
+                  <span className="text-weeet-primary font-medium">
                     ฿{parseFloat(order.totalThb).toLocaleString()}
                   </span>
                 )}
@@ -232,7 +232,7 @@ export default function BuyerOrdersPage() {
               <button
                 type="button"
                 onClick={() => router.push("/parts")}
-                className="mt-2 text-orange-400 text-sm underline"
+                className="mt-2 text-weeet-primary text-sm underline"
               >
                 เลือกซื้ออะไหล่
               </button>

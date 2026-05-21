@@ -190,7 +190,7 @@ function LoginForm() {
                 placeholder="example@email.com"
                 required
                 disabled={isLocked}
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary focus:ring-1 focus:ring-weeet-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
             <div className="space-y-2">
@@ -202,7 +202,7 @@ function LoginForm() {
                 placeholder="••••••••"
                 required
                 disabled={isLocked}
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary focus:ring-1 focus:ring-weeet-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               />
               {/* Attempt counter warning */}
               {!isLocked && lockout.count > 0 && (
@@ -226,7 +226,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading || isLocked}
-              className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -252,7 +252,7 @@ function LoginForm() {
           <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-xs text-gray-400 space-y-1">
             <p className="font-medium text-gray-300 mb-1">🧪 Demo Mode</p>
             <p>กรอกอีเมลใดก็ได้ + รหัสผ่านใดก็ได้ เพื่อทดสอบ</p>
-            <p className="text-orange-300">ใช้รหัส <code className="bg-gray-700 px-1 rounded">changeme123</code> เพื่อจำลอง Rented WeeeT (บังคับเปลี่ยนรหัส)</p>
+            <p className="text-weeet-primary">ใช้รหัส <code className="bg-gray-700 px-1 rounded">changeme123</code> เพื่อจำลอง Rented WeeeT (บังคับเปลี่ยนรหัส)</p>
             {isImpersonation && (
               <p className="text-amber-400">⚡ Impersonation: จาก {shopName}</p>
             )}

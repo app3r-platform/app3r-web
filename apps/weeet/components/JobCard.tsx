@@ -12,7 +12,7 @@ function formatTime(isoString: string) {
 export function JobCard({ job }: { job: Job }) {
   return (
     <Link href={`/jobs/${job.id}`}>
-      <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-orange-600 transition-colors active:scale-[0.98]">
+      <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-weeet-primary transition-colors active:scale-[0.98]">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div>
             <p className="text-xs text-gray-400">{job.jobNo}</p>
@@ -43,7 +43,7 @@ export function JobCard({ job }: { job: Job }) {
             </div>
             <div className="w-full bg-gray-700 rounded-full h-1.5">
               <div
-                className="bg-orange-500 h-1.5 rounded-full transition-all"
+                className="bg-weeet-primary h-1.5 rounded-full transition-all"
                 style={{ width: `${(job.steps.filter((s) => s.done).length / job.steps.length) * 100}%` }}
               />
             </div>

@@ -179,7 +179,7 @@ export default function PartsOrderDetailPage({
             <p className="text-gray-400 text-sm">ไม่สามารถโหลดข้อมูลออเดอร์ได้</p>
             <button
               onClick={load}
-              className="text-orange-400 text-xs underline mt-2"
+              className="text-weeet-primary text-xs underline mt-2"
             >
               ลองใหม่
             </button>
@@ -207,13 +207,13 @@ export default function PartsOrderDetailPage({
                 </div>
                 <div className="bg-gray-900 rounded-xl p-3">
                   <p className="text-xs text-gray-500 mb-1">ราคา/หน่วย</p>
-                  <p className="text-orange-400 font-bold">
+                  <p className="text-weeet-primary font-bold">
                     ฿{parseFloat(order.unitPriceThb).toLocaleString()}
                   </p>
                 </div>
                 <div className="bg-gray-900 rounded-xl p-3 col-span-2">
                   <p className="text-xs text-gray-500 mb-1">ยอดรวม</p>
-                  <p className="text-orange-400 font-bold text-xl">
+                  <p className="text-weeet-primary font-bold text-xl">
                     ฿{parseFloat(order.totalThb).toLocaleString()}
                   </p>
                 </div>
@@ -313,7 +313,7 @@ export default function PartsOrderDetailPage({
                         onChange={(e) => setRateComment(e.target.value)}
                         rows={2}
                         placeholder="รีวิวสั้นๆ..."
-                        className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 resize-none"
+                        className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-weeet-primary resize-none"
                       />
                     </div>
 

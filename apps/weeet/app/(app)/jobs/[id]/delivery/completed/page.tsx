@@ -80,7 +80,7 @@ export default function DeliveryCompletedPage({
       <div className="space-y-3">
         <button
           onClick={() => router.push("/jobs")}
-          className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           📋 กลับหน้ารายการงาน
         </button>

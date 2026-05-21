@@ -94,7 +94,7 @@ export default function DepartPage({ params }: { params: Promise<{ id: string }>
         <button
           onClick={handleDepart}
           disabled={!location || submitting}
-          className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><span className="animate-spin">⏳</span> กำลังบันทึก...</>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import type { ServiceProgress } from "@/lib/types/service-progress";
 import { ProgressStatusBadge } from "./ProgressStatusBadge";
 import { SUB_STAGE_LABELS } from "@/lib/types/service-progress";
@@ -24,7 +24,7 @@ export function DailyQueueCard({ job, onClick }: Props) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full bg-gray-800 border border-gray-700 hover:border-orange-500/50 rounded-xl p-4 text-left space-y-2 transition-colors"
+      className="w-full bg-gray-800 border border-gray-700 hover:border-weeet-primary/50 rounded-xl p-4 text-left space-y-2 transition-colors"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="space-y-0.5">
@@ -47,7 +47,7 @@ export function DailyQueueCard({ job, onClick }: Props) {
       </div>
 
       {nextSubStageLabel && (
-        <p className="text-xs text-orange-400 font-medium">
+        <p className="text-xs text-weeet-primary font-medium">
           ▶ {nextSubStageLabel}
         </p>
       )}

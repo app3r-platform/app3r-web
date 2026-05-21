@@ -86,7 +86,7 @@ export default function PickupReceiptPage({
           placeholder="เช่น SN1234567890"
           value={serialNumber}
           onChange={(e) => setSerialNumber(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
         />
       </div>
 
@@ -100,7 +100,7 @@ export default function PickupReceiptPage({
           placeholder="เช่น สายไฟ, รีโมท, คู่มือ"
           value={accessories}
           onChange={(e) => setAccessories(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
         />
       </div>
 
@@ -137,7 +137,7 @@ export default function PickupReceiptPage({
           placeholder="บันทึกเพิ่มเติม..."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 

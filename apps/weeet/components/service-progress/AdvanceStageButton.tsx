@@ -17,7 +17,7 @@ export function AdvanceStageButton({ label, isLastSubStage, loading, disabled, o
       className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 ${
         isLastSubStage
           ? "bg-green-600 hover:bg-green-500 text-white"
-          : "bg-orange-600 hover:bg-orange-500 text-white"
+          : "bg-weeet-primary hover:bg-weeet-dark text-white"
       }`}
     >
       {loading ? "กำลังบันทึก..." : label}

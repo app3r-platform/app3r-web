@@ -56,9 +56,9 @@ export function ServicePhotoUploader({ jobId, mode = "photo", onUploaded, maxFil
     <div className="space-y-3">
       <p className="text-xs text-gray-400 font-medium">{displayLabel}</p>
       {mode === "photo" && (
-        <input type="text" value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="คำอธิบายรูป (optional)" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500" />
+        <input type="text" value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="คำอธิบายรูป (optional)" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-weeet-primary" />
       )}
-      <div className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${uploading ? "border-gray-600 pointer-events-none" : "border-gray-600 hover:border-orange-500"}`} onClick={() => !uploading && fileRef.current?.click()}>
+      <div className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${uploading ? "border-gray-600 pointer-events-none" : "border-gray-600 hover:border-weeet-primary"}`} onClick={() => !uploading && fileRef.current?.click()}>
         {uploading ? (
           <p className="text-sm text-gray-400 flex items-center justify-center gap-2"><span className="animate-spin">⏳</span> กำลังอัปโหลด...</p>
         ) : (

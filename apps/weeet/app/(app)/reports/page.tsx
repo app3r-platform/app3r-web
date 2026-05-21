@@ -23,7 +23,7 @@ export default function ReportsPage() {
           <button
             key={period}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              i === 0 ? "bg-orange-600 text-white" : "bg-gray-800 text-gray-400 border border-gray-700"
+              i === 0 ? "bg-weeet-primary text-white" : "bg-gray-800 text-gray-400 border border-gray-700"
             }`}
           >
             {period}
@@ -42,7 +42,7 @@ export default function ReportsPage() {
           <p className="text-xs text-gray-400 mt-1">เสร็จสิ้น</p>
         </div>
         <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-          <p className="text-3xl font-bold text-orange-400">{inProgress}</p>
+          <p className="text-3xl font-bold text-weeet-primary">{inProgress}</p>
           <p className="text-xs text-gray-400 mt-1">กำลังทำ</p>
         </div>
         <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
@@ -55,11 +55,11 @@ export default function ReportsPage() {
       <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium text-white">อัตราเสร็จสิ้น</span>
-          <span className="text-orange-400 font-bold">{completionRate}%</span>
+          <span className="text-weeet-primary font-bold">{completionRate}%</span>
         </div>
         <div className="w-full bg-gray-700 rounded-full h-2.5">
           <div
-            className="bg-orange-500 h-2.5 rounded-full transition-all"
+            className="bg-weeet-primary h-2.5 rounded-full transition-all"
             style={{ width: `${completionRate}%` }}
           />
         </div>

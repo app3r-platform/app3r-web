@@ -40,8 +40,8 @@ export function StepUpdateForm({ subStage, onSubmit, loading }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="bg-orange-950/30 border border-orange-800/40 rounded-xl px-4 py-2">
-        <p className="text-xs text-orange-300 font-medium">
+      <div className="bg-weeet-primary/10 border border-weeet-dark/30 rounded-xl px-4 py-2">
+        <p className="text-xs text-weeet-primary font-medium">
           บันทึกขั้นตอน: {SUB_STAGE_LABELS[subStage] ?? subStage}
         </p>
       </div>
@@ -57,7 +57,7 @@ export function StepUpdateForm({ subStage, onSubmit, loading }: Props) {
             value={tracking}
             onChange={(e) => setTracking(e.target.value)}
             placeholder="เช่น TH123456789"
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
           />
         </div>
       )}
@@ -72,7 +72,7 @@ export function StepUpdateForm({ subStage, onSubmit, loading }: Props) {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="บันทึกรายละเอียดขั้นตอนนี้..."
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 
@@ -96,7 +96,7 @@ export function StepUpdateForm({ subStage, onSubmit, loading }: Props) {
         type="button"
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "✅ ยืนยันขั้นตอนนี้"}
       </button>

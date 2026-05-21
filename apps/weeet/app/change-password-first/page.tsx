@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -76,7 +76,7 @@ export default function ChangePasswordFirstPage() {
   const strengthColor = [
     "",
     "bg-red-500",
-    "bg-orange-500",
+    "bg-weeet-primary",
     "bg-yellow-500",
     "bg-blue-500",
     "bg-green-500",
@@ -93,11 +93,11 @@ export default function ChangePasswordFirstPage() {
   return (
     <div className="min-h-screen bg-gray-950 flex flex-col">
       {/* Header */}
-      <div className="bg-orange-600/10 border-b border-orange-800/50 px-4 py-4 flex items-center gap-3">
+      <div className="bg-weeet-primary/10 border-b border-weeet-dark/50 px-4 py-4 flex items-center gap-3">
         <span className="text-2xl">🔐</span>
         <div>
           <h1 className="font-bold text-white">ตั้งรหัสผ่านใหม่</h1>
-          <p className="text-xs text-orange-300">กรุณาเปลี่ยนรหัสผ่านก่อนเข้าใช้งาน</p>
+          <p className="text-xs text-weeet-primary">กรุณาเปลี่ยนรหัสผ่านก่อนเข้าใช้งาน</p>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ export default function ChangePasswordFirstPage() {
                 onChange={(e) => setCurrent(e.target.value)}
                 placeholder="รหัสผ่านที่ได้รับจากร้าน"
                 required
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary focus:ring-1 focus:ring-weeet-primary transition-colors"
               />
               <button
                 type="button"
@@ -152,7 +152,7 @@ export default function ChangePasswordFirstPage() {
                 placeholder="อย่างน้อย 8 ตัวอักษร"
                 required
                 minLength={8}
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary focus:ring-1 focus:ring-weeet-primary transition-colors"
               />
               <button
                 type="button"
@@ -211,7 +211,7 @@ export default function ChangePasswordFirstPage() {
                     ? "border-red-600 focus:border-red-500 focus:ring-red-500"
                     : confirm && newPass === confirm
                     ? "border-green-600 focus:border-green-500 focus:ring-green-500"
-                    : "border-gray-600 focus:border-orange-500 focus:ring-orange-500"
+                    : "border-gray-600 focus:border-weeet-primary focus:ring-weeet-primary"
                 }`}
               />
               <button
@@ -250,7 +250,7 @@ export default function ChangePasswordFirstPage() {
           <button
             type="submit"
             disabled={loading || newPass.length < 8 || newPass !== confirm || newPass === current}
-            className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

@@ -55,7 +55,7 @@ export default function PhotoCapturePage({ params }: { params: Promise<{ id: str
     return (
       <div className="px-4 pt-5 text-center">
         <p className="text-gray-400">ไม่พบงาน</p>
-        <button onClick={() => router.back()} className="text-orange-400 text-sm mt-2">← กลับ</button>
+        <button onClick={() => router.back()} className="text-weeet-primary text-sm mt-2">← กลับ</button>
       </div>
     );
   }
@@ -133,7 +133,7 @@ export default function PhotoCapturePage({ params }: { params: Promise<{ id: str
             placeholder="คำอธิบายรูป (ไม่บังคับ)"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
           />
         </div>
 
@@ -193,7 +193,7 @@ export default function PhotoCapturePage({ params }: { params: Promise<{ id: str
         {photos.length > 0 && (
           <button
             onClick={() => router.back()}
-            className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl transition-colors"
+            className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
           >
             💾 บันทึกรูปภาพ ({photos.length} รูป)
           </button>
