@@ -70,10 +70,10 @@ function BarRow({
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
-        <span className="text-gray-300">{label}</span>
-        <span className="text-gray-400">{value.toLocaleString()}{suffix} ({pct}%)</span>
+        <span className="text-gray-700">{label}</span>
+        <span className="text-gray-500">{value.toLocaleString()}{suffix} ({pct}%)</span>
       </div>
-      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
         <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -82,7 +82,7 @@ function BarRow({
 
 function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className="text-2xl font-bold text-white">{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
@@ -105,17 +105,17 @@ export default function MaintainAnalyticsPage() {
   }, [router]);
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
     </div>
   );
 
   if (error || !data) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error ?? "ไม่พบข้อมูล"}</div>
-        <Link href="/maintain/jobs" className="text-sm text-blue-400 hover:text-blue-300">← Jobs</Link>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error ?? "ไม่พบข้อมูล"}</div>
+        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← Jobs</Link>
       </main>
     </div>
   );
@@ -124,7 +124,7 @@ export default function MaintainAnalyticsPage() {
   const cancelledCount = data.by_status["cancelled"] ?? 0;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-6xl">
 
@@ -132,12 +132,12 @@ export default function MaintainAnalyticsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📊 Maintain Analytics</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               ภาพรวมงาน Maintain — สถิติรายได้ / ประเภท / recurring
             </p>
           </div>
           <Link href="/maintain/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             🛁 Jobs →
           </Link>
         </div>
@@ -170,7 +170,7 @@ export default function MaintainAnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
           {/* By status */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5 space-y-3">
+          <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
               สถานะงาน
             </h2>
@@ -188,7 +188,7 @@ export default function MaintainAnalyticsPage() {
           </section>
 
           {/* By cleaning type */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5 space-y-3">
+          <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
               ประเภทการล้าง
             </h2>
@@ -206,7 +206,7 @@ export default function MaintainAnalyticsPage() {
           </section>
 
           {/* By appliance type */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5 space-y-3">
+          <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
               ประเภทเครื่อง
             </h2>
@@ -226,32 +226,32 @@ export default function MaintainAnalyticsPage() {
         </div>
 
         {/* Recurring conversion detail */}
-        <section className="bg-gray-900 rounded-xl border border-admin-primary/30 p-5">
+        <section className="bg-white rounded-xl border border-admin-primary/30 p-5">
           <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-4">
             🔁 Recurring Conversion
           </h2>
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400">งานทั้งหมด</span>
+              <span className="text-gray-500">งานทั้งหมด</span>
               <span className="text-white font-mono">{data.total_jobs.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400">งาน recurring</span>
+              <span className="text-gray-500">งาน recurring</span>
               <span className="text-admin-primary font-mono">{data.recurring_count.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Conversion Rate</span>
+              <span className="text-gray-500">Conversion Rate</span>
               <span className={`font-mono font-bold ${
                 data.recurring_conversion_rate >= 0.3
-                  ? "text-green-400"
+                  ? "text-green-600"
                   : data.recurring_conversion_rate >= 0.15
-                  ? "text-yellow-400"
-                  : "text-red-400"
+                  ? "text-yellow-700"
+                  : "text-red-600"
               }`}>
                 {(data.recurring_conversion_rate * 100).toFixed(1)}%
               </span>
             </div>
-            <div className="h-3 bg-gray-800 rounded-full overflow-hidden mt-2">
+            <div className="h-3 bg-gray-100 rounded-full overflow-hidden mt-2">
               <div
                 className="h-full rounded-full bg-admin-primary transition-all"
                 style={{ width: `${Math.min(data.recurring_conversion_rate * 100, 100)}%` }}

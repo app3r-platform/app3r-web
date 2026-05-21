@@ -211,7 +211,7 @@ export default function ContactInfoEditor() {
       {/* phones */}
       <Section title="เบอร์โทรศัพท์" onAdd={addPhone}>
         {form.phones.length === 0 && (
-          <p className="text-xs text-gray-400">ยังไม่มีเบอร์โทร</p>
+          <p className="text-xs text-gray-500">ยังไม่มีเบอร์โทร</p>
         )}
         {form.phones.map((p, i) => (
           <div key={i} className="grid grid-cols-12 gap-2 items-center">
@@ -248,7 +248,7 @@ export default function ContactInfoEditor() {
       {/* emails */}
       <Section title="อีเมล" onAdd={addEmail}>
         {form.emails.length === 0 && (
-          <p className="text-xs text-gray-400">ยังไม่มีอีเมล</p>
+          <p className="text-xs text-gray-500">ยังไม่มีอีเมล</p>
         )}
         {form.emails.map((em, i) => (
           <div key={i} className="grid grid-cols-12 gap-2 items-center">
@@ -279,7 +279,7 @@ export default function ContactInfoEditor() {
       {/* socials */}
       <Section title="โซเชียลมีเดีย" onAdd={addSocial}>
         {form.socials.length === 0 && (
-          <p className="text-xs text-gray-400">ยังไม่มีโซเชียล</p>
+          <p className="text-xs text-gray-500">ยังไม่มีโซเชียล</p>
         )}
         {form.socials.map((s, i) => (
           <div key={i} className="grid grid-cols-12 gap-2 items-center">
@@ -370,7 +370,7 @@ export default function ContactInfoEditor() {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+          className="bg-admin-surface text-admin-primary px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
         >
           {saving ? 'กำลังบันทึก...' : 'บันทึกข้อมูลติดต่อ'}
         </button>

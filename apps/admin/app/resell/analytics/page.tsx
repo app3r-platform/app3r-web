@@ -37,7 +37,7 @@ function StatCard({ label, value, sub, highlight }: {
   label: string; value: string; sub?: string; highlight?: boolean;
 }) {
   return (
-    <div className={`bg-gray-900 rounded-xl border p-5 ${highlight ? "border-blue-800/50" : "border-gray-800"}`}>
+    <div className={`bg-white rounded-xl border p-5 ${highlight ? "border-blue-800/50" : "border-gray-200"}`}>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${highlight ? "text-blue-300" : "text-white"}`}>{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
@@ -52,10 +52,10 @@ function BarRow({ label, value, total, color, suffix = "" }: {
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
-        <span className="text-gray-300">{label}</span>
-        <span className="text-gray-400">{value.toLocaleString()}{suffix} ({pct}%)</span>
+        <span className="text-gray-700">{label}</span>
+        <span className="text-gray-500">{value.toLocaleString()}{suffix} ({pct}%)</span>
       </div>
-      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -103,25 +103,25 @@ export default function ResellAnalyticsPage() {
   }, [router]);
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
     </div>
   );
 
   if (error || !data) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           ระบบ Resell กำลังพัฒนา — {error ?? "ไม่พบข้อมูล"}
         </div>
-        <Link href="/resell/listings" className="text-sm text-blue-400 hover:text-blue-300">← Listings</Link>
+        <Link href="/resell/listings" className="text-sm text-admin-primary hover:text-admin-dark">← Listings</Link>
       </main>
     </div>
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-6xl">
 
@@ -129,12 +129,12 @@ export default function ResellAnalyticsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📊 Resell Analytics</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               สรุปภาพรวม Resell — listings / transactions / conversion / GP
             </p>
           </div>
           <Link href="/resell/listings"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             🛍️ Listings →
           </Link>
         </div>
@@ -166,41 +166,41 @@ export default function ResellAnalyticsPage() {
         {/* KPI row 2 — rates */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Conversion funnel */}
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5 lg:col-span-1">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 lg:col-span-1">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
               🔄 Conversion Funnel
             </h2>
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-400">Offer Acceptance Rate</span>
-                  <span className={`font-mono font-bold ${data.offer_acceptance_rate >= 0.3 ? "text-green-400" : data.offer_acceptance_rate >= 0.15 ? "text-yellow-400" : "text-red-400"}`}>
+                  <span className="text-gray-500">Offer Acceptance Rate</span>
+                  <span className={`font-mono font-bold ${data.offer_acceptance_rate >= 0.3 ? "text-green-600" : data.offer_acceptance_rate >= 0.15 ? "text-yellow-700" : "text-red-600"}`}>
                     {(data.offer_acceptance_rate * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min(data.offer_acceptance_rate * 100, 100)}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-400">Sales Conversion Rate</span>
-                  <span className={`font-mono font-bold ${data.conversion_rate >= 0.2 ? "text-green-400" : data.conversion_rate >= 0.1 ? "text-yellow-400" : "text-red-400"}`}>
+                  <span className="text-gray-500">Sales Conversion Rate</span>
+                  <span className={`font-mono font-bold ${data.conversion_rate >= 0.2 ? "text-green-600" : data.conversion_rate >= 0.1 ? "text-yellow-700" : "text-red-600"}`}>
                     {(data.conversion_rate * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div className="h-full bg-green-500 rounded-full" style={{ width: `${Math.min(data.conversion_rate * 100, 100)}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-400">Dispute Rate</span>
-                  <span className={`font-mono font-bold ${data.dispute_rate > 0.05 ? "text-red-400" : data.dispute_rate > 0.02 ? "text-yellow-400" : "text-green-400"}`}>
+                  <span className="text-gray-500">Dispute Rate</span>
+                  <span className={`font-mono font-bold ${data.dispute_rate > 0.05 ? "text-red-600" : data.dispute_rate > 0.02 ? "text-yellow-700" : "text-green-600"}`}>
                     {(data.dispute_rate * 100).toFixed(2)}%
                   </span>
                 </div>
-                <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div className="h-full bg-red-500 rounded-full" style={{ width: `${Math.min(data.dispute_rate * 100 * 10, 100)}%` }} />
                 </div>
                 <div className="text-xs text-gray-600 mt-0.5">{data.disputed_count} รายการพิพาท</div>
@@ -209,7 +209,7 @@ export default function ResellAnalyticsPage() {
           </div>
 
           {/* By listing type */}
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ประเภท Listing</h2>
             <div className="space-y-3">
               <BarRow label="มือสอง (used_appliance)" value={data.by_listing_type["used_appliance"] ?? 0}
@@ -227,7 +227,7 @@ export default function ResellAnalyticsPage() {
           </div>
 
           {/* By status */}
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">สถานะ (10-state)</h2>
             <div className="space-y-2.5">
               {Object.entries(data.by_status)
@@ -247,7 +247,7 @@ export default function ResellAnalyticsPage() {
         {/* Top sellers + buyers */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 Top Sellers</h2>
             {data.top_sellers.length === 0 ? (
               <p className="text-sm text-gray-600">ยังไม่มีข้อมูล</p>
@@ -258,10 +258,10 @@ export default function ResellAnalyticsPage() {
                     <span className="text-xs text-gray-600 w-5 text-right shrink-0">{i + 1}</span>
                     <div className="flex-1">
                       <div className="flex justify-between text-xs">
-                        <span className={`font-medium ${u.userType === "WeeeU" ? "text-sky-400" : "text-green-400"}`}>
+                        <span className={`font-medium ${u.userType === "WeeeU" ? "text-sky-400" : "text-green-600"}`}>
                           {u.userName ?? u.userId.slice(0, 8)} ({u.userType})
                         </span>
-                        <span className="text-gray-400">{u.count} listings</span>
+                        <span className="text-gray-500">{u.count} listings</span>
                       </div>
                       <div className="text-xs text-gray-500 font-mono">{u.totalValue.toLocaleString()} ฿</div>
                     </div>
@@ -271,7 +271,7 @@ export default function ResellAnalyticsPage() {
             )}
           </section>
 
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 Top Buyers</h2>
             {data.top_buyers.length === 0 ? (
               <p className="text-sm text-gray-600">ยังไม่มีข้อมูล</p>
@@ -282,10 +282,10 @@ export default function ResellAnalyticsPage() {
                     <span className="text-xs text-gray-600 w-5 text-right shrink-0">{i + 1}</span>
                     <div className="flex-1">
                       <div className="flex justify-between text-xs">
-                        <span className={`font-medium ${u.userType === "WeeeU" ? "text-sky-400" : "text-green-400"}`}>
+                        <span className={`font-medium ${u.userType === "WeeeU" ? "text-sky-400" : "text-green-600"}`}>
                           {u.userName ?? u.userId.slice(0, 8)} ({u.userType})
                         </span>
-                        <span className="text-gray-400">{u.count} ซื้อ</span>
+                        <span className="text-gray-500">{u.count} ซื้อ</span>
                       </div>
                       <div className="text-xs text-gray-500 font-mono">{u.totalValue.toLocaleString()} ฿</div>
                     </div>

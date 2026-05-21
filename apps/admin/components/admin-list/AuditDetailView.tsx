@@ -28,7 +28,7 @@ export function AuditDetailView({ entry }: AuditDetailViewProps) {
   }
 
   return (
-    <dl className="divide-y divide-gray-800">
+    <dl className="divide-y divide-gray-200">
       <div className="flex justify-between py-2">
         <dt className="text-xs text-gray-500">การกระทำ</dt>
         <dd>

@@ -140,15 +140,15 @@ export function AdminFormFields({ module, register, errors }: AdminFormFieldsPro
         const err = errors[f.name]
         return (
           <div key={f.name} className="flex flex-col gap-1">
-            <label htmlFor={f.name} className="text-sm text-gray-400">
+            <label htmlFor={f.name} className="text-sm text-gray-500">
               {f.label}
-              {f.required && <span className="text-red-400"> *</span>}
+              {f.required && <span className="text-red-600"> *</span>}
             </label>
             {f.type === 'select' ? (
               <select
                 id={f.name}
                 {...register(f.name)}
-                className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
+                className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
               >
                 <option value="">— เลือก —</option>
                 {f.options?.map((o) => (
@@ -160,11 +160,11 @@ export function AdminFormFields({ module, register, errors }: AdminFormFieldsPro
                 id={f.name}
                 type={f.type === 'number' ? 'number' : f.type === 'email' ? 'email' : 'text'}
                 {...register(f.name)}
-                className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
+                className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
               />
             )}
             {err && (
-              <span className="text-xs text-red-400">{String(err.message)}</span>
+              <span className="text-xs text-red-600">{String(err.message)}</span>
             )}
           </div>
         )

@@ -106,7 +106,7 @@ export default function MaintainRecurringPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -114,12 +114,12 @@ export default function MaintainRecurringPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">🔁 Maintain Recurring</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               รายการนัดซ้ำทั้งหมด — ติดตาม nextScheduledAt + manual trigger
             </p>
           </div>
           <Link href="/maintain/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             🛁 Jobs →
           </Link>
         </div>
@@ -129,7 +129,7 @@ export default function MaintainRecurringPage() {
           <select
             value={filterInterval}
             onChange={e => { setFilterInterval(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500">
             <option value="">ทุก interval</option>
             <option value="3_months">3 เดือน</option>
             <option value="6_months">6 เดือน</option>
@@ -138,42 +138,42 @@ export default function MaintainRecurringPage() {
           <select
             value={filterAppliance}
             onChange={e => { setFilterAppliance(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-44 focus:outline-none focus:border-blue-500">
             <option value="">ทุกเครื่อง</option>
             <option value="AC">แอร์</option>
             <option value="WashingMachine">เครื่องซัก</option>
           </select>
           {(filterInterval || filterAppliance) && (
             <button onClick={() => { setFilterInterval(""); setFilterAppliance(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-gray-800 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ (recurring)</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">{error}</div>
+            <div className="px-6 py-8 text-red-600">{error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Service Code</th>
                   <th className="px-4 py-3">เครื่อง</th>
                   <th className="px-4 py-3">ประเภทล้าง</th>
@@ -184,16 +184,16 @@ export default function MaintainRecurringPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.map(job => {
                   const next = job.recurring?.nextScheduledAt;
                   const countdown = next ? daysUntil(next) : null;
                   const ts = triggerStates[job.id];
                   return (
-                    <tr key={job.id} className="hover:bg-gray-800/40">
+                    <tr key={job.id} className="hover:bg-gray-100/40">
                       <td className="px-4 py-3 font-mono text-xs text-blue-400">{job.serviceCode}</td>
                       <td className="px-4 py-3 text-sm">{APPLIANCE_LABEL[job.applianceType]}</td>
-                      <td className="px-4 py-3 text-xs text-gray-300">{CLEANING_LABEL[job.cleaningType]}</td>
+                      <td className="px-4 py-3 text-xs text-gray-700">{CLEANING_LABEL[job.cleaningType]}</td>
                       <td className="px-4 py-3">
                         <span className="text-xs px-2 py-0.5 rounded-full bg-admin-primary/15 text-admin-primary">
                           {INTERVAL_LABEL[job.recurring?.interval ?? ""] ?? "—"}
@@ -202,16 +202,16 @@ export default function MaintainRecurringPage() {
                       <td className="px-4 py-3">
                         {next ? (
                           <div>
-                            <div className="text-xs text-gray-300">
+                            <div className="text-xs text-gray-700">
                               {new Date(next).toLocaleDateString("th-TH")}
                             </div>
-                            <div className={`text-xs mt-0.5 ${countdown?.urgent ? "text-red-400" : "text-gray-500"}`}>
+                            <div className={`text-xs mt-0.5 ${countdown?.urgent ? "text-red-600" : "text-gray-500"}`}>
                               {countdown?.label}
                             </div>
                           </div>
                         ) : <span className="text-gray-600">—</span>}
                       </td>
-                      <td className="px-4 py-3 text-xs font-mono text-green-400">
+                      <td className="px-4 py-3 text-xs font-mono text-green-600">
                         {job.totalPrice.toLocaleString()} ฿
                       </td>
                       <td className="px-4 py-3">
@@ -223,7 +223,7 @@ export default function MaintainRecurringPage() {
                             {ts?.loading ? "..." : "▶ Trigger"}
                           </button>
                           {ts?.msg && (
-                            <span className={`text-xs ${ts.msg.type === "success" ? "text-green-400" : "text-red-400"}`}>
+                            <span className={`text-xs ${ts.msg.type === "success" ? "text-green-600" : "text-red-600"}`}>
                               {ts.msg.text}
                             </span>
                           )}
@@ -231,7 +231,7 @@ export default function MaintainRecurringPage() {
                       </td>
                       <td className="px-4 py-3">
                         <Link href={`/maintain/jobs/${job.id}`}
-                          className="text-xs text-blue-400 hover:text-blue-300 whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
                           ดู →
                         </Link>
                       </td>

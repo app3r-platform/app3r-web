@@ -29,13 +29,13 @@ interface MaintainJobDetail extends MaintainJob {
 }
 
 const STATUS_META: Record<MaintainJob["status"], { label: string; color: string }> = {
-  pending:     { label: "รอดำเนินการ",  color: "bg-gray-800 text-gray-400" },
-  assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-900/50 text-blue-300" },
-  departed:    { label: "ออกเดินทาง",  color: "bg-yellow-900/50 text-yellow-400" },
+  pending:     { label: "รอดำเนินการ",  color: "bg-gray-100 text-gray-500" },
+  assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-50 text-blue-700" },
+  departed:    { label: "ออกเดินทาง",  color: "bg-yellow-50 text-yellow-700" },
   arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-900/50 text-cyan-300" },
   in_progress: { label: "กำลังทำงาน",  color: "bg-brand-info/15 text-brand-info" },
-  completed:   { label: "เสร็จสิ้น",   color: "bg-green-900/50 text-green-400" },
-  cancelled:   { label: "ยกเลิก",       color: "bg-red-900/50 text-red-400" },
+  completed:   { label: "เสร็จสิ้น",   color: "bg-green-50 text-green-700" },
+  cancelled:   { label: "ยกเลิก",       color: "bg-red-50 text-red-700" },
 };
 
 const PHOTO_LABEL: Record<string, string> = {
@@ -47,7 +47,7 @@ const PHOTO_LABEL: Record<string, string> = {
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex gap-2 py-1.5 border-b border-gray-800/60 last:border-0">
+    <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-36 shrink-0">{label}</span>
       <span className="text-sm text-gray-100">{value}</span>
     </div>
@@ -104,17 +104,17 @@ export default function MaintainJobDetailPage() {
   const superAdmin = isSuperAdmin();
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
     </div>
   );
 
   if (error || !job) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error ?? "ไม่พบข้อมูล"}</div>
-        <Link href="/maintain/jobs" className="text-sm text-blue-400 hover:text-blue-300">← Jobs</Link>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error ?? "ไม่พบข้อมูล"}</div>
+        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← Jobs</Link>
       </main>
     </div>
   );
@@ -123,7 +123,7 @@ export default function MaintainJobDetailPage() {
   const canCancel = superAdmin && job.status !== "completed" && job.status !== "cancelled";
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-5xl">
 
@@ -139,20 +139,20 @@ export default function MaintainJobDetailPage() {
                 </span>
               )}
             </div>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-500 text-sm">
               {job.applianceType === "AC" ? "แอร์" : "เครื่องซักผ้า"} —{" "}
               {job.cleaningType === "general" ? "ล้างทั่วไป" : job.cleaningType === "deep" ? "ล้างลึก" : "ล้าง+ฆ่าเชื้อ"}
             </p>
           </div>
           <Link href="/maintain/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             ← Jobs
           </Link>
         </div>
 
         {/* Info grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ลูกค้า</h2>
             <InfoRow label="ชื่อ" value={job.customerName} />
             <InfoRow label="โทร" value={job.customerPhone} />
@@ -160,25 +160,25 @@ export default function MaintainJobDetailPage() {
             <InfoRow label="GPS" value={
               <a href={`https://maps.google.com/?q=${job.address.lat},${job.address.lng}`}
                 target="_blank" rel="noreferrer"
-                className="text-blue-400 hover:text-blue-300 text-xs">
+                className="text-admin-primary hover:text-admin-dark text-xs">
                 📍 {job.address.lat.toFixed(5)}, {job.address.lng.toFixed(5)}
               </a>
             } />
           </section>
 
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">งาน</h2>
             <InfoRow label="ช่าง" value={job.technicianName ?? "—"} />
             <InfoRow label="ร้าน" value={job.shopName ?? "—"} />
             <InfoRow label="นัดหมาย" value={new Date(job.scheduledAt).toLocaleString("th-TH")} />
             <InfoRow label="ระยะเวลาประมาณ" value={`${job.estimatedDuration} ชั่วโมง`} />
             <InfoRow label="ราคา" value={
-              <span className="text-green-400 font-mono">{job.totalPrice.toLocaleString()} ฿</span>
+              <span className="text-green-600 font-mono">{job.totalPrice.toLocaleString()} ฿</span>
             } />
           </section>
 
           {job.recurring?.enabled && (
-            <section className="bg-gray-900 rounded-xl border border-admin-primary/30 p-5">
+            <section className="bg-white rounded-xl border border-admin-primary/30 p-5">
               <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-3">🔁 Recurring</h2>
               <InfoRow label="Interval" value={job.recurring.interval.replace("_months", " เดือน")} />
               <InfoRow label="นัดถัดไป" value={new Date(job.recurring.nextScheduledAt).toLocaleString("th-TH")} />
@@ -186,13 +186,13 @@ export default function MaintainJobDetailPage() {
           )}
 
           {job.parts_used && job.parts_used.length > 0 && (
-            <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <section className="bg-white rounded-xl border border-gray-200 p-5">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อะไหล่ที่ใช้</h2>
               <div className="space-y-1.5">
                 {job.parts_used.map((p, i) => (
                   <div key={i} className="flex justify-between text-sm">
                     <span className="text-gray-200">{p.name}</span>
-                    <span className="text-gray-400 font-mono">× {p.qty}</span>
+                    <span className="text-gray-500 font-mono">× {p.qty}</span>
                   </div>
                 ))}
               </div>
@@ -202,7 +202,7 @@ export default function MaintainJobDetailPage() {
 
         {/* Photos */}
         {job.photos?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">📷 Photos</h2>
             {(["before", "after", "parts", "other"] as const).map(type => {
               const photos = job.photos.filter(p => p.type === type);
@@ -213,7 +213,7 @@ export default function MaintainJobDetailPage() {
                   <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                     {photos.map((p, i) => (
                       <a key={i} href={p.url} target="_blank" rel="noreferrer"
-                        className="aspect-square bg-gray-800 rounded-lg overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all">
+                        className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all">
                         <img src={p.url} alt={`${type}-${i}`} className="w-full h-full object-cover" />
                       </a>
                     ))}
@@ -226,7 +226,7 @@ export default function MaintainJobDetailPage() {
 
         {/* Timeline */}
         {job.timeline?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</h2>
             <div className="space-y-3">
               {job.timeline.map((t, i) => {
@@ -254,7 +254,7 @@ export default function MaintainJobDetailPage() {
                             className="text-xs text-blue-500 hover:text-blue-400">📍</a>
                         )}
                       </div>
-                      {t.note && <p className="text-xs text-gray-400 mt-1">{t.note}</p>}
+                      {t.note && <p className="text-xs text-gray-500 mt-1">{t.note}</p>}
                     </div>
                   </div>
                 );
@@ -265,15 +265,15 @@ export default function MaintainJobDetailPage() {
 
         {/* Force-cancel — super-admin only, non-terminal status */}
         {canCancel && (
-          <section className="bg-gray-900 rounded-xl border border-red-900/40 p-5">
-            <h2 className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-4">
+          <section className="bg-white rounded-xl border border-red-900/40 p-5">
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-4">
               🔐 Force-Cancel — Super-Admin
             </h2>
             {cancelMsg && (
               <div className={`mb-4 p-3 rounded-lg text-sm border ${
                 cancelMsg.type === "success"
-                  ? "bg-green-900/30 border-green-800 text-green-300"
-                  : "bg-red-900/30 border-red-800 text-red-300"
+                  ? "bg-green-900/30 border-green-800 text-green-700"
+                  : "bg-red-900/30 border-red-800 text-red-700"
               }`}>{cancelMsg.text}</div>
             )}
             <textarea
@@ -281,9 +281,9 @@ export default function MaintainJobDetailPage() {
               onChange={e => setCancelReason(e.target.value)}
               placeholder="เหตุผลยกเลิก (อย่างน้อย 10 ตัวอักษร)..."
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-red-500 resize-none mb-3"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-red-500 resize-none mb-3"
             />
-            <label className="flex items-center gap-2 text-sm text-gray-300 mb-4 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-gray-700 mb-4 cursor-pointer">
               <input type="checkbox" checked={cancelConfirm}
                 onChange={e => setCancelConfirm(e.target.checked)} className="accent-red-500" />
               ยืนยันว่าต้องการยกเลิกงานนี้

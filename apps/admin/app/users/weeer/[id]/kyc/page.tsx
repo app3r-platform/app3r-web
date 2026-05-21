@@ -42,11 +42,11 @@ const DOC_LABELS: Record<string, string> = {
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  pending:             { label: "รอตรวจ",        color: "bg-yellow-900/50 text-yellow-400" },
-  reviewing:           { label: "กำลังตรวจ",      color: "bg-blue-900/50 text-blue-400" },
-  approved:            { label: "อนุมัติแล้ว",    color: "bg-green-900/50 text-green-400" },
-  rejected:            { label: "ปฏิเสธ",         color: "bg-red-900/50 text-red-400" },
-  additional_required: { label: "ขอเอกสารเพิ่ม",  color: "bg-orange-900/50 text-orange-400" },
+  pending:             { label: "รอตรวจ",        color: "bg-yellow-50 text-yellow-700" },
+  reviewing:           { label: "กำลังตรวจ",      color: "bg-blue-50 text-blue-700" },
+  approved:            { label: "อนุมัติแล้ว",    color: "bg-green-50 text-green-700" },
+  rejected:            { label: "ปฏิเสธ",         color: "bg-red-50 text-red-700" },
+  additional_required: { label: "ขอเอกสารเพิ่ม",  color: "bg-orange-50 text-orange-700" },
 };
 
 export default function KYCReviewPage() {
@@ -155,7 +155,7 @@ export default function KYCReviewPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
       </div>
@@ -164,10 +164,10 @@ export default function KYCReviewPage() {
 
   if (!app) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 p-8">
-          <p className="text-red-400">ไม่พบข้อมูล KYC</p>
+          <p className="text-red-600">ไม่พบข้อมูล KYC</p>
           <Link href="/kyc" className="text-blue-400 text-sm mt-2 inline-block">← กลับ KYC Queue</Link>
         </main>
       </div>
@@ -177,7 +177,7 @@ export default function KYCReviewPage() {
   const sc = STATUS_CONFIG[app.overall_status];
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-6">
         {/* Breadcrumb */}
@@ -192,9 +192,9 @@ export default function KYCReviewPage() {
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold">{app.user_name}</h1>
             <span className={`text-xs px-2 py-0.5 rounded-full ${sc.color}`}>{sc.label}</span>
-            <span className="text-xs bg-green-900/40 text-green-400 px-2 py-0.5 rounded-full">WeeeR</span>
+            <span className="text-xs bg-green-900/40 text-green-600 px-2 py-0.5 rounded-full">WeeeR</span>
           </div>
-          <Link href={`/users?id=${userId}`} className="text-xs text-blue-400 hover:text-blue-300">
+          <Link href={`/users?id=${userId}`} className="text-xs text-admin-primary hover:text-admin-dark">
             ดู User Profile →
           </Link>
         </div>
@@ -204,33 +204,33 @@ export default function KYCReviewPage() {
           {/* Left Panel (60%) — Document Preview */}
           <div className="col-span-3 space-y-4">
             {/* Doc Tabs */}
-            <div className="flex flex-wrap gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800">
+            <div className="flex flex-wrap gap-1 bg-white rounded-xl p-1 border border-gray-200">
               {app.documents.map((doc) => (
                 <button key={doc.id} onClick={() => setActiveDoc(doc)}
                   className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                    activeDoc?.id === doc.id ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                    activeDoc?.id === doc.id ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
                   }`}>
                   {DOC_LABELS[doc.document_type] ?? doc.document_type}
-                  {doc.status === "ok" && <span className="ml-1 text-green-400">✓</span>}
-                  {doc.status === "issue" && <span className="ml-1 text-red-400">!</span>}
+                  {doc.status === "ok" && <span className="ml-1 text-green-600">✓</span>}
+                  {doc.status === "issue" && <span className="ml-1 text-red-600">!</span>}
                 </button>
               ))}
             </div>
 
             {/* Preview Area */}
             {activeDoc ? (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
                   <span className="text-sm font-medium">{DOC_LABELS[activeDoc.document_type]}</span>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-500">TTL: 1 ชม. (D24)</span>
                     <a href={activeDoc.file_url} target="_blank" rel="noopener noreferrer"
-                      className="text-xs text-blue-400 hover:text-blue-300 transition-colors">
+                      className="text-xs text-admin-primary hover:text-admin-dark transition-colors">
                       📥 ดาวน์โหลด
                     </a>
                   </div>
                 </div>
-                <div className="relative bg-gray-950 min-h-[400px] flex items-center justify-center">
+                <div className="relative bg-gray-50 min-h-[400px] flex items-center justify-center">
                   {activeDoc.file_type === "image" ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={activeDoc.file_url} alt={activeDoc.document_type}
@@ -241,7 +241,7 @@ export default function KYCReviewPage() {
                 </div>
               </div>
             ) : (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-12 text-center text-gray-500">
+              <div className="bg-white rounded-xl border border-gray-200 p-12 text-center text-gray-500">
                 ไม่มีเอกสาร
               </div>
             )}
@@ -250,7 +250,7 @@ export default function KYCReviewPage() {
           {/* Right Panel (40%) — Review Panel */}
           <div className="col-span-2 space-y-4">
             {/* Section 1: Checklist */}
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
               <h3 className="font-semibold text-sm mb-3">☑️ Checklist</h3>
               <div className="space-y-2.5">
                 {[
@@ -263,7 +263,7 @@ export default function KYCReviewPage() {
                   <label key={item.key} className="flex items-center gap-2.5 cursor-pointer">
                     <input type="checkbox" checked={checks[item.key]} onChange={(e) => setChecks({ ...checks, [item.key]: e.target.checked })}
                       className="rounded" />
-                    <span className="text-sm text-gray-300">{item.label}</span>
+                    <span className="text-sm text-gray-700">{item.label}</span>
                   </label>
                 ))}
               </div>
@@ -271,10 +271,10 @@ export default function KYCReviewPage() {
 
             {/* Section 2: Status */}
             {app.overall_status !== "approved" && (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <div className="bg-white rounded-xl border border-gray-200 p-5">
                 <h3 className="font-semibold text-sm mb-3">📋 เปลี่ยนสถานะ</h3>
                 <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none text-white mb-3">
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white mb-3">
                   <option value="">— เลือกสถานะ —</option>
                   <option value="reviewing">กำลังตรวจ</option>
                   <option value="rejected">ปฏิเสธ</option>
@@ -283,9 +283,9 @@ export default function KYCReviewPage() {
 
                 {["rejected", "additional_required"].includes(newStatus) && (
                   <div className="mb-3">
-                    <label className="text-xs text-gray-400 mb-1 block">เหตุผล (≥ 20 ตัวอักษร) *</label>
+                    <label className="text-xs text-gray-500 mb-1 block">เหตุผล (≥ 20 ตัวอักษร) *</label>
                     <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none text-white resize-none"
+                      className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white resize-none"
                       placeholder="ระบุเหตุผลโดยละเอียด..." />
                     <p className="text-xs text-gray-600 mt-0.5">{reason.length}/20+ ตัวอักษร</p>
                   </div>
@@ -293,7 +293,7 @@ export default function KYCReviewPage() {
 
                 {newStatus === "additional_required" && (
                   <div className="mb-3">
-                    <label className="text-xs text-gray-400 mb-1 block">เอกสารที่ต้องการเพิ่ม</label>
+                    <label className="text-xs text-gray-500 mb-1 block">เอกสารที่ต้องการเพิ่ม</label>
                     <div className="space-y-1.5">
                       {Object.entries(DOC_LABELS).map(([k, v]) => (
                         <label key={k} className="flex items-center gap-2 cursor-pointer">
@@ -304,7 +304,7 @@ export default function KYCReviewPage() {
                               : additionalDocs.filter((d) => d !== k)
                             )}
                             className="rounded" />
-                          <span className="text-xs text-gray-300">{v}</span>
+                          <span className="text-xs text-gray-700">{v}</span>
                         </label>
                       ))}
                     </div>
@@ -328,23 +328,23 @@ export default function KYCReviewPage() {
             )}
 
             {/* Section 3: History */}
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
               <h3 className="font-semibold text-sm mb-3">📜 History Log</h3>
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {history.length === 0 ? (
                   <p className="text-xs text-gray-500">ยังไม่มีประวัติ</p>
                 ) : history.map((h) => (
-                  <div key={h.id} className="text-xs border border-gray-800 rounded-lg p-2.5 space-y-1">
+                  <div key={h.id} className="text-xs border border-gray-200 rounded-lg p-2.5 space-y-1">
                     <div className="flex justify-between text-gray-500">
                       <span>{new Date(h.created_at).toLocaleString("th-TH")}</span>
                       <span>{h.admin_name}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-gray-400">{h.from_status}</span>
+                      <span className="text-gray-500">{h.from_status}</span>
                       <span className="text-gray-600">→</span>
                       <span className="text-white font-medium">{h.to_status}</span>
                     </div>
-                    {h.reason && <p className="text-gray-400 truncate">{h.reason}</p>}
+                    {h.reason && <p className="text-gray-500 truncate">{h.reason}</p>}
                   </div>
                 ))}
               </div>
@@ -360,7 +360,7 @@ export default function KYCReviewPage() {
               )}
               {isSuper && (
                 <button onClick={handleRestore} disabled={submitting}
-                  className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-xl text-sm transition-colors text-gray-300">
+                  className="w-full py-2 bg-gray-100 hover:bg-gray-700 rounded-xl text-sm transition-colors text-gray-700">
                   🔄 Restore from Archive (Super Admin)
                 </button>
               )}
@@ -371,22 +371,22 @@ export default function KYCReviewPage() {
         {/* Approve Confirm Modal */}
         {showApproveModal && (
           <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50" onClick={() => setShowApproveModal(false)}>
-            <div className="bg-gray-900 rounded-2xl border border-gray-700 p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-lg font-bold mb-4 text-green-400">✅ ยืนยันอนุมัติ KYC</h3>
-              <div className="bg-gray-800 rounded-xl p-4 text-sm mb-4 space-y-2">
-                <p className="text-gray-300">KYC ของ <strong className="text-white">{app.user_name}</strong> จะถูกอนุมัติ</p>
-                <p className="text-gray-300">→ ระบบจะสร้าง default WeeeT account อัตโนมัติ:</p>
-                <div className="ml-4 space-y-1 text-gray-400">
+            <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+              <h3 className="text-lg font-bold mb-4 text-green-600">✅ ยืนยันอนุมัติ KYC</h3>
+              <div className="bg-gray-100 rounded-xl p-4 text-sm mb-4 space-y-2">
+                <p className="text-gray-700">KYC ของ <strong className="text-white">{app.user_name}</strong> จะถูกอนุมัติ</p>
+                <p className="text-gray-700">→ ระบบจะสร้าง default WeeeT account อัตโนมัติ:</p>
+                <div className="ml-4 space-y-1 text-gray-500">
                   <p>ชื่อผู้ใช้: <span className="font-mono text-white">{app.phone}</span></p>
-                  <p>รหัสผ่าน: <span className="text-gray-300">[เหมือน WeeeR&apos;s password — D15]</span></p>
+                  <p>รหัสผ่าน: <span className="text-gray-700">[เหมือน WeeeR&apos;s password — D15]</span></p>
                 </div>
               </div>
-              <div className="bg-orange-900/20 border border-orange-800/50 rounded-lg p-3 text-xs text-orange-300 mb-4">
+              <div className="bg-orange-900/20 border border-orange-800/50 rounded-lg p-3 text-xs text-orange-700 mb-4">
                 ⚠️ WeeeR ต้องแจ้ง credentials ให้ช่างเอง (ไม่มี SMS — D16)
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setShowApproveModal(false)}
-                  className="flex-1 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition-colors">
+                  className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm transition-colors">
                   ยกเลิก
                 </button>
                 <button onClick={handleApprove} disabled={submitting}
@@ -399,7 +399,7 @@ export default function KYCReviewPage() {
         )}
 
         {toast && (
-          <div className="fixed bottom-6 right-6 bg-gray-800 border border-gray-700 rounded-xl px-5 py-3 text-sm shadow-xl">
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
             {toast}
           </div>
         )}

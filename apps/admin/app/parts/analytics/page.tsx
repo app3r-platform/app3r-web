@@ -45,9 +45,9 @@ interface PartsAnalytics {
 
 function StatCard({ label, value, sub, warn }: { label: string; value: string; sub?: string; warn?: boolean }) {
   return (
-    <div className={`bg-gray-900 rounded-xl border p-5 ${warn ? "border-red-900/50" : "border-gray-800"}`}>
+    <div className={`bg-white rounded-xl border p-5 ${warn ? "border-red-900/50" : "border-gray-200"}`}>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className={`text-2xl font-bold ${warn ? "text-red-400" : "text-white"}`}>{value}</p>
+      <p className={`text-2xl font-bold ${warn ? "text-red-600" : "text-white"}`}>{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
     </div>
   );
@@ -58,10 +58,10 @@ function BarRow({ label, value, total, color }: { label: string; value: number; 
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
-        <span className="text-gray-300 truncate max-w-xs">{label}</span>
-        <span className="text-gray-400 ml-2 shrink-0">{value.toLocaleString()} ({pct}%)</span>
+        <span className="text-gray-700 truncate max-w-xs">{label}</span>
+        <span className="text-gray-500 ml-2 shrink-0">{value.toLocaleString()} ({pct}%)</span>
       </div>
-      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -86,19 +86,19 @@ export default function PartsAnalyticsPage() {
   }, [router]);
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
     </div>
   );
 
   if (error || !data) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           ระบบอะไหล่กำลังพัฒนา — {error ?? "ไม่พบข้อมูล"}
         </div>
-        <Link href="/parts" className="text-sm text-blue-400 hover:text-blue-300">← Inventory</Link>
+        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← Inventory</Link>
       </main>
     </div>
   );
@@ -108,7 +108,7 @@ export default function PartsAnalyticsPage() {
   const maxShopValue = data.stock_value_by_shop.reduce((m, s) => Math.max(m, s.totalValue), 1);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-6xl">
 
@@ -116,12 +116,12 @@ export default function PartsAnalyticsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📊 Parts Analytics</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               สรุปภาพรวมอะไหล่ระดับระบบ — low-stock / top moving / stock value / disassembly
             </p>
           </div>
           <Link href="/parts"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             🔩 Inventory →
           </Link>
         </div>
@@ -154,8 +154,8 @@ export default function PartsAnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
           {/* Low stock items */}
-          <section className="bg-gray-900 rounded-xl border border-red-900/30 p-5">
-            <h2 className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-4">
+          <section className="bg-white rounded-xl border border-red-900/30 p-5">
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-4">
               ⚠️ Low Stock — ข้าม Shop
             </h2>
             {data.low_stock_items.length === 0 ? (
@@ -166,7 +166,7 @@ export default function PartsAnalyticsPage() {
                   const avail = item.stockQty - item.reservedQty;
                   return (
                     <div key={item.partId}
-                      className="flex items-center justify-between py-1.5 border-b border-gray-800/60 last:border-0">
+                      className="flex items-center justify-between py-1.5 border-b border-gray-200/60 last:border-0">
                       <div>
                         <Link href={`/parts/${item.partId}`}
                           className="text-sm text-gray-100 hover:text-blue-400 transition-colors">
@@ -175,7 +175,7 @@ export default function PartsAnalyticsPage() {
                         <div className="text-xs text-gray-500 font-mono">{item.sku} · Shop: {item.shopId}</div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-sm font-mono font-bold ${avail <= 0 ? "text-red-500" : "text-red-400"}`}>
+                        <div className={`text-sm font-mono font-bold ${avail <= 0 ? "text-red-500" : "text-red-600"}`}>
                           {item.stockQty} {item.unit}
                         </div>
                         {item.reservedQty > 0 && (
@@ -190,7 +190,7 @@ export default function PartsAnalyticsPage() {
           </section>
 
           {/* Stock value by shop */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
               💰 มูลค่าสต็อกตาม Shop
             </h2>
@@ -216,17 +216,17 @@ export default function PartsAnalyticsPage() {
         </div>
 
         {/* Top moving parts */}
-        <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+        <section className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
               🔥 Top Moving Parts
             </h2>
-            <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+            <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
               {(["top_moving_7d", "top_moving_30d", "top_moving_90d"] as PeriodKey[]).map(k => (
                 <button key={k}
                   onClick={() => setTopPeriod(k)}
                   className={`px-2.5 py-1 rounded text-xs transition-colors ${
-                    topPeriod === k ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                    topPeriod === k ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
                   }`}>
                   {k === "top_moving_7d" ? "7 วัน" : k === "top_moving_30d" ? "30 วัน" : "90 วัน"}
                 </button>
@@ -243,13 +243,13 @@ export default function PartsAnalyticsPage() {
                   <div className="flex-1 space-y-1">
                     <div className="flex justify-between text-xs">
                       <Link href={`/parts/${t.partId}`}
-                        className="text-gray-300 hover:text-blue-400 transition-colors font-mono">
+                        className="text-gray-700 hover:text-blue-400 transition-colors font-mono">
                         {t.sku}
                       </Link>
-                      <span className="text-gray-400">{t.totalQty.toLocaleString()} หน่วย ({t.movementCount} ครั้ง)</span>
+                      <span className="text-gray-500">{t.totalQty.toLocaleString()} หน่วย ({t.movementCount} ครั้ง)</span>
                     </div>
                     <p className="text-xs text-gray-500">{t.name}</p>
-                    <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div className="h-full bg-orange-500 rounded-full"
                         style={{ width: `${Math.round((t.totalQty / maxTopQty) * 100)}%` }} />
                     </div>
@@ -261,24 +261,24 @@ export default function PartsAnalyticsPage() {
         </section>
 
         {/* Disassembly conversion */}
-        <section className="bg-gray-900 rounded-xl border border-admin-primary/20 p-5">
+        <section className="bg-white rounded-xl border border-admin-primary/20 p-5">
           <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-4">
             ♻️ Disassembly Conversion (ซาก → อะไหล่)
           </h2>
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Conversion Rate</span>
+              <span className="text-gray-500">Conversion Rate</span>
               <span className={`font-mono font-bold ${
                 data.disassembly_conversion_rate >= 0.2
-                  ? "text-green-400"
+                  ? "text-green-600"
                   : data.disassembly_conversion_rate >= 0.1
-                  ? "text-yellow-400"
-                  : "text-red-400"
+                  ? "text-yellow-700"
+                  : "text-red-600"
               }`}>
                 {(data.disassembly_conversion_rate * 100).toFixed(1)}%
               </span>
             </div>
-            <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
               <div className="h-full rounded-full bg-admin-primary transition-all"
                 style={{ width: `${Math.min(data.disassembly_conversion_rate * 100, 100)}%` }} />
             </div>

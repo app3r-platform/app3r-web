@@ -28,17 +28,17 @@ interface ParcelDispute {
 }
 
 const DISPUTE_TYPE_META: Record<string, { label: string; color: string; icon: string }> = {
-  lost:             { label: "พัสดุหาย",          color: "bg-red-900/60 text-red-300",    icon: "🔍" },
-  damaged_arrival:  { label: "เสียหายเมื่อถึงร้าน", color: "bg-orange-900/50 text-orange-400", icon: "💥" },
-  damaged_return:   { label: "เสียหายเมื่อส่งคืน", color: "bg-orange-900/50 text-orange-300", icon: "💥" },
-  wrong_item:       { label: "ส่งผิดชิ้น",         color: "bg-yellow-900/50 text-yellow-400", icon: "❓" },
+  lost:             { label: "พัสดุหาย",          color: "bg-red-900/60 text-red-700",    icon: "🔍" },
+  damaged_arrival:  { label: "เสียหายเมื่อถึงร้าน", color: "bg-orange-50 text-orange-700", icon: "💥" },
+  damaged_return:   { label: "เสียหายเมื่อส่งคืน", color: "bg-orange-900/50 text-orange-700", icon: "💥" },
+  wrong_item:       { label: "ส่งผิดชิ้น",         color: "bg-yellow-50 text-yellow-700", icon: "❓" },
 };
 
 const DISPUTE_STATUS_META: Record<string, { label: string; color: string }> = {
-  open:      { label: "เปิด",         color: "bg-red-900/50 text-red-400" },
-  in_review: { label: "กำลังตรวจ",   color: "bg-yellow-900/50 text-yellow-400" },
-  resolved:  { label: "แก้ไขแล้ว",   color: "bg-green-900/50 text-green-400" },
-  closed:    { label: "ปิด",          color: "bg-gray-800 text-gray-400" },
+  open:      { label: "เปิด",         color: "bg-red-50 text-red-700" },
+  in_review: { label: "กำลังตรวจ",   color: "bg-yellow-50 text-yellow-700" },
+  resolved:  { label: "แก้ไขแล้ว",   color: "bg-green-50 text-green-700" },
+  closed:    { label: "ปิด",          color: "bg-gray-100 text-gray-500" },
 };
 
 const PAGE_SIZE = 20;
@@ -113,7 +113,7 @@ export default function ParcelDisputesPage() {
   const resolveDispute = items.find(d => d.id === resolveId);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6">
 
@@ -121,18 +121,18 @@ export default function ParcelDisputesPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">⚠️ Parcel Disputes</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               พัสดุหาย / เสียหาย / ส่งผิด — admin action panel
             </p>
           </div>
           <Link href="/repair/parcel/queue"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             ← Parcel Queue
           </Link>
         </div>
 
         {/* Status filter */}
-        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit">
+        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           {[
             { label: "ทั้งหมด", value: "" },
             { label: "เปิด", value: "open" },
@@ -143,7 +143,7 @@ export default function ParcelDisputesPage() {
             <button key={f.value}
               onClick={() => { setFilterStatus(f.value); setPage(1); }}
               className={`px-4 py-2 rounded-lg text-xs transition-colors ${
-                filterStatus === f.value ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
               }`}>
               {f.label}
             </button>
@@ -154,8 +154,8 @@ export default function ParcelDisputesPage() {
         {resolveMsg && (
           <div className={`p-3 rounded-xl text-sm border ${
             resolveMsg.type === "success"
-              ? "bg-green-900/30 border-green-800 text-green-300"
-              : "bg-red-900/30 border-red-800 text-red-300"
+              ? "bg-green-900/30 border-green-800 text-green-700"
+              : "bg-red-900/30 border-red-800 text-red-700"
           }`}>
             {resolveMsg.text}
           </div>
@@ -163,8 +163,8 @@ export default function ParcelDisputesPage() {
 
         {/* Resolve Panel */}
         {resolveId && resolveDispute && (
-          <section className="bg-gray-900 rounded-xl border border-orange-900/60 p-5">
-            <h2 className="text-sm font-semibold text-orange-400 mb-3">
+          <section className="bg-white rounded-xl border border-orange-900/60 p-5">
+            <h2 className="text-sm font-semibold text-orange-700 mb-3">
               🔧 แก้ไข Dispute: {resolveDispute.job_number} —{" "}
               {DISPUTE_TYPE_META[resolveDispute.type]?.label ?? resolveDispute.type}
             </h2>
@@ -176,7 +176,7 @@ export default function ParcelDisputesPage() {
                   onChange={e => setResolution(e.target.value)}
                   placeholder="อธิบายการแก้ไข (อย่างน้อย 10 ตัวอักษร)..."
                   rows={3}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 resize-none"
                 />
               </div>
               <div>
@@ -189,7 +189,7 @@ export default function ParcelDisputesPage() {
                   onChange={e => setRefundAmount(e.target.value)}
                   placeholder="0"
                   min="0"
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-orange-500"
                 />
                 {resolveDispute.insurance_value != null && (
                   <p className="text-xs text-gray-500 mt-1">
@@ -208,7 +208,7 @@ export default function ParcelDisputesPage() {
               </button>
               <button
                 onClick={() => { setResolveId(null); setResolution(""); setRefundAmount(""); }}
-                className="px-4 py-2 text-sm text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                className="px-4 py-2 text-sm text-gray-500 hover:text-white bg-gray-100 hover:bg-gray-700 rounded-lg transition-colors"
               >
                 ยกเลิก
               </button>
@@ -217,28 +217,28 @@ export default function ParcelDisputesPage() {
         )}
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">{error}</div>
+            <div className="px-6 py-8 text-red-600">{error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3">Job #</th>
                   <th className="px-5 py-3">ประเภท</th>
                   <th className="px-5 py-3">Courier</th>
@@ -251,16 +251,16 @@ export default function ParcelDisputesPage() {
                   <th className="px-5 py-3">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.map(d => {
-                  const dtMeta = DISPUTE_TYPE_META[d.type] ?? { label: d.type, color: "bg-gray-800 text-gray-300", icon: "❓" };
-                  const dsMeta = DISPUTE_STATUS_META[d.status] ?? { label: d.status, color: "bg-gray-800 text-gray-300" };
+                  const dtMeta = DISPUTE_TYPE_META[d.type] ?? { label: d.type, color: "bg-gray-100 text-gray-600", icon: "❓" };
+                  const dsMeta = DISPUTE_STATUS_META[d.status] ?? { label: d.status, color: "bg-gray-100 text-gray-600" };
                   const canResolve = superAdmin && (d.status === "open" || d.status === "in_review");
                   return (
-                    <tr key={d.id} className="hover:bg-gray-800/40">
+                    <tr key={d.id} className="hover:bg-gray-100/40">
                       <td className="px-5 py-3">
                         <Link href={`/repair/parcel/${d.parcel_job_id}`}
-                          className="font-mono text-xs text-blue-400 hover:text-blue-300">
+                          className="font-mono text-xs text-admin-primary hover:text-admin-dark">
                           {d.job_number}
                         </Link>
                       </td>
@@ -270,13 +270,13 @@ export default function ParcelDisputesPage() {
                         </span>
                       </td>
                       <td className="px-5 py-3 text-xs font-medium text-gray-200">{d.courier_name}</td>
-                      <td className="px-5 py-3 text-xs text-gray-300">{d.customer_name}</td>
-                      <td className="px-5 py-3 text-xs text-gray-400">{d.shop_name}</td>
-                      <td className="px-5 py-3 text-xs text-gray-300">{d.device_model}</td>
+                      <td className="px-5 py-3 text-xs text-gray-700">{d.customer_name}</td>
+                      <td className="px-5 py-3 text-xs text-gray-500">{d.shop_name}</td>
+                      <td className="px-5 py-3 text-xs text-gray-700">{d.device_model}</td>
                       <td className="px-5 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${dsMeta.color}`}>{dsMeta.label}</span>
                       </td>
-                      <td className="px-5 py-3 text-xs font-mono text-yellow-400">
+                      <td className="px-5 py-3 text-xs font-mono text-yellow-700">
                         {d.refund_amount != null ? `${d.refund_amount.toLocaleString()} ฿` : "—"}
                       </td>
                       <td className="px-5 py-3 text-xs text-gray-500">
@@ -286,7 +286,7 @@ export default function ParcelDisputesPage() {
                         {canResolve ? (
                           <button
                             onClick={() => { setResolveId(d.id); setResolveMsg(null); setResolution(""); setRefundAmount(""); }}
-                            className="text-xs px-3 py-1 bg-orange-900/40 hover:bg-orange-900/60 border border-orange-700/50 text-orange-300 rounded-lg transition-colors">
+                            className="text-xs px-3 py-1 bg-orange-900/40 hover:bg-orange-900/60 border border-orange-700/50 text-orange-700 rounded-lg transition-colors">
                             แก้ไข
                           </button>
                         ) : (

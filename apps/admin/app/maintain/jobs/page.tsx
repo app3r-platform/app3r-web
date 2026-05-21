@@ -9,13 +9,13 @@ import { Sidebar } from "@/components/sidebar";
 import type { MaintainJob } from "@/lib/types";
 
 const STATUS_META: Record<MaintainJob["status"], { label: string; color: string }> = {
-  pending:     { label: "รอดำเนินการ",  color: "bg-gray-800 text-gray-400" },
-  assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-900/50 text-blue-300" },
-  departed:    { label: "ออกเดินทาง",  color: "bg-yellow-900/50 text-yellow-400" },
+  pending:     { label: "รอดำเนินการ",  color: "bg-gray-100 text-gray-500" },
+  assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-50 text-blue-700" },
+  departed:    { label: "ออกเดินทาง",  color: "bg-yellow-50 text-yellow-700" },
   arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-900/50 text-cyan-300" },
   in_progress: { label: "กำลังทำงาน",  color: "bg-brand-info/15 text-brand-info" },
-  completed:   { label: "เสร็จสิ้น",   color: "bg-green-900/50 text-green-400" },
-  cancelled:   { label: "ยกเลิก",       color: "bg-red-900/50 text-red-400" },
+  completed:   { label: "เสร็จสิ้น",   color: "bg-green-50 text-green-700" },
+  cancelled:   { label: "ยกเลิก",       color: "bg-red-50 text-red-700" },
 };
 
 const APPLIANCE_LABEL: Record<MaintainJob["applianceType"], string> = {
@@ -90,7 +90,7 @@ export default function MaintainJobsPage() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -98,23 +98,23 @@ export default function MaintainJobsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">🛁 Maintain Jobs — Audit</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               รายการงานทั้งหมด — filter สถานะ / ประเภทล้าง / ร้าน / วันที่
             </p>
           </div>
           <Link href="/maintain/analytics"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             📊 Analytics →
           </Link>
         </div>
 
         {/* Status tabs */}
-        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit flex-wrap">
+        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 w-fit flex-wrap">
           {STATUS_TABS.map(t => (
             <button key={t.value}
               onClick={() => { setFilterStatus(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === t.value ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
               }`}>
               {t.label}
             </button>
@@ -126,7 +126,7 @@ export default function MaintainJobsPage() {
           <select
             value={filterCleaning}
             onChange={e => { setFilterCleaning(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500">
             <option value="">ทุกประเภทล้าง</option>
             <option value="general">ล้างทั่วไป</option>
             <option value="deep">ล้างลึก</option>
@@ -134,46 +134,46 @@ export default function MaintainJobsPage() {
           </select>
           <input type="text" placeholder="Shop ID"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
           />
           <span className="self-center text-gray-600 text-xs">ถึง</span>
           <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
           />
           {(filterCleaning || filterShop || dateFrom || dateTo) && (
             <button onClick={() => { setFilterCleaning(""); setFilterShop(""); setDateFrom(""); setDateTo(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-gray-800 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">{error}</div>
+            <div className="px-6 py-8 text-red-600">{error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Service Code</th>
                   <th className="px-4 py-3">เครื่อง</th>
                   <th className="px-4 py-3">ประเภทล้าง</th>
@@ -185,27 +185,27 @@ export default function MaintainJobsPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.map(job => {
                   const sm = STATUS_META[job.status];
                   return (
-                    <tr key={job.id} className="hover:bg-gray-800/40">
+                    <tr key={job.id} className="hover:bg-gray-100/40">
                       <td className="px-4 py-3 font-mono text-xs text-blue-400">{job.serviceCode}</td>
                       <td className="px-4 py-3">
                         <span className="text-sm">{APPLIANCE_LABEL[job.applianceType]}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-300">
+                      <td className="px-4 py-3 text-xs text-gray-700">
                         {CLEANING_LABEL[job.cleaningType]}
                       </td>
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-400">
+                      <td className="px-4 py-3 text-xs text-gray-500">
                         {new Date(job.scheduledAt).toLocaleString("th-TH", {
                           dateStyle: "short", timeStyle: "short",
                         })}
                       </td>
-                      <td className="px-4 py-3 text-xs font-mono text-green-400">
+                      <td className="px-4 py-3 text-xs font-mono text-green-600">
                         {job.totalPrice.toLocaleString()} ฿
                       </td>
                       <td className="px-4 py-3">
@@ -217,12 +217,12 @@ export default function MaintainJobsPage() {
                           <span className="text-xs text-gray-600">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-400">
+                      <td className="px-4 py-3 text-xs text-gray-500">
                         {job.technicianId ?? "—"}
                       </td>
                       <td className="px-4 py-3">
                         <Link href={`/maintain/jobs/${job.id}`}
-                          className="text-xs text-blue-400 hover:text-blue-300 whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
                           ดู →
                         </Link>
                       </td>

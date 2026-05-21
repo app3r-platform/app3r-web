@@ -27,9 +27,9 @@ interface PaginatedDeposits {
 }
 
 const STATUS_META: Record<DepositRequest["status"], { label: string; color: string }> = {
-  pending:  { label: "รอตรวจสลิป", color: "bg-yellow-900/50 text-yellow-400" },
-  verified: { label: "อนุมัติแล้ว", color: "bg-green-900/50 text-green-400" },
-  rejected: { label: "ปฏิเสธ",      color: "bg-red-900/50 text-red-400" },
+  pending:  { label: "รอตรวจสลิป", color: "bg-yellow-50 text-yellow-700" },
+  verified: { label: "อนุมัติแล้ว", color: "bg-green-50 text-green-700" },
+  rejected: { label: "ปฏิเสธ",      color: "bg-red-50 text-red-700" },
 };
 
 export default function TransferDepositsPage() {
@@ -101,31 +101,31 @@ export default function TransferDepositsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-2xl font-bold">💳 ตรวจสลิปโอนเงิน</h1>
         </div>
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-gray-500 text-sm mb-6">
           ตรวจสอบและอนุมัติคำขอเติม Point ผ่านการโอนเงินตรง (Manual Bank Transfer)
         </p>
 
         {/* Filter tabs */}
-        <div className="flex gap-1 mb-6 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit">
+        <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           {(["pending", "verified", "rejected"] as const).map(s => (
             <button key={s}
               onClick={() => setFilterStatus(s)}
               className={`px-4 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === s ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterStatus === s ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
               }`}>
               {STATUS_META[s].label}
             </button>
           ))}
         </div>
 
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 text-sm text-gray-500">
             พบ {total.toLocaleString()} รายการ
           </div>
 
@@ -134,7 +134,7 @@ export default function TransferDepositsPage() {
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-6 py-3">ผู้ใช้</th>
                   <th className="px-6 py-3">จำนวนเงิน</th>
                   <th className="px-6 py-3">อ้างอิง</th>
@@ -144,34 +144,34 @@ export default function TransferDepositsPage() {
                   {filterStatus === "pending" && <th className="px-6 py-3">ดำเนินการ</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.map(item => {
                   const sc = STATUS_META[item.status];
                   const isProcessing = actionLoading === item.id;
                   return (
-                    <tr key={item.id} className="hover:bg-gray-800/40">
+                    <tr key={item.id} className="hover:bg-gray-100/40">
                       <td className="px-6 py-3">
                         <p className="text-sm">{item.user_name}</p>
                         <p className="text-xs text-gray-500">ID: {item.user_id}</p>
                       </td>
-                      <td className="px-6 py-3 font-mono text-green-400 font-semibold">
+                      <td className="px-6 py-3 font-mono text-green-600 font-semibold">
                         ฿{item.amount.toLocaleString()}
                       </td>
-                      <td className="px-6 py-3 font-mono text-xs text-gray-400">
+                      <td className="px-6 py-3 font-mono text-xs text-gray-500">
                         {item.reference || "—"}
                       </td>
                       <td className="px-6 py-3">
                         {item.slip_url ? (
                           <button
                             onClick={() => setSlipModal(item.slip_url!)}
-                            className="text-xs text-blue-400 hover:text-blue-300 underline">
+                            className="text-xs text-admin-primary hover:text-admin-dark underline">
                             ดูสลิป 🖼️
                           </button>
                         ) : (
                           <span className="text-xs text-gray-600">ไม่มี</span>
                         )}
                       </td>
-                      <td className="px-6 py-3 text-xs text-gray-400">
+                      <td className="px-6 py-3 text-xs text-gray-500">
                         {new Date(item.submitted_at).toLocaleString("th-TH")}
                       </td>
                       <td className="px-6 py-3">
@@ -197,7 +197,7 @@ export default function TransferDepositsPage() {
                                 placeholder="เหตุผลปฏิเสธ..."
                                 value={rejectNote[item.id] ?? ""}
                                 onChange={e => setRejectNote(prev => ({ ...prev, [item.id]: e.target.value }))}
-                                className="bg-gray-800 border border-gray-700 rounded px-2 py-1 text-xs w-32 focus:outline-none focus:border-red-500"
+                                className="bg-gray-100 border border-gray-300 rounded px-2 py-1 text-xs w-32 focus:outline-none focus:border-red-500"
                               />
                               <button
                                 onClick={() => handleReject(item.id)}
@@ -229,7 +229,7 @@ export default function TransferDepositsPage() {
         {slipModal && (
           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
             onClick={() => setSlipModal(null)}>
-            <div className="bg-gray-900 rounded-xl border border-gray-700 p-4 max-w-lg w-full"
+            <div className="bg-white rounded-xl border border-gray-300 p-4 max-w-lg w-full"
               onClick={e => e.stopPropagation()}>
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-semibold text-sm">สลิปโอนเงิน</h3>

@@ -9,9 +9,9 @@ import { Sidebar } from "@/components/sidebar";
 import type { StockMovement } from "@/lib/types";
 
 const TYPE_META: Record<string, { label: string; color: string }> = {
-  STOCK_IN:         { label: "รับเข้า",    color: "bg-green-900/50 text-green-400" },
-  STOCK_OUT:        { label: "จ่ายออก",    color: "bg-red-900/50 text-red-400" },
-  STOCK_ADJUSTMENT: { label: "ปรับสต็อก", color: "bg-yellow-900/50 text-yellow-400" },
+  STOCK_IN:         { label: "รับเข้า",    color: "bg-green-50 text-green-700" },
+  STOCK_OUT:        { label: "จ่ายออก",    color: "bg-red-50 text-red-700" },
+  STOCK_ADJUSTMENT: { label: "ปรับสต็อก", color: "bg-yellow-50 text-yellow-700" },
 };
 
 const REASON_LABEL: Record<string, string> = {
@@ -118,7 +118,7 @@ function MovementsInner() {
   const hasFilters = filterShop || filterPartId || dateFrom || dateTo;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -126,7 +126,7 @@ function MovementsInner() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📦 Stock Movements</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               ประวัติการเคลื่อนไหวสต็อกข้าม shop — filter ประเภท / ร้าน / อะไหล่ / วันที่
             </p>
           </div>
@@ -136,19 +136,19 @@ function MovementsInner() {
               {exportLoading ? "กำลัง export..." : "⬇ Export CSV"}
             </button>
             <Link href="/parts"
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
               🔩 Inventory →
             </Link>
           </div>
         </div>
 
         {/* Type tabs */}
-        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit flex-wrap">
+        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 w-fit flex-wrap">
           {TYPE_TABS.map(t => (
             <button key={t.value}
               onClick={() => { setFilterType(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterType === t.value ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterType === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
               }`}>
               {t.label}
             </button>
@@ -159,50 +159,50 @@ function MovementsInner() {
         <div className="flex gap-3 flex-wrap">
           <input type="text" placeholder="Shop ID"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
           <input type="text" placeholder="Part ID"
             value={filterPartId} onChange={e => { setFilterPartId(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
           />
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
           />
           <span className="self-center text-gray-600 text-xs">ถึง</span>
           <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500"
           />
           {hasFilters && (
             <button onClick={() => { setFilterShop(""); setFilterPartId(""); setDateFrom(""); setDateTo(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-gray-800 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">ระบบอะไหล่กำลังพัฒนา — {error}</div>
+            <div className="px-6 py-8 text-red-600">ระบบอะไหล่กำลังพัฒนา — {error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">ประเภท</th>
                   <th className="px-4 py-3">Part ID</th>
                   <th className="px-4 py-3">จำนวน</th>
@@ -215,15 +215,15 @@ function MovementsInner() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.length === 0 ? (
                   <tr><td colSpan={10} className="px-6 py-10 text-center text-gray-500">ยังไม่มีข้อมูล movement</td></tr>
                 ) : items.map(m => {
-                  const tm = TYPE_META[m.type] ?? { label: m.type, color: "bg-gray-800 text-gray-300" };
+                  const tm = TYPE_META[m.type] ?? { label: m.type, color: "bg-gray-100 text-gray-600" };
                   const qtySign = m.type === "STOCK_IN" ? "+" : m.type === "STOCK_OUT" ? "-" : "±";
-                  const qtyColor = m.type === "STOCK_IN" ? "text-green-400" : m.type === "STOCK_OUT" ? "text-red-400" : "text-yellow-400";
+                  const qtyColor = m.type === "STOCK_IN" ? "text-green-600" : m.type === "STOCK_OUT" ? "text-red-600" : "text-yellow-700";
                   return (
-                    <tr key={m.id} className="hover:bg-gray-800/40">
+                    <tr key={m.id} className="hover:bg-gray-100/40">
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${tm.color}`}>{tm.label}</span>
                       </td>
@@ -235,10 +235,10 @@ function MovementsInner() {
                       <td className={`px-4 py-3 font-mono font-semibold ${qtyColor}`}>
                         {qtySign}{m.qty}
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-300">
+                      <td className="px-4 py-3 text-xs text-gray-700">
                         {REASON_LABEL[m.reason] ?? m.reason}
                       </td>
-                      <td className="px-4 py-3 text-xs font-mono text-gray-300">{m.balanceAfter}</td>
+                      <td className="px-4 py-3 text-xs font-mono text-gray-700">{m.balanceAfter}</td>
                       <td className="px-4 py-3 text-xs font-mono text-gray-500">
                         {m.refId ? (
                           <span className="text-blue-500">{m.refId.slice(0, 8)}…</span>
@@ -247,13 +247,13 @@ function MovementsInner() {
                       <td className="px-4 py-3 text-xs text-gray-500 max-w-32 truncate">
                         {m.note ?? "—"}
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-400">{m.performedBy}</td>
+                      <td className="px-4 py-3 text-xs text-gray-500">{m.performedBy}</td>
                       <td className="px-4 py-3 text-xs text-gray-500">
                         {new Date(m.performedAt).toLocaleString("th-TH", { dateStyle: "short", timeStyle: "short" })}
                       </td>
                       <td className="px-4 py-3">
                         <Link href={`/parts/movements/${m.id}`}
-                          className="text-xs text-blue-400 hover:text-blue-300 whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
                           ดู →
                         </Link>
                       </td>
@@ -272,7 +272,7 @@ function MovementsInner() {
 export default function MovementsPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
       </div>
     }>

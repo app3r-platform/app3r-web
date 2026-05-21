@@ -127,18 +127,18 @@ export default function SilverPage() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Silver Points</h1>
-        <p className="text-gray-400 text-sm mb-6">จัดการ Silver Point (non-cashable) ตาม D29 + D30</p>
+        <p className="text-gray-500 text-sm mb-6">จัดการ Silver Point (non-cashable) ตาม D29 + D30</p>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit">
+        <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           {TABS.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.key ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                tab === t.key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
               }`}>
               {t.label}
             </button>
@@ -163,8 +163,8 @@ export default function SilverPage() {
             {tab === "triggers" && (
               <div className="space-y-6">
                 {/* D29 Engagement Triggers */}
-                <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-800">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200">
                     <h3 className="font-semibold">🎯 D29 — Silver Engagement Rewards</h3>
                     <p className="text-xs text-gray-500 mt-0.5">8 triggers กำหนดได้ผ่าน system_config</p>
                   </div>
@@ -177,7 +177,7 @@ export default function SilverPage() {
                         <th className="px-6 py-3">บันทึก</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800">
+                    <tbody className="divide-y divide-gray-200">
                       {triggers.map((t) => (
                         <TriggerRow key={t.key} trigger={t} onSave={saveTrigger} />
                       ))}
@@ -186,7 +186,7 @@ export default function SilverPage() {
                 </div>
 
                 {/* D30 Signup Bonus */}
-                <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
                   <h3 className="font-semibold mb-4">🎁 D30 — Signup Bonus</h3>
                   <div className="flex items-center gap-6 flex-wrap">
                     <label className="flex items-center gap-3 cursor-pointer">
@@ -198,9 +198,9 @@ export default function SilverPage() {
                     </label>
                     {signupBonus && (
                       <div className="flex items-center gap-2">
-                        <label className="text-sm text-gray-400">Points:</label>
+                        <label className="text-sm text-gray-500">Points:</label>
                         <input type="number" value={signupPoints} onChange={(e) => setSignupPoints(Number(e.target.value))}
-                          className="w-24 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-sm focus:outline-none" />
+                          className="w-24 bg-gray-100 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none" />
                       </div>
                     )}
                     <button onClick={saveSignupBonus}
@@ -215,9 +215,9 @@ export default function SilverPage() {
             {/* Expiry Batch Tab */}
             {tab === "expiry" && (
               <div className="space-y-6">
-                <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
                   <h3 className="font-semibold mb-2">⏰ Run Expiry Batch</h3>
-                  <p className="text-sm text-gray-400 mb-4">
+                  <p className="text-sm text-gray-500 mb-4">
                     รัน batch หมดอายุ Silver Point ด้วยตนเอง (ปกติรันอัตโนมัติทุกคืน 02:00)
                   </p>
                   <button onClick={runExpiry} disabled={runningExpiry}
@@ -227,15 +227,15 @@ export default function SilverPage() {
                 </div>
 
                 {expiryResult && (
-                  <div className="bg-green-900/20 border border-green-800 rounded-xl p-5">
-                    <p className="font-semibold text-green-400 mb-2">✅ ผลการรัน</p>
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+                    <p className="font-semibold text-green-600 mb-2">✅ ผลการรัน</p>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-gray-400">จำนวน records</p>
+                        <p className="text-gray-500">จำนวน records</p>
                         <p className="font-bold text-white">{expiryResult.expired_count.toLocaleString()}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400">Points หมดอายุ</p>
+                        <p className="text-gray-500">Points หมดอายุ</p>
                         <p className="font-bold text-white">{expiryResult.total_points_expired.toLocaleString()} S</p>
                       </div>
                     </div>
@@ -249,8 +249,8 @@ export default function SilverPage() {
 
             {/* Recent Tab */}
             {tab === "recent" && (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-800">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
                   <h3 className="font-semibold">📋 Recent Silver Transactions</h3>
                 </div>
                 <table className="w-full text-sm">
@@ -262,17 +262,17 @@ export default function SilverPage() {
                       <th className="px-6 py-3 text-right">จำนวน</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {recent.map((tx) => (
-                      <tr key={tx.id} className="hover:bg-gray-800/50">
-                        <td className="px-6 py-3 text-gray-400 text-xs">
+                      <tr key={tx.id} className="hover:bg-gray-100">
+                        <td className="px-6 py-3 text-gray-500 text-xs">
                           {new Date(tx.created_at).toLocaleString("th-TH")}
                         </td>
                         <td className="px-6 py-3">{tx.user_name}</td>
                         <td className="px-6 py-3">
-                          <span className="text-xs bg-gray-800 px-2 py-0.5 rounded">{tx.type}</span>
+                          <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">{tx.type}</span>
                         </td>
-                        <td className={`px-6 py-3 text-right font-mono font-semibold ${tx.amount >= 0 ? "text-green-400" : "text-red-400"}`}>
+                        <td className={`px-6 py-3 text-right font-mono font-semibold ${tx.amount >= 0 ? "text-green-600" : "text-red-600"}`}>
                           {tx.amount >= 0 ? "+" : ""}{tx.amount.toLocaleString()} S
                         </td>
                       </tr>
@@ -286,7 +286,7 @@ export default function SilverPage() {
 
         {/* Toast */}
         {toast && (
-          <div className="fixed bottom-6 right-6 bg-gray-800 border border-gray-700 rounded-xl px-5 py-3 text-sm shadow-xl">
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
             {toast}
           </div>
         )}
@@ -297,10 +297,10 @@ export default function SilverPage() {
 
 function SCard({ label, value, color }: { label: string; value: string; color: string }) {
   const colors: Record<string, string> = {
-    gray: "text-gray-300", blue: "text-blue-400", red: "text-red-400", green: "text-green-400",
+    gray: "text-gray-700", blue: "text-blue-400", red: "text-red-600", green: "text-green-600",
   };
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-xl font-bold ${colors[color] ?? "text-white"}`}>{value}</p>
     </div>
@@ -317,13 +317,13 @@ function TriggerRow({
   const [enabled, setEnabled] = useState(trigger.enabled);
 
   return (
-    <tr className="hover:bg-gray-800/30">
+    <tr className="hover:bg-gray-100/30">
       <td className="px-6 py-3">
         {TRIGGER_LABELS[trigger.key] ?? trigger.key}
       </td>
       <td className="px-6 py-3">
         <input type="number" value={pts} onChange={(e) => setPts(Number(e.target.value))}
-          className="w-20 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-sm focus:outline-none" />
+          className="w-20 bg-gray-100 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none" />
       </td>
       <td className="px-6 py-3">
         <button onClick={() => setEnabled(!enabled)}

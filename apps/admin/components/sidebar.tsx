@@ -145,13 +145,13 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="w-56 min-h-screen bg-gray-900 border-r border-gray-800 flex flex-col">
+    <aside className="w-56 min-h-screen bg-white border-r border-gray-200 flex flex-col shadow-sm">
       {/* Logo */}
-      <div className="px-5 py-4 border-b border-gray-800 flex items-center gap-3">
+      <div className="px-5 py-4 border-b border-gray-200 flex items-center gap-3">
         <Image src="/admin-logo.png" alt="App3R Admin" width={32} height={32}
           className="rounded-lg" onError={() => {}} />
         <div>
-          <span className="text-sm font-bold text-white">App3R Admin</span>
+          <span className="text-sm font-bold text-admin-text">App3R Admin</span>
           <p className="text-xs text-gray-500">Dashboard</p>
         </div>
       </div>
@@ -161,7 +161,7 @@ export function Sidebar() {
         {navGroups.map((group, gi) => (
           <div key={gi}>
             {group.label && (
-              <p className="px-3 mb-1 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <p className="px-3 mb-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 {group.label}
               </p>
             )}
@@ -174,8 +174,8 @@ export function Sidebar() {
                     href={item.href}
                     className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
                       active
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                        ? "bg-admin-surface text-admin-primary font-medium"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-admin-text"
                     }`}
                   >
                     <span className="text-base">{item.icon}</span>
@@ -189,10 +189,10 @@ export function Sidebar() {
       </nav>
 
       {/* Logout */}
-      <div className="px-3 py-4 border-t border-gray-800">
+      <div className="px-3 py-4 border-t border-gray-200">
         <button
           onClick={logout}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-50 hover:text-red-600 transition-colors"
         >
           <span>🚪</span> ออกจากระบบ
         </button>

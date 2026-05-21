@@ -9,14 +9,14 @@ import { Sidebar } from "@/components/sidebar";
 import type { EWasteCertificate } from "@/lib/types";
 
 const STATUS_META: Record<EWasteCertificate["status"], { label: string; color: string }> = {
-  pending:  { label: "รอออกใบรับรอง", color: "bg-yellow-900/50 text-yellow-400" },
-  issued:   { label: "ออกแล้ว",       color: "bg-green-900/50 text-green-400" },
-  rejected: { label: "ปฏิเสธ",        color: "bg-red-900/50 text-red-400" },
+  pending:  { label: "รอออกใบรับรอง", color: "bg-yellow-50 text-yellow-700" },
+  issued:   { label: "ออกแล้ว",       color: "bg-green-50 text-green-700" },
+  rejected: { label: "ปฏิเสธ",        color: "bg-red-50 text-red-700" },
 };
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex gap-2 py-1.5 border-b border-gray-800/60 last:border-0">
+    <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-40 shrink-0">{label}</span>
       <span className="text-sm text-gray-100">{value}</span>
     </div>
@@ -157,19 +157,19 @@ export default function CertificateDetailPage() {
   }
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
     </div>
   );
 
   if (error || !cert) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ยังไม่มีข้อมูลใบรับรอง"}
         </div>
-        <Link href="/scrap/certificates" className="text-sm text-blue-400 hover:text-blue-300">← Certificates</Link>
+        <Link href="/scrap/certificates" className="text-sm text-admin-primary hover:text-admin-dark">← Certificates</Link>
       </main>
     </div>
   );
@@ -177,7 +177,7 @@ export default function CertificateDetailPage() {
   const sm = STATUS_META[cert.status];
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-4xl">
 
@@ -191,18 +191,18 @@ export default function CertificateDetailPage() {
             <p className="text-admin-primary text-sm font-mono font-bold">{cert.certNumber}</p>
           </div>
           <Link href="/scrap/certificates"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             ← Certificates
           </Link>
         </div>
 
         {/* Cert info */}
-        <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+        <section className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลใบรับรอง</h2>
           <InfoRow label="เลขที่ใบรับรอง" value={<span className="font-mono text-admin-primary">{cert.certNumber}</span>} />
           <InfoRow label="Scrap Job" value={
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
-              className="font-mono text-xs text-blue-400 hover:text-blue-300">
+              className="font-mono text-xs text-admin-primary hover:text-admin-dark">
               {cert.scrapJobId} ↗
             </Link>
           } />
@@ -215,7 +215,7 @@ export default function CertificateDetailPage() {
         </section>
 
         {/* HTML Preview */}
-        <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+        <section className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
               HTML Preview
@@ -225,7 +225,7 @@ export default function CertificateDetailPage() {
               ⬇️ ดาวน์โหลด .html
             </button>
           </div>
-          <div className="bg-white rounded-lg overflow-hidden border border-gray-700" style={{ height: "400px" }}>
+          <div className="bg-white rounded-lg overflow-hidden border border-gray-300" style={{ height: "400px" }}>
             <iframe
               srcDoc={generateCertHtml(cert)}
               className="w-full h-full border-0"
@@ -240,7 +240,7 @@ export default function CertificateDetailPage() {
 
         {/* Actions (pending only) */}
         {cert.status === "pending" && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
               จัดการใบรับรอง
             </h2>
@@ -250,7 +250,7 @@ export default function CertificateDetailPage() {
                 {actionLoading === "issue" ? "กำลังออก..." : "✅ ออกใบรับรอง (Issue)"}
               </button>
               <button onClick={() => setShowRejectForm(v => !v)} disabled={actionLoading !== null}
-                className="px-5 py-2.5 text-sm bg-red-900/50 hover:bg-red-800/50 border border-red-800 text-red-400 rounded-lg transition-colors">
+                className="px-5 py-2.5 text-sm bg-red-900/50 hover:bg-red-800/50 border border-red-800 text-red-600 rounded-lg transition-colors">
                 ❌ ปฏิเสธ (Reject)
               </button>
             </div>
@@ -261,7 +261,7 @@ export default function CertificateDetailPage() {
                   onChange={e => setRejectNote(e.target.value)}
                   placeholder="เหตุผลที่ปฏิเสธ..."
                   rows={3}
-                  className="w-full bg-gray-800 border border-gray-700 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-600 resize-none"
+                  className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
                 />
                 <div className="flex gap-3">
                   <button onClick={handleReject} disabled={actionLoading !== null || !rejectNote.trim()}
@@ -269,13 +269,13 @@ export default function CertificateDetailPage() {
                     {actionLoading === "reject" ? "กำลังปฏิเสธ..." : "ยืนยันปฏิเสธ"}
                   </button>
                   <button onClick={() => { setShowRejectForm(false); setRejectNote(""); }}
-                    className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 rounded-lg">
+                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 rounded-lg">
                     ยกเลิก
                   </button>
                 </div>
               </div>
             )}
-            {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
+            {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
           </section>
         )}
 
@@ -287,7 +287,7 @@ export default function CertificateDetailPage() {
               ⬇️ ดาวน์โหลดใบรับรอง (.html)
             </button>
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
-              className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
               🔨 ดู Scrap Job →
             </Link>
           </div>

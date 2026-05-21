@@ -29,7 +29,7 @@ export default function Footer() {
   // pre-T+2 (endpoint not live) or fetch error → minimal fallback footer
   if (failed || !info) {
     return (
-      <footer className="border-t border-gray-800 bg-gray-900 text-gray-500 text-xs px-6 py-4">
+      <footer className="border-t border-gray-200 bg-white text-gray-500 text-xs px-6 py-4">
         <p>App3R Admin — ระบบจัดการแพลตฟอร์ม</p>
       </footer>
     )
@@ -40,7 +40,7 @@ export default function Footer() {
   const socials = Array.isArray(info.socials) ? info.socials : []
 
   return (
-    <footer className="border-t border-gray-800 bg-gray-900 text-gray-400 text-xs px-6 py-6">
+    <footer className="border-t border-gray-200 bg-white text-gray-500 text-xs px-6 py-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div>
           <p className="text-white font-semibold mb-1">{info.companyName}</p>
@@ -54,7 +54,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-gray-300 font-medium mb-1">โทรศัพท์</p>
+          <p className="text-gray-700 font-medium mb-1">โทรศัพท์</p>
           {phones.length === 0 && <p>—</p>}
           {phones.map((p, i) => (
             <p key={i}>
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-gray-300 font-medium mb-1">อีเมล</p>
+          <p className="text-gray-700 font-medium mb-1">อีเมล</p>
           {emails.length === 0 && <p>—</p>}
           {emails.map((e, i) => (
             <p key={i}>
@@ -75,7 +75,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-gray-300 font-medium mb-1">ติดตามเรา</p>
+          <p className="text-gray-700 font-medium mb-1">ติดตามเรา</p>
           {socials.length === 0 && <p>—</p>}
           {socials.map((s, i) => (
             <p key={i}>

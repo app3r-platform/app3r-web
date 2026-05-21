@@ -9,15 +9,15 @@ import { Sidebar } from "@/components/sidebar";
 import type { ScrapItem } from "@/lib/types";
 
 const STATUS_META: Record<ScrapItem["status"], { label: string; color: string }> = {
-  available: { label: "ขายได้",   color: "bg-green-900/50 text-green-400" },
-  sold:      { label: "ขายแล้ว",  color: "bg-blue-900/50 text-blue-300" },
-  removed:   { label: "ลบแล้ว",   color: "bg-gray-800 text-gray-500" },
+  available: { label: "ขายได้",   color: "bg-green-50 text-green-700" },
+  sold:      { label: "ขายแล้ว",  color: "bg-blue-50 text-blue-700" },
+  removed:   { label: "ลบแล้ว",   color: "bg-gray-100 text-gray-500" },
 };
 
 const GRADE_META: Record<ScrapItem["conditionGrade"], { label: string; color: string }> = {
-  grade_A: { label: "A", color: "bg-green-900/50 text-green-400" },
-  grade_B: { label: "B", color: "bg-yellow-900/50 text-yellow-400" },
-  grade_C: { label: "C", color: "bg-red-900/50 text-red-400" },
+  grade_A: { label: "A", color: "bg-green-50 text-green-700" },
+  grade_B: { label: "B", color: "bg-yellow-50 text-yellow-700" },
+  grade_C: { label: "C", color: "bg-red-50 text-red-700" },
 };
 
 const PAGE_SIZE = 20;
@@ -81,7 +81,7 @@ export default function ScrapListingsPage() {
   const hasFilters = filterStatus || filterGrade || filterSeller;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -89,13 +89,13 @@ export default function ScrapListingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">♻️ Scrap Listings</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               รายการซากเครื่องใช้ไฟฟ้า — filter สถานะ / เกรด / ผู้ขาย
             </p>
           </div>
           <div className="flex gap-2">
             <Link href="/scrap/jobs"
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
               🔨 Jobs →
             </Link>
           </div>
@@ -106,7 +106,7 @@ export default function ScrapListingsPage() {
           <select
             value={filterStatus}
             onChange={e => { setFilterStatus(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุกสถานะ</option>
             <option value="available">ขายได้</option>
             <option value="sold">ขายแล้ว</option>
@@ -115,7 +115,7 @@ export default function ScrapListingsPage() {
           <select
             value={filterGrade}
             onChange={e => { setFilterGrade(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุกเกรด</option>
             <option value="grade_A">Grade A</option>
             <option value="grade_B">Grade B</option>
@@ -123,39 +123,39 @@ export default function ScrapListingsPage() {
           </select>
           <input type="text" placeholder="Seller ID"
             value={filterSeller} onChange={e => { setFilterSeller(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
           />
           {hasFilters && (
             <button onClick={clearFilters}
-              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-gray-800 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-white bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">ระบบ Scrap กำลังพัฒนา — {error}</div>
+            <div className="px-6 py-8 text-red-600">ระบบ Scrap กำลังพัฒนา — {error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Seller</th>
                   <th className="px-4 py-3">รายละเอียด</th>
                   <th className="px-4 py-3">เกรด</th>
@@ -166,19 +166,19 @@ export default function ScrapListingsPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.length === 0 ? (
                   <EmptyState message="ยังไม่มีรายการซาก" />
                 ) : items.map(item => {
                   const sm = STATUS_META[item.status];
                   const gm = GRADE_META[item.conditionGrade];
                   return (
-                    <tr key={item.id} className="hover:bg-gray-800/40">
-                      <td className="px-4 py-3 text-xs font-mono text-gray-400">{item.sellerId}</td>
+                    <tr key={item.id} className="hover:bg-gray-100/40">
+                      <td className="px-4 py-3 text-xs font-mono text-gray-500">{item.sellerId}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {item.photos[0] && (
-                            <img src={item.photos[0]} alt="" className="w-8 h-8 object-cover rounded bg-gray-800" />
+                            <img src={item.photos[0]} alt="" className="w-8 h-8 object-cover rounded bg-gray-100" />
                           )}
                           <span className="text-sm text-gray-100 max-w-xs truncate">{item.description}</span>
                         </div>
@@ -186,12 +186,12 @@ export default function ScrapListingsPage() {
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${gm.color}`}>{gm.label}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-400">
+                      <td className="px-4 py-3 text-xs text-gray-500">
                         {item.workingParts.length > 0
                           ? item.workingParts.slice(0, 3).join(", ") + (item.workingParts.length > 3 ? "…" : "")
                           : "—"}
                       </td>
-                      <td className="px-4 py-3 text-sm font-mono text-green-400">
+                      <td className="px-4 py-3 text-sm font-mono text-green-600">
                         {item.price.toLocaleString()} ฿
                       </td>
                       <td className="px-4 py-3">
@@ -202,7 +202,7 @@ export default function ScrapListingsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <Link href={`/scrap/listings/${item.id}`}
-                          className="text-xs text-blue-400 hover:text-blue-300 whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
                           ดู →
                         </Link>
                       </td>

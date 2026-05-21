@@ -53,7 +53,7 @@ export default function ContentEditor({ initialContent, onChange, readOnly = fal
               onClick={() => btn.action(editor)}
               className={`px-2 py-1 text-sm rounded font-mono ${
                 btn.isActive(editor)
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-admin-surface text-admin-primary'
                   : 'bg-white border text-gray-700 hover:bg-gray-100'
               }`}
             >

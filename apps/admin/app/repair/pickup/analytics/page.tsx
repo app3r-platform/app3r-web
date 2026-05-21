@@ -50,17 +50,17 @@ function StatCard({
 }) {
   const accentMap: Record<string, string> = {
     blue:    "text-blue-400",
-    green:   "text-green-400",
-    red:     "text-red-400",
-    orange:  "text-orange-400",
-    yellow:  "text-yellow-400",
+    green:   "text-green-600",
+    red:     "text-red-600",
+    orange:  "text-orange-700",
+    yellow:  "text-yellow-700",
     "admin-primary": "text-admin-primary",
     "brand-info": "text-brand-info",
     cyan:    "text-cyan-400",
     default: "text-white",
   };
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-2xl mb-1">{icon}</p>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${accentMap[accent ?? "default"]}`}>{value}</p>
@@ -101,7 +101,7 @@ export default function PickupAnalyticsPage() {
   }, [router, fetchData]);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-8 max-w-5xl">
 
@@ -109,25 +109,25 @@ export default function PickupAnalyticsPage() {
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-bold">📊 Pickup Analytics</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               avg pickup time + travel cost + KPI — ภาพรวม pickup jobs
             </p>
           </div>
           <div className="flex items-center gap-2">
             {/* Period selector */}
-            <div className="flex gap-1 bg-gray-900 rounded-lg p-1 border border-gray-800">
+            <div className="flex gap-1 bg-white rounded-lg p-1 border border-gray-200">
               {["7d", "30d", "90d", "all"].map(p => (
                 <button key={p}
                   onClick={() => setPeriod(p)}
                   className={`px-3 py-1 rounded text-xs transition-colors ${
-                    period === p ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                    period === p ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
                   }`}>
                   {p}
                 </button>
               ))}
             </div>
             <Link href="/repair/pickup/queue"
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
               ← Queue
             </Link>
           </div>
@@ -136,7 +136,7 @@ export default function PickupAnalyticsPage() {
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
         ) : error ? (
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error}</div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error}</div>
         ) : data && (
           <>
             {/* Summary */}
@@ -224,7 +224,7 @@ export default function PickupAnalyticsPage() {
 
             {/* Monthly travel cost chart */}
             {data.monthly_travel_cost?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                   Travel Cost รายเดือน
                 </h2>
@@ -235,12 +235,12 @@ export default function PickupAnalyticsPage() {
                       const pct = (m.cost / maxCost) * 100;
                       return (
                         <div key={m.month} className="flex items-center gap-3">
-                          <span className="text-xs text-gray-400 w-20 shrink-0 font-mono">{m.month}</span>
-                          <div className="flex-1 bg-gray-800 rounded-full h-2">
+                          <span className="text-xs text-gray-500 w-20 shrink-0 font-mono">{m.month}</span>
+                          <div className="flex-1 bg-gray-100 rounded-full h-2">
                             <div className="bg-yellow-500 h-2 rounded-full transition-all"
                               style={{ width: `${pct}%` }} />
                           </div>
-                          <span className="text-xs text-yellow-400 font-mono w-28 text-right">
+                          <span className="text-xs text-yellow-700 font-mono w-28 text-right">
                             {m.cost.toLocaleString()} ฿
                           </span>
                           <span className="text-xs text-gray-600 w-16 text-right">
@@ -256,21 +256,21 @@ export default function PickupAnalyticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* By Status */}
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
                     return (
                       <div key={row.status} className="flex items-center gap-3">
-                        <span className="text-xs text-gray-400 w-28 shrink-0">
+                        <span className="text-xs text-gray-500 w-28 shrink-0">
                           {STATUS_LABELS[row.status] ?? row.status}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className="bg-blue-600 h-2 rounded-full transition-all"
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-10 text-right">{row.count}</span>
+                        <span className="text-xs text-gray-700 w-10 text-right">{row.count}</span>
                       </div>
                     );
                   })}
@@ -278,7 +278,7 @@ export default function PickupAnalyticsPage() {
               </section>
 
               {/* By Direction */}
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Direction</h2>
                 <div className="space-y-3">
                   {data.by_direction.map(row => {
@@ -290,11 +290,11 @@ export default function PickupAnalyticsPage() {
                         <span className={`text-xs w-28 shrink-0 ${isS2C ? "text-brand-success" : "text-admin-primary"}`}>
                           {isS2C ? "ร้าน → ลูกค้า" : "ลูกค้า → ร้าน"}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className={`h-2 rounded-full transition-all ${isS2C ? "bg-brand-success" : "bg-admin-primary"}`}
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-10 text-right">{row.count}</span>
+                        <span className="text-xs text-gray-700 w-10 text-right">{row.count}</span>
                       </div>
                     );
                   })}
@@ -304,20 +304,20 @@ export default function PickupAnalyticsPage() {
 
             {/* Top WeeeT */}
             {data.top_weeet?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Top WeeeT</h2>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-gray-500 text-left border-b border-gray-800">
+                    <tr className="text-gray-500 text-left border-b border-gray-200">
                       <th className="pb-2">#</th>
                       <th className="pb-2">WeeeT</th>
                       <th className="pb-2 text-right">Jobs</th>
                       <th className="pb-2 text-right">Avg Time</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {data.top_weeet.map((row, i) => (
-                      <tr key={i} className="hover:bg-gray-800/30">
+                      <tr key={i} className="hover:bg-gray-100/30">
                         <td className="py-2.5 text-gray-600 w-8">{i + 1}.</td>
                         <td className="py-2.5 text-gray-200">{row.weeet_name}</td>
                         <td className="py-2.5 text-right font-mono text-blue-400">{row.jobs}</td>

@@ -35,7 +35,7 @@ interface DispatchMonitor {
 
 const STATUS_META: Record<string, { label: string; color: string; dot: string }> = {
   assigned:          { label: "มอบหมายแล้ว",  color: "text-blue-300",   dot: "bg-blue-500" },
-  en_route_pickup:   { label: "กำลังไปรับ",   color: "text-yellow-400", dot: "bg-yellow-500" },
+  en_route_pickup:   { label: "กำลังไปรับ",   color: "text-yellow-700", dot: "bg-yellow-500" },
   picked_up:         { label: "รับแล้ว",       color: "text-cyan-300",   dot: "bg-cyan-500" },
   en_route_delivery: { label: "กำลังส่ง",      color: "text-brand-info",    dot: "bg-brand-info" },
   delivered:         { label: "ส่งแล้ว",       color: "text-brand-success", dot: "bg-brand-success" },
@@ -90,7 +90,7 @@ export default function DispatchMonitorPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -100,23 +100,23 @@ export default function DispatchMonitorPage() {
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold">📡 Dispatch Monitor</h1>
               {/* Live pulse */}
-              <span className="flex items-center gap-1.5 text-xs text-green-400 bg-green-900/30 border border-green-800/50 px-2 py-0.5 rounded-full">
+              <span className="flex items-center gap-1.5 text-xs text-green-600 bg-green-900/30 border border-green-800/50 px-2 py-0.5 rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                 LIVE
               </span>
             </div>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               ติดตาม WeeeT en-route real-time — รีเฟรชทุก 30 วินาที
             </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-500">รีเฟรชใน {countdown}s</span>
             <button onClick={manualRefresh}
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
               🔄 รีเฟรชเดี๋ยวนี้
             </button>
             <Link href="/repair/pickup/queue"
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
               ← Queue
             </Link>
           </div>
@@ -125,19 +125,19 @@ export default function DispatchMonitorPage() {
         {/* Summary cards */}
         {data && (
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
               <p className="text-xs text-gray-500 mb-1">Active Jobs</p>
               <p className="text-3xl font-bold text-blue-400">{data.total_active}</p>
             </div>
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
               <p className="text-xs text-gray-500 mb-1">มีความล่าช้า</p>
-              <p className={`text-3xl font-bold ${data.total_delayed > 0 ? "text-red-400" : "text-green-400"}`}>
+              <p className={`text-3xl font-bold ${data.total_delayed > 0 ? "text-red-600" : "text-green-600"}`}>
                 {data.total_delayed}
               </p>
             </div>
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
               <p className="text-xs text-gray-500 mb-1">อัพเดตล่าสุด</p>
-              <p className="text-sm text-gray-300 mt-1">
+              <p className="text-sm text-gray-700 mt-1">
                 {data.last_updated
                   ? new Date(data.last_updated).toLocaleTimeString("th-TH")
                   : "—"}
@@ -147,25 +147,25 @@ export default function DispatchMonitorPage() {
         )}
 
         {error ? (
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error}</div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error}</div>
         ) : loading && !data ? (
           <p className="text-gray-500">กำลังโหลด...</p>
         ) : data && (
           <>
             {data.active_jobs.length === 0 ? (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-10 text-center text-gray-500">
+              <div className="bg-white rounded-xl border border-gray-200 p-10 text-center text-gray-500">
                 ไม่มี active jobs ขณะนี้
               </div>
             ) : (
               <div className="space-y-3">
                 {data.active_jobs.map(job => {
-                  const sm = STATUS_META[job.status] ?? { label: job.status, color: "text-gray-300", dot: "bg-gray-500" };
+                  const sm = STATUS_META[job.status] ?? { label: job.status, color: "text-gray-700", dot: "bg-gray-500" };
                   const isDelayed = (job.delay_minutes ?? 0) > 0;
                   const dirLabel = job.direction === "shop_to_customer" ? "ร้าน → ลูกค้า" : "ลูกค้า → ร้าน";
 
                   return (
-                    <div key={job.id} className={`bg-gray-900 rounded-xl border p-5 transition-all ${
-                      isDelayed ? "border-red-800/60" : "border-gray-800"
+                    <div key={job.id} className={`bg-white rounded-xl border p-5 transition-all ${
+                      isDelayed ? "border-red-800/60" : "border-gray-200"
                     }`}>
                       <div className="flex items-start justify-between gap-4 flex-wrap">
 
@@ -173,7 +173,7 @@ export default function DispatchMonitorPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-2 flex-wrap">
                             <Link href={`/repair/pickup/${job.id}`}
-                              className="font-mono text-sm text-blue-400 hover:text-blue-300 font-bold">
+                              className="font-mono text-sm text-admin-primary hover:text-admin-dark font-bold">
                               {job.job_number}
                             </Link>
                             <span className={`flex items-center gap-1.5 text-xs ${sm.color}`}>
@@ -188,7 +188,7 @@ export default function DispatchMonitorPage() {
                               {dirLabel}
                             </span>
                             {isDelayed && (
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-red-900/50 text-red-400">
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">
                                 ⚠️ ล่าช้า {job.delay_minutes} นาที
                               </span>
                             )}
@@ -221,11 +221,11 @@ export default function DispatchMonitorPage() {
                           {job.eta_minutes != null && (
                             <div className={`text-center px-4 py-2 rounded-xl border ${
                               isDelayed
-                                ? "bg-red-900/20 border-red-800/50"
-                                : "bg-green-900/20 border-green-800/50"
+                                ? "bg-red-50 border-red-200/50"
+                                : "bg-green-50 border-green-200/50"
                             }`}>
                               <p className="text-xs text-gray-500">ETA</p>
-                              <p className={`text-xl font-bold ${isDelayed ? "text-red-400" : "text-green-400"}`}>
+                              <p className={`text-xl font-bold ${isDelayed ? "text-red-600" : "text-green-600"}`}>
                                 {job.eta_minutes} <span className="text-sm font-normal">นาที</span>
                               </p>
                             </div>
@@ -233,7 +233,7 @@ export default function DispatchMonitorPage() {
                           {job.current_lat != null && job.current_lng != null && (
                             <a href={`https://maps.google.com/?q=${job.current_lat},${job.current_lng}`}
                               target="_blank" rel="noreferrer"
-                              className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                              className="text-xs text-admin-primary hover:text-admin-dark flex items-center gap-1">
                               📍 ดูแผนที่
                             </a>
                           )}

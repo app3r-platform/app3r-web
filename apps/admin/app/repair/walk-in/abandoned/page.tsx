@@ -24,10 +24,10 @@ interface AbandonedDevice {
 }
 
 const ABANDONED_STATUS: Record<string, { label: string; color: string }> = {
-  waiting:  { label: "รอดำเนินการ", color: "bg-yellow-900/50 text-yellow-400" },
-  contacted:{ label: "ติดต่อแล้ว",  color: "bg-blue-900/50 text-blue-300" },
-  scrapped: { label: "ส่งขายซาก",   color: "bg-orange-900/50 text-orange-400" },
-  disposed: { label: "ทำลายแล้ว",   color: "bg-gray-800 text-gray-400" },
+  waiting:  { label: "รอดำเนินการ", color: "bg-yellow-50 text-yellow-700" },
+  contacted:{ label: "ติดต่อแล้ว",  color: "bg-blue-50 text-blue-700" },
+  scrapped: { label: "ส่งขายซาก",   color: "bg-orange-50 text-orange-700" },
+  disposed: { label: "ทำลายแล้ว",   color: "bg-gray-100 text-gray-500" },
 };
 
 const PAGE_SIZE = 20;
@@ -90,7 +90,7 @@ export default function AbandonedDevicesPage() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6">
 
@@ -98,18 +98,18 @@ export default function AbandonedDevicesPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📦 Abandoned Devices</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               เครื่องที่ลูกค้าไม่มารับ — action: ติดต่อ / ส่งขายซาก / ทำลาย
             </p>
           </div>
           <Link href="/repair/walk-in/queue"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-700 border border-gray-300 rounded-lg transition-colors">
             ← Walk-in Queue
           </Link>
         </div>
 
         {/* Status filter */}
-        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit">
+        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           {[
             { label: "ทั้งหมด", value: "" },
             { label: "รอดำเนินการ", value: "waiting" },
@@ -120,7 +120,7 @@ export default function AbandonedDevicesPage() {
             <button key={f.value}
               onClick={() => { setFilterStatus(f.value); setPage(1); }}
               className={`px-4 py-2 rounded-lg text-xs transition-colors ${
-                filterStatus === f.value ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-white"
               }`}>
               {f.label}
             </button>
@@ -131,36 +131,36 @@ export default function AbandonedDevicesPage() {
         {scrapMsg && (
           <div className={`p-3 rounded-xl text-sm border ${
             scrapMsg.type === "success"
-              ? "bg-green-900/30 border-green-800 text-green-300"
-              : "bg-red-900/30 border-red-800 text-red-300"
+              ? "bg-green-900/30 border-green-800 text-green-700"
+              : "bg-red-900/30 border-red-800 text-red-700"
           }`}>
             {scrapMsg.text}
           </div>
         )}
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-700">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">{error}</div>
+            <div className="px-6 py-8 text-red-600">{error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3">Job #</th>
                   <th className="px-5 py-3">ร้าน</th>
                   <th className="px-5 py-3">อุปกรณ์</th>
@@ -172,19 +172,19 @@ export default function AbandonedDevicesPage() {
                   <th className="px-5 py-3">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.map(d => {
-                  const sm = ABANDONED_STATUS[d.status] ?? { label: d.status, color: "bg-gray-800 text-gray-300" };
+                  const sm = ABANDONED_STATUS[d.status] ?? { label: d.status, color: "bg-gray-100 text-gray-600" };
                   const isConfirming = scrapId === d.id;
                   return (
-                    <tr key={d.id} className="hover:bg-gray-800/40">
+                    <tr key={d.id} className="hover:bg-gray-100/40">
                       <td className="px-5 py-3">
                         <Link href={`/repair/walk-in/${d.job_id}`}
-                          className="font-mono text-xs text-blue-400 hover:text-blue-300">
+                          className="font-mono text-xs text-admin-primary hover:text-admin-dark">
                           {d.job_number}
                         </Link>
                       </td>
-                      <td className="px-5 py-3 text-xs text-gray-300">{d.store_name}</td>
+                      <td className="px-5 py-3 text-xs text-gray-700">{d.store_name}</td>
                       <td className="px-5 py-3">
                         <div className="text-sm text-white">{d.device_brand} {d.device_model}</div>
                       </td>
@@ -193,17 +193,17 @@ export default function AbandonedDevicesPage() {
                         <div className="text-xs text-gray-500">{d.customer_phone}</div>
                       </td>
                       <td className="px-5 py-3">
-                        <span className={`text-sm font-bold ${d.days_stored > 30 ? "text-red-400" : d.days_stored > 14 ? "text-orange-400" : "text-yellow-400"}`}>
+                        <span className={`text-sm font-bold ${d.days_stored > 30 ? "text-red-600" : d.days_stored > 14 ? "text-orange-700" : "text-yellow-700"}`}>
                           {d.days_stored}
                         </span>
                       </td>
-                      <td className="px-5 py-3 font-mono text-xs text-yellow-400">
+                      <td className="px-5 py-3 font-mono text-xs text-yellow-700">
                         {d.storage_fee_accumulated.toLocaleString()} ฿
                       </td>
                       <td className="px-5 py-3 text-xs text-gray-500">
                         {d.last_contact_at
                           ? new Date(d.last_contact_at).toLocaleDateString("th-TH")
-                          : <span className="text-red-400">ยังไม่ติดต่อ</span>}
+                          : <span className="text-red-600">ยังไม่ติดต่อ</span>}
                       </td>
                       <td className="px-5 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
@@ -212,7 +212,7 @@ export default function AbandonedDevicesPage() {
                         {d.status === "waiting" || d.status === "contacted" ? (
                           isConfirming ? (
                             <div className="flex items-center gap-2">
-                              <span className="text-xs text-orange-400">ยืนยันส่งขายซาก?</span>
+                              <span className="text-xs text-orange-700">ยืนยันส่งขายซาก?</span>
                               <button
                                 onClick={() => handleScrap(d.id)}
                                 disabled={scrapLoading}
@@ -227,7 +227,7 @@ export default function AbandonedDevicesPage() {
                           ) : (
                             <button
                               onClick={() => { setScrapId(d.id); setScrapMsg(null); }}
-                              className="text-xs px-3 py-1 bg-orange-900/40 hover:bg-orange-900/60 border border-orange-700/50 text-orange-300 rounded-lg transition-colors">
+                              className="text-xs px-3 py-1 bg-orange-900/40 hover:bg-orange-900/60 border border-orange-700/50 text-orange-700 rounded-lg transition-colors">
                               ♻️ ส่งขายซาก
                             </button>
                           )
