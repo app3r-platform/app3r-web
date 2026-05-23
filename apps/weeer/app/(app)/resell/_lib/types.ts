@@ -61,7 +61,8 @@ export type ListingStatus =
   | "inspection_period"
   | "completed"
   | "cancelled"
-  | "disputed";
+  | "disputed"
+  | "suspended";        // R2/R3: Admin ระงับ (Listing Lifecycle D14)
 
 export interface Listing {
   id: string;
@@ -94,32 +95,44 @@ export interface Listing {
   viewCount?: number;
   imageUrl?: string;
   description?: string;
+
+  // R2/R3: SUSPENDED (Mockup — D14 Lifecycle)
+  suspendReason?: string;
+
+  // sell flow: terms 3 แกน (Mockup)
+  terms3?: {
+    shipping: string;       // ค่าส่งฝ่ายใดรับผิดชอบ
+    usedWarranty: string;   // รับประกันมือสองกี่วัน
+    liability: string;      // รับผิดถ้าของไม่ตรงปก
+  };
 }
 
 export const LISTING_STATUS_LABEL: Record<ListingStatus, string> = {
-  announced: "ประกาศแล้ว",
-  receiving_offers: "รับข้อเสนอ",
-  offer_selected: "เลือกข้อเสนอแล้ว",
-  buyer_confirmed: "ผู้ซื้อยืนยัน",
-  in_progress: "กำลังดำเนินการ",
-  delivered: "ส่งมอบแล้ว",
+  announced:         "ประกาศแล้ว",
+  receiving_offers:  "รับข้อเสนอ",
+  offer_selected:    "เลือกข้อเสนอแล้ว",
+  buyer_confirmed:   "ผู้ซื้อยืนยัน",
+  in_progress:       "กำลังดำเนินการ",
+  delivered:         "ส่งมอบแล้ว",
   inspection_period: "ช่วงตรวจสอบ",
-  completed: "เสร็จสิ้น",
-  cancelled: "ยกเลิก",
-  disputed: "พิพาท",
+  completed:         "เสร็จสิ้น",
+  cancelled:         "ยกเลิก",
+  disputed:          "พิพาท",
+  suspended:         "ถูกระงับ",   // R2/R3
 };
 
 export const LISTING_STATUS_COLOR: Record<ListingStatus, string> = {
-  announced:        "bg-blue-100 text-blue-700",
-  receiving_offers: "bg-indigo-100 text-indigo-700",
-  offer_selected:   "bg-purple-100 text-purple-700",
-  buyer_confirmed:  "bg-cyan-100 text-cyan-700",
-  in_progress:      "bg-yellow-100 text-yellow-700",
-  delivered:        "bg-orange-100 text-orange-700",
-  inspection_period:"bg-amber-100 text-amber-700",
-  completed:        "bg-green-100 text-green-700",
-  cancelled:        "bg-gray-100 text-gray-500",
-  disputed:         "bg-red-100 text-red-700",
+  announced:         "bg-blue-100 text-blue-700",
+  receiving_offers:  "bg-indigo-100 text-indigo-700",
+  offer_selected:    "bg-purple-100 text-purple-700",
+  buyer_confirmed:   "bg-cyan-100 text-cyan-700",
+  in_progress:       "bg-yellow-100 text-yellow-700",
+  delivered:         "bg-orange-100 text-orange-700",
+  inspection_period: "bg-amber-100 text-amber-700",
+  completed:         "bg-green-100 text-green-700",
+  cancelled:         "bg-gray-100 text-gray-500",
+  disputed:          "bg-red-100 text-red-700",
+  suspended:         "bg-red-200 text-red-800",   // R2/R3
 };
 
 // Terminal states — can't transition from these
@@ -171,4 +184,9 @@ export interface ResellTransaction {
   deliveryMethod: string;
   createdAt: string;
   updatedAt: string;
+  // Mockup fields (R6/R10/R11)
+  evidenceUrls?: string[];
+  trackingNumber?: string;
+  disputeReason?: string;
+  role?: "seller" | "buyer";  // perspective
 }
