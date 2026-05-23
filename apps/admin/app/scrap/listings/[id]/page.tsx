@@ -8,6 +8,11 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { ScrapItem } from "@/lib/types";
 
+/* S12 — extended with cross-module repair ref */
+interface ScrapItemExtended extends ScrapItem {
+  source_repair_job_id?: string | null;
+}
+
 const STATUS_META: Record<ScrapItem["status"], { label: string; color: string }> = {
   available: { label: "ขายได้",  color: "bg-green-50 text-green-700" },
   sold:      { label: "ขายแล้ว", color: "bg-blue-50 text-blue-700" },
@@ -24,7 +29,7 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-36 shrink-0">{label}</span>
-      <span className="text-sm text-gray-100">{value}</span>
+      <span className="text-sm text-gray-800">{value}</span>
     </div>
   );
 }
@@ -32,7 +37,7 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 export default function ScrapListingDetailPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
-  const [item, setItem] = useState<ScrapItem | null>(null);
+  const [item, setItem] = useState<ScrapItemExtended | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
@@ -41,7 +46,7 @@ export default function ScrapListingDetailPage() {
 
   const fetchItem = useCallback(async () => {
     try {
-      const d = await api.get<ScrapItem>(`/admin/scrap/items/${id}/`);
+      const d = await api.get<ScrapItemExtended>(`/admin/scrap/items/${id}/`);
       setItem(d);
       setError(null);
     } catch (e) {
@@ -165,6 +170,22 @@ export default function ScrapListingDetailPage() {
           )}
         </div>
 
+        {/* S12 — Source from Repair (cross-module) */}
+        {item.source_repair_job_id && (
+          <section className="bg-orange-50 border border-orange-200 rounded-xl p-4">
+            <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-2">
+              🔧 S12 — ซากจากงานซ่อม (Cross-module Repair C4)
+            </p>
+            <p className="text-xs text-orange-600 mb-2">
+              รายการนี้มาจาก Repair Job — ห้ามสร้าง ScrapItem ทับ ใช้ badge/ลิงก์เท่านั้น
+            </p>
+            <Link href={`/repair/jobs/${item.source_repair_job_id}`}
+              className="text-xs font-mono text-admin-primary hover:text-admin-dark bg-white px-2 py-1 rounded border border-orange-200 inline-block">
+              🔧 Repair Job: {item.source_repair_job_id} ↗
+            </Link>
+          </section>
+        )}
+
         {/* Quick links */}
         <div className="flex gap-3">
           <Link href={`/scrap/jobs?scrap_item_id=${item.id}`}
@@ -175,8 +196,8 @@ export default function ScrapListingDetailPage() {
 
         {/* Force Remove (super admin only) */}
         {superAdmin && item.status === "available" && (
-          <section className="bg-red-950/30 rounded-xl border border-red-900/50 p-5">
-            <h2 className="text-xs font-semibold text-red-500 uppercase tracking-wider mb-3">
+          <section className="bg-red-50 rounded-xl border border-red-200 p-5">
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3">
               ⚠️ Force Remove (Super Admin)
             </h2>
             <p className="text-sm text-gray-500 mb-4">
@@ -186,17 +207,17 @@ export default function ScrapListingDetailPage() {
               <div className="flex gap-3 items-center">
                 <span className="text-sm text-red-600">ยืนยันลบรายการนี้?</span>
                 <button onClick={handleForceRemove} disabled={removing}
-                  className="px-4 py-2 text-sm bg-red-700 hover:bg-red-600 rounded-lg disabled:opacity-50">
+                  className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg disabled:opacity-50">
                   {removing ? "กำลังลบ..." : "ยืนยัน Force Remove"}
                 </button>
                 <button onClick={() => setRemoveConfirm(false)}
-                  className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg">
+                  className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
                   ยกเลิก
                 </button>
               </div>
             ) : (
               <button onClick={handleForceRemove}
-                className="px-4 py-2 text-sm bg-red-900/50 hover:bg-red-800/50 border border-red-800 text-red-600 rounded-lg transition-colors">
+                className="px-4 py-2 text-sm bg-white hover:bg-red-50 border border-red-300 text-red-600 rounded-lg transition-colors">
                 🗑️ Force Remove
               </button>
             )}
