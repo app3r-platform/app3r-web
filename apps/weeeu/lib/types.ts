@@ -90,7 +90,7 @@ export interface EWasteCertificate {
   htmlUrl?: string;                 // C-3.2 = HTML mock | Phase D = real PDF
 }
 
-// ─── MaintainJob (D48 verbatim — App3R-Advisor Gen 18) ───────────────────────
+// ─── MaintainJob (D48 verbatim — App3R-Advisor Gen 18, extended Blueprint 2.1) ─
 
 export interface MaintainJob {
   id: string;
@@ -98,7 +98,20 @@ export interface MaintainJob {
   customerId: string;
   shopId?: string;
   technicianId?: string;
-  status: "pending" | "assigned" | "departed" | "arrived" | "in_progress" | "completed" | "cancelled";
+  /**
+   * awaiting_offer  — จองแล้ว รอ WeeeR ส่งข้อเสนอ (Blueprint 2.1)
+   * closed_for_repair — WeeeR พบความเสียหาย → ปิด Maintain, แจ้ง WeeeU ซ่อม (D-M-2)
+   */
+  status:
+    | "awaiting_offer"
+    | "pending"
+    | "assigned"
+    | "departed"
+    | "arrived"
+    | "in_progress"
+    | "completed"
+    | "cancelled"
+    | "closed_for_repair";
   applianceType: "AC" | "WashingMachine";
   cleaningType: "general" | "deep" | "sanitize";
   serviceMethod: "on_site";
@@ -114,4 +127,32 @@ export interface MaintainJob {
   totalPrice: number;
   createdAt: string;
   updatedAt: string;
+}
+
+// ─── MaintainOffer (Blueprint 2.1 — Offer=SoT, Decision กลาง) ────────────────
+
+export interface MaintainOfferTerms {
+  deposit?: number;                // มัดจำ (บาท)
+  deposit_refundable?: boolean;    // คืนมัดจำเมื่องานเสร็จ
+  travel_fee?: number;             // ค่าเดินทาง (บาท)
+  inspection_fee?: number;         // ค่าตรวจ (ถ้ามี)
+  warranty_days?: number;          // รับประกัน (วัน)
+  no_show_fee?: number;            // ค่าฝาก/no-show (บาท)
+  liability_cap?: number;          // วงเงินความรับผิด (บาท)
+  notes?: string;                  // หมายเหตุเพิ่มเติม
+}
+
+export interface MaintainOffer {
+  id: string;
+  jobId: string;
+  shopId: string;
+  shopName: string;
+  shopRating: number;              // 0-5
+  shopReviewCount: number;
+  price: number;                   // ค่าบริการรวม (บาท)
+  terms: MaintainOfferTerms;
+  status: "pending" | "accepted" | "rejected" | "withdrawn";
+  acknowledgedAt?: string;         // WeeeU กดรับทราบ (ก่อนยืนยัน)
+  expiresAt: string;
+  createdAt: string;
 }

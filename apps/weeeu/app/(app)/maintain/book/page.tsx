@@ -127,8 +127,8 @@ export default function MaintainBookPage() {
                 onClick={() => setApplianceType(opt.value)}
                 className={`py-4 rounded-xl border text-sm font-medium flex flex-col items-center gap-2 transition-colors ${
                   applianceType === opt.value
-                    ? "bg-teal-600 border-teal-600 text-white"
-                    : "border-gray-200 text-gray-500 hover:border-teal-300"
+                    ? "bg-weeeu-primary border-weeeu-primary text-white"
+                    : "border-gray-200 text-gray-500 hover:border-weeeu-primary"
                 }`}
               >
                 <span className="text-2xl">{opt.icon}</span>
@@ -149,16 +149,16 @@ export default function MaintainBookPage() {
                 onClick={() => setCleaningType(opt.value)}
                 className={`w-full text-left px-4 py-3.5 rounded-xl border transition-colors flex items-center gap-3 ${
                   cleaningType === opt.value
-                    ? "bg-teal-50 border-teal-500 text-teal-800"
-                    : "border-gray-200 text-gray-600 hover:border-teal-200"
+                    ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text"
+                    : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
                 }`}
               >
                 <span className="text-xl">{opt.icon}</span>
                 <div className="flex-1">
-                  <p className={`text-sm font-semibold ${cleaningType === opt.value ? "text-teal-800" : "text-gray-700"}`}>{opt.label}</p>
+                  <p className={`text-sm font-semibold ${cleaningType === opt.value ? "text-weeeu-text" : "text-gray-700"}`}>{opt.label}</p>
                   <p className="text-xs text-gray-400 mt-0.5">{opt.desc}</p>
                 </div>
-                {cleaningType === opt.value && <span className="text-teal-600 text-lg">✓</span>}
+                {cleaningType === opt.value && <span className="text-weeeu-primary text-lg">✓</span>}
               </button>
             ))}
           </div>
@@ -172,7 +172,7 @@ export default function MaintainBookPage() {
             value={scheduledAt}
             min={minDateStr}
             onChange={e => { setScheduledAt(e.target.value); clearErr("scheduledAt"); }}
-            className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+            className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary ${
               errors.scheduledAt ? "border-red-400 bg-red-50" : "border-gray-200"
             }`}
           />
@@ -187,13 +187,13 @@ export default function MaintainBookPage() {
               type="button"
               onClick={handleGPS}
               disabled={gpsLoading}
-              className="text-xs text-teal-600 font-medium hover:underline disabled:opacity-50 flex items-center gap-1"
+              className="text-xs text-weeeu-primary font-medium hover:underline disabled:opacity-50 flex items-center gap-1"
             >
               {gpsLoading ? <><span className="animate-spin">⟳</span> กำลังดึง GPS...</> : "📍 ใช้ GPS ปัจจุบัน"}
             </button>
           </div>
           {lat !== null && (
-            <p className="text-xs text-teal-600 bg-teal-50 rounded-lg px-3 py-1.5">
+            <p className="text-xs text-weeeu-primary bg-weeeu-surface rounded-lg px-3 py-1.5">
               📍 GPS: {lat.toFixed(5)}, {lng?.toFixed(5)}
             </p>
           )}
@@ -202,7 +202,7 @@ export default function MaintainBookPage() {
             onChange={e => { setAddress(e.target.value); clearErr("address"); }}
             placeholder="เช่น 123 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพ 10110"
             rows={3}
-            className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none ${
+            className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none ${
               errors.address ? "border-red-400 bg-red-50" : "border-gray-200"
             }`}
           />
@@ -219,7 +219,7 @@ export default function MaintainBookPage() {
             <button
               type="button"
               onClick={() => setRecurringEnabled(v => !v)}
-              className={`relative w-12 h-6 rounded-full transition-colors ${recurringEnabled ? "bg-teal-500" : "bg-gray-200"}`}
+              className={`relative w-12 h-6 rounded-full transition-colors ${recurringEnabled ? "bg-weeeu-primary" : "bg-gray-200"}`}
             >
               <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${recurringEnabled ? "translate-x-6" : ""}`} />
             </button>
@@ -234,17 +234,17 @@ export default function MaintainBookPage() {
                   onClick={() => setRecurringInterval(opt.value)}
                   className={`w-full text-left px-4 py-2.5 rounded-xl border text-sm transition-colors flex items-center justify-between ${
                     recurringInterval === opt.value
-                      ? "bg-teal-50 border-teal-400 text-teal-800 font-medium"
-                      : "border-gray-200 text-gray-600 hover:border-teal-200"
+                      ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
+                      : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
                   }`}
                 >
                   <span>{opt.label}</span>
-                  {recurringInterval === opt.value && <span className="text-teal-600 text-sm">✓</span>}
+                  {recurringInterval === opt.value && <span className="text-weeeu-primary text-sm">✓</span>}
                 </button>
               ))}
-              <div className="bg-teal-50 rounded-xl px-4 py-2.5 flex items-center gap-2">
-                <span className="text-teal-600">🎉</span>
-                <p className="text-xs text-teal-700 font-medium">ส่วนลด 10% ทุกครั้งที่นัดซ้ำ</p>
+              <div className="bg-weeeu-surface rounded-xl px-4 py-2.5 flex items-center gap-2">
+                <span className="text-weeeu-primary">🎉</span>
+                <p className="text-xs text-weeeu-dark font-medium">ส่วนลด 10% ทุกครั้งที่นัดซ้ำ</p>
               </div>
             </div>
           )}
@@ -253,7 +253,7 @@ export default function MaintainBookPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
         >
           {submitting
             ? <><span className="animate-spin">⟳</span> กำลังจอง...</>
@@ -261,7 +261,7 @@ export default function MaintainBookPage() {
         </button>
 
         <p className="text-xs text-center text-gray-400">
-          หลังจอง — ระบบจะหาช่างในพื้นที่และแจ้งผลภายใน 30 นาที
+          หลังจอง — WeeeR ในพื้นที่จะส่งข้อเสนอราคาให้คุณพิจารณาก่อนยืนยัน
         </p>
       </form>
     </div>
