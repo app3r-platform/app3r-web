@@ -110,7 +110,7 @@ export default function InspectPage({ params }: { params: Promise<{ id: string }
             ))}
             {photos.length < MAX_PHOTOS && (
               <button onClick={() => photoRef.current?.click()}
-                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-orange-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-orange-400 transition-colors">
+                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-weeet-primary rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-weeet-primary transition-colors">
                 <span className="text-2xl">📷</span>
                 <span className="text-xs">เพิ่มรูป</span>
               </button>
@@ -157,7 +157,7 @@ export default function InspectPage({ params }: { params: Promise<{ id: string }
             onChange={(e) => setNotes(e.target.value)}
             placeholder="บรรยายสภาพเครื่อง ปัญหาที่พบ..."
             rows={4}
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
           />
         </div>
 
@@ -171,7 +171,7 @@ export default function InspectPage({ params }: { params: Promise<{ id: string }
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? <><span className="animate-spin">⏳</span> กำลังส่ง...</> : "🔍 ส่งรายงานตรวจสอบ"}
         </button>

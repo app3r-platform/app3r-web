@@ -51,17 +51,17 @@ export function LocationPickerSection({ technicianId }: { technicianId: string }
   return (
     <div className="space-y-3">
       <p className="text-xs text-gray-400">ตำแหน่งใช้สำหรับคำนวณระยะทางรับงาน</p>
-      <button type="button" onClick={useCurrentLocation} disabled={locating} className="w-full flex items-center justify-center gap-2 bg-indigo-950/50 border border-indigo-800 hover:border-indigo-600 text-indigo-300 text-sm font-medium py-2.5 rounded-xl transition-colors disabled:opacity-50">
+      <button type="button" onClick={useCurrentLocation} disabled={locating} className="w-full flex items-center justify-center gap-2 bg-weeet-surface border border-weeet-dark/40 hover:border-weeet-primary text-weeet-primary text-sm font-medium py-2.5 rounded-xl transition-colors disabled:opacity-50">
         {locating ? <><span className="animate-spin">⏳</span> กำลังระบุตำแหน่ง...</> : <>📍 ใช้ตำแหน่งปัจจุบัน</>}
       </button>
       <div className="grid grid-cols-2 gap-2">
-        <div><label className="text-xs text-gray-500 mb-1 block">ละติจูด (Lat)</label><input type="number" step="0.000001" value={lat} onChange={(e) => setLat(e.target.value)} placeholder="13.756331" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500" /></div>
-        <div><label className="text-xs text-gray-500 mb-1 block">ลองจิจูด (Lng)</label><input type="number" step="0.000001" value={lng} onChange={(e) => setLng(e.target.value)} placeholder="100.501765" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500" /></div>
+        <div><label className="text-xs text-gray-500 mb-1 block">ละติจูด (Lat)</label><input type="number" step="0.000001" value={lat} onChange={(e) => setLat(e.target.value)} placeholder="13.756331" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-weeet-primary" /></div>
+        <div><label className="text-xs text-gray-500 mb-1 block">ลองจิจูด (Lng)</label><input type="number" step="0.000001" value={lng} onChange={(e) => setLng(e.target.value)} placeholder="100.501765" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-weeet-primary" /></div>
       </div>
-      <div><label className="text-xs text-gray-500 mb-1 block">รัศมีให้บริการ (กม.)</label><div className="flex items-center gap-3"><input type="range" min={5} max={100} step={5} value={radius} onChange={(e) => setRadius(e.target.value)} className="flex-1 accent-orange-500" /><span className="text-sm text-white w-16 text-right">{radius} กม.</span></div></div>
+      <div><label className="text-xs text-gray-500 mb-1 block">รัศมีให้บริการ (กม.)</label><div className="flex items-center gap-3"><input type="range" min={5} max={100} step={5} value={radius} onChange={(e) => setRadius(e.target.value)} className="flex-1 accent-[#1696F9]" /><span className="text-sm text-white w-16 text-right">{radius} กม.</span></div></div>
       {error && <p className="text-xs text-red-400 bg-red-950/40 border border-red-800 rounded-lg px-3 py-2">{error}</p>}
       {saved && <p className="text-xs text-green-400 bg-green-950/30 border border-green-800 rounded-lg px-3 py-2">✅ บันทึกตำแหน่งสำเร็จ</p>}
-      <button type="button" onClick={handleSave} disabled={saving || !lat || !lng} className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+      <button type="button" onClick={handleSave} disabled={saving || !lat || !lng} className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
         {saving ? "กำลังบันทึก..." : "💾 บันทึกตำแหน่ง"}
       </button>
     </div>

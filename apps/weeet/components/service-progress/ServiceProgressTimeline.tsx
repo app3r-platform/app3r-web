@@ -33,8 +33,8 @@ export function ServiceProgressTimeline({ job }: { job: ServiceProgress }) {
 
       {/* Current sub-stage label */}
       {job.currentSubStage && (
-        <div className="bg-orange-950/40 border border-orange-800/60 rounded-xl px-4 py-2">
-          <p className="text-xs text-orange-400 font-medium">
+        <div className="bg-weeet-primary/10 border border-weeet-dark/30 rounded-xl px-4 py-2">
+          <p className="text-xs text-weeet-primary font-medium">
             ขั้นตอนปัจจุบัน: {SUB_STAGE_LABELS[job.currentSubStage] ?? job.currentSubStage}
           </p>
         </div>

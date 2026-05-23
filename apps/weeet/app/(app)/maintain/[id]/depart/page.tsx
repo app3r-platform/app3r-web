@@ -49,7 +49,7 @@ export default function MaintainDepartPage({ params }: { params: Promise<{ id: s
       </div>
 
       <div className="px-4 pt-6 space-y-5">
-        <div className="bg-teal-950/30 border border-teal-800/50 rounded-xl p-3 text-xs text-teal-300">
+        <div className="bg-weeet-primary/10 border border-weeet-dark/40 rounded-xl p-3 text-xs text-weeet-primary">
           บันทึกพิกัดจุดออกเดินทาง ก่อนไปหาลูกค้าเพื่อบำรุงรักษา
         </div>
 
@@ -96,7 +96,7 @@ export default function MaintainDepartPage({ params }: { params: Promise<{ id: s
         <button
           onClick={handleDepart}
           disabled={!location || submitting}
-          className="w-full bg-teal-600 hover:bg-teal-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><span className="animate-spin">⏳</span> กำลังบันทึก...</>

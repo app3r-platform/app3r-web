@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
@@ -56,7 +56,7 @@ function statusLabel(s: RepairJobStatus): string {
 function statusColor(s: RepairJobStatus): string {
   if (DONE_STATUSES.includes(s)) {
     if (s === "cancelled") return "bg-red-900/60 text-red-300";
-    if (s === "converted_scrap") return "bg-purple-900/60 text-purple-300";
+    if (s === "converted_scrap") return "bg-gray-700/40 text-gray-300";
     return "bg-green-900/60 text-green-300";
   }
   if (AWAITING_STATUSES.includes(s)) return "bg-amber-900/60 text-amber-300";
@@ -164,7 +164,7 @@ export default function JobsPage() {
           placeholder="ค้นหา ชื่อลูกค้า / เลขงาน / เครื่องใช้ไฟฟ้า"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
         />
       </div>
 
@@ -175,7 +175,7 @@ export default function JobsPage() {
             onClick={() => setActiveTab(tab.key)}
             className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               activeTab === tab.key
-                ? "bg-orange-600 text-white"
+                ? "bg-weeet-primary text-white"
                 : "text-gray-400 hover:text-gray-200"
             }`}
           >
@@ -210,7 +210,7 @@ export default function JobsPage() {
               <button
                 key={job.id}
                 onClick={() => router.push(`/jobs/${job.id}`)}
-                className="w-full bg-gray-800 border border-gray-700 hover:border-orange-500/50 rounded-xl p-4 text-left space-y-2 transition-colors"
+                className="w-full bg-gray-800 border border-gray-700 hover:border-weeet-primary/50 rounded-xl p-4 text-left space-y-2 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -224,13 +224,13 @@ export default function JobsPage() {
                     </p>
                     {/* Sub-4: แสดง point_amount ถ้ามี */}
                     {job.point_amount != null && (
-                      <p className="text-orange-400 text-xs mt-0.5">
+                      <p className="text-weeet-primary text-xs mt-0.5">
                         💰 {job.point_amount.toLocaleString()} pts
                       </p>
                     )}
                     {/* Source badge — D64 */}
                     {job.source?.type === "purchased_scrap" ? (
-                      <span className="inline-block mt-1 bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+                      <span className="inline-block mt-1 bg-weeet-surface/40 border border-weeet-dark text-weeet-primary text-xs px-2 py-0.5 rounded">
                         ซื้อจากซาก{job.source.refId ? `: ${job.source.refId}` : ""}
                       </span>
                     ) : (
@@ -257,7 +257,7 @@ export default function JobsPage() {
                   {job.customer_address ?? ""}
                 </p>
                 {action && (
-                  <p className="text-xs text-orange-400 font-medium">{action}</p>
+                  <p className="text-xs text-weeet-primary font-medium">{action}</p>
                 )}
               </button>
             );

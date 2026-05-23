@@ -50,9 +50,9 @@ export default function DeliveryEnRoutePage({
       </div>
 
       {/* Info */}
-      <div className="bg-teal-950/50 border border-teal-800/60 rounded-xl p-4 space-y-1">
-        <p className="text-teal-300 font-semibold text-sm">🚗 ออกส่งคืนเครื่อง</p>
-        <p className="text-teal-200 text-xs">
+      <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl p-4 space-y-1">
+        <p className="text-weeet-primary font-semibold text-sm">🚗 ออกส่งคืนเครื่อง</p>
+        <p className="text-weeet-text text-xs">
           กดปุ่มด้านล่างเพื่อบันทึก GPS และเปลี่ยนสถานะเป็น{" "}
           <span className="font-semibold">กำลังส่งคืน</span>
         </p>
@@ -74,7 +74,7 @@ export default function DeliveryEnRoutePage({
       <button
         onClick={handleDepart}
         disabled={loading}
-        className="w-full bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🚗 ออกเดินทางส่งคืนเครื่อง"}
       </button>

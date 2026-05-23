@@ -23,8 +23,8 @@ const STATUS_COLORS: Record<PartsOrderStatus, string> = {
   fulfilled: "bg-yellow-900/40 border-yellow-700 text-yellow-300",
   closed:    "bg-green-900/40 border-green-700 text-green-300",
   disputed:  "bg-red-900/40 border-red-700 text-red-300",
-  resolved:  "bg-purple-900/40 border-purple-700 text-purple-300",
-  refunded:  "bg-teal-900/40 border-teal-700 text-teal-300",
+  resolved:  "bg-blue-900/40 border-blue-700 text-blue-300",
+  refunded:  "bg-weeet-surface/60 border-weeet-primary/50 text-weeet-primary",
   cancelled: "bg-gray-900/40 border-gray-700 text-gray-500",
 };
 
@@ -179,7 +179,7 @@ export default function PartsOrderDetailPage({
             <p className="text-gray-400 text-sm">ไม่สามารถโหลดข้อมูลออเดอร์ได้</p>
             <button
               onClick={load}
-              className="text-orange-400 text-xs underline mt-2"
+              className="text-weeet-primary text-xs underline mt-2"
             >
               ลองใหม่
             </button>
@@ -207,13 +207,13 @@ export default function PartsOrderDetailPage({
                 </div>
                 <div className="bg-gray-900 rounded-xl p-3">
                   <p className="text-xs text-gray-500 mb-1">ราคา/หน่วย</p>
-                  <p className="text-orange-400 font-bold">
+                  <p className="text-weeet-primary font-bold">
                     ฿{parseFloat(order.unitPriceThb).toLocaleString()}
                   </p>
                 </div>
                 <div className="bg-gray-900 rounded-xl p-3 col-span-2">
                   <p className="text-xs text-gray-500 mb-1">ยอดรวม</p>
-                  <p className="text-orange-400 font-bold text-xl">
+                  <p className="text-weeet-primary font-bold text-xl">
                     ฿{parseFloat(order.totalThb).toLocaleString()}
                   </p>
                 </div>
@@ -222,7 +222,7 @@ export default function PartsOrderDetailPage({
               {order.serviceId && (
                 <div className="border-t border-gray-700 pt-3">
                   <p className="text-xs text-gray-500 mb-0.5">เชื่อมกับงาน</p>
-                  <p className="text-sm text-blue-300 font-mono">{order.serviceId}</p>
+                  <p className="text-sm text-weeet-primary font-mono">{order.serviceId}</p>
                 </div>
               )}
 
@@ -313,7 +313,7 @@ export default function PartsOrderDetailPage({
                         onChange={(e) => setRateComment(e.target.value)}
                         rows={2}
                         placeholder="รีวิวสั้นๆ..."
-                        className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 resize-none"
+                        className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-weeet-primary resize-none"
                       />
                     </div>
 
@@ -377,6 +377,11 @@ export default function PartsOrderDetailPage({
                       </p>
                     </div>
 
+                    {/* Blueprint §② dispute model: buyer แจ้ง → Admin ตัดสิน */}
+                    <p className="text-xs text-gray-500 bg-gray-900/60 border border-gray-700 rounded-lg px-3 py-2">
+                      💡 หลังส่ง Admin จะตรวจสอบและติดต่อกลับ — ไม่ใช่การแก้ไขอัตโนมัติ
+                    </p>
+
                     {disputeError && (
                       <p className="text-xs text-red-400 bg-red-950/30 border border-red-800/50 rounded-lg px-3 py-2">
                         ⚠️ {disputeError}
@@ -430,7 +435,7 @@ export default function PartsOrderDetailPage({
                 {order.dispute.resolution && (
                   <div className="mt-2 pt-2 border-t border-red-900/40">
                     <p className="text-xs text-gray-500 mb-0.5">ผลการแก้ไข</p>
-                    <p className="text-sm text-purple-300">{order.dispute.resolution}</p>
+                    <p className="text-sm text-blue-300">{order.dispute.resolution}</p>
                   </div>
                 )}
               </div>
