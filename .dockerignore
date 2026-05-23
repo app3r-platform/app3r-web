@@ -1,0 +1,23 @@
+# pnpm / node dependencies — ไม่ copy จาก host (pnpm install ใน container จัดการเอง)
+node_modules/
+apps/*/node_modules/
+packages/*/node_modules/
+
+# Next.js build artifacts
+**/.next/
+**/.turbo/
+**/dist/
+**/build/
+**/coverage/
+
+# Dev/test files
+**/test-results/
+**/playwright-report/
+e2e/
+
+# Claude/system files
+**/.claude/
+**/CLAUDE.md
+
+# Logs
+**/*.log
