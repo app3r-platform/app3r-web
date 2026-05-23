@@ -129,7 +129,7 @@ export default function MaintainChecklistPage({
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">M3 — ตรวจสภาพ + ล้างเครื่อง</h1>
+          <h1 className="font-bold text-white">M4 — ล้างเครื่อง</h1>
           <p className="text-xs text-gray-400">ทำครบ checklist + ถ่ายรูประหว่างล้าง</p>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function MaintainChecklistPage({
               onClick={() => toggleItem(i)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-colors ${
                 checked[i]
-                  ? "bg-weeet-surface/60 border-weeet-primary/50 text-weeet-text"
+                  ? "bg-weeet-primary/10 border-weeet-dark/40 text-weeet-primary"
                   : "bg-gray-800 border-gray-700 text-gray-300"
               }`}
             >
@@ -213,7 +213,7 @@ export default function MaintainChecklistPage({
             <h2 className="text-sm font-semibold text-white">🔩 อะไหล่/น้ำยาที่ใช้</h2>
             <button
               onClick={() => setShowPartModal(true)}
-              className="text-xs text-weeet-primary hover:text-weeet-primary border border-weeet-dark/40 rounded-lg px-2 py-1"
+              className="text-xs text-weeet-primary hover:text-weeet-dark border border-weeet-dark/50 rounded-lg px-2 py-1"
             >
               + เลือกอะไหล่
             </button>

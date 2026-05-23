@@ -66,7 +66,7 @@ export default function MaintainCompletePage({ params }: { params: Promise<{ id:
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">M4 — เสร็จงาน</h1>
+          <h1 className="font-bold text-white">M5 — เสร็จงาน</h1>
           <p className="text-xs text-gray-400">ถ่ายรูปหลังล้าง + รับลายเซ็นลูกค้า</p>
         </div>
       </div>

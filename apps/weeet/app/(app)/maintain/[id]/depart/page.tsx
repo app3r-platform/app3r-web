@@ -49,7 +49,7 @@ export default function MaintainDepartPage({ params }: { params: Promise<{ id: s
       </div>
 
       <div className="px-4 pt-6 space-y-5">
-        <div className="bg-weeet-surface border border-weeet-dark/30 rounded-xl p-3 text-xs text-weeet-primary">
+        <div className="bg-weeet-primary/10 border border-weeet-dark/40 rounded-xl p-3 text-xs text-weeet-primary">
           บันทึกพิกัดจุดออกเดินทาง ก่อนไปหาลูกค้าเพื่อบำรุงรักษา
         </div>
 

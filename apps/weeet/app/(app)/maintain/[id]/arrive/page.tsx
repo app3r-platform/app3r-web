@@ -48,7 +48,7 @@ export default function MaintainArrivePage({ params }: { params: Promise<{ id: s
     photos.forEach((p) => fd.append("arrival_photos", p.file));
     try {
       await maintainApi.arrive(id, fd);
-      router.replace(`/maintain/${id}/checklist`);
+      router.replace(`/maintain/${id}/inspect`);
     } catch (e) {
       setError((e as Error).message);
       setSubmitting(false);
@@ -68,7 +68,7 @@ export default function MaintainArrivePage({ params }: { params: Promise<{ id: s
       </div>
 
       <div className="px-4 pt-4 space-y-4">
-        <div className="bg-weeet-surface border border-weeet-dark/30 rounded-xl p-3 text-xs text-weeet-primary space-y-1">
+        <div className="bg-weeet-primary/10 border border-weeet-dark/40 rounded-xl p-3 text-xs text-weeet-primary space-y-1">
           <p className="font-semibold">📸 ต้องถ่ายอย่างน้อย 2 รูป:</p>
           <p>1. รูปเครื่องก่อนล้าง (สภาพเริ่มต้น)</p>
           <p>2. รูปร่วมกับลูกค้าหรือสถานที่</p>
