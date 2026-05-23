@@ -12,6 +12,51 @@ import {
   RECURRING_LABEL,
 } from "../_lib/types";
 
+// ── M2: Offer countdown helper ─────────────────────────────────────────────────
+// deadline = offerDeadlineAt ?? createdAt + 24h
+function getOfferDeadline(job: MaintainJob): Date {
+  if (job.offerDeadlineAt) return new Date(job.offerDeadlineAt);
+  const d = new Date(job.createdAt);
+  d.setHours(d.getHours() + 24);
+  return d;
+}
+
+function useCountdown(deadline: Date) {
+  const [msLeft, setMsLeft] = useState(() => deadline.getTime() - Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setMsLeft(deadline.getTime() - Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [deadline]);
+  return msLeft;
+}
+
+function OfferCountdown({ job }: { job: MaintainJob }) {
+  const deadline = getOfferDeadline(job);
+  const msLeft = useCountdown(deadline);
+
+  if (msLeft <= 0) {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">
+        ⏰ หมดอายุแล้ว — งานนี้จะหลุดจาก queue
+      </span>
+    );
+  }
+
+  const totalSec = Math.floor(msLeft / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const isUrgent = msLeft < 3 * 60 * 60 * 1000; // น้อยกว่า 3 ชม. = urgent
+
+  return (
+    <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium ${
+      isUrgent ? "bg-red-50 text-red-600" : "bg-amber-50 text-amber-700"
+    }`}>
+      ⏳ เหลือ {h}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
+    </span>
+  );
+}
+
 export default function MaintainQueuePage() {
   const [jobs, setJobs] = useState<MaintainJob[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +69,7 @@ export default function MaintainQueuePage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // M2: กรองเฉพาะ pending (offer_expired หลุดออกจาก queue อัตโนมัติ)
   const pendingJobs = jobs.filter(j => j.status === "pending");
 
   return (
@@ -55,6 +101,12 @@ export default function MaintainQueuePage() {
           <p className="text-xl font-bold text-cyan-700">{jobs.filter(j => j.applianceType === "WashingMachine").length}</p>
           <p className="text-xs text-gray-500 mt-0.5">เครื่องซักผ้า</p>
         </div>
+      </div>
+
+      {/* M2: Expiry notice */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2">
+        <span className="text-sm">⏰</span>
+        <p className="text-xs text-amber-700">งานที่หมดเวลายื่นข้อเสนอจะหลุดออก queue อัตโนมัติ — ยื่นก่อนนับถอยหลังหมด</p>
       </div>
 
       {loading && <div className="flex items-center justify-center h-40 text-gray-400">กำลังโหลด…</div>}
@@ -92,6 +144,12 @@ export default function MaintainQueuePage() {
                 <p className="text-xs text-gray-400 mt-1">
                   🗓 {new Date(job.scheduledAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                 </p>
+
+                {/* M2: Countdown */}
+                <div className="mt-1.5">
+                  <OfferCountdown job={job} />
+                </div>
+
                 {job.recurring?.enabled && (
                   <div className="mt-1.5 inline-flex items-center gap-1 bg-purple-50 rounded-lg px-2 py-0.5">
                     <span className="text-xs">🔁</span>

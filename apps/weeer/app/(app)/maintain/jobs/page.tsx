@@ -16,7 +16,10 @@ const FILTER_TABS: { label: string; value: MaintainStatus | "all" }[] = [
   { label: "รอตอบรับ",     value: "awaiting_offer" },
   { label: "มอบหมายแล้ว", value: "assigned" },
   { label: "กำลังล้าง",   value: "in_progress" },
+  { label: "ลูกค้าไม่อยู่", value: "no_show" },
+  { label: "ลูกค้ายุติ",   value: "terminated_by_customer" },
   { label: "เสร็จแล้ว",   value: "completed" },
+  { label: "ถอนงาน",      value: "withdrawn" },
   { label: "ยกเลิก",      value: "cancelled" },
   { label: "ปิด→ซ่อม",    value: "closed_for_repair" },
 ];

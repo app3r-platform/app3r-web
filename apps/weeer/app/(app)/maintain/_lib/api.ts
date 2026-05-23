@@ -1,4 +1,4 @@
-import type { MaintainJob, MaintainOfferPayload } from "./types";
+import type { MaintainJob, MaintainOfferPayload, WithdrawReason } from "./types";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -60,5 +60,26 @@ export const maintainApi = {
     apiFetch<MaintainJob>(`/maintain/jobs/${id}/offer/`, {
       method: "POST",
       body: JSON.stringify(payload),
+    }),
+
+  // POST /maintain/jobs/{id}/withdraw/  body: { reason, evidence? }  (M6)
+  withdrawJob: (id: string, reason: WithdrawReason, evidence?: string) =>
+    apiFetch<MaintainJob>(`/maintain/jobs/${id}/withdraw/`, {
+      method: "POST",
+      body: JSON.stringify({ reason, ...(evidence ? { evidence } : {}) }),
+    }),
+
+  // POST /maintain/jobs/{id}/no-show/  (M7 — confirm no-show + trigger settle)
+  confirmNoShow: (id: string) =>
+    apiFetch<MaintainJob>(`/maintain/jobs/${id}/no-show/`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    }),
+
+  // POST /maintain/jobs/{id}/termination-response/  body: { decision }  (M9)
+  respondToTermination: (id: string, decision: "continue" | "terminate") =>
+    apiFetch<MaintainJob>(`/maintain/jobs/${id}/termination-response/`, {
+      method: "POST",
+      body: JSON.stringify({ decision }),
     }),
 };

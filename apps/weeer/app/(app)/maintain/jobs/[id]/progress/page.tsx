@@ -141,7 +141,7 @@ export default function MaintainJobProgressPage({
           stageOrder={MAINTAIN_STAGE_ORDER}
           currentStage={progress.current_stage}
           entries={progress.entries}
-          terminalStages={["cancelled", "closed_for_repair"]}
+          terminalStages={["cancelled", "closed_for_repair", "offer_expired", "withdrawn"]}
         />
       </div>
     </div>
