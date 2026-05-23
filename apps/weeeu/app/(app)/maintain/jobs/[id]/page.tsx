@@ -2,31 +2,37 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 import type { MaintainJob } from "@/lib/types";
 
 const STATUS_LABEL: Record<MaintainJob["status"], string> = {
-  awaiting_offer: "รอข้อเสนอ",
-  pending: "รอช่าง",
-  assigned: "มอบหมายแล้ว",
-  departed: "ช่างออกเดินทาง",
-  arrived: "ช่างถึงแล้ว",
-  in_progress: "กำลังล้าง",
-  completed: "เสร็จแล้ว",
-  cancelled: "ยกเลิก",
+  awaiting_offer:  "รอข้อเสนอ",
+  offer_expired:   "หมดอายุ — ไม่มีร้านรับ",
+  pending:         "รอช่าง",
+  assigned:        "มอบหมายแล้ว",
+  departed:        "ช่างออกเดินทาง",
+  arrived:         "ช่างถึงแล้ว",
+  in_progress:     "กำลังล้าง",
+  terminated:      "ยุติกลางคัน",
+  completed:       "เสร็จแล้ว",
+  cancelled:       "ยกเลิก",
+  weeer_withdrawn: "WeeeR ถอนงาน",
   closed_for_repair: "ปิด→แจ้งซ่อม",
 };
 
 const STATUS_COLOR: Record<MaintainJob["status"], string> = {
-  awaiting_offer: "bg-blue-100 text-blue-700",
-  pending: "bg-yellow-100 text-yellow-700",
-  assigned: "bg-weeeu-surface text-weeeu-primary",
-  departed: "bg-amber-100 text-amber-700",
-  arrived: "bg-amber-100 text-amber-700",
-  in_progress: "bg-weeeu-surface text-weeeu-dark",
-  completed: "bg-green-100 text-green-700",
-  cancelled: "bg-gray-100 text-gray-500",
+  awaiting_offer:  "bg-blue-100 text-blue-700",
+  offer_expired:   "bg-red-100 text-red-600",
+  pending:         "bg-yellow-100 text-yellow-700",
+  assigned:        "bg-weeeu-surface text-weeeu-primary",
+  departed:        "bg-amber-100 text-amber-700",
+  arrived:         "bg-amber-100 text-amber-700",
+  in_progress:     "bg-weeeu-surface text-weeeu-dark",
+  terminated:      "bg-gray-100 text-gray-600",
+  completed:       "bg-green-100 text-green-700",
+  cancelled:       "bg-gray-100 text-gray-500",
+  weeer_withdrawn: "bg-orange-100 text-orange-700",
   closed_for_repair: "bg-orange-100 text-orange-700",
 };
 
@@ -59,12 +65,31 @@ function formatDate(iso: string | null) {
   });
 }
 
+// M9 — เหตุผลยุติงาน
+const TERMINATE_REASONS = [
+  { value: "changed_mind",   label: "เปลี่ยนใจ ไม่ต้องการล้างแล้ว" },
+  { value: "quality_issue",  label: "ไม่พอใจคุณภาพการล้างระหว่างงาน" },
+  { value: "emergency",      label: "เหตุฉุกเฉิน ต้องหยุดทันที" },
+  { value: "other",          label: "อื่นๆ" },
+];
+
 export default function MaintainJobDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [job, setJob] = useState<MaintainJob | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [cancelling, setCancelling] = useState(false);
+
+  // M9 — ยุติงาน modal state
+  const [showTerminateModal, setShowTerminateModal] = useState(false);
+  const [terminateReason, setTerminateReason] = useState("changed_mind");
+  const [terminateNote, setTerminateNote] = useState("");
+  const [terminateSubmitting, setTerminateSubmitting] = useState(false);
+  const [terminateError, setTerminateError] = useState("");
+
+  // M6 — WeeeR ถอนงาน action state
+  const [withdrawalSubmitting, setWithdrawalSubmitting] = useState<"reroute" | "dispute" | null>(null);
 
   useEffect(() => {
     apiFetch(`/api/v1/maintain/jobs/${id}/`)
@@ -85,6 +110,47 @@ export default function MaintainJobDetailPage() {
       setError("ไม่สามารถยกเลิกได้ กรุณาลองใหม่");
     } finally {
       setCancelling(false);
+    }
+  };
+
+  // M9 — ยุติงานระหว่าง in_progress
+  const handleTerminate = async () => {
+    setTerminateSubmitting(true);
+    setTerminateError("");
+    try {
+      // Production: POST /api/v1/maintain/jobs/${id}/terminate
+      const res = await apiFetch(`/api/v1/maintain/jobs/${id}/terminate/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: terminateReason, note: terminateNote.trim() }),
+      });
+      if (!res.ok) throw new Error();
+      setJob(j => j ? { ...j, status: "terminated" } : j);
+      setShowTerminateModal(false);
+    } catch {
+      setTerminateError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setTerminateSubmitting(false);
+    }
+  };
+
+  // M6 — WeeeR ถอน: WeeeU ตัดสินใจ reroute หรือ dispute
+  const handleWithdrawal = async (action: "reroute" | "dispute") => {
+    setWithdrawalSubmitting(action);
+    try {
+      if (action === "reroute") {
+        // Production: POST /api/v1/maintain/jobs/${id}/accept-withdrawal → status = awaiting_offer (หาร้านใหม่ฟรี)
+        await apiFetch(`/api/v1/maintain/jobs/${id}/accept-withdrawal/`, { method: "POST" });
+        setJob(j => j ? { ...j, status: "awaiting_offer" } : j);
+      } else {
+        // Production: POST /api/v1/maintain/jobs/${id}/dispute-withdrawal → status = pending_admin
+        await apiFetch(`/api/v1/maintain/jobs/${id}/dispute-withdrawal/`, { method: "POST" });
+        setError("ส่งเรื่องโต้แย้งถึง Admin แล้ว — Admin จะติดต่อกลับภายใน 24 ชม.");
+      }
+    } catch {
+      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setWithdrawalSubmitting(null);
     }
   };
 
@@ -159,6 +225,63 @@ export default function MaintainJobDetailPage() {
         </div>
       )}
 
+      {/* Action banner — M2: offer_expired → จองใหม่ */}
+      {job.status === "offer_expired" && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-semibold text-red-800">⏰ หมดเวลา — ไม่มี WeeeR รับงานนี้</p>
+            <p className="text-xs text-red-600 mt-1">
+              ไม่มีร้านในพื้นที่ส่งข้อเสนอภายในเวลาที่กำหนด งานนี้จึงปิดโดยอัตโนมัติ
+            </p>
+          </div>
+          <Link
+            href="/maintain/book"
+            className="block w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm text-center transition-colors"
+          >
+            + จองใหม่อีกครั้ง
+          </Link>
+        </div>
+      )}
+
+      {/* Action banner — M6: weeer_withdrawn → WeeeU เลือก reroute / dispute */}
+      {job.status === "weeer_withdrawn" && (
+        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-semibold text-orange-800">⚠️ WeeeR ขอถอนงานหลังยืนยัน</p>
+            <p className="text-xs text-orange-600 mt-1">
+              ร้านแจ้งว่าไม่สามารถรับงานนี้ได้ — กรุณาเลือกการดำเนินการ
+            </p>
+          </div>
+          <div className="bg-white border border-orange-100 rounded-xl px-3 py-2">
+            <p className="text-xs text-gray-500">
+              📋 นโยบาย: หากร้านผิด → ระบบ reroute (จัดสรรร้านใหม่) ฟรี · หากโต้แย้ง → Admin วินิจฉัย
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={withdrawalSubmitting !== null}
+              onClick={() => handleWithdrawal("reroute")}
+              className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-1"
+            >
+              {withdrawalSubmitting === "reroute"
+                ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</>
+                : "✅ ยอมรับ — หาร้านใหม่ฟรี"}
+            </button>
+            <button
+              type="button"
+              disabled={withdrawalSubmitting !== null}
+              onClick={() => handleWithdrawal("dispute")}
+              className="flex-1 border border-orange-300 text-orange-700 hover:bg-orange-50 disabled:opacity-50 font-medium py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-1"
+            >
+              {withdrawalSubmitting === "dispute"
+                ? <><span className="animate-spin">⟳</span> กำลังส่ง...</>
+                : "⚖️ โต้แย้ง → Admin"}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Action banner — rate */}
       {job.status === "completed" && (
         <Link
@@ -184,8 +307,18 @@ export default function MaintainJobDetailPage() {
         </div>
       </div>
 
+      {/* M9 — terminated banner */}
+      {job.status === "terminated" && (
+        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-1">
+          <p className="text-sm font-semibold text-gray-700">🛑 งานถูกยุติกลางคัน</p>
+          <p className="text-xs text-gray-500">
+            WeeeR ได้รับแจ้งและกำลังประสานงานการ settle ค่าใช้จ่ายตามข้อเสนอที่ตกลงไว้
+          </p>
+        </div>
+      )}
+
       {/* Status timeline */}
-      {job.status !== "cancelled" && (
+      {(job.status !== "cancelled" && job.status !== "offer_expired" && job.status !== "terminated") && (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ขั้นตอน</p>
           <div className="space-y-3">
@@ -265,6 +398,99 @@ export default function MaintainJobDetailPage() {
         >
           {cancelling ? <><span className="animate-spin">⟳</span> กำลังยกเลิก...</> : "❌ ยกเลิกงานนี้"}
         </button>
+      )}
+
+      {/* M9 — ยุติงาน button (in_progress เท่านั้น) */}
+      {job.status === "in_progress" && (
+        <button
+          type="button"
+          onClick={() => setShowTerminateModal(true)}
+          className="w-full border border-red-300 text-red-600 hover:bg-red-50 font-medium py-3 rounded-2xl transition-colors text-sm"
+        >
+          🛑 ยุติงานกลางคัน
+        </button>
+      )}
+
+      {/* M9 — Terminate modal */}
+      {showTerminateModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-6">
+          <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+              <p className="text-base font-bold text-gray-900">🛑 ยุติงานกลางคัน</p>
+              <button
+                type="button"
+                onClick={() => { setShowTerminateModal(false); setTerminateError(""); }}
+                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                <p className="text-xs text-amber-700">
+                  ⚠️ การยุติงานกลางคันจะแจ้ง WeeeR ให้หยุดงานทันที — ค่าใช้จ่ายที่เกิดขึ้นแล้วจะคิดตาม offer ที่ตกลงไว้
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-gray-700">เหตุผลยุติงาน <span className="text-red-500">*</span></p>
+                {TERMINATE_REASONS.map(r => (
+                  <label key={r.value} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                    terminateReason === r.value
+                      ? "bg-weeeu-surface border-weeeu-primary"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="terminateReason"
+                      value={r.value}
+                      checked={terminateReason === r.value}
+                      onChange={() => setTerminateReason(r.value)}
+                      className="accent-weeeu-primary"
+                    />
+                    <span className={`text-sm ${terminateReason === r.value ? "text-weeeu-text font-medium" : "text-gray-600"}`}>
+                      {r.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+
+              {terminateReason === "other" && (
+                <textarea
+                  value={terminateNote}
+                  onChange={e => setTerminateNote(e.target.value)}
+                  placeholder="ระบุเหตุผลเพิ่มเติม..."
+                  rows={3}
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
+                />
+              )}
+
+              {terminateError && (
+                <p className="text-xs text-red-600">{terminateError}</p>
+              )}
+
+              <div className="flex gap-3 pt-1">
+                <button
+                  type="button"
+                  onClick={() => { setShowTerminateModal(false); setTerminateError(""); }}
+                  className="flex-1 border border-gray-200 text-gray-600 font-medium py-3 rounded-2xl text-sm"
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  type="button"
+                  disabled={terminateSubmitting}
+                  onClick={handleTerminate}
+                  className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white font-semibold py-3 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  {terminateSubmitting
+                    ? <><span className="animate-spin">⟳</span> กำลังยุติ...</>
+                    : "ยืนยันยุติงาน"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

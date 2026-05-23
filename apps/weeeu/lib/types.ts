@@ -100,17 +100,23 @@ export interface MaintainJob {
   technicianId?: string;
   /**
    * awaiting_offer  — จองแล้ว รอ WeeeR ส่งข้อเสนอ (Blueprint 2.1)
+   * offer_expired   — M2: หมดเวลายื่นข้อเสนอ ไม่มีร้านรับ → WeeeU จองใหม่ได้
+   * weeer_withdrawn — M6: WeeeR ถอนงานหลังยืนยัน → รอ WeeeU ตัดสินใจ (reroute/dispute)
+   * terminated      — M9: WeeeU ยุติงานระหว่าง in_progress → WeeeR รับแจ้งประสาน
    * closed_for_repair — WeeeR พบความเสียหาย → ปิด Maintain, แจ้ง WeeeU ซ่อม (D-M-2)
    */
   status:
     | "awaiting_offer"
+    | "offer_expired"
     | "pending"
     | "assigned"
     | "departed"
     | "arrived"
     | "in_progress"
+    | "terminated"
     | "completed"
     | "cancelled"
+    | "weeer_withdrawn"
     | "closed_for_repair";
   applianceType: "AC" | "WashingMachine";
   cleaningType: "general" | "deep" | "sanitize";
