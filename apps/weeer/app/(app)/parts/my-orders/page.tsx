@@ -27,6 +27,7 @@ export default function MyOrdersPage() {
   const [orders, setOrders] = useState<PartOrder[]>([]);
   const [sideTab, setSideTab] = useState<SideTab>("buyer");
   const [stageFilter, setStageFilter] = useState<StageFilter>("all");
+  const [confirmOrder, setConfirmOrder] = useState<PartOrder | null>(null);
   const [receiveOrder, setReceiveOrder] = useState<PartOrder | null>(null);
   const [shipOrder, setShipOrder] = useState<PartOrder | null>(null);
   const [cancelOrder, setCancelOrder] = useState<PartOrder | null>(null);
@@ -47,7 +48,7 @@ export default function MyOrdersPage() {
   }, []);
 
   usePartsSync((e) => {
-    if (["refresh_parts", "shop_switched", "order_placed", "order_shipped", "order_received", "order_cancelled"].includes(e.type)) reload();
+    if (["refresh_parts", "shop_switched", "order_placed", "order_confirmed", "order_shipped", "order_received", "order_cancelled"].includes(e.type)) reload();
   });
 
   const shop = SHOPS_MOCK.find((s) => s.id === shopId);
@@ -61,9 +62,20 @@ export default function MyOrdersPage() {
   // นับแต่ละ stage
   const countByStage = (stage: PartOrder["stage"]) => sideOrders.filter((o) => o.stage === stage).length;
 
-  const handleAction = (action: "ship" | "receive" | "cancel", orderId: string) => {
+  // P5: ผู้ขายรับออเดอร์ ordered→confirmed
+  const handleConfirm = () => {
+    if (!confirmOrder) return;
+    const updated: PartOrder = { ...confirmOrder, stage: "confirmed" };
+    upsertOrder(updated);
+    partsSync.emit({ type: "order_confirmed", orderId: confirmOrder.id });
+    setConfirmOrder(null);
+    reload();
+  };
+
+  const handleAction = (action: "confirm" | "ship" | "receive" | "cancel", orderId: string) => {
     const order = orders.find((o) => o.id === orderId);
     if (!order) return;
+    if (action === "confirm") setConfirmOrder(order);
     if (action === "receive") setReceiveOrder(order);
     if (action === "ship")    setShipOrder(order);
     if (action === "cancel")  setCancelOrder(order);
@@ -104,6 +116,7 @@ export default function MyOrdersPage() {
   const STAGE_TABS: { value: StageFilter; label: string }[] = [
     { value: "all",       label: `ทั้งหมด (${sideOrders.length})` },
     { value: "ordered",   label: `${ORDER_STAGE_LABEL.ordered} (${countByStage("ordered")})` },
+    { value: "confirmed", label: `${ORDER_STAGE_LABEL.confirmed} (${countByStage("confirmed")})` },
     { value: "shipped",   label: `${ORDER_STAGE_LABEL.shipped} (${countByStage("shipped")})` },
     { value: "received",  label: `${ORDER_STAGE_LABEL.received} (${countByStage("received")})` },
     { value: "cancelled", label: `${ORDER_STAGE_LABEL.cancelled} (${countByStage("cancelled")})` },
@@ -163,6 +176,26 @@ export default function MyOrdersPage() {
       )}
 
       {/* Modals */}
+      {/* P5 Confirm modal */}
+      {confirmOrder && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
+            <h2 className="font-bold text-gray-900">☑️ รับออเดอร์ (P5)</h2>
+            <p className="text-sm text-gray-600">
+              ยืนยันรับออเดอร์ <span className="font-semibold">{confirmOrder.partName}</span>{" "}
+              จาก {confirmOrder.buyerShopName} — {confirmOrder.quantity} ชิ้น · {confirmOrder.totalPoints.toLocaleString()} pts
+            </p>
+            <div className="flex gap-2">
+              <button onClick={handleConfirm} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                ✅ ยืนยันรับออเดอร์
+              </button>
+              <button onClick={() => setConfirmOrder(null)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {receiveOrder && <ConfirmReceiveModal order={receiveOrder} onConfirm={handleReceive} onClose={() => setReceiveOrder(null)} />}
       {shipOrder    && <ShipOrderModal order={shipOrder}         onConfirm={handleShip}    onClose={() => setShipOrder(null)} />}
       {cancelOrder  && <CancelOrderConfirm order={cancelOrder}   onConfirm={handleCancel}  onClose={() => setCancelOrder(null)} />}
