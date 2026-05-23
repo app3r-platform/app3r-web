@@ -28,12 +28,13 @@ export const PARTS_STORAGE_KEYS = {
 
 // ── BroadcastChannel Events (ชนิดข้อความระหว่าง tab) ────────────────────────
 export type PartsSyncEvent =
-  | { type: "order_placed";    orderId: string; partId: string; buyerShopId: string }
-  | { type: "order_shipped";   orderId: string; trackingNumber?: string }
-  | { type: "order_received";  orderId: string }
-  | { type: "order_cancelled"; orderId: string; partId: string }
-  | { type: "listing_updated"; partId: string }
-  | { type: "shop_switched";   shopId: string }
+  | { type: "order_placed";     orderId: string; partId: string; buyerShopId: string }
+  | { type: "order_confirmed";  orderId: string }                                      // Gen 80: ordered→confirmed
+  | { type: "order_shipped";    orderId: string; trackingNumber?: string }
+  | { type: "order_received";   orderId: string }
+  | { type: "order_cancelled";  orderId: string; partId: string }
+  | { type: "listing_updated";  partId: string }
+  | { type: "shop_switched";    shopId: string }
   | { type: "refresh_parts" };
 
 const CHANNEL_NAME = "parts-b2b-weeer";

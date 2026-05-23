@@ -26,6 +26,7 @@ export default function MyListingsPage() {
   const [orders, setOrders] = useState<PartOrder[]>([]);
   const [tab, setTab] = useState<TabType>("listings");
   const [showForm, setShowForm] = useState(false);
+  const [confirmOrder, setConfirmOrder] = useState<PartOrder | null>(null);
   const [shipOrder, setShipOrder] = useState<PartOrder | null>(null);
   const [cancelOrder, setCancelOrder] = useState<PartOrder | null>(null);
 
@@ -47,7 +48,7 @@ export default function MyListingsPage() {
   }, []);
 
   usePartsSync((e) => {
-    if (e.type === "refresh_parts" || e.type === "shop_switched" || e.type === "order_placed" || e.type === "order_cancelled" || e.type === "listing_updated") reload();
+    if (e.type === "refresh_parts" || e.type === "shop_switched" || e.type === "order_placed" || e.type === "order_confirmed" || e.type === "order_cancelled" || e.type === "listing_updated") reload();
   });
 
   const shop = SHOPS_MOCK.find((s) => s.id === shopId);
@@ -61,6 +62,16 @@ export default function MyListingsPage() {
     upsertListing(newListing);
     partsSync.emit({ type: "listing_updated", partId: newListing.id });
     setShowForm(false);
+    reload();
+  };
+
+  // P5: ผู้ขายรับออเดอร์ ordered→confirmed
+  const handleConfirm = () => {
+    if (!confirmOrder) return;
+    const updated: PartOrder = { ...confirmOrder, stage: "confirmed" };
+    upsertOrder(updated);
+    partsSync.emit({ type: "order_confirmed", orderId: confirmOrder.id });
+    setConfirmOrder(null);
     reload();
   };
 
@@ -84,14 +95,15 @@ export default function MyListingsPage() {
     reload();
   };
 
-  const handleAction = (action: "ship" | "receive" | "cancel", orderId: string) => {
+  const handleAction = (action: "confirm" | "ship" | "receive" | "cancel", orderId: string) => {
     const order = orders.find((o) => o.id === orderId);
     if (!order) return;
-    if (action === "ship")   setShipOrder(order);
-    if (action === "cancel") setCancelOrder(order);
+    if (action === "confirm") setConfirmOrder(order);
+    if (action === "ship")    setShipOrder(order);
+    if (action === "cancel")  setCancelOrder(order);
   };
 
-  const pendingOrders = orders.filter((o) => o.stage === "ordered");
+  const pendingOrders = orders.filter((o) => o.stage === "ordered" || o.stage === "confirmed");
 
   return (
     <div className="space-y-4">
@@ -151,6 +163,27 @@ export default function MyListingsPage() {
       {/* Modals */}
       {showForm && shop && (
         <PartListingForm shopId={shopId} shopName={shop.name} onSubmit={handleAddListing} onClose={() => setShowForm(false)} />
+      )}
+      {/* P5: Confirm modal (ordered → confirmed) */}
+      {confirmOrder && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
+            <h2 className="font-bold text-gray-900">☑️ รับออเดอร์ (P5)</h2>
+            <p className="text-sm text-gray-600">
+              ยืนยันรับออเดอร์ <span className="font-semibold">{confirmOrder.partName}</span>{" "}
+              จาก {confirmOrder.buyerShopName} — {confirmOrder.quantity} ชิ้น · {confirmOrder.totalPoints.toLocaleString()} pts
+            </p>
+            <p className="text-xs text-gray-400">เมื่อรับแล้ว จะเปลี่ยนเป็น "ผู้ขายรับแล้ว" รอขั้นตอนส่ง</p>
+            <div className="flex gap-2">
+              <button onClick={handleConfirm} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                ✅ ยืนยันรับออเดอร์
+              </button>
+              <button onClick={() => setConfirmOrder(null)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
       )}
       {shipOrder && (
         <ShipOrderModal order={shipOrder} onConfirm={handleShip} onClose={() => setShipOrder(null)} />
