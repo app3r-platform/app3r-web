@@ -13,6 +13,10 @@ interface MaintainJobListItem extends MaintainJob {
   dispute_flag?:     boolean;
   risk_flag?:        boolean;
   cross_module_ref?: { type: "repair"; job_id: string } | null;
+  /* M7: No-show — ลูกค้าไม่อยู่ */
+  no_show_flag?:     boolean;
+  /* M2: ปิดเปล่า — ไม่มีร้านยื่นข้อเสนอ/หมดอายุ */
+  no_match_flag?:    boolean;
 }
 
 const STATUS_META: Record<MaintainJob["status"], { label: string; color: string }> = {
@@ -37,12 +41,14 @@ const CLEANING_LABEL: Record<MaintainJob["cleaningType"], string> = {
 };
 
 const STATUS_TABS: { label: string; value: string }[] = [
-  { label: "ทั้งหมด",    value: "" },
-  { label: "รอ/มอบหมาย", value: "pending" },
-  { label: "กำลังทำ",    value: "in_progress" },
-  { label: "เสร็จสิ้น",  value: "completed" },
-  { label: "ยกเลิก",     value: "cancelled" },
-  { label: "⚖️ ข้อพิพาท", value: "disputed" },
+  { label: "ทั้งหมด",          value: "" },
+  { label: "รอ/มอบหมาย",       value: "pending" },
+  { label: "กำลังทำ",           value: "in_progress" },
+  { label: "เสร็จสิ้น",         value: "completed" },
+  { label: "ยกเลิก",            value: "cancelled" },
+  { label: "⚪ ปิดเปล่า",       value: "no_match" },   /* M2 */
+  { label: "🚫 No-show",        value: "no_show" },     /* M7 */
+  { label: "⚖️ ข้อพิพาท",      value: "disputed" },
 ];
 
 const PAGE_SIZE = 20;
@@ -123,9 +129,10 @@ export default function MaintainJobsPage() {
               onClick={() => { setFilterStatus(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                 filterStatus === t.value
-                  ? t.value === "disputed"
-                    ? "bg-red-50 text-red-700"
-                    : "bg-admin-surface text-admin-primary"
+                  ? t.value === "disputed"  ? "bg-red-50 text-red-700"
+                  : t.value === "no_show"   ? "bg-yellow-50 text-yellow-700"
+                  : t.value === "no_match"  ? "bg-gray-200 text-gray-600"
+                  : "bg-admin-surface text-admin-primary"
                   : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
@@ -253,7 +260,19 @@ export default function MaintainJobsPage() {
                               🔧 →ซ่อม
                             </Link>
                           )}
-                          {!job.dispute_flag && !job.risk_flag && !job.cross_module_ref && (
+                          {/* M7: No-show */}
+                          {job.no_show_flag && (
+                            <span className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-yellow-100 text-yellow-800 whitespace-nowrap">
+                              🚫 No-show
+                            </span>
+                          )}
+                          {/* M2: ปิดเปล่า */}
+                          {job.no_match_flag && (
+                            <span className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">
+                              ⚪ ปิดเปล่า
+                            </span>
+                          )}
+                          {!job.dispute_flag && !job.risk_flag && !job.cross_module_ref && !job.no_show_flag && !job.no_match_flag && (
                             <span className="text-xs text-gray-400">—</span>
                           )}
                         </div>

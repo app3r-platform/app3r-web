@@ -31,14 +31,26 @@ interface MaintainJobDetail extends MaintainJob {
   risk_note?:  string | null;
   /* D-Maintain-2: cross-module reference to repair job */
   cross_module_ref?: { type: "repair"; job_id: string } | null;
+  /* M7: No-show — ลูกค้าไม่อยู่ */
+  no_show_flag?:          boolean;
+  no_show_evidence_url?:  string | null;
+  no_show_settled_at?:    string | null;
   /* Dispute */
   dispute_flag?: boolean;
   dispute?: {
+    /* case type: ระบุประเภทเคส */
+    case_type?:     "weeer_withdraw" | "weeu_stop_mid" | "no_show" | "general" | null;
     fault_party:    "weeeu" | "weeer" | "weeet" | null;
     resolution:     "refund" | "forfeit" | "split" | "pending" | null;
     split_pct?:     number | null;
     precedent_note?: string | null;
     offer_terms_ref?: string | null;
+    /* M6: WeeeR ถอนหลังยืนยัน — นโยบาย 1 */
+    weeer_withdraw_reason?: "shop_fault" | "customer_fault" | "force_majeure" | null;
+    reroute_granted?:       boolean | null;
+    /* M9: WeeeU ยุติกลางล้าง */
+    completion_pct?:        number | null;   /* % ที่ล้างเสร็จแล้ว */
+    settle_amount?:         number | null;   /* จำนวน Point ที่ WeeeR ได้รับ */
   } | null;
 }
 
@@ -46,7 +58,7 @@ const STATUS_META: Record<MaintainJob["status"], { label: string; color: string 
   pending:     { label: "รอดำเนินการ",  color: "bg-gray-100 text-gray-500" },
   assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-50 text-blue-700" },
   departed:    { label: "ออกเดินทาง",  color: "bg-yellow-50 text-yellow-700" },
-  arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-900/50 text-cyan-300" },
+  arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-50 text-cyan-700" },
   in_progress: { label: "กำลังทำงาน",  color: "bg-brand-info/15 text-brand-info" },
   completed:   { label: "เสร็จสิ้น",   color: "bg-green-50 text-green-700" },
   cancelled:   { label: "ยกเลิก",       color: "bg-red-50 text-red-700" },
@@ -306,13 +318,54 @@ export default function MaintainJobDetailPage() {
           </section>
         )}
 
+        {/* M7: No-show Audit */}
+        {job.no_show_flag && (
+          <section className="bg-yellow-50 rounded-xl border border-yellow-200 p-5">
+            <h2 className="text-xs font-semibold text-yellow-800 uppercase tracking-wider mb-3">
+              🚫 No-show — ลูกค้าไม่อยู่ / ไม่รับสาย
+            </h2>
+            <div className="space-y-2 text-xs text-yellow-800">
+              <p>WeeeT (ช่าง) บันทึกว่าถึงสถานที่แล้วแต่ไม่พบลูกค้า</p>
+              {job.no_show_settled_at && (
+                <p>Settle เมื่อ: <span className="font-medium">{new Date(job.no_show_settled_at).toLocaleString("th-TH")}</span></p>
+              )}
+              {job.no_show_evidence_url && (
+                <div className="mt-2">
+                  <a href={job.no_show_evidence_url} target="_blank" rel="noreferrer"
+                    className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-lg text-xs text-yellow-800 transition-colors">
+                    📷 ดูหลักฐานรูปถ่าย →
+                  </a>
+                </div>
+              )}
+              <p className="text-yellow-600 mt-2">
+                ค่าเสียเที่ยวตามแกน No-show ใน Offer — ดู Audit Log สำหรับรายละเอียดการ Settle
+              </p>
+            </div>
+          </section>
+        )}
+
         {/* Dispute 4-Layer Panel */}
         {job.dispute_flag && (
           <section className="bg-white rounded-xl border border-red-200 p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider">
-                ⚖️ Dispute — 4 ชั้น (อ้างอิง Offer Terms)
-              </h2>
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider">
+                  ⚖️ Dispute — 4 ชั้น (อ้างอิง Offer Terms)
+                </h2>
+                {/* Case type badge */}
+                {job.dispute?.case_type && job.dispute.case_type !== "general" && (
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                    job.dispute.case_type === "weeer_withdraw" ? "bg-orange-100 text-orange-700" :
+                    job.dispute.case_type === "weeu_stop_mid"  ? "bg-blue-100 text-blue-700" :
+                    job.dispute.case_type === "no_show"        ? "bg-yellow-100 text-yellow-800" :
+                    "bg-gray-100 text-gray-600"
+                  }`}>
+                    {job.dispute.case_type === "weeer_withdraw" ? "M6 — WeeeR ถอนหลังยืนยัน" :
+                     job.dispute.case_type === "weeu_stop_mid"  ? "M9 — WeeeU ยุติกลางล้าง" :
+                     job.dispute.case_type === "no_show"        ? "M7 — No-show" : ""}
+                  </span>
+                )}
+              </div>
               <Link
                 href={`/disputes?job_id=${job.id}&service=maintain`}
                 className="text-xs text-admin-primary hover:text-admin-dark">
@@ -333,9 +386,9 @@ export default function MaintainJobDetailPage() {
               )}
             </div>
 
-            {/* L2: Fault Party */}
-            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
-              <p className="text-xs font-semibold text-gray-600 mb-2">L2 — ฝ่ายที่เป็นต้นเหตุ</p>
+            {/* L2: Fault Party + Case-specific details */}
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4 space-y-3">
+              <p className="text-xs font-semibold text-gray-600">L2 — ฝ่ายที่เป็นต้นเหตุ</p>
               {job.dispute?.fault_party ? (
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                   job.dispute.fault_party === "weeeu" ? "bg-orange-100 text-orange-700" :
@@ -349,6 +402,75 @@ export default function MaintainJobDetailPage() {
                 </span>
               ) : (
                 <span className="text-xs text-gray-500">ยังไม่ระบุ — อยู่ระหว่างพิจารณา</span>
+              )}
+
+              {/* M6: WeeeR ถอนหลังยืนยัน — นโยบาย 1 (3 สาเหตุ) */}
+              {job.dispute?.case_type === "weeer_withdraw" && (
+                <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+                  <p className="text-xs font-semibold text-orange-700">นโยบาย 1 — WeeeR ถอนหลังยืนยัน (3 สาเหตุ)</p>
+                  <div className="space-y-1.5">
+                    <div className={`flex items-start gap-2 p-2 rounded-lg text-xs ${
+                      job.dispute.weeer_withdraw_reason === "shop_fault"
+                        ? "bg-red-100 border border-red-200"
+                        : "bg-gray-50 border border-gray-200"
+                    }`}>
+                      <span className="font-medium text-red-700 shrink-0">ร้านผิด:</span>
+                      <span className="text-gray-600">WeeeU ได้ reroute (จับคู่ร้านใหม่) ฟรี + คืนมัดจำเต็ม</span>
+                      {job.dispute.reroute_granted && (
+                        <span className="ml-auto text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">✅ Rerouted</span>
+                      )}
+                    </div>
+                    <div className={`flex items-start gap-2 p-2 rounded-lg text-xs ${
+                      job.dispute.weeer_withdraw_reason === "customer_fault"
+                        ? "bg-orange-100 border border-orange-200"
+                        : "bg-gray-50 border border-gray-200"
+                    }`}>
+                      <span className="font-medium text-orange-700 shrink-0">ลูกค้าผิด:</span>
+                      <span className="text-gray-600">WeeeR ได้รับค่าเสียเวลาตาม offer — WeeeU ไม่ได้คืนมัดจำ</span>
+                    </div>
+                    <div className={`flex items-start gap-2 p-2 rounded-lg text-xs ${
+                      job.dispute.weeer_withdraw_reason === "force_majeure"
+                        ? "bg-blue-100 border border-blue-200"
+                        : "bg-gray-50 border border-gray-200"
+                    }`}>
+                      <span className="font-medium text-blue-700 shrink-0">สุดวิสัย:</span>
+                      <span className="text-gray-600">ไม่มีฝ่ายผิด — คืนมัดจำ WeeeU บางส่วน ตาม offer policy</span>
+                    </div>
+                  </div>
+                  {job.dispute.weeer_withdraw_reason && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      สาเหตุที่ระบุ:{" "}
+                      <span className="font-medium text-gray-700">
+                        {job.dispute.weeer_withdraw_reason === "shop_fault"     ? "ร้านผิด" :
+                         job.dispute.weeer_withdraw_reason === "customer_fault" ? "ลูกค้าผิด" : "สุดวิสัย"}
+                      </span>
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* M9: WeeeU ยุติกลางล้าง */}
+              {job.dispute?.case_type === "weeu_stop_mid" && (
+                <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+                  <p className="text-xs font-semibold text-blue-700">M9 — WeeeU ยุติระหว่างล้าง</p>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-2">
+                      <p className="text-gray-500 mb-0.5">% ล้างเสร็จแล้ว</p>
+                      <p className="font-mono font-bold text-blue-700">
+                        {job.dispute.completion_pct != null ? `${job.dispute.completion_pct}%` : "ยังไม่ระบุ"}
+                      </p>
+                    </div>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-2">
+                      <p className="text-gray-500 mb-0.5">WeeeR ได้รับ</p>
+                      <p className="font-mono font-bold text-blue-700">
+                        {job.dispute.settle_amount != null ? `${job.dispute.settle_amount.toLocaleString()} G` : "รอ settle"}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    ตาม offer terms — จำนวน Point ที่ WeeeR ได้รับขึ้นกับ % งานที่ทำเสร็จแล้ว
+                  </p>
+                </div>
               )}
             </div>
 
