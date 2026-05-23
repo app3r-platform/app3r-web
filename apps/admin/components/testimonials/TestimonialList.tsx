@@ -96,7 +96,7 @@ export default function TestimonialList() {
         </h1>
         <Link
           href="/testimonials/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+          className="bg-admin-surface text-admin-primary px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
         >
           + เพิ่มรีวิว
         </Link>
@@ -143,7 +143,7 @@ export default function TestimonialList() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-4 py-8 text-center text-gray-400"
+                    className="px-4 py-8 text-center text-gray-500"
                   >
                     ไม่พบรีวิว
                   </td>

@@ -66,19 +66,19 @@ interface ParcelJobDetail {
 }
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
-  pending:          { label: "รอดำเนินการ",      color: "bg-gray-800 text-gray-400" },
-  label_created:    { label: "สร้าง label แล้ว", color: "bg-gray-700 text-gray-300" },
-  shipped_out:      { label: "ส่งออกแล้ว",       color: "bg-blue-900/50 text-blue-300" },
-  in_transit_out:   { label: "กำลังส่งไปร้าน",  color: "bg-yellow-900/50 text-yellow-400" },
-  at_shop:          { label: "อยู่ที่ร้าน",       color: "bg-purple-900/50 text-purple-300" },
-  repaired:         { label: "ซ่อมเสร็จ",        color: "bg-teal-900/50 text-teal-300" },
-  shipped_back:     { label: "ส่งคืนแล้ว",       color: "bg-indigo-900/50 text-indigo-300" },
+  pending:          { label: "รอดำเนินการ",      color: "bg-gray-100 text-gray-500" },
+  label_created:    { label: "สร้าง label แล้ว", color: "bg-gray-700 text-gray-700" },
+  shipped_out:      { label: "ส่งออกแล้ว",       color: "bg-blue-50 text-blue-700" },
+  in_transit_out:   { label: "กำลังส่งไปร้าน",  color: "bg-yellow-50 text-yellow-700" },
+  at_shop:          { label: "อยู่ที่ร้าน",       color: "bg-admin-primary/15 text-admin-primary" },
+  repaired:         { label: "ซ่อมเสร็จ",        color: "bg-brand-success/15 text-brand-success" },
+  shipped_back:     { label: "ส่งคืนแล้ว",       color: "bg-brand-info/15 text-brand-info" },
   in_transit_back:  { label: "กำลังส่งกลับ",     color: "bg-cyan-900/50 text-cyan-300" },
-  delivered:        { label: "ส่งถึงลูกค้า",     color: "bg-green-900/50 text-green-300" },
-  completed:        { label: "เสร็จสิ้น",        color: "bg-green-900/50 text-green-400" },
-  failed:           { label: "ล้มเหลว",           color: "bg-red-900/50 text-red-400" },
-  lost:             { label: "พัสดุหาย",         color: "bg-red-900/60 text-red-300" },
-  cancelled:        { label: "ยกเลิก",            color: "bg-gray-800 text-gray-500" },
+  delivered:        { label: "ส่งถึงลูกค้า",     color: "bg-green-900/50 text-green-700" },
+  completed:        { label: "เสร็จสิ้น",        color: "bg-green-50 text-green-700" },
+  failed:           { label: "ล้มเหลว",           color: "bg-red-50 text-red-700" },
+  lost:             { label: "พัสดุหาย",         color: "bg-red-900/60 text-red-700" },
+  cancelled:        { label: "ยกเลิก",            color: "bg-gray-100 text-gray-500" },
 };
 
 const DISPUTE_TYPE_LABEL: Record<string, string> = {
@@ -89,10 +89,10 @@ const DISPUTE_TYPE_LABEL: Record<string, string> = {
 };
 
 const DISPUTE_STATUS_META: Record<string, { label: string; color: string }> = {
-  open:      { label: "เปิด",         color: "bg-red-900/50 text-red-400" },
-  in_review: { label: "กำลังตรวจ",   color: "bg-yellow-900/50 text-yellow-400" },
-  resolved:  { label: "แก้ไขแล้ว",   color: "bg-green-900/50 text-green-400" },
-  closed:    { label: "ปิด",          color: "bg-gray-800 text-gray-400" },
+  open:      { label: "เปิด",         color: "bg-red-50 text-red-700" },
+  in_review: { label: "กำลังตรวจ",   color: "bg-yellow-50 text-yellow-700" },
+  resolved:  { label: "แก้ไขแล้ว",   color: "bg-green-50 text-green-700" },
+  closed:    { label: "ปิด",          color: "bg-gray-100 text-gray-500" },
 };
 
 const PHOTO_TYPE_LABEL: Record<string, string> = {
@@ -106,7 +106,7 @@ const PHOTO_TYPE_LABEL: Record<string, string> = {
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex gap-2 py-1.5 border-b border-gray-800/60 last:border-0">
+    <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-36 shrink-0">{label}</span>
       <span className="text-sm text-gray-100">{value}</span>
     </div>
@@ -141,7 +141,7 @@ export default function ParcelDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
       </div>
@@ -150,23 +150,23 @@ export default function ParcelDetailPage() {
 
   if (error || !job) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 p-8 space-y-4">
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
             {error ?? "ไม่พบข้อมูล"}
           </div>
-          <Link href="/repair/parcel/queue" className="text-sm text-blue-400 hover:text-blue-300">← Queue</Link>
+          <Link href="/repair/parcel/queue" className="text-sm text-admin-primary hover:text-admin-dark">← Queue</Link>
         </main>
       </div>
     );
   }
 
-  const sm = STATUS_META[job.status] ?? { label: job.status, color: "bg-gray-800 text-gray-300" };
+  const sm = STATUS_META[job.status] ?? { label: job.status, color: "bg-gray-100 text-gray-600" };
   const openDisputes = job.disputes?.filter(d => d.status === "open" || d.status === "in_review") ?? [];
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-5xl">
 
@@ -177,51 +177,51 @@ export default function ParcelDetailPage() {
               <h1 className="text-2xl font-bold">📦 {job.job_number}</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               {openDisputes.length > 0 && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-orange-900/50 text-orange-400">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-orange-50 text-orange-700">
                   ⚠️ {openDisputes.length} dispute{openDisputes.length > 1 ? "s" : ""}
                 </span>
               )}
             </div>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-500 text-sm">
               Repair Job:{" "}
               <Link href={`/repair/jobs/${job.repair_job_id}`}
-                className="text-blue-400 hover:text-blue-300 font-mono text-xs">
+                className="text-admin-primary hover:text-admin-dark font-mono text-xs">
                 {job.repair_job_id.slice(0, 8)}…
               </Link>
             </p>
           </div>
           <Link href="/repair/parcel/queue"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Queue
           </Link>
         </div>
 
         {/* Info grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
             <InfoRow label="Serial" value={job.device_serial ?? "—"} />
           </section>
 
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ลูกค้า</h2>
             <InfoRow label="ชื่อ" value={job.customer_name} />
             <InfoRow label="โทร" value={job.customer_phone} />
             <InfoRow label="ที่อยู่" value={job.customer_address} />
           </section>
 
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ร้านซ่อม</h2>
             <InfoRow label="ชื่อร้าน" value={job.shop_name} />
             <InfoRow label="ที่อยู่" value={job.shop_address} />
           </section>
 
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ค่าใช้จ่าย</h2>
             <InfoRow label="ค่าส่ง" value={
               job.shipping_cost != null
-                ? <span className="text-yellow-400 font-mono">{job.shipping_cost.toLocaleString()} ฿</span>
+                ? <span className="text-yellow-700 font-mono">{job.shipping_cost.toLocaleString()} ฿</span>
                 : "—"
             } />
             <InfoRow label="มูลค่าประกัน" value={
@@ -234,7 +234,7 @@ export default function ParcelDetailPage() {
 
         {/* Tracking Timeline — two legs */}
         {job.legs?.map(leg => (
-          <section key={leg.leg} className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section key={leg.leg} className="bg-white rounded-xl border border-gray-200 p-5">
             <div className="flex items-center gap-3 mb-4">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 {leg.leg === "outbound" ? "↗ ขาออก (ลูกค้า → ร้านซ่อม)" : "↙ ขาคืน (ร้านซ่อม → ลูกค้า)"}
@@ -259,7 +259,7 @@ export default function ParcelDetailPage() {
                     <div className="pb-3 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-xs font-medium text-gray-200">{ev.description}</span>
-                        <span className="text-xs font-mono text-gray-600 bg-gray-800 px-1.5 py-0.5 rounded">
+                        <span className="text-xs font-mono text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded">
                           {ev.status_code}
                         </span>
                       </div>
@@ -276,16 +276,16 @@ export default function ParcelDetailPage() {
             )}
 
             {/* Leg timestamps summary */}
-            <div className="flex gap-6 mt-4 pt-4 border-t border-gray-800">
+            <div className="flex gap-6 mt-4 pt-4 border-t border-gray-200">
               <div>
                 <p className="text-xs text-gray-500">ส่งออก</p>
-                <p className="text-sm font-mono text-gray-300">
+                <p className="text-sm font-mono text-gray-700">
                   {leg.shipped_at ? new Date(leg.shipped_at).toLocaleDateString("th-TH") : "—"}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">ส่งถึง</p>
-                <p className="text-sm font-mono text-gray-300">
+                <p className="text-sm font-mono text-gray-700">
                   {leg.delivered_at ? new Date(leg.delivered_at).toLocaleDateString("th-TH") : "—"}
                 </p>
               </div>
@@ -295,7 +295,7 @@ export default function ParcelDetailPage() {
 
         {/* Photos timeline */}
         {job.photos?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
               📷 Photos Timeline
             </h2>
@@ -307,13 +307,13 @@ export default function ParcelDetailPage() {
                   <p className="text-xs text-gray-500 mb-2">
                     {PHOTO_TYPE_LABEL[type]}
                     {type === "damage" && (
-                      <span className="ml-2 text-red-400">⚠️</span>
+                      <span className="ml-2 text-red-600">⚠️</span>
                     )}
                   </p>
                   <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                     {typePhotos.map((photo, i) => (
                       <a key={i} href={photo.url} target="_blank" rel="noreferrer"
-                        className={`aspect-square bg-gray-800 rounded-lg overflow-hidden transition-all ${
+                        className={`aspect-square bg-gray-100 rounded-lg overflow-hidden transition-all ${
                           type === "damage"
                             ? "hover:ring-2 hover:ring-red-500 ring-1 ring-red-800/50"
                             : "hover:ring-2 hover:ring-blue-500"
@@ -330,17 +330,17 @@ export default function ParcelDetailPage() {
 
         {/* Dispute log */}
         {job.disputes?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-orange-900/40 p-5">
-            <h2 className="text-xs font-semibold text-orange-400 uppercase tracking-wider mb-4">
+          <section className="bg-white rounded-xl border border-orange-900/40 p-5">
+            <h2 className="text-xs font-semibold text-orange-700 uppercase tracking-wider mb-4">
               ⚠️ Dispute Log
             </h2>
             <div className="space-y-3">
               {job.disputes.map(d => {
-                const ds = DISPUTE_STATUS_META[d.status] ?? { label: d.status, color: "bg-gray-800 text-gray-300" };
+                const ds = DISPUTE_STATUS_META[d.status] ?? { label: d.status, color: "bg-gray-100 text-gray-600" };
                 return (
-                  <div key={d.id} className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                  <div key={d.id} className="bg-gray-100 rounded-xl p-4 border border-gray-300">
                     <div className="flex items-center gap-2 flex-wrap mb-2">
-                      <span className="text-sm font-semibold text-orange-300">
+                      <span className="text-sm font-semibold text-orange-700">
                         {DISPUTE_TYPE_LABEL[d.type] ?? d.type}
                       </span>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${ds.color}`}>{ds.label}</span>
@@ -348,13 +348,13 @@ export default function ParcelDetailPage() {
                         {new Date(d.opened_at).toLocaleDateString("th-TH")}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">{d.description}</p>
+                    <p className="text-sm text-gray-700 mb-2">{d.description}</p>
                     {d.resolution && (
-                      <div className="bg-green-900/20 border border-green-800/50 rounded-lg p-3 mt-2">
-                        <p className="text-xs text-green-400 font-semibold mb-1">การแก้ไข</p>
+                      <div className="bg-green-50 border border-green-200/50 rounded-lg p-3 mt-2">
+                        <p className="text-xs text-green-600 font-semibold mb-1">การแก้ไข</p>
                         <p className="text-sm text-gray-200">{d.resolution}</p>
                         {d.refund_amount != null && (
-                          <p className="text-xs text-yellow-400 mt-1 font-mono">
+                          <p className="text-xs text-yellow-700 mt-1 font-mono">
                             คืนเงิน: {d.refund_amount.toLocaleString()} ฿
                           </p>
                         )}
@@ -367,7 +367,7 @@ export default function ParcelDetailPage() {
                     )}
                     {(d.status === "open" || d.status === "in_review") && (
                       <Link href={`/repair/parcel/disputes`}
-                        className="inline-block mt-2 text-xs text-orange-400 hover:text-orange-300">
+                        className="inline-block mt-2 text-xs text-orange-700 hover:text-orange-700">
                         จัดการ Dispute →
                       </Link>
                     )}

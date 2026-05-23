@@ -82,7 +82,7 @@ export default function ImageUploader({ contentPageId, token, onUploaded }: Imag
         ) : (
           <>
             <p className="text-sm text-gray-600 font-medium">ลากรูปภาพวางที่นี่</p>
-            <p className="text-xs text-gray-400 mt-1">หรือคลิกเพื่อเลือกไฟล์ • สูงสุด 5 MB</p>
+            <p className="text-xs text-gray-500 mt-1">หรือคลิกเพื่อเลือกไฟล์ • สูงสุด 5 MB</p>
           </>
         )}
       </div>

@@ -8,19 +8,19 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 const JOB_STATUS: Record<string, { label: string; color: string }> = {
-  assigned:          { label: "มอบหมายแล้ว",      color: "bg-gray-800 text-gray-300" },
-  traveling:         { label: "เดินทาง",           color: "bg-blue-900/50 text-blue-300" },
-  arrived:           { label: "ถึงแล้ว",            color: "bg-blue-900/50 text-blue-400" },
-  awaiting_entry:    { label: "รอเข้าบ้าน",        color: "bg-yellow-900/50 text-yellow-400" },
-  inspecting:        { label: "ตรวจสภาพ",          color: "bg-purple-900/50 text-purple-400" },
-  awaiting_decision: { label: "รอ WeeeR อนุมัติ",  color: "bg-orange-900/50 text-orange-400" },
-  awaiting_user:     { label: "รอ WeeeU ตอบ",      color: "bg-yellow-900/50 text-yellow-300" },
-  in_progress:       { label: "กำลังซ่อม",         color: "bg-blue-900/50 text-blue-400" },
-  completed:         { label: "ซ่อมเสร็จ",         color: "bg-teal-900/50 text-teal-400" },
-  awaiting_review:   { label: "รอตรวจรับ",         color: "bg-teal-900/50 text-teal-300" },
-  closed:            { label: "ปิดงาน ✓",          color: "bg-green-900/50 text-green-400" },
-  cancelled:         { label: "ยกเลิก",             color: "bg-red-900/50 text-red-400" },
-  converted_scrap:   { label: "→ ซาก",             color: "bg-gray-700 text-gray-400" },
+  assigned:          { label: "มอบหมายแล้ว",      color: "bg-gray-100 text-gray-600" },
+  traveling:         { label: "เดินทาง",           color: "bg-blue-50 text-blue-700" },
+  arrived:           { label: "ถึงแล้ว",            color: "bg-blue-50 text-blue-700" },
+  awaiting_entry:    { label: "รอเข้าบ้าน",        color: "bg-yellow-50 text-yellow-700" },
+  inspecting:        { label: "ตรวจสภาพ",          color: "bg-admin-primary/15 text-admin-primary" },
+  awaiting_decision: { label: "รอ WeeeR อนุมัติ",  color: "bg-orange-50 text-orange-700" },
+  awaiting_user:     { label: "รอ WeeeU ตอบ",      color: "bg-yellow-50 text-yellow-700" },
+  in_progress:       { label: "กำลังซ่อม",         color: "bg-blue-50 text-blue-700" },
+  completed:         { label: "ซ่อมเสร็จ",         color: "bg-brand-success/15 text-brand-success" },
+  awaiting_review:   { label: "รอตรวจรับ",         color: "bg-brand-success/15 text-brand-success" },
+  closed:            { label: "ปิดงาน ✓",          color: "bg-green-50 text-green-700" },
+  cancelled:         { label: "ยกเลิก",             color: "bg-red-50 text-red-700" },
+  converted_scrap:   { label: "→ ซาก",             color: "bg-gray-100 text-gray-500" },
 };
 
 interface EvidenceFile { id: string; url: string; type: "image" | "video"; created_at: string; }
@@ -70,7 +70,7 @@ interface RepairJobDetail {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
       <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">{title}</h2>
       {children}
     </section>
@@ -79,10 +79,185 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-2 py-1.5 border-b border-gray-800/60 last:border-0">
+    <div className="flex items-start gap-2 py-1.5 border-b border-gray-100 last:border-0">
       <span className="text-xs text-gray-500 w-40 shrink-0">{label}</span>
-      <span className="text-sm text-gray-200">{value ?? <span className="text-gray-600">—</span>}</span>
+      <span className="text-sm text-gray-700">{value ?? <span className="text-gray-400">—</span>}</span>
     </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Fee Settle Monitor Panel
+   แสดง settlement ตาม 9 แกน lock + การจ่ายเงินจริง
+───────────────────────────────────────────── */
+const SETTLE_AXES = [
+  { key: "price",        label: "ราคา",         icon: "💰" },
+  { key: "scope",        label: "ขอบเขต",        icon: "📋" },
+  { key: "timeline",     label: "ระยะเวลา",      icon: "⏱️" },
+  { key: "parts",        label: "อะไหล่",        icon: "🔩" },
+  { key: "quality",      label: "คุณภาพ",        icon: "⭐" },
+  { key: "deposit",      label: "มัดจำ",         icon: "💳" },
+  { key: "cancellation", label: "ยกเลิก",         icon: "❌" },
+  { key: "evidence",     label: "หลักฐาน",       icon: "📸" },
+  { key: "conduct",      label: "พฤติกรรม",      icon: "🤝" },
+];
+
+interface FeeSettlePanelProps {
+  job: RepairJobDetail;
+  superAdmin: boolean;
+}
+
+function FeeSettlePanel({ job, superAdmin }: FeeSettlePanelProps) {
+  const finalPrice   = job.final_price ?? job.proposed_price ?? job.original_price ?? 0;
+  const deposit      = job.deposit_amount ?? 0;
+  const inspFee      = job.inspection_fee_charged ?? 0;
+  const partsTotal   = job.parts_added?.reduce((s, p) => s + p.price * p.qty, 0) ?? 0;
+  const netWeeeR     = finalPrice + partsTotal - inspFee;
+  const depositNote  = job.deposit_action ?? "pending";
+
+  const depositBadge = depositNote === "released"
+    ? "bg-green-50 text-green-700 border-green-200"
+    : depositNote === "forfeit"
+    ? "bg-red-50 text-red-700 border-red-200"
+    : depositNote === "refund"
+    ? "bg-blue-50 text-blue-700 border-blue-200"
+    : "bg-gray-100 text-gray-500 border-gray-300";
+
+  return (
+    <section className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      {/* Header */}
+      <div className="px-5 py-4 bg-admin-surface border-b border-admin-primary/20 flex items-center justify-between">
+        <div>
+          <h2 className="text-sm font-bold text-admin-primary">💰 Fee Settle Monitor</h2>
+          <p className="text-xs text-gray-500 mt-0.5">ตรวจสอบการ settle ตาม 9 แกน lock — Admin view</p>
+        </div>
+        {superAdmin && (
+          <Link href={`/repair/jobs/${job.id}/manual-override`}
+            className="text-xs px-3 py-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-lg transition-colors font-medium">
+            ⚙️ Manual Override
+          </Link>
+        )}
+      </div>
+
+      <div className="p-5">
+        {/* Payment flow */}
+        <div className="grid grid-cols-3 gap-3 mb-5">
+          {/* WeeeU (ลูกค้า) */}
+          <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+            <p className="text-xs text-blue-600 font-semibold mb-2">👤 WeeeU จ่าย</p>
+            <p className="text-2xl font-bold text-blue-700">{finalPrice.toLocaleString()}</p>
+            <p className="text-xs text-blue-500 mt-0.5">G (ราคาสุดท้าย)</p>
+            <div className="mt-2 pt-2 border-t border-blue-200 text-xs space-y-1">
+              <div className="flex justify-between text-blue-600">
+                <span>มัดจำ</span>
+                <span className={`px-1.5 py-0.5 rounded border text-xs ${depositBadge}`}>
+                  {deposit.toLocaleString()} G — {depositNote}
+                </span>
+              </div>
+              {inspFee > 0 && (
+                <div className="flex justify-between text-blue-600">
+                  <span>ค่าตรวจ</span>
+                  <span>{inspFee.toLocaleString()} G</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Escrow arrow */}
+          <div className="flex flex-col items-center justify-center">
+            <div className="text-gray-300 text-3xl mb-1">→</div>
+            <div className="text-center">
+              <p className="text-xs text-gray-500">Escrow</p>
+              <p className="text-sm font-bold text-gray-700">{(finalPrice + partsTotal).toLocaleString()} G</p>
+            </div>
+            <div className="text-gray-300 text-3xl mt-1">→</div>
+          </div>
+
+          {/* WeeeR (ร้าน) */}
+          <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+            <p className="text-xs text-green-600 font-semibold mb-2">🏪 WeeeR รับ</p>
+            <p className="text-2xl font-bold text-green-700">{netWeeeR.toLocaleString()}</p>
+            <p className="text-xs text-green-500 mt-0.5">G (หลังหักค่าใช้จ่าย)</p>
+            <div className="mt-2 pt-2 border-t border-green-200 text-xs space-y-1">
+              <div className="flex justify-between text-green-600">
+                <span>ราคาซ่อม</span>
+                <span>{finalPrice.toLocaleString()} G</span>
+              </div>
+              {partsTotal > 0 && (
+                <div className="flex justify-between text-green-600">
+                  <span>อะไหล่</span>
+                  <span>+{partsTotal.toLocaleString()} G</span>
+                </div>
+              )}
+              {inspFee > 0 && (
+                <div className="flex justify-between text-green-600">
+                  <span>ค่าตรวจ (หักออก)</span>
+                  <span>−{inspFee.toLocaleString()} G</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* 9-Axes status grid */}
+        <div>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            9 แกน Lock — สถานะปัจจุบัน
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {SETTLE_AXES.map(ax => {
+              // Infer axis status from job data
+              let status: "ok" | "disputed" | "n/a" = "ok";
+              let note = "";
+              if (ax.key === "price") {
+                if (job.proposed_price && job.final_price && job.proposed_price !== job.final_price) {
+                  status = "disputed"; note = `เสนอ ${job.proposed_price?.toLocaleString()} → จริง ${job.final_price?.toLocaleString()}`;
+                } else {
+                  note = finalPrice > 0 ? `${finalPrice.toLocaleString()} G` : "ยังไม่ตกลง";
+                }
+              } else if (ax.key === "deposit") {
+                note = deposit > 0 ? `${deposit.toLocaleString()} G — ${depositNote}` : "ไม่มีมัดจำ";
+                if (depositNote === "forfeit") status = "disputed";
+              } else if (ax.key === "parts") {
+                note = partsTotal > 0 ? `+${partsTotal.toLocaleString()} G` : "ไม่มีอะไหล่";
+              } else if (ax.key === "cancellation") {
+                if (job.status === "cancelled") { status = "disputed"; note = "ยกเลิกงาน"; }
+                else note = "ไม่ยกเลิก";
+              } else if (ax.key === "timeline") {
+                note = job.completed_at ? "ส่งงานแล้ว" : job.scheduled_at ? "ตาม schedule" : "ยังไม่กำหนด";
+              } else {
+                note = "—";
+              }
+              return (
+                <div key={ax.key}
+                  className={`rounded-lg px-3 py-2.5 border text-xs ${
+                    status === "ok"       ? "bg-gray-50 border-gray-200"
+                    : status === "disputed" ? "bg-orange-50 border-orange-300"
+                    : "bg-gray-50 border-gray-200 opacity-60"
+                  }`}>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span>{ax.icon}</span>
+                    <span className="font-medium text-gray-700">{ax.label}</span>
+                    {status === "disputed" && <span className="ml-auto text-orange-500">⚠</span>}
+                    {status === "ok"       && <span className="ml-auto text-green-500">✓</span>}
+                  </div>
+                  <p className="text-gray-500 truncate">{note}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Decision branch */}
+        {job.decision_branch && (
+          <div className="mt-4 bg-admin-surface rounded-xl px-4 py-3 border border-admin-primary/20">
+            <p className="text-xs text-gray-500 mb-1">Decision Branch</p>
+            <p className="text-sm font-bold text-admin-primary font-mono">{job.decision_branch}</p>
+            {job.decision_notes && <p className="text-xs text-gray-600 mt-1">{job.decision_notes}</p>}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -98,9 +273,9 @@ function EvidenceGrid({ files, label }: { files: EvidenceFile[] | null; label: s
           <a key={f.id} href={f.url} target="_blank" rel="noopener noreferrer"
             className="relative group">
             {f.type === "image" ? (
-              <img src={f.url} alt="" className="w-20 h-20 object-cover rounded-lg border border-gray-700 hover:border-blue-500 transition-colors" />
+              <img src={f.url} alt="" className="w-20 h-20 object-cover rounded-lg border border-gray-300 hover:border-blue-500 transition-colors" />
             ) : (
-              <div className="w-20 h-20 flex items-center justify-center bg-gray-800 rounded-lg border border-gray-700 hover:border-blue-500 transition-colors text-2xl">
+              <div className="w-20 h-20 flex items-center justify-center bg-gray-100 rounded-lg border border-gray-300 hover:border-blue-500 transition-colors text-2xl">
                 🎬
               </div>
             )}
@@ -138,29 +313,29 @@ export default function RepairJobDetailPage() {
   }, [router, fetchData, jobId]);
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 text-gray-500">กำลังโหลด...</main>
     </div>
   );
 
   if (error || !job) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ไม่พบงาน"}
         </div>
-        <Link href="/repair/jobs" className="mt-4 inline-block text-sm text-blue-400">← กลับ</Link>
+        <Link href="/repair/jobs" className="mt-4 inline-block text-sm text-admin-primary hover:text-admin-dark">← กลับ</Link>
       </main>
     </div>
   );
 
-  const sc = JOB_STATUS[job.status] ?? { label: job.status, color: "bg-gray-800 text-gray-300" };
+  const sc = JOB_STATUS[job.status] ?? { label: job.status, color: "bg-gray-100 text-gray-600" };
   const fmt = (d: string | null) => d ? new Date(d).toLocaleString("th-TH") : null;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-5xl">
 
@@ -168,7 +343,7 @@ export default function RepairJobDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <Link href="/repair/jobs" className="text-sm text-gray-500 hover:text-gray-300">← Repair Jobs</Link>
+              <Link href="/repair/jobs" className="text-sm text-gray-500 hover:text-gray-700">← Repair Jobs</Link>
             </div>
             <h1 className="text-2xl font-bold">🔧 Job Detail</h1>
             <p className="text-xs font-mono text-gray-500 mt-1">{job.id}</p>
@@ -177,17 +352,17 @@ export default function RepairJobDetailPage() {
             <span className={`text-sm px-3 py-1 rounded-full font-medium ${sc.color}`}>{sc.label}</span>
             {/* D64 source badge */}
             {job.source?.type === "purchased_scrap" ? (
-              <span className="bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+              <span className="bg-orange-50 border border-orange-200 text-orange-700 text-xs px-2 py-0.5 rounded">
                 ซื้อจากซาก: {job.source.refId ?? "—"}
               </span>
             ) : (
-              <span className="bg-blue-900/40 border border-blue-700 text-blue-300 text-xs px-2 py-0.5 rounded">
+              <span className="bg-blue-50 border border-blue-200 text-blue-700 text-xs px-2 py-0.5 rounded">
                 ลูกค้า
               </span>
             )}
             {superAdmin && (
               <Link href={`/repair/jobs/${job.id}/manual-override`}
-                className="px-4 py-2 text-sm bg-red-900/40 hover:bg-red-900/60 border border-red-800 text-red-300 rounded-lg transition-colors">
+                className="px-4 py-2 text-sm bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-lg transition-colors">
                 ⚙️ Manual Override
               </Link>
             )}
@@ -202,7 +377,7 @@ export default function RepairJobDetailPage() {
               { role: "🏪 WeeeR (ร้าน)", name: job.weeer_name, id: job.weeer_id },
               { role: "🔧 WeeeT (ช่าง)", name: job.weeet_name, id: job.weeet_id },
             ].map(p => (
-              <div key={p.role} className="bg-gray-800/50 rounded-lg p-3">
+              <div key={p.role} className="bg-gray-100 rounded-lg p-3">
                 <p className="text-xs text-gray-500 mb-1">{p.role}</p>
                 <p className="font-medium text-sm">{p.name}</p>
                 <p className="text-xs text-gray-600 font-mono">{p.id.slice(0, 8)}…</p>
@@ -211,11 +386,14 @@ export default function RepairJobDetailPage() {
           </div>
         </Section>
 
+        {/* Fee Settle Monitor Panel */}
+        <FeeSettlePanel job={job} superAdmin={superAdmin} />
+
         {/* Job Info */}
         <Section title="รายละเอียดงาน">
-          <InfoRow label="Service Type" value={<span className="font-mono text-blue-400">{job.service_type}</span>} />
+          <InfoRow label="Service Type" value={<span className="font-mono text-admin-primary">{job.service_type}</span>} />
           <InfoRow label="Decision Branch" value={job.decision_branch
-            ? <span className="font-mono font-bold text-purple-400">{job.decision_branch}</span>
+            ? <span className="font-mono font-bold text-admin-primary">{job.decision_branch}</span>
             : null} />
           <InfoRow label="Decision Notes" value={job.decision_notes} />
           <InfoRow label="นัดหมาย" value={fmt(job.scheduled_at)} />
@@ -230,7 +408,7 @@ export default function RepairJobDetailPage() {
             : null} />
           {job.scrap_announcement_id && (
             <InfoRow label="Scrap Job" value={
-              <span className="text-gray-400 font-mono text-xs">{job.scrap_announcement_id} — {job.scrap_agreed_price?.toLocaleString()} G</span>
+              <span className="text-gray-500 font-mono text-xs">{job.scrap_announcement_id} — {job.scrap_agreed_price?.toLocaleString()} G</span>
             } />
           )}
         </Section>
@@ -249,9 +427,9 @@ export default function RepairJobDetailPage() {
               { label: "T7 ปิดงาน",        at: job.closed_at },
             ].map((ev, i) => (
               <div key={i} className={`flex items-center gap-3 py-1.5 text-sm ${ev.at ? "" : "opacity-30"}`}>
-                <span className={`w-2 h-2 rounded-full shrink-0 ${ev.at ? "bg-green-500" : "bg-gray-700"}`} />
-                <span className="text-gray-400 w-44 shrink-0">{ev.label}</span>
-                <span className="text-gray-300 text-xs font-mono">{ev.at ? fmt(ev.at) : "—"}</span>
+                <span className={`w-2 h-2 rounded-full shrink-0 ${ev.at ? "bg-brand-success" : "bg-gray-300"}`} />
+                <span className="text-gray-500 w-44 shrink-0">{ev.label}</span>
+                <span className="text-gray-700 text-xs font-mono">{ev.at ? fmt(ev.at) : "—"}</span>
               </div>
             ))}
           </div>
@@ -281,11 +459,11 @@ export default function RepairJobDetailPage() {
               <div className="mb-4">
                 <p className="text-xs text-gray-500 mb-2">อะไหล่เพิ่ม (B1.2)</p>
                 <table className="w-full text-sm">
-                  <thead><tr className="text-xs text-gray-600 text-left border-b border-gray-800">
+                  <thead><tr className="text-xs text-gray-600 text-left border-b border-gray-200">
                     <th className="py-1 pr-4">ชื่อ</th><th className="py-1 pr-4">จำนวน</th><th className="py-1">ราคา</th>
                   </tr></thead>
                   <tbody>{job.parts_added.map((p, i) => (
-                    <tr key={i} className="border-b border-gray-800/50 text-gray-300">
+                    <tr key={i} className="border-b border-gray-200/50 text-gray-700">
                       <td className="py-1.5 pr-4">{p.name}</td>
                       <td className="py-1.5 pr-4">{p.qty}</td>
                       <td className="py-1.5">{p.price.toLocaleString()} G</td>
@@ -298,11 +476,11 @@ export default function RepairJobDetailPage() {
               <div>
                 <p className="text-xs text-gray-500 mb-2">อะไหล่ที่ใช้จริง (T5)</p>
                 <table className="w-full text-sm">
-                  <thead><tr className="text-xs text-gray-600 text-left border-b border-gray-800">
+                  <thead><tr className="text-xs text-gray-600 text-left border-b border-gray-200">
                     <th className="py-1 pr-4">ชื่อ</th><th className="py-1">จำนวน</th>
                   </tr></thead>
                   <tbody>{job.parts_used.map((p, i) => (
-                    <tr key={i} className="border-b border-gray-800/50 text-gray-300">
+                    <tr key={i} className="border-b border-gray-200/50 text-gray-700">
                       <td className="py-1.5 pr-4">{p.name}</td>
                       <td className="py-1.5">{p.qty}</td>
                     </tr>
@@ -320,9 +498,9 @@ export default function RepairJobDetailPage() {
               {job.state_history.map((ev, i) => {
                 const s = JOB_STATUS[ev.state];
                 return (
-                  <div key={i} className="flex items-center gap-3 text-xs py-1.5 border-b border-gray-800/40 last:border-0">
+                  <div key={i} className="flex items-center gap-3 text-xs py-1.5 border-b border-gray-200/40 last:border-0">
                     <span className="text-gray-600 font-mono w-36 shrink-0">{fmt(ev.occurred_at)}</span>
-                    <span className={`px-2 py-0.5 rounded-full ${s?.color ?? "bg-gray-800 text-gray-300"}`}>
+                    <span className={`px-2 py-0.5 rounded-full ${s?.color ?? "bg-gray-100 text-gray-600"}`}>
                       {s?.label ?? ev.state}
                     </span>
                     <span className="text-gray-500">{ev.actor}</span>
@@ -338,10 +516,10 @@ export default function RepairJobDetailPage() {
           <Section title="Audit Log">
             <div className="space-y-1">
               {job.audit_log.map((ev) => (
-                <div key={ev.id} className="flex items-start gap-3 text-xs py-1.5 border-b border-gray-800/40 last:border-0">
+                <div key={ev.id} className="flex items-start gap-3 text-xs py-1.5 border-b border-gray-200/40 last:border-0">
                   <span className="text-gray-600 font-mono w-36 shrink-0">{fmt(ev.occurred_at)}</span>
-                  <span className="font-mono text-blue-400 w-40 shrink-0">{ev.event_type}</span>
-                  <span className="text-gray-400 w-24 shrink-0">{ev.actor_role} / {ev.actor_name}</span>
+                  <span className="font-mono text-admin-primary w-40 shrink-0">{ev.event_type}</span>
+                  <span className="text-gray-500 w-24 shrink-0">{ev.actor_role} / {ev.actor_name}</span>
                   <span className="text-gray-500">{ev.detail ?? ""}</span>
                 </div>
               ))}

@@ -54,7 +54,7 @@ const PROMOS = [
     label: "ฟรีค่าบริการ — บำรุงรักษาเครื่องใช้ไฟฟ้า",
     type: "D",
     desc: "ยกเว้น Platform Fee สำหรับงานบำรุงรักษา (Type D) ทั้งผู้ประกาศและผู้ยื่นข้อเสนอ",
-    color: "purple",
+    color: "admin-primary",
   },
   {
     key: "promo_free_scrap",
@@ -218,7 +218,7 @@ export default function PromotionsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 flex items-center justify-center text-gray-500">
           <span className="animate-spin mr-3 text-xl">⟳</span> กำลังโหลด...
@@ -230,7 +230,7 @@ export default function PromotionsPage() {
   const signupBonusOn = config["signup_bonus_enabled"] === "true";
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
 
       <main className="flex-1 p-8 min-w-0 max-w-4xl">
@@ -238,7 +238,7 @@ export default function PromotionsPage() {
         {/* ══ Section 1: Promotions ══════════════════════════════════════════ */}
         <div className="mb-10">
           <h1 className="text-2xl font-bold mb-1">โปรโมชัน — ฟรีค่าบริการ</h1>
-          <p className="text-gray-400 text-sm mb-6">
+          <p className="text-gray-500 text-sm mb-6">
             เปิดเพื่อยกเว้น Platform Fee สำหรับงานประเภทนั้น ทั้งผู้ประกาศและผู้ยื่นข้อเสนอ
           </p>
 
@@ -252,17 +252,17 @@ export default function PromotionsPage() {
                   className={`flex items-center justify-between p-5 rounded-xl border transition-all ${
                     isOn
                       ? "bg-green-950 border-green-700"
-                      : "bg-gray-900 border-gray-800"
+                      : "bg-white border-gray-200"
                   }`}
                 >
                   <div className="flex-1 min-w-0 mr-4">
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                        isOn ? "bg-green-700 text-white" : "bg-gray-700 text-gray-400"
+                        isOn ? "bg-green-50 text-green-700 border border-green-200" : "bg-gray-100 text-gray-500"
                       }`}>
                         Type {promo.type}
                       </span>
-                      <span className={`font-semibold ${isOn ? "text-white" : "text-gray-300"}`}>
+                      <span className={`font-semibold ${isOn ? "text-white" : "text-gray-700"}`}>
                         {promo.label}
                       </span>
                     </div>
@@ -292,16 +292,16 @@ export default function PromotionsPage() {
         {/* ══ Section 2: Signup Bonus ════════════════════════════════════════ */}
         <div className="mb-10">
           <h2 className="text-xl font-bold mb-1">Signup Bonus</h2>
-          <p className="text-gray-400 text-sm mb-5">
+          <p className="text-gray-500 text-sm mb-5">
             เติม Point อัตโนมัติให้ WeeeU และ WeeeR ทุกคนที่สมัครใหม่
           </p>
 
           <div className={`p-5 rounded-xl border transition-all ${
-            signupBonusOn ? "bg-blue-950 border-blue-700" : "bg-gray-900 border-gray-800"
+            signupBonusOn ? "bg-blue-950 border-blue-700" : "bg-white border-gray-200"
           }`}>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <div className={`font-semibold ${signupBonusOn ? "text-white" : "text-gray-300"}`}>
+                <div className={`font-semibold ${signupBonusOn ? "text-white" : "text-gray-700"}`}>
                   เปิด/ปิด Signup Bonus
                 </div>
                 <div className="text-xs text-gray-500 mt-0.5">
@@ -328,7 +328,7 @@ export default function PromotionsPage() {
 
             <div className="flex items-end gap-3">
               <div className="flex-1">
-                <label className="block text-sm text-gray-400 mb-2">
+                <label className="block text-sm text-gray-500 mb-2">
                   จำนวน Point ที่มอบให้ต่อการสมัคร
                 </label>
                 <div className="flex items-center gap-2">
@@ -337,9 +337,9 @@ export default function PromotionsPage() {
                     min="0"
                     value={bonusPoints}
                     onChange={(e) => setBonusPoints(e.target.value)}
-                    className="w-40 bg-gray-800 border border-gray-700 text-white text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-40 bg-gray-100 border border-gray-300 text-white text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary"
                   />
-                  <span className="text-gray-400 text-sm">Points</span>
+                  <span className="text-gray-500 text-sm">Points</span>
                 </div>
               </div>
               <button
@@ -356,16 +356,16 @@ export default function PromotionsPage() {
         {/* ══ Section 3: Manual Point Adjustment ════════════════════════════ */}
         <div>
           <h2 className="text-xl font-bold mb-1">ปรับ Point ด้วยมือ</h2>
-          <p className="text-gray-400 text-sm mb-5">
+          <p className="text-gray-500 text-sm mb-5">
             เพิ่มหรือหัก Point ให้ WeeeU / WeeeR — บังคับระบุหมวดหมู่และรายละเอียดทุกครั้ง
           </p>
 
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-5">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-5">
 
             {/* Search User */}
             <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                ค้นหาผู้ใช้ (WeeeU / WeeeR) <span className="text-red-400">*</span>
+              <label className="block text-sm text-gray-500 mb-2">
+                ค้นหาผู้ใช้ (WeeeU / WeeeR) <span className="text-red-600">*</span>
               </label>
               <div className="flex gap-2 mb-3">
                 <input
@@ -373,7 +373,7 @@ export default function PromotionsPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="ชื่อ หรือ email หรือ เบอร์โทร..."
-                  className="flex-1 bg-gray-800 border border-gray-700 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-600"
+                  className="flex-1 bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
                 />
                 <button
                   onClick={handleSearch}
@@ -386,15 +386,15 @@ export default function PromotionsPage() {
 
               {/* Search Results */}
               {searchResults.length > 0 && !selectedUser && (
-                <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+                <div className="bg-gray-100 rounded-xl border border-gray-300 overflow-hidden">
                   {searchResults.map((u) => (
                     <button
                       key={u.id}
                       onClick={() => { setSelectedUser(u); setSearchResults([]); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700 transition-colors text-left border-b border-gray-700 last:border-0"
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-200 transition-colors text-left border-b border-gray-300 last:border-0"
                     >
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        u.role === "weeeu" ? "bg-blue-900 text-blue-300" : "bg-green-900 text-green-300"
+                        u.role === "weeeu" ? "bg-blue-900 text-blue-300" : "bg-green-900 text-green-700"
                       }`}>
                         {u.role === "weeeu" ? "WeeeU" : "WeeeR"}
                       </span>
@@ -416,17 +416,17 @@ export default function PromotionsPage() {
               {selectedUser && (
                 <div className="flex items-center gap-3 bg-blue-950 border border-blue-800 rounded-xl px-4 py-3">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    selectedUser.role === "weeeu" ? "bg-blue-700 text-white" : "bg-green-700 text-white"
+                    selectedUser.role === "weeeu" ? "bg-blue-700 text-white" : "bg-green-50 text-green-700 border border-green-200"
                   }`}>
                     {selectedUser.role === "weeeu" ? "WeeeU" : "WeeeR"}
                   </span>
                   <div className="flex-1">
                     <span className="font-semibold text-white">{selectedUser.full_name}</span>
-                    <span className="text-gray-400 text-sm ml-2">{selectedUser.email ?? selectedUser.phone}</span>
+                    <span className="text-gray-500 text-sm ml-2">{selectedUser.email ?? selectedUser.phone}</span>
                   </div>
                   <button
                     onClick={() => { setSelectedUser(null); setSearchQuery(""); }}
-                    className="text-gray-500 hover:text-white text-sm transition-colors"
+                    className="text-gray-500 hover:text-gray-900 text-sm transition-colors"
                   >
                     ✕ เปลี่ยน
                   </button>
@@ -437,16 +437,16 @@ export default function PromotionsPage() {
             {/* Direction + Amount */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-gray-400 mb-2">
-                  ประเภท <span className="text-red-400">*</span>
+                <label className="block text-sm text-gray-500 mb-2">
+                  ประเภท <span className="text-red-600">*</span>
                 </label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setAdjustDirection("credit")}
                     className={`flex-1 py-2.5 text-sm rounded-lg font-medium transition-colors ${
                       adjustDirection === "credit"
-                        ? "bg-green-700 text-white"
-                        : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                        ? "bg-green-50 text-green-700 border border-green-200"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}
                   >
                     ➕ เพิ่ม Point
@@ -455,8 +455,8 @@ export default function PromotionsPage() {
                     onClick={() => setAdjustDirection("debit")}
                     className={`flex-1 py-2.5 text-sm rounded-lg font-medium transition-colors ${
                       adjustDirection === "debit"
-                        ? "bg-red-700 text-white"
-                        : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                        ? "bg-red-50 text-red-700 border border-red-200"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}
                   >
                     ➖ หัก Point
@@ -464,8 +464,8 @@ export default function PromotionsPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-2">
-                  จำนวน Point <span className="text-red-400">*</span>
+                <label className="block text-sm text-gray-500 mb-2">
+                  จำนวน Point <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="number"
@@ -473,15 +473,15 @@ export default function PromotionsPage() {
                   value={adjustAmount}
                   onChange={(e) => setAdjustAmount(e.target.value)}
                   placeholder="เช่น 100"
-                  className="w-full bg-gray-800 border border-gray-700 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-600"
+                  className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
                 />
               </div>
             </div>
 
             {/* Reason Category */}
             <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                หมวดหมู่เหตุผล <span className="text-red-400">*</span>
+              <label className="block text-sm text-gray-500 mb-2">
+                หมวดหมู่เหตุผล <span className="text-red-600">*</span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {REASON_CATEGORIES.map((cat) => (
@@ -491,7 +491,7 @@ export default function PromotionsPage() {
                     className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
                       adjustCategory === cat
                         ? "bg-blue-700 text-white"
-                        : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                        : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900"
                     }`}
                   >
                     {cat}
@@ -502,15 +502,15 @@ export default function PromotionsPage() {
 
             {/* Reason Detail */}
             <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                รายละเอียด <span className="text-red-400">* (อย่างน้อย 10 ตัวอักษร)</span>
+              <label className="block text-sm text-gray-500 mb-2">
+                รายละเอียด <span className="text-red-600">* (อย่างน้อย 10 ตัวอักษร)</span>
               </label>
               <textarea
                 value={adjustDetail}
                 onChange={(e) => setAdjustDetail(e.target.value)}
                 placeholder="อธิบายเหตุผลให้ครบถ้วน เช่น เลขที่ transaction ที่เกิดปัญหา, วันที่เกิดเหตุ, การตกลงกับผู้ใช้..."
                 rows={3}
-                className="w-full bg-gray-800 border border-gray-700 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-600 resize-none"
+                className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400 resize-none"
               />
               <div className="text-xs text-gray-600 mt-1 text-right">
                 {adjustDetail.length} / 10 ตัวอักษรขั้นต่ำ
@@ -525,11 +525,11 @@ export default function PromotionsPage() {
                   : "bg-red-950 border-red-800"
               }`}>
                 <div className="font-medium mb-2 text-white">ตัวอย่างรายการที่จะบันทึก:</div>
-                <div className="text-gray-300 space-y-1">
+                <div className="text-gray-700 space-y-1">
                   <div>ผู้รับ: <span className="text-white font-medium">{selectedUser.full_name}</span></div>
                   <div>
                     ประเภท:{" "}
-                    <span className={adjustDirection === "credit" ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
+                    <span className={adjustDirection === "credit" ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
                       {adjustDirection === "credit" ? `+${parseFloat(adjustAmount || "0").toLocaleString("th-TH")}` : `-${parseFloat(adjustAmount || "0").toLocaleString("th-TH")}`} Points
                     </span>
                   </div>
@@ -544,7 +544,7 @@ export default function PromotionsPage() {
               disabled={adjustLoading || !selectedUser || !adjustAmount || !adjustCategory || adjustDetail.length < 10}
               className={`w-full py-3 text-sm font-semibold rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                 adjustDirection === "credit"
-                  ? "bg-green-700 hover:bg-green-600 text-white"
+                  ? "bg-brand-success hover:bg-brand-success/90 text-white"
                   : "bg-red-700 hover:bg-red-600 text-white"
               }`}
             >
@@ -562,7 +562,7 @@ export default function PromotionsPage() {
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 max-w-sm px-5 py-3.5 rounded-xl shadow-xl text-sm font-medium ${
-          toast.type === "ok" ? "bg-green-700 text-white" : "bg-red-700 text-white"
+          toast.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
         }`}>
           {toast.msg}
         </div>

@@ -9,26 +9,26 @@ import { Sidebar } from "@/components/sidebar";
 import type { Listing } from "@/lib/types";
 
 const STATUS_META: Record<Listing["status"], { label: string; color: string }> = {
-  announced:        { label: "ประกาศ",          color: "bg-gray-800 text-gray-400" },
-  receiving_offers: { label: "รับ Offer",        color: "bg-blue-900/50 text-blue-300" },
-  offer_selected:   { label: "เลือก Offer แล้ว", color: "bg-indigo-900/50 text-indigo-300" },
+  announced:        { label: "ประกาศ",          color: "bg-gray-100 text-gray-500" },
+  receiving_offers: { label: "รับ Offer",        color: "bg-blue-50 text-blue-700" },
+  offer_selected:   { label: "เลือก Offer แล้ว", color: "bg-brand-info/15 text-brand-info" },
   buyer_confirmed:  { label: "Buyer ยืนยัน",     color: "bg-cyan-900/50 text-cyan-300" },
-  in_progress:      { label: "กำลังดำเนินการ",   color: "bg-yellow-900/50 text-yellow-400" },
-  delivered:        { label: "ส่งแล้ว",          color: "bg-teal-900/50 text-teal-300" },
-  inspection_period:{ label: "ช่วงตรวจสอบ",      color: "bg-purple-900/50 text-purple-300" },
-  completed:        { label: "เสร็จสิ้น",        color: "bg-green-900/50 text-green-400" },
-  cancelled:        { label: "ยกเลิก",           color: "bg-gray-800 text-gray-500" },
-  disputed:         { label: "พิพาท",            color: "bg-red-900/50 text-red-400" },
+  in_progress:      { label: "กำลังดำเนินการ",   color: "bg-yellow-50 text-yellow-700" },
+  delivered:        { label: "ส่งแล้ว",          color: "bg-brand-success/15 text-brand-success" },
+  inspection_period:{ label: "ช่วงตรวจสอบ",      color: "bg-admin-primary/15 text-admin-primary" },
+  completed:        { label: "เสร็จสิ้น",        color: "bg-green-50 text-green-700" },
+  cancelled:        { label: "ยกเลิก",           color: "bg-gray-100 text-gray-500" },
+  disputed:         { label: "พิพาท",            color: "bg-red-50 text-red-700" },
 };
 
 const TYPE_META: Record<Listing["listingType"], { label: string; color: string }> = {
   used_appliance: { label: "มือสอง",  color: "bg-blue-900/40 text-blue-300" },
-  scrap:          { label: "ซาก",     color: "bg-orange-900/40 text-orange-300" },
+  scrap:          { label: "ซาก",     color: "bg-orange-900/40 text-orange-700" },
 };
 
 const SELLER_COLOR: Record<Listing["sellerType"], string> = {
   WeeeU: "text-sky-400",
-  WeeeR: "text-green-400",
+  WeeeR: "text-green-600",
 };
 
 const STATUS_TABS = [
@@ -93,7 +93,7 @@ export default function ResellListingsPage() {
   const hasSecondaryFilters = filterSellerType || filterListingType || dateFrom || dateTo;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -101,23 +101,23 @@ export default function ResellListingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">🛍️ Resell Listings — Audit</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               รายการ listings ข้าม sellers — filter สถานะ / sellerType / listingType / วันที่
             </p>
           </div>
           <Link href="/resell/analytics"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             📊 Analytics →
           </Link>
         </div>
 
         {/* Status tabs */}
-        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit flex-wrap">
+        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 w-fit flex-wrap">
           {STATUS_TABS.map(t => (
             <button key={t.value}
               onClick={() => { setFilterStatus(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === t.value ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -128,54 +128,54 @@ export default function ResellListingsPage() {
         <div className="flex gap-3 flex-wrap">
           <select value={filterSellerType}
             onChange={e => { setFilterSellerType(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุก Seller</option>
             <option value="WeeeU">WeeeU</option>
             <option value="WeeeR">WeeeR</option>
           </select>
           <select value={filterListingType}
             onChange={e => { setFilterListingType(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
             <option value="">ทุกประเภท</option>
             <option value="used_appliance">มือสอง</option>
             <option value="scrap">ซาก</option>
           </select>
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500" />
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500" />
           <span className="self-center text-gray-600 text-xs">ถึง</span>
           <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-40 focus:outline-none focus:border-blue-500" />
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500" />
           {hasSecondaryFilters && (
             <button onClick={() => { setFilterSellerType(""); setFilterListingType(""); setDateFrom(""); setDateTo(""); setPage(1); }}
-              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-gray-800 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">ระบบ Resell กำลังพัฒนา — {error}</div>
+            <div className="px-6 py-8 text-red-600">ระบบ Resell กำลังพัฒนา — {error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Listing ID</th>
                   <th className="px-4 py-3">ประเภท</th>
                   <th className="px-4 py-3">Seller</th>
@@ -186,14 +186,14 @@ export default function ResellListingsPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.length === 0 ? (
                   <tr><td colSpan={8} className="px-6 py-10 text-center text-gray-500">ยังไม่มีข้อมูล listing</td></tr>
                 ) : items.map(listing => {
                   const sm = STATUS_META[listing.status];
                   const tm = TYPE_META[listing.listingType];
                   return (
-                    <tr key={listing.id} className="hover:bg-gray-800/40">
+                    <tr key={listing.id} className="hover:bg-gray-100/40">
                       <td className="px-4 py-3 font-mono text-xs text-blue-400">
                         {listing.id.slice(0, 8)}…
                       </td>
@@ -209,7 +209,7 @@ export default function ResellListingsPage() {
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs font-mono text-green-400">
+                      <td className="px-4 py-3 text-xs font-mono text-green-600">
                         {listing.price.toLocaleString()} ฿
                       </td>
                       <td className="px-4 py-3 text-xs text-gray-500">
@@ -220,7 +220,7 @@ export default function ResellListingsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <Link href={`/resell/listings/${listing.id}`}
-                          className="text-xs text-blue-400 hover:text-blue-300 whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
                           ดู →
                         </Link>
                       </td>

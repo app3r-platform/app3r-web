@@ -71,16 +71,17 @@ function StatCard({
 }) {
   const accentMap: Record<string, string> = {
     blue:    "text-blue-400",
-    green:   "text-green-400",
-    red:     "text-red-400",
-    orange:  "text-orange-400",
-    yellow:  "text-yellow-400",
-    purple:  "text-purple-400",
+    green:   "text-green-600",
+    red:     "text-red-600",
+    orange:  "text-orange-700",
+    yellow:  "text-yellow-700",
+    "admin-primary": "text-admin-primary",
     cyan:    "text-cyan-400",
+    "brand-info": "text-brand-info",
     default: "text-white",
   };
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-2xl mb-1">{icon}</p>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${accentMap[accent ?? "default"]}`}>{value}</p>
@@ -120,7 +121,7 @@ export default function ParcelAnalyticsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-8 max-w-5xl">
 
@@ -128,23 +129,23 @@ export default function ParcelAnalyticsPage() {
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-bold">📊 Parcel Analytics</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               avg shipping time + dispute rate + courier comparison
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex gap-1 bg-gray-900 rounded-lg p-1 border border-gray-800">
+            <div className="flex gap-1 bg-white rounded-lg p-1 border border-gray-200">
               {["7d", "30d", "90d", "all"].map(p => (
                 <button key={p} onClick={() => setPeriod(p)}
                   className={`px-3 py-1 rounded text-xs transition-colors ${
-                    period === p ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                    period === p ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
                   }`}>
                   {p}
                 </button>
               ))}
             </div>
             <Link href="/repair/parcel/queue"
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               ← Queue
             </Link>
           </div>
@@ -153,7 +154,7 @@ export default function ParcelAnalyticsPage() {
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
         ) : error ? (
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error}</div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error}</div>
         ) : data && (
           <>
             {/* Summary */}
@@ -177,9 +178,9 @@ export default function ParcelAnalyticsPage() {
                 <StatCard icon="↗" label="ขาออก (avg)" value={fmtDays(data.avg_outbound_days)}
                   sub="ส่ง → ถึงร้าน" accent="cyan" />
                 <StatCard icon="↙" label="ขาคืน (avg)" value={fmtDays(data.avg_return_days)}
-                  sub="ส่งกลับ → ถึงลูกค้า" accent="indigo" />
+                  sub="ส่งกลับ → ถึงลูกค้า" accent="brand-info" />
                 <StatCard icon="⏱️" label="รวม (avg)" value={fmtDays(data.avg_total_days)}
-                  sub="ตั้งแต่ต้นจนจบ" accent="purple" />
+                  sub="ตั้งแต่ต้นจนจบ" accent="admin-primary" />
                 <StatCard icon="💰" label="ค่าส่ง/งาน (avg)"
                   value={data.avg_shipping_cost != null ? `${data.avg_shipping_cost.toFixed(0)} ฿` : "—"}
                   accent="yellow" />
@@ -208,7 +209,7 @@ export default function ParcelAnalyticsPage() {
 
             {/* Monthly shipping cost chart */}
             {data.monthly_shipping_cost?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                   Shipping Cost รายเดือน
                 </h2>
@@ -217,8 +218,8 @@ export default function ParcelAnalyticsPage() {
                     const maxCost = Math.max(...data.monthly_shipping_cost.map(m => m.cost), 1);
                     return data.monthly_shipping_cost.map(m => (
                       <div key={m.month} className="flex items-center gap-3">
-                        <span className="text-xs text-gray-400 w-20 shrink-0 font-mono">{m.month}</span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <span className="text-xs text-gray-500 w-20 shrink-0 font-mono">{m.month}</span>
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className="bg-blue-600 h-2 rounded-full transition-all"
                             style={{ width: `${(m.cost / maxCost) * 100}%` }} />
                         </div>
@@ -236,7 +237,7 @@ export default function ParcelAnalyticsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Disputes by type */}
               {data.disputes_by_type?.length > 0 && (
-                <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+                <section className="bg-white rounded-xl border border-gray-200 p-5">
                   <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                     Disputes by Type
                   </h2>
@@ -246,14 +247,14 @@ export default function ParcelAnalyticsPage() {
                       const pct = total > 0 ? (row.count / total) * 100 : 0;
                       return (
                         <div key={row.type} className="flex items-center gap-3">
-                          <span className="text-xs text-gray-400 w-36 shrink-0">
+                          <span className="text-xs text-gray-500 w-36 shrink-0">
                             {DISPUTE_TYPE_LABEL[row.type] ?? row.type}
                           </span>
-                          <div className="flex-1 bg-gray-800 rounded-full h-2">
+                          <div className="flex-1 bg-gray-100 rounded-full h-2">
                             <div className="bg-orange-600 h-2 rounded-full transition-all"
                               style={{ width: `${pct}%` }} />
                           </div>
-                          <span className="text-xs text-gray-300 w-8 text-right">{row.count}</span>
+                          <span className="text-xs text-gray-700 w-8 text-right">{row.count}</span>
                         </div>
                       );
                     })}
@@ -262,21 +263,21 @@ export default function ParcelAnalyticsPage() {
               )}
 
               {/* By Status */}
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
                     return (
                       <div key={row.status} className="flex items-center gap-3">
-                        <span className="text-xs text-gray-400 w-28 shrink-0">
+                        <span className="text-xs text-gray-500 w-28 shrink-0">
                           {STATUS_LABELS[row.status] ?? row.status}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className="bg-blue-600 h-2 rounded-full transition-all"
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-8 text-right">{row.count}</span>
+                        <span className="text-xs text-gray-700 w-8 text-right">{row.count}</span>
                       </div>
                     );
                   })}
@@ -286,13 +287,13 @@ export default function ParcelAnalyticsPage() {
 
             {/* Courier comparison */}
             {data.by_courier?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                   Courier Comparison
                 </h2>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-gray-500 text-left border-b border-gray-800">
+                    <tr className="text-gray-500 text-left border-b border-gray-200">
                       <th className="pb-2">Courier</th>
                       <th className="pb-2 text-right">Jobs</th>
                       <th className="pb-2 text-right">Avg Transit</th>
@@ -301,18 +302,18 @@ export default function ParcelAnalyticsPage() {
                       <th className="pb-2 text-right">Total Cost</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {data.by_courier.map((row, i) => (
-                      <tr key={i} className="hover:bg-gray-800/30">
+                      <tr key={i} className="hover:bg-gray-100/30">
                         <td className="py-2.5 text-gray-200 font-medium">{row.courier_name}</td>
                         <td className="py-2.5 text-right font-mono text-blue-400">{row.jobs}</td>
-                        <td className="py-2.5 text-right font-mono text-purple-400">
+                        <td className="py-2.5 text-right font-mono text-admin-primary">
                           {fmtDays(row.avg_transit_days)}
                         </td>
                         <td className="py-2.5 text-right font-mono">
                           <span className={
                             row.on_time_rate != null && row.on_time_rate >= 0.9
-                              ? "text-green-400" : "text-orange-400"
+                              ? "text-green-600" : "text-orange-700"
                           }>
                             {row.on_time_rate != null ? `${(row.on_time_rate * 100).toFixed(1)}%` : "—"}
                           </span>
@@ -320,12 +321,12 @@ export default function ParcelAnalyticsPage() {
                         <td className="py-2.5 text-right font-mono">
                           <span className={
                             row.dispute_rate != null && row.dispute_rate > 0.05
-                              ? "text-red-400" : "text-gray-400"
+                              ? "text-red-600" : "text-gray-500"
                           }>
                             {row.dispute_rate != null ? `${(row.dispute_rate * 100).toFixed(1)}%` : "—"}
                           </span>
                         </td>
-                        <td className="py-2.5 text-right font-mono text-yellow-400">
+                        <td className="py-2.5 text-right font-mono text-yellow-700">
                           {row.total_cost.toLocaleString()} ฿
                         </td>
                       </tr>

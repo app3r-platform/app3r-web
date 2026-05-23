@@ -10,7 +10,7 @@ const ACTION_COLOR: Record<AuditRecord['action'], string> = {
   create: 'bg-green-600',
   update: 'bg-blue-600',
   delete: 'bg-red-600',
-  approve: 'bg-teal-600',
+  approve: 'bg-brand-success',
   reject: 'bg-orange-600',
 }
 
@@ -28,7 +28,7 @@ export function AuditDetailView({ entry }: AuditDetailViewProps) {
   }
 
   return (
-    <dl className="divide-y divide-gray-800">
+    <dl className="divide-y divide-gray-200">
       <div className="flex justify-between py-2">
         <dt className="text-xs text-gray-500">การกระทำ</dt>
         <dd>
@@ -47,7 +47,7 @@ export function AuditDetailView({ entry }: AuditDetailViewProps) {
       </div>
       <div className="flex justify-between py-2">
         <dt className="text-xs text-gray-500">Entity ID</dt>
-        <dd className="text-sm text-white font-mono">{entry.entityId}</dd>
+        <dd className="text-sm text-gray-900 font-mono">{entry.entityId}</dd>
       </div>
       <div className="flex justify-between py-2">
         <dt className="text-xs text-gray-500">เวลา</dt>
@@ -57,7 +57,7 @@ export function AuditDetailView({ entry }: AuditDetailViewProps) {
       </div>
       <div className="flex justify-between py-2">
         <dt className="text-xs text-gray-500">ID</dt>
-        <dd className="text-sm text-white font-mono truncate max-w-[220px]" title={entry.id}>
+        <dd className="text-sm text-gray-900 font-mono truncate max-w-[220px]" title={entry.id}>
           {entry.id}
         </dd>
       </div>

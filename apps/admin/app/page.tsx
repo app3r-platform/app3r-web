@@ -26,11 +26,11 @@ export default function Dashboard() {
   const pending = users.filter((u) => u.role === "weeer" && !u.is_approved).length;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Dashboard</h1>
-        <p className="text-gray-400 text-sm mb-8">ภาพรวมระบบ App3R</p>
+        <p className="text-gray-500 text-sm mb-8">ภาพรวมระบบ App3R</p>
 
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
@@ -44,8 +44,8 @@ export default function Dashboard() {
             </div>
 
             {/* Recent users */}
-            <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-800">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200">
                 <h2 className="font-semibold">ผู้ใช้ล่าสุด</h2>
               </div>
               <table className="w-full text-sm">
@@ -57,18 +57,18 @@ export default function Dashboard() {
                     <th className="px-6 py-3">สถานะ</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-y divide-gray-200">
                   {users.map((u) => (
-                    <tr key={u.id} className="hover:bg-gray-800/50">
-                      <td className="px-6 py-3 text-gray-400">{u.id}</td>
+                    <tr key={u.id} className="hover:bg-gray-100">
+                      <td className="px-6 py-3 text-gray-500">{u.id}</td>
                       <td className="px-6 py-3">{u.full_name}</td>
                       <td className="px-6 py-3">
                         <RoleBadge role={u.role} />
                       </td>
                       <td className="px-6 py-3">
                         {u.is_approved
-                          ? <span className="text-green-400 text-xs">✓ อนุมัติแล้ว</span>
-                          : <span className="text-yellow-400 text-xs">⏳ รออนุมัติ</span>}
+                          ? <span className="text-green-600 text-xs">✓ อนุมัติแล้ว</span>
+                          : <span className="text-yellow-700 text-xs">⏳ รออนุมัติ</span>}
                       </td>
                     </tr>
                   ))}
@@ -87,12 +87,12 @@ function StatCard({ icon, label, value, sub, alert, green }: {
   sub: string; alert?: boolean; green?: boolean;
 }) {
   return (
-    <div className={`bg-gray-900 rounded-xl border p-5 ${alert ? "border-yellow-700" : "border-gray-800"}`}>
+    <div className={`bg-white rounded-xl border p-5 ${alert ? "border-yellow-700" : "border-gray-200"}`}>
       <div className="text-2xl mb-2">{icon}</div>
-      <div className={`text-2xl font-bold ${green ? "text-green-400" : alert ? "text-yellow-400" : "text-white"}`}>
+      <div className={`text-2xl font-bold ${green ? "text-green-600" : alert ? "text-yellow-700" : "text-white"}`}>
         {value}
       </div>
-      <div className="text-sm text-gray-400 mt-0.5">{label}</div>
+      <div className="text-sm text-gray-500 mt-0.5">{label}</div>
       <div className="text-xs text-gray-600 mt-1">{sub}</div>
     </div>
   );
@@ -100,13 +100,13 @@ function StatCard({ icon, label, value, sub, alert, green }: {
 
 function RoleBadge({ role }: { role: string }) {
   const colors: Record<string, string> = {
-    admin: "bg-purple-900 text-purple-300",
-    weeer: "bg-green-900 text-green-300",
+    admin: "bg-admin-primary/15 text-admin-primary",
+    weeer: "bg-green-900 text-green-700",
     weeeu: "bg-blue-900 text-blue-300",
-    weeet: "bg-orange-900 text-orange-300",
+    weeet: "bg-orange-900 text-orange-700",
   };
   return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[role] ?? "bg-gray-800 text-gray-300"}`}>
+    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[role] ?? "bg-gray-100 text-gray-600"}`}>
       {role}
     </span>
   );

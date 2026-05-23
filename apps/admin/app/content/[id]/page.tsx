@@ -177,7 +177,7 @@ export default function EditContentPage({ params }: EditContentPageProps) {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
+            className="bg-admin-surface text-admin-primary px-4 py-1.5 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
           >
             {saving ? 'กำลังบันทึก...' : 'บันทึก'}
           </button>
@@ -250,7 +250,7 @@ export default function EditContentPage({ params }: EditContentPageProps) {
                 <div key={v.id} className="flex items-center justify-between border rounded px-4 py-3">
                   <div>
                     <span className="font-medium text-sm">v{v.version}</span>
-                    <span className="text-gray-400 text-xs ml-2">
+                    <span className="text-gray-500 text-xs ml-2">
                       {new Date(v.createdAt).toLocaleString('th-TH')}
                     </span>
                     {v.publishedAt && (

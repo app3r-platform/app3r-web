@@ -79,25 +79,25 @@ export default function GoldManagementPage() {
   const fmtG = (v: number) => v.toLocaleString() + " G";
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Gold Management</h1>
-        <p className="text-gray-400 text-sm mb-6">จัดการ Gold Point Reserve Pool และ Fee Pools</p>
+        <p className="text-gray-500 text-sm mb-6">จัดการ Gold Point Reserve Pool และ Fee Pools</p>
 
         {/* Super Admin Notice */}
         {!isSuper && (
-          <div className="mb-6 bg-orange-900/30 border border-orange-800 rounded-xl p-4 text-orange-300 text-sm">
+          <div className="mb-6 bg-orange-900/30 border border-orange-800 rounded-xl p-4 text-orange-700 text-sm">
             ⚠️ การ Mint / Destroy / Write-off ต้องการสิทธิ์ <strong>Super Admin</strong>
           </div>
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit">
+        <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           {(["reserve", "fee"] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                tab === t ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t === "reserve" ? "🏦 Reserve Pool" : "💰 Fee Pools"}
             </button>
@@ -118,9 +118,9 @@ export default function GoldManagementPage() {
                 </div>
 
                 {/* D17 Invariant */}
-                <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-sm text-gray-400">
-                  <p className="font-semibold text-gray-300 mb-1">📐 D17 Invariant</p>
-                  <code className="text-xs text-green-400">
+                <div className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-500">
+                  <p className="font-semibold text-gray-700 mb-1">📐 D17 Invariant</p>
+                  <code className="text-xs text-green-600">
                     Total Minted = Reserve + Fee Pools + Escrow + Written-Off (ต้องสมดุลเสมอ)
                   </code>
                 </div>
@@ -129,7 +129,7 @@ export default function GoldManagementPage() {
                 {isSuper && (
                   <div className="flex flex-wrap gap-3">
                     <button onClick={() => setModal("mint")}
-                      className="px-5 py-2.5 bg-green-700 hover:bg-green-600 rounded-lg text-sm font-medium transition-colors">
+                      className="px-5 py-2.5 bg-brand-success hover:bg-brand-success/90 rounded-lg text-sm font-medium transition-colors">
                       ➕ Mint Gold
                     </button>
                     <button onClick={() => setModal("destroy")}
@@ -149,7 +149,7 @@ export default function GoldManagementPage() {
               <div className="grid grid-cols-2 gap-4">
                 <InfoCard label="Listing Offer Fee Pool" value={fmtG(data.fee_pools.listing_offer_fee_pool)} accent="yellow" />
                 <InfoCard label="Platform Fee Pool" value={fmtG(data.fee_pools.platform_fee_pool)} accent="yellow" />
-                <InfoCard label="Advertising Pool" value={fmtG(data.fee_pools.advertising_pool)} accent="purple" />
+                <InfoCard label="Advertising Pool" value={fmtG(data.fee_pools.advertising_pool)} accent="admin-primary" />
                 <InfoCard label="Escrow Pool" value={fmtG(data.fee_pools.escrow_pool)} accent="blue" />
               </div>
             )}
@@ -159,22 +159,22 @@ export default function GoldManagementPage() {
         {/* Modal */}
         {modal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={closeModal}>
-            <div className="bg-gray-900 rounded-2xl border border-gray-700 p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-lg font-bold mb-4">
                 {modal === "mint" ? "➕ Mint Gold" : modal === "destroy" ? "🔥 Destroy Gold" : "📝 Write-Off Gold"}
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-gray-400 mb-1 block">จำนวน (Gold)</label>
+                  <label className="text-sm text-gray-500 mb-1 block">จำนวน (Gold)</label>
                   <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
                     placeholder="เช่น 1000" min="1" />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400 mb-1 block">เหตุผล (จำเป็น)</label>
+                  <label className="text-sm text-gray-500 mb-1 block">เหตุผล (จำเป็น)</label>
                   <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
+                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
                     placeholder="ระบุเหตุผลการดำเนินการ..." />
                 </div>
 
@@ -182,7 +182,7 @@ export default function GoldManagementPage() {
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input type="checkbox" checked={confirm2} onChange={(e) => setConfirm2(e.target.checked)}
                       className="mt-0.5 rounded" />
-                    <span className="text-sm text-orange-300">
+                    <span className="text-sm text-orange-700">
                       ⚠️ ฉันเข้าใจว่าการดำเนินการนี้จะถูกบันทึกใน Audit Log และไม่สามารถยกเลิกได้
                     </span>
                   </label>
@@ -191,12 +191,12 @@ export default function GoldManagementPage() {
 
               <div className="flex gap-3 mt-6">
                 <button onClick={closeModal}
-                  className="flex-1 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition-colors">
+                  className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
                   ยกเลิก
                 </button>
                 <button onClick={handleSubmit}
                   disabled={!confirm2 || !amount || !reason || submitting}
-                  className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+                  className="flex-1 px-4 py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                   {submitting ? "กำลังดำเนินการ..." : "ยืนยัน"}
                 </button>
               </div>
@@ -206,7 +206,7 @@ export default function GoldManagementPage() {
 
         {/* Toast */}
         {toast && (
-          <div className="fixed bottom-6 right-6 bg-gray-800 border border-gray-700 rounded-xl px-5 py-3 text-sm shadow-xl">
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
             {toast}
           </div>
         )}
@@ -217,11 +217,11 @@ export default function GoldManagementPage() {
 
 function InfoCard({ label, value, accent }: { label: string; value: string; accent: string }) {
   const colors: Record<string, string> = {
-    green: "text-green-400", blue: "text-blue-400", red: "text-red-400",
-    yellow: "text-yellow-400", purple: "text-purple-400", gray: "text-gray-300",
+    green: "text-green-600", blue: "text-blue-400", red: "text-red-600",
+    yellow: "text-yellow-700", "admin-primary": "text-admin-primary", gray: "text-gray-700",
   };
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-xl font-bold ${colors[accent] ?? "text-white"}`}>{value}</p>
     </div>
