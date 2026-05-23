@@ -14,6 +14,21 @@ type ListingDetail = Listing & {
   description?: string;
 };
 
+// Mock: terms 3 แกน (local type — Mockup เท่านั้น)
+type MockSellerTerms = {
+  shipping_policy: string;   // แกน 1: ค่าส่ง
+  used_warranty_days: number; // แกน 2: รับประกันมือสอง (วัน)
+  liability_policy: string;  // แกน 3: รับผิดไม่ตรงปก
+};
+
+// Mock: Q&A local type
+type MockQA = {
+  id: string;
+  question: string;
+  answer?: string;
+  mine: boolean;
+};
+
 const DELIVERY_LABEL: Record<string, string> = {
   on_site: "ส่งเอง / นัดรับ",
   parcel: "ส่งพัสดุ (ขนส่ง)",
@@ -31,6 +46,23 @@ const GRADE_COLOR: Record<string, string> = {
   grade_C: "bg-red-100 text-red-600",
 };
 
+// Mock terms สำหรับ demo (Mockup)
+const MOCK_TERMS: MockSellerTerms = {
+  shipping_policy: "ผู้ขายออกค่าส่งให้ หากสินค้าน้ำหนักเกิน 10kg ผู้ซื้อรับผิดชอบส่วนเกิน",
+  used_warranty_days: 30,
+  liability_policy: "หากสินค้าไม่ตรงปก ผู้ขายรับผิดชอบคืนเงินเต็มจำนวนภายใน 7 วัน",
+};
+
+// Mock Q&A สำหรับ demo (Mockup — buyer เห็นเฉพาะของตัวเอง)
+const MOCK_QA: MockQA[] = [
+  {
+    id: "qa-1",
+    question: "สภาพคอมเพรสเซอร์เป็นอย่างไรบ้างครับ?",
+    answer: "คอมเพรสเซอร์ทำงานปกติ เย็นดีมากครับ",
+    mine: true,
+  },
+];
+
 export default function ListingDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [listing, setListing] = useState<ListingDetail | null>(null);
@@ -44,6 +76,11 @@ export default function ListingDetailPage() {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [offerSent, setOfferSent] = useState(false);
+
+  // Mock Q&A state (Mockup — FLAG-3 placeholder)
+  const [qaItems, setQaItems] = useState<MockQA[]>(MOCK_QA);
+  const [newQuestion, setNewQuestion] = useState("");
+  const [showQA, setShowQA] = useState(false);
 
   useEffect(() => {
     listingsApi.get(id)
@@ -76,12 +113,23 @@ export default function ListingDetailPage() {
     }
   };
 
+  // Mock: ส่งคำถาม Q&A (Mockup — FLAG-3 placeholder ไม่ wire API จริง)
+  const handleAskQuestion = () => {
+    if (!newQuestion.trim()) return;
+    setQaItems(prev => [...prev, {
+      id: `qa-${Date.now()}`,
+      question: newQuestion.trim(),
+      mine: true,
+    }]);
+    setNewQuestion("");
+  };
+
   if (loading) return <div className="text-center py-16 text-gray-400">กำลังโหลด...</div>;
   if (error && !listing) return (
     <div className="text-center py-16">
       <p className="text-4xl mb-3">📦</p>
       <p className="text-gray-600 font-medium">{error}</p>
-      <Link href="/listings" className="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline">← กลับตลาด</Link>
+      <Link href="/listings" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">← กลับตลาด</Link>
     </div>
   );
   if (!listing) return null;
@@ -125,7 +173,7 @@ export default function ListingDetailPage() {
           )}
         </div>
 
-        <p className="text-2xl font-bold text-indigo-600">{listing.price.toLocaleString()} ฿</p>
+        <p className="text-2xl font-bold text-weeeu-primary">{listing.price.toLocaleString()} ฿</p>
 
         <div className="border-t border-gray-50 pt-3 space-y-2">
           <InfoRow label="จัดส่ง" value={listing.deliveryMethods.map(d => DELIVERY_LABEL[d] ?? d).join(", ")} />
@@ -152,6 +200,46 @@ export default function ListingDetailPage() {
         )}
       </div>
 
+      {/* Terms 3 แกน (Mock — Mockup Resell 2.2) */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">📋 เงื่อนไขผู้ขาย</p>
+        <div className="space-y-2.5">
+          <div className="flex items-start gap-2.5">
+            <span className="text-base mt-0.5">🚚</span>
+            <div>
+              <p className="text-xs font-semibold text-gray-700">ค่าส่ง</p>
+              <p className="text-xs text-gray-500 leading-relaxed">{MOCK_TERMS.shipping_policy}</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <span className="text-base mt-0.5">🔒</span>
+            <div>
+              <p className="text-xs font-semibold text-gray-700">รับประกันมือสอง</p>
+              <p className="text-xs text-gray-500">{MOCK_TERMS.used_warranty_days} วัน หลังรับสินค้า</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <span className="text-base mt-0.5">⚖️</span>
+            <div>
+              <p className="text-xs font-semibold text-gray-700">ความรับผิดกรณีไม่ตรงปก</p>
+              <p className="text-xs text-gray-500 leading-relaxed">{MOCK_TERMS.liability_policy}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Escrow note */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex items-start gap-2.5">
+        <span className="text-lg">🥇</span>
+        <div>
+          <p className="text-xs font-semibold text-yellow-800">ชำระด้วย Gold Point</p>
+          <p className="text-xs text-yellow-700 mt-0.5">
+            เมื่อข้อเสนอถูกเลือก ระบบล็อก Gold ในบัญชีคุณ — คุณมีเวลา 24 ชม. เติม Gold ถ้าไม่พอ
+          </p>
+          <Link href="/wallet" className="inline-block text-xs text-yellow-800 font-semibold underline mt-1">ดูกระเป๋า Gold →</Link>
+        </div>
+      </div>
+
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3">
           <p className="text-sm text-red-700">{error}</p>
@@ -160,11 +248,11 @@ export default function ListingDetailPage() {
 
       {/* Offer success */}
       {offerSent && (
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-center space-y-2">
+        <div className="bg-weeeu-surface border border-weeeu-primary/30 rounded-2xl p-4 text-center space-y-2">
           <p className="text-2xl">✅</p>
-          <p className="text-sm font-semibold text-green-800">ส่งข้อเสนอแล้ว!</p>
-          <p className="text-xs text-green-600">ผู้ขายจะพิจารณาข้อเสนอของคุณ</p>
-          <Link href="/offers" className="block text-sm text-indigo-600 font-medium hover:underline">ดูข้อเสนอของฉัน →</Link>
+          <p className="text-sm font-semibold text-weeeu-text">ส่งข้อเสนอแล้ว!</p>
+          <p className="text-xs text-weeeu-primary">ผู้ขายจะพิจารณาข้อเสนอของคุณ</p>
+          <Link href="/offers" className="block text-sm text-weeeu-primary font-medium hover:underline">ดูข้อเสนอของฉัน →</Link>
         </div>
       )}
 
@@ -172,7 +260,7 @@ export default function ListingDetailPage() {
       {canMakeOffer && !offerSent && !showOfferForm && (
         <button
           onClick={() => setShowOfferForm(true)}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm"
         >
           🤝 ยื่นข้อเสนอ
         </button>
@@ -191,7 +279,7 @@ export default function ListingDetailPage() {
               value={offerPrice}
               onChange={e => setOfferPrice(e.target.value)}
               placeholder={`ราคาประกาศ ${listing.price.toLocaleString()} ฿`}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
             />
           </div>
 
@@ -205,8 +293,8 @@ export default function ListingDetailPage() {
                   onClick={() => setDeliveryMethod(d)}
                   className={`w-full text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
                     deliveryMethod === d
-                      ? "bg-indigo-50 border-indigo-400 text-indigo-800 font-medium"
-                      : "border-gray-200 text-gray-600 hover:border-indigo-200"
+                      ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
+                      : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
                   }`}
                 >
                   {deliveryMethod === d && <span className="mr-2">✅</span>}
@@ -223,7 +311,7 @@ export default function ListingDetailPage() {
               onChange={e => setMessage(e.target.value)}
               placeholder="เช่น สนใจมาก ต่อราคาได้บ้างไหม"
               rows={2}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40 resize-none"
             />
           </div>
 
@@ -238,13 +326,64 @@ export default function ListingDetailPage() {
             <button
               onClick={handleMakeOffer}
               disabled={submitting}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm"
+              className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm"
             >
               {submitting ? "กำลังส่ง..." : "ส่งข้อเสนอ"}
             </button>
           </div>
         </div>
       )}
+
+      {/* Q&A Section (Mockup — FLAG-3 placeholder ไม่ wire API จริง) */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+        <button
+          type="button"
+          onClick={() => setShowQA(!showQA)}
+          className="w-full flex items-center justify-between text-left"
+        >
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            💬 Q&A ถามผู้ขาย <span className="text-gray-400">({qaItems.filter(q => q.mine).length} คำถาม)</span>
+          </p>
+          <span className="text-gray-400 text-sm">{showQA ? "▲" : "▼"}</span>
+        </button>
+
+        {showQA && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-xl p-3">
+              <p className="text-xs text-blue-600">💡 คุณเห็นเฉพาะคำถามของตัวเอง — ผู้ขายเห็นทุกคำถาม</p>
+            </div>
+
+            {qaItems.filter(q => q.mine).map(qa => (
+              <div key={qa.id} className="border border-gray-100 rounded-xl p-3 space-y-1.5">
+                <p className="text-xs text-gray-800 font-medium">❓ {qa.question}</p>
+                {qa.answer ? (
+                  <p className="text-xs text-weeeu-primary font-medium">💬 {qa.answer}</p>
+                ) : (
+                  <p className="text-xs text-gray-400 italic">รอผู้ขายตอบ...</p>
+                )}
+              </div>
+            ))}
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newQuestion}
+                onChange={e => setNewQuestion(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleAskQuestion()}
+                placeholder="พิมพ์คำถามถึงผู้ขาย..."
+                className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+              />
+              <button
+                onClick={handleAskQuestion}
+                disabled={!newQuestion.trim()}
+                className="px-3 py-2 bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-gray-200 text-white text-xs font-semibold rounded-xl transition-colors"
+              >
+                ถาม
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
