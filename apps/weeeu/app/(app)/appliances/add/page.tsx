@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "เพิ่มเครื่องใช้ไฟฟ้า" };
@@ -32,7 +32,7 @@ export default function AddAppliancePage() {
               <button
                 key={cat.id}
                 type="button"
-                className="flex flex-col items-center gap-1 p-3 border-2 border-gray-100 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all"
+                className="flex flex-col items-center gap-1 p-3 border-2 border-gray-100 rounded-xl hover:border-weeeu-dark hover:bg-weeeu-surface transition-all"
               >
                 <span className="text-2xl">{cat.icon}</span>
                 <span className="text-xs font-medium text-gray-600">{cat.label}</span>
@@ -47,7 +47,7 @@ export default function AddAppliancePage() {
           <input
             type="text"
             placeholder="เช่น แอร์ห้องนอน, ตู้เย็นครัว"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
           />
         </div>
 
@@ -58,7 +58,7 @@ export default function AddAppliancePage() {
             <input
               type="text"
               placeholder="เช่น Mitsubishi, LG"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
             />
           </div>
           <div>
@@ -66,7 +66,7 @@ export default function AddAppliancePage() {
             <input
               type="text"
               placeholder="เช่น MSY-GN13VF"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
             />
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function AddAppliancePage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">วันที่ติดตั้ง</label>
             <input
               type="date"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-500"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm text-gray-500"
             />
           </div>
           <div>
@@ -85,7 +85,7 @@ export default function AddAppliancePage() {
             <input
               type="number"
               placeholder="0"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
             />
           </div>
         </div>
@@ -97,14 +97,14 @@ export default function AddAppliancePage() {
             <input
               type="text"
               placeholder="ไม่บังคับ"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">วันหมดประกัน</label>
             <input
               type="date"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-500"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm text-gray-500"
             />
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function AddAppliancePage() {
         {/* Photo */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">รูปภาพเครื่อง</label>
-          <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-blue-300 cursor-pointer transition-colors">
+          <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-weeeu-dark cursor-pointer transition-colors">
             <span className="text-3xl">📷</span>
             <p className="text-sm text-gray-500 mt-2">คลิกเพื่ออัปโหลดรูป</p>
             <p className="text-xs text-gray-400 mt-1">JPG, PNG สูงสุด 5MB</p>
@@ -125,7 +125,7 @@ export default function AddAppliancePage() {
           <textarea
             placeholder="รายละเอียดเพิ่มเติม..."
             rows={3}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm resize-none"
           />
         </div>
 
@@ -139,7 +139,7 @@ export default function AddAppliancePage() {
           </Link>
           <button
             type="submit"
-            className="flex-[2] py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors"
+            className="flex-[2] py-3 bg-weeeu-primary hover:bg-weeeu-primary text-white rounded-xl text-sm font-semibold transition-colors"
           >
             บันทึกเครื่องใช้ไฟฟ้า
           </button>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "การแจ้งเตือน" };
 
@@ -34,7 +34,7 @@ const categoryColors: Record<string, string> = {
   resell: "bg-green-50",
   wallet: "bg-yellow-50",
   maintain: "bg-purple-50",
-  system: "bg-blue-50",
+  system: "bg-weeeu-surface",
 };
 
 export default function NotificationsPage() {
@@ -47,7 +47,7 @@ export default function NotificationsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">การแจ้งเตือน</h1>
           {newCount > 0 && (
-            <p className="text-sm text-blue-600 mt-0.5">{newCount} รายการใหม่</p>
+            <p className="text-sm text-weeeu-primary mt-0.5">{newCount} รายการใหม่</p>
           )}
         </div>
         <button className="text-sm text-gray-400 hover:text-gray-600 font-medium">
@@ -62,7 +62,7 @@ export default function NotificationsPage() {
             key={tab}
             className={`flex-shrink-0 text-xs px-4 py-2 rounded-full font-medium transition-colors ${
               tab === "ทั้งหมด"
-                ? "bg-blue-600 text-white"
+                ? "bg-weeeu-primary text-white"
                 : "bg-gray-100 text-gray-500 hover:bg-gray-200"
             }`}
           >
@@ -78,13 +78,13 @@ export default function NotificationsPage() {
             key={notif.id}
             className={`relative flex items-start gap-4 p-4 rounded-2xl border transition-all cursor-pointer hover:shadow-sm ${
               notif.isNew
-                ? "bg-blue-50 border-blue-100"
+                ? "bg-weeeu-surface border-weeeu-surface"
                 : "bg-white border-gray-100"
             }`}
           >
             {/* New dot */}
             {notif.isNew && (
-              <span className="absolute top-4 right-4 w-2 h-2 bg-blue-500 rounded-full" />
+              <span className="absolute top-4 right-4 w-2 h-2 bg-weeeu-primary rounded-full" />
             )}
 
             {/* Icon */}
@@ -96,7 +96,7 @@ export default function NotificationsPage() {
 
             {/* Content */}
             <div className="flex-1 min-w-0 pr-4">
-              <p className={`text-sm font-semibold ${notif.isNew ? "text-blue-900" : "text-gray-800"}`}>
+              <p className={`text-sm font-semibold ${notif.isNew ? "text-weeeu-text" : "text-gray-800"}`}>
                 {notif.title}
               </p>
               <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">{notif.body}</p>

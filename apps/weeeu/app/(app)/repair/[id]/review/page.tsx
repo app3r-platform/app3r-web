@@ -145,7 +145,7 @@ export default function ReviewPage() {
         <p className="text-sm text-gray-500">ขอบคุณที่ใช้บริการ — Point จะถูกโอนให้ร้านซ่อมในไม่ช้า</p>
         <Link
           href="/repair"
-          className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
+          className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
         >
           กลับรายการงานซ่อม
         </Link>
@@ -164,8 +164,8 @@ export default function ReviewPage() {
 
       {/* Progress indicator */}
       <div className="flex items-center gap-2">
-        <div className={`flex-1 h-1.5 rounded-full ${phase === "inspect" || phase === "rating" ? "bg-blue-500" : "bg-gray-200"}`} />
-        <div className={`flex-1 h-1.5 rounded-full ${phase === "rating" ? "bg-blue-500" : "bg-gray-200"}`} />
+        <div className={`flex-1 h-1.5 rounded-full ${phase === "inspect" || phase === "rating" ? "bg-weeeu-primary" : "bg-gray-200"}`} />
+        <div className={`flex-1 h-1.5 rounded-full ${phase === "rating" ? "bg-weeeu-primary" : "bg-gray-200"}`} />
       </div>
 
       {/* Inspect phase */}
@@ -215,7 +215,7 @@ export default function ReviewPage() {
           {/* Final price */}
           <div className="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
             <p className="text-sm text-gray-500">ยอดที่จะหัก</p>
-            <p className="text-lg font-bold text-blue-700">{data.final_price.toLocaleString()} Point</p>
+            <p className="text-lg font-bold text-weeeu-primary">{data.final_price.toLocaleString()} Point</p>
           </div>
 
           {inspectError && (
@@ -265,7 +265,7 @@ export default function ReviewPage() {
               onChange={e => setWeeerReview(e.target.value)}
               placeholder="รีวิวร้านซ่อม (ถ้ามี ≥50 ตัวอักษร รับ +10 แต้ม)"
               rows={3}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
             />
             {weeerReview.length > 0 && weeerReview.length < 50 && (
               <p className="text-xs text-amber-500">ยังขาดอีก {50 - weeerReview.length} ตัวอักษรเพื่อรับ +10 แต้ม</p>
@@ -282,7 +282,7 @@ export default function ReviewPage() {
                 onChange={e => setWeeetReview(e.target.value)}
                 placeholder="รีวิวช่าง (ไม่บังคับ)"
                 rows={2}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
               />
             </div>
           )}
@@ -297,7 +297,7 @@ export default function ReviewPage() {
             <button
               onClick={handleSubmitRating}
               disabled={ratingSubmitting}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+              className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
             >
               {ratingSubmitting ? <><span className="animate-spin">⟳</span> กำลังส่งรีวิว...</> : "ส่งรีวิว"}
             </button>

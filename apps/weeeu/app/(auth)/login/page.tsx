@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -66,7 +66,7 @@ export default function LoginPage() {
   };
 
   const inputCls = (field: string) =>
-    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary focus:border-transparent ${
       errors[field] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -123,7 +123,7 @@ export default function LoginPage() {
             <label className="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
             <Link
               href="/forgot-password"
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+              className="text-xs text-weeeu-primary hover:text-weeeu-dark font-medium"
             >
               ลืมรหัสผ่าน?
             </Link>
@@ -141,7 +141,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading || isLocked}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
         >
           {loading ? <><span className="animate-spin">⟳</span> กำลังเข้าสู่ระบบ...</> : "เข้าสู่ระบบ"}
         </button>
@@ -174,7 +174,7 @@ export default function LoginPage() {
 
       <p className="text-center text-sm text-gray-500">
         ยังไม่มีบัญชี?{" "}
-        <Link href="/signup/method" className="text-blue-600 font-semibold hover:text-blue-800">
+        <Link href="/signup/method" className="text-weeeu-primary font-semibold hover:text-weeeu-dark">
           สมัครสมาชิกฟรี
         </Link>
       </p>

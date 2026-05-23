@@ -54,7 +54,7 @@ export default async function ModulePage({ params }: Props) {
       <div className="text-center py-20">
         <p className="text-4xl mb-3">🔍</p>
         <p className="text-xl font-semibold text-gray-700">ไม่พบบริการนี้</p>
-        <Link href="/dashboard" className="mt-4 inline-block text-blue-600 hover:text-blue-800 text-sm font-medium">
+        <Link href="/dashboard" className="mt-4 inline-block text-weeeu-primary hover:text-weeeu-dark text-sm font-medium">
           ← กลับหน้าหลัก
         </Link>
       </div>
@@ -71,15 +71,15 @@ export default async function ModulePage({ params }: Props) {
       </div>
 
       {/* Phase 2b placeholder */}
-      <div className="bg-white rounded-2xl border-2 border-dashed border-blue-200 p-10 text-center">
+      <div className="bg-white rounded-2xl border-2 border-dashed border-weeeu-dark p-10 text-center">
         <div className="text-5xl mb-4">🚧</div>
         <h2 className="text-lg font-semibold text-gray-700">กำลังพัฒนา</h2>
         <p className="text-sm text-gray-400 mt-2 max-w-sm mx-auto">
           ฟีเจอร์ <strong>{config.title}</strong> อยู่ในขั้นตอนพัฒนา (Wave 4 Phase 2b)
           <br />จะพร้อมใช้งานเร็วๆ นี้
         </p>
-        <div className="mt-4 inline-flex items-center gap-2 bg-blue-50 text-blue-600 text-xs font-medium px-4 py-2 rounded-full">
-          <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+        <div className="mt-4 inline-flex items-center gap-2 bg-weeeu-surface text-weeeu-primary text-xs font-medium px-4 py-2 rounded-full">
+          <span className="w-2 h-2 bg-weeeu-primary rounded-full animate-pulse" />
           Phase 2b — Coming Soon
         </div>
       </div>

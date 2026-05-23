@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -67,7 +67,7 @@ export default function SecuritySettingsPage() {
   const pwScore = pwChecks.filter((c) => c.ok).length;
 
   const inputCls = (field: string) =>
-    `border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+    `border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary focus:border-transparent ${
       errors[field] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -89,7 +89,7 @@ export default function SecuritySettingsPage() {
         </div>
         <Link
           href="/login"
-          className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
+          className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
         >
           เข้าสู่ระบบใหม่
         </Link>
@@ -199,7 +199,7 @@ export default function SecuritySettingsPage() {
             <button
               type="submit"
               disabled={pageState === "saving"}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+              className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
             >
               {pageState === "saving" ? (
                 <><span className="animate-spin">⟳</span> กำลังเปลี่ยนรหัสผ่าน...</>

@@ -125,7 +125,7 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   inspecting: "bg-purple-100 text-purple-700",
   awaiting_decision: "bg-purple-100 text-purple-700",
   awaiting_user: "bg-red-100 text-red-700",
-  in_progress: "bg-blue-100 text-blue-700",
+  in_progress: "bg-weeeu-surface text-weeeu-primary",
   completed: "bg-green-100 text-green-700",
   awaiting_review: "bg-yellow-100 text-yellow-700",
   closed: "bg-green-100 text-green-700",
@@ -145,7 +145,7 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   in_transit_to_shop: "bg-amber-100 text-amber-700",
   received_at_shop: "bg-indigo-100 text-indigo-700",
   parcel_inspecting: "bg-indigo-100 text-indigo-700",
-  parcel_in_progress: "bg-blue-100 text-blue-700",
+  parcel_in_progress: "bg-weeeu-surface text-weeeu-primary",
   ready_to_ship_back: "bg-green-100 text-green-700",
   in_transit_to_customer: "bg-amber-100 text-amber-700",
   parcel_delivered: "bg-yellow-100 text-yellow-700",
@@ -191,7 +191,7 @@ export default function RepairJobDetailPage() {
     <div className="text-center py-16">
       <p className="text-4xl mb-3">🔍</p>
       <p className="text-gray-600 font-medium">{error || "ไม่พบข้อมูล"}</p>
-      <Link href="/repair" className="mt-3 inline-block text-blue-600 text-sm font-medium hover:underline">← กลับรายการ</Link>
+      <Link href="/repair" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">← กลับรายการ</Link>
     </div>
   );
 
@@ -460,7 +460,7 @@ export default function RepairJobDetailPage() {
               {job.timeline.map((ev, i) => (
                 <div key={ev.id} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className={`w-2.5 h-2.5 rounded-full mt-1 ${i === 0 ? "bg-blue-500" : "bg-gray-300"}`} />
+                    <div className={`w-2.5 h-2.5 rounded-full mt-1 ${i === 0 ? "bg-weeeu-primary" : "bg-gray-300"}`} />
                     {i < job.timeline.length - 1 && <div className="w-px flex-1 bg-gray-200 mt-1" />}
                   </div>
                   <div className="pb-4">

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "หน้าหลัก" };
@@ -12,7 +12,7 @@ const quickActions = [
 
 const recentActivities = [
   { icon: "🔧", title: "แจ้งซ่อมแอร์", status: "กำลังดำเนินการ", date: "2 พ.ค. 69", statusColor: "text-orange-600 bg-orange-50" },
-  { icon: "💰", title: "ประกาศขายตู้เย็น Sharp", status: "รอผู้ซื้อ", date: "1 พ.ค. 69", statusColor: "text-blue-600 bg-blue-50" },
+  { icon: "💰", title: "ประกาศขายตู้เย็น Sharp", status: "รอผู้ซื้อ", date: "1 พ.ค. 69", statusColor: "text-weeeu-primary bg-weeeu-surface" },
   { icon: "✅", title: "ซ่อมเครื่องซักผ้า", status: "เสร็จแล้ว", date: "28 เม.ย. 69", statusColor: "text-green-600 bg-green-50" },
 ];
 
@@ -69,7 +69,7 @@ export default function DashboardPage() {
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-base font-semibold text-gray-800">เครื่องใช้ไฟฟ้าของฉัน</h2>
-          <Link href="/appliances" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+          <Link href="/appliances" className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">
             ดูทั้งหมด →
           </Link>
         </div>
@@ -83,7 +83,7 @@ export default function DashboardPage() {
               <span className="text-2xl">{app.icon}</span>
               <p className="text-xs font-medium text-gray-700 mt-1">{app.name}</p>
               <p className="text-xs text-gray-400">{app.brand}</p>
-              <span className="inline-block mt-1 text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
+              <span className="inline-block mt-1 text-xs bg-weeeu-surface text-weeeu-primary px-2 py-0.5 rounded-full">
                 {app.count} เครื่อง
               </span>
             </div>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/appliances/add"
-          className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 border-2 border-dashed border-blue-200 rounded-xl text-sm text-blue-500 hover:border-blue-400 hover:text-blue-600 transition-colors"
+          className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 border-2 border-dashed border-weeeu-dark rounded-xl text-sm text-weeeu-primary hover:border-weeeu-primary hover:text-weeeu-primary transition-colors"
         >
           <span>+</span> เพิ่มเครื่องใช้ไฟฟ้า
         </Link>
@@ -101,7 +101,7 @@ export default function DashboardPage() {
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-base font-semibold text-gray-800">กิจกรรมล่าสุด</h2>
-          <Link href="/history" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+          <Link href="/history" className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">
             ดูทั้งหมด →
           </Link>
         </div>

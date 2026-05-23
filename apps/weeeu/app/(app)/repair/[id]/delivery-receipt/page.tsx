@@ -137,7 +137,7 @@ export default function DeliveryReceiptPage() {
     <div className="text-center py-16">
       <p className="text-4xl mb-3">🔍</p>
       <p className="text-gray-600 font-medium">{error}</p>
-      <Link href="/repair" className="mt-3 inline-block text-blue-600 text-sm font-medium hover:underline">← กลับรายการ</Link>
+      <Link href="/repair" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">← กลับรายการ</Link>
     </div>
   );
 

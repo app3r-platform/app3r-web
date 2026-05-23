@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -64,7 +64,7 @@ export default function SignupEmailPage() {
   };
 
   const inputCls = (field: string) =>
-    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary focus:border-transparent ${
       errors[field] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -82,7 +82,7 @@ export default function SignupEmailPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 2 ? "bg-blue-600" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 2 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
       <p className="text-xs text-gray-400 -mt-3">ขั้นตอนที่ 2 จาก 7</p>
@@ -174,13 +174,13 @@ export default function SignupEmailPage() {
               type="checkbox"
               checked={form.accept_terms}
               onChange={(e) => set("accept_terms", e.target.checked)}
-              className="mt-0.5 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="mt-0.5 w-4 h-4 rounded border-gray-300 text-weeeu-primary focus:ring-weeeu-primary"
             />
             <span className="text-xs text-gray-600 leading-relaxed">
               ฉันยอมรับ{" "}
-              <Link href="/terms" className="text-blue-600 hover:underline font-medium">ข้อตกลงการใช้งาน</Link>{" "}
+              <Link href="/terms" className="text-weeeu-primary hover:underline font-medium">ข้อตกลงการใช้งาน</Link>{" "}
               และ{" "}
-              <Link href="/privacy" className="text-blue-600 hover:underline font-medium">นโยบายความเป็นส่วนตัว</Link>{" "}
+              <Link href="/privacy" className="text-weeeu-primary hover:underline font-medium">นโยบายความเป็นส่วนตัว</Link>{" "}
               ของ WeeeU
             </span>
           </label>
@@ -192,7 +192,7 @@ export default function SignupEmailPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
@@ -206,7 +206,7 @@ export default function SignupEmailPage() {
 
       <p className="text-center text-sm text-gray-500">
         มีบัญชีแล้ว?{" "}
-        <Link href="/login" className="text-blue-600 font-semibold hover:text-blue-800">
+        <Link href="/login" className="text-weeeu-primary font-semibold hover:text-weeeu-dark">
           เข้าสู่ระบบ
         </Link>
       </p>

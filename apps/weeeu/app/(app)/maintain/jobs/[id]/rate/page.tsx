@@ -45,16 +45,16 @@ export default function MaintainRatePage() {
       </div>
 
       {submitted ? (
-        <div className="bg-teal-50 border border-teal-200 rounded-2xl p-6 text-center space-y-3">
+        <div className="bg-weeeu-surface border border-weeeu-primary/30 rounded-2xl p-6 text-center space-y-3">
           <p className="text-4xl">⭐</p>
-          <p className="text-sm font-semibold text-teal-800">ขอบคุณสำหรับคะแนน!</p>
-          <p className="text-xs text-teal-600">กำลังกลับหน้ารายละเอียดงาน...</p>
+          <p className="text-sm font-semibold text-weeeu-text">ขอบคุณสำหรับคะแนน!</p>
+          <p className="text-xs text-weeeu-primary">กำลังกลับหน้ารายละเอียดงาน...</p>
         </div>
       ) : (
         <>
-          <div className="bg-teal-50 border border-teal-100 rounded-2xl p-4 text-center">
-            <p className="text-sm font-semibold text-teal-800">🛁 งานล้างเครื่องเสร็จแล้ว</p>
-            <p className="text-xs text-teal-600 mt-1">คะแนนของคุณช่วยพัฒนาคุณภาพบริการ</p>
+          <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 text-center">
+            <p className="text-sm font-semibold text-weeeu-text">🛁 งานล้างเครื่องเสร็จแล้ว</p>
+            <p className="text-xs text-weeeu-primary mt-1">คะแนนของคุณช่วยพัฒนาคุณภาพบริการ</p>
           </div>
 
           {error && (
@@ -83,7 +83,7 @@ export default function MaintainRatePage() {
               ))}
             </div>
             {(hovered || rating) > 0 && (
-              <p className="text-center text-sm font-semibold text-teal-700">
+              <p className="text-center text-sm font-semibold text-weeeu-dark">
                 {STAR_LABELS[hovered || rating]}
               </p>
             )}
@@ -97,14 +97,14 @@ export default function MaintainRatePage() {
               onChange={e => setComment(e.target.value)}
               placeholder="เช่น ช่างมาตรงเวลา / เครื่องสะอาดมาก / บริการดีมาก"
               rows={4}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
             />
           </div>
 
           <button
             onClick={handleSubmit}
             disabled={submitting || rating === 0}
-            className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
           >
             {submitting
               ? <><span className="animate-spin">⟳</span> กำลังส่งคะแนน...</>

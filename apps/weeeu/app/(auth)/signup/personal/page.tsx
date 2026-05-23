@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -59,7 +59,7 @@ export default function SignupPersonalPage() {
   };
 
   const inputCls = (field: string) =>
-    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary focus:border-transparent ${
       errors[field] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -75,7 +75,7 @@ export default function SignupPersonalPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 5 ? "bg-blue-600" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 5 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
       <p className="text-xs text-gray-400 -mt-3">ขั้นตอนที่ 5 จาก 7</p>
@@ -149,8 +149,8 @@ export default function SignupPersonalPage() {
                 onClick={() => set("gender", g.value)}
                 className={`py-3 rounded-xl text-sm font-medium border-2 transition-colors ${
                   form.gender === g.value
-                    ? "border-blue-600 bg-blue-50 text-blue-700"
-                    : "border-gray-200 text-gray-600 hover:border-blue-300"
+                    ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary"
+                    : "border-gray-200 text-gray-600 hover:border-weeeu-dark"
                 }`}
               >
                 {g.label}
@@ -163,7 +163,7 @@ export default function SignupPersonalPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 mt-2"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 mt-2"
         >
           {loading ? <><span className="animate-spin">⟳</span> กำลังบันทึก...</> : "ถัดไป →"}
         </button>

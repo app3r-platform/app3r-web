@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, KeyboardEvent, ClipboardEvent } from "react";
 
@@ -67,8 +67,8 @@ export default function OtpInput({ value, onChange, disabled = false }: OtpInput
           onFocus={() => inputs.current[i]?.select()}
           disabled={disabled}
           className={`w-12 h-14 text-center text-xl font-bold border-2 rounded-xl transition-colors focus:outline-none
-            ${digit && digit !== " " ? "border-blue-500 bg-blue-50 text-blue-700" : "border-gray-200 bg-white text-gray-900"}
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-100
+            ${digit && digit !== " " ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary" : "border-gray-200 bg-white text-gray-900"}
+            focus:border-weeeu-primary focus:ring-2 focus:ring-weeeu-surface
             disabled:opacity-50 disabled:cursor-not-allowed`}
           aria-label={`OTP หลักที่ ${i + 1}`}
         />

@@ -205,7 +205,7 @@ export default function DecisionB22Page() {
                 <button
                   onClick={() => setAction("counter")}
                   disabled={submitting}
-                  className="w-full border border-blue-300 text-blue-600 hover:bg-blue-50 disabled:opacity-50 font-medium py-3 rounded-2xl text-sm transition-colors"
+                  className="w-full border border-weeeu-dark text-weeeu-primary hover:bg-weeeu-surface disabled:opacity-50 font-medium py-3 rounded-2xl text-sm transition-colors"
                 >
                   💬 ต่อรองราคา
                 </button>
@@ -222,8 +222,8 @@ export default function DecisionB22Page() {
 
           {/* Counter form */}
           {action === "counter" && (
-            <div className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
-              <p className="text-sm font-semibold text-blue-800">ต่อรองราคาซาก (รอบ {data.negotiation_round + 1}/{MAX_ROUNDS})</p>
+            <div className="bg-white rounded-2xl border border-weeeu-dark p-5 space-y-4">
+              <p className="text-sm font-semibold text-weeeu-dark">ต่อรองราคาซาก (รอบ {data.negotiation_round + 1}/{MAX_ROUNDS})</p>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">ราคาซากที่คุณต้องการ (Point)</label>
                 <input
@@ -232,7 +232,7 @@ export default function DecisionB22Page() {
                   onChange={e => setCounterPrice(e.target.value)}
                   placeholder="ระบุราคา"
                   min={0}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
                 />
               </div>
               <div className="flex gap-2">
@@ -242,7 +242,7 @@ export default function DecisionB22Page() {
                 <button
                   onClick={() => submit("counter")}
                   disabled={submitting}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+                  className="flex-1 bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
                 >
                   {submitting ? "กำลังส่ง..." : "ส่งข้อเสนอต่อรอง"}
                 </button>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -81,7 +81,7 @@ export default function SignupOtpPage() {
   };
 
   const inputCls = (err: string) =>
-    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary ${
       err ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -90,7 +90,7 @@ export default function SignupOtpPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 3 ? "bg-blue-600" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 3 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
       <p className="text-xs text-gray-400 -mt-4">ขั้นตอนที่ 3 จาก 7</p>
@@ -126,7 +126,7 @@ export default function SignupOtpPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
           >
             {loading ? <><span className="animate-spin">⟳</span> กำลังส่ง OTP...</> : "ส่ง OTP"}
           </button>
@@ -155,7 +155,7 @@ export default function SignupOtpPage() {
           <button
             type="submit"
             disabled={loading || otp.replace(/\s/g, "").length < 6 || secondsLeft <= 0}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
           >
             {loading ? <><span className="animate-spin">⟳</span> กำลังตรวจสอบ...</> : "ยืนยัน OTP →"}
           </button>
@@ -167,7 +167,7 @@ export default function SignupOtpPage() {
                 type="button"
                 onClick={handleResend}
                 disabled={resendCooldown > 0 || loading}
-                className="text-sm text-blue-600 disabled:text-gray-400 hover:text-blue-800 font-medium"
+                className="text-sm text-weeeu-primary disabled:text-gray-400 hover:text-weeeu-dark font-medium"
               >
                 {resendCooldown > 0 ? `ขอ OTP ใหม่ได้ใน ${resendCooldown} วิ` : "ขอ OTP ใหม่"}
               </button>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "ประวัติ & รายงาน" };
 
@@ -36,7 +36,7 @@ const historyItems = [
 ];
 
 const summaryStats = [
-  { label: "รายการทั้งหมด", value: "12", icon: "📋", color: "bg-blue-50 text-blue-700" },
+  { label: "รายการทั้งหมด", value: "12", icon: "📋", color: "bg-weeeu-surface text-weeeu-primary" },
   { label: "ค่าใช้จ่ายรวม", value: "฿8,450", icon: "💸", color: "bg-red-50 text-red-700" },
   { label: "รายได้จากขาย", value: "฿1,250", icon: "💰", color: "bg-green-50 text-green-700" },
   { label: "Silver Point รับ", value: "+580", icon: "💎", color: "bg-gray-50 text-gray-700" },
@@ -66,7 +66,7 @@ export default function HistoryPage() {
               key={tab}
               className={`flex-shrink-0 text-xs px-4 py-2 rounded-full font-medium transition-colors ${
                 tab === "ทั้งหมด"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-weeeu-primary text-white"
                   : "bg-gray-100 text-gray-500 hover:bg-gray-200"
               }`}
             >
@@ -87,7 +87,7 @@ export default function HistoryPage() {
         {historyItems.map((item) => (
           <div
             key={item.id}
-            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-blue-100 transition-colors cursor-pointer"
+            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-weeeu-surface transition-colors cursor-pointer"
           >
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">

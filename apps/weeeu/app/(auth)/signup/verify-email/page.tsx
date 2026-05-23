@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -29,14 +29,14 @@ export default function VerifyEmailPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 4 ? "bg-blue-600" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 4 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
       <p className="text-xs text-gray-400 -mt-4">ขั้นตอนที่ 4 จาก 7</p>
 
       {/* Icon + heading */}
       <div className="text-center space-y-4">
-        <div className="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center text-4xl mx-auto shadow-inner">
+        <div className="w-20 h-20 bg-weeeu-surface rounded-3xl flex items-center justify-center text-4xl mx-auto shadow-inner">
           ✉️
         </div>
         <div>
@@ -44,14 +44,14 @@ export default function VerifyEmailPage() {
           <p className="text-gray-500 text-sm mt-2">
             เราส่งลิงก์ยืนยันไปที่
           </p>
-          <p className="font-semibold text-blue-700 text-sm mt-1 break-all">{email}</p>
+          <p className="font-semibold text-weeeu-primary text-sm mt-1 break-all">{email}</p>
         </div>
       </div>
 
       {/* Instructions */}
-      <div className="bg-blue-50 rounded-2xl p-4 space-y-2">
-        <p className="text-sm font-semibold text-blue-800">วิธียืนยัน Email:</p>
-        <ol className="space-y-1 text-sm text-blue-700">
+      <div className="bg-weeeu-surface rounded-2xl p-4 space-y-2">
+        <p className="text-sm font-semibold text-weeeu-dark">วิธียืนยัน Email:</p>
+        <ol className="space-y-1 text-sm text-weeeu-primary">
           <li className="flex items-start gap-2"><span className="font-bold">1.</span> เปิด inbox Email ของคุณ</li>
           <li className="flex items-start gap-2"><span className="font-bold">2.</span> หาอีเมลจาก WeeeU</li>
           <li className="flex items-start gap-2"><span className="font-bold">3.</span> คลิกลิงก์ "ยืนยัน Email" ในอีเมล</li>
@@ -71,7 +71,7 @@ export default function VerifyEmailPage() {
         <button
           onClick={handleResend}
           disabled={cooldown > 0 || loading}
-          className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+          className="w-full border-2 border-weeeu-primary text-weeeu-primary hover:bg-weeeu-surface disabled:border-gray-300 disabled:text-gray-400 font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
         >
           {loading ? (
             <><span className="animate-spin">⟳</span> กำลังส่ง...</>
@@ -85,7 +85,7 @@ export default function VerifyEmailPage() {
         {/* Simulate email verified (demo only) */}
         <Link
           href="/signup/personal"
-          className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-2xl text-center transition-colors text-sm"
+          className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-center transition-colors text-sm"
         >
           ยืนยัน Email แล้ว → ถัดไป
         </Link>

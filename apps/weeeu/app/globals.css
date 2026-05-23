@@ -5,15 +5,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --color-primary: #1D4ED8;
-  --color-primary-light: #3B82F6;
-  --color-primary-dark: #1E3A8A;
-  --color-accent: #06B6D4;
+  /* ── WeeeU Brand Color System v1 (2026-05-20) ─────────────────────
+   * Source: BC Brand Color System v1 (366813ec-7277-8196-a1c6-d6ba8f2438d9)
+   * ห้าม hardcode hex ในที่อื่น — ใช้ token เหล่านี้เสมอ
+   * ─────────────────────────────────────────────────────────────── */
+
+  /* Role Colors — WeeeU (เขียวมรกต) */
+  --weeeu-surface:  #E1F7EC;  /* พื้นการ์ด/แบนเนอร์อ่อน */
+  --weeeu-primary:  #0DC36C;  /* สีหลัก ปุ่ม/header/ไอคอน */
+  --weeeu-dark:     #0A9B55;  /* hover/active/เส้นขอบเข้ม */
+  --weeeu-text:     #04331C;  /* ข้อความบนพื้นสีอ่อน */
+
+  /* Semantic Colors (ห้ามใช้ปนกับ role-primary) */
+  --semantic-success: #10B981;
+  --semantic-warning: #F59E0B;
+  --semantic-danger:  #EF4444;
+  --semantic-info:    #3B82F6;
+
+  /* Utility */
   --color-silver: #9CA3AF;
-  --color-gold: #F59E0B;
+  --color-gold:   #F59E0B;
+
+  /* Legacy aliases (backward-compat — จะ deprecate ใน v2) */
   --color-success: #10B981;
   --color-warning: #F59E0B;
-  --color-danger: #EF4444;
+  --color-danger:  #EF4444;
+
+  /* Layout */
   --sidebar-width: 240px;
   --header-height: 60px;
 }

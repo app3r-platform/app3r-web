@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -64,8 +64,8 @@ const STATUS_LABEL: Record<RepairStatus, string> = {
 
 const STATUS_COLOR: Record<RepairStatus, string> = {
   draft: "bg-gray-100 text-gray-600",
-  open: "bg-blue-100 text-blue-700",
-  matching: "bg-blue-100 text-blue-700",
+  open: "bg-weeeu-surface text-weeeu-primary",
+  matching: "bg-weeeu-surface text-weeeu-primary",
   assigned: "bg-indigo-100 text-indigo-700",
   traveling: "bg-amber-100 text-amber-700",
   arrived: "bg-amber-100 text-amber-700",
@@ -73,7 +73,7 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   inspecting: "bg-purple-100 text-purple-700",
   awaiting_decision: "bg-purple-100 text-purple-700",
   awaiting_user: "bg-red-100 text-red-700",
-  in_progress: "bg-blue-100 text-blue-700",
+  in_progress: "bg-weeeu-surface text-weeeu-primary",
   completed: "bg-green-100 text-green-700",
   awaiting_review: "bg-yellow-100 text-yellow-700",
   closed: "bg-green-100 text-green-700",
@@ -132,7 +132,7 @@ export default function RepairListPage() {
         <h1 className="text-xl font-bold text-gray-900">งานซ่อม</h1>
         <Link
           href="/repair/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+          className="bg-weeeu-primary hover:bg-weeeu-primary text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
         >
           + แจ้งซ่อมใหม่
         </Link>
@@ -145,7 +145,7 @@ export default function RepairListPage() {
             onClick={() => setFilter(tab)}
             className={`pb-2.5 px-3 text-sm font-medium border-b-2 transition-colors ${
               filter === tab
-                ? "border-blue-600 text-blue-600"
+                ? "border-weeeu-primary text-weeeu-primary"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -162,19 +162,19 @@ export default function RepairListPage() {
             <Link
               key={listing.id}
               href={`/repair/${listing.id}/offers`}
-              className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-200 hover:shadow transition-all"
+              className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-weeeu-dark hover:shadow transition-all"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-gray-900 truncate">{listing.appliance_name}</p>
                   <p className="text-sm text-gray-500 truncate mt-0.5">{listing.issue_summary}</p>
                 </div>
-                <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
+                <span className="bg-weeeu-surface text-weeeu-primary text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
                   {listing.offer_count > 0 ? `${listing.offer_count} Offer` : "รอ Offer"}
                 </span>
               </div>
               {listing.offer_count > 0 && (
-                <p className="text-xs text-blue-600 font-medium mt-2">→ กดเพื่อดูและเลือก Offer</p>
+                <p className="text-xs text-weeeu-primary font-medium mt-2">→ กดเพื่อดูและเลือก Offer</p>
               )}
             </Link>
           ))}
@@ -186,7 +186,7 @@ export default function RepairListPage() {
               className={`block bg-white rounded-2xl border shadow-sm p-5 hover:shadow transition-all ${
                 needsAction(job.status)
                   ? "border-orange-200 ring-1 ring-orange-200"
-                  : "border-gray-100 hover:border-blue-200"
+                  : "border-gray-100 hover:border-weeeu-dark"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -242,7 +242,7 @@ export default function RepairListPage() {
                 {filter === "active" ? "ยังไม่มีงานซ่อมที่ใช้งานอยู่" : "ยังไม่มีงานที่สำเร็จ/ยกเลิก"}
               </p>
               {filter === "active" && (
-                <Link href="/repair/new" className="mt-3 inline-block text-blue-600 text-sm font-medium hover:underline">
+                <Link href="/repair/new" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">
                   + แจ้งซ่อมเครื่องใช้ไฟฟ้า
                 </Link>
               )}

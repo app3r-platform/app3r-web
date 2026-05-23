@@ -26,6 +26,19 @@ const SCRAP_GRADE_OPTIONS = [
 
 const COMMON_PARTS = ["คอมเพรสเซอร์", "มอเตอร์", "แผงวงจร PCB", "หน้าจอ", "ปั๊มน้ำ", "ฮีตเตอร์", "ถัง", "ฝาครอบ", "สายไฟ", "รีโมท"];
 
+// Terms 3 แกน options (Mockup)
+const SHIPPING_POLICY_OPTIONS = [
+  { value: "seller_pays", label: "ผู้ขายออกค่าส่งให้ทั้งหมด" },
+  { value: "buyer_pays", label: "ผู้ซื้อออกค่าส่ง" },
+  { value: "split", label: "แบ่งกัน (ตกลงกันเอง)" },
+];
+
+const LIABILITY_POLICY_OPTIONS = [
+  { value: "full_refund", label: "คืนเงินเต็มถ้าสินค้าไม่ตรงปก (ภายใน 7 วัน)" },
+  { value: "repair_first", label: "ซ่อมให้ก่อน ถ้าซ่อมไม่ได้ค่อยคืน" },
+  { value: "no_return", label: "ขายตามสภาพ — ไม่รับคืน (ต้องตรวจก่อนรับ)" },
+];
+
 export default function SellNewPage() {
   const router = useRouter();
   const partInputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +56,11 @@ export default function SellNewPage() {
   // Scrap-specific
   const [workingParts, setWorkingParts] = useState<string[]>([]);
   const [partInput, setPartInput] = useState("");
+
+  // Terms 3 แกน (Mockup — Resell 2.2)
+  const [shippingPolicy, setShippingPolicy] = useState("seller_pays");
+  const [usedWarrantyDays, setUsedWarrantyDays] = useState("30");
+  const [liabilityPolicy, setLiabilityPolicy] = useState("full_refund");
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -126,6 +144,8 @@ export default function SellNewPage() {
   };
 
   const gradeOptions = listingType === "scrap" ? SCRAP_GRADE_OPTIONS : GRADE_OPTIONS;
+  const primaryColor = listingType === "scrap" ? "bg-green-600 hover:bg-green-700" : "bg-weeeu-primary hover:bg-weeeu-dark";
+  const ringColor = listingType === "scrap" ? "focus:ring-green-400" : "focus:ring-weeeu-primary/40";
 
   return (
     <div className="max-w-xl space-y-5">
@@ -147,8 +167,8 @@ export default function SellNewPage() {
                 listingType === t
                   ? t === "scrap"
                     ? "bg-green-600 border-green-600 text-white"
-                    : "bg-indigo-600 border-indigo-600 text-white"
-                  : "border-gray-200 text-gray-600 hover:border-indigo-300"
+                    : "bg-weeeu-primary border-weeeu-primary text-white"
+                  : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
               }`}
             >
               <span className="text-xl">{t === "used_appliance" ? "📱" : "♻️"}</span>
@@ -175,12 +195,15 @@ export default function SellNewPage() {
           {loadingAppliances ? (
             <p className="text-sm text-gray-400">กำลังโหลด...</p>
           ) : appliances.length === 0 ? (
-            <p className="text-sm text-gray-400">ไม่พบเครื่องใช้ไฟฟ้าที่ลงทะเบียน</p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-400">ไม่พบเครื่องใช้ไฟฟ้าที่ลงทะเบียน</p>
+              <Link href="/appliances/add" className="text-xs text-weeeu-primary hover:underline">+ เพิ่มเครื่องใช้ไฟฟ้าก่อน →</Link>
+            </div>
           ) : (
             <select
               value={applianceId}
               onChange={e => setApplianceId(e.target.value)}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40 bg-white"
             >
               <option value="">— เลือกเครื่อง —</option>
               {appliances.map(a => (
@@ -201,7 +224,6 @@ export default function SellNewPage() {
           </p>
           <p className="text-xs text-gray-400">พิมพ์ชื่อชิ้นส่วนแล้วกด Enter หรือเลือกจากรายการ</p>
 
-          {/* Chips */}
           {workingParts.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {workingParts.map(p => (
@@ -210,19 +232,12 @@ export default function SellNewPage() {
                   className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full"
                 >
                   {p}
-                  <button
-                    type="button"
-                    onClick={() => removePart(p)}
-                    className="text-green-600 hover:text-green-800 leading-none"
-                  >
-                    ×
-                  </button>
+                  <button type="button" onClick={() => removePart(p)} className="text-green-600 hover:text-green-800 leading-none">×</button>
                 </span>
               ))}
             </div>
           )}
 
-          {/* Text input */}
           <input
             ref={partInputRef}
             type="text"
@@ -234,7 +249,6 @@ export default function SellNewPage() {
             className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
           />
 
-          {/* Quick-add common parts */}
           <div className="flex flex-wrap gap-1.5">
             {COMMON_PARTS.filter(p => !workingParts.includes(p)).map(p => (
               <button
@@ -265,8 +279,8 @@ export default function SellNewPage() {
                 conditionGrade === g.value
                   ? listingType === "scrap"
                     ? "bg-green-50 border-green-400 font-medium"
-                    : "bg-indigo-50 border-indigo-400 font-medium"
-                  : "border-gray-200 text-gray-600 hover:border-indigo-200"
+                    : "bg-weeeu-surface border-weeeu-primary font-medium"
+                  : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
               }`}
             >
               {conditionGrade === g.value && <span className="mr-2">✅</span>}
@@ -287,7 +301,7 @@ export default function SellNewPage() {
           value={price}
           onChange={e => setPrice(e.target.value)}
           placeholder={listingType === "scrap" ? "เช่น 500" : "เช่น 3500"}
-          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className={`w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 ${ringColor}`}
         />
       </div>
 
@@ -304,8 +318,8 @@ export default function SellNewPage() {
               onClick={() => toggleDelivery(d.value)}
               className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
                 deliveryMethods.includes(d.value)
-                  ? "bg-indigo-50 border-indigo-400 text-indigo-800 font-medium"
-                  : "border-gray-200 text-gray-600 hover:border-indigo-200"
+                  ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
+                  : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
               }`}
             >
               {deliveryMethods.includes(d.value) && <span className="mr-2">✅</span>}
@@ -323,28 +337,111 @@ export default function SellNewPage() {
             <div>
               <label className="block text-xs text-gray-500 mb-1">ประกันจากผู้ผลิต</label>
               <input
-                type="number"
-                min="0"
-                value={sourceWarranty}
+                type="number" min="0" value={sourceWarranty}
                 onChange={e => setSourceWarranty(e.target.value)}
                 placeholder="0"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
               />
             </div>
             <div>
               <label className="block text-xs text-gray-500 mb-1">ประกันเพิ่มเติม</label>
               <input
-                type="number"
-                min="0"
-                value={additionalWarranty}
+                type="number" min="0" value={additionalWarranty}
                 onChange={e => setAdditionalWarranty(e.target.value)}
                 placeholder="0"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
               />
             </div>
           </div>
         </div>
       )}
+
+      {/* Terms 3 แกน (Mockup — Resell 2.2 Blueprint) */}
+      <div className="bg-white rounded-2xl border border-weeeu-primary/20 shadow-sm p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <span className="text-base">📋</span>
+          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider">เงื่อนไขการขาย (Terms 3 แกน)</p>
+        </div>
+        <div className="bg-weeeu-surface rounded-xl p-3">
+          <p className="text-xs text-weeeu-text">เงื่อนไขนี้จะแสดงให้ผู้ซื้อเห็นก่อนยื่นข้อเสนอ — เป็น Source of Truth ในกรณีข้อพิพาท</p>
+        </div>
+
+        {/* แกน 1: ค่าส่ง */}
+        <div className="space-y-2">
+          <label className="block text-xs font-semibold text-gray-600">🚚 ค่าส่ง <span className="text-red-500">*</span></label>
+          <div className="space-y-1.5">
+            {SHIPPING_POLICY_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setShippingPolicy(opt.value)}
+                className={`w-full text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                  shippingPolicy === opt.value
+                    ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
+                    : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
+                }`}
+              >
+                {shippingPolicy === opt.value && <span className="mr-2">✅</span>}
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* แกน 2: รับประกันมือสอง */}
+        <div className="space-y-2">
+          <label className="block text-xs font-semibold text-gray-600">🔒 รับประกันมือสอง (วัน หลังรับสินค้า)</label>
+          <div className="flex gap-2 items-center">
+            <input
+              type="number"
+              min="0"
+              value={usedWarrantyDays}
+              onChange={e => setUsedWarrantyDays(e.target.value)}
+              placeholder="30"
+              className="w-32 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+            />
+            <span className="text-sm text-gray-500">วัน</span>
+            <div className="flex gap-1.5 ml-2">
+              {[0, 7, 14, 30, 90].map(d => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setUsedWarrantyDays(String(d))}
+                  className={`text-xs px-2 py-1 rounded-lg border transition-colors ${
+                    usedWarrantyDays === String(d)
+                      ? "bg-weeeu-primary text-white border-weeeu-primary"
+                      : "border-gray-200 text-gray-500 hover:border-weeeu-primary/40"
+                  }`}
+                >
+                  {d === 0 ? "ไม่รับ" : `${d}ว`}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* แกน 3: ความรับผิดสินค้าไม่ตรงปก */}
+        <div className="space-y-2">
+          <label className="block text-xs font-semibold text-gray-600">⚖️ ความรับผิดกรณีสินค้าไม่ตรงปก <span className="text-red-500">*</span></label>
+          <div className="space-y-1.5">
+            {LIABILITY_POLICY_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setLiabilityPolicy(opt.value)}
+                className={`w-full text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                  liabilityPolicy === opt.value
+                    ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
+                    : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
+                }`}
+              >
+                {liabilityPolicy === opt.value && <span className="mr-2">✅</span>}
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Description */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
@@ -358,7 +455,7 @@ export default function SellNewPage() {
             ? "เช่น แอร์ใช้งาน 8 ปี คอมเพรสเซอร์ยังดี แผงบางส่วนเสีย"
             : "เช่น ซื้อมา 2 ปี ใช้งานน้อย มีกล่องและอุปกรณ์ครบ"}
           rows={3}
-          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+          className={`w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 ${ringColor} resize-none`}
         />
       </div>
 
@@ -371,11 +468,7 @@ export default function SellNewPage() {
       <button
         onClick={handleSubmit}
         disabled={submitting}
-        className={`w-full disabled:opacity-60 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 ${
-          listingType === "scrap"
-            ? "bg-green-600 hover:bg-green-700"
-            : "bg-indigo-600 hover:bg-indigo-700"
-        }`}
+        className={`w-full disabled:opacity-60 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 ${primaryColor}`}
       >
         {submitting
           ? <><span className="animate-spin">⟳</span> กำลังประกาศ...</>

@@ -23,6 +23,63 @@ const GRADE_COLOR: Record<string, string> = {
   grade_C: "bg-red-100 text-red-600",
 };
 
+// Mock: ตัวอย่าง listing สำหรับแสดงถ้า API ว่าง (Mockup R1)
+const MOCK_LISTINGS: Listing[] = [
+  {
+    id: "mock-001",
+    sellerId: "seller-01",
+    sellerType: "WeeeU",
+    listingType: "used_appliance",
+    applianceId: "app-01",
+    conditionGrade: "grade_A",
+    workingParts: [],
+    price: 8500,
+    deliveryMethods: ["parcel", "on_site"],
+    status: "receiving_offers",
+    warranty: { sourceWarranty: 6, additionalWarranty: 3 },
+    expiresAt: new Date(Date.now() + 86400000 * 7).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: "mock-002",
+    sellerId: "seller-02",
+    sellerType: "WeeeR",
+    listingType: "used_appliance",
+    applianceId: "app-02",
+    conditionGrade: "grade_B",
+    workingParts: [],
+    price: 4200,
+    deliveryMethods: ["parcel"],
+    status: "receiving_offers",
+    expiresAt: new Date(Date.now() + 86400000 * 5).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: "mock-003",
+    sellerId: "seller-03",
+    sellerType: "WeeeR",
+    listingType: "used_appliance",
+    applianceId: "app-03",
+    conditionGrade: "grade_A",
+    workingParts: [],
+    price: 12000,
+    deliveryMethods: ["on_site"],
+    status: "announced",
+    warranty: { sourceWarranty: 12, additionalWarranty: 6 },
+    expiresAt: new Date(Date.now() + 86400000 * 14).toISOString(),
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+];
+
+const MOCK_NAMES: Record<string, string> = {
+  "mock-001": "แอร์ Mitsubishi 12000 BTU",
+  "mock-002": "เครื่องซักผ้า Samsung 8kg",
+  "mock-003": "แอร์ Daikin 18000 BTU (ใหม่มาก)",
+};
+
 export default function ListingsPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [total, setTotal] = useState(0);
@@ -40,18 +97,36 @@ export default function ListingsPage() {
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
       page: p,
     })
-      .then(r => { setListings(r.results ?? r as unknown as Listing[]); setTotal((r as { count?: number }).count ?? 0); })
-      .catch(() => setListings([]))
+      .then(r => {
+        const items = r.results ?? r as unknown as Listing[];
+        // Mockup: ถ้า API ยังไม่มีข้อมูล ใช้ mock listings
+        const display = Array.isArray(items) && items.length > 0 ? items : MOCK_LISTINGS;
+        setListings(display);
+        setTotal((r as { count?: number }).count ?? display.length);
+      })
+      .catch(() => {
+        setListings(MOCK_LISTINGS);
+        setTotal(MOCK_LISTINGS.length);
+      })
       .finally(() => setLoading(false));
   };
 
   useEffect(() => { setPage(1); load(1); }, [typeTab]);
 
+  const filtered = typeTab
+    ? listings.filter(l => l.listingType === typeTab)
+    : listings;
+
   return (
     <div className="max-w-xl space-y-5">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">ตลาดซื้อ-ขาย</h1>
-        <Link href="/sell/new" className="text-sm text-indigo-600 font-medium hover:underline">+ ขายของ</Link>
+        <Link
+          href="/sell/new"
+          className="bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+        >
+          + ขายของ
+        </Link>
       </div>
 
       {/* Type tabs */}
@@ -62,7 +137,7 @@ export default function ListingsPage() {
             onClick={() => setTypeTab(t.value)}
             className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               typeTab === t.value
-                ? "bg-indigo-600 text-white"
+                ? "bg-weeeu-primary text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
@@ -78,7 +153,7 @@ export default function ListingsPage() {
           value={minPrice}
           onChange={e => setMinPrice(e.target.value)}
           placeholder="ราคาต่ำสุด"
-          className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
         />
         <span className="text-gray-400 text-sm">—</span>
         <input
@@ -86,11 +161,11 @@ export default function ListingsPage() {
           value={maxPrice}
           onChange={e => setMaxPrice(e.target.value)}
           placeholder="ราคาสูงสุด"
-          className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
         />
         <button
           onClick={() => { setPage(1); load(1); }}
-          className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors"
+          className="px-4 py-2 bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-medium rounded-xl transition-colors"
         >
           ค้นหา
         </button>
@@ -98,7 +173,7 @@ export default function ListingsPage() {
 
       {loading ? (
         <div className="text-center py-12 text-gray-400">กำลังโหลด...</div>
-      ) : listings.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
           <p className="text-4xl">🔍</p>
           <p className="text-gray-500 font-medium">ไม่พบรายการ</p>
@@ -108,18 +183,21 @@ export default function ListingsPage() {
         <>
           <p className="text-xs text-gray-400">{total} รายการ</p>
           <div className="space-y-3">
-            {listings.map(l => (
+            {filtered.map(l => (
               <Link
                 key={l.id}
                 href={`/listings/${l.id}`}
-                className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow"
+                className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:border-weeeu-primary/30 hover:shadow-md transition-all"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-800 truncate">
-                      {l.listingType === "scrap" ? "🔩 ชิ้นส่วน/ซากเครื่อง" : "📱 เครื่องใช้ไฟฟ้ามือสอง"}
+                      {l.listingType === "scrap" ? "🔩 ชิ้นส่วน/ซากเครื่อง" : `📱 ${MOCK_NAMES[l.id] ?? "เครื่องใช้ไฟฟ้ามือสอง"}`}
                     </p>
                     <p className="text-xs text-gray-400">{new Date(l.createdAt).toLocaleDateString("th-TH")}</p>
+                    {l.deliveryMethods.includes("parcel") && (
+                      <p className="text-xs text-gray-400">🚚 ส่งพัสดุได้</p>
+                    )}
                   </div>
                   <div className="flex flex-col items-end gap-1.5 shrink-0">
                     {l.conditionGrade && (
@@ -127,16 +205,22 @@ export default function ListingsPage() {
                         {GRADE_LABEL[l.conditionGrade] ?? l.conditionGrade}
                       </span>
                     )}
-                    <p className="text-sm font-bold text-indigo-600">{l.price.toLocaleString()} ฿</p>
+                    <p className="text-sm font-bold text-weeeu-primary">{l.price.toLocaleString()} ฿</p>
                   </div>
                 </div>
-                <p className="mt-1.5 text-xs text-indigo-500 font-medium">ดูรายละเอียด →</p>
+
+                {/* Q&A placeholder (ไอเดีย 9 — FLAG-3 placeholder) */}
+                <div className="mt-2 pt-2 border-t border-gray-50 flex items-center gap-1.5">
+                  <span className="text-xs text-gray-400">💬 Q&A</span>
+                  <span className="text-xs text-gray-300">ถามผู้ขายได้</span>
+                  <span className="ml-auto text-xs text-weeeu-primary font-medium">ดูรายละเอียด →</span>
+                </div>
               </Link>
             ))}
           </div>
 
           {/* Simple pagination */}
-          {total > listings.length * page && (
+          {total > filtered.length * page && (
             <button
               onClick={() => { const next = page + 1; setPage(next); load(next); }}
               className="w-full border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-xl hover:bg-gray-50 transition-colors"

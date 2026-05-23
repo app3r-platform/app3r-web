@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -32,11 +32,28 @@ const GENDER_MAP: Record<string, string> = {
 
 type Section = "view" | "personal" | "address" | "phone" | "email";
 
+// ── Notification preferences ──────────────────────────────────────────────────
+type NotifPrefs = {
+  repair_updates:  boolean; // สถานะงานซ่อม
+  promotions:      boolean; // โปรโมชั่น / Point bonus
+  system_notices:  boolean; // แจ้งเตือนระบบ (ไม่สามารถปิดได้)
+};
+
+const DEFAULT_NOTIF_PREFS: NotifPrefs = {
+  repair_updates: true,
+  promotions:     true,
+  system_notices: true, // always true — read-only
+};
+
 export default function ProfilePage() {
   const [section, setSection] = useState<Section>("view");
   const [user, setUser] = useState(MOCK_USER);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Notification preferences
+  const [notifPrefs, setNotifPrefs] = useState<NotifPrefs>(DEFAULT_NOTIF_PREFS);
+  const [savingNotif, setSavingNotif] = useState(false);
 
   // Personal form
   const [personal, setPersonal] = useState({
@@ -62,13 +79,24 @@ export default function ProfilePage() {
 
   const showSaved = () => { setSaved(true); setTimeout(() => setSaved(false), 2500); };
 
+  // ─── Save notification preferences ────────────────────────────────────────
+  const saveNotifPrefs = async (key: keyof NotifPrefs, val: boolean) => {
+    if (key === "system_notices") return; // always on — read-only
+    const updated = { ...notifPrefs, [key]: val };
+    setNotifPrefs(updated);
+    setSavingNotif(true);
+    await new Promise((r) => setTimeout(r, 400)); // Production: PATCH /api/v1/users/me/notifications
+    setSavingNotif(false);
+    showSaved();
+  };
+
   const maxDate = (() => {
     const d = new Date(); d.setFullYear(d.getFullYear() - 13);
     return d.toISOString().split("T")[0];
   })();
 
   const inputCls = (err?: string) =>
-    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+    `w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary ${
       err ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -144,16 +172,16 @@ export default function ProfilePage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <div className="flex items-center gap-5">
           <div className="relative">
-            <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl font-bold text-blue-700 select-none">
+            <div className="w-20 h-20 bg-weeeu-surface rounded-2xl flex items-center justify-center text-3xl font-bold text-weeeu-primary select-none">
               {user.first_name.charAt(0)}{user.last_name.charAt(0)}
             </div>
-            <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs hover:bg-blue-700">✏️</button>
+            <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-weeeu-primary rounded-full flex items-center justify-center text-white text-xs hover:bg-weeeu-primary">✏️</button>
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-bold text-gray-900">{user.first_name} {user.last_name}</h2>
             <p className="text-gray-500 text-sm">{user.phone_number.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}</p>
             <div className="flex items-center gap-3 mt-2">
-              <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">💎 Silver Member</span>
+              <span className="inline-flex items-center gap-1 text-xs bg-weeeu-surface text-weeeu-primary px-2.5 py-1 rounded-full font-medium">💎 Silver Member</span>
               <span className="text-xs text-gray-400">สมาชิกตั้งแต่ {user.member_since}</span>
             </div>
           </div>
@@ -177,7 +205,7 @@ export default function ProfilePage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-100">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ข้อมูลส่วนตัว</p>
-          <button onClick={() => setSection("personal")} className="text-xs text-blue-600 hover:text-blue-800 font-medium">แก้ไข</button>
+          <button onClick={() => setSection("personal")} className="text-xs text-weeeu-primary hover:text-weeeu-dark font-medium">แก้ไข</button>
         </div>
         <div className="divide-y divide-gray-50">
           {[
@@ -203,14 +231,14 @@ export default function ProfilePage() {
             <p className="text-sm text-gray-500">เบอร์โทร</p>
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium text-gray-900">{user.phone_number.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}</p>
-              <button onClick={() => setSection("phone")} className="text-xs text-blue-500 hover:text-blue-700">เปลี่ยน</button>
+              <button onClick={() => setSection("phone")} className="text-xs text-weeeu-primary hover:text-weeeu-primary">เปลี่ยน</button>
             </div>
           </div>
           <div className="flex items-center justify-between px-5 py-4">
             <p className="text-sm text-gray-500">Email</p>
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium text-gray-900 truncate max-w-[160px]">{user.email}</p>
-              <button onClick={() => setSection("email")} className="text-xs text-blue-500 hover:text-blue-700">เปลี่ยน</button>
+              <button onClick={() => setSection("email")} className="text-xs text-weeeu-primary hover:text-weeeu-primary">เปลี่ยน</button>
             </div>
           </div>
         </div>
@@ -220,7 +248,7 @@ export default function ProfilePage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-100">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ที่อยู่</p>
-          <button onClick={() => setSection("address")} className="text-xs text-blue-600 hover:text-blue-800 font-medium">แก้ไข</button>
+          <button onClick={() => setSection("address")} className="text-xs text-weeeu-primary hover:text-weeeu-dark font-medium">แก้ไข</button>
         </div>
         <div className="px-5 py-4 space-y-1">
           <p className="text-sm text-gray-700">{user.address.address_line}</p>
@@ -238,6 +266,46 @@ export default function ProfilePage() {
           <div className="flex items-center gap-3"><span>🔒</span><span className="text-sm font-medium text-gray-700">เปลี่ยนรหัสผ่าน</span></div>
           <span className="text-gray-400">›</span>
         </Link>
+      </div>
+
+      {/* Notification preferences */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-100">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">การแจ้งเตือน</p>
+          {savingNotif && <span className="text-xs text-gray-400">กำลังบันทึก...</span>}
+        </div>
+        <div className="divide-y divide-gray-50">
+          {([
+            { key: "repair_updates" as const,  icon: "🔧", label: "สถานะงานซ่อม",      desc: "อัพเดตความคืบหน้าและการแจ้งเตือนจากช่าง" },
+            { key: "promotions"     as const,  icon: "🎁", label: "โปรโมชั่น / Point",  desc: "ข่าวสาร โปรโมชั่น และ Point bonus" },
+            { key: "system_notices" as const,  icon: "🔔", label: "แจ้งเตือนระบบ",       desc: "ความปลอดภัยและการเปลี่ยนแปลงบัญชี (ปิดไม่ได้)" },
+          ] as const).map((item) => (
+            <div key={item.key} className="flex items-center justify-between px-5 py-4 gap-3">
+              <div className="flex items-start gap-3 flex-1 min-w-0">
+                <span className="text-lg flex-shrink-0">{item.icon}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={item.key === "system_notices"}
+                onClick={() => saveNotifPrefs(item.key, !notifPrefs[item.key])}
+                aria-label={`${item.label} ${notifPrefs[item.key] ? "เปิด" : "ปิด"}`}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  notifPrefs[item.key] ? "bg-weeeu-primary" : "bg-gray-200"
+                } ${item.key === "system_notices" ? "opacity-60 cursor-not-allowed" : ""}`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transform transition duration-200 ease-in-out ${
+                    notifPrefs[item.key] ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Logout */}
@@ -280,14 +348,14 @@ export default function ProfilePage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">เพศ <span className="text-red-500">*</span></label>
             <div className="grid grid-cols-2 gap-2">
               {[{ value: "male", label: "ชาย" }, { value: "female", label: "หญิง" }, { value: "other", label: "อื่น ๆ" }, { value: "prefer_not_say", label: "ไม่ระบุ" }].map((g) => (
-                <button key={g.value} type="button" onClick={() => setPersonal((p) => ({ ...p, gender: g.value as typeof personal.gender }))} className={`py-3 rounded-xl text-sm font-medium border-2 transition-colors ${personal.gender === g.value ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600"}`}>{g.label}</button>
+                <button key={g.value} type="button" onClick={() => setPersonal((p) => ({ ...p, gender: g.value as typeof personal.gender }))} className={`py-3 rounded-xl text-sm font-medium border-2 transition-colors ${personal.gender === g.value ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary" : "border-gray-200 text-gray-600"}`}>{g.label}</button>
               ))}
             </div>
             {personalErrors.gender && <p className="text-red-500 text-xs mt-1">{personalErrors.gender}</p>}
           </div>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={() => setSection("view")} className="flex-1 border border-gray-200 text-gray-600 font-semibold py-3 rounded-2xl text-sm">ยกเลิก</button>
-            <button type="submit" disabled={saving} className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <button type="submit" disabled={saving} className="flex-1 bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
               {saving ? <><span className="animate-spin">⟳</span> บันทึก...</> : "บันทึก"}
             </button>
           </div>
@@ -308,7 +376,7 @@ export default function ProfilePage() {
           <AddressAutoFill value={address} onChange={setAddress} errors={addressErrors} />
           <div className="flex gap-3 pt-4">
             <button type="button" onClick={() => setSection("view")} className="flex-1 border border-gray-200 text-gray-600 font-semibold py-3 rounded-2xl text-sm">ยกเลิก</button>
-            <button type="submit" disabled={saving} className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <button type="submit" disabled={saving} className="flex-1 bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
               {saving ? <><span className="animate-spin">⟳</span> บันทึก...</> : "บันทึก"}
             </button>
           </div>
@@ -335,7 +403,7 @@ export default function ProfilePage() {
               <input type="tel" inputMode="numeric" placeholder="0812345678" value={newPhone} maxLength={10} onChange={(e) => { setNewPhone(e.target.value.replace(/\D/g, "")); setPhoneError(""); }} className={inputCls(phoneError)} />
               {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
             </div>
-            <button type="submit" disabled={saving} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <button type="submit" disabled={saving} className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
               {saving ? <><span className="animate-spin">⟳</span> ส่ง OTP...</> : "ส่ง OTP ยืนยัน"}
             </button>
           </form>
@@ -344,7 +412,7 @@ export default function ProfilePage() {
             <p className="text-sm text-gray-600 text-center">ส่ง OTP ไปที่ {newPhone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}</p>
             <OtpInput value={phoneOtp} onChange={setPhoneOtp} disabled={saving} />
             {phoneError && <p className="text-red-500 text-xs text-center">{phoneError}</p>}
-            <button type="submit" disabled={saving || phoneOtp.replace(/\s/g, "").length < 6} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <button type="submit" disabled={saving || phoneOtp.replace(/\s/g, "").length < 6} className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
               {saving ? <><span className="animate-spin">⟳</span> กำลังยืนยัน...</> : "ยืนยัน OTP"}
             </button>
             <button type="button" onClick={() => { setPhoneStage("phone"); setPhoneOtp(""); setPhoneError(""); }} className="w-full text-sm text-gray-400 hover:text-gray-600">เปลี่ยนเบอร์</button>
@@ -370,7 +438,7 @@ export default function ProfilePage() {
             <div className="text-4xl">✉️</div>
             <p className="text-sm font-semibold text-gray-800">ส่งลิงก์ยืนยันแล้ว</p>
             <p className="text-xs text-gray-500">ตรวจสอบ inbox ที่ <strong>{newEmail}</strong> และคลิกลิงก์เพื่อยืนยัน Email ใหม่</p>
-            <button onClick={() => { setSection("view"); setEmailSent(false); setNewEmail(""); }} className="text-sm text-blue-600 hover:text-blue-800 font-medium">กลับโปรไฟล์</button>
+            <button onClick={() => { setSection("view"); setEmailSent(false); setNewEmail(""); }} className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">กลับโปรไฟล์</button>
           </div>
         ) : (
           <form onSubmit={changeEmail} className="space-y-4">
@@ -380,7 +448,7 @@ export default function ProfilePage() {
               {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
               <p className="text-xs text-gray-400 mt-1">ระบบจะส่งลิงก์ยืนยันไปที่ Email ใหม่</p>
             </div>
-            <button type="submit" disabled={saving} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <button type="submit" disabled={saving} className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
               {saving ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</> : "ส่งลิงก์ยืนยัน"}
             </button>
           </form>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -55,7 +55,7 @@ export default function SignupAddressPage() {
         <div className="space-y-3">
           <Link
             href="/dashboard"
-            className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-2xl text-center transition-colors text-sm"
+            className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-center transition-colors text-sm"
           >
             เริ่มใช้งาน WeeeU →
           </Link>
@@ -69,7 +69,7 @@ export default function SignupAddressPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 6 ? "bg-blue-600" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 6 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
       <p className="text-xs text-gray-400 -mt-3">ขั้นตอนที่ 6 จาก 7</p>
@@ -88,7 +88,7 @@ export default function SignupAddressPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
           >
             {loading ? <><span className="animate-spin">⟳</span> กำลังบันทึก...</> : "เสร็จสิ้น ✓"}
           </button>

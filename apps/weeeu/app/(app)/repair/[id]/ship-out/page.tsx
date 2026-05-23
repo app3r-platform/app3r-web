@@ -96,7 +96,7 @@ export default function ShipOutPage() {
     <div className="text-center py-16">
       <p className="text-4xl mb-3">📦</p>
       <p className="text-gray-600 font-medium">{error}</p>
-      <Link href={`/repair/${id}`} className="mt-3 inline-block text-blue-600 text-sm font-medium hover:underline">← กลับรายละเอียดงาน</Link>
+      <Link href={`/repair/${id}`} className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">← กลับรายละเอียดงาน</Link>
     </div>
   );
 
@@ -174,7 +174,7 @@ export default function ShipOutPage() {
                       className={`w-20 h-20 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-xs gap-1 transition-colors ${
                         photos.length < 3
                           ? "border-orange-300 text-orange-400 hover:border-orange-500"
-                          : "border-gray-200 text-gray-400 hover:border-blue-300"
+                          : "border-gray-200 text-gray-400 hover:border-weeeu-dark"
                       }`}
                     >
                       <span className="text-2xl leading-none">+</span>
