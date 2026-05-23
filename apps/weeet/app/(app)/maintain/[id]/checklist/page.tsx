@@ -40,6 +40,12 @@ export default function MaintainChecklistPage({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // M9 — WeeeU ยุติงานระหว่างล้าง → หยุดงาน + รายงาน WeeeR (delta ขั้น 2.1)
+  const [showTerminateModal, setShowTerminateModal] = useState(false);
+  const [terminateNotes, setTerminateNotes] = useState("");
+  const [terminateSubmitting, setTerminateSubmitting] = useState(false);
+  const [terminateError, setTerminateError] = useState<string | null>(null);
+
   // Load parts when modal opens (lazy)
   useEffect(() => {
     if (!showPartModal || partsList.length > 0) return;
@@ -100,6 +106,23 @@ export default function MaintainChecklistPage({
 
   const removePart = (i: number) =>
     setPartsUsed((prev) => prev.filter((_, idx) => idx !== i));
+
+  // M9 — รับสัญญาณยุติจาก WeeeU → หยุดงาน + รายงาน WeeeR
+  const handleTerminate = async () => {
+    setTerminateSubmitting(true);
+    setTerminateError(null);
+    try {
+      // TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/terminate/
+      // const fd = new FormData();
+      // if (terminateNotes.trim()) fd.append("notes", terminateNotes.trim());
+      // await maintainApi.terminate(id, fd);
+      await new Promise((r) => setTimeout(r, 1000)); // mock — remove after backend ready
+      router.replace(`/maintain/${id}`);
+    } catch (e) {
+      setTerminateError((e as Error).message);
+      setTerminateSubmitting(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
@@ -273,7 +296,69 @@ export default function MaintainChecklistPage({
             "🧹 ยืนยันล้างเครื่องเสร็จ"
           )}
         </button>
+
+        {/* M9 — WeeeU ยุติงานระหว่างล้าง */}
+        <div className="border-t border-gray-800 pt-4 mt-2">
+          <p className="text-xs text-gray-600 mb-2 text-center">หากได้รับสัญญาณยุติจาก WeeeU</p>
+          <button
+            onClick={() => setShowTerminateModal(true)}
+            disabled={submitting}
+            className="w-full bg-red-950/30 hover:bg-red-950/50 border border-red-900/50 text-red-400 font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+          >
+            🛑 WeeeU ยุติงาน — หยุดและรายงาน (M9)
+          </button>
+        </div>
       </div>
+
+      {/* M9 — Terminate confirm modal */}
+      {showTerminateModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-end">
+          <div className="w-full bg-gray-900 border-t border-gray-700 rounded-t-2xl p-5 space-y-4">
+            <div>
+              <h3 className="font-bold text-white text-base">🛑 WeeeU ยุติงานระหว่างล้าง?</h3>
+              <p className="text-xs text-gray-400 mt-1">M9: งานล้างจะหยุด — WeeeR จะได้รับแจ้งและประสาน settle ตาม offer</p>
+            </div>
+            <div className="bg-red-950/30 border border-red-900/40 rounded-xl p-3 space-y-1 text-xs text-red-400">
+              <p>• งานล้างจะถูกหยุดทันที</p>
+              <p>• WeeeR รับทราบ + ประสาน settle (ตาม offer)</p>
+              <p>• ถ้าไม่ตกลง → Admin Dispute (M8)</p>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-400">บันทึกเพิ่มเติม <span className="text-gray-600">(ไม่บังคับ)</span></label>
+              <textarea
+                value={terminateNotes}
+                onChange={(e) => setTerminateNotes(e.target.value)}
+                placeholder="สถานะงาน ณ เวลายุติ เช่น ล้างเสร็จ 60%..."
+                rows={2}
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-600 resize-none"
+              />
+            </div>
+            {terminateError && (
+              <p className="text-red-400 text-xs bg-red-950/40 border border-red-800 rounded-lg px-3 py-2">{terminateError}</p>
+            )}
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowTerminateModal(false); setTerminateError(null); }}
+                disabled={terminateSubmitting}
+                className="flex-1 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-gray-300 font-medium py-3 rounded-xl transition-colors"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleTerminate}
+                disabled={terminateSubmitting}
+                className="flex-1 bg-red-700 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-1"
+              >
+                {terminateSubmitting ? (
+                  <><span className="animate-spin">⏳</span> กำลังส่ง...</>
+                ) : (
+                  "🛑 ยืนยันหยุดงาน"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Parts modal — real API */}
       {showPartModal && (

@@ -1,18 +1,25 @@
 "use client";
 // M3 — ตรวจสภาพก่อนล้าง (NEW · Blueprint WeeeT Maintain ขั้น 2.1)
+// M7 — No-show: ลูกค้าไม่อยู่/ไม่รับสาย → settle No-show (delta ขั้น 2.1)
 // State machine: arrive → inspect → checklist → complete
 // D-Maintain-1: Pre-cleaning inspection + risk reporting (WeeeR+WeeeU joint decision)
 // D-Maintain-2: cross-module Maintain→Repair (auto-lock WeeeR เดิม)
-// TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/risk/ + /convert-to-repair/
+// TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/risk/ + /convert-to-repair/ + /no-show/
 import { use, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const MAX_INSPECT_PHOTOS = 3;
 const MAX_RISK_PHOTOS = 3;
+const MAX_NOSHOW_PHOTOS = 3; // M7 — หลักฐาน No-show (บังคับ ≥1)
 const MAX_FILE_MB = 3;
 
 type PhotoEntry = { file: File; previewUrl: string };
-type InspectMode = "normal" | "risk_form" | "risk_submitted";
+type InspectMode =
+  | "normal"
+  | "risk_form"
+  | "risk_submitted"
+  | "noshow_form"    // M7 — กรอกหลักฐาน No-show
+  | "noshow_submitted"; // M7 — ส่ง No-show แล้ว รอ settle
 
 export default function MaintainInspectPage({
   params,
@@ -28,6 +35,7 @@ export default function MaintainInspectPage({
 
   const inspectFileRef = useRef<HTMLInputElement>(null);
   const riskFileRef = useRef<HTMLInputElement>(null);
+  const noshowFileRef = useRef<HTMLInputElement>(null); // M7
 
   const [inspectPhotos, setInspectPhotos] = useState<PhotoEntry[]>([]);
   const [inspectNotes, setInspectNotes] = useState("");
@@ -43,6 +51,12 @@ export default function MaintainInspectPage({
   const [showRepairConfirm, setShowRepairConfirm] = useState(false);
   const [repairSubmitting, setRepairSubmitting] = useState(false);
 
+  // M7: No-show
+  const [noshowPhotos, setNoshowPhotos] = useState<PhotoEntry[]>([]);
+  const [noshowNotes, setNoshowNotes] = useState("");
+  const [noshowSubmitting, setNoshowSubmitting] = useState(false);
+  const [noshowError, setNoshowError] = useState<string | null>(null);
+
   function addPhotos(
     files: FileList | null,
     current: PhotoEntry[],
@@ -52,7 +66,7 @@ export default function MaintainInspectPage({
     if (!files) return;
     const toAdd: PhotoEntry[] = [];
     for (const file of Array.from(files)) {
-      if (file.size > MAX_FILE_MB * 1024 * 1024) continue; // skip oversized silently
+      if (file.size > MAX_FILE_MB * 1024 * 1024) continue;
       if (current.length + toAdd.length >= max) break;
       toAdd.push({ file, previewUrl: URL.createObjectURL(file) });
     }
@@ -102,6 +116,26 @@ export default function MaintainInspectPage({
     } catch {
       setRepairSubmitting(false);
       setShowRepairConfirm(false);
+    }
+  }
+
+  // M7 — No-show: ลูกค้าไม่อยู่ ถ่ายรูปหลักฐาน → settle
+  async function handleNoshowSubmit() {
+    if (noshowPhotos.length === 0) return; // ต้องมีหลักฐาน ≥1 รูป
+    setNoshowSubmitting(true);
+    setNoshowError(null);
+    try {
+      // TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/no-show/
+      // const fd = new FormData();
+      // noshowPhotos.forEach((p) => fd.append("noshow_photos", p.file));
+      // if (noshowNotes.trim()) fd.append("notes", noshowNotes.trim());
+      // await maintainApi.noShow(id, fd);
+      await new Promise((r) => setTimeout(r, 1200)); // mock — remove after backend ready
+      setMode("noshow_submitted");
+    } catch (e) {
+      setNoshowError((e as Error).message);
+    } finally {
+      setNoshowSubmitting(false);
     }
   }
 
@@ -186,6 +220,14 @@ export default function MaintainInspectPage({
 
             <div className="text-center text-xs text-gray-600">หรือถ้าพบปัญหา</div>
 
+            {/* M7 — No-show: ลูกค้าไม่อยู่/ไม่รับสาย */}
+            <button
+              onClick={() => setMode("noshow_form")}
+              className="w-full bg-orange-900/30 hover:bg-orange-900/50 border border-orange-700/50 text-orange-300 font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
+            >
+              ⚠️ ลูกค้าไม่อยู่/ไม่รับสาย — M7 No-show
+            </button>
+
             {/* D-Maintain-1: report risk */}
             <button
               onClick={() => setMode("risk_form")}
@@ -200,6 +242,117 @@ export default function MaintainInspectPage({
               className="w-full bg-red-900/20 hover:bg-red-900/40 border border-red-800/40 text-red-400 font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
             >
               🔧 เปลี่ยนเป็นงานซ่อม — D-Maintain-2
+            </button>
+          </div>
+        )}
+
+        {/* === mode: noshow_form (M7) === */}
+        {mode === "noshow_form" && (
+          <div className="space-y-4 bg-orange-950/20 border border-orange-800/40 rounded-xl p-4">
+            <div>
+              <h3 className="font-semibold text-orange-300 text-sm">⚠️ บันทึก No-show — ลูกค้าไม่อยู่</h3>
+              <p className="text-xs text-orange-500 mt-0.5">ถ่ายรูปหลักฐาน ≥1 รูป เพื่อ settle ค่าเสียเที่ยว (ตามแกน No-show ใน offer)</p>
+            </div>
+
+            {/* No-show evidence photos — required ≥1 */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-medium text-orange-300">
+                  รูปหลักฐาน <span className="text-red-400">* (ต้องมีอย่างน้อย 1 รูป)</span>
+                </label>
+                <span className="text-xs text-gray-400">{noshowPhotos.length}/{MAX_NOSHOW_PHOTOS}</span>
+              </div>
+              <input
+                ref={noshowFileRef}
+                type="file"
+                accept="image/*"
+                multiple
+                capture="environment"
+                className="hidden"
+                onChange={(e) => addPhotos(e.target.files, noshowPhotos, setNoshowPhotos, MAX_NOSHOW_PHOTOS)}
+              />
+              <div className="grid grid-cols-3 gap-2">
+                {noshowPhotos.map((p, i) => (
+                  <div key={i} className="relative aspect-square bg-gray-800 rounded-lg overflow-hidden border border-gray-600">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.previewUrl} alt="" className="w-full h-full object-cover" />
+                    <button
+                      onClick={() => removePhoto(i, setNoshowPhotos)}
+                      className="absolute top-1 right-1 bg-black/70 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                    >✕</button>
+                  </div>
+                ))}
+                {noshowPhotos.length < MAX_NOSHOW_PHOTOS && (
+                  <button
+                    onClick={() => noshowFileRef.current?.click()}
+                    className="aspect-square bg-gray-800 border border-dashed border-orange-700/40 hover:border-orange-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-orange-400 transition-colors"
+                  >
+                    <span className="text-2xl">📷</span>
+                    <span className="text-xs">เพิ่มรูป</span>
+                  </button>
+                )}
+              </div>
+              {noshowPhotos.length === 0 && (
+                <p className="text-xs text-orange-400">⚠️ ต้องถ่ายรูปหน้าประตู/ตู้เครื่อง เป็นหลักฐานว่าไม่มีคนอยู่</p>
+              )}
+            </div>
+
+            {/* Optional notes */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-orange-300">บันทึกเพิ่มเติม <span className="text-gray-500">(ไม่บังคับ)</span></label>
+              <textarea
+                value={noshowNotes}
+                onChange={(e) => setNoshowNotes(e.target.value)}
+                placeholder="รายละเอียดเพิ่มเติม เช่น โทรไม่รับ X ครั้ง รอนาน Y นาที..."
+                rows={3}
+                className="w-full bg-gray-800 border border-orange-700/50 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+              />
+            </div>
+
+            {noshowError && (
+              <p className="text-red-400 text-xs bg-red-950/40 border border-red-800 rounded-lg px-3 py-2">{noshowError}</p>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => setMode("normal")}
+                disabled={noshowSubmitting}
+                className="flex-1 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-gray-300 font-medium py-3 rounded-xl transition-colors text-sm"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleNoshowSubmit}
+                disabled={noshowPhotos.length === 0 || noshowSubmitting}
+                className="flex-1 bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-1 text-sm"
+              >
+                {noshowSubmitting ? (
+                  <><span className="animate-spin">⏳</span> กำลังส่ง...</>
+                ) : (
+                  "📤 ส่งรายงาน No-show"
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* === mode: noshow_submitted (M7) === */}
+        {mode === "noshow_submitted" && (
+          <div className="space-y-4">
+            <div className="bg-orange-950/30 border border-orange-700/50 rounded-xl p-4 space-y-2">
+              <p className="text-orange-300 font-semibold text-sm">📤 ส่งรายงาน No-show แล้ว</p>
+              <p className="text-xs text-orange-400">ระบบจะ settle ค่าเสียเที่ยวตามแกน No-show ใน offer — WeeeR จะได้รับแจ้ง</p>
+            </div>
+            <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4 space-y-1 text-xs text-gray-400">
+              <p>• ค่าเสียเที่ยว = ตามเงื่อนไข offer ที่ WeeeU รับแล้ว</p>
+              <p>• WeeeR ได้รับแจ้งและ settle อัตโนมัติ</p>
+              <p>• ถ้าลูกค้าโต้แย้ง → Admin Dispute (M8)</p>
+            </div>
+            <button
+              onClick={() => router.replace("/maintain")}
+              className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3.5 rounded-xl transition-colors"
+            >
+              ✅ กลับหน้าหลัก
             </button>
           </div>
         )}
