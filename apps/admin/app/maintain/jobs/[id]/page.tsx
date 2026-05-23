@@ -9,23 +9,37 @@ import { Sidebar } from "@/components/sidebar";
 import type { MaintainJob } from "@/lib/types";
 
 interface MaintainJobDetail extends MaintainJob {
-  customerName: string;
-  customerPhone: string;
-  technicianName: string | null;
-  shopName: string | null;
+  customerName:    string;
+  customerPhone:   string;
+  technicianName:  string | null;
+  shopName:        string | null;
   timeline: {
-    status: MaintainJob["status"];
-    actor: string;
-    note: string | null;
-    lat: number | null;
-    lng: number | null;
+    status:    MaintainJob["status"];
+    actor:     string;
+    note:      string | null;
+    lat:       number | null;
+    lng:       number | null;
     timestamp: string;
   }[];
   photos: {
-    type: "before" | "after" | "parts" | "other";
-    url: string;
+    type:    "before" | "after" | "parts" | "other";
+    url:     string;
     takenAt: string;
   }[];
+  /* D-Maintain-1: WeeeT risk flag */
+  risk_flag?:  boolean;
+  risk_note?:  string | null;
+  /* D-Maintain-2: cross-module reference to repair job */
+  cross_module_ref?: { type: "repair"; job_id: string } | null;
+  /* Dispute */
+  dispute_flag?: boolean;
+  dispute?: {
+    fault_party:    "weeeu" | "weeer" | "weeet" | null;
+    resolution:     "refund" | "forfeit" | "split" | "pending" | null;
+    split_pct?:     number | null;
+    precedent_note?: string | null;
+    offer_terms_ref?: string | null;
+  } | null;
 }
 
 const STATUS_META: Record<MaintainJob["status"], { label: string; color: string }> = {
@@ -49,7 +63,7 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-36 shrink-0">{label}</span>
-      <span className="text-sm text-gray-100">{value}</span>
+      <span className="text-sm text-gray-800">{value}</span>
     </div>
   );
 }
@@ -191,7 +205,7 @@ export default function MaintainJobDetailPage() {
               <div className="space-y-1.5">
                 {job.parts_used.map((p, i) => (
                   <div key={i} className="flex justify-between text-sm">
-                    <span className="text-gray-200">{p.name}</span>
+                    <span className="text-gray-700">{p.name}</span>
                     <span className="text-gray-500 font-mono">× {p.qty}</span>
                   </div>
                 ))}
@@ -213,7 +227,7 @@ export default function MaintainJobDetailPage() {
                   <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                     {photos.map((p, i) => (
                       <a key={i} href={p.url} target="_blank" rel="noreferrer"
-                        className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all">
+                        className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-admin-primary transition-all">
                         <img src={p.url} alt={`${type}-${i}`} className="w-full h-full object-cover" />
                       </a>
                     ))}
@@ -234,9 +248,9 @@ export default function MaintainJobDetailPage() {
                 return (
                   <div key={i} className="flex gap-4 items-start">
                     <div className="flex flex-col items-center">
-                      <div className="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1 shrink-0" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-admin-primary mt-1 shrink-0" />
                       {i < job.timeline.length - 1 && (
-                        <div className="w-px flex-1 bg-gray-700 mt-1 min-h-[16px]" />
+                        <div className="w-px flex-1 bg-gray-200 mt-1 min-h-[16px]" />
                       )}
                     </div>
                     <div className="pb-3 flex-1">
@@ -251,7 +265,7 @@ export default function MaintainJobDetailPage() {
                         {t.lat != null && t.lng != null && (
                           <a href={`https://maps.google.com/?q=${t.lat},${t.lng}`}
                             target="_blank" rel="noreferrer"
-                            className="text-xs text-blue-500 hover:text-blue-400">📍</a>
+                            className="text-xs text-admin-primary hover:text-admin-dark">📍</a>
                         )}
                       </div>
                       {t.note && <p className="text-xs text-gray-500 mt-1">{t.note}</p>}
@@ -263,17 +277,130 @@ export default function MaintainJobDetailPage() {
           </section>
         )}
 
+        {/* D-Maintain-1: Risk Flag — WeeeT แจ้งความเสี่ยง */}
+        {job.risk_flag && (
+          <section className="bg-orange-50 rounded-xl border border-orange-200 p-5">
+            <h2 className="text-xs font-semibold text-orange-700 uppercase tracking-wider mb-3">
+              ⚠️ Risk Flag — WeeeT แจ้งความเสี่ยง
+            </h2>
+            <p className="text-sm text-orange-800">
+              {job.risk_note ?? "WeeeT ได้แจ้งความเสี่ยงในงานนี้ — โปรดตรวจสอบรายละเอียดเพิ่มเติม"}
+            </p>
+          </section>
+        )}
+
+        {/* D-Maintain-2: Cross-module trace — งานนี้ผูกกับ Repair Job */}
+        {job.cross_module_ref?.type === "repair" && (
+          <section className="bg-purple-50 rounded-xl border border-purple-200 p-5">
+            <h2 className="text-xs font-semibold text-purple-700 uppercase tracking-wider mb-3">
+              🔧 Cross-Module — งานนี้ถูกส่งต่อเป็นงานซ่อม
+            </h2>
+            <p className="text-xs text-purple-600 mb-3">
+              งาน Maintain นี้พบปัญหาระหว่างการล้าง และถูกเปิดเป็น Repair Job แยกต่างหาก
+            </p>
+            <Link
+              href={`/repair/jobs/${job.cross_module_ref.job_id}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-700 text-xs font-medium rounded-lg transition-colors">
+              🔧 ดู Repair Job →
+            </Link>
+          </section>
+        )}
+
+        {/* Dispute 4-Layer Panel */}
+        {job.dispute_flag && (
+          <section className="bg-white rounded-xl border border-red-200 p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider">
+                ⚖️ Dispute — 4 ชั้น (อ้างอิง Offer Terms)
+              </h2>
+              <Link
+                href={`/disputes?job_id=${job.id}&service=maintain`}
+                className="text-xs text-admin-primary hover:text-admin-dark">
+                ดูรายการพิพาท →
+              </Link>
+            </div>
+
+            {/* L1: Offer Terms Lock */}
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="text-xs font-semibold text-gray-600 mb-2">
+                L1 — เงื่อนไขที่ตกลงใน Offer (Source of Truth)
+              </p>
+              <p className="text-xs text-gray-500">
+                ข้อตกลงที่ WeeeU และ WeeeT ยืนยันก่อนเริ่มงาน ถูกล็อกเป็น SoT สำหรับวินิจฉัยข้อพิพาทนี้
+              </p>
+              {job.dispute?.offer_terms_ref && (
+                <p className="text-xs text-admin-primary mt-1">ref: {job.dispute.offer_terms_ref}</p>
+              )}
+            </div>
+
+            {/* L2: Fault Party */}
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="text-xs font-semibold text-gray-600 mb-2">L2 — ฝ่ายที่เป็นต้นเหตุ</p>
+              {job.dispute?.fault_party ? (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                  job.dispute.fault_party === "weeeu" ? "bg-orange-100 text-orange-700" :
+                  job.dispute.fault_party === "weeer" ? "bg-red-100 text-red-700" :
+                  job.dispute.fault_party === "weeet" ? "bg-yellow-100 text-yellow-700" :
+                  "bg-gray-100 text-gray-600"
+                }`}>
+                  {job.dispute.fault_party === "weeeu" ? "WeeeU (ลูกค้า)" :
+                   job.dispute.fault_party === "weeer" ? "WeeeR (ช่าง)" :
+                   job.dispute.fault_party === "weeet" ? "WeeeT (ร้าน)" : "ไม่ระบุ"}
+                </span>
+              ) : (
+                <span className="text-xs text-gray-500">ยังไม่ระบุ — อยู่ระหว่างพิจารณา</span>
+              )}
+            </div>
+
+            {/* L3: Resolution + Default */}
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="text-xs font-semibold text-gray-600 mb-2">
+                L3 — ผลวินิจฉัย (Default: คืนเงินลูกค้าเต็ม)
+              </p>
+              {job.dispute?.resolution ? (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                    job.dispute.resolution === "refund"  ? "bg-blue-100 text-blue-700" :
+                    job.dispute.resolution === "forfeit" ? "bg-red-100 text-red-700" :
+                    job.dispute.resolution === "split"   ? "bg-purple-100 text-purple-700" :
+                    "bg-gray-100 text-gray-600"
+                  }`}>
+                    {job.dispute.resolution === "refund"  ? "คืนเงินลูกค้า (Refund)" :
+                     job.dispute.resolution === "forfeit" ? "ยึดให้ WeeeT (Forfeit)" :
+                     job.dispute.resolution === "split"   ? `แบ่ง ${job.dispute.split_pct ?? 50}/${100 - (job.dispute.split_pct ?? 50)}` :
+                     "รอผลวินิจฉัย"}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500">
+                  รอผลวินิจฉัย — Default คือคืนเงินให้ WeeeU เต็มจำนวน
+                </p>
+              )}
+            </div>
+
+            {/* L4: Precedent */}
+            <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
+              <p className="text-xs font-semibold text-gray-600 mb-2">L4 — บันทึก Precedent</p>
+              {job.dispute?.precedent_note ? (
+                <p className="text-xs text-gray-700">{job.dispute.precedent_note}</p>
+              ) : (
+                <p className="text-xs text-gray-400">ยังไม่มีบันทึก — กรอกได้ในหน้า Dispute Detail</p>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Force-cancel — super-admin only, non-terminal status */}
         {canCancel && (
-          <section className="bg-white rounded-xl border border-red-900/40 p-5">
+          <section className="bg-white rounded-xl border border-red-200 p-5">
             <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-4">
               🔐 Force-Cancel — Super-Admin
             </h2>
             {cancelMsg && (
               <div className={`mb-4 p-3 rounded-lg text-sm border ${
                 cancelMsg.type === "success"
-                  ? "bg-green-900/30 border-green-800 text-green-700"
-                  : "bg-red-900/30 border-red-800 text-red-700"
+                  ? "bg-green-50 border-green-200 text-green-700"
+                  : "bg-red-50 border-red-200 text-red-700"
               }`}>{cancelMsg.text}</div>
             )}
             <textarea

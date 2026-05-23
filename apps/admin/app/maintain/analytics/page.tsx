@@ -17,6 +17,8 @@ interface MaintainAnalytics {
   by_appliance_type: Record<string, number>;
   avg_price: number;
   avg_duration: number;
+  dispute_count?: number;
+  dispute_rate?: number; // 0-1
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -31,7 +33,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 const STATUS_COLOR: Record<string, string> = {
   pending:     "bg-gray-500",
-  assigned:    "bg-blue-500",
+  assigned:    "bg-admin-primary",
   departed:    "bg-yellow-500",
   arrived:     "bg-cyan-500",
   in_progress: "bg-brand-info",
@@ -46,8 +48,8 @@ const CLEANING_LABEL: Record<string, string> = {
 };
 
 const CLEANING_COLOR: Record<string, string> = {
-  general:  "bg-blue-500",
-  deep:     "bg-admin-primary",
+  general:  "bg-admin-primary",
+  deep:     "bg-admin-dark",
   sanitize: "bg-brand-success",
 };
 
@@ -120,8 +122,10 @@ export default function MaintainAnalyticsPage() {
     </div>
   );
 
-  const completedCount = data.by_status["completed"] ?? 0;
-  const cancelledCount = data.by_status["cancelled"] ?? 0;
+  const completedCount  = data.by_status["completed"] ?? 0;
+  const cancelledCount  = data.by_status["cancelled"] ?? 0;
+  const disputeCount    = data.dispute_count ?? 0;
+  const disputeRate     = data.dispute_rate ?? 0;
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -165,6 +169,19 @@ export default function MaintainAnalyticsPage() {
             sub="per job"
           />
         </div>
+
+        {/* Dispute KPI */}
+        {disputeCount > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-red-50 border border-red-200 rounded-xl p-5">
+              <p className="text-xs text-red-600 mb-1">⚖️ ข้อพิพาท</p>
+              <p className="text-2xl font-bold text-red-700">{disputeCount.toLocaleString()}</p>
+              <p className="text-xs text-red-500 mt-1">
+                {(disputeRate * 100).toFixed(1)}% ของงานทั้งหมด
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Charts grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -224,6 +241,44 @@ export default function MaintainAnalyticsPage() {
           </section>
 
         </div>
+
+        {/* Dispute detail */}
+        {disputeCount > 0 && (
+          <section className="bg-white rounded-xl border border-red-200 p-5">
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-4">
+              ⚖️ Dispute Overview
+            </h2>
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">งานทั้งหมด</span>
+                <span className="text-gray-900 font-mono">{data.total_jobs.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">มีข้อพิพาท</span>
+                <span className="text-red-600 font-mono font-bold">{disputeCount.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">Dispute Rate</span>
+                <span className={`font-mono font-bold ${
+                  disputeRate >= 0.05 ? "text-red-600" : disputeRate >= 0.02 ? "text-yellow-700" : "text-green-600"
+                }`}>
+                  {(disputeRate * 100).toFixed(2)}%
+                </span>
+              </div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden mt-2">
+                <div
+                  className="h-full rounded-full bg-red-500 transition-all"
+                  style={{ width: `${Math.min(disputeRate * 100 * 10, 100)}%` }}
+                />
+              </div>
+              <p className="text-xs text-gray-400 mt-2">
+                <Link href="/disputes?service=maintain" className="text-admin-primary hover:text-admin-dark">
+                  ดูรายการข้อพิพาท →
+                </Link>
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* Recurring conversion detail */}
         <section className="bg-white rounded-xl border border-admin-primary/30 p-5">

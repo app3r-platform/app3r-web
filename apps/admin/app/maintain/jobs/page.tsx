@@ -8,11 +8,18 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { MaintainJob } from "@/lib/types";
 
+/* ─── local extension — server may return these extra fields ─── */
+interface MaintainJobListItem extends MaintainJob {
+  dispute_flag?:     boolean;
+  risk_flag?:        boolean;
+  cross_module_ref?: { type: "repair"; job_id: string } | null;
+}
+
 const STATUS_META: Record<MaintainJob["status"], { label: string; color: string }> = {
   pending:     { label: "รอดำเนินการ",  color: "bg-gray-100 text-gray-500" },
   assigned:    { label: "มอบหมายแล้ว", color: "bg-blue-50 text-blue-700" },
   departed:    { label: "ออกเดินทาง",  color: "bg-yellow-50 text-yellow-700" },
-  arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-900/50 text-cyan-300" },
+  arrived:     { label: "ถึงที่แล้ว",   color: "bg-cyan-50 text-cyan-700" },
   in_progress: { label: "กำลังทำงาน",  color: "bg-brand-info/15 text-brand-info" },
   completed:   { label: "เสร็จสิ้น",   color: "bg-green-50 text-green-700" },
   cancelled:   { label: "ยกเลิก",       color: "bg-red-50 text-red-700" },
@@ -35,27 +42,28 @@ const STATUS_TABS: { label: string; value: string }[] = [
   { label: "กำลังทำ",    value: "in_progress" },
   { label: "เสร็จสิ้น",  value: "completed" },
   { label: "ยกเลิก",     value: "cancelled" },
+  { label: "⚖️ ข้อพิพาท", value: "disputed" },
 ];
 
 const PAGE_SIZE = 20;
 
 interface JobListResponse {
-  results: MaintainJob[];
+  results: MaintainJobListItem[];
   count: number;
 }
 
 export default function MaintainJobsPage() {
   const router = useRouter();
-  const [items, setItems] = useState<MaintainJob[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [items, setItems]               = useState<MaintainJobListItem[]>([]);
+  const [total, setTotal]               = useState(0);
+  const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
   const [filterCleaning, setFilterCleaning] = useState("");
-  const [filterShop, setFilterShop] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo]     = useState("");
-  const [page, setPage] = useState(1);
+  const [filterShop, setFilterShop]     = useState("");
+  const [dateFrom, setDateFrom]         = useState("");
+  const [dateTo, setDateTo]             = useState("");
+  const [page, setPage]                 = useState(1);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -63,11 +71,11 @@ export default function MaintainJobsPage() {
       const params = new URLSearchParams({
         limit: String(PAGE_SIZE),
         offset: String((page - 1) * PAGE_SIZE),
-        ...(filterStatus  && { status: filterStatus }),
+        ...(filterStatus   && { status: filterStatus }),
         ...(filterCleaning && { cleaning_type: filterCleaning }),
-        ...(filterShop    && { shop_id: filterShop }),
-        ...(dateFrom      && { date_from: dateFrom }),
-        ...(dateTo        && { date_to: dateTo }),
+        ...(filterShop     && { shop_id: filterShop }),
+        ...(dateFrom       && { date_from: dateFrom }),
+        ...(dateTo         && { date_to: dateTo }),
       });
       const d = await api.get<JobListResponse>(
         "/maintain/jobs/admin/?" + params
@@ -114,7 +122,11 @@ export default function MaintainJobsPage() {
             <button key={t.value}
               onClick={() => { setFilterStatus(t.value); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                filterStatus === t.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
+                filterStatus === t.value
+                  ? t.value === "disputed"
+                    ? "bg-red-50 text-red-700"
+                    : "bg-admin-surface text-admin-primary"
+                  : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -126,7 +138,7 @@ export default function MaintainJobsPage() {
           <select
             value={filterCleaning}
             onChange={e => { setFilterCleaning(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-admin-primary">
             <option value="">ทุกประเภทล้าง</option>
             <option value="general">ล้างทั่วไป</option>
             <option value="deep">ล้างลึก</option>
@@ -134,14 +146,14 @@ export default function MaintainJobsPage() {
           </select>
           <input type="text" placeholder="Shop ID"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-admin-primary"
           />
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-admin-primary"
           />
           <span className="self-center text-gray-600 text-xs">ถึง</span>
           <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-40 focus:outline-none focus:border-admin-primary"
           />
           {(filterCleaning || filterShop || dateFrom || dateTo) && (
             <button onClick={() => { setFilterCleaning(""); setFilterShop(""); setDateFrom(""); setDateTo(""); setPage(1); }}
@@ -182,6 +194,7 @@ export default function MaintainJobsPage() {
                   <th className="px-4 py-3">ราคา</th>
                   <th className="px-4 py-3">Recurring</th>
                   <th className="px-4 py-3">ช่าง</th>
+                  <th className="px-4 py-3">Flags</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
@@ -189,8 +202,8 @@ export default function MaintainJobsPage() {
                 {items.map(job => {
                   const sm = STATUS_META[job.status];
                   return (
-                    <tr key={job.id} className="hover:bg-gray-100/40">
-                      <td className="px-4 py-3 font-mono text-xs text-blue-400">{job.serviceCode}</td>
+                    <tr key={job.id} className={`hover:bg-gray-100/40 ${job.dispute_flag ? "bg-red-50/30" : ""}`}>
+                      <td className="px-4 py-3 font-mono text-xs text-admin-primary">{job.serviceCode}</td>
                       <td className="px-4 py-3">
                         <span className="text-sm">{APPLIANCE_LABEL[job.applianceType]}</span>
                       </td>
@@ -220,6 +233,31 @@ export default function MaintainJobsPage() {
                       <td className="px-4 py-3 text-xs text-gray-500">
                         {job.technicianId ?? "—"}
                       </td>
+                      {/* Flags column */}
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1 min-w-[72px]">
+                          {job.dispute_flag && (
+                            <Link href={`/disputes?job_id=${job.id}&service=maintain`}
+                              className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-red-100 text-red-700 hover:bg-red-200 transition-colors whitespace-nowrap">
+                              ⚖️ พิพาท
+                            </Link>
+                          )}
+                          {job.risk_flag && (
+                            <span className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 whitespace-nowrap">
+                              ⚠️ ความเสี่ยง
+                            </span>
+                          )}
+                          {job.cross_module_ref?.type === "repair" && (
+                            <Link href={`/repair/jobs/${job.cross_module_ref.job_id}`}
+                              className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors whitespace-nowrap">
+                              🔧 →ซ่อม
+                            </Link>
+                          )}
+                          {!job.dispute_flag && !job.risk_flag && !job.cross_module_ref && (
+                            <span className="text-xs text-gray-400">—</span>
+                          )}
+                        </div>
+                      </td>
                       <td className="px-4 py-3">
                         <Link href={`/maintain/jobs/${job.id}`}
                           className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
@@ -231,7 +269,7 @@ export default function MaintainJobsPage() {
                 })}
                 {items.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="px-6 py-10 text-center text-gray-500">
+                    <td colSpan={10} className="px-6 py-10 text-center text-gray-500">
                       ไม่มีข้อมูล
                     </td>
                   </tr>

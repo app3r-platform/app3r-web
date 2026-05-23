@@ -129,7 +129,7 @@ export default function MaintainRecurringPage() {
           <select
             value={filterInterval}
             onChange={e => { setFilterInterval(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-admin-primary">
             <option value="">ทุก interval</option>
             <option value="3_months">3 เดือน</option>
             <option value="6_months">6 เดือน</option>
@@ -138,7 +138,7 @@ export default function MaintainRecurringPage() {
           <select
             value={filterAppliance}
             onChange={e => { setFilterAppliance(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-admin-primary">
             <option value="">ทุกเครื่อง</option>
             <option value="AC">แอร์</option>
             <option value="WashingMachine">เครื่องซัก</option>
@@ -191,7 +191,7 @@ export default function MaintainRecurringPage() {
                   const ts = triggerStates[job.id];
                   return (
                     <tr key={job.id} className="hover:bg-gray-100/40">
-                      <td className="px-4 py-3 font-mono text-xs text-blue-400">{job.serviceCode}</td>
+                      <td className="px-4 py-3 font-mono text-xs text-admin-primary">{job.serviceCode}</td>
                       <td className="px-4 py-3 text-sm">{APPLIANCE_LABEL[job.applianceType]}</td>
                       <td className="px-4 py-3 text-xs text-gray-700">{CLEANING_LABEL[job.cleaningType]}</td>
                       <td className="px-4 py-3">
