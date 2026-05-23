@@ -121,7 +121,7 @@ export default function MaintainJobProgressPage({
         </div>
         <div className="flex justify-between text-gray-600">
           <span>ราคา</span>
-          <span className="font-bold text-green-700">{job.totalPrice.toLocaleString()} pts</span>
+          <span className="font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</span>
         </div>
         {job.recurring?.enabled && (
           <div className="flex justify-between text-gray-600">
@@ -141,7 +141,7 @@ export default function MaintainJobProgressPage({
           stageOrder={MAINTAIN_STAGE_ORDER}
           currentStage={progress.current_stage}
           entries={progress.entries}
-          terminalStages={["cancelled"]}
+          terminalStages={["cancelled", "closed_for_repair"]}
         />
       </div>
     </div>

@@ -76,11 +76,13 @@ export const MAINTAIN_ADVANCEABLE_STAGES: MaintainStatus[] = [
 
 /** Map stage key → order index for progress bar */
 export const MAINTAIN_STAGE_ORDER: Record<MaintainStatus, number> = {
-  pending: 0,
-  assigned: 1,
-  departed: 2,
-  arrived: 3,
-  in_progress: 4,
-  completed: 5,
-  cancelled: -1,
+  pending:           0,
+  awaiting_offer:    0,   // same phase as pending — ยื่นข้อเสนอแล้ว รอ WeeeU ตอบรับ
+  assigned:          1,
+  departed:          2,
+  arrived:           3,
+  in_progress:       4,
+  completed:         5,
+  cancelled:         -1,
+  closed_for_repair: -1,  // terminal — GAP D-M-2
 };

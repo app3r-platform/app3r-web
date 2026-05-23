@@ -9,13 +9,13 @@ import {
   MAINTAIN_STATUS_COLOR,
   APPLIANCE_LABEL,
   CLEANING_LABEL,
+  RECURRING_LABEL,
 } from "../_lib/types";
 
 export default function MaintainQueuePage() {
   const [jobs, setJobs] = useState<MaintainJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [accepting, setAccepting] = useState<string | null>(null);
 
   useEffect(() => {
     maintainApi.getQueue()
@@ -24,18 +24,6 @@ export default function MaintainQueuePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleAccept(id: string) {
-    setAccepting(id);
-    try {
-      const updated = await maintainApi.acceptJob(id);
-      setJobs(prev => prev.map(j => j.id === id ? updated : j));
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setAccepting(null);
-    }
-  }
-
   const pendingJobs = jobs.filter(j => j.status === "pending");
 
   return (
@@ -43,10 +31,10 @@ export default function MaintainQueuePage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">คิวงาน Maintain</h1>
-          <p className="text-xs text-gray-500 mt-0.5">งานล้างเครื่องใช้ไฟฟ้าในรัศมี — รับงาน → มอบหมายช่าง</p>
+          <p className="text-xs text-gray-500 mt-0.5">งานล้างเครื่องใช้ไฟฟ้าในรัศมี — ดูรายละเอียด → ยื่นข้อเสนอ</p>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/maintain/jobs" className="text-sm text-green-700 hover:text-green-900 font-medium">
+          <Link href="/maintain/jobs" className="text-sm text-[#FF663A] hover:text-[#D8491F] font-medium">
             งานที่รับแล้ว →
           </Link>
           <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
@@ -57,7 +45,7 @@ export default function MaintainQueuePage() {
       <div className="grid grid-cols-3 gap-2">
         <div className="bg-orange-50 rounded-xl p-3 text-center">
           <p className="text-xl font-bold text-orange-700">{pendingJobs.length}</p>
-          <p className="text-xs text-gray-500 mt-0.5">รอรับงาน</p>
+          <p className="text-xs text-gray-500 mt-0.5">รอยื่นข้อเสนอ</p>
         </div>
         <div className="bg-blue-50 rounded-xl p-3 text-center">
           <p className="text-xl font-bold text-blue-700">{jobs.filter(j => j.applianceType === "AC").length}</p>
@@ -111,12 +99,11 @@ export default function MaintainQueuePage() {
                   </div>
                 )}
               </div>
-              <button
-                onClick={() => handleAccept(job.id)}
-                disabled={accepting === job.id}
-                className="shrink-0 bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50">
-                {accepting === job.id ? "กำลังรับ…" : "✅ รับงาน"}
-              </button>
+              <Link
+                href={`/maintain/queue/${job.id}/offer`}
+                className="shrink-0 bg-[#FF663A] hover:bg-[#D8491F] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                📝 ยื่นข้อเสนอ
+              </Link>
             </div>
           </div>
         ))}
@@ -124,10 +111,3 @@ export default function MaintainQueuePage() {
     </div>
   );
 }
-
-// helper (used inline above)
-const RECURRING_LABEL: Record<string, string> = {
-  "3_months":  "ทุก 3 เดือน",
-  "6_months":  "ทุก 6 เดือน",
-  "12_months": "ทุก 12 เดือน",
-};

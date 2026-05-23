@@ -17,6 +17,12 @@ const RECURRING_LABEL: Record<string, string> = {
   "12_months": "ทุก 12 เดือน",
 };
 
+const DAMAGE_POLICY_LABEL: Record<string, string> = {
+  none:              "ไม่รับผิดชอบ",
+  no_service_fee:    "คืนค่าบริการ",
+  up_to_service_fee: "ไม่เกินค่าบริการ",
+};
+
 export default function MaintainJobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [job, setJob] = useState<MaintainJob | null>(null);
@@ -34,7 +40,8 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
   if (error) return <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">{error}</div>;
   if (!job) return null;
 
-  const canAssign = ["pending", "assigned"].includes(job.status);
+  // canAssign: only when job is assigned (pending is now handled via offer flow)
+  const canAssign = job.status === "assigned";
 
   return (
     <div className="space-y-5 max-w-xl">
@@ -52,6 +59,28 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
           <p className="text-xs text-gray-400 mt-0.5">{job.serviceCode}</p>
         </div>
       </div>
+
+      {/* awaiting_offer banner (ขั้น 2.1) */}
+      {job.status === "awaiting_offer" && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 flex items-start gap-2">
+          <span className="text-lg">⏳</span>
+          <div>
+            <p className="text-sm font-semibold text-yellow-800">รอลูกค้าตอบรับข้อเสนอ</p>
+            <p className="text-xs text-yellow-600 mt-0.5">ยื่นข้อเสนอแล้ว — รอ WeeeU ยืนยันก่อนมอบหมายช่าง</p>
+          </div>
+        </div>
+      )}
+
+      {/* closed_for_repair banner (GAP D-M-2) */}
+      {job.status === "closed_for_repair" && (
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-start gap-2">
+          <span className="text-lg">🔧</span>
+          <div>
+            <p className="text-sm font-semibold text-gray-700">ปิดงาน Maintain → ส่งต่อซ่อม</p>
+            <p className="text-xs text-gray-500 mt-0.5">งานนี้ถูกปิดและส่งต่อเป็นงานซ่อมแล้ว</p>
+          </div>
+        </div>
+      )}
 
       {/* Service info card */}
       <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
@@ -85,10 +114,43 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
           </div>
           <div>
             <p className="text-xs text-gray-400">ราคารวม</p>
-            <p className="font-bold text-green-700">{job.totalPrice.toLocaleString()} pts</p>
+            <p className="font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</p>
           </div>
         </div>
       </div>
+
+      {/* Offer lock display (ขั้น 2.1) — show when offerData is set */}
+      {job.offerData && (
+        <div className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl p-4 space-y-2">
+          <p className="text-xs font-semibold text-[#4A1B0C] uppercase tracking-wider">ข้อเสนอที่ยื่นไว้</p>
+          <div className="space-y-1.5 text-sm">
+            {job.offerData.deposit.required && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">มัดจำ</span>
+                <span className="font-medium text-gray-800">{job.offerData.deposit.amount?.toLocaleString()} pts</span>
+              </div>
+            )}
+            {job.offerData.travelFee.required && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">ค่าเดินทาง</span>
+                <span className="font-medium text-gray-800">{job.offerData.travelFee.amount?.toLocaleString()} pts</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span className="text-gray-600">รับประกันงาน</span>
+              <span className="font-medium text-gray-800">{job.offerData.warranty.days} วัน</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">No-show fee</span>
+              <span className="font-medium text-gray-800">{job.offerData.noShow.fee.toLocaleString()} pts</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">ความรับผิดเสียหาย</span>
+              <span className="font-medium text-gray-800">{DAMAGE_POLICY_LABEL[job.offerData.damagePolicy] ?? job.offerData.damagePolicy}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recurring */}
       {job.recurring?.enabled && (
@@ -111,7 +173,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">ช่างผู้รับผิดชอบ</p>
         {job.technicianId ? (
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm">👷</div>
+            <div className="w-9 h-9 bg-[#FCEAE3] rounded-full flex items-center justify-center text-[#FF663A] font-bold text-sm">👷</div>
             <div>
               <p className="text-sm font-semibold text-gray-800">Technician ID: {job.technicianId}</p>
               <p className="text-xs text-gray-400">มอบหมายแล้ว</p>
@@ -142,14 +204,14 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
 
       {/* Progress link */}
       <Link href={`/maintain/jobs/${id}/progress`}
-        className="w-full block text-center bg-white border border-green-200 text-green-700 hover:bg-green-50 font-medium py-2.5 rounded-xl transition-colors text-sm">
+        className="w-full block text-center bg-white border border-[#FFD5C4] text-[#FF663A] hover:bg-[#FCEAE3] font-medium py-2.5 rounded-xl transition-colors text-sm">
         📊 ดูความคืบหน้า (Progress)
       </Link>
 
       {/* Action */}
       {canAssign && (
         <Link href={`/maintain/jobs/${id}/assign`}
-          className="w-full block text-center bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors text-sm">
+          className="w-full block text-center bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-3 rounded-xl transition-colors text-sm">
           👷 มอบหมายช่าง →
         </Link>
       )}

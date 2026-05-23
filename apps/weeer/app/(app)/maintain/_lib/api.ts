@@ -1,4 +1,4 @@
-import type { MaintainJob } from "./types";
+import type { MaintainJob, MaintainOfferPayload } from "./types";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -53,5 +53,12 @@ export const maintainApi = {
     apiFetch<MaintainJob>(`/maintain/jobs/${id}/assign/`, {
       method: "POST",
       body: JSON.stringify({ technicianId }),
+    }),
+
+  // POST /maintain/jobs/{id}/offer/   body: MaintainOfferPayload  (ขั้น 2.1)
+  submitOffer: (id: string, payload: MaintainOfferPayload) =>
+    apiFetch<MaintainJob>(`/maintain/jobs/${id}/offer/`, {
+      method: "POST",
+      body: JSON.stringify(payload),
     }),
 };
