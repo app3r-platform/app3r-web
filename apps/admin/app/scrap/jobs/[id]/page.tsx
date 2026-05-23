@@ -8,6 +8,23 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { ScrapJob, ScrapJobOption } from "@/lib/types";
 
+/* S8/S9/S12 — extended fields (mock patch) */
+interface PriceRevision {
+  revised_at:    string;
+  old_price:     number;
+  new_price:     number;
+  revised_by:    "WeeeR" | "Admin";
+  reason:        string;
+}
+
+interface ScrapJobExtended extends ScrapJob {
+  cancelled_reason?:     "weeer_withdraw" | "weeu_stop" | "force_majeure" | null;
+  no_show_flag?:         boolean;
+  no_show_settled_at?:   string | null;
+  price_revisions?:      PriceRevision[];
+  source_repair_job_id?: string | null;
+}
+
 const STATUS_META: Record<ScrapJob["status"], { label: string; color: string }> = {
   pending_decision: { label: "รอตัดสินใจ", color: "bg-yellow-50 text-yellow-700" },
   in_progress:      { label: "กำลังดำเนิน", color: "bg-blue-50 text-blue-700" },
@@ -26,7 +43,7 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-40 shrink-0">{label}</span>
-      <span className="text-sm text-gray-100">{value}</span>
+      <span className="text-sm text-gray-800">{value}</span>
     </div>
   );
 }
@@ -34,13 +51,13 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 export default function ScrapJobDetailPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
-  const [job, setJob] = useState<ScrapJob | null>(null);
+  const [job, setJob] = useState<ScrapJobExtended | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchJob = useCallback(async () => {
     try {
-      const d = await api.get<ScrapJob>(`/admin/scrap/jobs/${id}/`);
+      const d = await api.get<ScrapJobExtended>(`/admin/scrap/jobs/${id}/`);
       setJob(d);
       setError(null);
     } catch (e) {
@@ -87,6 +104,33 @@ export default function ScrapJobDetailPage() {
             <div className="flex items-center gap-3 mb-1 flex-wrap">
               <h1 className="text-2xl font-bold">🔨 Scrap Job</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
+              {/* S9 */}
+              {job.no_show_flag && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">
+                  🚫 No-show
+                </span>
+              )}
+              {/* S7/S10 */}
+              {job.cancelled_reason && (
+                <span className={`text-xs px-2 py-0.5 rounded-full border ${
+                  job.cancelled_reason === "weeer_withdraw"
+                    ? "bg-orange-50 text-orange-700 border-orange-200"
+                    : job.cancelled_reason === "weeu_stop"
+                    ? "bg-red-50 text-red-700 border-red-200"
+                    : "bg-gray-100 text-gray-600 border-gray-200"
+                }`}>
+                  ❌ {job.cancelled_reason === "weeer_withdraw" ? "S7: WeeeR ถอน"
+                      : job.cancelled_reason === "weeu_stop" ? "S10: WeeeU ยุติ"
+                      : "สุดวิสัย"}
+                </span>
+              )}
+              {/* S12 */}
+              {job.source_repair_job_id && (
+                <Link href={`/repair/jobs/${job.source_repair_job_id}`}
+                  className="text-xs px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 transition-colors">
+                  🔧 จาก Repair
+                </Link>
+              )}
             </div>
             <p className="text-gray-500 text-sm font-mono">{job.id}</p>
           </div>
@@ -132,6 +176,56 @@ export default function ScrapJobDetailPage() {
             } />
           </section>
 
+          {/* S8 — Price Revision History */}
+          {job.price_revisions && job.price_revisions.length > 0 && (
+            <section className="bg-white rounded-xl border border-gray-200 p-5 lg:col-span-2">
+              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                S8 — ประวัติปรับราคา ({job.price_revisions.length} ครั้ง)
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-xs text-gray-500 border-b border-gray-200 text-left">
+                      <th className="py-2 pr-4">วันที่</th>
+                      <th className="py-2 pr-4">ราคาเดิม</th>
+                      <th className="py-2 pr-4">ราคาใหม่</th>
+                      <th className="py-2 pr-4">ผู้ปรับ</th>
+                      <th className="py-2">เหตุผล</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {job.price_revisions.map((rev, i) => (
+                      <tr key={i} className="text-sm">
+                        <td className="py-2 pr-4 text-xs text-gray-500 whitespace-nowrap">
+                          {new Date(rev.revised_at).toLocaleString("th-TH")}
+                        </td>
+                        <td className="py-2 pr-4 font-mono text-gray-500 line-through text-xs">
+                          {rev.old_price.toLocaleString()} ฿
+                        </td>
+                        <td className="py-2 pr-4 font-mono text-green-600 font-semibold text-xs">
+                          {rev.new_price.toLocaleString()} ฿
+                          <span className={`ml-1.5 text-xs ${rev.new_price > rev.old_price ? "text-red-500" : "text-green-500"}`}>
+                            ({rev.new_price > rev.old_price ? "+" : ""}{(rev.new_price - rev.old_price).toLocaleString()})
+                          </span>
+                        </td>
+                        <td className="py-2 pr-4">
+                          <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                            rev.revised_by === "Admin"
+                              ? "bg-blue-50 text-blue-700"
+                              : "bg-orange-50 text-orange-700"
+                          }`}>
+                            {rev.revised_by}
+                          </span>
+                        </td>
+                        <td className="py-2 text-xs text-gray-600">{rev.reason}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
           {/* Output refs */}
           <section className="bg-white rounded-xl border border-gray-200 p-5 lg:col-span-2">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Output References</h2>
@@ -142,7 +236,7 @@ export default function ScrapJobDetailPage() {
                 <div className="flex flex-wrap gap-2">
                   {job.partsCreatedIds.map(pid => (
                     <Link key={pid} href={`/parts/${pid}`}
-                      className="text-xs font-mono text-admin-primary hover:text-admin-dark bg-blue-900/20 px-2 py-1 rounded">
+                      className="text-xs font-mono text-admin-primary hover:text-admin-dark bg-blue-50 border border-blue-200 px-2 py-1 rounded">
                       {pid.slice(0, 12)}… ↗
                     </Link>
                   ))}

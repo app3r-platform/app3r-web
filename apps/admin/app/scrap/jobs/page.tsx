@@ -8,6 +8,13 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { ScrapJob, ScrapJobOption } from "@/lib/types";
 
+/* S7/S9/S10/S12 — extended job fields (mock patch) */
+interface ScrapJobExtended extends ScrapJob {
+  cancelled_reason?: "weeer_withdraw" | "weeu_stop" | "force_majeure" | null;  /* S7/S10 */
+  no_show_flag?:     boolean;   /* S9 */
+  source_repair_job_id?: string | null;  /* S12 */
+}
+
 const STATUS_META: Record<ScrapJob["status"], { label: string; color: string }> = {
   pending_decision: { label: "รอตัดสินใจ", color: "bg-yellow-50 text-yellow-700" },
   in_progress:      { label: "กำลังดำเนิน", color: "bg-blue-50 text-blue-700" },
@@ -25,27 +32,35 @@ const OPTION_LABEL: Record<ScrapJobOption, string> = {
 const PAGE_SIZE = 20;
 
 interface ScrapJobListResponse {
-  results: ScrapJob[];
+  results: ScrapJobExtended[];
   count: number;
 }
+
+/* S9 — no-show filter */
+const CANCEL_REASON_LABEL: Record<string, string> = {
+  weeer_withdraw: "S7: WeeeR ถอน",
+  weeu_stop:      "S10: WeeeU ยุติ",
+  force_majeure:  "สุดวิสัย",
+};
 
 function EmptyState({ message }: { message: string }) {
   return (
     <tr>
-      <td colSpan={8} className="px-6 py-10 text-center text-gray-500">{message}</td>
+      <td colSpan={9} className="px-6 py-10 text-center text-gray-500">{message}</td>
     </tr>
   );
 }
 
 export default function ScrapJobsPage() {
   const router = useRouter();
-  const [items, setItems] = useState<ScrapJob[]>([]);
+  const [items, setItems] = useState<ScrapJobExtended[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
   const [filterDecision, setFilterDecision] = useState("");
   const [filterBuyer, setFilterBuyer] = useState("");
+  const [filterNoShow, setFilterNoShow] = useState(false);   /* S9 */
   const [page, setPage] = useState(1);
 
   const fetchData = useCallback(async () => {
@@ -57,6 +72,7 @@ export default function ScrapJobsPage() {
         ...(filterStatus   && { status: filterStatus }),
         ...(filterDecision && { decision: filterDecision }),
         ...(filterBuyer    && { buyer_id: filterBuyer }),
+        ...(filterNoShow   && { no_show: "true" }),   /* S9 */
       });
       const d = await api.get<ScrapJobListResponse>("/admin/scrap/jobs/?" + params);
       setItems(d.results);
@@ -67,7 +83,7 @@ export default function ScrapJobsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus, filterDecision, filterBuyer]);
+  }, [page, filterStatus, filterDecision, filterBuyer, filterNoShow]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -77,10 +93,11 @@ export default function ScrapJobsPage() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   function clearFilters() {
-    setFilterStatus(""); setFilterDecision(""); setFilterBuyer(""); setPage(1);
+    setFilterStatus(""); setFilterDecision(""); setFilterBuyer("");
+    setFilterNoShow(false); setPage(1);
   }
 
-  const hasFilters = filterStatus || filterDecision || filterBuyer;
+  const hasFilters = filterStatus || filterDecision || filterBuyer || filterNoShow;
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -127,7 +144,7 @@ export default function ScrapJobsPage() {
           <select
             value={filterDecision}
             onChange={e => { setFilterDecision(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-44 focus:outline-none focus:border-admin-primary">
             <option value="">ทุกตัวเลือก</option>
             <option value="resell_parts">แยกอะไหล่ขาย</option>
             <option value="repair_and_sell">ซ่อมแล้วขาย</option>
@@ -136,8 +153,18 @@ export default function ScrapJobsPage() {
           </select>
           <input type="text" placeholder="Buyer ID"
             value={filterBuyer} onChange={e => { setFilterBuyer(e.target.value); setPage(1); }}
-            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-admin-primary"
           />
+          {/* S9 — no-show filter */}
+          <button
+            onClick={() => { setFilterNoShow(v => !v); setPage(1); }}
+            className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
+              filterNoShow
+                ? "bg-yellow-50 text-yellow-700 border-yellow-300"
+                : "bg-white text-gray-500 border-gray-300 hover:text-gray-700"
+            }`}>
+            🚫 No-show
+          </button>
           {hasFilters && (
             <button onClick={clearFilters}
               className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
@@ -175,6 +202,7 @@ export default function ScrapJobsPage() {
                   <th className="px-4 py-3">ตัวเลือก</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">ตัดสินใจเมื่อ</th>
+                  <th className="px-4 py-3">Flags</th>
                   <th className="px-4 py-3">Cert</th>
                   <th className="px-4 py-3"></th>
                 </tr>
@@ -185,8 +213,8 @@ export default function ScrapJobsPage() {
                 ) : items.map(job => {
                   const sm = STATUS_META[job.status];
                   return (
-                    <tr key={job.id} className="hover:bg-gray-100/40">
-                      <td className="px-4 py-3 font-mono text-xs text-blue-400 max-w-[120px] truncate">{job.id}</td>
+                    <tr key={job.id} className={`hover:bg-gray-100/40 ${job.no_show_flag ? "bg-yellow-50/30" : ""}`}>
+                      <td className="px-4 py-3 font-mono text-xs text-admin-primary max-w-[120px] truncate">{job.id}</td>
                       <td className="px-4 py-3">
                         <Link href={`/scrap/listings/${job.scrapItemId}`}
                           className="text-xs font-mono text-gray-700 hover:text-blue-400">
@@ -202,6 +230,36 @@ export default function ScrapJobsPage() {
                       </td>
                       <td className="px-4 py-3 text-xs text-gray-500">
                         {job.decisionAt ? new Date(job.decisionAt).toLocaleDateString("th-TH") : "—"}
+                      </td>
+                      {/* Flags — S7/S9/S10/S12 */}
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1 min-w-[80px]">
+                          {job.no_show_flag && (
+                            <span className="inline-flex items-center text-xs px-1.5 py-0.5 rounded-full bg-yellow-100 text-yellow-800 whitespace-nowrap">
+                              🚫 No-show
+                            </span>
+                          )}
+                          {job.cancelled_reason && (
+                            <span className={`inline-flex items-center text-xs px-1.5 py-0.5 rounded-full whitespace-nowrap ${
+                              job.cancelled_reason === "weeer_withdraw"
+                                ? "bg-orange-100 text-orange-700"
+                                : job.cancelled_reason === "weeu_stop"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-gray-100 text-gray-600"
+                            }`}>
+                              ❌ {CANCEL_REASON_LABEL[job.cancelled_reason]}
+                            </span>
+                          )}
+                          {job.source_repair_job_id && (
+                            <Link href={`/repair/jobs/${job.source_repair_job_id}`}
+                              className="inline-flex items-center text-xs px-1.5 py-0.5 rounded-full bg-orange-50 text-orange-700 hover:bg-orange-100 whitespace-nowrap transition-colors">
+                              🔧 →Repair
+                            </Link>
+                          )}
+                          {!job.no_show_flag && !job.cancelled_reason && !job.source_repair_job_id && (
+                            <span className="text-xs text-gray-400">—</span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-4 py-3">
                         {job.certificateId ? (
