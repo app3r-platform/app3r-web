@@ -1,4 +1,4 @@
-// ── Scrap Module Types (Phase C-3.2) ───────────────────────────────────────
+// ── Scrap Module Types (Phase C-3.2 + 2.3 mockup additions) ─────────────────
 // D62 verbatim — ScrapItem (pre-sale entity) + ScrapJob (post-purchase pipeline)
 
 // ── ScrapItem ─────────────────────────────────────────────────────────────
@@ -10,12 +10,17 @@ export interface ScrapItem {
   sellerId: string;
   sellerType: "WeeeU";
   applianceId?: string;
+  applianceName?: string;      // denormalized display name
+  applianceBrand?: string;
+  applianceType?: string;      // e.g. "washing_machine" / "ac" / "notebook"
   conditionGrade: ConditionGrade;
   workingParts: string[];
   description: string;
   photos: string[];
   price: number;
+  isFree?: boolean;            // S2b: ซากแบบทิ้งฟรี — ซ่อนช่องราคา
   status: ScrapItemStatus;
+  fromRepairJobId?: string;    // S12: ซากมาจากงาน Repair
   createdAt: string;
   updatedAt: string;
 }
@@ -75,7 +80,47 @@ export interface ScrapJob {
   // denormalized for display
   scrapItemDescription?: string;
   conditionGrade?: ConditionGrade;
+
+  // 2.3 additions (mockup)
+  offerPrice?: number;         // ราคาที่ WeeeR จ่าย (0 = ฟรี)
+  isFree?: boolean;            // ซากแบบทิ้งฟรี
+  weeeTId?: string;            // S6: WeeeT technician assigned
+  weeeTName?: string;
+  escrowStatus?: "locked" | "released" | "refunded";   // escrow กลับทิศ WeeeR→WeeeU
+  withdrawReason?: string;     // S7
+  reOfferReason?: string;      // S8: T แจ้งซากไม่ตรง
+  disputeReason?: string;      // S11
+  feeSettled?: boolean;        // Fee Settle
+  fromRepairJobId?: string;    // S12 denorm
 }
+
+// ── ScrapOffer ────────────────────────────────────────────────────────────
+export type ScrapOfferStatus = "pending" | "accepted" | "rejected" | "withdrawn";
+
+export interface ScrapOffer {
+  id: string;
+  scrapItemId: string;
+  buyerId: string;
+  offerPrice: number;
+  isFree: boolean;
+  message?: string;
+  status: ScrapOfferStatus;
+  createdAt: string;
+}
+
+export const SCRAP_OFFER_STATUS_LABEL: Record<ScrapOfferStatus, string> = {
+  pending:   "รอตอบ",
+  accepted:  "ตอบรับแล้ว",
+  rejected:  "ถูกปฏิเสธ",
+  withdrawn: "ถอนแล้ว",
+};
+
+export const SCRAP_OFFER_STATUS_COLOR: Record<ScrapOfferStatus, string> = {
+  pending:   "bg-yellow-100 text-yellow-700",
+  accepted:  "bg-green-100 text-green-700",
+  rejected:  "bg-red-100 text-red-600",
+  withdrawn: "bg-gray-100 text-gray-500",
+};
 
 export const SCRAP_JOB_OPTION_LABEL: Record<ScrapJobOption, string> = {
   resell_parts:    "แยกอะไหล่",
