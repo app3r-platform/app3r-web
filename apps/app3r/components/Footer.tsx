@@ -62,18 +62,18 @@ export default function Footer() {
               ))}
             </div>
             <div className="flex gap-3">
-              <a
+              <Link
                 href="/download"
                 className="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-lg text-xs transition"
               >
                 <span>📱</span> WeeeU App
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/download"
                 className="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-lg text-xs transition"
               >
                 <span>🔧</span> WeeeT App
-              </a>
+              </Link>
             </div>
           </div>
 
