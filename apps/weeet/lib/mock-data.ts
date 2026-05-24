@@ -101,8 +101,8 @@ export const mockJobs: Job[] = [
     scheduledAt: "2026-05-01T10:00:00",
     status: "completed",
     photos: [
-      { type: "before", url: "/mock/before1.jpg", caption: "แอร์ก่อนซ่อม" },
-      { type: "after", url: "/mock/after1.jpg", caption: "แอร์หลังซ่อม" },
+      { type: "before", url: "/demo/แอร์ติดผนัง.png", caption: "แอร์ก่อนซ่อม" },
+      { type: "after", url: "/demo/แอร์สี่ทิศทาง.png", caption: "แอร์หลังซ่อม" },
     ],
     steps: [
       { id: "s1", label: "ถ่ายรูปก่อนซ่อม", done: true },
