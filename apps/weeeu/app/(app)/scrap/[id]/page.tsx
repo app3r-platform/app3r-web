@@ -90,20 +90,20 @@ function getMockListing(id: string): ScrapListingDetail {
         status: "pending",
       },
     ],
-    // S8 — ตัวอย่าง mismatch report (uncomment เพื่อ demo):
-    // mismatchReport: {
-    //   reportedAt: "2026-05-25T14:30:00",
-    //   weeeTName: "ช่างสมศักดิ์",
-    //   originalPrice: 350,
-    //   proposedPrice: 200,
-    //   reason: "มีรอยสนิมที่แผงวงจรเพิ่มเติมจากรูป — สภาพจริงต่ำกว่าที่ประกาศ",
-    //   photos: ["/mock/mismatch-1.jpg"],
-    // },
-    // S9 — ตัวอย่าง no-show event (uncomment เพื่อ demo):
-    // noShowEvent: {
+    // S8 — mismatch report demo (MOCK — remove before prod)
+    mismatchReport: {
+      reportedAt: "2026-05-25T14:30:00",
+      weeeTName: "ช่างสมศักดิ์ มานะดี",
+      originalPrice: 350,
+      proposedPrice: 220,
+      reason: "คอมเพรสเซอร์หายไป — ซากสภาพแย่กว่ารูปประกาศ ไม่ตรงกับที่ระบุไว้",
+      photos: ["/mock/mismatch-weeet-1.jpg"],
+    },
+    // S9 — no-show event demo (MOCK — remove before prod)
+    // noShowEvent: {        ← uncomment บรรทัดนี้เพื่อ demo S9 แทน S8
     //   reportedAt: "2026-05-25T16:00:00",
-    //   weeeTName: "ช่างสมศักดิ์",
-    //   notes: "โทรไม่ติด ไม่มีคนอยู่บ้าน",
+    //   weeeTName: "ช่างสมศักดิ์ มานะดี",
+    //   notes: "โทรไม่ติด ไม่มีคนอยู่บ้าน รอ 20 นาทีแล้ว",
     // },
   };
 }
