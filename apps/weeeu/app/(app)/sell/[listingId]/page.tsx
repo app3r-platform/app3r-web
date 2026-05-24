@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Seller Listing Detail — WeeeU
+ * Covers: R2 (SUSPENDED listing + appeal dialog) · R5 (withdraw selection + confirm dialog)
+ *
+ * Demo: ตั้ง USE_MOCK = true + เปลี่ยน MOCK_STATUS เพื่อทดสอบ
+ *   "suspended"      → R2: SUSPENDED state + เหตุผล + อุทธรณ์
+ *   "offer_selected" → R5: withdraw selection dialog
+ */
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -7,15 +16,28 @@ import { listingsApi } from "@/lib/api/listings";
 import { offersApi } from "@/lib/api/offers";
 import type { Listing, Offer } from "@/lib/types";
 
+// ─── Demo mock overlay (toggle USE_MOCK = true เพื่อทดสอบ R2/R5) ──────────────
+const USE_MOCK = false;
+const MOCK_STATUS: "suspended" | "offer_selected" = "offer_selected"; // เปลี่ยนเพื่อ demo
+const MOCK_SUSPENDED_REASON =
+  "ข้อมูลสินค้าไม่ครบถ้วน — กรุณาเพิ่มรูปภาพที่ชัดเจนและรายละเอียดสภาพสินค้า";
+const MOCK_OFFERS_R5 = [
+  { id: "o1", buyer_name: "สมชาย พิมพ์ใจ", offerPrice: 4200, status: "pending", deliveryMethod: "on_site", message: "" },
+  { id: "o2", buyer_name: "นิดา ทองดี",    offerPrice: 4300, status: "selected", deliveryMethod: "parcel",  message: "" },
+];
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 type ListingDetail = Listing & {
   appliance_name?: string;
   seller_name?: string;
   images?: { url: string }[];
   description?: string;
+  suspended_reason?: string; // R2 — เหตุผลจาก Admin
 };
 
 type OfferWithBuyer = Offer & { buyer_name?: string };
 
+// ─── Labels ───────────────────────────────────────────────────────────────────
 const STATUS_LABEL: Record<string, string> = {
   announced: "ประกาศขาย",
   receiving_offers: "รับข้อเสนอ",
@@ -27,6 +49,15 @@ const STATUS_LABEL: Record<string, string> = {
   completed: "เสร็จสิ้น",
   cancelled: "ยกเลิก",
   disputed: "มีข้อพิพาท",
+  suspended: "ถูกระงับ 🚫", // R2
+};
+
+const STATUS_COLOR: Record<string, string> = {
+  suspended: "bg-red-100 text-red-700",
+  offer_selected: "bg-purple-100 text-purple-700",
+  completed: "bg-green-100 text-green-700",
+  cancelled: "bg-gray-100 text-gray-500",
+  disputed: "bg-orange-100 text-orange-700",
 };
 
 const OFFER_STATUS_LABEL: Record<string, string> = {
@@ -47,17 +78,49 @@ const GRADE_LABEL: Record<string, string> = {
   grade_C: "เกรด C",
 };
 
+// ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function SellDetailPage() {
   const { listingId } = useParams<{ listingId: string }>();
+
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [offers, setOffers] = useState<OfferWithBuyer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selecting, setSelecting] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+
+  // R5 — withdraw selection dialog state
+  const [showWithdrawDialog, setShowWithdrawDialog] = useState(false);
+  const [withdrawReason, setWithdrawReason] = useState("");
+  const [withdrawing, setWithdrawing] = useState(false);
+
+  // R2 — appeal dialog state
+  const [showAppealDialog, setShowAppealDialog] = useState(false);
+  const [appealText, setAppealText] = useState("");
+  const [appealing, setAppealing] = useState(false);
 
   const load = () => {
     setLoading(true);
+    if (USE_MOCK) {
+      // Mock data สำหรับ demo R2/R5
+      const mockListing: ListingDetail = {
+        id: listingId,
+        listingType: "used_appliance",
+        appliance_name: "ตู้เย็น Samsung 2 ประตู สีเงิน",
+        price: 4500,
+        status: MOCK_STATUS,
+        suspended_reason: MOCK_SUSPENDED_REASON,
+        conditionGrade: "grade_A",
+        deliveryMethods: ["parcel"],
+        createdAt: new Date().toISOString(),
+        description: "สภาพดี ใช้งานปกติ บานพับแน่น ไม่รั่ว",
+      } as ListingDetail;
+      setListing(mockListing);
+      setOffers(MOCK_OFFERS_R5 as OfferWithBuyer[]);
+      setLoading(false);
+      return;
+    }
     Promise.all([
       listingsApi.get(listingId),
       offersApi.forListing(listingId).catch(() => []),
@@ -68,6 +131,8 @@ export default function SellDetailPage() {
   };
 
   useEffect(load, [listingId]);
+
+  // ─── Handlers ───────────────────────────────────────────────────────────────
 
   const handleSelectOffer = async (offerId: string) => {
     setSelecting(offerId);
@@ -96,23 +161,72 @@ export default function SellDetailPage() {
     }
   };
 
+  // R5 — withdraw selected offer
+  const handleWithdraw = async () => {
+    if (!withdrawReason.trim()) return;
+    setWithdrawing(true);
+    try {
+      if (!USE_MOCK) {
+        const res = await listingsApi.withdrawSelection(listingId);
+        if (!res.ok) throw new Error();
+        load();
+      } else {
+        await new Promise((r) => setTimeout(r, 800));
+      }
+      setShowWithdrawDialog(false);
+      setWithdrawReason("");
+      setSuccessMsg("ถอนการเลือกเรียบร้อยแล้ว — ผู้ซื้อได้รับแจ้งและยังอยู่ใน offer pool");
+    } catch {
+      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setWithdrawing(false);
+    }
+  };
+
+  // R2 — appeal suspension
+  const handleAppeal = async () => {
+    if (!appealText.trim()) return;
+    setAppealing(true);
+    try {
+      if (!USE_MOCK) {
+        const res = await listingsApi.appealSuspension(listingId, appealText);
+        if (!res.ok) throw new Error();
+      } else {
+        await new Promise((r) => setTimeout(r, 800));
+      }
+      setShowAppealDialog(false);
+      setAppealText("");
+      setSuccessMsg("ส่งคำอุทธรณ์เรียบร้อยแล้ว — Admin จะพิจารณาภายใน 24 ชั่วโมง");
+    } catch {
+      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setAppealing(false);
+    }
+  };
+
+  // ─── Render guards ──────────────────────────────────────────────────────────
   if (loading) return <div className="text-center py-16 text-gray-400">กำลังโหลด...</div>;
   if (error && !listing) return (
     <div className="text-center py-16">
       <p className="text-4xl mb-3">📦</p>
       <p className="text-gray-600 font-medium">{error}</p>
-      <Link href="/sell" className="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline">← กลับรายการขาย</Link>
+      <Link href="/sell" className="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline">
+        ← กลับรายการขาย
+      </Link>
     </div>
   );
   if (!listing) return null;
 
   const canEdit = listing.status === "announced";
   const canCancel = listing.status === "announced" || listing.status === "receiving_offers";
-  const pendingOffers = offers.filter(o => o.status === "pending");
-  const selectedOffer = offers.find(o => o.status === "selected");
+  const pendingOffers = offers.filter((o) => o.status === "pending");
+  const selectedOffer = offers.find((o) => o.status === "selected");
+  const statusColor = STATUS_COLOR[listing.status] ?? "bg-indigo-100 text-indigo-700";
 
+  // ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="max-w-xl space-y-5">
+      {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/sell" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">รายละเอียดประกาศ</h1>
@@ -126,6 +240,12 @@ export default function SellDetailPage() {
         )}
       </div>
 
+      {/* Success / Error banners */}
+      {successMsg && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+          <p className="text-sm text-green-700">✅ {successMsg}</p>
+        </div>
+      )}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3">
           <p className="text-sm text-red-700">{error}</p>
@@ -137,19 +257,28 @@ export default function SellDetailPage() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-sm font-semibold text-gray-800">
-              {listing.listingType === "scrap" ? "🔩 ชิ้นส่วน / ซากเครื่อง" : `📱 ${listing.appliance_name ?? "เครื่องใช้ไฟฟ้า"}`}
+              {listing.listingType === "scrap"
+                ? "🔩 ชิ้นส่วน / ซากเครื่อง"
+                : `📱 ${listing.appliance_name ?? "เครื่องใช้ไฟฟ้า"}`}
             </p>
-            <p className="text-xs text-gray-400 mt-0.5">{new Date(listing.createdAt).toLocaleDateString("th-TH")}</p>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {new Date(listing.createdAt).toLocaleDateString("th-TH")}
+            </p>
           </div>
-          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">
+          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${statusColor}`}>
             {STATUS_LABEL[listing.status] ?? listing.status}
           </span>
         </div>
 
         <div className="border-t border-gray-50 pt-3 space-y-2">
           <InfoRow label="ราคา" value={`${listing.price.toLocaleString()} ฿`} bold />
-          {listing.conditionGrade && <InfoRow label="สภาพ" value={GRADE_LABEL[listing.conditionGrade] ?? listing.conditionGrade} />}
-          <InfoRow label="จัดส่ง" value={listing.deliveryMethods.map(d => DELIVERY_LABEL[d] ?? d).join(", ")} />
+          {listing.conditionGrade && (
+            <InfoRow label="สภาพ" value={GRADE_LABEL[listing.conditionGrade] ?? listing.conditionGrade} />
+          )}
+          <InfoRow
+            label="จัดส่ง"
+            value={listing.deliveryMethods.map((d) => DELIVERY_LABEL[d] ?? d).join(", ")}
+          />
           {listing.warranty && (
             <InfoRow
               label="ประกัน"
@@ -159,21 +288,23 @@ export default function SellDetailPage() {
         </div>
 
         {/* Working parts — scrap only */}
-        {listing.listingType === "scrap" && listing.workingParts && listing.workingParts.length > 0 && (
-          <div className="border-t border-gray-50 pt-3">
-            <p className="text-xs text-gray-500 mb-2">ชิ้นส่วนที่ใช้งานได้</p>
-            <div className="flex flex-wrap gap-1.5">
-              {listing.workingParts.map((p, i) => (
-                <span
-                  key={i}
-                  className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full"
-                >
-                  {p}
-                </span>
-              ))}
+        {listing.listingType === "scrap" &&
+          listing.workingParts &&
+          listing.workingParts.length > 0 && (
+            <div className="border-t border-gray-50 pt-3">
+              <p className="text-xs text-gray-500 mb-2">ชิ้นส่วนที่ใช้งานได้</p>
+              <div className="flex flex-wrap gap-1.5">
+                {listing.workingParts.map((p, i) => (
+                  <span
+                    key={i}
+                    className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full"
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {listing.description && (
           <div className="border-t border-gray-50 pt-3">
@@ -183,34 +314,109 @@ export default function SellDetailPage() {
         )}
       </div>
 
-      {/* Offers received */}
+      {/* ═══════════════════════════════════════════════════════════════════
+          R2 — SUSPENDED state
+          ════════════════════════════════════════════════════════════════ */}
+      {listing.status === "suspended" && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🚫</span>
+            <p className="font-semibold text-red-800">ประกาศถูกระงับชั่วคราว</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <p className="text-xs font-semibold text-red-700 uppercase tracking-wide">
+              เหตุผลจาก Admin
+            </p>
+            <div className="bg-white border border-red-200 rounded-xl p-3">
+              <p className="text-sm text-gray-800">
+                {listing.suspended_reason ?? MOCK_SUSPENDED_REASON}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Link
+              href={`/sell/${listingId}/edit`}
+              className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-3 rounded-2xl text-center transition-colors"
+            >
+              ✏️ แก้ไขแล้วประกาศใหม่
+            </Link>
+            <button
+              onClick={() => setShowAppealDialog(true)}
+              className="flex-1 border-2 border-red-300 text-red-700 text-sm font-medium py-3 rounded-2xl hover:bg-red-100 transition-colors"
+            >
+              ⚖️ อุทธรณ์
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          Offers received
+          ════════════════════════════════════════════════════════════════ */}
       {(pendingOffers.length > 0 || selectedOffer) && (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             ข้อเสนอที่ได้รับ ({offers.length})
           </p>
 
+          {/* Selected offer — with R5 withdraw button */}
           {selectedOffer && (
             <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-green-800">{selectedOffer.buyer_name ?? "ผู้ซื้อ"}</p>
-                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">เลือกแล้ว ✅</span>
+                <p className="text-sm font-semibold text-green-800">
+                  {selectedOffer.buyer_name ?? "ผู้ซื้อ"}
+                </p>
+                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">
+                  เลือกแล้ว ✅
+                </span>
               </div>
-              <p className="text-sm font-bold text-green-700">{selectedOffer.offerPrice.toLocaleString()} ฿</p>
-              <p className="text-xs text-green-600">จัดส่ง: {DELIVERY_LABEL[selectedOffer.deliveryMethod] ?? selectedOffer.deliveryMethod}</p>
-              {selectedOffer.message && <p className="text-xs text-green-600 italic">"{selectedOffer.message}"</p>}
+              <p className="text-sm font-bold text-green-700">
+                {selectedOffer.offerPrice.toLocaleString()} ฿
+              </p>
+              <p className="text-xs text-green-600">
+                จัดส่ง: {DELIVERY_LABEL[selectedOffer.deliveryMethod] ?? selectedOffer.deliveryMethod}
+              </p>
+              {selectedOffer.message && (
+                <p className="text-xs text-green-600 italic">"{selectedOffer.message}"</p>
+              )}
+
+              {/* R5 — Withdraw selection (ก่อนผู้ซื้อชำระเงิน) */}
+              {listing.status === "offer_selected" && (
+                <div className="pt-1 border-t border-green-200 space-y-1.5">
+                  <button
+                    onClick={() => setShowWithdrawDialog(true)}
+                    className="w-full border-2 border-orange-300 text-orange-700 text-xs font-medium py-2 rounded-xl hover:bg-orange-50 transition-colors"
+                  >
+                    ↩️ ถอนการเลือก (ก่อนชำระเงิน)
+                  </button>
+                  <p className="text-xs text-orange-600 text-center">
+                    ⚠️ อาจมีค่าธรรมเนียม (ผิดสัญญา)
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
-          {pendingOffers.map(offer => (
+          {/* Pending offers */}
+          {pendingOffers.map((offer) => (
             <div key={offer.id} className="border border-gray-100 rounded-xl p-4 space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-sm font-semibold text-gray-800">{offer.buyer_name ?? "ผู้ซื้อ"}</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  {offer.buyer_name ?? "ผู้ซื้อ"}
+                </p>
                 <span className="text-xs text-gray-400">{OFFER_STATUS_LABEL[offer.status]}</span>
               </div>
-              <p className="text-sm font-bold text-indigo-600">{offer.offerPrice.toLocaleString()} ฿</p>
-              <p className="text-xs text-gray-500">จัดส่ง: {DELIVERY_LABEL[offer.deliveryMethod] ?? offer.deliveryMethod}</p>
-              {offer.message && <p className="text-xs text-gray-400 italic">"{offer.message}"</p>}
+              <p className="text-sm font-bold text-indigo-600">
+                {offer.offerPrice.toLocaleString()} ฿
+              </p>
+              <p className="text-xs text-gray-500">
+                จัดส่ง: {DELIVERY_LABEL[offer.deliveryMethod] ?? offer.deliveryMethod}
+              </p>
+              {offer.message && (
+                <p className="text-xs text-gray-400 italic">"{offer.message}"</p>
+              )}
               {listing.status === "receiving_offers" && (
                 <button
                   onClick={() => handleSelectOffer(offer.id)}
@@ -244,15 +450,105 @@ export default function SellDetailPage() {
           📋 ดูสถานะธุรกรรม
         </Link>
       )}
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          R5 — Withdraw Selection Dialog
+          ════════════════════════════════════════════════════════════════ */}
+      {showWithdrawDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 className="font-bold text-gray-900 text-lg">ยืนยันถอนการเลือก</h3>
+            <p className="text-sm text-gray-600">
+              ผู้ซื้อ <strong>{selectedOffer?.buyer_name}</strong> จะได้รับแจ้งและยังคงอยู่ใน
+              offer pool — คุณสามารถเลือกข้อเสนออื่นได้
+            </p>
+            <div>
+              <label className="text-xs font-medium text-gray-700 mb-1 block">
+                เหตุผล (บังคับ)
+              </label>
+              <textarea
+                value={withdrawReason}
+                onChange={(e) => setWithdrawReason(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                placeholder="ระบุเหตุผลที่ต้องการถอนการเลือก..."
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowWithdrawDialog(false);
+                  setWithdrawReason("");
+                }}
+                className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleWithdraw}
+                disabled={withdrawing || !withdrawReason.trim()}
+                className="flex-1 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                {withdrawing ? "กำลังดำเนินการ..." : "ยืนยันถอน"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          R2 — Appeal Dialog
+          ════════════════════════════════════════════════════════════════ */}
+      {showAppealDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl">
+            <h3 className="font-bold text-gray-900 text-lg">อุทธรณ์การระงับประกาศ</h3>
+            <p className="text-sm text-gray-600">
+              อธิบายเหตุผลที่คุณเชื่อว่าประกาศนี้ไม่ควรถูกระงับ Admin จะพิจารณาภายใน 24 ชั่วโมง
+            </p>
+            <div>
+              <label className="text-xs font-medium text-gray-700 mb-1 block">
+                คำอุทธรณ์ (บังคับ)
+              </label>
+              <textarea
+                value={appealText}
+                onChange={(e) => setAppealText(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none h-28 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                placeholder="อธิบายเหตุผล เช่น 'รูปสินค้าครบแล้ว ข้อมูลถูกต้องทุกอย่าง...'"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowAppealDialog(false);
+                  setAppealText("");
+                }}
+                className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleAppeal}
+                disabled={appealing || !appealText.trim()}
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                {appealing ? "กำลังส่ง..." : "ส่งอุทธรณ์"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 function InfoRow({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
     <div className="flex items-start justify-between gap-3">
       <p className="text-sm text-gray-500 shrink-0">{label}</p>
-      <p className={`text-sm text-right ${bold ? "font-bold text-indigo-600" : "font-medium text-gray-800"}`}>{value}</p>
+      <p className={`text-sm text-right ${bold ? "font-bold text-indigo-600" : "font-medium text-gray-800"}`}>
+        {value}
+      </p>
     </div>
   );
 }
