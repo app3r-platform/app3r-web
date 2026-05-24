@@ -317,7 +317,7 @@ export default function SellDetailPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           R2 — SUSPENDED state
           ════════════════════════════════════════════════════════════════ */}
-      {listing.status === "suspended" && (
+      {(listing.status as string) === "suspended" && (
         <div className="bg-red-50 border border-red-200 rounded-2xl p-5 space-y-4">
           <div className="flex items-center gap-2">
             <span className="text-xl">🚫</span>
