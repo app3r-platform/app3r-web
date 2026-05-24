@@ -30,6 +30,34 @@ interface ScrapJobExtended extends ScrapJob {
   /* S12 */ sourceRepairJobId?: string;
 }
 
+// ── MOCK_JOB — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ────────────
+const MOCK_JOB: ScrapJobExtended = {
+  id: "SPJ-001",
+  scrapItemId: "SCR-002",
+  buyerId: "weeer-demo-001",
+  buyerType: "WeeeR",
+  decision: "resell_parts",
+  status: "in_progress",
+  createdAt: "2026-05-20T10:00:00+07:00",
+  updatedAt: "2026-05-24T10:00:00+07:00",
+  scrapItemDescription: "แอร์ Mitsubishi 12000 BTU ซ่อมไม่คุ้ม",
+  conditionGrade: "grade_C",
+  // S7 demo — ปุ่มถอน offer เห็นได้ทันที
+  canWithdraw: true,
+  // S8 demo — mismatch report จาก WeeeT
+  mismatchReport: {
+    reportedAt: "2026-05-24T09:30:00+07:00",
+    weeeTName: "ช่างสมศักดิ์ มานะดี",
+    originalPrice: 380,
+    proposedByWeeeT: 250,
+    reason: "คอมเพรสเซอร์แตกรุนแรงกว่าที่แจ้ง — น้ำหนักจริงน้อยกว่า 20% สภาพต่ำกว่าเกรด C ที่ประกาศ",
+    photos: ["/mock/mismatch-weeet-1.jpg", "/mock/mismatch-weeet-2.jpg"],
+    weeeUResponse: "pending",
+  },
+  // S12 demo — มาจาก Repair Job
+  sourceRepairJobId: "REP-0042",
+};
+
 const OPTIONS: {
   value: ScrapJobOption;
   label: string;
@@ -64,14 +92,17 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
   useEffect(() => {
     scrapApi.getJob(id)
       .then(d => {
-        // Mock inject S7/S8 fields for demo (backend จะส่ง field จริงใน Phase 4)
+        // Inject S7/S8/S12 fields for demo (backend จะส่ง field จริงใน Phase D)
         const extended = d as ScrapJobExtended;
-        extended.canWithdraw = d.status === "in_progress";
-        // extended.mismatchReport = { ... };  // uncomment เพื่อ demo S8
-        // extended.sourceRepairJobId = "REP-0042";  // uncomment เพื่อ demo S12
+        extended.canWithdraw = true;  // S7 demo: แสดงปุ่มถอน offer เสมอ
+        extended.mismatchReport = MOCK_JOB.mismatchReport;  // S8 demo: mismatch report
+        extended.sourceRepairJobId = "REP-0042";             // S12 demo: Repair badge
         setJob(extended);
       })
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_JOB แทน (ไม่แสดง error)
+        setJob(MOCK_JOB);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
