@@ -1,0 +1,425 @@
+"use client";
+
+// ── My Order Detail — Phase D-4 (P7 Receive · P8 Buyer Cancel · P9 Seller Cancel) ──
+
+import { use, useEffect, useState } from "react";
+import Link from "next/link";
+import type { PartOrder } from "../../_lib/types";
+import { PART_ORDERS_MOCK } from "../../_lib/mock-data";
+import { OrderStageStepper } from "../../../../../components/parts/OrderStageStepper";
+import { ORDER_STAGE_LABEL, ORDER_STAGE_COLOR, DELIVERY_LABEL } from "../../_lib/types";
+import {
+  getCurrentShopId, getOrders, saveOrders, upsertOrder,
+  updateListingStock, partsSync, usePartsSync,
+} from "../../../../../lib/utils/parts-sync";
+import { escrowRelease, escrowRefund } from "../../../../../lib/utils/parts-escrow";
+
+// P7: checklist ตรวจสอบสินค้าก่อนยืนยันรับ
+const RECEIVE_CHECKLIST = [
+  "จำนวนสินค้าครบถ้วนตามที่สั่งซื้อ",
+  "สภาพสินค้าดี ไม่มีความเสียหาย",
+  "สินค้าตรงตามรายการที่สั่งซื้อ",
+];
+
+export default function MyOrderDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const [shopId, setShopId] = useState("S001");
+  const [order, setOrder] = useState<PartOrder | null>(null);
+
+  // P7: receive modal state
+  const [showReceiveModal, setShowReceiveModal] = useState(false);
+  const [checklist, setChecklist] = useState<boolean[]>(RECEIVE_CHECKLIST.map(() => false));
+  const [receiving, setReceiving] = useState(false);
+  const [receiveResult, setReceiveResult] = useState<{ netToSeller: number; fee: number } | null>(null);
+
+  // P8/P9: cancel modal state
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelDone, setCancelDone] = useState(false);
+
+  const reload = () => {
+    const sid = getCurrentShopId();
+    setShopId(sid);
+    const stored = getOrders();
+    const all = stored.length > 0 ? stored : PART_ORDERS_MOCK;
+    setOrder(all.find((o) => o.id === id) ?? null);
+  };
+
+  useEffect(() => {
+    const stored = getOrders();
+    if (stored.length === 0) saveOrders(PART_ORDERS_MOCK);
+    reload();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  usePartsSync((e) => {
+    if (
+      ["refresh_parts", "shop_switched", "order_confirmed", "order_shipped",
+       "order_received", "order_cancelled"].includes(e.type)
+    ) reload();
+  });
+
+  // ── Not found ──────────────────────────────────────────────────────────────────
+  if (!order) {
+    return (
+      <div className="flex flex-col items-center justify-center h-48 text-gray-400 space-y-2">
+        <span className="text-4xl">🔍</span>
+        <p className="text-sm">ไม่พบคำสั่งซื้อ #{id}</p>
+        <Link href="/parts/my-orders" className="text-xs text-green-700 hover:underline mt-1">
+          ‹ กลับรายการคำสั่งซื้อ
+        </Link>
+      </div>
+    );
+  }
+
+  // ── Role ───────────────────────────────────────────────────────────────────────
+  const role: "buyer" | "seller" | null =
+    order.buyerShopId  === shopId ? "buyer"  :
+    order.sellerShopId === shopId ? "seller" : null;
+
+  // ── P7: buyer confirm receive (shipped → received) ────────────────────────────
+  const canReceive = role === "buyer" && order.stage === "shipped";
+  const checklistAllDone = checklist.every(Boolean);
+
+  const handleReceive = () => {
+    if (!checklistAllDone || receiving) return;
+    setReceiving(true);
+    const result = escrowRelease(order.id);
+    const updated: PartOrder = {
+      ...order,
+      stage: "received",
+      receivedAt: new Date().toISOString(),
+    };
+    upsertOrder(updated);
+    partsSync.emit({ type: "order_received", orderId: order.id });
+    if (result.success) {
+      setReceiveResult({ netToSeller: result.netToSeller, fee: result.fee });
+    }
+    setShowReceiveModal(false);
+    setReceiving(false);
+    reload();
+  };
+
+  // ── P8: buyer cancel (ordered only)
+  // ── P9: seller cancel (ordered or confirmed, before shipped)
+  const canCancel =
+    (role === "buyer"  && order.stage === "ordered") ||
+    (role === "seller" && (order.stage === "ordered" || order.stage === "confirmed"));
+
+  const handleCancel = () => {
+    if (!cancelReason.trim() || cancelling) return;
+    setCancelling(true);
+    escrowRefund(order.id);
+    updateListingStock(order.partId, order.quantity);
+    const updated: PartOrder = {
+      ...order,
+      stage: "cancelled",
+      cancelledAt: new Date().toISOString(),
+    };
+    upsertOrder(updated);
+    partsSync.emit({ type: "order_cancelled", orderId: order.id, partId: order.partId });
+    setShowCancelModal(false);
+    setCancelReason("");
+    setCancelling(false);
+    setCancelDone(true);
+    reload();
+  };
+
+  // ── UI ─────────────────────────────────────────────────────────────────────────
+  return (
+    <div className="space-y-4">
+      {/* Back */}
+      <Link href="/parts/my-orders" className="text-sm text-gray-400 hover:text-gray-600">
+        ‹ กลับรายการคำสั่งซื้อ
+      </Link>
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h1 className="text-lg font-bold text-gray-900 truncate">{order.partName}</h1>
+          <p className="text-xs text-gray-400 mt-0.5">#{order.id}</p>
+        </div>
+        <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${ORDER_STAGE_COLOR[order.stage]}`}>
+          {ORDER_STAGE_LABEL[order.stage]}
+        </span>
+      </div>
+
+      {/* Stepper */}
+      <div className="bg-white border border-gray-100 rounded-xl p-4">
+        <OrderStageStepper stage={order.stage} />
+      </div>
+
+      {/* Order Details */}
+      <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
+        <h2 className="text-sm font-semibold text-gray-700">รายละเอียดคำสั่งซื้อ</h2>
+        <div className="grid grid-cols-2 gap-y-3 text-xs">
+          <div>
+            <p className="text-gray-400">ผู้ขาย</p>
+            <p className="font-medium text-gray-700">{order.sellerShopName}</p>
+          </div>
+          <div>
+            <p className="text-gray-400">ผู้ซื้อ</p>
+            <p className="font-medium text-gray-700">{order.buyerShopName}</p>
+          </div>
+          <div>
+            <p className="text-gray-400">จำนวน</p>
+            <p className="font-medium text-gray-700">
+              {order.quantity} ชิ้น · {order.pricePoints.toLocaleString()} pts/ชิ้น
+            </p>
+          </div>
+          <div>
+            <p className="text-gray-400">รวม</p>
+            <p className="font-bold text-green-700">{order.totalPoints.toLocaleString()} pts</p>
+          </div>
+          <div>
+            <p className="text-gray-400">ค่าธรรมเนียม (3%)</p>
+            <p className="font-medium text-gray-500">{order.platformFee.toLocaleString()} pts</p>
+          </div>
+          <div>
+            <p className="text-gray-400">ผู้ขายได้รับ</p>
+            <p className="font-medium text-gray-700">{order.netToSeller.toLocaleString()} pts</p>
+          </div>
+          <div>
+            <p className="text-gray-400">การจัดส่ง</p>
+            <p className="font-medium text-gray-700">{DELIVERY_LABEL[order.deliveryMethod]}</p>
+          </div>
+          <div>
+            <p className="text-gray-400">วันที่สั่ง</p>
+            <p className="font-medium text-gray-700">
+              {new Date(order.orderedAt).toLocaleDateString("th-TH")}
+            </p>
+          </div>
+        </div>
+
+        {/* Tracking */}
+        {order.trackingNumber && (
+          <div className="bg-orange-50 rounded-lg px-3 py-2 text-xs">
+            📦 Tracking:{" "}
+            <span className="font-mono font-medium text-gray-800">{order.trackingNumber}</span>
+          </div>
+        )}
+
+        {/* Timestamps */}
+        <div className="space-y-0.5 text-xs text-gray-400">
+          {order.shippedAt && (
+            <p>จัดส่งเมื่อ: {new Date(order.shippedAt).toLocaleDateString("th-TH")}</p>
+          )}
+          {order.receivedAt && (
+            <p>รับของเมื่อ: {new Date(order.receivedAt).toLocaleDateString("th-TH")}</p>
+          )}
+          {order.cancelledAt && (
+            <p className="text-red-400">
+              ยกเลิกเมื่อ: {new Date(order.cancelledAt).toLocaleDateString("th-TH")}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* P7 Receive result banner */}
+      {receiveResult && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 space-y-1">
+          <p className="text-sm font-semibold text-emerald-700">
+            ✅ ยืนยันรับของสำเร็จ — escrow ปล่อยแล้ว
+          </p>
+          <p className="text-xs text-emerald-600">
+            ผู้ขายได้รับ {receiveResult.netToSeller.toLocaleString()} pts
+            (หักค่าธรรมเนียม {receiveResult.fee.toLocaleString()} pts)
+          </p>
+        </div>
+      )}
+
+      {/* P8/P9 Cancel done banner */}
+      {cancelDone && (
+        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 space-y-1">
+          <p className="text-sm font-semibold text-red-700">🚫 ยกเลิกคำสั่งซื้อแล้ว</p>
+          <p className="text-xs text-red-500">
+            คะแนน {order.totalPoints.toLocaleString()} pts ถูกคืนให้ผู้ซื้อแล้ว
+          </p>
+        </div>
+      )}
+
+      {/* ── Actions ──────────────────────────────────────────────────────────── */}
+      <div className="space-y-2">
+
+        {/* P7: Buyer confirm receive */}
+        {canReceive && !receiveResult && (
+          <button
+            onClick={() => setShowReceiveModal(true)}
+            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+          >
+            ✅ ยืนยันรับของ (P7)
+          </button>
+        )}
+
+        {/* P8/P9: Cancel */}
+        {canCancel && !cancelDone && (
+          <button
+            onClick={() => setShowCancelModal(true)}
+            className="w-full bg-white border border-red-200 text-red-600 hover:bg-red-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
+          >
+            🚫 {role === "buyer" ? "ยกเลิกคำสั่งซื้อ (P8)" : "ยกเลิกออเดอร์ (P9)"}
+          </button>
+        )}
+
+        {/* Stage-specific info messages */}
+        {order.stage === "shipped" && role === "seller" && (
+          <p className="text-xs text-center text-gray-400">📬 รอผู้ซื้อยืนยันรับของ</p>
+        )}
+        {order.stage === "received" && !receiveResult && (
+          <p className="text-xs text-center text-gray-400">
+            ✅ งานนี้ปิดแล้ว — escrow ถูกปล่อยแล้ว
+          </p>
+        )}
+        {order.stage === "cancelled" && !cancelDone && (
+          <p className="text-xs text-center text-gray-400">
+            🚫 คำสั่งซื้อถูกยกเลิก — escrow คืนแล้ว
+          </p>
+        )}
+        {order.stage === "ordered" && role === "seller" && (
+          <p className="text-xs text-center text-gray-400">
+            ⏳ รอคุณรับออเดอร์ใน{" "}
+            <Link href="/parts/my-listings" className="text-green-700 hover:underline">
+              จัดการร้าน
+            </Link>
+          </p>
+        )}
+        {order.stage === "confirmed" && role === "buyer" && (
+          <p className="text-xs text-center text-gray-400">
+            ☑️ ผู้ขายรับออเดอร์แล้ว — รอการจัดส่ง
+          </p>
+        )}
+      </div>
+
+      {/* ── P7: Receive Modal ─────────────────────────────────────────────────── */}
+      {showReceiveModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
+            <h2 className="font-bold text-gray-900">✅ ยืนยันรับของ (P7)</h2>
+            <p className="text-sm text-gray-600">
+              กรุณาตรวจสอบสินค้าก่อนยืนยัน — ติ๊กครบทุกข้อ:
+            </p>
+
+            {/* Checklist */}
+            <div className="space-y-3">
+              {RECEIVE_CHECKLIST.map((item, i) => (
+                <label key={i} className="flex items-center gap-3 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={checklist[i]}
+                    onChange={(e) => {
+                      const next = [...checklist];
+                      next[i] = e.target.checked;
+                      setChecklist(next);
+                    }}
+                    className="w-4 h-4 accent-green-700 shrink-0"
+                  />
+                  <span
+                    className={`text-sm leading-snug ${
+                      checklist[i] ? "text-gray-800 font-medium" : "text-gray-500"
+                    }`}
+                  >
+                    {item}
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            {/* Warning if not all checked */}
+            {!checklistAllDone && (
+              <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2">
+                ⚠️ กรุณาติ๊กครบทุกข้อก่อนยืนยัน
+              </p>
+            )}
+
+            {/* Escrow info */}
+            <div className="bg-blue-50 rounded-lg px-3 py-2 text-xs text-blue-700">
+              💰 escrow {order.totalPoints.toLocaleString()} pts จะถูกปล่อยให้ผู้ขายทันที
+              (หักค่าธรรมเนียม {order.platformFee.toLocaleString()} pts · ผู้ขายได้{" "}
+              {order.netToSeller.toLocaleString()} pts)
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={handleReceive}
+                disabled={!checklistAllDone || receiving}
+                className="flex-1 bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                {receiving ? "กำลังยืนยัน…" : "✅ ยืนยันรับของ"}
+              </button>
+              <button
+                onClick={() => {
+                  setShowReceiveModal(false);
+                  setChecklist(RECEIVE_CHECKLIST.map(() => false));
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── P8/P9: Cancel Modal ───────────────────────────────────────────────── */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
+            <h2 className="font-bold text-gray-900">
+              🚫 {role === "buyer" ? "ยกเลิกคำสั่งซื้อ (P8)" : "ยกเลิกออเดอร์ (P9)"}
+            </h2>
+            <p className="text-sm text-gray-600">
+              {role === "buyer"
+                ? "ออเดอร์ยังรอผู้ขายรับ — สามารถยกเลิกได้"
+                : "ยกเลิกก่อนจัดส่ง — escrow จะถูกคืนให้ผู้ซื้อ"}
+            </p>
+
+            <div className="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-700">
+              💰 คะแนน {order.totalPoints.toLocaleString()} pts
+              จะถูกคืนให้ผู้ซื้อ ({order.buyerShopName}) ทันที
+            </div>
+
+            <div>
+              <label className="text-xs font-medium text-gray-600 block mb-1.5">
+                เหตุผลการยกเลิก <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="ระบุเหตุผลการยกเลิก…"
+                rows={3}
+                className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 resize-none"
+              />
+              {!cancelReason.trim() && (
+                <p className="text-xs text-red-500 mt-1">⚠️ กรุณากรอกเหตุผลก่อนยืนยัน</p>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={handleCancel}
+                disabled={!cancelReason.trim() || cancelling}
+                className="flex-1 bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                {cancelling ? "กำลังยกเลิก…" : "🚫 ยืนยันยกเลิก"}
+              </button>
+              <button
+                onClick={() => {
+                  setShowCancelModal(false);
+                  setCancelReason("");
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                ย้อนกลับ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
