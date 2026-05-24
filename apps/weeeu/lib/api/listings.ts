@@ -63,4 +63,16 @@ export const listingsApi = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ offer_id: offerId }),
     }),
+
+  // R5 — withdraw selected offer (ถอนการเลือกผู้ซื้อ)
+  withdrawSelection: (listingId: string) =>
+    apiFetch(`/api/v1/listings/${listingId}/withdraw-selection/`, { method: "POST" }),
+
+  // R2 — appeal suspension (อุทธรณ์การระงับประกาศ)
+  appealSuspension: (listingId: string, reason: string) =>
+    apiFetch(`/api/v1/listings/${listingId}/appeal-suspension/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    }),
 };
