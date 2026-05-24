@@ -1,223 +1,233 @@
 "use client";
-// WeeeT Scrap — งานรับซากที่ assign ให้ช่าง
-// Sub-CMD C ขั้น 2.3 · Mockup คลิกได้ · escrow R→U (กลับทิศ)
-// เคส: S1-S4 ปกติ · S8 ของไม่ตรง · S9 No-show · S12 ลิงก์ Repair
-import { useRouter } from "next/navigation";
 
-type ScrapStatus =
-  | "assigned"       // S1-S4: รอรับงาน
-  | "gps_checked"    // GPS check-in แล้ว
-  | "confirmed"      // S1-S4: ยืนยันรับซากแล้ว
-  | "mismatch"       // S8: แจ้งของไม่ตรง
-  | "noshow"         // S9: ลูกค้าไม่อยู่
-  | "cancelled";     // ถูกยกเลิก
+/**
+ * WeeeT — รายการงานรับซากที่ assign ให้
+ * S9: แสดง status no_show ใน job list
+ * เชื่อมไปหน้า [id] เพื่อ verify + S8/S9 actions
+ */
 
-type ScrapGrade = "A" | "B" | "C";
+import { useState } from "react";
+import Link from "next/link";
 
-type ScrapJob = {
+// ── Mock types ────────────────────────────────────────────────────────────────
+type ScrapPickupStatus =
+  | "assigned"          // รับงานใหม่
+  | "traveling"         // กำลังเดินทาง
+  | "arrived"           // ถึงแล้ว รอ verify
+  | "verifying"         // กำลังตรวจซาก (S8 trigger point)
+  | "mismatch_reported" // S8: รายงานไม่ตรง รอ WeeeU
+  | "pickup_confirmed"  // รับซากเรียบร้อย
+  | "no_show"           // S9: WeeeU ไม่อยู่/ไม่พบ
+  | "completed"
+  | "cancelled";
+
+interface ScrapPickupJob {
   id: string;
-  customerName: string;
-  customerAddress: string;
-  itemType: string;
-  grade: ScrapGrade;
-  status: ScrapStatus;
-  assignedAt: string;
-  repairJobId?: string; // S12 — ถ้ามาจากงานซ่อม
-  offerPrice?: number;  // null = ทิ้งฟรี
-};
+  scrapItemId: string;
+  scrapDescription: string;
+  weeeUAddress: string;
+  weeeUName: string;
+  weeeUPhone: string;
+  scheduledDate: string;
+  offeredPrice: number;
+  grade: string;
+  status: ScrapPickupStatus;
+  weeerName: string;    // ร้านที่ assign งาน
+  sourceRepairJobId?: string;  // S12
+}
 
-// Mock data — replace with API in Phase 4
-const MOCK_SCRAP_JOBS: ScrapJob[] = [
+// ── Mock data ─────────────────────────────────────────────────────────────────
+const MOCK_JOBS: ScrapPickupJob[] = [
   {
-    id: "scrap-001",
-    customerName: "คุณสมชาย ใจดี",
-    customerAddress: "123 ถ.พหลโยธิน แขวงลาดยาว เขตจตุจักร กทม.",
-    itemType: "แอร์ Daikin 12000 BTU",
-    grade: "B",
+    id: "SPJ-001",
+    scrapItemId: "SCR-002",
+    scrapDescription: "แอร์ Mitsubishi 12000 BTU ซ่อมไม่คุ้ม",
+    weeeUAddress: "123/4 ถ.สุขุมวิท แขวงคลองตัน กรุงเทพ",
+    weeeUName: "สมชาย ใจดี",
+    weeeUPhone: "081-234-5678",
+    scheduledDate: "2026-05-26 10:00",
+    offeredPrice: 380,
+    grade: "grade_C",
+    status: "arrived",   // ช่างถึงแล้ว รอ verify (demo S8/S9)
+    weeerName: "ร้านซากดี จำกัด",
+    sourceRepairJobId: "REP-0042",
+  },
+  {
+    id: "SPJ-002",
+    scrapItemId: "SCR-005",
+    scrapDescription: "ตู้เย็น LG 2 ประตู มอเตอร์พัง",
+    weeeUAddress: "88 ถ.พระราม 9 กรุงเทพ",
+    weeeUName: "มาลี สวัสดี",
+    weeeUPhone: "092-567-8901",
+    scheduledDate: "2026-05-27 14:00",
+    offeredPrice: 200,
+    grade: "grade_B",
     status: "assigned",
-    assignedAt: "2026-05-23T09:00:00Z",
-    offerPrice: 800,
+    weeerName: "รับซากทั่วไทย",
   },
   {
-    id: "scrap-002",
-    customerName: "คุณสุดา รักสะอาด",
-    customerAddress: "456 ถ.ลาดพร้าว แขวงจอมพล เขตจตุจักร กทม.",
-    itemType: "แอร์ Mitsubishi 9000 BTU",
-    grade: "C",
-    status: "gps_checked",
-    assignedAt: "2026-05-23T10:30:00Z",
-    repairJobId: "R-2026-0412", // S12 — มาจากงานซ่อม
-    offerPrice: undefined, // ทิ้งฟรี
-  },
-  {
-    id: "scrap-003",
-    customerName: "คุณวิชัย ประสิทธิ์",
-    customerAddress: "789 ซ.รัชดา 18 เขตห้วยขวาง กทม.",
-    itemType: "แอร์ Samsung 18000 BTU",
-    grade: "A",
-    status: "confirmed",
-    assignedAt: "2026-05-22T14:00:00Z",
-    offerPrice: 1500,
-  },
-  {
-    id: "scrap-004",
-    customerName: "คุณมาลี สวรรค์",
-    customerAddress: "101 ถ.เพชรบุรี เขตราชเทวี กทม.",
-    itemType: "แอร์ LG 12000 BTU",
-    grade: "B",
-    status: "mismatch",
-    assignedAt: "2026-05-22T11:00:00Z",
-    offerPrice: 700,
-  },
-  {
-    id: "scrap-005",
-    customerName: "คุณปิยะ หาญกล้า",
-    customerAddress: "202 ถ.อโศก เขตวัฒนา กทม.",
-    itemType: "แอร์ Carrier 24000 BTU",
-    grade: "C",
-    status: "noshow",
-    assignedAt: "2026-05-21T09:00:00Z",
-    offerPrice: 300,
+    id: "SPJ-003",
+    scrapItemId: "SCR-006",
+    scrapDescription: "เครื่องซักผ้า Samsung ฝาบน พัง",
+    weeeUAddress: "55 ถ.รัชดาภิเษก กรุงเทพ",
+    weeeUName: "วิชัย บุญดี",
+    weeeUPhone: "085-999-0001",
+    scheduledDate: "2026-05-24 09:00",
+    offeredPrice: 150,
+    grade: "grade_C",
+    status: "no_show",  // S9 demo
+    weeerName: "ร้านซากดี จำกัด",
   },
 ];
 
-const STATUS_CONFIG: Record<ScrapStatus, { label: string; color: string }> = {
-  assigned:    { label: "รอรับงาน",        color: "bg-weeet-primary/20 text-weeet-primary border-weeet-dark/40" },
-  gps_checked: { label: "GPS แล้ว — ตรวจซาก", color: "bg-blue-900/30 text-blue-300 border-blue-700/40" },
-  confirmed:   { label: "รับซากแล้ว",      color: "bg-green-900/30 text-green-300 border-green-700/40" },
-  mismatch:    { label: "แจ้งของไม่ตรง",   color: "bg-amber-900/30 text-amber-300 border-amber-700/40" },
-  noshow:      { label: "ลูกค้าไม่อยู่",   color: "bg-orange-900/30 text-orange-300 border-orange-700/40" },
-  cancelled:   { label: "ถูกยกเลิก",       color: "bg-gray-700/40 text-gray-400 border-gray-600/40" },
+const STATUS_META: Record<ScrapPickupStatus, { label: string; color: string; emoji: string }> = {
+  assigned:          { label: "รับงานใหม่",      color: "bg-blue-100 text-blue-700",   emoji: "📋" },
+  traveling:         { label: "กำลังเดินทาง",   color: "bg-indigo-100 text-indigo-700", emoji: "🚗" },
+  arrived:           { label: "ถึงแล้ว",         color: "bg-teal-100 text-teal-700",   emoji: "📍" },
+  verifying:         { label: "กำลังตรวจซาก",   color: "bg-yellow-100 text-yellow-700", emoji: "🔍" },
+  mismatch_reported: { label: "รายงานไม่ตรง",   color: "bg-orange-100 text-orange-700", emoji: "⚠️" },
+  pickup_confirmed:  { label: "รับซากแล้ว",     color: "bg-green-100 text-green-700",  emoji: "✅" },
+  no_show:           { label: "ไม่พบลูกค้า",    color: "bg-red-100 text-red-600",      emoji: "🚫" },
+  completed:         { label: "เสร็จสิ้น",       color: "bg-gray-100 text-gray-600",    emoji: "🏁" },
+  cancelled:         { label: "ยกเลิก",          color: "bg-gray-100 text-gray-500",    emoji: "❌" },
 };
 
-const GRADE_COLOR: Record<ScrapGrade, string> = {
-  A: "text-green-400 bg-green-900/30 border-green-700/40",
-  B: "text-yellow-400 bg-yellow-900/20 border-yellow-700/30",
-  C: "text-red-400 bg-red-900/20 border-red-700/30",
+const GRADE_COLOR: Record<string, string> = {
+  grade_A: "bg-green-100 text-green-700",
+  grade_B: "bg-yellow-100 text-yellow-700",
+  grade_C: "bg-red-100 text-red-500",
 };
 
-export default function ScrapListPage() {
-  const router = useRouter();
+export default function WeeeTScrapJobsPage() {
+  const [filterStatus, setFilterStatus] = useState<ScrapPickupStatus | "">("");
 
-  const activeJobs = MOCK_SCRAP_JOBS.filter(
-    (j) => j.status === "assigned" || j.status === "gps_checked"
-  );
-  const doneJobs = MOCK_SCRAP_JOBS.filter(
-    (j) => j.status !== "assigned" && j.status !== "gps_checked"
-  );
+  const filtered = filterStatus
+    ? MOCK_JOBS.filter(j => j.status === filterStatus)
+    : MOCK_JOBS;
+
+  const noShowCount   = MOCK_JOBS.filter(j => j.status === "no_show").length;
+  const activeCount   = MOCK_JOBS.filter(j =>
+    ["assigned", "traveling", "arrived", "verifying"].includes(j.status)
+  ).length;
 
   return (
-    <div className="pb-20">
+    <div className="space-y-5 max-w-xl">
+
       {/* Header */}
-      <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 z-10">
-        <h1 className="font-bold text-white text-base">🗑️ งานรับซาก</h1>
-        <p className="text-xs text-gray-400">รายการที่ WeeeR มอบหมายให้คุณ</p>
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">♻️ งานรับซาก</h1>
+        <p className="text-xs text-gray-400 mt-1">งานที่ร้านมอบหมายให้รับซากจากลูกค้า</p>
       </div>
 
-      <div className="px-4 pt-4 space-y-5">
-        {/* Active jobs */}
-        <div className="space-y-3">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-            รอดำเนินการ ({activeJobs.length})
-          </h2>
-          {activeJobs.length === 0 ? (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 text-center">
-              <p className="text-3xl mb-2">✅</p>
-              <p className="text-gray-400 text-sm">ไม่มีงานรอดำเนินการ</p>
-            </div>
-          ) : (
-            activeJobs.map((job) => (
-              <ScrapJobCard
-                key={job.id}
-                job={job}
-                onClick={() => router.push(`/scrap/${job.id}`)}
-              />
-            ))
-          )}
-        </div>
-
-        {/* Done / history */}
-        {doneJobs.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              ประวัติ ({doneJobs.length})
-            </h2>
-            {doneJobs.map((job) => (
-              <ScrapJobCard
-                key={job.id}
-                job={job}
-                onClick={() => router.push(`/scrap/${job.id}`)}
-                dim
-              />
-            ))}
+      {/* Summary */}
+      <div className="flex gap-3 flex-wrap">
+        {activeCount > 0 && (
+          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2 text-sm">
+            <span className="text-blue-600 font-bold">{activeCount}</span>
+            <span className="text-blue-700">งานที่กำลังดำเนินอยู่</span>
+          </div>
+        )}
+        {/* S9 — no-show alert */}
+        {noShowCount > 0 && (
+          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2 text-sm">
+            <span className="text-red-500">🚫</span>
+            <span className="text-red-700">{noShowCount} งาน ไม่พบลูกค้า (No-show)</span>
           </div>
         )}
       </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-1 bg-white border border-gray-200 rounded-xl p-1 w-fit flex-wrap">
+        {(["", "assigned", "arrived", "no_show", "completed"] as const).map(s => (
+          <button
+            key={s}
+            onClick={() => setFilterStatus(s)}
+            className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
+              filterStatus === s
+                ? s === "no_show"
+                  ? "bg-red-100 text-red-700"
+                  : "bg-[#1696F9] text-white"
+                : "text-gray-500 hover:text-gray-900"
+            }`}
+          >
+            {s === "" ? "ทั้งหมด"
+             : s === "assigned" ? "รับงานใหม่"
+             : s === "arrived"  ? "ถึงแล้ว"
+             : s === "no_show"  ? "🚫 No-show"
+             : "เสร็จสิ้น"}
+          </button>
+        ))}
+      </div>
+
+      {/* Job cards */}
+      <div className="space-y-3">
+        {filtered.length === 0 && (
+          <div className="text-center py-12 text-gray-400">ยังไม่มีงานในหมวดนี้</div>
+        )}
+        {filtered.map(job => {
+          const sm = STATUS_META[job.status];
+          return (
+            <Link
+              key={job.id}
+              href={`/scrap/${job.id}`}
+              className={`block bg-white rounded-2xl border shadow-sm p-4 space-y-3 transition-colors hover:border-blue-200 ${
+                job.status === "no_show" ? "border-red-200 bg-red-50/30" : "border-gray-100"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="text-sm font-semibold text-gray-800 truncate">
+                      {job.scrapDescription}
+                    </p>
+                    {/* S12 badge */}
+                    {job.sourceRepairJobId && (
+                      <span className="text-xs bg-orange-50 text-orange-600 border border-orange-200 px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                        🔧 Repair
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                    <span className={`px-1.5 py-0.5 rounded-full ${GRADE_COLOR[job.grade]}`}>
+                      {job.grade.replace("grade_", "")}
+                    </span>
+                    <span>#{job.id}</span>
+                    <span>·</span>
+                    <span>{job.weeerName}</span>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className={`text-xs px-2 py-1 rounded-full ${sm.color}`}>
+                    {sm.emoji} {sm.label}
+                  </span>
+                  {job.offeredPrice > 0 && (
+                    <p className="text-xs font-mono text-green-600 mt-1">{job.offeredPrice} Gold</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-xs text-gray-500 space-y-1">
+                <p>📍 {job.weeeUAddress}</p>
+                <p>📅 นัดรับ: {job.scheduledDate}</p>
+              </div>
+
+              {/* S9 — no-show quick action hint */}
+              {job.status === "no_show" && (
+                <div className="bg-red-100 rounded-xl px-3 py-2 text-xs text-red-700">
+                  🚫 บันทึก no-show แล้ว — รอลูกค้าตอบกลับ (นัดใหม่/ยกเลิก)
+                </div>
+              )}
+
+              {/* Arrived — action needed */}
+              {job.status === "arrived" && (
+                <div className="bg-teal-50 rounded-xl px-3 py-2 text-xs text-teal-700">
+                  📍 ถึงสถานที่แล้ว → กดเพื่อเริ่มตรวจซาก
+                </div>
+              )}
+            </Link>
+          );
+        })}
+      </div>
     </div>
-  );
-}
-
-function ScrapJobCard({
-  job,
-  onClick,
-  dim = false,
-}: {
-  job: ScrapJob;
-  onClick: () => void;
-  dim?: boolean;
-}) {
-  const statusCfg = STATUS_CONFIG[job.status];
-  const dateLabel = new Date(job.assignedAt).toLocaleDateString("th-TH", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full text-left bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-3 transition-colors hover:border-weeet-primary/60 ${dim ? "opacity-60" : ""}`}
-    >
-      {/* Top row */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-white text-sm truncate">{job.itemType}</p>
-          <p className="text-xs text-gray-400 truncate">{job.customerName}</p>
-        </div>
-        <div className="flex flex-col items-end gap-1 flex-shrink-0">
-          <span className={`text-xs px-2 py-0.5 rounded-full border ${statusCfg.color}`}>
-            {statusCfg.label}
-          </span>
-          <span className={`text-xs px-1.5 py-0.5 rounded border font-semibold ${GRADE_COLOR[job.grade]}`}>
-            เกรด {job.grade}
-          </span>
-        </div>
-      </div>
-
-      {/* Address */}
-      <p className="text-xs text-gray-500 leading-relaxed">{job.customerAddress}</p>
-
-      {/* Bottom row */}
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-600">{dateLabel}</span>
-        <div className="flex items-center gap-2">
-          {/* S12 — from Repair */}
-          {job.repairJobId && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-900/30 border border-purple-700/40 text-purple-300">
-              🔧 จากงานซ่อม
-            </span>
-          )}
-          {/* Price / Free */}
-          {job.offerPrice != null ? (
-            <span className="text-xs text-weeet-primary font-semibold">
-              ฿{job.offerPrice.toLocaleString()}
-            </span>
-          ) : (
-            <span className="text-xs text-green-400 font-medium">ทิ้งฟรี</span>
-          )}
-        </div>
-      </div>
-    </button>
   );
 }
