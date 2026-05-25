@@ -127,7 +127,18 @@ export default function ResellBuyPage() {
         </div>
       </div>
 
-      {/* ────────────── B6 WIZARD ────────────────────────────────────────── */}
+      {/* ────────────── B6 Pricing Wizard Entry Point (Generic-First) ──── */}
+      <Link href="/resell/buy/wizard"
+        className="flex items-center justify-between bg-[#FCEAE3] border border-[#FFD5C4] rounded-2xl p-5 hover:bg-[#FAD9CB] transition-colors group">
+        <div className="space-y-1">
+          <p className="text-sm font-bold text-[#4A1B0C]">🧮 ประเมินราคารับซื้อ (Generic Wizard)</p>
+          <p className="text-xs text-[#7A3A20]">5 ขั้น · Generic-First · รองรับทุกประเภทสินค้า</p>
+          <p className="text-xs text-[#AA5030]">applies_when · reject_rules ทำงานอัตโนมัติ</p>
+        </div>
+        <span className="text-[#FF663A] text-2xl group-hover:translate-x-1 transition-transform">→</span>
+      </Link>
+
+      {/* ────────────── B6 WIZARD (Legacy 4-step Hardcoded) ─────────────── */}
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-sm font-bold text-[#FF663A]">B6 Wizard</span>
