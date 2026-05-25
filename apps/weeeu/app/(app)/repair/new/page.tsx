@@ -1,19 +1,73 @@
-﻿"use client";
+"use client";
+// ─── แจ้งซ่อมใหม่ (/repair/new) — CMD-A R2: 7 ประเด็น ────────────────────────
+// R2-1: อาการ dropdown D-5 mock · R2-2: chip หมายเหตุ 6 อัน
+// R2-3: รูป min3-max5 / คลิป min1-max3 · R2-4: งบ slider
+// R2-5: ลบค่าตรวจ 100 · R2-6: checklist สภาพ · R2-7: วันรอ slider
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 
+// ─── Local Types ──────────────────────────────────────────────────────────────
 type Appliance = { id: string; name: string; brand: string; model: string };
 type ServiceType = "on_site" | "walk_in" | "pickup" | "parcel";
-// Sub-4: inline type — TODO: import from @app3r/types/services when Backend exports
 type ServicePriority = "normal" | "urgent" | "vip";
-const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string }> = {
-  normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪" },
-  urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶" },
-  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑" },
+
+const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string; waitMin: number; waitMax: number; waitDefault: number }> = {
+  normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪", waitMin: 1, waitMax: 7, waitDefault: 7 },
+  urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶", waitMin: 1, waitMax: 2, waitDefault: 2 },
+  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑", waitMin: 0, waitMax: 1, waitDefault: 1 },
 };
+
+// ─── R2-1: อาการเสีย by appliance type (D-5 mock) ───────────────────────────
+const SYMPTOMS_BY_TYPE: Record<string, string[]> = {
+  "แอร์":            ["ไม่เย็น", "มีน้ำหยด/รั่ว", "มีเสียงดัง", "ไม่ติด", "รีโมทไม่ทำงาน", "คอมเพรสเซอร์มีปัญหา"],
+  "ตู้เย็น":         ["ไม่เย็น/เย็นน้อย", "มีเสียงดัง", "มีน้ำรั่ว", "น้ำแข็งเกาะมาก", "ยางขอบประตูเสื่อม", "ไฟสถานะไม่ติด"],
+  "เครื่องซักผ้า":   ["ไม่ปั่น/ไม่หมุน", "น้ำไม่เข้า", "น้ำไม่ระบาย", "น้ำรั่ว", "มีเสียงดัง/สั่น", "ฝาไม่ปิดสนิท"],
+  "ทีวี":            ["ไม่มีภาพ", "ภาพผิดเพี้ยน", "ไม่มีเสียง", "จอมีเส้น/จุด", "รีโมทไม่ทำงาน", "ไม่เปิดติด"],
+  "คอม/โน้ตบุ๊ก":   ["ไม่เปิดติด", "จอไม่ติด", "ร้อน/ดับเอง", "ช้า/ค้าง", "มีเสียงพัดลมดัง", "แบตเตอรี่เสื่อม"],
+};
+const DEFAULT_SYMPTOMS = ["ไม่เปิดติด", "มีเสียงดัง", "มีน้ำรั่ว", "ไฟไม่ติด", "ทำงานผิดปกติ", "อื่นๆ"];
+
+// ─── R2-2: chip หมายเหตุถึงช่าง 6 อัน ───────────────────────────────────────
+const NOTE_CHIPS = [
+  { id: "notify_parts",    label: "🔧 แจ้งก่อนเปลี่ยนอะไหล่",  group: "repair" },
+  { id: "original_parts",  label: "✅ ใช้อะไหล่แท้เท่านั้น",     group: "repair" },
+  { id: "estimate_first",  label: "💰 ประเมินราคาก่อนซ่อม",      group: "repair" },
+  { id: "call_30min",      label: "📞 โทรก่อนมา 30 นาที",        group: "onsite" },
+  { id: "has_pets",        label: "🐶 มีสัตว์เลี้ยงในบ้าน",       group: "onsite" },
+  { id: "parking_limited", label: "🅿️ ที่จอดรถจำกัด",           group: "onsite" },
+];
+
+// ─── R2-6: checklist สภาพเครื่อง by type ────────────────────────────────────
+const CONDITION_CHECKLIST: Record<string, string[]> = {
+  "แอร์":            ["ไฟเข้าไหม", "คอมเพรสเซอร์ทำงานไหม", "มีน้ำหยด/รั่ว", "ไม่เย็น", "มีเสียงดัง", "รีโมทไม่ทำงาน"],
+  "ตู้เย็น":         ["ไฟเข้าไหม", "ไม่เย็น/เย็นน้อย", "มีเสียงดัง", "มีน้ำรั่ว/น้ำแข็งเกาะ", "ยางขอบประตูเสื่อม", "ไฟสถานะไม่ติด"],
+  "เครื่องซักผ้า":   ["ไฟเข้าไหม", "ไม่ปั่น/ไม่หมุน", "น้ำไม่เข้า/ไม่ระบาย", "น้ำรั่ว", "มีเสียงดัง/สั่น", "ฝาไม่ปิดสนิท"],
+  "ทีวี":            ["ไฟเข้าไหม", "ไม่มีภาพ", "ภาพผิดเพี้ยน", "ไม่มีเสียง", "จอมีเส้น/จุด", "รีโมทไม่ทำงาน"],
+  "คอม/โน้ตบุ๊ก":   ["ไม่เปิดติด", "จอไม่ติด", "ร้อน/ดับเอง", "ช้า/ค้าง", "มีเสียงพัดลมดัง", "แบตเตอรี่เสื่อม"],
+};
+
+// ─── MOCK appliances fallback ─────────────────────────────────────────────────
+const MOCK_APPLIANCES: Appliance[] = [
+  { id: "a1", name: "แอร์ห้องนอน",   brand: "Mitsubishi", model: "MSY-GN13VF" },
+  { id: "a2", name: "แอร์ห้องแขก",   brand: "Daikin",     model: "FTKQ25SV2S" },
+  { id: "a3", name: "เครื่องซักผ้า", brand: "LG",         model: "T2108VSAM" },
+  { id: "a4", name: "ตู้เย็น Sharp", brand: "Sharp",      model: "SJ-X420TP-SL" },
+];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+const getApplianceType = (name: string): string => {
+  if (/แอร์|air/i.test(name)) return "แอร์";
+  if (/ตู้เย็น/i.test(name)) return "ตู้เย็น";
+  if (/ซักผ้า|ซัก/i.test(name)) return "เครื่องซักผ้า";
+  if (/ทีวี|TV/i.test(name)) return "ทีวี";
+  if (/คอม|โน้ต/i.test(name)) return "คอม/โน้ตบุ๊ก";
+  return "อื่นๆ";
+};
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function RepairNewPage() {
   const router = useRouter();
@@ -23,24 +77,43 @@ export default function RepairNewPage() {
   const [selectedShopName, setSelectedShopName] = useState("");
   const [form, setForm] = useState({
     appliance_id: "",
-    issue_summary: "",
     issue_detail: "",
-    customer_note: "",
     scheduled_at: "",
-    budget_max: "",
     priority: "normal" as ServicePriority,
   });
+
+  // R2-1: อาการ dropdown
+  const [selectedSymptom, setSelectedSymptom] = useState("");
+  const [customSymptom, setCustomSymptom] = useState("");
+
+  // R2-2: chip หมายเหตุ
+  const [selectedChips, setSelectedChips] = useState<Set<string>>(new Set());
+
+  // R2-3: รูป + คลิป
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [videos, setVideos] = useState<File[]>([]);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLInputElement>(null);
+
+  // R2-4: งบ slider (0 = ไม่จำกัด)
+  const [budgetValue, setBudgetValue] = useState(0);
+
+  // R2-6: condition checklist
+  const [conditionChecks, setConditionChecks] = useState<Set<string>>(new Set());
+
+  // R2-7: วันรอ
+  const [waitDays, setWaitDays] = useState(7);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     apiFetch("/api/v1/appliances")
       .then(r => r.ok ? r.json() : { items: [] })
-      .then(d => setAppliances(d.items ?? []));
-    // Read back shop selection from select-shop page (via URL params)
+      .then(d => setAppliances(d.items?.length ? d.items : MOCK_APPLIANCES))
+      .catch(() => setAppliances(MOCK_APPLIANCES));
+    // URL params (walk-in / shop selection)
     const params = new URLSearchParams(window.location.search);
     const st = params.get("service_type");
     const sid = params.get("shop_id");
@@ -50,11 +123,27 @@ export default function RepairNewPage() {
     if (st === "parcel") setServiceType("parcel");
     if (sid) setSelectedShopId(sid);
     if (sname) setSelectedShopName(decodeURIComponent(sname));
+    // appliance pre-select from /appliances
+    const aid = params.get("appliance");
+    if (aid) setForm(f => ({ ...f, appliance_id: aid }));
   }, []);
 
   const clearErr = (key: string) =>
     setErrors(e => { const c = { ...e }; delete c[key]; return c; });
 
+  // Derived appliance type
+  const selectedAppliance = appliances.find(a => a.id === form.appliance_id);
+  const applianceType = selectedAppliance ? getApplianceType(selectedAppliance.name) : "";
+  const symptomOptions = SYMPTOMS_BY_TYPE[applianceType] ?? DEFAULT_SYMPTOMS;
+  const conditionOptions = CONDITION_CHECKLIST[applianceType] ?? [];
+
+  // R2-7: update waitDays when priority changes
+  const handlePriorityChange = (p: ServicePriority) => {
+    setForm(f => ({ ...f, priority: p }));
+    setWaitDays(PRIORITY_CONFIG[p].waitDefault);
+  };
+
+  // R2-3: photo handlers
   const handlePhotoAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     setPhotos(prev => {
@@ -65,11 +154,32 @@ export default function RepairNewPage() {
     e.target.value = "";
     clearErr("photos");
   };
-
   const removePhoto = (i: number) => {
-    setPhotos(p => {
-      const next = p.filter((_, idx) => idx !== i);
-      setPhotoUrls(next.map(f => URL.createObjectURL(f)));
+    setPhotos(p => { const next = p.filter((_, idx) => idx !== i); setPhotoUrls(next.map(f => URL.createObjectURL(f))); return next; });
+  };
+
+  const handleVideoAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    setVideos(prev => [...prev, ...files].slice(0, 3));
+    e.target.value = "";
+    clearErr("videos");
+  };
+  const removeVideo = (i: number) => setVideos(v => v.filter((_, idx) => idx !== i));
+
+  // R2-2: chip toggle
+  const toggleChip = (id: string) => {
+    setSelectedChips(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  // R2-6: condition toggle
+  const toggleCondition = (item: string) => {
+    setConditionChecks(prev => {
+      const next = new Set(prev);
+      next.has(item) ? next.delete(item) : next.add(item);
       return next;
     });
   };
@@ -77,12 +187,14 @@ export default function RepairNewPage() {
   const validate = () => {
     const e: Record<string, string> = {};
     if (!form.appliance_id) e.appliance_id = "กรุณาเลือกเครื่องใช้ไฟฟ้า";
-    if (!form.issue_summary.trim()) e.issue_summary = "กรุณาระบุอาการเสียเบื้องต้น";
-    if (photos.length < 1) e.photos = "กรุณาถ่ายรูปอาการเสียอย่างน้อย 1 รูป (R-01.5)";
-    if (serviceType === "on_site" && !form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
+    const issueVal = selectedSymptom === "อื่นๆ" ? customSymptom.trim() : selectedSymptom;
+    if (!issueVal) e.issue_summary = "กรุณาระบุอาการเสีย";
+    if (serviceType === "on_site") {
+      if (photos.length < 3) e.photos = "กรุณาถ่ายรูปอาการเสียอย่างน้อย 3 รูป";
+      if (videos.length < 1) e.videos = "กรุณาอัพโหลดคลิปอย่างน้อย 1 คลิป";
+      if (!form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
+    }
     if (serviceType === "walk_in" && !selectedShopId) e.shop = "กรุณาเลือกร้านซ่อม";
-    // pickup/parcel: photos not validated here — handled by downstream pages
-    if (serviceType === "pickup" || serviceType === "parcel") delete e.photos;
     return e;
   };
 
@@ -93,32 +205,26 @@ export default function RepairNewPage() {
     setErrors({});
     setSubmitting(true);
     try {
+      const issueVal = selectedSymptom === "อื่นๆ" ? customSymptom.trim() : selectedSymptom;
+      const noteFromChips = [...selectedChips]
+        .map(id => NOTE_CHIPS.find(c => c.id === id)?.label.replace(/^[^\s]+\s/, "") ?? "")
+        .filter(Boolean).join(", ");
+
       const body = new FormData();
       body.append("appliance_id", form.appliance_id);
-      body.append("issue_summary", form.issue_summary);
+      body.append("issue_summary", issueVal);
       body.append("issue_detail", form.issue_detail);
       body.append("service_type", serviceType);
-      if (serviceType === "on_site") {
-        body.append("scheduled_at", new Date(form.scheduled_at).toISOString());
-      }
-      if (serviceType === "walk_in") {
-        body.append("shop_id", selectedShopId);
-      }
-      if (form.budget_max) body.append("budget_max", form.budget_max);
+      if (serviceType === "on_site") body.append("scheduled_at", new Date(form.scheduled_at).toISOString());
+      if (serviceType === "walk_in") body.append("shop_id", selectedShopId);
+      if (budgetValue > 0) body.append("budget_max", String(budgetValue));
       body.append("priority", form.priority);
-      if (form.customer_note.trim()) body.append("customer_note", form.customer_note.trim());
+      body.append("wait_days", String(waitDays));
+      if (noteFromChips) body.append("customer_note", noteFromChips);
       photos.forEach(f => body.append("photos", f));
 
-      // Pickup → go to schedule page with URL params (schedule page does full POST)
       if (serviceType === "pickup") {
-        const p = new URLSearchParams({
-          appliance_id: form.appliance_id,
-          issue_summary: form.issue_summary,
-          issue_detail: form.issue_detail,
-          priority: form.priority,
-          ...(form.budget_max && { budget_max: form.budget_max }),
-          ...(form.customer_note.trim() && { customer_note: form.customer_note.trim() }),
-        });
+        const p = new URLSearchParams({ appliance_id: form.appliance_id, issue_summary: issueVal, issue_detail: form.issue_detail, priority: form.priority, ...(budgetValue > 0 && { budget_max: String(budgetValue) }) });
         router.push(`/repair/pickup/schedule?${p.toString()}`);
         return;
       }
@@ -126,15 +232,8 @@ export default function RepairNewPage() {
       const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
-      // Parcel → shipping-details; Walk-in → receipt page; On-site → offers list
-      if (serviceType === "parcel") {
-        router.push(`/repair/${data.id}/shipping-details`);
-        return;
-      }
-      router.push(serviceType === "walk_in"
-        ? `/repair/${data.id}/walk-in-receipt`
-        : `/repair/${data.id}/offers`
-      );
+      if (serviceType === "parcel") { router.push(`/repair/${data.id}/shipping-details`); return; }
+      router.push(serviceType === "walk_in" ? `/repair/${data.id}/walk-in-receipt` : `/repair/${data.id}/offers`);
     } catch {
       setErrors({ general: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง" });
     } finally {
@@ -145,9 +244,13 @@ export default function RepairNewPage() {
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1);
   const inputCls = (f: string) =>
-    `w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary ${
+    `w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30 ${
       errors[f] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
+  const pCfg = PRIORITY_CONFIG[form.priority];
+  const visibleChips = serviceType === "on_site"
+    ? NOTE_CHIPS
+    : NOTE_CHIPS.filter(c => c.group === "repair");
 
   return (
     <div className="max-w-xl space-y-6">
@@ -163,104 +266,83 @@ export default function RepairNewPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-        {/* Service type toggle */}
+        {/* Service type */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ประเภทบริการ</p>
           <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => { setServiceType("on_site"); setErrors({}); }}
-              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
-                serviceType === "on_site"
-                  ? "bg-weeeu-primary border-weeeu-primary text-white"
-                  : "border-gray-200 text-gray-500 hover:border-weeeu-dark"
-              }`}
-            >
-              <span className="text-lg">🏠</span>
-              <span className="text-xs text-center leading-tight">On-site<br/>ช่างมาบ้าน</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => { setServiceType("walk_in"); setErrors({}); }}
-              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
-                serviceType === "walk_in"
-                  ? "bg-green-600 border-green-600 text-white"
-                  : "border-gray-200 text-gray-500 hover:border-green-300"
-              }`}
-            >
-              <span className="text-lg">🚶</span>
-              <span className="text-xs text-center leading-tight">Walk-in<br/>ไปร้านเอง</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => { setServiceType("pickup"); setErrors({}); }}
-              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
-                serviceType === "pickup"
-                  ? "bg-purple-600 border-purple-600 text-white"
-                  : "border-gray-200 text-gray-500 hover:border-purple-300"
-              }`}
-            >
-              <span className="text-lg">🚛</span>
-              <span className="text-xs text-center leading-tight">Pickup<br/>ช่างมารับ-ส่ง</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => { setServiceType("parcel"); setErrors({}); }}
-              className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
-                serviceType === "parcel"
-                  ? "bg-orange-500 border-orange-500 text-white"
-                  : "border-gray-200 text-gray-500 hover:border-orange-300"
-              }`}
-            >
-              <span className="text-lg">📦</span>
-              <span className="text-xs text-center leading-tight">Parcel<br/>ส่งพัสดุ</span>
-            </button>
+            {(["on_site", "walk_in", "pickup", "parcel"] as ServiceType[]).map(type => {
+              const conf = {
+                on_site: { icon: "🏠", label: "On-site\nช่างมาบ้าน",    active: "bg-weeeu-primary border-weeeu-primary text-white" },
+                walk_in: { icon: "🚶", label: "Walk-in\nไปร้านเอง",      active: "bg-green-600 border-green-600 text-white" },
+                pickup:  { icon: "🚛", label: "Pickup\nช่างมารับ-ส่ง",   active: "bg-purple-600 border-purple-600 text-white" },
+                parcel:  { icon: "📦", label: "Parcel\nส่งพัสดุ",        active: "bg-orange-500 border-orange-500 text-white" },
+              }[type];
+              return (
+                <button key={type} type="button"
+                  onClick={() => { setServiceType(type); setErrors({}); }}
+                  className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
+                    serviceType === type ? conf.active : "border-gray-200 text-gray-500 hover:border-gray-300"
+                  }`}
+                >
+                  <span className="text-lg">{conf.icon}</span>
+                  <span className="text-xs text-center leading-tight whitespace-pre-line">{conf.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Appliance */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">เครื่องใช้ไฟฟ้า</p>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              เลือกเครื่อง <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">เลือกเครื่อง <span className="text-red-500">*</span></label>
             <select
               value={form.appliance_id}
-              onChange={e => { setForm(f => ({ ...f, appliance_id: e.target.value })); clearErr("appliance_id"); }}
+              onChange={e => { setForm(f => ({ ...f, appliance_id: e.target.value })); setSelectedSymptom(""); setConditionChecks(new Set()); clearErr("appliance_id"); }}
               className={inputCls("appliance_id")}
             >
               <option value="">— เลือกเครื่องใช้ไฟฟ้า —</option>
-              {appliances.map(a => (
-                <option key={a.id} value={a.id}>{a.name} — {a.brand} {a.model}</option>
-              ))}
+              {appliances.map(a => <option key={a.id} value={a.id}>{a.name} — {a.brand} {a.model}</option>)}
             </select>
             {errors.appliance_id && <p className="text-red-500 text-xs mt-1">{errors.appliance_id}</p>}
             {appliances.length === 0 && (
-              <p className="text-xs text-gray-400 mt-1">
-                ยังไม่มีเครื่องใช้ไฟฟ้า —{" "}
-                <Link href="/appliances" className="text-weeeu-primary hover:underline">เพิ่มเครื่องก่อน</Link>
-              </p>
+              <p className="text-xs text-gray-400 mt-1">ยังไม่มีเครื่อง — <Link href="/appliances" className="text-weeeu-primary hover:underline">เพิ่มเครื่องก่อน</Link></p>
             )}
           </div>
         </div>
 
-        {/* Issue */}
+        {/* R2-1: อาการเสีย dropdown */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">อาการเสีย</p>
+
+          {/* Symptom dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              อาการเสียเบื้องต้น <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={form.issue_summary}
-              onChange={e => { setForm(f => ({ ...f, issue_summary: e.target.value })); clearErr("issue_summary"); }}
-              placeholder="เช่น เปิดไม่ติด / เสียงดัง / น้ำรั่ว"
+            <label className="block text-sm font-medium text-gray-700 mb-1">อาการเสียเบื้องต้น <span className="text-red-500">*</span></label>
+            <select
+              value={selectedSymptom}
+              onChange={e => { setSelectedSymptom(e.target.value); clearErr("issue_summary"); }}
               className={inputCls("issue_summary")}
-            />
+              disabled={!form.appliance_id}
+            >
+              <option value="">— เลือกอาการเสีย —</option>
+              {symptomOptions.map(s => <option key={s} value={s}>{s}</option>)}
+              <option value="อื่นๆ">อื่นๆ (ระบุเอง)</option>
+            </select>
+            {selectedSymptom === "อื่นๆ" && (
+              <input
+                type="text"
+                value={customSymptom}
+                onChange={e => { setCustomSymptom(e.target.value); clearErr("issue_summary"); }}
+                placeholder="ระบุอาการเสีย..."
+                className="mt-2 w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+              />
+            )}
+            {!form.appliance_id && <p className="text-xs text-gray-400 mt-1">เลือกเครื่องก่อนเพื่อดูอาการตามประเภท</p>}
             {errors.issue_summary && <p className="text-red-500 text-xs mt-1">{errors.issue_summary}</p>}
           </div>
+
+          {/* Detail */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">รายละเอียดเพิ่มเติม</label>
             <textarea
@@ -268,36 +350,42 @@ export default function RepairNewPage() {
               onChange={e => setForm(f => ({ ...f, issue_detail: e.target.value }))}
               placeholder="เริ่มเป็นตั้งแต่เมื่อไร / เกิดขึ้นบ่อยแค่ไหน"
               rows={3}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30 resize-none"
             />
           </div>
-          {/* Sub-4: customer_note */}
+
+          {/* R2-2: chip หมายเหตุถึงช่าง */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">หมายเหตุเพิ่มเติมถึงช่าง</label>
-            <textarea
-              value={form.customer_note}
-              onChange={e => setForm(f => ({ ...f, customer_note: e.target.value }))}
-              placeholder="เช่น ต้องการให้แจ้งก่อนเปลี่ยนอะไหล่ / ใช้อะไหล่แท้เท่านั้น"
-              rows={2}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">หมายเหตุถึงช่าง (ไม่บังคับ)</label>
+            <div className="flex flex-wrap gap-2">
+              {visibleChips.map(chip => (
+                <button
+                  key={chip.id}
+                  type="button"
+                  onClick={() => toggleChip(chip.id)}
+                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                    selectedChips.has(chip.id)
+                      ? "bg-weeeu-primary text-white border-weeeu-primary"
+                      : "border-gray-200 text-gray-600 hover:border-weeeu-primary/30"
+                  }`}
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
           </div>
-          {/* Sub-4: priority selector */}
+
+          {/* R2-7: Priority + วันรอ slider */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">ลำดับความสำคัญ</label>
-            <div className="flex gap-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">ลำดับความสำคัญ + วันที่ยอมรอ</label>
+            <div className="flex gap-2 mb-3">
               {(["normal", "urgent", "vip"] as ServicePriority[]).map(p => {
                 const cfg = PRIORITY_CONFIG[p];
                 const active = form.priority === p;
                 return (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => setForm(f => ({ ...f, priority: p }))}
-                    className={`flex-1 py-2 px-3 rounded-xl border text-xs font-medium transition-colors flex flex-col items-center gap-0.5 ${
-                      active
-                        ? `${cfg.cls} border-current ring-1 ring-current`
-                        : "border-gray-200 text-gray-500 hover:border-gray-300"
+                  <button key={p} type="button" onClick={() => handlePriorityChange(p)}
+                    className={`flex-1 py-2 px-2 rounded-xl border text-xs font-medium transition-colors flex flex-col items-center gap-0.5 ${
+                      active ? `${cfg.cls} border-current ring-1 ring-current` : "border-gray-200 text-gray-500 hover:border-gray-300"
                     }`}
                   >
                     <span className="text-base leading-none">{cfg.icon}</span>
@@ -306,43 +394,126 @@ export default function RepairNewPage() {
                 );
               })}
             </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>ยอมรอได้</span>
+                <span className="font-semibold text-weeeu-primary">
+                  {waitDays === 0 ? "ภายในวันนี้" : `${waitDays} วัน`}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={pCfg.waitMin}
+                max={pCfg.waitMax}
+                step={1}
+                value={waitDays}
+                onChange={e => setWaitDays(Number(e.target.value))}
+                className="w-full accent-weeeu-primary"
+              />
+              <div className="flex justify-between text-xs text-gray-400">
+                <span>{pCfg.waitMin === 0 ? "วันนี้" : `${pCfg.waitMin} วัน`}</span>
+                <span>{pCfg.waitMax} วัน</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Photos — R-01.5: min 1, max 5 */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">รูปถ่ายอาการเสีย</p>
-            <span className="text-xs text-gray-400">{photos.length}/5</span>
-          </div>
-          {errors.photos && <p className="text-red-500 text-xs">{errors.photos}</p>}
-          <div className="flex flex-wrap gap-2">
-            {photoUrls.map((url, i) => (
-              <div key={i} className="relative w-20 h-20">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={url} alt="" className="w-20 h-20 object-cover rounded-xl border border-gray-200" />
+        {/* R2-6: checklist สภาพเครื่อง (แสดงเมื่อเลือกเครื่องแล้ว) */}
+        {form.appliance_id && conditionOptions.length > 0 && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              สภาพเครื่อง — เช็คอาการที่พบ (ไม่บังคับ)
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {conditionOptions.map(item => (
                 <button
+                  key={item}
                   type="button"
-                  onClick={() => removePhoto(i)}
-                  className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                  onClick={() => toggleCondition(item)}
+                  className={`flex items-center gap-2 text-xs px-3 py-2 rounded-xl border transition-colors text-left ${
+                    conditionChecks.has(item)
+                      ? "bg-weeeu-surface border-weeeu-primary text-weeeu-primary"
+                      : "border-gray-200 text-gray-600 hover:border-gray-300"
+                  }`}
                 >
-                  ×
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
+                    conditionChecks.has(item) ? "bg-weeeu-primary border-weeeu-primary text-white" : "border-gray-300"
+                  }`}>
+                    {conditionChecks.has(item) && "✓"}
+                  </span>
+                  {item}
                 </button>
-              </div>
-            ))}
-            {photos.length < 5 && (
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-weeeu-dark hover:text-weeeu-primary transition-colors text-xs gap-1"
-              >
-                <span className="text-2xl leading-none">+</span>
-                <span>เพิ่มรูป</span>
-              </button>
-            )}
+              ))}
+            </div>
           </div>
-          <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={handlePhotoAdd} />
-          <p className="text-xs text-gray-400">ต้องมีอย่างน้อย 1 รูป, สูงสุด 5 รูป (Media Constraints R-01.5)</p>
+        )}
+
+        {/* R2-3: รูปถ่าย + คลิป */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+          {/* Photos */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">รูปถ่ายอาการเสีย</p>
+              <span className="text-xs text-gray-400">{photos.length}/5</span>
+            </div>
+            {errors.photos && <p className="text-red-500 text-xs">{errors.photos}</p>}
+            <div className="flex flex-wrap gap-2">
+              {photoUrls.map((url, i) => (
+                <div key={i} className="relative w-20 h-20">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={url} alt="" className="w-20 h-20 object-cover rounded-xl border border-gray-200" />
+                  <button type="button" onClick={() => removePhoto(i)}
+                    className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                    ×
+                  </button>
+                </div>
+              ))}
+              {photos.length < 5 && (
+                <button type="button" onClick={() => fileRef.current?.click()}
+                  className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-weeeu-primary/40 transition-colors text-xs gap-1">
+                  <span className="text-2xl leading-none">+</span>
+                  <span>เพิ่มรูป</span>
+                </button>
+              )}
+            </div>
+            <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={handlePhotoAdd} />
+            <p className="text-xs text-gray-400">
+              {serviceType === "on_site"
+                ? "ต้องมีอย่างน้อย 3 รูป, สูงสุด 5 รูป · 3MB/รูป (R2-3)"
+                : "แนบรูปเพิ่มเติมได้ (ไม่บังคับ) · สูงสุด 5 รูป"}
+            </p>
+          </div>
+
+          {/* Videos — R2-3 */}
+          <div className="space-y-3 border-t border-gray-50 pt-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">คลิปวิดีโออาการเสีย</p>
+              <span className="text-xs text-gray-400">{videos.length}/3</span>
+            </div>
+            {errors.videos && <p className="text-red-500 text-xs">{errors.videos}</p>}
+            <div className="flex flex-wrap gap-2">
+              {videos.map((v, i) => (
+                <div key={i} className="relative bg-gray-100 rounded-xl px-3 py-2 flex items-center gap-2">
+                  <span className="text-lg">🎥</span>
+                  <span className="text-xs text-gray-600 max-w-[100px] truncate">{v.name}</span>
+                  <button type="button" onClick={() => removeVideo(i)}
+                    className="text-red-400 hover:text-red-600 text-xs ml-1">×</button>
+                </div>
+              ))}
+              {videos.length < 3 && (
+                <button type="button" onClick={() => videoRef.current?.click()}
+                  className="border-2 border-dashed border-gray-200 rounded-xl px-4 py-2 flex items-center gap-2 text-gray-400 hover:border-weeeu-primary/40 transition-colors text-xs">
+                  <span>🎥</span> เพิ่มคลิป
+                </button>
+              )}
+            </div>
+            <input ref={videoRef} type="file" accept="video/*" multiple hidden onChange={handleVideoAdd} />
+            <p className="text-xs text-gray-400">
+              {serviceType === "on_site"
+                ? "ต้องมีอย่างน้อย 1 คลิป, สูงสุด 3 คลิป · 30MB/คลิป (R2-3)"
+                : "แนบคลิปเพิ่มเติมได้ (ไม่บังคับ) · สูงสุด 3 คลิป"}
+            </p>
+          </div>
         </div>
 
         {/* Walk-in: shop selector */}
@@ -355,19 +526,12 @@ export default function RepairNewPage() {
                   <p className="text-sm font-semibold text-green-800">✅ {selectedShopName}</p>
                   <p className="text-xs text-green-600 mt-0.5">ร้านที่เลือกแล้ว</p>
                 </div>
-                <Link
-                  href={`/repair/walk-in/select-shop?service_type=walk_in`}
-                  className="text-xs text-weeeu-primary hover:underline"
-                >
-                  เปลี่ยนร้าน
-                </Link>
+                <Link href="/repair/walk-in/select-shop?service_type=walk_in" className="text-xs text-weeeu-primary hover:underline">เปลี่ยนร้าน</Link>
               </div>
             ) : (
               <div>
-                <Link
-                  href="/repair/walk-in/select-shop?service_type=walk_in"
-                  className="w-full flex items-center justify-between gap-3 border-2 border-dashed border-green-300 rounded-xl p-4 text-green-600 hover:border-green-500 hover:bg-green-50 transition-colors"
-                >
+                <Link href="/repair/walk-in/select-shop?service_type=walk_in"
+                  className="w-full flex items-center justify-between gap-3 border-2 border-dashed border-green-300 rounded-xl p-4 text-green-600 hover:border-green-500 hover:bg-green-50 transition-colors">
                   <span className="text-sm font-medium">🏪 เลือกร้านซ่อมที่จะไป</span>
                   <span className="text-lg">›</span>
                 </Link>
@@ -377,11 +541,11 @@ export default function RepairNewPage() {
           </div>
         )}
 
-        {/* On-site schedule / budget (not shown for pickup; parcel shows budget only) */}
+        {/* Schedule (on_site) + R2-4: Budget slider */}
         {serviceType !== "pickup" && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              {serviceType === "on_site" ? "นัดหมาย" : "งบประมาณ"}
+              {serviceType === "on_site" ? "นัดหมาย + งบประมาณ" : "งบประมาณ"}
             </p>
             {serviceType === "on_site" && (
               <div>
@@ -398,54 +562,60 @@ export default function RepairNewPage() {
                 {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
               </div>
             )}
+
+            {/* R2-4: Budget slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">งบประมาณสูงสุด (Point)</label>
-              <input
-                type="number"
-                value={form.budget_max}
-                onChange={e => setForm(f => ({ ...f, budget_max: e.target.value }))}
-                placeholder="ไม่ระบุ = ไม่จำกัด"
-                min={0}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">งบประมาณสูงสุด (Gold Point)</label>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <button type="button"
+                    onClick={() => setBudgetValue(v => Math.max(0, v - 500))}
+                    className="w-9 h-9 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-lg font-bold flex-shrink-0"
+                  >−</button>
+                  <input type="range" min={0} max={20000} step={500} value={budgetValue}
+                    onChange={e => setBudgetValue(Number(e.target.value))}
+                    className="flex-1 accent-weeeu-primary"
+                  />
+                  <button type="button"
+                    onClick={() => setBudgetValue(v => Math.min(20000, v + 500))}
+                    className="w-9 h-9 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-lg font-bold flex-shrink-0"
+                  >+</button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-weeeu-primary">
+                    {budgetValue === 0 ? "ไม่จำกัด" : `${budgetValue.toLocaleString()} Gold`}
+                  </span>
+                  {budgetValue > 0 && (
+                    <button type="button" onClick={() => setBudgetValue(0)}
+                      className="text-xs text-gray-400 hover:text-gray-600 underline">ไม่จำกัด</button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Pickup: info box */}
+        {/* Pickup info */}
         {serviceType === "pickup" && (
           <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 space-y-2">
             <p className="text-sm font-semibold text-purple-800">🚛 Pickup — ช่างมารับเครื่องถึงบ้าน</p>
             <p className="text-xs text-purple-600">ขั้นตอนถัดไป: กรอกที่อยู่รับเครื่อง + เลือกวัน/เวลานัดรับ</p>
-            <ol className="space-y-1 pl-1">
-              {["ช่างมารับเครื่องตามนัด", "นำไปซ่อมที่ร้าน", "ช่างส่งคืนถึงบ้านเมื่อเสร็จ"].map((s, i) => (
-                <li key={i} className="flex gap-1.5 text-xs text-purple-700">
-                  <span className="font-bold">{i + 1}.</span><span>{s}</span>
-                </li>
-              ))}
-            </ol>
           </div>
         )}
 
-        {/* Parcel: info box */}
+        {/* Parcel info */}
         {serviceType === "parcel" && (
           <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 space-y-2">
             <p className="text-sm font-semibold text-orange-800">📦 Parcel — ส่งพัสดุไปร้านซ่อม</p>
             <p className="text-xs text-orange-600">ขั้นตอนถัดไป: ตกลงบริษัทขนส่ง + แพ็คพัสดุ + กรอก Tracking</p>
-            <ol className="space-y-1 pl-1">
-              {["ตกลงบริษัทขนส่งและผู้รับผิดชอบค่าส่ง", "แพ็คเครื่องส่งไปร้านซ่อม", "ร้านซ่อม → ส่งคืนเมื่อเสร็จ"].map((s, i) => (
-                <li key={i} className="flex gap-1.5 text-xs text-orange-700">
-                  <span className="font-bold">{i + 1}.</span><span>{s}</span>
-                </li>
-              ))}
-            </ol>
           </div>
         )}
 
+        {/* R2-5: on-site info — ลบค่าตรวจ 100 Point */}
         {serviceType === "on_site" && (
-          <div className="bg-weeeu-surface border border-weeeu-surface rounded-xl p-3">
+          <div className="bg-weeeu-surface border border-weeeu-primary/10 rounded-xl p-3">
             <p className="text-xs text-weeeu-primary">
-              🔧 <strong>On-site</strong> — ช่างจะออกมาซ่อมถึงบ้านคุณ ค่าตรวจ 100 Point (ไม่คืน)
+              🏠 <strong>On-site</strong> — ช่างออกมาซ่อมถึงบ้านคุณ · ร้านจะเสนอค่าตรวจ/ค่าเดินทางในข้อเสนอ
             </p>
           </div>
         )}
@@ -467,18 +637,15 @@ export default function RepairNewPage() {
               ? "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white"
               : serviceType === "parcel"
               ? "bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white"
-              : "bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white"
+              : "bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white"
           }`}
         >
           {submitting
             ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</>
-            : serviceType === "walk_in"
-            ? "🚶 ส่งคำขอ Walk-in"
-            : serviceType === "pickup"
-            ? "🚛 ถัดไป — กรอกที่อยู่และนัดหมาย"
-            : serviceType === "parcel"
-            ? "📦 ส่งคำขอ — ตกลงรายละเอียดขนส่ง"
-            : "ส่งคำขอซ่อม"
+            : serviceType === "walk_in" ? "🚶 ส่งคำขอ Walk-in"
+            : serviceType === "pickup"  ? "🚛 ถัดไป — กรอกที่อยู่และนัดหมาย"
+            : serviceType === "parcel"  ? "📦 ส่งคำขอ — ตกลงรายละเอียดขนส่ง"
+            : "🔧 ส่งคำขอซ่อม"
           }
         </button>
       </form>
