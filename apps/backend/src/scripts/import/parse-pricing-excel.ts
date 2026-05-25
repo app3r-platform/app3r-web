@@ -54,6 +54,13 @@ export interface PricingRowA {
   totalCost: number
   /** หมายเหตุ */
   remark?: string
+  // ── D-5 extension fields (optional — auto-detected from columns) ───────────
+  /** สถานะการบูต เช่น "เปิดได้", "เปิดไม่ได้", "ติด Logo" */
+  bootState?: string
+  /** อุปกรณ์เสริม เช่น "ครบ", "ไม่ครบ" */
+  accessory?: string
+  /** true ถ้า remark มี "งานตำหนิมากกว่า 1 จุด" (D-5 is_multi_issue) */
+  isMultiIssue?: boolean
 }
 
 export interface PricingRowB {
@@ -334,11 +341,15 @@ function parsePatternA(rows: string[][]): { data: PricingRowA[]; errors: string[
   const header = rows[0]
   let colModel = -1, colSymptom = -1, colScratch = -1
   let colLabor = -1, colPart = -1, colTotal = -1, colRemark = -1
+  // D-5 extension columns (optional)
+  let colBootState = -1, colAccessory = -1
 
   for (let c = 0; c < header.length; c++) {
     const h = header[c].toLowerCase()
     if (h.includes('รุ่น') || h.includes('model') || h.includes('เครื่อง')) colModel = c
-    else if (h.includes('อาการ') || h.includes('symptom') || h.includes('งาน')) colSymptom = c
+    else if (h.includes('สถานะ') || h.includes('boot') || h.includes('เปิด')) colBootState = c
+    else if (h.includes('อุปกรณ์') || h.includes('accessory') || h.includes('ครบ')) colAccessory = c
+    else if (h.includes('อาการ') || h.includes('symptom') || h.includes('ปัญหา') || h.includes('งาน')) colSymptom = c
     else if (h.includes('รอย') || h.includes('ระดับ') || h.includes('scratch') || h.includes('tier')) colScratch = c
     else if (h.includes('ค่าแรง') || h.includes('labor')) colLabor = c
     else if (h.includes('ค่าอะไหล่') || h.includes('part')) colPart = c
@@ -363,6 +374,7 @@ function parsePatternA(rows: string[][]): { data: PricingRowA[]; errors: string[
     if (!symptom) continue  // Skip if no symptom/service
 
     try {
+      const remark = colRemark >= 0 ? (row[colRemark]?.trim() || undefined) : undefined
       data.push({
         model: lastModel,
         symptom,
@@ -370,7 +382,11 @@ function parsePatternA(rows: string[][]): { data: PricingRowA[]; errors: string[
         laborCost: colLabor >= 0 ? parseCost(row[colLabor] ?? '') : 0,
         partCost: colPart >= 0 ? parseCost(row[colPart] ?? '') : 0,
         totalCost: colTotal >= 0 ? parseCost(row[colTotal] ?? '') : 0,
-        remark: colRemark >= 0 ? (row[colRemark]?.trim() || undefined) : undefined,
+        remark,
+        // D-5 extension
+        bootState: colBootState >= 0 ? (row[colBootState]?.trim() || undefined) : undefined,
+        accessory: colAccessory >= 0 ? (row[colAccessory]?.trim() || undefined) : undefined,
+        isMultiIssue: remark?.includes('งานตำหนิมากกว่า 1 จุด') ?? false,
       })
     } catch (e) {
       errors.push(`Row[${i}]: ${(e as Error).message}`)
