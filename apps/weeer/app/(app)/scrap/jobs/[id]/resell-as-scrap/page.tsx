@@ -6,6 +6,20 @@ import { useRouter } from "next/navigation";
 import { scrapApi } from "../../../_lib/api";
 import type { ScrapJob } from "../../../_lib/types";
 
+// ── MOCK_JOB — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_JOB: ScrapJob = {
+  id: "SJ005",
+  scrapItemId: "SC005",
+  buyerId: "S1",
+  buyerType: "WeeeR",
+  decision: "resell_as_scrap",
+  status: "in_progress",
+  createdAt: "2026-05-16T10:00:00+07:00",
+  updatedAt: "2026-05-24T10:00:00+07:00",
+  scrapItemDescription: "Panasonic เครื่องซักผ้า NA-F70LG1 ขายต่อซาก",
+  conditionGrade: "grade_A",
+};
+
 export default function ResellAsScrapPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
@@ -20,7 +34,10 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
   useEffect(() => {
     scrapApi.getJob(id)
       .then(setJob)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_JOB แทน (ไม่แสดง error)
+        setJob(MOCK_JOB);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

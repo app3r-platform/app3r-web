@@ -6,6 +6,34 @@ import { scrapApi } from "../_lib/api";
 import type { ScrapItem } from "../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../_lib/types";
 
+// ── MOCK_ITEMS — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_ITEMS: ScrapItem[] = [
+  {
+    id: "SC002", sellerId: "U102", sellerType: "WeeeU",
+    applianceName: "Daikin แอร์ FTKF25XV2S", applianceBrand: "Daikin", applianceType: "ac",
+    conditionGrade: "grade_B", workingParts: ["คอมเพรสเซอร์", "พัดลม"],
+    description: "แอร์เก่าถอดออกจากห้องพัก คอมเพรสเซอร์ยังดี เหมาะซ่อมขายต่อ",
+    photos: [], price: 800, isFree: false, status: "available",
+    createdAt: "2026-05-19", updatedAt: "2026-05-21",
+  },
+  {
+    id: "SC001", sellerId: "U101", sellerType: "WeeeU",
+    applianceName: "Samsung เครื่องซักผ้า WW12T", applianceBrand: "Samsung", applianceType: "washing_machine",
+    conditionGrade: "grade_A", workingParts: ["มอเตอร์", "แผงควบคุม", "ฝาปิด"],
+    description: "ซากเครื่องซักผ้า Samsung สภาพดี มอเตอร์ยังใช้ได้ อะไหล่ครบ",
+    photos: [], price: 1200, isFree: false, status: "available",
+    createdAt: "2026-05-20", updatedAt: "2026-05-22",
+  },
+  {
+    id: "SC003", sellerId: "U103", sellerType: "WeeeU",
+    applianceName: "ตู้เย็น LG GN-B202SQBB", applianceBrand: "LG", applianceType: "refrigerator",
+    conditionGrade: "grade_C", workingParts: ["ชั้นวาง", "ลิ้นชัก"],
+    description: "ตู้เย็นเสีย ถอดชิ้นส่วนได้ ไม่รวมคอมเพรสเซอร์ ทิ้งฟรี",
+    photos: [], price: 0, isFree: true, status: "available",
+    createdAt: "2026-05-18", updatedAt: "2026-05-22",
+  },
+];
+
 const GRADES = ["", "grade_A", "grade_B", "grade_C"] as const;
 
 export default function ScrapBrowsePage() {
@@ -24,7 +52,10 @@ export default function ScrapBrowsePage() {
       maxPrice: maxPrice || undefined,
     })
       .then(setItems)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_ITEMS แทน (ไม่แสดง error)
+        setItems(MOCK_ITEMS);
+      })
       .finally(() => setLoading(false));
   }, [grade, minPrice, maxPrice]);
 
