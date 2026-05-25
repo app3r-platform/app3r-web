@@ -50,6 +50,10 @@ export * from './email-preferences'
 export * from './parts-inventory'
 export * from './parts-orders'
 
+// B5-Backend: Inventory Stock Movements (audit trail)
+// Migration: 0020_b5_inventory_extend.sql
+export * from './inventory-stock-movements'
+
 // Sub-CMD-2: Manual Bank Transfer Module (อ.PP decision 2026-05-14)
 export * from './bank-transfers'
 

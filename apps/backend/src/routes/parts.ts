@@ -4,18 +4,24 @@
  * CRIT-002 FIX (Sub-CMD-1.1 Wave 1): Aligned API paths + response shapes + error format
  *   to match WeeeR FE (apps/weeer/app/(app)/parts/_lib/api.ts)
  *
- * Paths now match FE expectations (trailing-slash compatible):
- *   GET    /api/v1/parts/              — list inventory (was /inventory)
- *   POST   /api/v1/parts/              — create item (was /inventory)
- *   GET    /api/v1/parts/:id/          — get single item (NEW)
- *   PATCH  /api/v1/parts/:id/          — update item (was /inventory/:id)
- *   DELETE /api/v1/parts/:id/          — delete item (was /inventory/:id)
- *   POST   /api/v1/parts/:id/stock-in/ — stock in (NEW)
- *   POST   /api/v1/parts/:id/stock-adjust/ — stock adjust (NEW)
- *   GET    /api/v1/parts/movements/    — list movements (scaffold — no DB table yet)
- *   GET    /api/v1/parts/movements/:id/ — single movement (scaffold)
- *   GET    /api/v1/parts/reservations/ — list reservations (scaffold)
- *   GET    /api/v1/parts/dashboard/    — aggregate stats
+ * B5-Backend (2026-05-25): Extended with reserve/release/adjust + real stock_movements
+ *
+ * Paths:
+ *   GET    /api/v1/parts/                     — list inventory
+ *   POST   /api/v1/parts/                     — create item
+ *   GET    /api/v1/parts/dashboard/           — aggregate stats
+ *   GET    /api/v1/parts/movements/           — list all movements (real DB)
+ *   GET    /api/v1/parts/movements/:id/       — single movement
+ *   GET    /api/v1/parts/reservations/        — list reservations (scaffold)
+ *   GET    /api/v1/parts/:id/                 — get single item
+ *   PATCH  /api/v1/parts/:id/                 — update item
+ *   DELETE /api/v1/parts/:id/                 — delete item
+ *   POST   /api/v1/parts/:id/stock-in/        — add stock (existing)
+ *   POST   /api/v1/parts/:id/stock-adjust/    — set absolute qty (existing)
+ *   POST   /api/v1/parts/:id/reserve          — B5: reserve qty
+ *   POST   /api/v1/parts/:id/release          — B5: release reserved qty
+ *   GET    /api/v1/parts/:id/movements        — B5: per-item movements
+ *   POST   /api/v1/parts/:id/adjust           — B5: delta adjust + log
  *
  * Error format: {detail: "..."} (matches FE apiFetch err.detail parsing)
  * Response shape: Part interface from FE types.ts (unitPrice: number, stockQty, etc.)
@@ -26,8 +32,8 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
 import { db } from '../db/client'
-import { partsInventory, partsOrders } from '../db/schema'
-import { eq, and, sql, ilike, or } from 'drizzle-orm'
+import { partsInventory, partsOrders, inventoryStockMovements } from '../db/schema'
+import { eq, and, sql, ilike, or, desc } from 'drizzle-orm'
 import { verifyAccessToken } from '../lib/jwt'
 
 export const partsRouter = new OpenAPIHono()
@@ -48,8 +54,12 @@ const PartSchema = z.object({
   category: z.string().nullable(),
   unit: z.string(),
   condition: z.enum(['new', 'used', 'refurbished']),
+  // B5: stock tracking fields
   stockQty: z.number(),
   reservedQty: z.number(),
+  availableQty: z.number(),                           // stockQty - reservedQty
+  sourceType: z.enum(['NEW', 'USED', 'DISASSEMBLED']),
+  scrapSourceId: z.string().nullable(),
   unitPrice: z.number(),
   imageUrl: z.string().nullable(),
   createdAt: z.string(),
@@ -59,18 +69,18 @@ const PartSchema = z.object({
 const StockMovementSchema = z.object({
   id: z.string(),
   partId: z.string(),
-  type: z.enum(['STOCK_IN', 'STOCK_OUT', 'STOCK_ADJUSTMENT']),
-  qty: z.number(),
-  reason: z.string(),
-  refId: z.string().nullable(),
+  movementType: z.enum(['IN', 'OUT', 'RESERVE', 'RELEASE', 'ADJUST']),
+  quantityDelta: z.number(),
+  referenceType: z.string().nullable(),
+  referenceId: z.string().nullable(),
   note: z.string().nullable(),
-  performedBy: z.string(),
-  performedAt: z.string(),
-  balanceAfter: z.number(),
+  createdBy: z.string(),
+  createdAt: z.string(),
 })
 
 // Helper: map DB row → Part response
 function mapPart(row: typeof partsInventory.$inferSelect): z.infer<typeof PartSchema> {
+  const reserved = row.reservedQuantity ?? 0
   return {
     id: row.id,
     shopId: row.ownerId,
@@ -78,25 +88,64 @@ function mapPart(row: typeof partsInventory.$inferSelect): z.infer<typeof PartSc
     sku: row.sku ?? null,
     category: row.category ?? null,
     unit: row.unit,
-    condition: 'used', // no condition column in DB yet — default 'used'
+    condition: 'used',  // no condition column in DB yet — default 'used'
     stockQty: row.stockQuantity,
-    reservedQty: 0,    // no reservations tracking yet
+    reservedQty: reserved,
+    availableQty: row.stockQuantity - reserved,
+    sourceType: (row.sourceType ?? 'NEW') as 'NEW' | 'USED' | 'DISASSEMBLED',
+    scrapSourceId: row.scrapSourceId ?? null,
     unitPrice: parseFloat(String(row.unitPriceThb)),
-    imageUrl: null,    // imageR2Key is internal key — presign if needed separately
+    imageUrl: null,     // imageR2Key is internal key — presign separately if needed
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
+  }
+}
+
+// Helper: map DB movement row → StockMovementSchema
+function mapMovement(row: typeof inventoryStockMovements.$inferSelect): z.infer<typeof StockMovementSchema> {
+  return {
+    id: row.id,
+    partId: row.inventoryItemId,
+    movementType: row.movementType as 'IN' | 'OUT' | 'RESERVE' | 'RELEASE' | 'ADJUST',
+    quantityDelta: row.quantityDelta,
+    referenceType: row.referenceType ?? null,
+    referenceId: row.referenceId ?? null,
+    note: row.note ?? null,
+    createdBy: row.createdBy,
+    createdAt: row.createdAt.toISOString(),
   }
 }
 
 // Helper: Django-style error (matches FE apiFetch `err.detail` parsing)
 const err = (detail: string) => ({ detail })
 
+// Helper: insert a stock movement record (B5)
+async function insertMovement(data: {
+  inventoryItemId: string
+  movementType: 'IN' | 'OUT' | 'RESERVE' | 'RELEASE' | 'ADJUST'
+  quantityDelta: number
+  referenceType?: string | null
+  referenceId?: string | null
+  note?: string | null
+  createdBy: string
+}) {
+  await db.insert(inventoryStockMovements).values({
+    inventoryItemId: data.inventoryItemId,
+    movementType: data.movementType,
+    quantityDelta: data.quantityDelta,
+    referenceType: data.referenceType ?? null,
+    referenceId: data.referenceId ?? null,
+    note: data.note ?? null,
+    createdBy: data.createdBy,
+  })
+}
+
 // ── GET / — list inventory ───────────────────────────────────────────────────
 const listPartsRoute = createRoute({
   method: 'get',
   path: '/',
   tags: ['Parts'],
-  summary: 'List WeeeR parts inventory (CRIT-002 fix — was /inventory)',
+  summary: 'List WeeeR parts inventory',
   security: [{ bearerAuth: [] }],
   request: {
     query: z.object({
@@ -147,7 +196,7 @@ const createPartRoute = createRoute({
   method: 'post',
   path: '/',
   tags: ['Parts'],
-  summary: 'Create parts inventory item (CRIT-002 fix — was POST /inventory)',
+  summary: 'Create parts inventory item',
   security: [{ bearerAuth: [] }],
   request: {
     body: {
@@ -161,7 +210,8 @@ const createPartRoute = createRoute({
             stockQty: z.number().int().min(0).default(0),
             unit: z.string().default('piece'),
             category: z.string().optional(),
-            condition: z.enum(['new', 'used', 'refurbished']).optional(),
+            sourceType: z.enum(['NEW', 'USED', 'DISASSEMBLED']).default('NEW'),
+            scrapSourceId: z.string().uuid().optional(),
           }),
         },
       },
@@ -192,8 +242,22 @@ partsRouter.openapi(createPartRoute, async (c) => {
       stockQuantity: body.stockQty,
       unit: body.unit,
       category: body.category ?? null,
+      sourceType: body.sourceType,
+      scrapSourceId: body.scrapSourceId ?? null,
     })
     .returning()
+
+  // Log initial IN movement if stockQty > 0
+  if (body.stockQty > 0) {
+    await insertMovement({
+      inventoryItemId: item.id,
+      movementType: 'IN',
+      quantityDelta: body.stockQty,
+      referenceType: 'manual',
+      note: 'initial stock on create',
+      createdBy: user.userId,
+    })
+  }
 
   return c.json(mapPart(item), 201)
 })
@@ -240,24 +304,33 @@ partsRouter.openapi(dashboardRoute, async (c) => {
   )
   const low_stock = rows.filter((r) => r.stockQuantity <= 5).map(mapPart)
 
+  // B5: real recent movements for this owner's items
+  const recentMovements = await db
+    .select({ mv: inventoryStockMovements })
+    .from(inventoryStockMovements)
+    .innerJoin(partsInventory, eq(inventoryStockMovements.inventoryItemId, partsInventory.id))
+    .where(eq(partsInventory.ownerId, user.userId))
+    .orderBy(desc(inventoryStockMovements.createdAt))
+    .limit(10)
+
   return c.json({
     total_skus,
     total_stock_value: Math.round(total_stock_value * 100) / 100,
     low_stock,
-    recent_movements: [], // scaffold — no stock_movements table yet
+    recent_movements: recentMovements.map(r => mapMovement(r.mv)),
   }, 200)
 })
 
-// ── GET /movements/ — list movements (scaffold) ──────────────────────────────
+// ── GET /movements/ — list all movements ─────────────────────────────────────
 const listMovementsRoute = createRoute({
   method: 'get',
   path: '/movements/',
   tags: ['Parts'],
-  summary: 'List stock movements — scaffold (no DB table yet, NOTE-SUB4)',
+  summary: 'List stock movements — real DB (B5 upgrade from scaffold)',
   security: [{ bearerAuth: [] }],
   request: {
     query: z.object({
-      partId: z.string().optional(),
+      partId: z.string().uuid().optional(),
       type: z.string().optional(),
       dateFrom: z.string().optional(),
       dateTo: z.string().optional(),
@@ -265,7 +338,7 @@ const listMovementsRoute = createRoute({
   },
   responses: {
     200: {
-      description: 'Movements list (scaffold — always empty)',
+      description: 'Movements list',
       content: { 'application/json': { schema: z.array(StockMovementSchema) } },
     },
     401: { description: 'Unauthorized' },
@@ -275,20 +348,38 @@ const listMovementsRoute = createRoute({
 partsRouter.openapi(listMovementsRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
-  // TODO D-3: create stock_movements table + implement tracking
-  return c.json([], 200)
+
+  const { partId } = c.req.valid('query')
+
+  const rows = await db
+    .select({ mv: inventoryStockMovements })
+    .from(inventoryStockMovements)
+    .innerJoin(partsInventory, eq(inventoryStockMovements.inventoryItemId, partsInventory.id))
+    .where(
+      and(
+        eq(partsInventory.ownerId, user.userId),
+        partId ? eq(inventoryStockMovements.inventoryItemId, partId) : undefined,
+      ),
+    )
+    .orderBy(desc(inventoryStockMovements.createdAt))
+    .limit(200)
+
+  return c.json(rows.map(r => mapMovement(r.mv)), 200)
 })
 
-// ── GET /movements/:id/ — single movement (scaffold) ─────────────────────────
+// ── GET /movements/:id/ — single movement ────────────────────────────────────
 const getMovementRoute = createRoute({
   method: 'get',
   path: '/movements/:id/',
   tags: ['Parts'],
-  summary: 'Get single stock movement — scaffold',
+  summary: 'Get single stock movement',
   security: [{ bearerAuth: [] }],
-  request: { params: z.object({ id: z.string() }) },
+  request: { params: z.object({ id: z.string().uuid() }) },
   responses: {
-    200: { description: 'Movement (scaffold)' },
+    200: {
+      description: 'Movement',
+      content: { 'application/json': { schema: StockMovementSchema } },
+    },
     401: { description: 'Unauthorized' },
     404: { description: 'Not found' },
   },
@@ -297,7 +388,21 @@ const getMovementRoute = createRoute({
 partsRouter.openapi(getMovementRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
-  return c.json(err('Stock movements not yet implemented.'), 404)
+
+  const { id } = c.req.valid('param')
+  const [row] = await db
+    .select({ mv: inventoryStockMovements })
+    .from(inventoryStockMovements)
+    .innerJoin(partsInventory, eq(inventoryStockMovements.inventoryItemId, partsInventory.id))
+    .where(
+      and(
+        eq(inventoryStockMovements.id, id),
+        eq(partsInventory.ownerId, user.userId),
+      ),
+    )
+
+  if (!row) return c.json(err('Not found.'), 404)
+  return c.json(mapMovement(row.mv), 200)
 })
 
 // ── GET /reservations/ — list reservations (scaffold) ────────────────────────
@@ -305,23 +410,12 @@ const listReservationsRoute = createRoute({
   method: 'get',
   path: '/reservations/',
   tags: ['Parts'],
-  summary: 'List parts reservations — scaffold (NOTE-SUB4)',
+  summary: 'List parts reservations — filtered RESERVE movements (B5)',
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: 'Reservations list (scaffold — always empty)',
-      content: {
-        'application/json': {
-          schema: z.array(z.object({
-            partId: z.string(),
-            partName: z.string(),
-            qty: z.number(),
-            jobId: z.string(),
-            jobType: z.string(),
-            reservedAt: z.string(),
-          })),
-        },
-      },
+      description: 'Active reservations (RESERVE movements without matching RELEASE)',
+      content: { 'application/json': { schema: z.array(StockMovementSchema) } },
     },
     401: { description: 'Unauthorized' },
   },
@@ -330,8 +424,21 @@ const listReservationsRoute = createRoute({
 partsRouter.openapi(listReservationsRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
-  // TODO D-3: implement reservations tracking
-  return c.json([], 200)
+
+  const rows = await db
+    .select({ mv: inventoryStockMovements })
+    .from(inventoryStockMovements)
+    .innerJoin(partsInventory, eq(inventoryStockMovements.inventoryItemId, partsInventory.id))
+    .where(
+      and(
+        eq(partsInventory.ownerId, user.userId),
+        eq(inventoryStockMovements.movementType, 'RESERVE'),
+      ),
+    )
+    .orderBy(desc(inventoryStockMovements.createdAt))
+    .limit(100)
+
+  return c.json(rows.map(r => mapMovement(r.mv)), 200)
 })
 
 // ── GET /:id/ — get single part ───────────────────────────────────────────────
@@ -339,7 +446,7 @@ const getPartRoute = createRoute({
   method: 'get',
   path: '/:id/',
   tags: ['Parts'],
-  summary: 'Get single parts inventory item (NEW — CRIT-002 fix)',
+  summary: 'Get single parts inventory item',
   security: [{ bearerAuth: [] }],
   request: { params: z.object({ id: z.string().uuid() }) },
   responses: {
@@ -371,7 +478,7 @@ const updatePartRoute = createRoute({
   method: 'patch',
   path: '/:id/',
   tags: ['Parts'],
-  summary: 'Update parts inventory item (CRIT-002 fix — was PATCH /inventory/:id)',
+  summary: 'Update parts inventory item',
   security: [{ bearerAuth: [] }],
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -383,7 +490,7 @@ const updatePartRoute = createRoute({
             unitPrice: z.number().positive().optional(),
             stockQty: z.number().int().min(0).optional(),
             category: z.string().optional(),
-            condition: z.enum(['new', 'used', 'refurbished']).optional(),
+            sourceType: z.enum(['NEW', 'USED', 'DISASSEMBLED']).optional(),
           }),
         },
       },
@@ -411,6 +518,7 @@ partsRouter.openapi(updatePartRoute, async (c) => {
   if (body.unitPrice !== undefined) updateData.unitPriceThb = String(body.unitPrice)
   if (body.stockQty !== undefined) updateData.stockQuantity = body.stockQty
   if (body.category !== undefined) updateData.category = body.category
+  if (body.sourceType !== undefined) updateData.sourceType = body.sourceType
 
   const [updated] = await db
     .update(partsInventory)
@@ -427,7 +535,7 @@ const deletePartRoute = createRoute({
   method: 'delete',
   path: '/:id/',
   tags: ['Parts'],
-  summary: 'Delete parts inventory item (CRIT-002 fix — was DELETE /inventory/:id)',
+  summary: 'Delete parts inventory item',
   security: [{ bearerAuth: [] }],
   request: { params: z.object({ id: z.string().uuid() }) },
   responses: {
@@ -451,12 +559,12 @@ partsRouter.openapi(deletePartRoute, async (c) => {
   return c.json({ success: true }, 200)
 })
 
-// ── POST /:id/stock-in/ — add stock ─────────────────────────────────────────
+// ── POST /:id/stock-in/ — add stock (existing, now logs to movements) ────────
 const stockInRoute = createRoute({
   method: 'post',
   path: '/:id/stock-in/',
   tags: ['Parts'],
-  summary: 'Stock in — increment part quantity (NEW, NOTE-SUB4)',
+  summary: 'Stock in — increment part quantity (NOTE-SUB4)',
   security: [{ bearerAuth: [] }],
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -497,32 +605,37 @@ partsRouter.openapi(stockInRoute, async (c) => {
       updatedAt: new Date(),
     })
     .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
-    .returning({ stockQuantity: partsInventory.stockQuantity })
+    .returning({ id: partsInventory.id })
 
   if (!updated) return c.json(err('Not found.'), 404)
 
-  // Scaffold movement record (no DB table yet — return stub)
-  const movement: z.infer<typeof StockMovementSchema> = {
-    id: crypto.randomUUID(),
-    partId: id,
-    type: 'STOCK_IN',
-    qty: body.qty,
-    reason: body.reason,
-    refId: body.refId ?? null,
-    note: body.note ?? null,
-    performedBy: user.userId,
-    performedAt: new Date().toISOString(),
-    balanceAfter: updated.stockQuantity,
-  }
-  return c.json(movement, 201)
+  // B5: log real movement to DB
+  await insertMovement({
+    inventoryItemId: id,
+    movementType: 'IN',
+    quantityDelta: body.qty,
+    referenceType: 'manual',
+    referenceId: body.refId ?? null,
+    note: body.note ?? body.reason,
+    createdBy: user.userId,
+  })
+
+  const [mv] = await db
+    .select()
+    .from(inventoryStockMovements)
+    .where(eq(inventoryStockMovements.inventoryItemId, id))
+    .orderBy(desc(inventoryStockMovements.createdAt))
+    .limit(1)
+
+  return c.json(mapMovement(mv), 201)
 })
 
-// ── POST /:id/stock-adjust/ — set absolute stock quantity ───────────────────
+// ── POST /:id/stock-adjust/ — set absolute stock quantity (existing) ─────────
 const stockAdjustRoute = createRoute({
   method: 'post',
   path: '/:id/stock-adjust/',
   tags: ['Parts'],
-  summary: 'Stock adjust — set absolute stock quantity (NEW, NOTE-SUB4)',
+  summary: 'Stock adjust — set absolute stock quantity (NOTE-SUB4)',
   security: [{ bearerAuth: [] }],
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -554,27 +667,300 @@ partsRouter.openapi(stockAdjustRoute, async (c) => {
   const { id } = c.req.valid('param')
   const body = c.req.valid('json')
 
-  const [updated] = await db
+  const [before] = await db
+    .select({ stockQuantity: partsInventory.stockQuantity })
+    .from(partsInventory)
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+
+  if (!before) return c.json(err('Not found.'), 404)
+
+  await db
     .update(partsInventory)
     .set({ stockQuantity: body.qty, updatedAt: new Date() })
     .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
-    .returning({ stockQuantity: partsInventory.stockQuantity })
 
-  if (!updated) return c.json(err('Not found.'), 404)
+  const delta = body.qty - before.stockQuantity
 
-  const movement: z.infer<typeof StockMovementSchema> = {
-    id: crypto.randomUUID(),
-    partId: id,
-    type: 'STOCK_ADJUSTMENT',
-    qty: body.qty,
-    reason: 'manual',
-    refId: null,
+  await insertMovement({
+    inventoryItemId: id,
+    movementType: 'ADJUST',
+    quantityDelta: delta,
+    referenceType: 'manual',
     note: body.note,
-    performedBy: user.userId,
-    performedAt: new Date().toISOString(),
-    balanceAfter: updated.stockQuantity,
+    createdBy: user.userId,
+  })
+
+  const [mv] = await db
+    .select()
+    .from(inventoryStockMovements)
+    .where(eq(inventoryStockMovements.inventoryItemId, id))
+    .orderBy(desc(inventoryStockMovements.createdAt))
+    .limit(1)
+
+  return c.json(mapMovement(mv), 201)
+})
+
+// ── POST /:id/reserve — B5: reserve stock for a repair job ───────────────────
+const reserveRoute = createRoute({
+  method: 'post',
+  path: '/:id/reserve',
+  tags: ['Parts'],
+  summary: 'B5: Reserve stock quantity for a repair job',
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            quantity: z.number().int().positive(),
+            repair_job_id: z.string().uuid(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Reserved — returns updated part',
+      content: { 'application/json': { schema: PartSchema } },
+    },
+    401: { description: 'Unauthorized' },
+    404: { description: 'Part not found' },
+    422: { description: 'Insufficient available stock' },
+  },
+})
+
+partsRouter.openapi(reserveRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+
+  const { id } = c.req.valid('param')
+  const body = c.req.valid('json')
+
+  // ตรวจสอบ available stock ก่อน reserve (security: ต้องเป็น owner)
+  const [current] = await db
+    .select()
+    .from(partsInventory)
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+
+  if (!current) return c.json(err('Not found.'), 404)
+
+  const available = current.stockQuantity - (current.reservedQuantity ?? 0)
+  if (body.quantity > available) {
+    return c.json(err(`Insufficient available stock. Available: ${available}, requested: ${body.quantity}`), 422)
   }
-  return c.json(movement, 201)
+
+  const [updated] = await db
+    .update(partsInventory)
+    .set({
+      reservedQuantity: sql`${partsInventory.reservedQuantity} + ${body.quantity}`,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+    .returning()
+
+  await insertMovement({
+    inventoryItemId: id,
+    movementType: 'RESERVE',
+    quantityDelta: -body.quantity,  // RESERVE = ลด available
+    referenceType: 'repair_job',
+    referenceId: body.repair_job_id,
+    createdBy: user.userId,
+  })
+
+  return c.json(mapPart(updated), 200)
+})
+
+// ── POST /:id/release — B5: release reserved stock ───────────────────────────
+const releaseRoute = createRoute({
+  method: 'post',
+  path: '/:id/release',
+  tags: ['Parts'],
+  summary: 'B5: Release previously reserved stock quantity',
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            quantity: z.number().int().positive(),
+            repair_job_id: z.string().uuid(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Released — returns updated part',
+      content: { 'application/json': { schema: PartSchema } },
+    },
+    401: { description: 'Unauthorized' },
+    404: { description: 'Part not found' },
+    422: { description: 'Cannot release more than reserved' },
+  },
+})
+
+partsRouter.openapi(releaseRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+
+  const { id } = c.req.valid('param')
+  const body = c.req.valid('json')
+
+  const [current] = await db
+    .select()
+    .from(partsInventory)
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+
+  if (!current) return c.json(err('Not found.'), 404)
+
+  const reserved = current.reservedQuantity ?? 0
+  if (body.quantity > reserved) {
+    return c.json(err(`Cannot release ${body.quantity} — only ${reserved} reserved.`), 422)
+  }
+
+  const [updated] = await db
+    .update(partsInventory)
+    .set({
+      reservedQuantity: sql`${partsInventory.reservedQuantity} - ${body.quantity}`,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+    .returning()
+
+  await insertMovement({
+    inventoryItemId: id,
+    movementType: 'RELEASE',
+    quantityDelta: body.quantity,  // RELEASE = เพิ่ม available กลับ
+    referenceType: 'repair_job',
+    referenceId: body.repair_job_id,
+    createdBy: user.userId,
+  })
+
+  return c.json(mapPart(updated), 200)
+})
+
+// ── GET /:id/movements — B5: per-item movement history ───────────────────────
+const itemMovementsRoute = createRoute({
+  method: 'get',
+  path: '/:id/movements',
+  tags: ['Parts'],
+  summary: 'B5: List stock movements for a specific inventory item',
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    query: z.object({
+      limit: z.string().optional(),  // default 50
+    }),
+  },
+  responses: {
+    200: {
+      description: 'Movements for this item (newest first)',
+      content: { 'application/json': { schema: z.array(StockMovementSchema) } },
+    },
+    401: { description: 'Unauthorized' },
+    404: { description: 'Part not found' },
+  },
+})
+
+partsRouter.openapi(itemMovementsRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+
+  const { id } = c.req.valid('param')
+  const { limit: limitStr } = c.req.valid('query')
+  const limit = Math.min(parseInt(limitStr ?? '50', 10) || 50, 200)
+
+  // ตรวจสอบว่า item เป็น owner ก่อน (security)
+  const [item] = await db
+    .select({ id: partsInventory.id })
+    .from(partsInventory)
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+
+  if (!item) return c.json(err('Not found.'), 404)
+
+  const rows = await db
+    .select()
+    .from(inventoryStockMovements)
+    .where(eq(inventoryStockMovements.inventoryItemId, id))
+    .orderBy(desc(inventoryStockMovements.createdAt))
+    .limit(limit)
+
+  return c.json(rows.map(mapMovement), 200)
+})
+
+// ── POST /:id/adjust — B5: delta-based stock adjust + log ────────────────────
+const adjustRoute = createRoute({
+  method: 'post',
+  path: '/:id/adjust',
+  tags: ['Parts'],
+  summary: 'B5: Adjust stock by delta (±quantity_delta) + log movement',
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            quantity_delta: z.number().int(),  // บวก = เพิ่ม, ลบ = ลด
+            note: z.string().min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Adjusted — returns updated part',
+      content: { 'application/json': { schema: PartSchema } },
+    },
+    401: { description: 'Unauthorized' },
+    404: { description: 'Part not found' },
+    422: { description: 'Adjustment would make stock negative' },
+  },
+})
+
+partsRouter.openapi(adjustRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
+
+  const { id } = c.req.valid('param')
+  const body = c.req.valid('json')
+
+  const [current] = await db
+    .select()
+    .from(partsInventory)
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+
+  if (!current) return c.json(err('Not found.'), 404)
+
+  const newQty = current.stockQuantity + body.quantity_delta
+  if (newQty < 0) {
+    return c.json(err(`Adjustment would result in negative stock (current: ${current.stockQuantity}, delta: ${body.quantity_delta})`), 422)
+  }
+
+  const [updated] = await db
+    .update(partsInventory)
+    .set({
+      stockQuantity: newQty,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(partsInventory.id, id), eq(partsInventory.ownerId, user.userId)))
+    .returning()
+
+  await insertMovement({
+    inventoryItemId: id,
+    movementType: 'ADJUST',
+    quantityDelta: body.quantity_delta,
+    referenceType: 'manual',
+    note: body.note,
+    createdBy: user.userId,
+  })
+
+  return c.json(mapPart(updated), 200)
 })
 
 // ── POST /order — create order + hold escrow (kept from original) ────────────
@@ -696,10 +1082,9 @@ partsRouter.openapi(refundOrderRoute, async (c) => {
   const [updated] = await db
     .update(partsOrders)
     .set({ status: 'refunded', updatedAt: new Date() })
-    .where(and(eq(partsOrders.id, id), eq(partsOrders.buyerId, user.userId))) // SECURITY-FIX: buyerId check (637fd4a)
+    .where(and(eq(partsOrders.id, id), eq(partsOrders.buyerId, user.userId)))  // SECURITY-FIX: buyerId check
     .returning({ id: partsOrders.id })
 
   if (!updated) return c.json(err('Order not found.'), 404)
   return c.json({ success: true, status: 'refunded' }, 200)
 })
-
