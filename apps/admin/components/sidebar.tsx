@@ -124,6 +124,7 @@ const navGroups: NavGroup[] = [
   {
     label: "ระบบ",
     items: [
+      { href: "/pricing",        label: "ราคารับซื้อ",     icon: "💲" },
       { href: "/reference",      label: "Reference Data",  icon: "📚" },
       { href: "/system/storage", label: "Storage",         icon: "💾" },
       { href: "/config",         label: "ตั้งค่าระบบ",      icon: "⚙️" },
