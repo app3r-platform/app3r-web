@@ -31,6 +31,7 @@ const navItems = [
   { href: "/maintain/jobs",    icon: "📋", label: "  งานของฉัน",    module: true, sub: true },
   { href: "/parts/dashboard",    icon: "🔩", label: "อะไหล่ (E)",       module: true },
   { href: "/parts",              icon: "📦", label: "  คลังอะไหล่",     module: true, sub: true },
+  { href: "/parts/inventory",    icon: "🗃️", label: "  จัดการคลัง B5",  module: true, sub: true },
   { href: "/parts/marketplace",  icon: "🛒", label: "  ตลาด B2B",        module: true, sub: true },
   { href: "/parts/my-listings",  icon: "📢", label: "  ขายของฉัน",       module: true, sub: true },
   { href: "/parts/my-orders",    icon: "🔄", label: "  คำสั่งซื้อ",       module: true, sub: true },
