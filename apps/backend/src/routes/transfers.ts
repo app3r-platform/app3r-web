@@ -17,7 +17,7 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
 import { db } from '../db/client'
-import { bankTransfers } from '../db/schema'
+import { bankTransfers, wallets } from '../db/schema'
 import { eq, and, or, desc } from 'drizzle-orm'
 import { verifyAccessToken } from '../lib/jwt'
 import { r2Adapter, generateR2Key } from '../lib/r2'
@@ -206,21 +206,25 @@ transfersRouter.openapi(verifyDepositRoute, async (c) => {
 })
 
 // ── POST /withdraw/ — ผู้ใช้ขอถอน ────────────────────────────────────────────
+// CMD-B2 D91: ขยาย role ครอบ WeeeU + WeeeR (Pre-check #1 — ไม่สร้าง endpoint ใหม่)
+// Validates: role guard + balance ≥ amountThb
+// KYC TODO: users table ไม่มี kyc_verified column ใน Phase D-1 — TODO Phase D-3
+// Bank account: รับ inline ในขณะนี้ — saved bank account table TODO Phase D-3
 const withdrawRoute = createRoute({
   method: 'post',
   path: '/withdraw/',
   tags: ['Transfers'],
-  summary: 'User requests withdrawal — pending admin confirmation',
+  summary: 'WeeeU/WeeeR requests withdrawal — validates balance, pending admin confirmation (CMD-B2 D91)',
   security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: {
         'application/json': {
           schema: z.object({
-            amountThb: z.number().positive(),
-            bankName: z.string().min(1),
-            accountNumber: z.string().min(10),
-            accountName: z.string().min(1),
+            amountThb: z.number().positive().int(),
+            bankName: z.string().min(1).max(100),
+            accountNumber: z.string().min(10).max(20),
+            accountName: z.string().min(1).max(200),
           }),
         },
       },
@@ -232,6 +236,8 @@ const withdrawRoute = createRoute({
       content: { 'application/json': { schema: TransferSchema } },
     },
     401: { description: 'Unauthorized' },
+    403: { description: 'Forbidden — only weeeu and weeer roles can withdraw' },
+    422: { description: 'Insufficient cash balance' },
   },
 })
 
@@ -239,10 +245,30 @@ transfersRouter.openapi(withdrawRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return c.json(err('Authentication credentials were not provided.'), 401)
 
+  // Role guard: weeeu + weeer only (CMD-B2 D91 Pre-check #1)
+  if (user.role !== 'weeeu' && user.role !== 'weeer') {
+    return c.json(err('Forbidden — only WeeeU and WeeeR can request withdrawals.'), 403)
+  }
+
   const body = c.req.valid('json')
 
-  // @needs-point-review: check user has sufficient balance before accepting request
-  // TODO D-3: debit point_ledger (hold) when withdraw is requested
+  // Balance check: query wallets table (pointType='cash') — CMD-B2 D91
+  const [wallet] = await db
+    .select({ balance: wallets.balance })
+    .from(wallets)
+    .where(and(eq(wallets.userId, user.userId), eq(wallets.pointType, 'cash')))
+    .limit(1)
+
+  const currentBalance = wallet?.balance ?? 0
+  if (currentBalance < body.amountThb) {
+    return c.json(
+      err(`Insufficient balance. Available: ${currentBalance} THB, Requested: ${body.amountThb} THB`),
+      422,
+    )
+  }
+
+  // TODO Phase D-3: KYC verified check (users table has no kyc_verified column yet)
+  // TODO Phase D-3: Bank account on file (no saved bank accounts table yet — inline input for now)
 
   const [transfer] = await db
     .insert(bankTransfers)

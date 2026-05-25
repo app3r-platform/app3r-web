@@ -1,10 +1,84 @@
 "use client";
 
+// ── WeeeR Resell Listing Detail — 2.2 Mockup ──────────────────────────────────
+// R2/R3: SUSPENDED banner + repost/cancel
+// R4: offer_selected → escrow 24h countdown (mock)
+// R5: ถอนการเลือก (mock)
+// R6: upload evidence (mock URL)
+// Q&A: placeholder
+
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import type { Listing, Offer } from "../../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, OFFER_STATUS_LABEL, OFFER_STATUS_COLOR, LISTING_TERMINAL } from "../../_lib/types";
+
+// ── Mock data (Mockup 2.2) ──────────────────────────────────────────────────
+const MOCK_LISTINGS: Record<string, Listing & { offers?: Offer[] }> = {
+  L001: {
+    id: "L001", sellerId: "S1", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "Samsung Q9 QLED 65\"", price: 18900, deliveryMethods: ["ส่ง Kerry"],
+    status: "receiving_offers", expiresAt: "2026-06-01", createdAt: "2026-05-20", updatedAt: "2026-05-20", offerCount: 2,
+    description: "สภาพ 95% มีกล่อง ใช้งาน 1 ปี ไม่มีรอยขีด",
+    warranty: { sourceWarranty: 6, additionalWarranty: 3 },
+    terms3: { shipping: "ผู้ขายรับผิดชอบ", usedWarranty: "30 วัน", liability: "ผู้ขายรับผิด" },
+    offers: [
+      { id: "O1", listingId: "L001", buyerId: "U1", buyerType: "WeeeU", offerPrice: 17500, deliveryMethod: "ส่ง Kerry", status: "pending", expiresAt: "2026-05-25", createdAt: "2026-05-21", buyerName: "สมชาย ใจดี", message: "ขอต่อราคาหน่อยครับ" },
+      { id: "O2", listingId: "L001", buyerId: "U2", buyerType: "WeeeU", offerPrice: 18000, deliveryMethod: "ส่ง Kerry", status: "pending", expiresAt: "2026-05-25", createdAt: "2026-05-22", buyerName: "สุดา รักชาติ" },
+    ],
+  },
+  L002: {
+    id: "L002", sellerId: "S1", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "Dyson V15 Detect", price: 8500, deliveryMethods: ["รับเอง"],
+    status: "offer_selected", expiresAt: "2026-06-01", createdAt: "2026-05-18", updatedAt: "2026-05-22", offerCount: 1,
+    terms3: { shipping: "ผู้ซื้อรับผิดชอบ", usedWarranty: "7 วัน", liability: "ไม่รับผิด" },
+    offers: [
+      { id: "O3", listingId: "L002", buyerId: "U3", buyerType: "WeeeR", offerPrice: 8500, deliveryMethod: "รับเอง", status: "selected", expiresAt: "2026-05-26", createdAt: "2026-05-22", buyerName: "ร้าน ElecPlus" },
+    ],
+  },
+  L003: {
+    id: "L003", sellerId: "S1", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "iPhone 14 Pro 256GB", price: 22000, deliveryMethods: ["ส่ง Kerry", "รับเอง"],
+    status: "suspended", expiresAt: "2026-06-01", createdAt: "2026-05-15", updatedAt: "2026-05-21",
+    suspendReason: "รูปภาพไม่ครบตามนโยบาย — ต้องการรูปด้านหน้า ด้านหลัง และกล่อง (อย่างน้อย 3 รูป)",
+    offers: [],
+  },
+  L004: {
+    id: "L004", sellerId: "S1", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "MacBook Air M2", price: 32000, deliveryMethods: ["ส่ง Kerry"],
+    status: "in_progress", expiresAt: "2026-06-10", createdAt: "2026-05-10", updatedAt: "2026-05-23",
+    offers: [],
+  },
+};
+
+// ── R4: Escrow 24h countdown (mock — เริ่มนับจากเวลาปัจจุบัน)
+function useEscrowCountdown() {
+  const deadline = useState(() => {
+    const d = new Date();
+    d.setHours(d.getHours() + 23, d.getMinutes() + 42); // mock 23h42m remaining
+    return d;
+  })[0];
+  const [msLeft, setMsLeft] = useState(() => deadline.getTime() - Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setMsLeft(deadline.getTime() - Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [deadline]);
+  return msLeft;
+}
+
+function EscrowCountdown() {
+  const msLeft = useEscrowCountdown();
+  if (msLeft <= 0) return <span className="text-xs text-red-600 font-medium">⏰ หมดเวลา — offer ถูกปลด</span>;
+  const h = Math.floor(msLeft / 3600000);
+  const m = Math.floor((msLeft % 3600000) / 60000);
+  const s = Math.floor((msLeft % 60000) / 1000);
+  const urgent = msLeft < 3600000;
+  return (
+    <span className={`text-xs font-medium ${urgent ? "text-red-600" : "text-purple-700"}`}>
+      ⏳ {h}:{String(m).padStart(2,"0")}:{String(s).padStart(2,"0")} เหลือ
+    </span>
+  );
+}
 
 export default function ResellListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -14,68 +88,142 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
+  // Mock state (R2/R3/R4/R5/R6)
+  const [mockCancelled, setMockCancelled] = useState(false);
+  const [r5Withdrawn, setR5Withdrawn] = useState(false);
+  const [showR5Confirm, setShowR5Confirm] = useState(false);
+  const [evidenceUrl, setEvidenceUrl] = useState("");
+  const [evidenceSubmitted, setEvidenceSubmitted] = useState(false);
+
   useEffect(() => {
+    const mock = MOCK_LISTINGS[id];
     Promise.all([
-      resellApi.listingsGet(id),
-      resellApi.listingOffers(id),
-    ])
-      .then(([l, o]) => { setListing(l); setOffers(o); })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+      resellApi.listingsGet(id).catch(() => mock ?? null),
+      resellApi.listingOffers(id).catch(() => mock?.offers ?? []),
+    ]).then(([l, o]) => {
+      setListing(l ?? mock ?? null);
+      setOffers(o ?? mock?.offers ?? []);
+    }).catch(() => {
+      if (mock) { setListing(mock); setOffers(mock.offers ?? []); }
+      else setError("ไม่พบประกาศ");
+    }).finally(() => setLoading(false));
   }, [id]);
 
   async function handleAccept(offerId: string) {
     setActionLoading(offerId);
     try {
-      const updated = await resellApi.acceptOffer(id, offerId);
+      const updated = await resellApi.acceptOffer(id, offerId).catch(() => ({
+        ...listing!, status: "offer_selected" as const,
+      }));
       setListing(updated);
-      setOffers(prev => prev.map(o => ({
-        ...o,
-        status: o.id === offerId ? "selected" : "rejected",
-      })));
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setActionLoading(null);
-    }
+      setOffers(prev => prev.map(o => ({ ...o, status: o.id === offerId ? "selected" : "rejected" })));
+    } catch { /**/ } finally { setActionLoading(null); }
   }
 
   async function handleReject(offerId: string) {
     setActionLoading(offerId);
     try {
-      await resellApi.rejectOffer(id, offerId);
+      await resellApi.rejectOffer(id, offerId).catch(() => null);
       setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setActionLoading(null);
-    }
+    } catch { /**/ } finally { setActionLoading(null); }
   }
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;
-  if (error && !listing) return <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-yellow-700 text-sm">⚠️ ระบบขายมือสองกำลังพัฒนา — {error}</div>;
+  if (error && !listing) return <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-yellow-700 text-sm">⚠️ {error}</div>;
   if (!listing) return null;
 
-  const isTerminal = LISTING_TERMINAL.includes(listing.status);
+  const effectiveStatus = mockCancelled ? "cancelled" : listing.status;
+  const isTerminal = LISTING_TERMINAL.includes(effectiveStatus);
   const pendingOffers = offers.filter(o => o.status === "pending");
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/resell/listings" className="text-gray-400 hover:text-gray-600">←</Link>
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-gray-900 truncate">{listing.applianceName ?? "ประกาศขาย"}</h1>
           <p className="text-xs text-gray-400">สร้าง {new Date(listing.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "long" })}</p>
         </div>
-        <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${LISTING_STATUS_COLOR[listing.status]}`}>
-          {LISTING_STATUS_LABEL[listing.status]}
+        <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${LISTING_STATUS_COLOR[effectiveStatus]}`}>
+          {LISTING_STATUS_LABEL[effectiveStatus]}
         </span>
       </div>
+
+      {/* R2/R3: SUSPENDED banner */}
+      {effectiveStatus === "suspended" && !mockCancelled && (
+        <div className="bg-red-50 border border-red-300 rounded-xl p-4">
+          <p className="text-sm font-bold text-red-700">🚫 ประกาศถูกระงับ (R2/R3 SUSPENDED)</p>
+          <p className="text-xs text-red-600 mt-1">{listing.suspendReason ?? "Admin ระงับ — กรุณาตรวจสอบ"}</p>
+          <div className="flex gap-2 mt-3">
+            <Link href={`/resell/listings/${id}/edit`}
+              className="flex-1 text-center text-xs bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2 rounded-lg transition-colors">
+              ✏️ แก้ไข + ประกาศใหม่ v2
+            </Link>
+            <button onClick={() => setMockCancelled(true)}
+              className="flex-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg transition-colors">
+              ❌ ยกเลิกประกาศ
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* R4: offer_selected → escrow 24h wait */}
+      {effectiveStatus === "offer_selected" && !r5Withdrawn && (
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-bold text-purple-800">⏳ รอผู้ซื้อเติม Gold (Escrow)</p>
+              <p className="text-xs text-purple-600 mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
+            </div>
+            <EscrowCountdown />
+          </div>
+          {/* R5: ถอนการเลือก */}
+          <button onClick={() => setShowR5Confirm(true)}
+            className="mt-3 w-full text-xs text-purple-700 border border-purple-300 hover:bg-purple-100 font-medium py-2 rounded-lg transition-colors">
+            ⏪ ถอนการเลือก (R5)
+          </button>
+        </div>
+      )}
+
+      {/* R5 withdrawn state */}
+      {r5Withdrawn && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+          <p className="text-sm text-amber-700 font-medium">✅ ถอนการเลือกแล้ว — ประกาศกลับสู่ receiving_offers</p>
+        </div>
+      )}
+
+      {/* R6: Evidence upload (in_progress) */}
+      {effectiveStatus === "in_progress" && !evidenceSubmitted && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
+          <p className="text-sm font-bold text-orange-800">📸 R6: แนบหลักฐานก่อนส่งสินค้า (บังคับ)</p>
+          <p className="text-xs text-orange-600 mt-0.5">ถ่ายรูป+คลิปสินค้าก่อนแพ็คและส่ง — หลักฐานป้องกันข้อพิพาท</p>
+          <div className="flex gap-2 mt-3">
+            <input type="url" value={evidenceUrl} onChange={e => setEvidenceUrl(e.target.value)}
+              placeholder="URL รูป/คลิป (mock)…"
+              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <button onClick={() => evidenceUrl && setEvidenceSubmitted(true)}
+              disabled={!evidenceUrl}
+              className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors disabled:opacity-50">
+              ส่ง
+            </button>
+          </div>
+        </div>
+      )}
+      {effectiveStatus === "in_progress" && evidenceSubmitted && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
+          <span>✅</span>
+          <p className="text-sm text-green-700 font-medium">ส่งหลักฐานแล้ว — กรุณาจัดส่งสินค้าตาม delivery method</p>
+        </div>
+      )}
 
       {/* Listing info */}
       <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3 text-sm">
         <div className="grid grid-cols-2 gap-3">
-          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-2xl font-bold text-green-700">{listing.price.toLocaleString()} pts</p></div>
+          <div>
+            <p className="text-xs text-gray-400">ราคา</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} pts</p>
+          </div>
           <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{listing.deliveryMethods.join(", ")}</p></div>
           {listing.warranty && (
             <div className="col-span-2">
@@ -89,6 +237,18 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
           <div><p className="text-xs text-gray-400">หมดอายุ</p><p className="font-medium">{new Date(listing.expiresAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" })}</p></div>
           <div><p className="text-xs text-gray-400">ข้อเสนอ</p><p className="font-bold text-amber-600">{offers.length} ข้อเสนอ</p></div>
         </div>
+
+        {/* Terms 3 แกน */}
+        {listing.terms3 && (
+          <div className="border-t border-gray-50 pt-3">
+            <p className="text-xs font-semibold text-gray-500 mb-2">📋 เงื่อนไข 3 แกน</p>
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="bg-gray-50 rounded-lg p-2"><p className="text-gray-400">ค่าส่ง</p><p className="font-medium text-gray-700">{listing.terms3.shipping}</p></div>
+              <div className="bg-gray-50 rounded-lg p-2"><p className="text-gray-400">ประกันมือสอง</p><p className="font-medium text-gray-700">{listing.terms3.usedWarranty}</p></div>
+              <div className="bg-gray-50 rounded-lg p-2"><p className="text-gray-400">ไม่ตรงปก</p><p className="font-medium text-gray-700">{listing.terms3.liability}</p></div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Offers */}
@@ -113,10 +273,10 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
                     {OFFER_STATUS_LABEL[o.status]}
                   </span>
                 </div>
-                {o.status === "pending" && !isTerminal && (
+                {o.status === "pending" && !isTerminal && !r5Withdrawn && (
                   <div className="flex gap-2 mt-3">
                     <button onClick={() => handleAccept(o.id)} disabled={!!actionLoading}
-                      className="flex-1 bg-green-700 hover:bg-green-800 text-white text-xs font-semibold py-2 rounded-lg transition-colors disabled:opacity-60">
+                      className="flex-1 bg-[#FF663A] hover:bg-[#D8491F] text-white text-xs font-semibold py-2 rounded-lg transition-colors disabled:opacity-60">
                       {actionLoading === o.id ? "…" : "✅ รับข้อเสนอ"}
                     </button>
                     <button onClick={() => handleReject(o.id)} disabled={!!actionLoading}
@@ -131,7 +291,36 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         )}
       </div>
 
+      {/* Q&A Placeholder (FLAG-3 · D82) */}
+      <div className="bg-white border border-gray-100 rounded-xl p-4">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">💬 Q&A (ไอเดีย 9 — D82)</p>
+        <div className="bg-gray-50 rounded-xl p-4 text-center">
+          <p className="text-sm text-gray-400">ฟีเจอร์ถาม-ตอบกำลังพัฒนา</p>
+          <p className="text-xs text-gray-300 mt-1">ผู้ซื้อสามารถถามผู้ขายได้โดยตรง (cross-module · Phase D)</p>
+        </div>
+      </div>
+
       {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
+      {/* R5 Confirm Modal */}
+      {showR5Confirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
+          <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
+            <h2 className="text-base font-bold text-gray-900">ยืนยันถอนการเลือก (R5)</h2>
+            <p className="text-sm text-gray-600">ถอนการเลือก — ประกาศจะกลับสู่ "รับข้อเสนอ" และผู้ซื้อรายนี้จะไม่ถูกเลือกอีก</p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowR5Confirm(false)}
+                className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50">
+                กลับ
+              </button>
+              <button onClick={() => { setR5Withdrawn(true); setShowR5Confirm(false); }}
+                className="flex-1 bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2.5 rounded-xl text-sm">
+                ยืนยันถอน
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -18,11 +18,11 @@ export function ServiceTypeStepperGuide({ serviceType, currentSubStage }: Props)
           const isCurrent = stage === currentSubStage;
 
           return (
-            <div key={stage} className={`flex items-center gap-2 text-xs px-2 py-1 rounded-lg ${isCurrent ? "bg-orange-900/30 border border-orange-800/40" : ""}`}>
-              <span className={`shrink-0 ${isDone ? "text-green-400" : isCurrent ? "text-orange-400" : "text-gray-600"}`}>
+            <div key={stage} className={`flex items-center gap-2 text-xs px-2 py-1 rounded-lg ${isCurrent ? "bg-weeet-primary/10 border border-weeet-dark/30" : ""}`}>
+              <span className={`shrink-0 ${isDone ? "text-green-400" : isCurrent ? "text-weeet-primary" : "text-gray-600"}`}>
                 {isDone ? "✓" : isCurrent ? "▶" : `${i + 1}.`}
               </span>
-              <span className={isDone ? "text-gray-500 line-through" : isCurrent ? "text-orange-200 font-medium" : "text-gray-400"}>
+              <span className={isDone ? "text-gray-500 line-through" : isCurrent ? "text-weeet-primary font-medium" : "text-gray-400"}>
                 {SUB_STAGE_LABELS[stage] ?? stage}
               </span>
             </div>

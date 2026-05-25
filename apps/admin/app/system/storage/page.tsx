@@ -145,23 +145,23 @@ export default function StoragePage() {
   const auditTotalPages = Math.ceil(auditTotal / 20);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-2xl font-bold">Storage Admin</h1>
-          <span className="text-xs text-gray-500 bg-gray-900 px-3 py-1 rounded-full border border-gray-800">
+          <span className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200">
             🔄 Auto-refresh 5 นาที
           </span>
         </div>
-        <p className="text-gray-400 text-sm mb-6">จัดการไฟล์ระบบ, PDPA Cleanup, และ Appliance Transfer (D20–D25)</p>
+        <p className="text-gray-500 text-sm mb-6">จัดการไฟล์ระบบ, PDPA Cleanup, และ Appliance Transfer (D20–D25)</p>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-1 mb-6 bg-gray-900 rounded-xl p-1 border border-gray-800">
+        <div className="flex flex-wrap gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200">
           {TABS.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === t.key ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                tab === t.key ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {t.label}
             </button>
@@ -182,8 +182,8 @@ export default function StoragePage() {
                   <BigCard label="Videos" value={summary.total_videos.toLocaleString()} />
                 </div>
 
-                <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-800">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200">
                     <h3 className="font-semibold">Breakdown by Entity Type (D20)</h3>
                   </div>
                   <table className="w-full text-sm">
@@ -195,12 +195,12 @@ export default function StoragePage() {
                         <th className="px-6 py-3 text-right">%</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800">
+                    <tbody className="divide-y divide-gray-200">
                       {summary.by_entity.map((row) => (
-                        <tr key={row.entity_type} className="hover:bg-gray-800/50">
+                        <tr key={row.entity_type} className="hover:bg-gray-100">
                           <td className="px-6 py-3 font-mono text-xs">{row.entity_type}</td>
-                          <td className="px-6 py-3 text-right text-gray-300">{row.files.toLocaleString()}</td>
-                          <td className="px-6 py-3 text-right text-gray-300">{fmtBytes(row.bytes)}</td>
+                          <td className="px-6 py-3 text-right text-gray-700">{row.files.toLocaleString()}</td>
+                          <td className="px-6 py-3 text-right text-gray-700">{fmtBytes(row.bytes)}</td>
                           <td className="px-6 py-3 text-right text-gray-500 text-xs">
                             {((row.bytes / summary.total_bytes) * 100).toFixed(1)}%
                           </td>
@@ -214,7 +214,7 @@ export default function StoragePage() {
 
             {/* Tab 2: Top Users */}
             {tab === "top-users" && (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-gray-500 text-left">
@@ -225,19 +225,19 @@ export default function StoragePage() {
                       <th className="px-6 py-3 text-right">Storage</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {topUsers.map((u, i) => (
-                      <tr key={u.user_id} className="hover:bg-gray-800/50">
+                      <tr key={u.user_id} className="hover:bg-gray-100">
                         <td className="px-6 py-3 text-gray-500 font-mono">#{i + 1}</td>
                         <td className="px-6 py-3">
                           <p className="font-medium">{u.user_name}</p>
                           <p className="text-xs text-gray-500">#{u.user_id}</p>
                         </td>
                         <td className="px-6 py-3">
-                          <span className="text-xs bg-gray-800 px-2 py-0.5 rounded">{u.role}</span>
+                          <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">{u.role}</span>
                         </td>
-                        <td className="px-6 py-3 text-right text-gray-300">{u.file_count.toLocaleString()}</td>
-                        <td className="px-6 py-3 text-right text-gray-300">{fmtBytes(u.total_bytes)}</td>
+                        <td className="px-6 py-3 text-right text-gray-700">{u.file_count.toLocaleString()}</td>
+                        <td className="px-6 py-3 text-right text-gray-700">{fmtBytes(u.total_bytes)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -247,8 +247,8 @@ export default function StoragePage() {
 
             {/* Tab 3: Appliance History (D22) */}
             {tab === "appliance" && (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-800">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
                   <h3 className="font-semibold">Appliance Ownership History (D22)</h3>
                   <p className="text-xs text-gray-500 mt-0.5">ประวัติการ Transfer ของ appliance ผ่าน Resell flow</p>
                 </div>
@@ -262,19 +262,19 @@ export default function StoragePage() {
                       <th className="px-6 py-3">Announcement</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {transfers.map((t) => (
-                      <tr key={t.id} className="hover:bg-gray-800/50">
-                        <td className="px-6 py-3 text-gray-400 text-xs whitespace-nowrap">
+                      <tr key={t.id} className="hover:bg-gray-100">
+                        <td className="px-6 py-3 text-gray-500 text-xs whitespace-nowrap">
                           {new Date(t.transferred_at).toLocaleString("th-TH")}
                         </td>
                         <td className="px-6 py-3 font-mono text-xs">{t.appliance_id}</td>
                         <td className="px-6 py-3 text-xs">
-                          <span className="text-gray-400">{t.from_user} ({t.from_role})</span>
+                          <span className="text-gray-500">{t.from_user} ({t.from_role})</span>
                           <span className="text-gray-600 mx-1.5">→</span>
                           <span className="text-white">{t.to_user} ({t.to_role})</span>
                         </td>
-                        <td className="px-6 py-3 text-right font-mono text-yellow-400 font-semibold">
+                        <td className="px-6 py-3 text-right font-mono text-yellow-700 font-semibold">
                           {t.price_points.toLocaleString()}
                         </td>
                         <td className="px-6 py-3 font-mono text-xs text-gray-500">{t.announcement_id}</td>
@@ -288,8 +288,8 @@ export default function StoragePage() {
             {/* Tab 4: PDPA Cleanup (D25) */}
             {tab === "pdpa" && (
               <div className="space-y-6">
-                <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-800">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200">
                     <h3 className="font-semibold">PDPA Retention Schedule (D25)</h3>
                   </div>
                   <table className="w-full text-sm">
@@ -301,25 +301,25 @@ export default function StoragePage() {
                         <th className="px-6 py-3">Last Cleanup</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800">
+                    <tbody className="divide-y divide-gray-200">
                       {cleanup.map((row) => (
-                        <tr key={row.file_type} className="hover:bg-gray-800/50">
+                        <tr key={row.file_type} className="hover:bg-gray-100">
                           <td className="px-6 py-3 font-medium">{row.file_type}</td>
                           <td className="px-6 py-3">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${
-                              row.retention === "ถาวร" ? "bg-gray-800 text-gray-400" :
-                              row.retention.includes("10") ? "bg-orange-900/40 text-orange-400" :
-                              "bg-red-900/30 text-red-400"
+                              row.retention === "ถาวร" ? "bg-gray-100 text-gray-500" :
+                              row.retention.includes("10") ? "bg-orange-900/40 text-orange-700" :
+                              "bg-red-900/30 text-red-600"
                             }`}>
                               {row.retention}
                             </span>
                           </td>
                           <td className={`px-6 py-3 text-right font-mono ${
-                            row.pending_count > 0 ? "text-red-400 font-bold" : "text-gray-500"
+                            row.pending_count > 0 ? "text-red-600 font-bold" : "text-gray-500"
                           }`}>
                             {row.pending_count > 0 ? row.pending_count.toLocaleString() : "—"}
                           </td>
-                          <td className="px-6 py-3 text-gray-400 text-xs">
+                          <td className="px-6 py-3 text-gray-500 text-xs">
                             {row.last_cleanup_at
                               ? new Date(row.last_cleanup_at).toLocaleString("th-TH")
                               : "—"}
@@ -331,14 +331,14 @@ export default function StoragePage() {
                 </div>
 
                 {/* Manual Cleanup */}
-                <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
                   <h3 className="font-semibold mb-2">🗑️ Manual Cleanup</h3>
-                  <p className="text-sm text-gray-400 mb-4">
+                  <p className="text-sm text-gray-500 mb-4">
                     รัน cleanup ทันที — ข้ามรอ cron 02:00 รายวัน (Super Admin only)
                   </p>
                   {isSuper ? (
                     <button onClick={runCleanup} disabled={runningCleanup}
-                      className="px-5 py-2.5 bg-red-700 hover:bg-red-600 disabled:bg-gray-700 disabled:text-gray-500 rounded-lg text-sm font-medium transition-colors">
+                      className="px-5 py-2.5 bg-red-700 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                       {runningCleanup ? "กำลัง Cleanup..." : "▶ Run Cleanup Now"}
                     </button>
                   ) : (
@@ -352,11 +352,11 @@ export default function StoragePage() {
             {tab === "audit" && (
               <div className="space-y-4">
                 {/* Filters */}
-                <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 flex flex-wrap gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap gap-3">
                   <div>
                     <label className="text-xs text-gray-500 mb-1 block">Role</label>
                     <select value={filterRole} onChange={(e) => { setFilterRole(e.target.value); setAuditPage(1); }}
-                      className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
                       <option value="">ทั้งหมด</option>
                       {["weeeu", "weeer", "weeet", "admin"].map((r) => (
                         <option key={r} value={r}>{r}</option>
@@ -366,7 +366,7 @@ export default function StoragePage() {
                   <div>
                     <label className="text-xs text-gray-500 mb-1 block">Entity Type</label>
                     <select value={filterEntity} onChange={(e) => { setFilterEntity(e.target.value); setAuditPage(1); }}
-                      className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
                       <option value="">ทั้งหมด</option>
                       {["profile", "kyc", "appliances", "jobs", "disputes", "ads", "scrap"].map((e) => (
                         <option key={e} value={e}>{e}</option>
@@ -376,7 +376,7 @@ export default function StoragePage() {
                   <div>
                     <label className="text-xs text-gray-500 mb-1 block">Visibility</label>
                     <select value={filterVis} onChange={(e) => { setFilterVis(e.target.value); setAuditPage(1); }}
-                      className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
                       <option value="">ทั้งหมด</option>
                       <option value="public">Public</option>
                       <option value="private">Private</option>
@@ -385,22 +385,22 @@ export default function StoragePage() {
                   </div>
                   {isSuper && (
                     <button
-                      className="self-end px-4 py-2 bg-red-900/50 hover:bg-red-900 border border-red-800 text-red-300 rounded-lg text-sm transition-colors">
+                      className="self-end px-4 py-2 bg-red-900/50 hover:bg-red-900 border border-red-800 text-red-700 rounded-lg text-sm transition-colors">
                       🗑️ Bulk Delete (Super Admin)
                     </button>
                   )}
                 </div>
 
-                <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-                  <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
                     <span>ทั้งหมด {auditTotal.toLocaleString()} ไฟล์</span>
                     {auditTotalPages > 1 && (
                       <div className="flex items-center gap-2">
                         <button onClick={() => setAuditPage((p) => Math.max(1, p - 1))} disabled={auditPage === 1}
-                          className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40">‹</button>
+                          className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40">‹</button>
                         <span>{auditPage} / {auditTotalPages}</span>
                         <button onClick={() => setAuditPage((p) => Math.min(auditTotalPages, p + 1))} disabled={auditPage === auditTotalPages}
-                          className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40">›</button>
+                          className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40">›</button>
                       </div>
                     )}
                   </div>
@@ -415,26 +415,26 @@ export default function StoragePage() {
                         <th className="px-6 py-3"></th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-800">
+                    <tbody className="divide-y divide-gray-200">
                       {auditFiles.map((f) => (
-                        <tr key={f.id} className="hover:bg-gray-800/50">
-                          <td className="px-6 py-3 font-mono text-xs text-gray-400 max-w-[200px] truncate">{f.file_path}</td>
+                        <tr key={f.id} className="hover:bg-gray-100">
+                          <td className="px-6 py-3 font-mono text-xs text-gray-500 max-w-[200px] truncate">{f.file_path}</td>
                           <td className="px-6 py-3 text-xs">{f.owner_name}</td>
                           <td className="px-6 py-3">
-                            <span className="text-xs bg-gray-800 px-2 py-0.5 rounded">{f.entity_type}</span>
+                            <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">{f.entity_type}</span>
                           </td>
-                          <td className="px-6 py-3 text-right text-xs text-gray-400">{fmtBytes(f.size_bytes)}</td>
+                          <td className="px-6 py-3 text-right text-xs text-gray-500">{fmtBytes(f.size_bytes)}</td>
                           <td className="px-6 py-3">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${
-                              f.visibility === "public" ? "bg-green-900/40 text-green-400" :
-                              f.visibility === "private" ? "bg-gray-800 text-gray-400" :
-                              "bg-yellow-900/40 text-yellow-400"
+                              f.visibility === "public" ? "bg-green-900/40 text-green-600" :
+                              f.visibility === "private" ? "bg-gray-100 text-gray-500" :
+                              "bg-yellow-900/40 text-yellow-700"
                             }`}>
                               {f.visibility}
                             </span>
                           </td>
                           <td className="px-6 py-3">
-                            <a href="#" className="text-xs text-blue-400 hover:text-blue-300">ดู</a>
+                            <a href="#" className="text-xs text-admin-primary hover:text-admin-dark">ดู</a>
                           </td>
                         </tr>
                       ))}
@@ -450,7 +450,7 @@ export default function StoragePage() {
         )}
 
         {toast && (
-          <div className="fixed bottom-6 right-6 bg-gray-800 border border-gray-700 rounded-xl px-5 py-3 text-sm shadow-xl z-50">
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl z-50">
             {toast}
           </div>
         )}
@@ -461,9 +461,9 @@ export default function StoragePage() {
 
 function BigCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className="text-xl font-bold text-white">{value}</p>
+      <p className="text-xl font-bold text-gray-900">{value}</p>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { partsApi } from "@/lib/api";
@@ -18,9 +18,9 @@ function MyOrdersChip({ router }: { router: ReturnType<typeof useRouter> }) {
     <button
       type="button"
       onClick={() => router.push("/parts/orders")}
-      className="w-full flex items-center justify-between bg-blue-900/30 border border-blue-700/40 rounded-xl px-4 py-2.5 text-sm"
+      className="w-full flex items-center justify-between bg-weeet-primary/10 border border-weeet-dark/40 rounded-xl px-4 py-2.5 text-sm"
     >
-      <span className="text-blue-300 font-medium">📦 ออเดอร์ของฉัน</span>
+      <span className="text-weeet-primary font-medium">📦 ออเดอร์ของฉัน</span>
       <span className="text-xs text-gray-500">
         {orderIds.length > 0 ? `${orderIds.length} รายการ` : "ดูทั้งหมด"} →
       </span>
@@ -89,7 +89,7 @@ export default function PartsPage() {
           placeholder="ค้นหาชื่อ / รหัสอะไหล่"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
         />
       </div>
 
@@ -124,7 +124,7 @@ export default function PartsPage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   selectedCategory === cat
-                    ? "bg-orange-600 text-white"
+                    ? "bg-weeet-primary text-white"
                     : "bg-gray-800 text-gray-400 border border-gray-700 hover:border-gray-500"
                 }`}
               >
@@ -140,7 +140,7 @@ export default function PartsPage() {
                 key={part.id}
                 type="button"
                 onClick={() => router.push(`/parts/${part.id}`)}
-                className="w-full text-left bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2 hover:border-orange-600/50 transition-colors"
+                className="w-full text-left bg-gray-800 border border-gray-700 rounded-xl p-4 space-y-2 hover:border-weeet-primary/50 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1">
@@ -164,7 +164,7 @@ export default function PartsPage() {
                         {part.stockQty} {part.unit}
                       </span>
                     </span>
-                    <span className="text-orange-400 font-medium">
+                    <span className="text-weeet-primary font-medium">
                       ฿{part.unitPrice.toLocaleString()}
                     </span>
                   </div>

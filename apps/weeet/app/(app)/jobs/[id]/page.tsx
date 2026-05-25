@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
@@ -37,17 +37,17 @@ const STATUS_COLOR: Record<RepairJobStatus, string> = {
   inspecting: "bg-blue-900/60 text-blue-300",
   awaiting_decision: "bg-amber-900/60 text-amber-300",
   awaiting_user: "bg-amber-900/60 text-amber-300",
-  in_progress: "bg-orange-900/60 text-orange-300",
+  in_progress: "bg-weeet-surface/60 text-weeet-primary",
   completed: "bg-green-900/60 text-green-300",
   awaiting_review: "bg-amber-900/60 text-amber-300",
   closed: "bg-green-900/60 text-green-300",
   cancelled: "bg-red-900/60 text-red-300",
-  converted_scrap: "bg-purple-900/60 text-purple-300",
+  converted_scrap: "bg-gray-700/40 text-gray-300",
   // Pickup states
   en_route_pickup: "bg-blue-900/60 text-blue-300",
   picked_up: "bg-blue-900/60 text-blue-300",
-  appliance_at_shop: "bg-indigo-900/60 text-indigo-300",
-  tested_ok: "bg-teal-900/60 text-teal-300",
+  appliance_at_shop: "bg-weeet-surface/60 text-weeet-primary",
+  tested_ok: "bg-green-900/60 text-green-300",
   en_route_delivery: "bg-blue-900/60 text-blue-300",
   delivered: "bg-green-900/60 text-green-300",
   // Parcel states
@@ -80,7 +80,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("depart")}
-          className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🚗 ออกเดินทาง
         </button>
@@ -100,7 +100,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("inspect")}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🔍 ส่งรายงานตรวจสอบ
         </button>
@@ -110,7 +110,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("diagnose")}
-          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🛠️ วินิจฉัย / เลือกสาขา
         </button>
@@ -144,7 +144,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("pickup/en-route")}
-          className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🚗 ออกเดินทางรับเครื่อง
         </button>
@@ -164,7 +164,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("pickup/receipt")}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           📋 ใบรับมอบเครื่อง (เซ็นชื่อ)
         </button>
@@ -174,7 +174,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("repair/in-progress")}
-          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🔧 บันทึกการซ่อม
         </button>
@@ -184,7 +184,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("delivery/en-route")}
-          className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🚗 ออกเดินทางส่งคืนเครื่อง
         </button>
@@ -208,7 +208,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("parcel/in-progress")}
-          className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           🔧 บันทึกการซ่อม (Parcel)
         </button>
@@ -218,7 +218,7 @@ function ActionButton({
       return (
         <button
           onClick={() => go("parcel/tested")}
-          className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
         >
           ✅ บันทึกผลทดสอบ + ส่งกลับ WeeeR
         </button>
@@ -265,7 +265,7 @@ export default function JobDetailPage({
         </p>
         <button
           onClick={() => router.back()}
-          className="text-orange-400 underline text-sm"
+          className="text-weeet-primary underline text-sm"
         >
           ← กลับ
         </button>
@@ -318,9 +318,9 @@ export default function JobDetailPage({
       <div className="px-4 pt-4 space-y-4">
         {/* Service type badge */}
         {job.service_type === "pickup" && (
-          <div className="bg-indigo-950/50 border border-indigo-800/60 rounded-xl px-4 py-2 flex items-center gap-2">
-            <span className="text-indigo-300 text-sm">🚛</span>
-            <span className="text-indigo-300 text-sm font-medium">งาน Pickup — รับ-ส่งซ่อม</span>
+          <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl px-4 py-2 flex items-center gap-2">
+            <span className="text-weeet-primary text-sm">🚛</span>
+            <span className="text-weeet-primary text-sm font-medium">งาน Pickup — รับ-ส่งซ่อม</span>
           </div>
         )}
 
@@ -329,7 +329,7 @@ export default function JobDetailPage({
           <div className="bg-gray-800/60 border border-gray-700/60 rounded-xl px-4 py-2.5 flex items-center gap-2">
             <span className="text-gray-400 text-xs shrink-0">แหล่งที่มาของเครื่อง:</span>
             {job.source.type === "purchased_scrap" ? (
-              <span className="bg-orange-900/40 border border-orange-700 text-orange-300 text-xs px-2 py-0.5 rounded">
+              <span className="bg-weeet-surface/40 border border-weeet-dark text-weeet-primary text-xs px-2 py-0.5 rounded">
                 ซื้อจากซาก{job.source.refId ? ` (${job.source.refId})` : ""}
               </span>
             ) : (
@@ -352,7 +352,7 @@ export default function JobDetailPage({
                 <span className="text-gray-400 w-20 shrink-0">โทร</span>
                 <a
                   href={`tel:${job.customer_phone}`}
-                  className="text-orange-400 hover:text-orange-300"
+                  className="text-weeet-primary hover:text-weeet-dark"
                 >
                   {job.customer_phone}
                 </a>

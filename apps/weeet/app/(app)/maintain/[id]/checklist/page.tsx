@@ -40,6 +40,12 @@ export default function MaintainChecklistPage({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // M9 — WeeeU ยุติงานระหว่างล้าง → หยุดงาน + รายงาน WeeeR (delta ขั้น 2.1)
+  const [showTerminateModal, setShowTerminateModal] = useState(false);
+  const [terminateNotes, setTerminateNotes] = useState("");
+  const [terminateSubmitting, setTerminateSubmitting] = useState(false);
+  const [terminateError, setTerminateError] = useState<string | null>(null);
+
   // Load parts when modal opens (lazy)
   useEffect(() => {
     if (!showPartModal || partsList.length > 0) return;
@@ -101,6 +107,23 @@ export default function MaintainChecklistPage({
   const removePart = (i: number) =>
     setPartsUsed((prev) => prev.filter((_, idx) => idx !== i));
 
+  // M9 — รับสัญญาณยุติจาก WeeeU → หยุดงาน + รายงาน WeeeR
+  const handleTerminate = async () => {
+    setTerminateSubmitting(true);
+    setTerminateError(null);
+    try {
+      // TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/terminate/
+      // const fd = new FormData();
+      // if (terminateNotes.trim()) fd.append("notes", terminateNotes.trim());
+      // await maintainApi.terminate(id, fd);
+      await new Promise((r) => setTimeout(r, 1000)); // mock — remove after backend ready
+      router.replace(`/maintain/${id}`);
+    } catch (e) {
+      setTerminateError((e as Error).message);
+      setTerminateSubmitting(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
     setSubmitting(true);
@@ -129,7 +152,7 @@ export default function MaintainChecklistPage({
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">M3 — ตรวจสภาพ + ล้างเครื่อง</h1>
+          <h1 className="font-bold text-white">M4 — ล้างเครื่อง</h1>
           <p className="text-xs text-gray-400">ทำครบ checklist + ถ่ายรูประหว่างล้าง</p>
         </div>
       </div>
@@ -146,7 +169,7 @@ export default function MaintainChecklistPage({
               onClick={() => toggleItem(i)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-colors ${
                 checked[i]
-                  ? "bg-teal-900/40 border-teal-700 text-teal-200"
+                  ? "bg-weeet-primary/10 border-weeet-dark/40 text-weeet-primary"
                   : "bg-gray-800 border-gray-700 text-gray-300"
               }`}
             >
@@ -192,7 +215,7 @@ export default function MaintainChecklistPage({
             {photos.length < MAX_PHOTOS && (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-teal-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-teal-400 transition-colors"
+                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-weeet-primary rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-weeet-primary transition-colors"
               >
                 <span className="text-2xl">📷</span>
                 <span className="text-xs">เพิ่มรูป</span>
@@ -213,7 +236,7 @@ export default function MaintainChecklistPage({
             <h2 className="text-sm font-semibold text-white">🔩 อะไหล่/น้ำยาที่ใช้</h2>
             <button
               onClick={() => setShowPartModal(true)}
-              className="text-xs text-teal-400 hover:text-teal-300 border border-teal-800 rounded-lg px-2 py-1"
+              className="text-xs text-weeet-primary hover:text-weeet-dark border border-weeet-dark/50 rounded-lg px-2 py-1"
             >
               + เลือกอะไหล่
             </button>
@@ -227,7 +250,7 @@ export default function MaintainChecklistPage({
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-white truncate">{p.name}</p>
                     {p.unitPrice != null && (
-                      <p className="text-xs text-teal-400">฿{p.unitPrice.toLocaleString()}/หน่วย</p>
+                      <p className="text-xs text-weeet-primary">฿{p.unitPrice.toLocaleString()}/หน่วย</p>
                     )}
                   </div>
                   <button
@@ -254,7 +277,7 @@ export default function MaintainChecklistPage({
             onChange={(e) => setNotes(e.target.value)}
             placeholder="สรุปงานที่ทำ สภาพเครื่องหลังล้าง..."
             rows={3}
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 resize-none"
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
           />
         </div>
 
@@ -265,7 +288,7 @@ export default function MaintainChecklistPage({
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="w-full bg-teal-600 hover:bg-teal-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><span className="animate-spin">⏳</span> กำลังส่ง...</>
@@ -273,7 +296,69 @@ export default function MaintainChecklistPage({
             "🧹 ยืนยันล้างเครื่องเสร็จ"
           )}
         </button>
+
+        {/* M9 — WeeeU ยุติงานระหว่างล้าง */}
+        <div className="border-t border-gray-800 pt-4 mt-2">
+          <p className="text-xs text-gray-600 mb-2 text-center">หากได้รับสัญญาณยุติจาก WeeeU</p>
+          <button
+            onClick={() => setShowTerminateModal(true)}
+            disabled={submitting}
+            className="w-full bg-red-950/30 hover:bg-red-950/50 border border-red-900/50 text-red-400 font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+          >
+            🛑 WeeeU ยุติงาน — หยุดและรายงาน (M9)
+          </button>
+        </div>
       </div>
+
+      {/* M9 — Terminate confirm modal */}
+      {showTerminateModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-end">
+          <div className="w-full bg-gray-900 border-t border-gray-700 rounded-t-2xl p-5 space-y-4">
+            <div>
+              <h3 className="font-bold text-white text-base">🛑 WeeeU ยุติงานระหว่างล้าง?</h3>
+              <p className="text-xs text-gray-400 mt-1">M9: งานล้างจะหยุด — WeeeR จะได้รับแจ้งและประสาน settle ตาม offer</p>
+            </div>
+            <div className="bg-red-950/30 border border-red-900/40 rounded-xl p-3 space-y-1 text-xs text-red-400">
+              <p>• งานล้างจะถูกหยุดทันที</p>
+              <p>• WeeeR รับทราบ + ประสาน settle (ตาม offer)</p>
+              <p>• ถ้าไม่ตกลง → Admin Dispute (M8)</p>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-400">บันทึกเพิ่มเติม <span className="text-gray-600">(ไม่บังคับ)</span></label>
+              <textarea
+                value={terminateNotes}
+                onChange={(e) => setTerminateNotes(e.target.value)}
+                placeholder="สถานะงาน ณ เวลายุติ เช่น ล้างเสร็จ 60%..."
+                rows={2}
+                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-600 resize-none"
+              />
+            </div>
+            {terminateError && (
+              <p className="text-red-400 text-xs bg-red-950/40 border border-red-800 rounded-lg px-3 py-2">{terminateError}</p>
+            )}
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowTerminateModal(false); setTerminateError(null); }}
+                disabled={terminateSubmitting}
+                className="flex-1 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-gray-300 font-medium py-3 rounded-xl transition-colors"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleTerminate}
+                disabled={terminateSubmitting}
+                className="flex-1 bg-red-700 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-1"
+              >
+                {terminateSubmitting ? (
+                  <><span className="animate-spin">⏳</span> กำลังส่ง...</>
+                ) : (
+                  "🛑 ยืนยันหยุดงาน"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Parts modal — real API */}
       {showPartModal && (
@@ -309,13 +394,13 @@ export default function MaintainChecklistPage({
                 key={part.id}
                 onClick={() => addPart(part)}
                 disabled={part.stockQty === 0}
-                className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 hover:border-teal-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl px-4 py-3 text-left transition-colors"
+                className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 hover:border-weeet-primary disabled:opacity-50 disabled:cursor-not-allowed rounded-xl px-4 py-3 text-left transition-colors"
               >
                 <div>
                   <p className="text-sm text-white">{part.name}</p>
                   <p className="text-xs text-gray-400">{part.sku} • {part.unit} • คงเหลือ {part.stockQty}</p>
                 </div>
-                <span className="text-xs text-teal-400 font-medium">฿{part.unitPrice.toLocaleString()}</span>
+                <span className="text-xs text-weeet-primary font-medium">฿{part.unitPrice.toLocaleString()}</span>
               </button>
             ))}
           </div>

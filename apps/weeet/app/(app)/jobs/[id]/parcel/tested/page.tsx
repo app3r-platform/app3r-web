@@ -68,9 +68,9 @@ export default function ParcelTestedPage({
       </div>
 
       {/* Parcel badge */}
-      <div className="bg-teal-950/50 border border-teal-800/60 rounded-xl px-4 py-2 flex items-center gap-2">
-        <span className="text-teal-300 text-sm">📦</span>
-        <span className="text-teal-300 text-sm font-medium">
+      <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl px-4 py-2 flex items-center gap-2">
+        <span className="text-weeet-primary text-sm">📦</span>
+        <span className="text-weeet-primary text-sm font-medium">
           ซ่อมเสร็จ — ส่งกลับ WeeeR เพื่อจัดส่งคืนลูกค้า
         </span>
       </div>
@@ -85,7 +85,7 @@ export default function ParcelTestedPage({
           placeholder="เช่น ทดสอบเปิด-ปิด 5 ครั้ง ผ่าน, ฟังก์ชันครบ, ไม่มีปัญหา..."
           value={testResult}
           onChange={(e) => setTestResult(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 
@@ -99,7 +99,7 @@ export default function ParcelTestedPage({
           placeholder="เช่น ระวังบรรจุภัณฑ์, แนบใบรับประกัน, คำแนะนำพิเศษ..."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 
@@ -167,7 +167,7 @@ export default function ParcelTestedPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !testResult.trim()}
-        className="w-full bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "✅ ยืนยันทดสอบผ่าน + ส่งกลับ WeeeR"}
       </button>

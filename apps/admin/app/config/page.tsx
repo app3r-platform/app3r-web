@@ -114,12 +114,12 @@ export default function ConfigPage() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
 
       <main className="flex-1 p-8 max-w-4xl">
         <h1 className="text-2xl font-bold mb-1">ตั้งค่าระบบ</h1>
-        <p className="text-gray-400 text-sm mb-8">
+        <p className="text-gray-500 text-sm mb-8">
           แก้ไขค่าธรรมเนียม · ระยะเวลา · และพารามิเตอร์ต่างๆ ของ App3R
         </p>
 
@@ -138,7 +138,7 @@ export default function ConfigPage() {
                 </div>
 
                 {/* Config Rows */}
-                <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   {group.keys.map((key, idx) => {
                     const meta = CONFIG_META[key];
                     const dirty = isDirty(key);
@@ -147,7 +147,7 @@ export default function ConfigPage() {
                       <div
                         key={key}
                         className={`flex items-center gap-4 px-5 py-4 ${
-                          idx !== 0 ? "border-t border-gray-800" : ""
+                          idx !== 0 ? "border-t border-gray-200" : ""
                         } ${dirty ? "bg-blue-950/20" : ""} transition-colors`}
                       >
                         {/* Label + Description */}
@@ -170,8 +170,8 @@ export default function ConfigPage() {
                                 if (e.key === "Enter") handleSave(key);
                                 if (e.key === "Escape") handleCancel(key);
                               }}
-                              className={`w-28 bg-gray-800 border text-white text-sm text-right rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                                dirty ? "border-blue-600" : "border-gray-700"
+                              className={`w-28 bg-white border text-gray-900 text-sm text-right rounded-lg px-3 py-2 focus:outline-none focus:outline-none focus:border-admin-primary transition-colors ${
+                                dirty ? "border-blue-600" : "border-gray-300"
                               }`}
                             />
                             {meta?.unit && (
@@ -188,14 +188,14 @@ export default function ConfigPage() {
                                 <button
                                   onClick={() => handleSave(key)}
                                   disabled={isSaving}
-                                  className="flex-1 px-2.5 py-1.5 text-xs bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                                  className="flex-1 px-2.5 py-1.5 text-xs bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
                                 >
                                   {isSaving ? "..." : "บันทึก"}
                                 </button>
                                 <button
                                   onClick={() => handleCancel(key)}
                                   disabled={isSaving}
-                                  className="px-2 py-1.5 text-xs text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 rounded-lg transition-colors"
+                                  className="px-2 py-1.5 text-xs text-gray-500 hover:text-gray-900 border border-gray-300 hover:border-gray-500 rounded-lg transition-colors"
                                 >
                                   ✕
                                 </button>
@@ -216,7 +216,7 @@ export default function ConfigPage() {
 
             {/* Hint */}
             <p className="text-xs text-gray-600 pb-4">
-              💡 แก้ไขตัวเลข แล้วกด <kbd className="bg-gray-800 px-1.5 py-0.5 rounded text-gray-400">บันทึก</kbd> หรือกด <kbd className="bg-gray-800 px-1.5 py-0.5 rounded text-gray-400">Enter</kbd> — กด <kbd className="bg-gray-800 px-1.5 py-0.5 rounded text-gray-400">Esc</kbd> เพื่อยกเลิก
+              💡 แก้ไขตัวเลข แล้วกด <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">บันทึก</kbd> หรือกด <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">Enter</kbd> — กด <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">Esc</kbd> เพื่อยกเลิก
             </p>
           </div>
         )}
@@ -226,7 +226,7 @@ export default function ConfigPage() {
       {toast && (
         <div
           className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl shadow-xl text-sm font-medium transition-all ${
-            toast.type === "ok" ? "bg-green-700 text-white" : "bg-red-700 text-white"
+            toast.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
           }`}
         >
           {toast.msg}

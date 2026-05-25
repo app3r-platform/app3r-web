@@ -59,7 +59,7 @@ function AuditDetailDrawer<T extends { id: string }>({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        <div className="px-6 py-4 border-b border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200">
           <SheetTitle className="text-lg font-semibold">
             รายละเอียด{TITLES.audit}
           </SheetTitle>
@@ -70,11 +70,11 @@ function AuditDetailDrawer<T extends { id: string }>({
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <AuditDetailView entry={item as AuditRecord | null} />
         </div>
-        <div className="px-6 py-4 border-t border-gray-800 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="px-4 py-2 text-sm rounded border border-gray-700 text-gray-300 hover:bg-gray-800"
+            className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
           >
             ปิด
           </button>
@@ -136,7 +136,7 @@ function FormDrawer<T extends { id: string }>({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        <div className="px-6 py-4 border-b border-gray-800">
+        <div className="px-6 py-4 border-b border-gray-200">
           <SheetTitle className="text-lg font-semibold">{headerLabel}</SheetTitle>
           <SheetDescription className="text-xs text-gray-500">
             {item ? item.id : 'รายการใหม่'}
@@ -162,13 +162,13 @@ function FormDrawer<T extends { id: string }>({
           )}
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-800 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
           {mode === 'view' && (
             <>
               <button
                 type="button"
                 onClick={() => onModeChange('edit')}
-                className="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-500"
+                className="px-4 py-2 text-sm rounded bg-admin-surface text-admin-primary hover:bg-blue-500"
               >
                 แก้ไข
               </button>
@@ -184,7 +184,7 @@ function FormDrawer<T extends { id: string }>({
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="px-4 py-2 text-sm rounded border border-gray-700 text-gray-300 hover:bg-gray-800"
+                className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 ปิด
               </button>
@@ -195,7 +195,7 @@ function FormDrawer<T extends { id: string }>({
               <button
                 type="button"
                 onClick={() => (mode === 'create' ? onOpenChange(false) : onModeChange('view'))}
-                className="px-4 py-2 text-sm rounded border border-gray-700 text-gray-300 hover:bg-gray-800"
+                className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 ยกเลิก
               </button>
@@ -203,7 +203,7 @@ function FormDrawer<T extends { id: string }>({
                 type="submit"
                 form="admin-drawer-form"
                 disabled={isSubmitting}
-                className="px-4 py-2 text-sm rounded bg-green-600 text-white hover:bg-green-500 disabled:opacity-50"
+                className="px-4 py-2 text-sm rounded bg-brand-success hover:bg-brand-success/90 text-white disabled:opacity-50"
               >
                 {mode === 'create' ? 'สร้าง' : 'บันทึก'}
               </button>

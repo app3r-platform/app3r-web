@@ -66,7 +66,7 @@ export default function MaintainCompletePage({ params }: { params: Promise<{ id:
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">M4 — เสร็จงาน</h1>
+          <h1 className="font-bold text-white">M5 — เสร็จงาน</h1>
           <p className="text-xs text-gray-400">ถ่ายรูปหลังล้าง + รับลายเซ็นลูกค้า</p>
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function MaintainCompletePage({ params }: { params: Promise<{ id:
             {photos.length < MAX_PHOTOS && (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-teal-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-teal-400 transition-colors"
+                className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-weeet-primary rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-weeet-primary transition-colors"
               >
                 <span className="text-2xl">📷</span>
                 <span className="text-xs">เพิ่มรูป</span>
@@ -138,7 +138,7 @@ export default function MaintainCompletePage({ params }: { params: Promise<{ id:
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="w-full bg-teal-600 hover:bg-teal-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><span className="animate-spin">⏳</span> กำลังส่ง...</>

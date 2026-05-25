@@ -100,7 +100,7 @@ export default function ArrivePage({ params }: { params: Promise<{ id: string }>
           {photos.length < MAX_PHOTOS && (
             <button
               onClick={() => fileRef.current?.click()}
-              className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-orange-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-orange-400 transition-colors"
+              className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-weeet-primary rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-weeet-primary transition-colors"
             >
               <span className="text-2xl">📷</span>
               <span className="text-xs">เพิ่มรูป</span>

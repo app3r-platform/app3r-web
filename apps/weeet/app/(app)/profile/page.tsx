@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -88,7 +88,6 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
-    if (!form.name?.trim()) return;
     setSaving(true);
     await new Promise((r) => setTimeout(r, 700));
     updateTechnician(form);
@@ -113,7 +112,7 @@ export default function ProfilePage() {
         {!editing ? (
           <button
             onClick={() => { setEditing(true); setSaved(false); }}
-            className="text-sm text-orange-400 hover:text-orange-300 font-medium flex items-center gap-1"
+            className="text-sm text-weeet-primary hover:text-weeet-dark font-medium flex items-center gap-1"
           >
             ✏️ แก้ไข
           </button>
@@ -145,25 +144,53 @@ export default function ProfilePage() {
 
       {/* Avatar + name + shop */}
       <div className="bg-gray-800 border border-gray-700 rounded-xl p-5 flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-orange-600 flex items-center justify-center text-3xl font-bold flex-shrink-0">
+        <div className="w-16 h-16 rounded-full bg-weeet-primary flex items-center justify-center text-3xl font-bold flex-shrink-0">
           {(form.name ?? tech.name)?.[0] ?? "ช"}
         </div>
         <div className="flex-1 min-w-0">
-          {editing ? (
-            <input
-              type="text"
-              value={form.name ?? ""}
-              onChange={(e) => set("name", e.target.value)}
-              placeholder="ชื่อ-นามสกุล"
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-orange-500"
-            />
-          ) : (
-            <h2 className="font-bold text-white text-lg truncate">{tech.name}</h2>
-          )}
+          <h2 className="font-bold text-white text-lg truncate">{tech.name}</h2>
           <p className="text-gray-400 text-sm mt-0.5">{tech.shopName}</p>
           <p className="text-xs text-gray-500">{tech.phone}</p>
         </div>
       </div>
+
+      {/* Shop affiliation — read-only, shop/admin controlled */}
+      <Section title="สังกัดร้าน">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <span className="text-lg flex-shrink-0">🏪</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500">ร้านที่สังกัด</p>
+            <p className="text-sm text-white">{tech.shopName || "—"}</p>
+          </div>
+          <span className="text-xs text-gray-600">ร้านคุม</span>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <span className="text-lg flex-shrink-0">👤</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500">ชื่อ-สกุลในระบบ</p>
+            <p className="text-sm text-white">{tech.name}</p>
+          </div>
+          <span className="text-xs text-gray-600">ร้านคุม</span>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <span className="text-lg flex-shrink-0">{auth.accountType === "rented" ? "🔑" : "🆓"}</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500">โหมดบัญชีช่าง</p>
+            {auth.accountType === "rented" ? (
+              <p className="text-sm text-white">
+                Mode 2 — เช่ารายปี{" "}
+                <span className="text-amber-400 text-xs">(5,000 Gold / ปี)</span>
+              </p>
+            ) : (
+              <p className="text-sm text-white">
+                Mode 1 — ฟรี{" "}
+                <span className="text-green-400 text-xs">(1 ตัว/ร้าน)</span>
+              </p>
+            )}
+          </div>
+          <span className="text-xs text-gray-600">Admin คุม</span>
+        </div>
+      </Section>
 
       {/* Basic info */}
       <Section title="ข้อมูลส่วนตัว">
@@ -212,7 +239,7 @@ export default function ProfilePage() {
                 placeholder="กรอกรหัสไปรษณีย์ (5 หลัก)"
                 maxLength={5}
                 inputMode="numeric"
-                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-weeet-primary"
               />
               {form.postalCode && postalCodeMap[form.postalCode ?? ""] && (
                 <span className="text-xs text-green-400 self-center">✅ พบที่อยู่</span>
@@ -237,7 +264,7 @@ export default function ProfilePage() {
                   type="text"
                   value={form[field] ?? ""}
                   onChange={(e) => set(field, e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-weeet-primary"
                 />
               ) : (
                 <p className="text-xs text-white">{(tech as unknown as Record<string, unknown>)[field] as string || "—"}</p>
@@ -259,7 +286,7 @@ export default function ProfilePage() {
                   onClick={() => set("educationLevel", level)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                     form.educationLevel === level
-                      ? "bg-orange-600 border-orange-500 text-white"
+                      ? "bg-weeet-primary border-weeet-primary text-white"
                       : "bg-gray-700 border-gray-600 text-gray-300 hover:border-gray-400"
                   }`}
                 >
@@ -292,7 +319,7 @@ export default function ProfilePage() {
                       onClick={() => toggleSpecialty(s)}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                         selected
-                          ? "bg-orange-600 border-orange-500 text-white"
+                          ? "bg-weeet-primary border-weeet-primary text-white"
                           : "bg-gray-700 border-gray-600 text-gray-300 hover:border-gray-400"
                       }`}
                     >
@@ -308,7 +335,7 @@ export default function ProfilePage() {
                 tech.specialties.map((s) => (
                   <span
                     key={s}
-                    className="text-xs bg-orange-900/50 text-orange-300 border border-orange-800 px-2 py-0.5 rounded-full"
+                    className="text-xs bg-weeet-surface/50 text-weeet-primary border border-weeet-dark/50 px-2 py-0.5 rounded-full"
                   >
                     {s}
                   </span>
@@ -333,7 +360,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={() => certInputRef.current?.click()}
                 disabled={(form.certificates ?? []).length >= MAX_CERT_FILES}
-                className="text-xs text-orange-400 hover:text-orange-300 disabled:text-gray-500 font-medium flex items-center gap-1"
+                className="text-xs text-weeet-primary hover:text-weeet-dark disabled:text-gray-500 font-medium flex items-center gap-1"
               >
                 + อัปโหลด
               </button>
@@ -380,14 +407,14 @@ export default function ProfilePage() {
             <div
               className={`border-2 border-dashed rounded-xl p-5 text-center ${
                 editing
-                  ? "border-gray-600 hover:border-orange-600 cursor-pointer"
+                  ? "border-gray-600 hover:border-weeet-primary cursor-pointer"
                   : "border-gray-700"
               }`}
               onClick={editing ? () => certInputRef.current?.click() : undefined}
             >
               <p className="text-2xl mb-1">📁</p>
               <p className="text-xs text-gray-400">ยังไม่มีเอกสาร</p>
-              {editing && <p className="text-xs text-orange-400 mt-0.5">แตะเพื่ออัปโหลด</p>}
+              {editing && <p className="text-xs text-weeet-primary mt-0.5">แตะเพื่ออัปโหลด</p>}
             </div>
           )}
         </div>
@@ -416,8 +443,8 @@ export default function ProfilePage() {
       {editing && (
         <button
           onClick={handleSave}
-          disabled={saving || !form.name?.trim()}
-          className="w-full bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+          disabled={saving}
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {saving ? (
             <><span className="animate-spin">⏳</span> กำลังบันทึก...</>
@@ -486,7 +513,7 @@ function Field({ label, icon, value, onChange, editing, readOnly, type = "text",
             value={value}
             onChange={(e) => onChange?.(e.target.value)}
             placeholder={placeholder}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-2 py-1 text-white text-sm mt-0.5 focus:outline-none focus:border-orange-500"
+            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-2 py-1 text-white text-sm mt-0.5 focus:outline-none focus:border-weeet-primary"
           />
         ) : (
           <p className="text-sm text-white">{value || "—"}</p>

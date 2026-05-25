@@ -11,13 +11,13 @@ interface Props {
 
 export function ProgressStageNode({ stage, isCurrent, isPast, onClick }: Props) {
   const circleClass = isCurrent
-    ? "bg-orange-500 ring-2 ring-orange-400 ring-offset-2 ring-offset-gray-900"
+    ? "bg-weeet-primary ring-2 ring-weeet-primary ring-offset-2 ring-offset-gray-900"
     : isPast
     ? "bg-green-600"
     : "bg-gray-700";
 
   const labelClass = isCurrent
-    ? "text-orange-300 font-semibold"
+    ? "text-weeet-primary font-semibold"
     : isPast
     ? "text-green-400"
     : "text-gray-500";

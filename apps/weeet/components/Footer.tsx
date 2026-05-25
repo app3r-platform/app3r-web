@@ -143,7 +143,7 @@ export function Footer() {
               <span>📞</span>
               <a
                 href={`tel:${phone.number.replace(/[^0-9+]/g, "")}`}
-                className="hover:text-orange-400 transition-colors"
+                className="hover:text-weeet-primary transition-colors"
               >
                 {phone.number}
               </a>
@@ -163,7 +163,7 @@ export function Footer() {
               <span>✉️</span>
               <a
                 href={`mailto:${email.address}`}
-                className="hover:text-orange-400 transition-colors truncate"
+                className="hover:text-weeet-primary transition-colors truncate"
               >
                 {email.address}
               </a>
@@ -192,7 +192,7 @@ export function Footer() {
               href={social.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-orange-400 transition-colors"
+              className="flex items-center gap-1 text-xs text-gray-400 hover:text-weeet-primary transition-colors"
               aria-label={`${social.platform}: ${social.handle}`}
             >
               <span>{SOCIAL_ICONS[social.platform]}</span>

@@ -26,7 +26,7 @@ export function LiveLocationShareControl({ serviceId, technicianId, isMoving = t
           </div>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => grantConsent()} className="flex-1 bg-orange-600 hover:bg-orange-500 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">✅ ยินยอม</button>
+          <button onClick={() => grantConsent()} className="flex-1 bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">✅ ยินยอม</button>
           <button onClick={() => setDeclined(true)} className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium py-2.5 rounded-xl text-sm transition-colors">ปฏิเสธ</button>
         </div>
         <p className="text-xs text-gray-500 text-center">หากปฏิเสธ ลูกค้าจะไม่เห็นตำแหน่งของคุณ</p>
@@ -57,7 +57,7 @@ export function LiveLocationShareControl({ serviceId, technicianId, isMoving = t
         {error && <p className="text-xs text-red-400">{error}</p>}
       </div>
       {(state === "idle" || state === "error") && (
-        <button onClick={startSharing} className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">📡 เริ่มแชร์ตำแหน่ง</button>
+        <button onClick={startSharing} className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">📡 เริ่มแชร์ตำแหน่ง</button>
       )}
       {state === "active" && (
         <button onClick={stopSharing} className="w-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 font-medium py-3 rounded-xl text-sm transition-colors">⏹ หยุดแชร์ตำแหน่ง</button>

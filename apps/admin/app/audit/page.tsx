@@ -57,7 +57,7 @@ export default function AuditPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 min-w-0">
         <AdminListPage
@@ -91,7 +91,7 @@ export default function AuditPage() {
         >
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 text-left border-b border-gray-800">
+              <tr className="text-gray-500 text-left border-b border-gray-200">
                 <th className="px-4 py-3">ID</th>
                 <th className="px-4 py-3">Actor</th>
                 <th className="px-4 py-3">Module</th>
@@ -100,7 +100,7 @@ export default function AuditPage() {
                 <th className="px-4 py-3">เวลา</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-gray-200">
               {paged.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-4 py-10 text-center text-gray-600">
@@ -112,13 +112,13 @@ export default function AuditPage() {
                   <tr
                     key={row.id}
                     onClick={() => openView(row)}
-                    className="hover:bg-gray-800/40 cursor-pointer"
+                    className="hover:bg-gray-100/40 cursor-pointer"
                   >
                     <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
-                    <td className="px-4 py-3 text-xs text-gray-400">{row.actor}</td>
+                    <td className="px-4 py-3 text-xs text-gray-500">{row.actor}</td>
                     <td className="px-4 py-3 text-xs">{row.module}</td>
                     <td className="px-4 py-3">
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-300">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
                         {row.action}
                       </span>
                     </td>

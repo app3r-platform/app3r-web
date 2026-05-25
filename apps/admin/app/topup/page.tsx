@@ -114,7 +114,7 @@ export default function TopupPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
 
       <main className="flex-1 p-8 min-w-0">
@@ -127,7 +127,7 @@ export default function TopupPage() {
             </span>
           )}
         </div>
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-gray-500 text-sm mb-6">
           ตรวจสอบสลิปและอนุมัติ/ปฏิเสธคำขอเติม Point ของผู้ใช้
         </p>
 
@@ -144,8 +144,8 @@ export default function TopupPage() {
               onClick={() => { setStatusFilter(val); setPage(1); }}
               className={`px-4 py-2 text-sm rounded-lg transition-colors ${
                 statusFilter === val
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                  ? "bg-admin-surface text-admin-primary"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900"
               }`}
             >
               {label}
@@ -154,7 +154,7 @@ export default function TopupPage() {
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-20 text-gray-500">
               <span className="animate-spin mr-3 text-xl">⟳</span> กำลังโหลด...
@@ -167,7 +167,7 @@ export default function TopupPage() {
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3 w-12">ID</th>
                   <th className="px-5 py-3">ผู้ใช้</th>
                   <th className="px-5 py-3">จำนวน</th>
@@ -179,9 +179,9 @@ export default function TopupPage() {
                   <th className="px-5 py-3 text-right">จัดการ</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {data.items.map((req) => (
-                  <tr key={req.id} className="hover:bg-gray-800/50 transition-colors">
+                  <tr key={req.id} className="hover:bg-gray-100 transition-colors">
                     <td className="px-5 py-3.5 text-gray-500 text-xs">{req.id}</td>
 
                     <td className="px-5 py-3.5">
@@ -190,7 +190,7 @@ export default function TopupPage() {
                     </td>
 
                     <td className="px-5 py-3.5">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-lg font-bold text-gray-900">
                         {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </span>
                       <span className="text-xs text-gray-500 ml-1">Points</span>
@@ -200,7 +200,7 @@ export default function TopupPage() {
                       <PaymentMethodBadge method={req.payment_method} />
                     </td>
 
-                    <td className="px-5 py-3.5 text-gray-400 text-xs font-mono">
+                    <td className="px-5 py-3.5 text-gray-500 text-xs font-mono">
                       {req.reference_no ?? <span className="text-gray-600">—</span>}
                     </td>
 
@@ -210,7 +210,7 @@ export default function TopupPage() {
                           href={req.slip_url}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-blue-400 hover:text-blue-300 text-xs underline underline-offset-2"
+                          className="text-admin-primary hover:text-admin-dark text-xs underline underline-offset-2"
                         >
                           ดูสลิป ↗
                         </a>
@@ -222,7 +222,7 @@ export default function TopupPage() {
                     <td className="px-5 py-3.5">
                       <StatusBadge status={req.status} />
                       {req.reject_reason && (
-                        <div className="text-xs text-red-400 mt-1 max-w-[140px] truncate" title={req.reject_reason}>
+                        <div className="text-xs text-red-600 mt-1 max-w-[140px] truncate" title={req.reject_reason}>
                           {req.reject_reason}
                         </div>
                       )}
@@ -241,14 +241,14 @@ export default function TopupPage() {
                           <button
                             onClick={() => handleApprove(req.id)}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1.5 text-xs bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-xs bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
                           >
                             {actionLoading === req.id ? "..." : "✓ อนุมัติ"}
                           </button>
                           <button
                             onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-300 hover:text-white rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
                           >
                             ✕ ปฏิเสธ
                           </button>
@@ -272,14 +272,14 @@ export default function TopupPage() {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-white rounded-lg"
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg"
               >
                 ← ก่อนหน้า
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(data.pages, p + 1))}
                 disabled={page === data.pages}
-                className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-white rounded-lg"
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg"
               >
                 ถัดไป →
               </button>
@@ -291,23 +291,23 @@ export default function TopupPage() {
       {/* Reject Modal */}
       {rejectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+          <div className="bg-white border border-gray-300 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <h3 className="text-lg font-bold mb-1">ปฏิเสธคำขอ</h3>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-gray-500 mb-4">
               ผู้ใช้: <span className="text-white">{rejectModal.userName}</span>
             </p>
-            <label className="block text-sm text-gray-400 mb-2">เหตุผลที่ปฏิเสธ <span className="text-red-400">*</span></label>
+            <label className="block text-sm text-gray-500 mb-2">เหตุผลที่ปฏิเสธ <span className="text-red-600">*</span></label>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder="เช่น: สลิปไม่ชัด, ยอดไม่ตรง, สลิปซ้ำ..."
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-600 resize-none"
+              className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
             />
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => { setRejectModal(null); setRejectReason(""); }}
-                className="flex-1 py-2.5 text-sm bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors"
+                className="flex-1 py-2.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
               >
                 ยกเลิก
               </button>
@@ -326,7 +326,7 @@ export default function TopupPage() {
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl shadow-xl text-sm font-medium ${
-          toast.type === "ok" ? "bg-green-700 text-white" : "bg-red-700 text-white"
+          toast.type === "ok" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
         }`}>
           {toast.msg}
         </div>
@@ -340,10 +340,10 @@ export default function TopupPage() {
 function PaymentMethodBadge({ method }: { method: string }) {
   const map: Record<string, { label: string; cls: string }> = {
     bank_transfer: { label: "โอนธนาคาร", cls: "bg-blue-900 text-blue-300" },
-    promptpay:     { label: "PromptPay",  cls: "bg-purple-900 text-purple-300" },
-    truemoney:     { label: "TrueMoney",  cls: "bg-orange-900 text-orange-300" },
+    promptpay:     { label: "PromptPay",  cls: "bg-admin-primary/15 text-admin-primary" },
+    truemoney:     { label: "TrueMoney",  cls: "bg-orange-900 text-orange-700" },
   };
-  const m = map[method] ?? { label: method, cls: "bg-gray-800 text-gray-400" };
+  const m = map[method] ?? { label: method, cls: "bg-gray-100 text-gray-500" };
   return (
     <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${m.cls}`}>
       {m.label}
@@ -353,11 +353,11 @@ function PaymentMethodBadge({ method }: { method: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    pending:  { label: "รออนุมัติ",   cls: "bg-yellow-900 text-yellow-300" },
-    approved: { label: "อนุมัติแล้ว", cls: "bg-green-900 text-green-300" },
-    rejected: { label: "ปฏิเสธแล้ว", cls: "bg-red-900 text-red-300" },
+    pending:  { label: "รออนุมัติ",   cls: "bg-yellow-900 text-yellow-700" },
+    approved: { label: "อนุมัติแล้ว", cls: "bg-green-900 text-green-700" },
+    rejected: { label: "ปฏิเสธแล้ว", cls: "bg-red-900 text-red-700" },
   };
-  const s = map[status] ?? { label: status, cls: "bg-gray-800 text-gray-400" };
+  const s = map[status] ?? { label: status, cls: "bg-gray-100 text-gray-500" };
   return (
     <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${s.cls}`}>
       {s.label}

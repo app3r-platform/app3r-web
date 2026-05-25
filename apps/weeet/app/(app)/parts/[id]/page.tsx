@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { use, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { partsApi, partsOrdersApi } from "@/lib/api";
@@ -35,6 +35,8 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
     // idempotency key: partId + timestamp (ป้องกัน double submit)
     const idempotencyKey = `${part.id}-${Date.now()}`;
     try {
+      // ★ VERIFY Blueprint §④: buyerId ถูก derive server-side จาก JWT token
+      // ช่างซื้อในนามร้านที่สังกัด (shopId) — ไม่ได้ส่ง techId จาก client ✅
       const order = await partsOrdersApi.createOrder({
         partId: part.id,
         quantity: orderQty,
@@ -123,7 +125,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="bg-gray-900 rounded-xl p-3">
                   <p className="text-xs text-gray-500 mb-1">ราคา/หน่วย</p>
-                  <p className="text-orange-400 font-bold text-lg">฿{part.unitPrice.toLocaleString()}</p>
+                  <p className="text-weeet-primary font-bold text-lg">฿{part.unitPrice.toLocaleString()}</p>
                 </div>
                 <div className="bg-gray-900 rounded-xl p-3">
                   <p className="text-xs text-gray-500 mb-1">คงเหลือ</p>
@@ -155,7 +157,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
 
             {/* Sub-8: B2B Order Form — Buyer UI */}
             {part.stockQty > 0 ? (
-              <div className="bg-gray-800 border border-orange-800/40 rounded-xl p-4 space-y-3">
+              <div className="bg-gray-800 border border-weeet-dark/40 rounded-xl p-4 space-y-3">
                 <p className="text-sm font-semibold text-white flex items-center gap-2">
                   🛒 สั่งซื้ออะไหล่ B2B
                 </p>
@@ -179,7 +181,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
                     >
                       +
                     </button>
-                    <span className="text-orange-400 font-semibold ml-auto">
+                    <span className="text-weeet-primary font-semibold ml-auto">
                       รวม ฿{(part.unitPrice * orderQty).toLocaleString()}
                     </span>
                   </div>
@@ -193,7 +195,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
                     value={orderServiceId}
                     onChange={(e) => setOrderServiceId(e.target.value)}
                     placeholder="เช่น job-abc123"
-                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-weeet-primary"
                   />
                 </div>
 
@@ -207,7 +209,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
                   type="button"
                   onClick={handleOrder}
                   disabled={orderLoading}
-                  className="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-sm transition-colors disabled:opacity-50"
+                  className="w-full py-3 rounded-xl bg-weeet-primary hover:bg-weeet-dark text-white font-semibold text-sm transition-colors disabled:opacity-50"
                 >
                   {orderLoading ? "กำลังสั่งซื้อ..." : `🛒 สั่งซื้อ ${orderQty} ${part.unit}`}
                 </button>

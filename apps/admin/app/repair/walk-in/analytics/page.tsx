@@ -48,15 +48,15 @@ function StatCard({
 }) {
   const accentMap: Record<string, string> = {
     blue:    "text-blue-400",
-    green:   "text-green-400",
-    red:     "text-red-400",
-    orange:  "text-orange-400",
-    yellow:  "text-yellow-400",
-    purple:  "text-purple-400",
+    green:   "text-green-600",
+    red:     "text-red-600",
+    orange:  "text-orange-700",
+    yellow:  "text-yellow-700",
+    "admin-primary": "text-admin-primary",
     default: "text-white",
   };
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-2xl mb-1">{icon}</p>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${accentMap[accent ?? "default"]}`}>{value}</p>
@@ -89,7 +89,7 @@ export default function WalkInAnalyticsPage() {
   }, [router, fetchData]);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-8 max-w-5xl">
 
@@ -97,12 +97,12 @@ export default function WalkInAnalyticsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📊 Walk-in Analytics</h1>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               Storage fee revenue + abandoned rate + ภาพรวม walk-in jobs
             </p>
           </div>
           <Link href="/repair/walk-in/queue"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Walk-in Queue
           </Link>
         </div>
@@ -110,7 +110,7 @@ export default function WalkInAnalyticsPage() {
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
         ) : error ? (
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error}</div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error}</div>
         ) : data && (
           <>
             {/* Summary */}
@@ -122,7 +122,7 @@ export default function WalkInAnalyticsPage() {
                 <StatCard icon="✅" label="ปิดงานแล้ว"     value={data.closed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="📦" label="Abandoned"      value={data.abandoned_jobs.toLocaleString()} accent="orange" />
                 <StatCard icon="❌" label="ยกเลิก"          value={data.cancelled_jobs.toLocaleString()} accent="red" />
-                <StatCard icon="🔧" label="ซ่อมเสร็จ"      value={data.completed_jobs.toLocaleString()} accent="purple" />
+                <StatCard icon="🔧" label="ซ่อมเสร็จ"      value={data.completed_jobs.toLocaleString()} accent="admin-primary" />
               </div>
             </section>
 
@@ -159,14 +159,14 @@ export default function WalkInAnalyticsPage() {
                     ? `${data.avg_repair_hours.toFixed(1)} ชม.`
                     : "—"}
                   sub="checked_in → completed"
-                  accent="purple"
+                  accent="admin-primary"
                 />
               </div>
             </section>
 
             {/* Monthly Storage Fee chart */}
             {data.monthly_storage_fee?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                   Storage Fee รายเดือน
                 </h2>
@@ -177,12 +177,12 @@ export default function WalkInAnalyticsPage() {
                       const pct = (m.fee / maxFee) * 100;
                       return (
                         <div key={m.month} className="flex items-center gap-3">
-                          <span className="text-xs text-gray-400 w-20 shrink-0 font-mono">{m.month}</span>
-                          <div className="flex-1 bg-gray-800 rounded-full h-2">
+                          <span className="text-xs text-gray-500 w-20 shrink-0 font-mono">{m.month}</span>
+                          <div className="flex-1 bg-gray-100 rounded-full h-2">
                             <div className="bg-yellow-500 h-2 rounded-full transition-all"
                               style={{ width: `${pct}%` }} />
                           </div>
-                          <span className="text-xs text-yellow-400 font-mono w-28 text-right">
+                          <span className="text-xs text-yellow-700 font-mono w-28 text-right">
                             {m.fee.toLocaleString()} ฿
                           </span>
                         </div>
@@ -195,21 +195,21 @@ export default function WalkInAnalyticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* By Status */}
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
                     return (
                       <div key={row.status} className="flex items-center gap-3">
-                        <span className="text-xs text-gray-400 w-28 shrink-0">
+                        <span className="text-xs text-gray-500 w-28 shrink-0">
                           {STATUS_LABELS[row.status] ?? row.status}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className="bg-blue-600 h-2 rounded-full transition-all"
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-10 text-right">{row.count}</span>
+                        <span className="text-xs text-gray-700 w-10 text-right">{row.count}</span>
                       </div>
                     );
                   })}
@@ -221,7 +221,7 @@ export default function WalkInAnalyticsPage() {
 
               {/* Top Issues */}
               {data.top_issues?.length > 0 && (
-                <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+                <section className="bg-white rounded-xl border border-gray-200 p-5">
                   <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                     อาการที่พบบ่อย
                   </h2>
@@ -232,12 +232,12 @@ export default function WalkInAnalyticsPage() {
                       return (
                         <div key={i} className="flex items-center gap-3">
                           <span className="text-xs text-gray-600 w-4 text-right">{i + 1}.</span>
-                          <span className="text-xs text-gray-300 w-40 shrink-0 truncate">{row.issue}</span>
-                          <div className="flex-1 bg-gray-800 rounded-full h-2">
-                            <div className="bg-purple-600 h-2 rounded-full transition-all"
+                          <span className="text-xs text-gray-700 w-40 shrink-0 truncate">{row.issue}</span>
+                          <div className="flex-1 bg-gray-100 rounded-full h-2">
+                            <div className="bg-admin-primary h-2 rounded-full transition-all"
                               style={{ width: `${pct}%` }} />
                           </div>
-                          <span className="text-xs text-gray-400 w-8 text-right">{row.count}</span>
+                          <span className="text-xs text-gray-500 w-8 text-right">{row.count}</span>
                         </div>
                       );
                     })}
@@ -248,24 +248,24 @@ export default function WalkInAnalyticsPage() {
 
             {/* By Store */}
             {data.by_store?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                   ภาพรวมตามร้าน
                 </h2>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-gray-500 text-left border-b border-gray-800">
+                    <tr className="text-gray-500 text-left border-b border-gray-200">
                       <th className="pb-2">ร้าน</th>
                       <th className="pb-2 text-right">Jobs</th>
                       <th className="pb-2 text-right">Storage Fee</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {data.by_store.map((row, i) => (
-                      <tr key={i} className="hover:bg-gray-800/30">
+                      <tr key={i} className="hover:bg-gray-100/30">
                         <td className="py-2.5 text-gray-200">{row.store_name}</td>
                         <td className="py-2.5 text-right font-mono text-blue-400">{row.count}</td>
-                        <td className="py-2.5 text-right font-mono text-yellow-400">
+                        <td className="py-2.5 text-right font-mono text-yellow-700">
                           {row.storage_fee.toLocaleString()} ฿
                         </td>
                       </tr>

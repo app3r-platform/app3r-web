@@ -8,36 +8,56 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { ScrapItem } from "@/lib/types";
 
-const STATUS_META: Record<ScrapItem["status"], { label: string; color: string }> = {
-  available: { label: "ขายได้",   color: "bg-green-900/50 text-green-400" },
-  sold:      { label: "ขายแล้ว",  color: "bg-blue-900/50 text-blue-300" },
-  removed:   { label: "ลบแล้ว",   color: "bg-gray-800 text-gray-500" },
+/* ─── S5/S6: extended status (mock — ไม่อยู่ใน ScrapItem type เดิม) ─── */
+type ExtendedStatus = ScrapItem["status"] | "expired" | "no_offer";
+
+const STATUS_META: Record<ExtendedStatus, { label: string; color: string }> = {
+  available: { label: "ขายได้",              color: "bg-green-50 text-green-700"  },
+  sold:      { label: "ขายแล้ว",             color: "bg-blue-50 text-blue-700"   },
+  removed:   { label: "ลบแล้ว",              color: "bg-gray-100 text-gray-500"  },
+  /* S5 */ expired:  { label: "⚪ หมดอายุ",    color: "bg-gray-100 text-gray-500"  },
+  /* S6 */ no_offer: { label: "⛔ ไม่มีข้อเสนอ", color: "bg-orange-50 text-orange-700" },
 };
 
+/* S12 — extended listing with cross-module repair reference */
+interface ScrapItemExtended extends ScrapItem {
+  source_repair_job_id?: string | null;
+}
+
 const GRADE_META: Record<ScrapItem["conditionGrade"], { label: string; color: string }> = {
-  grade_A: { label: "A", color: "bg-green-900/50 text-green-400" },
-  grade_B: { label: "B", color: "bg-yellow-900/50 text-yellow-400" },
-  grade_C: { label: "C", color: "bg-red-900/50 text-red-400" },
+  grade_A: { label: "A", color: "bg-green-50 text-green-700" },
+  grade_B: { label: "B", color: "bg-yellow-50 text-yellow-700" },
+  grade_C: { label: "C", color: "bg-red-50 text-red-700" },
 };
 
 const PAGE_SIZE = 20;
 
 interface ScrapListResponse {
-  results: ScrapItem[];
+  results: ScrapItemExtended[];
   count: number;
 }
+
+/* Status tabs — S5/S6 เพิ่ม */
+const STATUS_TABS: { label: string; value: string }[] = [
+  { label: "ทั้งหมด",       value: "" },
+  { label: "ขายได้",        value: "available" },
+  { label: "ขายแล้ว",       value: "sold" },
+  { label: "ลบแล้ว",        value: "removed" },
+  { label: "⚪ หมดอายุ",    value: "expired" },
+  { label: "⛔ ไม่มีข้อเสนอ", value: "no_offer" },
+];
 
 function EmptyState({ message }: { message: string }) {
   return (
     <tr>
-      <td colSpan={8} className="px-6 py-10 text-center text-gray-500">{message}</td>
+      <td colSpan={9} className="px-6 py-10 text-center text-gray-500">{message}</td>
     </tr>
   );
 }
 
 export default function ScrapListingsPage() {
   const router = useRouter();
-  const [items, setItems] = useState<ScrapItem[]>([]);
+  const [items, setItems] = useState<ScrapItemExtended[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,7 +101,7 @@ export default function ScrapListingsPage() {
   const hasFilters = filterStatus || filterGrade || filterSeller;
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-7xl">
 
@@ -89,33 +109,41 @@ export default function ScrapListingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">♻️ Scrap Listings</h1>
-            <p className="text-gray-400 text-sm mt-1">
-              รายการซากเครื่องใช้ไฟฟ้า — filter สถานะ / เกรด / ผู้ขาย
+            <p className="text-gray-500 text-sm mt-1">
+              รายการซากเครื่องใช้ไฟฟ้า — filter สถานะ / เกรด / ผู้ขาย · S5/S6/S12
             </p>
           </div>
           <div className="flex gap-2">
             <Link href="/scrap/jobs"
-              className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
               🔨 Jobs →
             </Link>
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Status tabs — S5: expired / S6: no_offer */}
+        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-200 w-fit flex-wrap">
+          {STATUS_TABS.map(t => (
+            <button key={t.value}
+              onClick={() => { setFilterStatus(t.value); setPage(1); }}
+              className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
+                filterStatus === t.value
+                  ? t.value === "expired"  ? "bg-gray-200 text-gray-600"
+                  : t.value === "no_offer" ? "bg-orange-50 text-orange-700"
+                  : "bg-admin-surface text-admin-primary"
+                  : "text-gray-500 hover:text-gray-900"
+              }`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Secondary Filters */}
         <div className="flex gap-3 flex-wrap items-center">
-          <select
-            value={filterStatus}
-            onChange={e => { setFilterStatus(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
-            <option value="">ทุกสถานะ</option>
-            <option value="available">ขายได้</option>
-            <option value="sold">ขายแล้ว</option>
-            <option value="removed">ลบแล้ว</option>
-          </select>
           <select
             value={filterGrade}
             onChange={e => { setFilterGrade(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-36 focus:outline-none focus:border-blue-500">
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-admin-primary">
             <option value="">ทุกเกรด</option>
             <option value="grade_A">Grade A</option>
             <option value="grade_B">Grade B</option>
@@ -123,39 +151,39 @@ export default function ScrapListingsPage() {
           </select>
           <input type="text" placeholder="Seller ID"
             value={filterSeller} onChange={e => { setFilterSeller(e.target.value); setPage(1); }}
-            className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 w-44 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-admin-primary"
           />
           {hasFilters && (
             <button onClick={clearFilters}
-              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white bg-gray-800 rounded-lg">
+              className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 bg-gray-100 rounded-lg">
               ล้าง filter
             </button>
           )}
         </div>
 
         {/* Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-400">ระบบ Scrap กำลังพัฒนา — {error}</div>
+            <div className="px-6 py-8 text-red-600">ระบบ Scrap กำลังพัฒนา — {error}</div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Seller</th>
                   <th className="px-4 py-3">รายละเอียด</th>
                   <th className="px-4 py-3">เกรด</th>
@@ -163,35 +191,42 @@ export default function ScrapListingsPage() {
                   <th className="px-4 py-3">ราคา</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">วันที่สร้าง</th>
+                  <th className="px-4 py-3">Flags</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.length === 0 ? (
                   <EmptyState message="ยังไม่มีรายการซาก" />
                 ) : items.map(item => {
-                  const sm = STATUS_META[item.status];
+                  const sm = STATUS_META[item.status as ExtendedStatus] ?? STATUS_META.available;
                   const gm = GRADE_META[item.conditionGrade];
                   return (
-                    <tr key={item.id} className="hover:bg-gray-800/40">
-                      <td className="px-4 py-3 text-xs font-mono text-gray-400">{item.sellerId}</td>
+                    <tr key={item.id} className="hover:bg-gray-100/40">
+                      <td className="px-4 py-3 text-xs font-mono text-gray-500">{item.sellerId}</td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {item.photos[0] && (
-                            <img src={item.photos[0]} alt="" className="w-8 h-8 object-cover rounded bg-gray-800" />
+                            <img src={item.photos[0]} alt="" className="w-8 h-8 object-cover rounded bg-gray-100" />
                           )}
-                          <span className="text-sm text-gray-100 max-w-xs truncate">{item.description}</span>
+                          {/* S12 badge */}
+                          {item.source_repair_job_id && (
+                            <span className="text-xs px-1.5 py-0.5 bg-orange-50 text-orange-700 border border-orange-200 rounded-full whitespace-nowrap">
+                              🔧 จาก Repair
+                            </span>
+                          )}
+                          <span className="text-sm text-gray-800 max-w-xs truncate">{item.description}</span>
                         </div>
                       </td>
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${gm.color}`}>{gm.label}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-400">
+                      <td className="px-4 py-3 text-xs text-gray-500">
                         {item.workingParts.length > 0
                           ? item.workingParts.slice(0, 3).join(", ") + (item.workingParts.length > 3 ? "…" : "")
                           : "—"}
                       </td>
-                      <td className="px-4 py-3 text-sm font-mono text-green-400">
+                      <td className="px-4 py-3 text-sm font-mono text-green-600">
                         {item.price.toLocaleString()} ฿
                       </td>
                       <td className="px-4 py-3">
@@ -200,9 +235,29 @@ export default function ScrapListingsPage() {
                       <td className="px-4 py-3 text-xs text-gray-500">
                         {new Date(item.createdAt).toLocaleDateString("th-TH")}
                       </td>
+                      {/* Flags: S5/S6/S12 */}
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1">
+                          {(item.status as ExtendedStatus) === "expired" && (
+                            <span className="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded-full whitespace-nowrap">⚪ หมดอายุ</span>
+                          )}
+                          {(item.status as ExtendedStatus) === "no_offer" && (
+                            <span className="text-xs px-1.5 py-0.5 bg-orange-50 text-orange-700 rounded-full whitespace-nowrap">⛔ ไม่มีข้อเสนอ</span>
+                          )}
+                          {item.source_repair_job_id && (
+                            <Link href={`/repair/jobs/${item.source_repair_job_id}`}
+                              className="text-xs px-1.5 py-0.5 bg-orange-50 text-orange-700 hover:bg-orange-100 rounded-full whitespace-nowrap transition-colors">
+                              🔧 →Repair
+                            </Link>
+                          )}
+                          {(item.status as ExtendedStatus) !== "expired" && (item.status as ExtendedStatus) !== "no_offer" && !item.source_repair_job_id && (
+                            <span className="text-xs text-gray-400">—</span>
+                          )}
+                        </div>
+                      </td>
                       <td className="px-4 py-3">
                         <Link href={`/scrap/listings/${item.id}`}
-                          className="text-xs text-blue-400 hover:text-blue-300 whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark whitespace-nowrap">
                           ดู →
                         </Link>
                       </td>

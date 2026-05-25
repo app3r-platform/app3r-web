@@ -58,7 +58,7 @@ export default function CompletePage({ params }: { params: Promise<{ id: string 
             type="checkbox"
             checked={confirmed}
             onChange={(e) => setConfirmed(e.target.checked)}
-            className="mt-0.5 w-4 h-4 accent-orange-500"
+            className="mt-0.5 w-4 h-4 accent-[#1696F9]"
           />
           <span className="text-sm text-gray-300">
             ฉันยืนยันว่าซ่อมเสร็จเรียบร้อย และลูกค้าได้รับทราบผลแล้ว

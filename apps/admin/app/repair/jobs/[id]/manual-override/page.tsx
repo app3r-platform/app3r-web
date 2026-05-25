@@ -9,34 +9,80 @@ import { Sidebar } from "@/components/sidebar";
 
 type OverrideAction = "cancel" | "refund" | "forfeit";
 
-const ACTION_CONFIG: Record<OverrideAction, { label: string; desc: string; color: string }> = {
-  cancel:  { label: "Cancel Job",   desc: "ยกเลิกงานและคืนเงินตาม deposit policy", color: "border-orange-700 bg-orange-900/20 text-orange-300" },
-  refund:  { label: "Force Refund", desc: "คืนเงินให้ WeeeU ทั้งหมด (override deposit policy)", color: "border-blue-700 bg-blue-900/20 text-blue-300" },
-  forfeit: { label: "Forfeit Deposit", desc: "ยึดมัดจำให้ WeeeR ทั้งหมด (override policy)", color: "border-red-700 bg-red-900/20 text-red-300" },
+/* ─────────────────────────────────────────────
+   9-แกน lock implications per action
+───────────────────────────────────────────── */
+const ACTION_CONFIG: Record<OverrideAction, {
+  label:   string;
+  desc:    string;
+  color:   string;
+  btnColor: string;
+  axes:    { key: string; icon: string; implication: string }[];
+}> = {
+  cancel: {
+    label:    "Cancel Job",
+    desc:     "ยกเลิกงานและคืนเงินตาม deposit policy",
+    color:    "border-orange-300 bg-orange-50 text-orange-700",
+    btnColor: "bg-orange-600 hover:bg-orange-700 text-white",
+    axes: [
+      { key: "price",        icon: "💰", implication: "ไม่มีการจ่ายเงินค่าซ่อม (Final price = 0)" },
+      { key: "deposit",      icon: "💳", implication: "มัดจำคืนตาม policy (อิง cancellation point)" },
+      { key: "cancellation", icon: "❌", implication: "เปิดใช้ cancellation policy ทันที" },
+      { key: "timeline",     icon: "⏱️", implication: "งานสิ้นสุดก่อนกำหนด — ช่วงยกเลิกมีผลต่อ deposit" },
+    ],
+  },
+  refund: {
+    label:    "Force Refund",
+    desc:     "คืนเงินให้ WeeeU ทั้งหมด (override deposit policy)",
+    color:    "border-blue-300 bg-blue-50 text-blue-700",
+    btnColor: "bg-admin-primary hover:bg-admin-dark text-white",
+    axes: [
+      { key: "price",    icon: "💰", implication: "คืน escrow ทั้งหมดให้ WeeeU (override ราคาตกลง)" },
+      { key: "deposit",  icon: "💳", implication: "override deposit policy — คืนมัดจำ 100%" },
+      { key: "quality",  icon: "⭐", implication: "บ่งชี้ว่างานไม่ผ่านมาตรฐาน (เหตุผล Refund)" },
+      { key: "evidence", icon: "📸", implication: "หลักฐานต้องสนับสนุนการ Refund ใน Audit Log" },
+    ],
+  },
+  forfeit: {
+    label:    "Forfeit Deposit",
+    desc:     "ยึดมัดจำให้ WeeeR ทั้งหมด (override policy)",
+    color:    "border-red-300 bg-red-50 text-red-700",
+    btnColor: "bg-red-600 hover:bg-red-700 text-white",
+    axes: [
+      { key: "deposit",      icon: "💳", implication: "ยึดมัดจำ 100% ให้ WeeeR (override คืนลูกค้า)" },
+      { key: "cancellation", icon: "❌", implication: "WeeeU ยกเลิกผิดเงื่อนไข → WeeeR รับมัดจำ" },
+      { key: "conduct",      icon: "🤝", implication: "พฤติกรรม WeeeU ละเมิดข้อตกลง" },
+      { key: "price",        icon: "💰", implication: "มัดจำคือส่วนหนึ่งของค่าบริการ — ไม่คืน" },
+    ],
+  },
 };
 
 interface JobSummary {
-  id: string;
-  weeeu_name: string;
-  weeer_name: string;
-  weeet_name: string;
-  status: string;
-  deposit_amount: number | null;
-  final_price: number | null;
+  id:              string;
+  weeeu_name:      string;
+  weeer_name:      string;
+  weeet_name:      string;
+  status:          string;
+  deposit_amount:  number | null;
+  final_price:     number | null;
+  deposit_action?: string | null;
 }
 
+/* ─────────────────────────────────────────────
+   Main Page
+───────────────────────────────────────────── */
 export default function ManualOverridePage() {
   const router = useRouter();
   const params = useParams();
   const jobId = params?.id as string;
 
-  const [job, setJob] = useState<JobSummary | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [action, setAction] = useState<OverrideAction | "">("");
-  const [reason, setReason] = useState("");
+  const [job,       setJob]       = useState<JobSummary | null>(null);
+  const [loading,   setLoading]   = useState(true);
+  const [submitting,setSubmitting]= useState(false);
+  const [action,    setAction]    = useState<OverrideAction | "">("");
+  const [reason,    setReason]    = useState("");
   const [confirmed, setConfirmed] = useState(false);
-  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const [result,    setResult]    = useState<{ ok: boolean; message: string } | null>(null);
 
   const fetchJob = useCallback(async () => {
     try {
@@ -49,7 +95,7 @@ export default function ManualOverridePage() {
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
-    if (!isSuperAdmin()) { router.push(`/repair/jobs/${jobId}`); return; }
+    if (!isSuperAdmin())    { router.push(`/repair/jobs/${jobId}`); return; }
     if (jobId) fetchJob();
   }, [router, fetchJob, jobId]);
 
@@ -67,101 +113,160 @@ export default function ManualOverridePage() {
   }
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8 text-gray-500">กำลังโหลด...</main>
     </div>
   );
 
+  const cfg = action ? ACTION_CONFIG[action] : null;
+
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 max-w-2xl">
 
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-2">
-          <Link href={`/repair/jobs/${jobId}`} className="text-sm text-gray-500 hover:text-gray-300">
-            ← Job Detail
-          </Link>
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 mb-2 text-sm text-gray-400">
+          <Link href="/repair/jobs" className="hover:text-gray-600">Repair Jobs</Link>
+          <span>/</span>
+          <Link href={`/repair/jobs/${jobId}`} className="hover:text-gray-600">Job Detail</Link>
+          <span>/</span>
+          <span className="text-gray-700 font-medium">Manual Override</span>
         </div>
+
+        {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <h1 className="text-2xl font-bold">⚙️ Manual Override</h1>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-red-900/50 text-red-400 border border-red-800">
+          <h1 className="text-2xl font-bold text-gray-900">⚙️ Manual Override</h1>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200">
             🔒 Super Admin Only
           </span>
         </div>
 
         {/* Warning */}
-        <div className="bg-red-900/20 border border-red-800 rounded-xl p-4 mb-6">
-          <p className="text-sm text-red-300 font-semibold mb-1">⚠️ คำเตือน — การกระทำนี้ไม่สามารถย้อนกลับได้</p>
-          <p className="text-xs text-red-400">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+          <p className="text-sm text-red-700 font-semibold mb-1">⚠️ คำเตือน — การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+          <p className="text-xs text-red-600">
             Manual override จะบันทึกใน Audit Log ทันที ระบุเหตุผลที่ชัดเจนก่อนดำเนินการ
           </p>
         </div>
 
         {/* Job summary */}
         {job && (
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 mb-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6">
             <p className="text-xs text-gray-500 mb-2">Job</p>
-            <p className="font-mono text-xs text-gray-400 mb-3">{job.id}</p>
+            <p className="font-mono text-xs text-gray-500 mb-3">{job.id}</p>
             <div className="grid grid-cols-3 gap-3 text-sm">
-              <div><p className="text-xs text-gray-600">WeeeU</p><p className="text-gray-200">{job.weeeu_name}</p></div>
-              <div><p className="text-xs text-gray-600">WeeeR</p><p className="text-gray-200">{job.weeer_name}</p></div>
-              <div><p className="text-xs text-gray-600">WeeeT</p><p className="text-gray-200">{job.weeet_name}</p></div>
+              <div>
+                <p className="text-xs text-gray-500">WeeeU</p>
+                <p className="text-gray-800 font-medium">{job.weeeu_name}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">WeeeR</p>
+                <p className="text-gray-800 font-medium">{job.weeer_name}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">WeeeT</p>
+                <p className="text-gray-800 font-medium">{job.weeet_name}</p>
+              </div>
             </div>
             {job.deposit_amount != null && (
-              <p className="text-xs text-gray-500 mt-3">Deposit: {job.deposit_amount.toLocaleString()} G</p>
+              <div className="mt-3 pt-3 border-t border-gray-100 flex gap-4 text-xs">
+                <div>
+                  <span className="text-gray-500">Deposit: </span>
+                  <span className="font-semibold text-admin-primary">{job.deposit_amount.toLocaleString()} G</span>
+                  {job.deposit_action && <span className="text-gray-500 ml-1">({job.deposit_action})</span>}
+                </div>
+                {job.final_price != null && (
+                  <div>
+                    <span className="text-gray-500">Final Price: </span>
+                    <span className="font-semibold text-gray-700">{job.final_price.toLocaleString()} G</span>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
 
         {result ? (
-          <div className={`rounded-xl p-5 border ${result.ok ? "bg-green-900/20 border-green-800 text-green-300" : "bg-red-900/20 border-red-800 text-red-300"}`}>
+          <div className={`rounded-xl p-5 border ${
+            result.ok
+              ? "bg-green-50 border-green-200 text-green-700"
+              : "bg-red-50 border-red-200 text-red-700"
+          }`}>
             <p className="font-semibold mb-2">{result.ok ? "✅ สำเร็จ" : "❌ เกิดข้อผิดพลาด"}</p>
             <p className="text-sm">{result.message}</p>
             <Link href={`/repair/jobs/${jobId}`}
-              className="mt-4 inline-block text-sm text-blue-400 hover:text-blue-300">
+              className="mt-4 inline-block text-sm text-admin-primary hover:text-admin-dark font-medium">
               ← กลับ Job Detail
             </Link>
           </div>
         ) : (
           <div className="space-y-5">
+
             {/* Action selector */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-3">เลือก Action</label>
+              <label className="block text-sm font-medium text-gray-700 mb-3">เลือก Action</label>
               <div className="space-y-2">
-                {(Object.entries(ACTION_CONFIG) as [OverrideAction, typeof ACTION_CONFIG[OverrideAction]][]).map(([key, cfg]) => (
+                {(Object.entries(ACTION_CONFIG) as [OverrideAction, typeof ACTION_CONFIG[OverrideAction]][]).map(([key, c]) => (
                   <button key={key} onClick={() => setAction(key)}
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                      action === key ? cfg.color : "border-gray-700 bg-gray-900 text-gray-400 hover:border-gray-600"
+                      action === key ? c.color : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
                     }`}>
-                    <p className="font-semibold text-sm">{cfg.label}</p>
-                    <p className="text-xs mt-0.5 opacity-80">{cfg.desc}</p>
+                    <p className="font-semibold text-sm">{c.label}</p>
+                    <p className="text-xs mt-0.5 opacity-80">{c.desc}</p>
                   </button>
                 ))}
               </div>
             </div>
 
+            {/* 9-Axes implications */}
+            {cfg && (
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                  ⚙️ ผลกระทบต่อ 9 แกน Lock
+                </p>
+                <div className="space-y-2">
+                  {cfg.axes.map(ax => (
+                    <div key={ax.key} className="flex items-start gap-3 py-2 border-b border-gray-100 last:border-0">
+                      <span className="text-base shrink-0 mt-0.5">{ax.icon}</span>
+                      <div>
+                        <p className="text-xs font-medium text-gray-700 capitalize">{ax.key}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{ax.implication}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <p className="text-xs text-gray-500">
+                    ℹ️ ผลตัดสินนี้จะ <strong>override</strong> ข้อตกลง 9 แกนเดิมโดยอำนาจ Super Admin
+                    และบันทึกใน Audit Log พร้อมชื่อผู้ดำเนินการ
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Reason */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                เหตุผล <span className="text-red-400">*</span>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                เหตุผล <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={reason}
                 onChange={e => setReason(e.target.value)}
                 rows={4}
                 placeholder="ระบุเหตุผลที่ชัดเจน — จะบันทึกใน Audit Log"
-                className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-600 resize-none"
+                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-admin-primary resize-none"
               />
-              <p className="text-xs text-gray-600 mt-1">{reason.length} ตัวอักษร (แนะนำ ≥ 20)</p>
+              <p className="text-xs text-gray-400 mt-1">{reason.length} ตัวอักษร (แนะนำ ≥ 20)</p>
             </div>
 
             {/* Confirmation */}
             <label className="flex items-start gap-3 cursor-pointer">
               <input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)}
                 className="mt-0.5 w-4 h-4 rounded accent-red-500" />
-              <span className="text-sm text-gray-300">
-                ฉันเข้าใจว่าการกระทำนี้ไม่สามารถย้อนกลับได้ และได้บันทึกใน Audit Log ในชื่อ Super Admin แล้ว
+              <span className="text-sm text-gray-700">
+                ฉันเข้าใจว่าการกระทำนี้ไม่สามารถย้อนกลับได้ และได้บันทึกใน Audit Log
+                ในชื่อ Super Admin แล้ว
               </span>
             </label>
 
@@ -169,9 +274,12 @@ export default function ManualOverridePage() {
             <button
               onClick={handleSubmit}
               disabled={!action || reason.trim().length < 10 || !confirmed || submitting}
-              className="w-full py-3 rounded-xl font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-red-700 hover:bg-red-600 text-white enabled:hover:shadow-lg">
-              {submitting ? "กำลังดำเนินการ..." : `ยืนยัน ${action ? ACTION_CONFIG[action].label : ""}`}
+              className={`w-full py-3 rounded-xl font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                cfg?.btnColor ?? "bg-red-600 hover:bg-red-50 text-red-700 border border-red-200"
+              }`}>
+              {submitting ? "กำลังดำเนินการ..." : `ยืนยัน ${cfg?.label ?? ""}`}
             </button>
+
           </div>
         )}
       </main>

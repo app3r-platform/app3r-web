@@ -42,10 +42,10 @@ export default function PickupAtShopPage({
       </div>
 
       {/* Confirm card */}
-      <div className="bg-indigo-950/50 border border-indigo-800/60 rounded-xl p-5 space-y-3 text-center">
+      <div className="bg-weeet-surface/80 border border-weeet-dark/30 rounded-xl p-5 space-y-3 text-center">
         <p className="text-4xl">🏪</p>
-        <p className="text-indigo-300 font-semibold">นำเครื่องเข้าร้านเรียบร้อยแล้ว?</p>
-        <p className="text-indigo-200 text-xs">
+        <p className="text-weeet-primary font-semibold">นำเครื่องเข้าร้านเรียบร้อยแล้ว?</p>
+        <p className="text-weeet-text text-xs">
           กดยืนยันเพื่อเปลี่ยนสถานะเป็น{" "}
           <span className="font-semibold">เครื่องถึงร้าน</span>{" "}
           และเริ่มขั้นตอนการซ่อม
@@ -61,7 +61,7 @@ export default function PickupAtShopPage({
       <button
         onClick={handleConfirm}
         disabled={loading}
-        className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🏪 ยืนยันเครื่องถึงร้านแล้ว"}
       </button>

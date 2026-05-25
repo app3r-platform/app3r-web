@@ -37,10 +37,10 @@ export function AdminListPage({
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
   return (
-    <div className="p-6 min-h-screen bg-gray-950 text-white">
+    <div className="p-6 min-h-screen bg-gray-50 text-gray-900">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-semibold">{title}</h1>
-        <span className="text-sm text-gray-400">{totalCount} รายการ</span>
+        <span className="text-sm text-gray-500">{totalCount} รายการ</span>
       </div>
 
       <FilterBar
@@ -53,12 +53,12 @@ export function AdminListPage({
         extraChips={extraChips}
       />
 
-      <div className="rounded-lg border border-gray-800 overflow-hidden">
+      <div className="rounded-lg border border-gray-200 overflow-hidden">
         {children}
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-4 text-sm text-gray-400">
+        <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
           <span>
             หน้า {page} / {totalPages}
           </span>
@@ -66,14 +66,14 @@ export function AdminListPage({
             <button
               onClick={() => onPageChange(page - 1)}
               disabled={page <= 1}
-              className="px-3 py-1 rounded border border-gray-700 disabled:opacity-40 hover:border-gray-500 transition-colors"
+              className="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:border-gray-500 transition-colors"
             >
               ก่อนหน้า
             </button>
             <button
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages}
-              className="px-3 py-1 rounded border border-gray-700 disabled:opacity-40 hover:border-gray-500 transition-colors"
+              className="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:border-gray-500 transition-colors"
             >
               ถัดไป
             </button>

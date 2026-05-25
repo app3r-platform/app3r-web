@@ -80,7 +80,7 @@ export default function RepairInProgressPage({
           placeholder="บันทึกสิ่งที่ซ่อม, ปัญหาที่พบ, วิธีแก้ไข..."
           value={repairLog}
           onChange={(e) => setRepairLog(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 
@@ -94,7 +94,7 @@ export default function RepairInProgressPage({
           placeholder="เช่น คอมเพรสเซอร์ × 1, น้ำยา R32 × 2"
           value={partsText}
           onChange={(e) => setPartsText(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
         />
       </div>
 
@@ -161,7 +161,7 @@ export default function RepairInProgressPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !repairLog.trim()}
-        className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🔧 ยืนยันซ่อมเสร็จ + ทดสอบผ่าน"}
       </button>

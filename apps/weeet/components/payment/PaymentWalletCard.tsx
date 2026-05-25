@@ -31,8 +31,8 @@ export function PaymentWalletCard() {
 
   return (
     <div className="space-y-3">
-      <div className="bg-gradient-to-br from-orange-950/60 to-gray-800 border border-orange-800/50 rounded-xl p-4">
-        <p className="text-xs text-orange-300/70 mb-1">กระเป๋าเงินช่าง</p>
+      <div className="bg-gradient-to-br from-weeet-text/60 to-gray-800 border border-weeet-dark/50 rounded-xl p-4">
+        <p className="text-xs text-weeet-primary/70 mb-1">กระเป๋าเงินช่าง</p>
         <div className="flex items-end gap-2">
           <span className="text-2xl font-bold text-white">฿{fmt(balance?.available ?? 0)}</span>
           <span className="text-xs text-gray-400 mb-0.5">พร้อมโอน</span>

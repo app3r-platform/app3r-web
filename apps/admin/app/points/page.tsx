@@ -37,7 +37,7 @@ export default function PointsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 min-w-0">
         <AdminListPage
@@ -53,17 +53,17 @@ export default function PointsPage() {
           onPageChange={setPage}
           onReset={resetMockData}
         >
-          <div className="flex justify-end p-3 bg-gray-900/40 border-b border-gray-800">
+          <div className="flex justify-end p-3 bg-white/40 border-b border-gray-200">
             <button
               onClick={openCreate}
-              className="px-4 py-2 text-sm rounded bg-green-600 text-white hover:bg-green-500"
+              className="px-4 py-2 text-sm rounded bg-brand-success hover:bg-brand-success/90 text-white"
             >
               + เพิ่มธุรกรรม
             </button>
           </div>
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-500 text-left border-b border-gray-800">
+              <tr className="text-gray-500 text-left border-b border-gray-200">
                 <th className="px-4 py-3">ID</th>
                 <th className="px-4 py-3">ผู้ใช้</th>
                 <th className="px-4 py-3">ประเภท</th>
@@ -72,7 +72,7 @@ export default function PointsPage() {
                 <th className="px-4 py-3">วันที่</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-gray-200">
               {paged.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-4 py-10 text-center text-gray-600">
@@ -84,16 +84,16 @@ export default function PointsPage() {
                   <tr
                     key={row.id}
                     onClick={() => openView(row)}
-                    className="hover:bg-gray-800/40 cursor-pointer"
+                    className="hover:bg-gray-100/40 cursor-pointer"
                   >
                     <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
                     <td className="px-4 py-3">{row.userName}</td>
-                    <td className="px-4 py-3 text-xs text-gray-400">{row.type}</td>
+                    <td className="px-4 py-3 text-xs text-gray-500">{row.type}</td>
                     <td className="px-4 py-3 text-right font-mono">
                       {row.amount.toLocaleString()}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-300">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
                         {row.status}
                       </span>
                     </td>

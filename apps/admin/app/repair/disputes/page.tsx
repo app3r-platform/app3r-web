@@ -20,10 +20,10 @@ interface RepairDispute {
 }
 
 const DISPUTE_STATUS: Record<string, { label: string; color: string }> = {
-  open:       { label: "เปิด",         color: "bg-red-900/50 text-red-400" },
-  in_review:  { label: "กำลังตรวจ",   color: "bg-yellow-900/50 text-yellow-400" },
-  resolved:   { label: "แก้ไขแล้ว",   color: "bg-green-900/50 text-green-400" },
-  escalated:  { label: "Escalated",    color: "bg-orange-900/50 text-orange-400" },
+  open:       { label: "เปิด",         color: "bg-red-50 text-red-700" },
+  in_review:  { label: "กำลังตรวจ",   color: "bg-yellow-50 text-yellow-700" },
+  resolved:   { label: "แก้ไขแล้ว",   color: "bg-green-50 text-green-700" },
+  escalated:  { label: "Escalated",    color: "bg-orange-50 text-orange-700" },
 };
 
 const PAGE_SIZE = 20;
@@ -63,22 +63,22 @@ export default function RepairDisputesPage() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-2xl font-bold">⚖️ Repair Disputes</h1>
           <Link href="/disputes"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ดู Disputes ทั้งหมด →
           </Link>
         </div>
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-gray-500 text-sm mb-6">
           ข้อพิพาทที่เกี่ยวกับ Repair module — filter จาก /admin/disputes?module=repair
         </p>
 
         {/* Status filter */}
-        <div className="flex gap-1 mb-6 bg-gray-900 rounded-xl p-1 border border-gray-800 w-fit">
+        <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">
           {[
             { label: "ทั้งหมด", value: "" },
             { label: "เปิด", value: "open" },
@@ -89,23 +89,23 @@ export default function RepairDisputesPage() {
             <button key={f.value}
               onClick={() => { setFilterStatus(f.value); setPage(1); }}
               className={`px-4 py-2 rounded-lg text-xs transition-colors ${
-                filterStatus === f.value ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"
+                filterStatus === f.value ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
               {f.label}
             </button>
           ))}
         </div>
 
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-800 flex items-center justify-between text-sm text-gray-400">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
             <span>พบ {total.toLocaleString()} รายการ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">‹</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">‹</button>
                 <span>{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  className="px-2 py-1 rounded bg-gray-800 disabled:opacity-40 hover:bg-gray-700">›</button>
+                  className="px-2 py-1 rounded bg-gray-100 disabled:opacity-40 hover:bg-gray-200">›</button>
               </div>
             )}
           </div>
@@ -115,7 +115,7 @@ export default function RepairDisputesPage() {
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-6 py-3">Dispute ID</th>
                   <th className="px-6 py-3">Repair Job</th>
                   <th className="px-6 py-3">WeeeU</th>
@@ -127,33 +127,33 @@ export default function RepairDisputesPage() {
                   <th className="px-6 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {items.map(d => {
-                  const sc = DISPUTE_STATUS[d.status] ?? { label: d.status, color: "bg-gray-800 text-gray-300" };
+                  const sc = DISPUTE_STATUS[d.status] ?? { label: d.status, color: "bg-gray-100 text-gray-600" };
                   return (
-                    <tr key={d.id} className="hover:bg-gray-800/40">
+                    <tr key={d.id} className="hover:bg-gray-100/40">
                       <td className="px-6 py-3">
-                        <span className="font-mono text-xs text-gray-400">{d.id.slice(0, 8)}…</span>
+                        <span className="font-mono text-xs text-gray-500">{d.id.slice(0, 8)}…</span>
                       </td>
                       <td className="px-6 py-3">
                         <Link href={`/repair/jobs/${d.repair_job_id}`}
-                          className="font-mono text-xs text-blue-400 hover:text-blue-300">
+                          className="font-mono text-xs text-admin-primary hover:text-admin-dark">
                           {d.repair_job_id.slice(0, 8)}…
                         </Link>
                       </td>
                       <td className="px-6 py-3 text-sm">{d.weeeu_name}</td>
-                      <td className="px-6 py-3 text-sm text-gray-300">{d.weeer_name}</td>
-                      <td className="px-6 py-3 text-xs text-gray-400">{d.opened_by}</td>
+                      <td className="px-6 py-3 text-sm text-gray-700">{d.weeer_name}</td>
+                      <td className="px-6 py-3 text-xs text-gray-500">{d.opened_by}</td>
                       <td className="px-6 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sc.color}`}>{sc.label}</span>
                       </td>
-                      <td className="px-6 py-3 text-xs text-gray-400 max-w-xs truncate">{d.reason}</td>
+                      <td className="px-6 py-3 text-xs text-gray-500 max-w-xs truncate">{d.reason}</td>
                       <td className="px-6 py-3 text-xs text-gray-500">
                         {new Date(d.created_at).toLocaleDateString("th-TH")}
                       </td>
                       <td className="px-6 py-3">
                         <Link href={`/disputes`}
-                          className="text-xs text-blue-400 hover:text-blue-300 transition-colors whitespace-nowrap">
+                          className="text-xs text-admin-primary hover:text-admin-dark transition-colors whitespace-nowrap">
                           จัดการ →
                         </Link>
                       </td>

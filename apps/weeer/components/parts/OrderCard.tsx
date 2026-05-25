@@ -1,5 +1,7 @@
 "use client";
 
+// ── OrderCard — Gen 80 (5-stage: +confirm action) ────────────────────────────
+
 import type { PartOrder } from "../../app/(app)/parts/_lib/types";
 import { ORDER_STAGE_COLOR, ORDER_STAGE_LABEL, DELIVERY_LABEL } from "../../app/(app)/parts/_lib/types";
 import { OrderStageStepper } from "./OrderStageStepper";
@@ -7,13 +9,16 @@ import { OrderStageStepper } from "./OrderStageStepper";
 interface OrderCardProps {
   order: PartOrder;
   role: "buyer" | "seller";
-  onAction?: (action: "ship" | "receive" | "cancel", orderId: string) => void;
+  onAction?: (action: "confirm" | "ship" | "receive" | "cancel", orderId: string) => void;
 }
 
 export function OrderCard({ order, role, onAction }: OrderCardProps) {
-  const canShip   = role === "seller" && order.stage === "ordered";
+  // Gen 80 5-stage authority
+  const canConfirm = role === "seller" && order.stage === "ordered";
+  const canShip    = role === "seller" && order.stage === "confirmed";
   const canReceive = role === "buyer"  && order.stage === "shipped";
-  const canCancel = order.stage === "ordered" && (role === "buyer" || role === "seller");
+  const canCancel  = (order.stage === "ordered" || order.stage === "confirmed") &&
+                     (role === "buyer" || role === "seller");
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
@@ -32,7 +37,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
         </span>
       </div>
 
-      {/* Stepper (ขั้นตอน) */}
+      {/* Stepper (5 ขั้น) */}
       <div className="py-1">
         <OrderStageStepper stage={order.stage} />
       </div>
@@ -62,25 +67,53 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
       {/* Actions */}
       {onAction && (
         <div className="flex flex-col gap-2">
+          {/* P5: ผู้ขายกดรับออเดอร์ ordered→confirmed */}
+          {canConfirm && (
+            <button
+              onClick={() => onAction("confirm", order.id)}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+            >
+              ☑️ รับออเดอร์ (P5)
+            </button>
+          )}
+          {/* P6: ผู้ขายกดส่ง confirmed→shipped */}
           {canShip && (
-            <button onClick={() => onAction("ship", order.id)} className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
-              📦 บันทึกการจัดส่ง
+            <button
+              onClick={() => onAction("ship", order.id)}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+            >
+              📦 บันทึกการจัดส่ง (P6)
             </button>
           )}
+          {/* P7: ผู้ซื้อกดรับของ shipped→received */}
           {canReceive && (
-            <button onClick={() => onAction("receive", order.id)} className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
-              ✅ ยืนยันรับของ
+            <button
+              onClick={() => onAction("receive", order.id)}
+              className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+            >
+              ✅ ยืนยันรับของ (P7)
             </button>
           )}
+          {/* P8/P9: ยกเลิก (เฉพาะก่อน shipped) */}
           {canCancel && (
-            <button onClick={() => onAction("cancel", order.id)} className="w-full bg-white border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium py-2 rounded-xl transition-colors">
-              🚫 ยกเลิกคำสั่งซื้อ
+            <button
+              onClick={() => onAction("cancel", order.id)}
+              className="w-full bg-white border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium py-2 rounded-xl transition-colors"
+            >
+              🚫 ยกเลิก
             </button>
           )}
-          {!canShip && !canReceive && !canCancel && order.stage !== "cancelled" && (
-            <p className="text-xs text-center text-gray-400">
-              {order.stage === "received" ? "✅ งานนี้ปิดแล้ว" : "รอฝ่ายตรงข้ามดำเนินการ"}
-            </p>
+          {/* หลัง shipped — ยกเลิกไม่ได้ */}
+          {order.stage === "shipped" && role !== "buyer" && (
+            <p className="text-xs text-center text-gray-400">รอผู้ซื้อยืนยันรับของ</p>
+          )}
+          {order.stage === "received" && (
+            <p className="text-xs text-center text-gray-400">✅ งานนี้ปิดแล้ว</p>
+          )}
+          {/* ไม่มีปุ่ม → แจ้ง */}
+          {!canConfirm && !canShip && !canReceive && !canCancel &&
+           order.stage !== "received" && order.stage !== "shipped" && order.stage !== "cancelled" && (
+            <p className="text-xs text-center text-gray-400">รอฝ่ายตรงข้ามดำเนินการ</p>
           )}
         </div>
       )}

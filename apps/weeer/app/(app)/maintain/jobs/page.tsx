@@ -13,10 +13,15 @@ import {
 
 const FILTER_TABS: { label: string; value: MaintainStatus | "all" }[] = [
   { label: "ทั้งหมด",      value: "all" },
+  { label: "รอตอบรับ",     value: "awaiting_offer" },
   { label: "มอบหมายแล้ว", value: "assigned" },
   { label: "กำลังล้าง",   value: "in_progress" },
+  { label: "ลูกค้าไม่อยู่", value: "no_show" },
+  { label: "ลูกค้ายุติ",   value: "terminated_by_customer" },
   { label: "เสร็จแล้ว",   value: "completed" },
+  { label: "ถอนงาน",      value: "withdrawn" },
   { label: "ยกเลิก",      value: "cancelled" },
+  { label: "ปิด→ซ่อม",    value: "closed_for_repair" },
 ];
 
 export default function MaintainJobsPage() {
@@ -41,7 +46,7 @@ export default function MaintainJobsPage() {
           <h1 className="text-xl font-bold text-gray-900">งาน Maintain</h1>
           <p className="text-xs text-gray-500 mt-0.5">งานล้างเครื่องที่ร้านรับแล้ว</p>
         </div>
-        <Link href="/maintain/queue" className="text-sm text-green-700 hover:text-green-900 font-medium">
+        <Link href="/maintain/queue" className="text-sm text-[#FF663A] hover:text-[#D8491F] font-medium">
           + รับงานใหม่
         </Link>
       </div>
@@ -53,7 +58,7 @@ export default function MaintainJobsPage() {
             onClick={() => setFilter(tab.value)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors
               ${filter === tab.value
-                ? "bg-green-700 text-white"
+                ? "bg-[#FF663A] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
             {tab.label}
             {tab.value !== "all" && (
@@ -78,7 +83,7 @@ export default function MaintainJobsPage() {
       <div className="space-y-3">
         {filtered.map((job) => (
           <Link key={job.id} href={`/maintain/jobs/${job.id}`}
-            className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all">
+            className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-[#FFD5C4] hover:shadow-sm transition-all">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
@@ -105,10 +110,14 @@ export default function MaintainJobsPage() {
                 {!job.technicianId && job.status === "assigned" && (
                   <p className="text-xs text-orange-600 mt-1 font-medium">⚠️ ยังไม่ได้มอบหมายช่าง</p>
                 )}
-                <p className="text-xs text-green-600 mt-1 font-medium">📊 ดู Progress</p>
+                {/* GAP D-M-2: closed_for_repair banner */}
+                {job.status === "closed_for_repair" && (
+                  <p className="text-xs text-gray-600 bg-gray-50 rounded-lg px-2 py-1 mt-1">🔧 ปิดงานนี้แล้ว — ส่งต่อซ่อม</p>
+                )}
+                <p className="text-xs text-[#FF663A] mt-1 font-medium">📊 ดู Progress</p>
               </div>
               <div className="shrink-0 text-right">
-                <p className="text-sm font-bold text-green-700">{job.totalPrice.toLocaleString()} pts</p>
+                <p className="text-sm font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</p>
                 <p className="text-xs text-gray-400">{job.estimatedDuration} ชม.</p>
               </div>
             </div>

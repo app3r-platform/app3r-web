@@ -68,9 +68,9 @@ export default function ParcelInProgressPage({
       </div>
 
       {/* Parcel badge */}
-      <div className="bg-purple-950/50 border border-purple-800/60 rounded-xl px-4 py-2 flex items-center gap-2">
-        <span className="text-purple-300 text-sm">📦</span>
-        <span className="text-purple-300 text-sm font-medium">พัสดุ — ซ่อมในร้านเท่านั้น</span>
+      <div className="bg-gray-800/60 border border-gray-600/60 rounded-xl px-4 py-2 flex items-center gap-2">
+        <span className="text-blue-300 text-sm">📦</span>
+        <span className="text-blue-300 text-sm font-medium">พัสดุ — ซ่อมในร้านเท่านั้น</span>
       </div>
 
       {/* Service log */}
@@ -83,7 +83,7 @@ export default function ParcelInProgressPage({
           placeholder="บันทึกสิ่งที่ซ่อม, ปัญหาที่พบ, วิธีแก้ไข..."
           value={serviceLog}
           onChange={(e) => setServiceLog(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 
@@ -97,7 +97,7 @@ export default function ParcelInProgressPage({
           placeholder="เช่น แผงวงจร × 1, ฟิวส์ × 2"
           value={partsUsed}
           onChange={(e) => setPartsUsed(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
+          className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary"
         />
       </div>
 
@@ -165,7 +165,7 @@ export default function ParcelInProgressPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !serviceLog.trim()}
-        className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🔧 บันทึกการซ่อม"}
       </button>

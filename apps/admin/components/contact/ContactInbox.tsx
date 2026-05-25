@@ -67,7 +67,7 @@ export default function ContactInbox() {
         <h1 className="text-2xl font-bold text-gray-900">กล่องข้อความติดต่อ (Inbox)</h1>
         <Link
           href="/contact/info"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+          className="bg-admin-surface text-admin-primary px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
         >
           แก้ข้อมูลติดต่อ
         </Link>
@@ -127,7 +127,7 @@ export default function ContactInbox() {
             <tbody className="divide-y">
               {messages.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
                     ไม่พบข้อความ
                   </td>
                 </tr>
@@ -148,7 +148,7 @@ export default function ContactInbox() {
                   <td className="px-4 py-3 text-gray-700 max-w-xs truncate">
                     {m.subject}
                   </td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">
+                  <td className="px-4 py-3 text-gray-500 text-xs">
                     {new Date(m.createdAt).toLocaleDateString('th-TH')}
                   </td>
                   <td className="px-4 py-3">

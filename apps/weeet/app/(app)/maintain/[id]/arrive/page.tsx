@@ -48,7 +48,7 @@ export default function MaintainArrivePage({ params }: { params: Promise<{ id: s
     photos.forEach((p) => fd.append("arrival_photos", p.file));
     try {
       await maintainApi.arrive(id, fd);
-      router.replace(`/maintain/${id}/checklist`);
+      router.replace(`/maintain/${id}/inspect`);
     } catch (e) {
       setError((e as Error).message);
       setSubmitting(false);
@@ -68,7 +68,7 @@ export default function MaintainArrivePage({ params }: { params: Promise<{ id: s
       </div>
 
       <div className="px-4 pt-4 space-y-4">
-        <div className="bg-teal-950/30 border border-teal-800/50 rounded-xl p-3 text-xs text-teal-300 space-y-1">
+        <div className="bg-weeet-primary/10 border border-weeet-dark/40 rounded-xl p-3 text-xs text-weeet-primary space-y-1">
           <p className="font-semibold">📸 ต้องถ่ายอย่างน้อย 2 รูป:</p>
           <p>1. รูปเครื่องก่อนล้าง (สภาพเริ่มต้น)</p>
           <p>2. รูปร่วมกับลูกค้าหรือสถานที่</p>
@@ -100,7 +100,7 @@ export default function MaintainArrivePage({ params }: { params: Promise<{ id: s
           {photos.length < MAX_PHOTOS && (
             <button
               onClick={() => fileRef.current?.click()}
-              className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-teal-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-teal-400 transition-colors"
+              className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-weeet-primary rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-weeet-primary transition-colors"
             >
               <span className="text-2xl">📷</span>
               <span className="text-xs">เพิ่มรูป</span>
@@ -127,7 +127,7 @@ export default function MaintainArrivePage({ params }: { params: Promise<{ id: s
         <button
           onClick={handleSubmit}
           disabled={!canSubmit}
-          className="w-full bg-teal-600 hover:bg-teal-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {submitting ? (
             <><span className="animate-spin">⏳</span> กำลังส่ง...</>

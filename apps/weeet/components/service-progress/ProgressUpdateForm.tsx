@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 /**
  * components/service-progress/ProgressUpdateForm.tsx
  * Sub-5 Wave 2 — Service Progress Tracker D79
@@ -14,7 +14,7 @@ import type { ServiceProgressRecord, ServiceProgressStatus } from "@/lib/dal/typ
 const STATUS_OPTIONS: { value: ServiceProgressStatus; label: string; color: string }[] = [
   { value: "pending",     label: "⏳ รอดำเนินการ",    color: "text-gray-300" },
   { value: "accepted",    label: "✅ รับงานแล้ว",      color: "text-blue-300" },
-  { value: "in_progress", label: "🔧 กำลังดำเนินการ", color: "text-orange-300" },
+  { value: "in_progress", label: "🔧 กำลังดำเนินการ", color: "text-weeet-primary" },
   { value: "paused",      label: "⏸ หยุดชั่วคราว",   color: "text-amber-300" },
   { value: "completed",   label: "🎉 เสร็จสิ้น",      color: "text-green-300" },
   { value: "cancelled",   label: "❌ ยกเลิก",          color: "text-red-300" },
@@ -128,7 +128,7 @@ export function ProgressUpdateForm({ serviceId, existingEntry, onSuccess, onCanc
               onClick={() => setStatus(opt.value)}
               className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors text-left ${
                 status === opt.value
-                  ? "border-orange-500 bg-orange-950/40 text-orange-300"
+                  ? "border-weeet-primary bg-weeet-primary/10 text-weeet-primary"
                   : "border-gray-700 bg-gray-800/60 text-gray-400 hover:border-gray-600"
               }`}
             >
@@ -142,7 +142,7 @@ export function ProgressUpdateForm({ serviceId, existingEntry, onSuccess, onCanc
       <div className="space-y-1.5">
         <label className="text-xs font-semibold text-gray-300 uppercase tracking-wide flex justify-between">
           <span>ความคืบหน้า</span>
-          <span className="text-orange-400 font-bold">{progressPercent}%</span>
+          <span className="text-weeet-primary font-bold">{progressPercent}%</span>
         </label>
         <input
           type="range"
@@ -151,11 +151,11 @@ export function ProgressUpdateForm({ serviceId, existingEntry, onSuccess, onCanc
           step={5}
           value={progressPercent}
           onChange={(e) => setProgressPercent(Number(e.target.value))}
-          className="w-full accent-orange-500 cursor-pointer"
+          className="w-full accent-[#1696F9] cursor-pointer"
         />
         <div className="w-full bg-gray-700 rounded-full h-2">
           <div
-            className="bg-orange-500 h-2 rounded-full transition-all"
+            className="bg-weeet-primary h-2 rounded-full transition-all"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -171,7 +171,7 @@ export function ProgressUpdateForm({ serviceId, existingEntry, onSuccess, onCanc
           onChange={(e) => setNote(e.target.value)}
           placeholder="รายละเอียดความคืบหน้า เช่น ถอดฝาครอบแล้ว กำลังตรวจ motor..."
           rows={3}
-          className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 resize-none"
+          className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-weeet-primary resize-none"
         />
       </div>
 
@@ -210,7 +210,7 @@ export function ProgressUpdateForm({ serviceId, existingEntry, onSuccess, onCanc
 
         {/* File input */}
         {!photoFile && !(!removePhoto && existingEntry?.photoR2Key) && (
-          <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:border-orange-500/50 transition-colors bg-gray-800/30">
+          <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:border-weeet-primary/50 transition-colors bg-gray-800/30">
             <span className="text-2xl mb-1">📷</span>
             <span className="text-xs text-gray-500">แตะเพื่อเลือกรูป (JPG/PNG/WebP ≤10MB)</span>
             <input
@@ -246,7 +246,7 @@ export function ProgressUpdateForm({ serviceId, existingEntry, onSuccess, onCanc
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-sm font-semibold transition-colors disabled:opacity-50"
+          className="flex-1 py-3 rounded-xl bg-weeet-primary hover:bg-weeet-dark text-white text-sm font-semibold transition-colors disabled:opacity-50"
         >
           {loading
             ? (isUpdateMode ? "กำลังอัพเดต..." : "กำลังบันทึก...")

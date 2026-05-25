@@ -91,6 +91,11 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
       </div>
 
       <div className="px-4 pt-4 space-y-5">
+        {/* Evidence banner — ร้านดึงหลักฐานนี้ไปใช้กับลูกค้า */}
+        <div className="bg-weeet-surface/10 border border-weeet-dark/30 rounded-xl px-4 py-3 text-xs text-weeet-primary">
+          📤 รูปและคลิปเหล่านี้จะถูกส่งเป็นหลักฐานให้ร้านโดยอัตโนมัติ — ร้านจะใช้ยืนยันกับลูกค้าในกรณีข้อพิพาท
+        </div>
+
         {/* Photos */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -145,7 +150,7 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-white">🔩 อะไหล่ที่ใช้</h2>
-            <button onClick={addPart} className="text-xs text-orange-400 hover:text-orange-300">+ เพิ่ม</button>
+            <button onClick={addPart} className="text-xs text-weeet-primary hover:text-weeet-dark">+ เพิ่ม</button>
           </div>
           {partsUsed.map((p, i) => (
             <div key={i} className="flex gap-2 items-center">
@@ -164,7 +169,7 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
           <label className="text-sm font-semibold text-white">📝 หมายเหตุหลังซ่อม</label>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
             placeholder="สรุปงานที่ทำ ผลการทดสอบ..." rows={3}
-            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none" />
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-weeet-primary resize-none" />
         </div>
 
         {sizeError && <p className="text-amber-400 text-xs bg-amber-950/40 border border-amber-700 rounded-lg px-3 py-2">⚠️ {sizeError}</p>}

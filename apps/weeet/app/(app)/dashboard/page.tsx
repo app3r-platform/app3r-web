@@ -22,7 +22,7 @@ export default function DashboardPage() {
           <p className="text-xs text-gray-500">{tech?.shopName}</p>
         </div>
         <Link href="/profile">
-          <div className="w-11 h-11 rounded-full bg-orange-600 flex items-center justify-center text-xl font-bold">
+          <div className="w-11 h-11 rounded-full bg-weeet-primary flex items-center justify-center text-xl font-bold">
             {tech?.name?.[0] ?? "ช"}
           </div>
         </Link>
@@ -31,7 +31,7 @@ export default function DashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-gray-800 rounded-xl p-3 text-center border border-gray-700">
-          <p className="text-2xl font-bold text-orange-400">{todayJobs.length}</p>
+          <p className="text-2xl font-bold text-weeet-primary">{todayJobs.length}</p>
           <p className="text-xs text-gray-400 mt-0.5">งานวันนี้</p>
         </div>
         <div className="bg-gray-800 rounded-xl p-3 text-center border border-gray-700">
@@ -48,7 +48,7 @@ export default function DashboardPage() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-semibold text-white">งานวันนี้</h2>
-          <Link href="/jobs" className="text-orange-400 text-sm hover:text-orange-300">
+          <Link href="/jobs" className="text-weeet-primary text-sm hover:text-weeet-dark">
             ดูทั้งหมด →
           </Link>
         </div>
@@ -83,25 +83,25 @@ export default function DashboardPage() {
         <h2 className="font-semibold text-white mb-3">ทางลัด</h2>
         <div className="grid grid-cols-2 gap-3">
           <Link href="/jobs">
-            <div className="bg-gray-800 border border-gray-700 hover:border-orange-600 rounded-xl p-4 text-center transition-colors">
+            <div className="bg-gray-800 border border-gray-700 hover:border-weeet-primary rounded-xl p-4 text-center transition-colors">
               <span className="text-2xl">📋</span>
               <p className="text-sm text-gray-300 mt-1 font-medium">รายการงาน</p>
             </div>
           </Link>
           <Link href="/parts">
-            <div className="bg-gray-800 border border-gray-700 hover:border-orange-600 rounded-xl p-4 text-center transition-colors">
+            <div className="bg-gray-800 border border-gray-700 hover:border-weeet-primary rounded-xl p-4 text-center transition-colors">
               <span className="text-2xl">📦</span>
               <p className="text-sm text-gray-300 mt-1 font-medium">อะไหล่</p>
             </div>
           </Link>
           <Link href="/reports">
-            <div className="bg-gray-800 border border-gray-700 hover:border-orange-600 rounded-xl p-4 text-center transition-colors">
+            <div className="bg-gray-800 border border-gray-700 hover:border-weeet-primary rounded-xl p-4 text-center transition-colors">
               <span className="text-2xl">📊</span>
               <p className="text-sm text-gray-300 mt-1 font-medium">รายงาน</p>
             </div>
           </Link>
           <Link href="/settings">
-            <div className="bg-gray-800 border border-gray-700 hover:border-orange-600 rounded-xl p-4 text-center transition-colors">
+            <div className="bg-gray-800 border border-gray-700 hover:border-weeet-primary rounded-xl p-4 text-center transition-colors">
               <span className="text-2xl">⚙️</span>
               <p className="text-sm text-gray-300 mt-1 font-medium">ตั้งค่า</p>
             </div>

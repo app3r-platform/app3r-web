@@ -32,14 +32,14 @@ function StatCard({
 }) {
   const accentMap: Record<string, string> = {
     blue:   "text-blue-400",
-    green:  "text-green-400",
-    red:    "text-red-400",
-    orange: "text-orange-400",
-    purple: "text-purple-400",
+    green:  "text-green-600",
+    red:    "text-red-600",
+    orange: "text-orange-700",
+    "admin-primary": "text-admin-primary",
     default: "text-white",
   };
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-2xl mb-1">{icon}</p>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className={`text-2xl font-bold ${accentMap[accent ?? "default"]}`}>{value}</p>
@@ -88,17 +88,17 @@ export default function RepairAnalyticsPage() {
   }, [router, fetchData]);
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-8 max-w-5xl">
 
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">📊 Repair Analytics — On-site</h1>
-            <p className="text-gray-400 text-sm mt-1">ภาพรวมงานซ่อม On-site — jobs by status, branch, conversion rate</p>
+            <p className="text-gray-500 text-sm mt-1">ภาพรวมงานซ่อม On-site — jobs by status, branch, conversion rate</p>
           </div>
           <Link href="/repair/jobs"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← ดู Jobs List
           </Link>
         </div>
@@ -106,7 +106,7 @@ export default function RepairAnalyticsPage() {
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
         ) : error ? (
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">{error}</div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error}</div>
         ) : data && (
           <>
             {/* Summary cards */}
@@ -132,7 +132,7 @@ export default function RepairAnalyticsPage() {
                     ? `${data.avg_completion_hours.toFixed(1)} ชั่วโมง`
                     : "—"}
                   sub="T0 → T7 เฉลี่ย"
-                  accent="purple"
+                  accent="admin-primary"
                 />
                 <StatCard
                   icon="♻️"
@@ -148,21 +148,21 @@ export default function RepairAnalyticsPage() {
 
             {/* By Status */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
                     return (
                       <div key={row.status} className="flex items-center gap-3">
-                        <span className="text-xs text-gray-400 w-32 shrink-0">
+                        <span className="text-xs text-gray-500 w-32 shrink-0">
                           {STATUS_LABELS[row.status] ?? row.status}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className="bg-blue-600 h-2 rounded-full transition-all"
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-12 text-right">{row.count}</span>
+                        <span className="text-xs text-gray-700 w-12 text-right">{row.count}</span>
                       </div>
                     );
                   })}
@@ -170,7 +170,7 @@ export default function RepairAnalyticsPage() {
               </section>
 
               {/* By Branch */}
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Branch</h2>
                 <div className="space-y-3">
                   {data.by_branch.map(row => {
@@ -182,15 +182,15 @@ export default function RepairAnalyticsPage() {
                     };
                     return (
                       <div key={row.branch} className="flex items-center gap-3">
-                        <span className="text-xs font-mono text-purple-400 w-10 shrink-0">{row.branch}</span>
+                        <span className="text-xs font-mono text-admin-primary w-10 shrink-0">{row.branch}</span>
                         <span className="text-xs text-gray-500 w-32 shrink-0">
                           {BRANCH_LABELS[row.branch] ?? row.branch}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className={`${colors[row.branch] ?? "bg-gray-600"} h-2 rounded-full transition-all`}
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-10 text-right">{row.count}</span>
+                        <span className="text-xs text-gray-700 w-10 text-right">{row.count}</span>
                       </div>
                     );
                   })}
@@ -202,7 +202,7 @@ export default function RepairAnalyticsPage() {
             </div>
 
             {/* By Source — D64 */}
-            <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <section className="bg-white rounded-xl border border-gray-200 p-5">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                 🔍 Jobs by Source (D64)
               </h2>
@@ -218,16 +218,16 @@ export default function RepairAnalyticsPage() {
                       <div key={row.type} className="flex items-center gap-3">
                         <span className={`text-xs px-2 py-0.5 rounded border shrink-0 w-36 text-center ${
                           isScrap
-                            ? "bg-orange-900/40 border-orange-700 text-orange-300"
-                            : "bg-blue-900/40 border-blue-700 text-blue-300"
+                            ? "bg-orange-900/40 border-orange-700 text-orange-700"
+                            : "bg-blue-50 border-blue-200 text-blue-700"
                         }`}>
                           {isScrap ? "ซื้อจากซาก" : "ลูกค้า"}
                         </span>
-                        <div className="flex-1 bg-gray-800 rounded-full h-2">
+                        <div className="flex-1 bg-gray-100 rounded-full h-2">
                           <div className={`${isScrap ? "bg-orange-500" : "bg-blue-500"} h-2 rounded-full transition-all`}
                             style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-xs text-gray-300 w-20 text-right font-mono">
+                        <span className="text-xs text-gray-700 w-20 text-right font-mono">
                           {row.count} ({pct.toFixed(1)}%)
                         </span>
                       </div>
@@ -239,7 +239,7 @@ export default function RepairAnalyticsPage() {
 
             {/* Top WeeeR */}
             {data.top_weeer?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Top WeeeR (by jobs)</h2>
                 <div className="space-y-1.5">
                   {data.top_weeer.map((row, i) => (
@@ -255,19 +255,19 @@ export default function RepairAnalyticsPage() {
 
             {/* Recent closures */}
             {data.recent_closures?.length > 0 && (
-              <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+              <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Recent Closures</h2>
                 <div className="space-y-1.5">
                   {data.recent_closures.map(row => (
-                    <div key={row.job_id} className="flex items-center gap-3 text-sm border-b border-gray-800/50 pb-1.5">
+                    <div key={row.job_id} className="flex items-center gap-3 text-sm border-b border-gray-200/50 pb-1.5">
                       <Link href={`/repair/jobs/${row.job_id}`}
-                        className="font-mono text-xs text-blue-400 hover:text-blue-300 w-24 shrink-0">
+                        className="font-mono text-xs text-admin-primary hover:text-admin-dark w-24 shrink-0">
                         {row.job_id.slice(0, 8)}…
                       </Link>
-                      <span className="text-gray-400 text-xs flex-1">
+                      <span className="text-gray-500 text-xs flex-1">
                         {new Date(row.closed_at).toLocaleString("th-TH")}
                       </span>
-                      <span className="text-green-400 font-mono text-xs">
+                      <span className="text-green-600 font-mono text-xs">
                         {row.final_price.toLocaleString()} G
                       </span>
                     </div>

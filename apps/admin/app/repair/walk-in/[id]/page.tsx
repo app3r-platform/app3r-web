@@ -56,16 +56,16 @@ interface WalkInJobDetail {
 }
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
-  checked_in:        { label: "เช็คอิน",        color: "bg-blue-900/50 text-blue-300" },
-  inspecting:        { label: "ตรวจสภาพ",        color: "bg-purple-900/50 text-purple-300" },
-  awaiting_decision: { label: "รอตัดสินใจ",      color: "bg-yellow-900/50 text-yellow-400" },
-  awaiting_parts:    { label: "รอชิ้นส่วน",      color: "bg-orange-900/50 text-orange-300" },
+  checked_in:        { label: "เช็คอิน",        color: "bg-blue-50 text-blue-700" },
+  inspecting:        { label: "ตรวจสภาพ",        color: "bg-admin-primary/15 text-admin-primary" },
+  awaiting_decision: { label: "รอตัดสินใจ",      color: "bg-yellow-50 text-yellow-700" },
+  awaiting_parts:    { label: "รอชิ้นส่วน",      color: "bg-orange-900/50 text-orange-700" },
   in_progress:       { label: "กำลังซ่อม",       color: "bg-cyan-900/50 text-cyan-300" },
-  completed:         { label: "ซ่อมเสร็จ",       color: "bg-teal-900/50 text-teal-300" },
-  awaiting_pickup:   { label: "รอรับคืน",        color: "bg-indigo-900/50 text-indigo-300" },
-  closed:            { label: "ปิดงาน",          color: "bg-green-900/50 text-green-400" },
-  abandoned:         { label: "ทิ้งแล้ว",        color: "bg-red-900/50 text-red-400" },
-  cancelled:         { label: "ยกเลิก",          color: "bg-gray-800 text-gray-400" },
+  completed:         { label: "ซ่อมเสร็จ",       color: "bg-brand-success/15 text-brand-success" },
+  awaiting_pickup:   { label: "รอรับคืน",        color: "bg-brand-info/15 text-brand-info" },
+  closed:            { label: "ปิดงาน",          color: "bg-green-50 text-green-700" },
+  abandoned:         { label: "ทิ้งแล้ว",        color: "bg-red-50 text-red-700" },
+  cancelled:         { label: "ยกเลิก",          color: "bg-gray-100 text-gray-500" },
 };
 
 const OVERRIDE_ACTIONS = [
@@ -76,7 +76,7 @@ const OVERRIDE_ACTIONS = [
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex gap-2 py-1.5 border-b border-gray-800/60 last:border-0">
+    <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-36 shrink-0">{label}</span>
       <span className="text-sm text-gray-100">{value}</span>
     </div>
@@ -140,7 +140,7 @@ export default function WalkInDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
       </div>
@@ -149,13 +149,13 @@ export default function WalkInDetailPage() {
 
   if (error || !job) {
     return (
-      <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex min-h-screen bg-gray-50 text-gray-900">
         <Sidebar />
         <main className="flex-1 p-8">
-          <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
             {error ?? "ไม่พบข้อมูล"}
           </div>
-          <Link href="/repair/walk-in/queue" className="mt-4 inline-block text-sm text-blue-400 hover:text-blue-300">
+          <Link href="/repair/walk-in/queue" className="mt-4 inline-block text-sm text-admin-primary hover:text-admin-dark">
             ← กลับ Queue
           </Link>
         </main>
@@ -163,10 +163,10 @@ export default function WalkInDetailPage() {
     );
   }
 
-  const sm = STATUS_META[job.status] ?? { label: job.status, color: "bg-gray-800 text-gray-300" };
+  const sm = STATUS_META[job.status] ?? { label: job.status, color: "bg-gray-100 text-gray-600" };
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-5xl">
 
@@ -177,10 +177,10 @@ export default function WalkInDetailPage() {
               <h1 className="text-2xl font-bold">🚶 {job.job_number}</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
             </div>
-            <p className="text-gray-400 text-sm">{job.store_name} — {job.store_address}</p>
+            <p className="text-gray-500 text-sm">{job.store_name} — {job.store_address}</p>
           </div>
           <Link href="/repair/walk-in/queue"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Queue
           </Link>
         </div>
@@ -189,7 +189,7 @@ export default function WalkInDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
           {/* Device */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
             <InfoRow label="Serial" value={job.device_serial ?? "—"} />
@@ -199,7 +199,7 @@ export default function WalkInDetailPage() {
           </section>
 
           {/* Customer + Technician */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ลูกค้า & ช่าง</h2>
             <InfoRow label="ชื่อลูกค้า" value={job.customer_name} />
             <InfoRow label="โทร" value={job.customer_phone} />
@@ -208,12 +208,12 @@ export default function WalkInDetailPage() {
           </section>
 
           {/* Pricing */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ราคา & Storage</h2>
             <InfoRow label="ราคา Quote" value={job.quote_price != null ? `${job.quote_price.toLocaleString()} ฿` : "—"} />
             <InfoRow label="ราคา Final" value={job.final_price != null ? `${job.final_price.toLocaleString()} ฿` : "—"} />
             <InfoRow label="Storage Fee" value={
-              <span className="text-yellow-400 font-mono">
+              <span className="text-yellow-700 font-mono">
                 {job.storage_fee.toLocaleString()} ฿
                 <span className="text-gray-500 ml-1 font-normal">
                   ({job.storage_days} วัน × {job.storage_fee_per_day.toLocaleString()} ฿/วัน)
@@ -223,7 +223,7 @@ export default function WalkInDetailPage() {
           </section>
 
           {/* Timestamps */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Timestamps</h2>
             <InfoRow label="เช็คอิน" value={new Date(job.checked_in_at).toLocaleString("th-TH")} />
             <InfoRow label="ตรวจสภาพ" value={job.inspected_at ? new Date(job.inspected_at).toLocaleString("th-TH") : "—"} />
@@ -238,24 +238,24 @@ export default function WalkInDetailPage() {
 
         {/* Parts used */}
         {job.parts_used?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ชิ้นส่วนที่ใช้</h2>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-500 text-left border-b border-gray-800">
+                <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="pb-2">ชิ้นส่วน</th>
                   <th className="pb-2 text-right">จำนวน</th>
                   <th className="pb-2 text-right">ราคา/ชิ้น</th>
                   <th className="pb-2 text-right">รวม</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-200">
                 {job.parts_used.map((p, i) => (
                   <tr key={i}>
                     <td className="py-2 text-gray-200">{p.name}</td>
-                    <td className="py-2 text-right text-gray-400">{p.qty}</td>
-                    <td className="py-2 text-right font-mono text-gray-400">{p.price.toLocaleString()} ฿</td>
-                    <td className="py-2 text-right font-mono text-green-400">{(p.qty * p.price).toLocaleString()} ฿</td>
+                    <td className="py-2 text-right text-gray-500">{p.qty}</td>
+                    <td className="py-2 text-right font-mono text-gray-500">{p.price.toLocaleString()} ฿</td>
+                    <td className="py-2 text-right font-mono text-green-600">{(p.qty * p.price).toLocaleString()} ฿</td>
                   </tr>
                 ))}
               </tbody>
@@ -265,12 +265,12 @@ export default function WalkInDetailPage() {
 
         {/* Device photos */}
         {job.device_photos?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">รูปอุปกรณ์</h2>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
               {job.device_photos.map((url, i) => (
                 <a key={i} href={url} target="_blank" rel="noreferrer"
-                  className="aspect-square bg-gray-800 rounded-lg overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all">
+                  className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all">
                   <img src={url} alt={`photo-${i}`} className="w-full h-full object-cover" />
                 </a>
               ))}
@@ -280,7 +280,7 @@ export default function WalkInDetailPage() {
 
         {/* Timeline */}
         {job.timeline?.length > 0 && (
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</h2>
             <div className="space-y-3">
               {job.timeline.map((t, i) => {
@@ -305,7 +305,7 @@ export default function WalkInDetailPage() {
                         </span>
                         <span className="text-xs text-gray-600">— {t.actor}</span>
                       </div>
-                      {t.note && <p className="text-xs text-gray-400 mt-1">{t.note}</p>}
+                      {t.note && <p className="text-xs text-gray-500 mt-1">{t.note}</p>}
                     </div>
                   </div>
                 );
@@ -316,16 +316,16 @@ export default function WalkInDetailPage() {
 
         {/* Override — super-admin only */}
         {superAdmin && (
-          <section className="bg-gray-900 rounded-xl border border-red-900/40 p-5">
-            <h2 className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-4">
+          <section className="bg-white rounded-xl border border-red-900/40 p-5">
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-4">
               🔐 Manual Override — Super-Admin
             </h2>
 
             {overrideMsg && (
               <div className={`mb-4 p-3 rounded-lg text-sm ${
                 overrideMsg.type === "success"
-                  ? "bg-green-900/30 border border-green-800 text-green-300"
-                  : "bg-red-900/30 border border-red-800 text-red-300"
+                  ? "bg-green-900/30 border border-green-800 text-green-700"
+                  : "bg-red-50 border border-red-200 text-red-700"
               }`}>
                 {overrideMsg.text}
               </div>
@@ -339,10 +339,10 @@ export default function WalkInDetailPage() {
                   className={`p-3 rounded-xl border text-left transition-all ${
                     overrideAction === a.value
                       ? "border-red-500 bg-red-900/20"
-                      : "border-gray-700 hover:border-gray-600"
+                      : "border-gray-300 hover:border-gray-600"
                   }`}>
                   <p className="text-sm font-semibold text-white">{a.label}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{a.desc}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{a.desc}</p>
                 </button>
               ))}
             </div>
@@ -352,10 +352,10 @@ export default function WalkInDetailPage() {
               onChange={e => setOverrideReason(e.target.value)}
               placeholder="เหตุผล (อย่างน้อย 10 ตัวอักษร)..."
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-red-500 resize-none mb-3"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-red-500 resize-none mb-3"
             />
 
-            <label className="flex items-center gap-2 text-sm text-gray-300 mb-4 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-gray-700 mb-4 cursor-pointer">
               <input
                 type="checkbox"
                 checked={overrideConfirm}
@@ -368,7 +368,7 @@ export default function WalkInDetailPage() {
             <button
               onClick={handleOverride}
               disabled={!overrideConfirm || overrideReason.trim().length < 10 || overrideLoading}
-              className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
+              className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
             >
               {overrideLoading ? "กำลังดำเนินการ..." : "Execute Override"}
             </button>

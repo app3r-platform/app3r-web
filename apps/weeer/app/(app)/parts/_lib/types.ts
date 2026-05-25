@@ -109,9 +109,10 @@ export interface PartListing {
 
 export type OrderStage =
   | "ordered"     // สั่งซื้อแล้ว
+  | "confirmed"   // ผู้ขายรับออเดอร์แล้ว (Gen 80 N5 — ขั้นที่ 2)
   | "shipped"     // จัดส่งแล้ว
   | "received"    // รับของแล้ว
-  | "cancelled";  // ยกเลิก (เฉพาะ ordered)
+  | "cancelled";  // ยกเลิก (เฉพาะก่อน shipped)
 
 export type DeliveryMethod = "self_pickup" | "courier";
 
@@ -193,6 +194,7 @@ export const B2B_CONDITION_COLOR: Record<PartListing["condition"], string> = {
 
 export const ORDER_STAGE_LABEL: Record<OrderStage, string> = {
   ordered:   "สั่งซื้อแล้ว",
+  confirmed: "ผู้ขายรับแล้ว",
   shipped:   "จัดส่งแล้ว",
   received:  "รับของแล้ว",
   cancelled: "ยกเลิก",
@@ -200,6 +202,7 @@ export const ORDER_STAGE_LABEL: Record<OrderStage, string> = {
 
 export const ORDER_STAGE_COLOR: Record<OrderStage, string> = {
   ordered:   "bg-blue-100 text-blue-700",
+  confirmed: "bg-purple-100 text-purple-700",
   shipped:   "bg-orange-100 text-orange-700",
   received:  "bg-emerald-100 text-emerald-700",
   cancelled: "bg-red-100 text-red-600",

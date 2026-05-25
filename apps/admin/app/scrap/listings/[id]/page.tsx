@@ -8,23 +8,28 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { ScrapItem } from "@/lib/types";
 
+/* S12 — extended with cross-module repair ref */
+interface ScrapItemExtended extends ScrapItem {
+  source_repair_job_id?: string | null;
+}
+
 const STATUS_META: Record<ScrapItem["status"], { label: string; color: string }> = {
-  available: { label: "ขายได้",  color: "bg-green-900/50 text-green-400" },
-  sold:      { label: "ขายแล้ว", color: "bg-blue-900/50 text-blue-300" },
-  removed:   { label: "ลบแล้ว",  color: "bg-gray-800 text-gray-500" },
+  available: { label: "ขายได้",  color: "bg-green-50 text-green-700" },
+  sold:      { label: "ขายแล้ว", color: "bg-blue-50 text-blue-700" },
+  removed:   { label: "ลบแล้ว",  color: "bg-gray-100 text-gray-500" },
 };
 
 const GRADE_META: Record<ScrapItem["conditionGrade"], { label: string; color: string }> = {
-  grade_A: { label: "Grade A", color: "bg-green-900/50 text-green-400" },
-  grade_B: { label: "Grade B", color: "bg-yellow-900/50 text-yellow-400" },
-  grade_C: { label: "Grade C", color: "bg-red-900/50 text-red-400" },
+  grade_A: { label: "Grade A", color: "bg-green-50 text-green-700" },
+  grade_B: { label: "Grade B", color: "bg-yellow-50 text-yellow-700" },
+  grade_C: { label: "Grade C", color: "bg-red-50 text-red-700" },
 };
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex gap-2 py-1.5 border-b border-gray-800/60 last:border-0">
+    <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
       <span className="text-xs text-gray-500 w-36 shrink-0">{label}</span>
-      <span className="text-sm text-gray-100">{value}</span>
+      <span className="text-sm text-gray-800">{value}</span>
     </div>
   );
 }
@@ -32,7 +37,7 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 export default function ScrapListingDetailPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
-  const [item, setItem] = useState<ScrapItem | null>(null);
+  const [item, setItem] = useState<ScrapItemExtended | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
@@ -41,7 +46,7 @@ export default function ScrapListingDetailPage() {
 
   const fetchItem = useCallback(async () => {
     try {
-      const d = await api.get<ScrapItem>(`/admin/scrap/items/${id}/`);
+      const d = await api.get<ScrapItemExtended>(`/admin/scrap/items/${id}/`);
       setItem(d);
       setError(null);
     } catch (e) {
@@ -71,19 +76,19 @@ export default function ScrapListingDetailPage() {
   }
 
   if (loading) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar /><main className="flex-1 p-8"><p className="text-gray-500">กำลังโหลด...</p></main>
     </div>
   );
 
   if (error || !item) return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-400">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ยังไม่มีข้อมูลซาก"}
         </div>
-        <Link href="/scrap/listings" className="text-sm text-blue-400 hover:text-blue-300">← Listings</Link>
+        <Link href="/scrap/listings" className="text-sm text-admin-primary hover:text-admin-dark">← Listings</Link>
       </main>
     </div>
   );
@@ -92,7 +97,7 @@ export default function ScrapListingDetailPage() {
   const gm = GRADE_META[item.conditionGrade];
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-6 max-w-4xl">
 
@@ -104,10 +109,10 @@ export default function ScrapListingDetailPage() {
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${gm.color}`}>{gm.label}</span>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
             </div>
-            <p className="text-gray-400 text-sm font-mono">{item.id}</p>
+            <p className="text-gray-500 text-sm font-mono">{item.id}</p>
           </div>
           <Link href="/scrap/listings"
-            className="px-3 py-1.5 text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Listings
           </Link>
         </div>
@@ -115,7 +120,7 @@ export default function ScrapListingDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
           {/* Item info */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลซาก</h2>
             <InfoRow label="Seller ID" value={<span className="font-mono text-xs">{item.sellerId}</span>} />
             <InfoRow label="Seller Type" value={item.sellerType} />
@@ -134,10 +139,10 @@ export default function ScrapListingDetailPage() {
           </section>
 
           {/* Price & status */}
-          <section className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ราคา & สถานะ</h2>
             <InfoRow label="ราคา" value={
-              <span className="font-mono text-green-400 font-bold text-lg">{item.price.toLocaleString()} ฿</span>
+              <span className="font-mono text-green-600 font-bold text-lg">{item.price.toLocaleString()} ฿</span>
             } />
             <InfoRow label="สถานะ" value={
               <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
@@ -148,7 +153,7 @@ export default function ScrapListingDetailPage() {
 
           {/* Photos */}
           {item.photos.length > 0 && (
-            <section className="bg-gray-900 rounded-xl border border-gray-800 p-5 lg:col-span-2">
+            <section className="bg-white rounded-xl border border-gray-200 p-5 lg:col-span-2">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                 รูปภาพ ({item.photos.length})
               </h2>
@@ -157,7 +162,7 @@ export default function ScrapListingDetailPage() {
                   <a key={i} href={url} target="_blank" rel="noreferrer"
                     className="hover:opacity-80 transition-opacity">
                     <img src={url} alt={`photo-${i + 1}`}
-                      className="h-32 w-32 object-cover rounded-lg bg-gray-800" />
+                      className="h-32 w-32 object-cover rounded-lg bg-gray-100" />
                   </a>
                 ))}
               </div>
@@ -165,42 +170,58 @@ export default function ScrapListingDetailPage() {
           )}
         </div>
 
+        {/* S12 — Source from Repair (cross-module) */}
+        {item.source_repair_job_id && (
+          <section className="bg-orange-50 border border-orange-200 rounded-xl p-4">
+            <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-2">
+              🔧 S12 — ซากจากงานซ่อม (Cross-module Repair C4)
+            </p>
+            <p className="text-xs text-orange-600 mb-2">
+              รายการนี้มาจาก Repair Job — ห้ามสร้าง ScrapItem ทับ ใช้ badge/ลิงก์เท่านั้น
+            </p>
+            <Link href={`/repair/jobs/${item.source_repair_job_id}`}
+              className="text-xs font-mono text-admin-primary hover:text-admin-dark bg-white px-2 py-1 rounded border border-orange-200 inline-block">
+              🔧 Repair Job: {item.source_repair_job_id} ↗
+            </Link>
+          </section>
+        )}
+
         {/* Quick links */}
         <div className="flex gap-3">
           <Link href={`/scrap/jobs?scrap_item_id=${item.id}`}
-            className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors">
+            className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             🔨 ดู Jobs →
           </Link>
         </div>
 
         {/* Force Remove (super admin only) */}
         {superAdmin && item.status === "available" && (
-          <section className="bg-red-950/30 rounded-xl border border-red-900/50 p-5">
-            <h2 className="text-xs font-semibold text-red-500 uppercase tracking-wider mb-3">
+          <section className="bg-red-50 rounded-xl border border-red-200 p-5">
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3">
               ⚠️ Force Remove (Super Admin)
             </h2>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-gray-500 mb-4">
               บังคับลบรายการซากออกจากระบบ ใช้เฉพาะกรณีพิเศษเท่านั้น
             </p>
             {removeConfirm ? (
               <div className="flex gap-3 items-center">
-                <span className="text-sm text-red-400">ยืนยันลบรายการนี้?</span>
+                <span className="text-sm text-red-600">ยืนยันลบรายการนี้?</span>
                 <button onClick={handleForceRemove} disabled={removing}
-                  className="px-4 py-2 text-sm bg-red-700 hover:bg-red-600 rounded-lg disabled:opacity-50">
+                  className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg disabled:opacity-50">
                   {removing ? "กำลังลบ..." : "ยืนยัน Force Remove"}
                 </button>
                 <button onClick={() => setRemoveConfirm(false)}
-                  className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 rounded-lg">
+                  className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
                   ยกเลิก
                 </button>
               </div>
             ) : (
               <button onClick={handleForceRemove}
-                className="px-4 py-2 text-sm bg-red-900/50 hover:bg-red-800/50 border border-red-800 text-red-400 rounded-lg transition-colors">
+                className="px-4 py-2 text-sm bg-white hover:bg-red-50 border border-red-300 text-red-600 rounded-lg transition-colors">
                 🗑️ Force Remove
               </button>
             )}
-            {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
+            {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
           </section>
         )}
 

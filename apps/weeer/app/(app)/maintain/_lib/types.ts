@@ -1,4 +1,37 @@
-// ── MaintainJob — D48 verbatim (App3R-Advisor Gen 18) ─────────────────────────
+// ── MaintainJob — D48 + ขั้น 2.1 Blueprint WeeeR Maintain ─────────────────────
+
+// ── Offer payload (ขั้น 2.1 · 5 แกน) ─────────────────────────────────────────
+export interface MaintainOfferPayload {
+  deposit: {
+    required: boolean;
+    amount?: number;
+    refundCondition?: string;
+  };
+  travelFee: {
+    required: boolean;
+    amount?: number;
+    condition?: string;
+  };
+  warranty: {
+    days: number;
+    scope: string;
+  };
+  noShow: {
+    fee: number;
+    condition: string;
+  };
+  damagePolicy: "none" | "no_service_fee" | "up_to_service_fee";
+  damagePolicyNote?: string;
+}
+
+// ── Withdrawal payload (M6 · ถอนหลังยืนยัน) ──────────────────────────────────
+export type WithdrawReason = "shop_fault" | "customer_fault" | "force_majeure";
+
+export const WITHDRAW_REASON_LABEL: Record<WithdrawReason, string> = {
+  shop_fault:      "ร้านเอง (ติดธุระ/ช่างไม่ว่าง)",
+  customer_fault:  "ลูกค้าผิด (ยกเลิกเอง/ไม่ยืนยัน)",
+  force_majeure:   "สุดวิสัย (ภัยธรรมชาติ/เหตุฉุกเฉิน)",
+};
 
 export interface MaintainJob {
   id: string;
@@ -6,7 +39,20 @@ export interface MaintainJob {
   customerId: string;
   shopId?: string;
   technicianId?: string;
-  status: "pending" | "assigned" | "departed" | "arrived" | "in_progress" | "completed" | "cancelled";
+  status:
+    | "pending"
+    | "awaiting_offer"      // ขั้น 2.1: ยื่นข้อเสนอแล้ว รอ WeeeU ตอบรับ
+    | "offer_expired"       // M2: หมดเวลายื่น — งานหลุดออก queue อัตโนมัติ
+    | "assigned"
+    | "departed"
+    | "arrived"
+    | "in_progress"
+    | "no_show"             // M7: ลูกค้าไม่อยู่ — WeeeT รายงาน → settle No-show
+    | "terminated_by_customer" // M9: WeeeU ยุติระหว่างล้าง → WeeeR ตอบสนอง
+    | "completed"
+    | "cancelled"
+    | "withdrawn"           // M6: WeeeR ถอนงานหลังยืนยัน
+    | "closed_for_repair";  // GAP D-M-2: ปิดงาน Maintain → ส่งต่อซ่อม
   applianceType: "AC" | "WashingMachine";
   cleaningType: "general" | "deep" | "sanitize";
   serviceMethod: "on_site";
@@ -20,6 +66,13 @@ export interface MaintainJob {
   };
   parts_used?: Array<{ name: string; qty: number }>;
   totalPrice: number;
+  offerData?: MaintainOfferPayload;  // lock เมื่อ WeeeU ยืนยันข้อเสนอ
+  offerDeadlineAt?: string;          // M2: วันหมดอายุยื่นข้อเสนอ (ISO datetime)
+  withdrawal?: {                     // M6: ข้อมูลการถอน
+    reason: WithdrawReason;
+    evidence?: string;               // URL รูปหลักฐาน
+    withdrawnAt: string;
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -29,27 +82,39 @@ export interface MaintainJob {
 export type MaintainStatus = MaintainJob["status"];
 
 export const MAINTAIN_STATUS_LABEL: Record<MaintainStatus, string> = {
-  pending:     "รอรับงาน",
-  assigned:    "มอบหมายช่างแล้ว",
-  departed:    "ช่างออกเดินทาง",
-  arrived:     "ช่างถึงแล้ว",
-  in_progress: "กำลังล้าง",
-  completed:   "เสร็จแล้ว",
-  cancelled:   "ยกเลิก",
+  pending:                "รอรับงาน",
+  awaiting_offer:         "รอลูกค้าตอบรับ",
+  offer_expired:          "หมดอายุ",
+  assigned:               "มอบหมายช่างแล้ว",
+  departed:               "ช่างออกเดินทาง",
+  arrived:                "ช่างถึงแล้ว",
+  in_progress:            "กำลังล้าง",
+  no_show:                "ลูกค้าไม่อยู่",
+  terminated_by_customer: "ลูกค้ายุติ",
+  completed:              "เสร็จแล้ว",
+  cancelled:              "ยกเลิก",
+  withdrawn:              "ถอนงาน",
+  closed_for_repair:      "ปิด→ซ่อม",
 };
 
 export const MAINTAIN_STATUS_COLOR: Record<MaintainStatus, string> = {
-  pending:     "bg-orange-100 text-orange-700",
-  assigned:    "bg-blue-100 text-blue-700",
-  departed:    "bg-indigo-100 text-indigo-700",
-  arrived:     "bg-cyan-100 text-cyan-700",
-  in_progress: "bg-green-100 text-green-700",
-  completed:   "bg-emerald-100 text-emerald-700",
-  cancelled:   "bg-red-100 text-red-600",
+  pending:                "bg-orange-100 text-orange-700",
+  awaiting_offer:         "bg-yellow-100 text-yellow-700",
+  offer_expired:          "bg-gray-100 text-gray-500",
+  assigned:               "bg-blue-100 text-blue-700",
+  departed:               "bg-indigo-100 text-indigo-700",
+  arrived:                "bg-cyan-100 text-cyan-700",
+  in_progress:            "bg-green-100 text-green-700",
+  no_show:                "bg-orange-100 text-orange-700",
+  terminated_by_customer: "bg-red-100 text-red-700",
+  completed:              "bg-emerald-100 text-emerald-700",
+  cancelled:              "bg-red-100 text-red-600",
+  withdrawn:              "bg-red-100 text-red-600",
+  closed_for_repair:      "bg-gray-100 text-gray-600",
 };
 
 export const APPLIANCE_LABEL: Record<MaintainJob["applianceType"], string> = {
-  AC:            "แอร์",
+  AC:             "แอร์",
   WashingMachine: "เครื่องซักผ้า",
 };
 

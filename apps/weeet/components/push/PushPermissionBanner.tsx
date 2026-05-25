@@ -60,8 +60,8 @@ export function PushPermissionBanner({ technicianId, compact = false }: Props) {
           <span className="text-lg">🔔</span>
           <div><p className="text-sm text-white">การแจ้งเตือน Push</p>{status === "denied" && <p className="text-xs text-red-400">ถูกบล็อกโดยเบราว์เซอร์</p>}</div>
         </div>
-        {status === "subscribed" ? <button onClick={handleUnsubscribe} className="text-xs text-orange-400">ปิด</button>
-          : status === "not_subscribed" ? <button onClick={handleSubscribe} className="text-xs bg-orange-600 text-white px-3 py-1 rounded-lg">เปิด</button> : null}
+        {status === "subscribed" ? <button onClick={handleUnsubscribe} className="text-xs text-weeet-primary">ปิด</button>
+          : status === "not_subscribed" ? <button onClick={handleSubscribe} className="text-xs bg-weeet-primary text-white px-3 py-1 rounded-lg">เปิด</button> : null}
       </div>
     );
   }
@@ -80,7 +80,7 @@ export function PushPermissionBanner({ technicianId, compact = false }: Props) {
       {error && <p className="text-xs text-red-400 bg-red-950/40 border border-red-800 rounded-lg px-3 py-2">{error}</p>}
       {status === "subscribed" && <button onClick={handleUnsubscribe} className="text-xs text-gray-400 hover:text-red-400">ปิดการแจ้งเตือน</button>}
       {status === "not_subscribed" && (
-        <button onClick={handleSubscribe} className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-2.5 rounded-xl text-sm">🔔 เปิดรับการแจ้งเตือน</button>
+        <button onClick={handleSubscribe} className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-2.5 rounded-xl text-sm">🔔 เปิดรับการแจ้งเตือน</button>
       )}
       {status === "subscribing" && <p className="text-xs text-center text-gray-400 flex items-center justify-center gap-1.5"><span className="animate-spin">⏳</span> กำลังสมัคร...</p>}
     </div>

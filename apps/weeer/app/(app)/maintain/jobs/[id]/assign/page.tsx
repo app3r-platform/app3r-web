@@ -56,7 +56,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
   if (success) return (
     <div className="flex flex-col items-center justify-center h-48 text-center">
       <span className="text-4xl mb-3">👷</span>
-      <p className="text-sm font-semibold text-green-700">มอบหมายช่างสำเร็จ</p>
+      <p className="text-sm font-semibold text-[#FF663A]">มอบหมายช่างสำเร็จ</p>
       <p className="text-xs text-gray-400 mt-1">กำลังกลับหน้ารายละเอียด…</p>
     </div>
   );
@@ -73,15 +73,15 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Job summary */}
-      <div className="bg-green-50 border border-green-100 rounded-xl p-4 space-y-1">
+      <div className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl p-4 space-y-1">
         <div className="flex items-center gap-2">
           <span className="text-lg">{job.applianceType === "AC" ? "❄️" : "🫧"}</span>
-          <p className="text-sm font-semibold text-green-800">
+          <p className="text-sm font-semibold text-[#4A1B0C]">
             {APPLIANCE_LABEL[job.applianceType]} — {CLEANING_LABEL[job.cleaningType]}
           </p>
         </div>
-        <p className="text-xs text-green-600">📍 {job.address.address}</p>
-        <p className="text-xs text-green-500">
+        <p className="text-xs text-[#FF663A]">📍 {job.address.address}</p>
+        <p className="text-xs text-[#FF9C80]">
           🗓 {new Date(job.scheduledAt).toLocaleDateString("th-TH", {
             day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
           })} · ⏱ {job.estimatedDuration} ชม.
@@ -100,11 +100,11 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
 
           {availableStaff.length > 0 && (
             <div className="space-y-2 mb-3">
-              <p className="text-xs font-medium text-green-700">✅ พร้อมรับงาน ({availableStaff.length})</p>
+              <p className="text-xs font-medium text-[#FF663A]">✅ พร้อมรับงาน ({availableStaff.length})</p>
               {availableStaff.map((s) => (
                 <label key={s.id}
                   className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
-                    ${selectedTech === s.id ? "border-green-300 bg-green-50" : "border-gray-100 hover:border-gray-200"}`}>
+                    ${selectedTech === s.id ? "border-[#FF9C80] bg-[#FCEAE3]" : "border-gray-100 hover:border-gray-200"}`}>
                   <input type="radio" name="tech" value={s.id}
                     checked={selectedTech === s.id}
                     onChange={() => { setSelectedTech(s.id); setTechError(""); }}
@@ -121,7 +121,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
                     </div>
                     <p className="text-xs text-gray-500">{s.phone} · งาน: {s.active_jobs}</p>
                   </div>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">ว่าง</span>
+                  <span className="text-xs bg-[#FCEAE3] text-[#FF663A] px-2 py-0.5 rounded-full font-medium">ว่าง</span>
                 </label>
               ))}
             </div>
@@ -156,7 +156,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting || !selectedTech}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
+          className="w-full bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
           {submitting ? "กำลังมอบหมาย…" : "👷 ยืนยันมอบหมายช่าง"}
         </button>
       </form>
