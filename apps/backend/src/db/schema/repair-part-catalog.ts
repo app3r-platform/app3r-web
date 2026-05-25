@@ -8,7 +8,7 @@
  *   repair_part_catalog       — static parts per appliance category (from docx import)
  *   repair_symptom_part_links — many-to-many: symptom ↔ part (from Table 0 in docx)
  *
- * Migration: 0017_repair_part_catalog.sql
+ * Migration: 0018_repair_part_catalog.sql
  * Spec: D88 Import Spec (36a813ec-7277-8166-b2cb-d31630a264c8)
  * Backend D88 Full Import · 2026-05-25
  */
