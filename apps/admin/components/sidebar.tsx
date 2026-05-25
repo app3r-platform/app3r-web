@@ -12,7 +12,8 @@ const navGroups: NavGroup[] = [
   {
     label: null,
     items: [
-      { href: "/",           label: "Dashboard",          icon: "📊" },
+      { href: "/",               label: "Dashboard",   icon: "📊" },
+      { href: "/modules/repair", label: "Module Mgmt", icon: "🗂️" },
     ],
   },
   {
