@@ -4,6 +4,7 @@
 // มุมผู้ซื้อ + ผู้ขาย: tabs ฝั่งผู้ซื้อ / ฝั่งผู้ขาย
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { PartOrder } from "../_lib/types";
 import { PART_ORDERS_MOCK } from "../_lib/mock-data";
 import { OrderCard } from "../../../../components/parts/OrderCard";
@@ -23,6 +24,7 @@ type SideTab = "buyer" | "seller";
 type StageFilter = PartOrder["stage"] | "all";
 
 export default function MyOrdersPage() {
+  const router = useRouter();
   const [shopId, setShopId] = useState("S001");
   const [orders, setOrders] = useState<PartOrder[]>([]);
   const [sideTab, setSideTab] = useState<SideTab>("buyer");
@@ -170,7 +172,9 @@ export default function MyOrdersPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map((o) => (
-            <OrderCard key={o.id} order={o} role={sideTab} onAction={handleAction} />
+            <div key={o.id} onClick={() => router.push(`/parts/orders/${o.id}`)} className="cursor-pointer">
+              <OrderCard order={o} role={sideTab} onAction={handleAction} />
+            </div>
           ))}
         </div>
       )}
