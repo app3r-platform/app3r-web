@@ -14,6 +14,67 @@ import {
 } from "../../../../../lib/utils/parts-sync";
 import { escrowRelease, escrowRefund } from "../../../../../lib/utils/parts-escrow";
 
+// ── D-6: Inventory Import Prompt component ─────────────────────────────────────
+// แสดงหลังออเดอร์ถึง "received" — ถามผู้ขายว่าต้องการเพิ่มอะไหล่เข้าสต็อกไหม
+function InventoryImportPrompt({
+  orderId, partName, qty,
+}: { orderId: string; partName: string; qty: number }) {
+  const [dismissed, setDismissed] = useState(false);
+  const [imported, setImported] = useState(false);
+
+  const doneKey = `d6_inv_import_${orderId}`;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem(doneKey)) setImported(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (dismissed || imported) return null;
+
+  const handleImport = () => {
+    // Mock: store in localStorage → simulate inventory_item + stock_movement creation
+    const entry = { orderId, partName, qty, importedAt: new Date().toISOString() };
+    const stored: typeof entry[] = JSON.parse(localStorage.getItem("d6_inv_imports") ?? "[]") as typeof entry[];
+    stored.push(entry);
+    localStorage.setItem("d6_inv_imports", JSON.stringify(stored));
+    localStorage.setItem(doneKey, "1");
+    setImported(true);
+  };
+
+  return (
+    <div className="bg-green-50 border border-green-300 rounded-xl p-4 space-y-3">
+      <div className="flex items-start gap-2">
+        <span className="text-2xl">📦</span>
+        <div>
+          <p className="text-sm font-semibold text-green-800">รับอะไหล่เข้าสต็อก?</p>
+          <p className="text-xs text-green-600 mt-0.5">
+            ออเดอร์ปิดแล้ว — ต้องการเพิ่ม <strong>{partName}</strong> ({qty} ชิ้น) เข้าคลังอะไหล่ไหม?
+          </p>
+        </div>
+      </div>
+      <p className="text-xs text-gray-500">
+        ระบบจะสร้าง Inventory Item + Stock Movement (purchase-in) โดยอัตโนมัติ
+      </p>
+      <div className="flex gap-2">
+        <button
+          onClick={handleImport}
+          className="flex-1 py-2 bg-green-600 text-white rounded-lg text-xs font-medium hover:bg-green-700 transition-colors"
+        >
+          ✅ เพิ่มเข้าสต็อก
+        </button>
+        <button
+          onClick={() => setDismissed(true)}
+          className="px-4 py-2 bg-gray-100 text-gray-500 rounded-lg text-xs"
+        >
+          ข้าม
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // P7: checklist ตรวจสอบสินค้าก่อนยืนยันรับ
 const RECEIVE_CHECKLIST = [
   "จำนวนสินค้าครบถ้วนตามที่สั่งซื้อ",
@@ -363,6 +424,32 @@ export default function MyOrderDetailPage({
             </div>
           </div>
         </div>
+      )}
+
+      {/* ── D-6: Warranty + Return links (buyer, received stage) ─────────────── */}
+      {role === "buyer" && order.stage === "received" && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2">
+          <p className="text-sm font-semibold text-blue-800">🛡️ ข้อมูลการรับประกัน (D-6)</p>
+          <div className="flex gap-2">
+            <Link
+              href={`/parts/my-orders/${id}/warranty`}
+              className="flex-1 text-center py-2 border border-blue-400 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
+            >
+              ดูประกัน
+            </Link>
+            <Link
+              href={`/parts/my-orders/${id}/return`}
+              className="flex-1 text-center py-2 border border-orange-400 text-orange-600 rounded-lg text-xs font-medium hover:bg-orange-50 transition-colors"
+            >
+              แจ้งคืน/เคลม
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ── D-6: Inventory Import Prompt (seller, received stage) ─────────────── */}
+      {role === "seller" && order.stage === "received" && (
+        <InventoryImportPrompt orderId={id} partName={order.partName} qty={order.quantity} />
       )}
 
       {/* ── P8/P9: Cancel Modal ───────────────────────────────────────────────── */}
