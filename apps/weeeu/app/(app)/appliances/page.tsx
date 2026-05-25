@@ -1,7 +1,9 @@
-﻿import type { Metadata } from "next";
-import Link from "next/link";
+"use client";
+// ─── เครื่องใช้ไฟฟ้าของฉัน (/appliances) — FIX-3: ปุ่มมี action ─────────────
+// 🔧→/repair/new?appliance={id} · 💰→/sell/new?appliance={id} · ✏️/🗑️→modal
 
-export const metadata: Metadata = { title: "เครื่องใช้ไฟฟ้า" };
+import { useState } from "react";
+import Link from "next/link";
 
 const appliances = [
   {
@@ -26,15 +28,42 @@ const appliances = [
   },
 ];
 
+type Appliance = typeof appliances[0];
+
 export default function AppliancesPage() {
+  const [editTarget, setEditTarget] = useState<Appliance | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Appliance | null>(null);
+  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [toastMsg, setToastMsg] = useState("");
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(""), 2500);
+  };
+
+  const handleDelete = (app: Appliance) => {
+    setDeletedIds(prev => new Set([...prev, app.id]));
+    setDeleteTarget(null);
+    showToast(`ลบ "${app.name}" แล้ว (Mockup)`);
+  };
+
+  const visible = appliances.filter(a => !deletedIds.has(a.id));
+
   return (
     <div className="space-y-6">
+      {/* Toast */}
+      {toastMsg && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-gray-800 text-white text-xs px-4 py-2 rounded-full shadow-lg">
+          {toastMsg}
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">เครื่องใช้ไฟฟ้า</h1>
         <Link
           href="/appliances/add"
-          className="flex items-center gap-2 bg-weeeu-primary hover:bg-weeeu-primary text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+          className="flex items-center gap-2 bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
         >
           + เพิ่มเครื่อง
         </Link>
@@ -43,9 +72,9 @@ export default function AppliancesPage() {
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "ทั้งหมด", count: 4, icon: "🔌", color: "bg-weeeu-surface text-weeeu-primary" },
-          { label: "ปกติ", count: 2, icon: "✅", color: "bg-green-50 text-green-700" },
-          { label: "มีปัญหา/ประกาศ", count: 2, icon: "⚠️", color: "bg-orange-50 text-orange-700" },
+          { label: "ทั้งหมด", count: visible.length, icon: "🔌", color: "bg-weeeu-surface text-weeeu-primary" },
+          { label: "ปกติ", count: visible.filter(a => a.status === "ปกติ").length, icon: "✅", color: "bg-green-50 text-green-700" },
+          { label: "มีปัญหา/ประกาศ", count: visible.filter(a => a.status !== "ปกติ").length, icon: "⚠️", color: "bg-orange-50 text-orange-700" },
         ].map((s) => (
           <div key={s.label} className={`rounded-2xl p-4 ${s.color} text-center`}>
             <p className="text-2xl mb-1">{s.icon}</p>
@@ -60,9 +89,9 @@ export default function AppliancesPage() {
         <input
           type="search"
           placeholder="ค้นหาเครื่องใช้ไฟฟ้า..."
-          className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
+          className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
         />
-        <select className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary">
+        <select className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30">
           <option>ทุกประเภท</option>
           <option>แอร์</option>
           <option>ตู้เย็น</option>
@@ -73,17 +102,15 @@ export default function AppliancesPage() {
 
       {/* Appliance list */}
       <div className="space-y-3">
-        {appliances.map((app) => (
+        {visible.map((app) => (
           <div
             key={app.id}
-            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-start gap-4 hover:border-weeeu-dark transition-colors"
+            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-start gap-4 hover:border-weeeu-primary/20 transition-colors"
           >
-            {/* Icon */}
             <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
               {app.icon}
             </div>
 
-            {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -99,18 +126,30 @@ export default function AppliancesPage() {
                 </span>
               </div>
 
-              {/* Actions */}
-              <div className="flex gap-2 mt-3">
-                <button className="text-xs px-3 py-1.5 border border-weeeu-dark text-weeeu-primary hover:bg-weeeu-surface rounded-lg transition-colors">
+              {/* Actions — FIX-3: มี href + onClick */}
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <Link
+                  href={`/repair/new?appliance=${app.id}`}
+                  className="text-xs px-3 py-1.5 border border-weeeu-primary/30 text-weeeu-primary hover:bg-weeeu-surface rounded-lg transition-colors"
+                >
                   🔧 แจ้งซ่อม
-                </button>
-                <button className="text-xs px-3 py-1.5 border border-green-200 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+                </Link>
+                <Link
+                  href={`/sell/new?appliance=${app.id}`}
+                  className="text-xs px-3 py-1.5 border border-green-200 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                >
                   💰 ลงขาย
-                </button>
-                <button className="text-xs px-3 py-1.5 border border-gray-200 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors">
+                </Link>
+                <button
+                  onClick={() => setEditTarget(app)}
+                  className="text-xs px-3 py-1.5 border border-gray-200 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
+                >
                   ✏️ แก้ไข
                 </button>
-                <button className="text-xs px-3 py-1.5 border border-red-200 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                <button
+                  onClick={() => setDeleteTarget(app)}
+                  className="text-xs px-3 py-1.5 border border-red-200 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                >
                   🗑️ ลบ
                 </button>
               </div>
@@ -119,15 +158,70 @@ export default function AppliancesPage() {
         ))}
       </div>
 
-      {/* Add appliance CTA */}
+      {/* Add CTA */}
       <Link
         href="/appliances/add"
-        className="w-full flex flex-col items-center justify-center gap-2 py-8 border-2 border-dashed border-weeeu-dark rounded-2xl text-weeeu-primary hover:border-weeeu-primary hover:text-weeeu-primary hover:bg-weeeu-surface transition-all"
+        className="w-full flex flex-col items-center justify-center gap-2 py-8 border-2 border-dashed border-weeeu-primary/30 rounded-2xl text-weeeu-primary hover:border-weeeu-primary hover:bg-weeeu-surface transition-all"
       >
         <span className="text-3xl">➕</span>
         <span className="text-sm font-medium">เพิ่มเครื่องใช้ไฟฟ้าใหม่</span>
         <span className="text-xs opacity-70">ลงทะเบียนเครื่องเพื่อใช้บริการครบวงจร</span>
       </Link>
+
+      {/* Edit modal (Mockup) */}
+      {editTarget && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={() => setEditTarget(null)}>
+          <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 space-y-4" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-bold text-gray-900">แก้ไข: {editTarget.name}</h2>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">ชื่อเครื่อง</label>
+                <input defaultValue={editTarget.name} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">ยี่ห้อ</label>
+                <input defaultValue={editTarget.brand} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30" />
+              </div>
+            </div>
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => { setEditTarget(null); showToast("บันทึกแล้ว (Mockup)"); }}
+                className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+              >
+                บันทึก (Mockup)
+              </button>
+              <button onClick={() => setEditTarget(null)} className="flex-1 bg-gray-100 text-gray-600 font-semibold py-3 rounded-xl text-sm">
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete confirm modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setDeleteTarget(null)}>
+          <div className="bg-white rounded-3xl w-80 p-6 space-y-4 mx-4" onClick={e => e.stopPropagation()}>
+            <div className="text-center">
+              <p className="text-4xl mb-3">🗑️</p>
+              <h2 className="text-base font-bold text-gray-900">ลบเครื่องใช้ไฟฟ้า?</h2>
+              <p className="text-sm text-gray-500 mt-1">{deleteTarget.name}</p>
+              <p className="text-xs text-red-500 mt-2">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleDelete(deleteTarget)}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                ลบ (Mockup)
+              </button>
+              <button onClick={() => setDeleteTarget(null)} className="flex-1 bg-gray-100 text-gray-600 font-semibold py-2.5 rounded-xl text-sm">
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

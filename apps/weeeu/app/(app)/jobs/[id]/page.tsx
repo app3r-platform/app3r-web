@@ -34,7 +34,7 @@ export default function JobDetailPage() {
       <div className="text-center py-16">
         <p className="text-4xl mb-3">🔍</p>
         <p className="text-gray-600 font-medium">ไม่พบข้อมูลงานนี้</p>
-        <Link href="/jobs" className="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline">
+        <Link href="/jobs" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">
           ← กลับรายการงาน
         </Link>
       </div>
@@ -62,9 +62,9 @@ export default function JobDetailPage() {
         </div>
 
         {job.currentSubStage && (
-          <div className="bg-indigo-50 rounded-xl px-3 py-2.5">
-            <p className="text-xs text-indigo-500">ขั้นตอนปัจจุบัน</p>
-            <p className="text-sm font-semibold text-indigo-700">
+          <div className="bg-weeeu-surface rounded-xl px-3 py-2.5">
+            <p className="text-xs text-weeeu-primary/70">ขั้นตอนปัจจุบัน</p>
+            <p className="text-sm font-semibold text-weeeu-text">
               {job.currentSubStage.replace(/_/g, " ")}
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function JobDetailPage() {
       {/* CTA: View progress */}
       <Link
         href={`/jobs/${id}/progress`}
-        className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
+        className="block w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
       >
         📋 ดูความคืบหน้างาน
       </Link>
