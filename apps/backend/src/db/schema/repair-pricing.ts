@@ -202,6 +202,12 @@ export const usedPricingDeductions = pgTable(
     rangeMax: numeric('range_max', { precision: 12, scale: 2 }),
     sortOrder: integer('sort_order').notNull().default(0),
     isActive: boolean('is_active').notNull().default(true),
+    // B6 Gap #1: applies_when — condition JSON สำหรับ conditional deduction
+    // NULL = apply เสมอ (backward compatible)
+    // { "dimension": "accessory", "value": "no_charger" }
+    // { "and": [{"dimension":"x","value":"y"}, {...}] }
+    // pattern เดียวกับ triggers_when (additive migration 0017)
+    appliesWhen: jsonb('applies_when').default(sql`NULL`),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
@@ -209,6 +215,8 @@ export const usedPricingDeductions = pgTable(
     index('idx_used_pricing_deductions_model').on(table.modelId),
     index('idx_used_pricing_deductions_kind').on(table.kind),
     index('idx_used_pricing_deductions_type').on(table.deductionType),
+    // GIN index สำหรับ applies_when JSONB containment queries (@>, ?)
+    index('idx_upd_applies_when').using('gin', table.appliesWhen),
     // CHECK constraint: ตรวจสอบว่ามีค่าตรงกับ deduction_type
     check(
       'chk_deduction_amounts',
