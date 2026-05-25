@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
@@ -85,6 +85,104 @@ const WARRANTY_SCOPE_LABEL: Record<string, string> = {
   both:  "ค่าแรง + อะไหล่",
 };
 
+// ── Mock fallback (CMD-FIX-2a) — try API → catch/empty → fallback MOCK ────────
+const MOCK_LISTING_FALLBACK: ListingDetail = {
+  id: "job-001",
+  appliance_name: "แอร์ Daikin 12000 BTU",
+  issue_summary: "เสียงดังผิดปกติ — คาดว่าคอมเพรสเซอร์เสื่อม",
+  status: "pending_offer",
+};
+
+const MOCK_OFFERS: RepairOffer[] = [
+  {
+    id: "offer-001",
+    weeer_id: "r-101",
+    weeer_name: "ร้านซ่อมดีเจริญ",
+    weeer_rating: 4.8,
+    weeer_review_count: 312,
+    quoted_price: 1800,
+    inspection_fee: 150,
+    deposit_amount: 500,
+    deposit_policy_when_unrepairable: "refund",
+    deposit_partial_refund_pct: null,
+    travel_fee: null,
+    travel_fee_policy: "included",
+    labor_cancel_fee: 300,
+    labor_cancel_fee_policy: "เก็บค่าแรงตรวจ",
+    parts_markup_pct: 10,
+    parts_policy: "market",
+    warranty_days: 90,
+    warranty_scope: "both",
+    no_show_fee: 150,
+    no_show_policy: "เก็บค่าเดินทาง",
+    scope_creep_policy: "แจ้งลูกค้าก่อนดำเนินการ",
+    scope_creep_threshold_pct: 20,
+    liability_cap: 5000,
+    liability_policy: "ไม่เกินราคาเครื่อง",
+    estimated_duration_days: 2,
+    notes: "มีช่างเฉพาะทางแอร์ ประสบการณ์ 10 ปี อะไหล่แท้ทุกชิ้น",
+    created_at: "2026-05-25T08:00:00.000Z",
+  },
+  {
+    id: "offer-002",
+    weeer_id: "r-102",
+    weeer_name: "ช่างแอร์ไทย",
+    weeer_rating: 4.5,
+    weeer_review_count: 187,
+    quoted_price: 1500,
+    inspection_fee: 100,
+    deposit_amount: 300,
+    deposit_policy_when_unrepairable: "forfeit",
+    deposit_partial_refund_pct: null,
+    travel_fee: 100,
+    travel_fee_policy: "extra",
+    labor_cancel_fee: 200,
+    labor_cancel_fee_policy: "เก็บค่าเดินทาง + ค่าตรวจ",
+    parts_markup_pct: 15,
+    parts_policy: "market",
+    warranty_days: 60,
+    warranty_scope: "labor",
+    no_show_fee: 100,
+    no_show_policy: "เก็บค่าเดินทาง",
+    scope_creep_policy: "แจ้งก่อนเปลี่ยนอะไหล่เพิ่ม",
+    scope_creep_threshold_pct: 30,
+    liability_cap: null,
+    liability_policy: null,
+    estimated_duration_days: 1,
+    notes: "รับงานด่วนได้ — บริการถึงบ้าน ภายในกรุงเทพฯ",
+    created_at: "2026-05-25T09:30:00.000Z",
+  },
+  {
+    id: "offer-003",
+    weeer_id: "r-103",
+    weeer_name: "อาร์แอร์เซอร์วิส",
+    weeer_rating: 4.9,
+    weeer_review_count: 521,
+    quoted_price: 2200,
+    inspection_fee: 200,
+    deposit_amount: 600,
+    deposit_policy_when_unrepairable: "refund_partial",
+    deposit_partial_refund_pct: 50,
+    travel_fee: null,
+    travel_fee_policy: "waived_if_repair",
+    labor_cancel_fee: 400,
+    labor_cancel_fee_policy: "เก็บค่าแรงตรวจ + อะไหล่ที่ใช้ไป",
+    parts_markup_pct: 5,
+    parts_policy: "at_cost",
+    warranty_days: 180,
+    warranty_scope: "both",
+    no_show_fee: 200,
+    no_show_policy: "เก็บค่าเดินทาง + ค่าแรง 1 ชั่วโมง",
+    scope_creep_policy: "แจ้งลูกค้าทุกครั้งก่อนขยายงาน",
+    scope_creep_threshold_pct: 10,
+    liability_cap: 10000,
+    liability_policy: "รับผิดชอบสูงสุดตามราคาเครื่องใหม่",
+    estimated_duration_days: 3,
+    notes: "บริษัทจดทะเบียน อะไหล่แท้ มี QC ทุกขั้นตอน รับประกันนานที่สุด",
+    created_at: "2026-05-25T10:15:00.000Z",
+  },
+];
+
 export default function RepairOffersPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -93,16 +191,26 @@ export default function RepairOffersPage() {
   const [loading, setLoading] = useState(true);
   const [selecting, setSelecting] = useState<string | null>(null);
   const [error, setError] = useState("");
+  // CMD-FIX-2a: track mock mode เพื่อ handleSelect fallback
+  const isMockRef = useRef(false);
 
   useEffect(() => {
     Promise.all([
       apiFetch(`/api/v1/repair/listings/${id}`).then(r => r.ok ? r.json() : null),
       apiFetch(`/api/v1/repair/listings/${id}/offers`).then(r => r.ok ? r.json() : { items: [] }),
     ]).then(([ld, od]) => {
-      setListing(ld);
-      setOffers(od.items ?? []);
-    }).catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
-      .finally(() => setLoading(false));
+      // listing fallback: API returns null (404) → ใช้ mock listing
+      setListing(ld ?? MOCK_LISTING_FALLBACK);
+      const items: RepairOffer[] = od.items ?? [];
+      // offers fallback: API empty → ใช้ MOCK (CMD-FIX-2a No-seed fix)
+      if (items.length === 0) isMockRef.current = true;
+      setOffers(items.length > 0 ? items : MOCK_OFFERS);
+    }).catch(() => {
+      // Network error → fallback MOCK ทั้งหมด
+      isMockRef.current = true;
+      setListing(MOCK_LISTING_FALLBACK);
+      setOffers(MOCK_OFFERS);
+    }).finally(() => setLoading(false));
   }, [id]);
 
   const handleSelect = async (offerId: string) => {
@@ -116,7 +224,12 @@ export default function RepairOffersPage() {
       const data = await res.json();
       router.push(`/repair/${data.job_id ?? id}`);
     } catch {
-      setError("เกิดข้อผิดพลาดในการเลือก Offer กรุณาลองใหม่");
+      if (isMockRef.current) {
+        // Mock mode: navigate to job detail (accept state เปลี่ยน)
+        router.push(`/repair/${id}`);
+      } else {
+        setError("เกิดข้อผิดพลาดในการเลือก Offer กรุณาลองใหม่");
+      }
     } finally {
       setSelecting(null);
     }

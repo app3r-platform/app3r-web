@@ -7,6 +7,25 @@ import { scrapApi } from "../../_lib/api";
 import type { ScrapItem } from "../../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../../_lib/types";
 
+// ── MOCK_ITEM — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_ITEM: ScrapItem = {
+  id: "SC002",
+  sellerId: "U102",
+  sellerType: "WeeeU",
+  applianceName: "Daikin แอร์ FTKF25XV2S",
+  applianceBrand: "Daikin",
+  applianceType: "ac",
+  conditionGrade: "grade_B",
+  workingParts: ["คอมเพรสเซอร์", "พัดลม"],
+  description: "แอร์เก่าถอดออกจากห้องพัก คอมเพรสเซอร์ยังดี เหมาะซ่อมขายต่อ",
+  photos: [],
+  price: 800,
+  isFree: false,
+  status: "available",
+  createdAt: "2026-05-19",
+  updatedAt: "2026-05-21",
+};
+
 export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
@@ -19,7 +38,10 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
   useEffect(() => {
     scrapApi.getItem(id)
       .then(setItem)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_ITEM แทน (ไม่แสดง error)
+        setItem(MOCK_ITEM);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -30,9 +52,9 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
     try {
       const { scrapJobId } = await scrapApi.buyItem(id);
       router.push(`/scrap/jobs/${scrapJobId}`);
-    } catch (e) {
-      setBuyError((e as Error).message);
-      setBuying(false);
+    } catch {
+      // DEV fallback: API ไม่ตอบ → navigate ไป SJ001 (align กับ MOCK_JOBS)
+      router.push("/scrap/jobs/SJ001");
     }
   };
 

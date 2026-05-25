@@ -85,9 +85,13 @@ export default function WalletPage() {
             >
               + เติม Gold
             </Link>
-            <button className="flex-1 bg-white/20 hover:bg-white/30 text-white text-sm font-semibold py-2.5 rounded-xl transition-all">
-              ↑ ถอน
-            </button>
+            {/* R1: WeeeU ถอน Gold ได้ — ลิงก์ไปหน้า withdraw */}
+            <Link
+              href="/wallet/withdraw"
+              className="flex-1 text-center bg-white/20 hover:bg-white/30 text-white text-sm font-semibold py-2.5 rounded-xl transition-all"
+            >
+              ↑ แจ้งถอน
+            </Link>
           </div>
         </div>
 
@@ -105,13 +109,10 @@ export default function WalletPage() {
             <p className="text-xs opacity-90">❌ Silver ซื้อขายไม่ได้ · ถอนไม่ได้</p>
             <p className="text-xs opacity-70">ใช้ได้แค่: ค่าประกาศ + ค่า offer · หมดอายุ 90 วัน</p>
           </div>
-          <div className="flex gap-2">
-            <button className="flex-1 bg-white/20 hover:bg-white/30 text-white text-sm font-semibold py-2.5 rounded-xl transition-all">
-              + เติม Silver
-            </button>
-            <button className="flex-1 bg-white/20 cursor-not-allowed opacity-40 text-white text-sm font-semibold py-2.5 rounded-xl" disabled>
-              ↑ ถอน (ไม่ได้)
-            </button>
+          {/* R1: Silver เติมเองไม่ได้ · ถอนไม่ได้ */}
+          <div className="bg-white/10 rounded-xl px-3 py-2">
+            <p className="text-xs opacity-90">💎 Silver รับจาก: Signup · Engagement · Admin แจก</p>
+            <p className="text-xs opacity-70 mt-0.5">❌ ถอนเป็นเงินไม่ได้ · ใช้ชำระค่าบริการเท่านั้น</p>
           </div>
         </div>
       </div>
@@ -171,38 +172,26 @@ export default function WalletPage() {
         <p className="text-xs text-gray-400">* Mockup — กดเติมเพื่อดู flow (ไม่โอนเงินจริง)</p>
       </div>
 
-      {/* Silver Top-up / Withdraw section */}
+      {/* R1: Silver info section — เติมเองไม่ได้ ถอนไม่ได้ */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-        <h2 className="text-base font-semibold text-gray-800 mb-4">เติม / ถอน Silver Point</h2>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-3">
-            <h3 className="text-sm font-medium text-gray-600">เติม Silver</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {[100, 200, 500, 1000].map(amt => (
-                <button
-                  key={amt}
-                  className="border border-weeeu-primary/30 text-weeeu-primary hover:bg-weeeu-surface text-sm font-medium py-2 rounded-xl transition-colors"
-                >
-                  {amt.toLocaleString()}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <h3 className="text-sm font-medium text-gray-600">ถอน Silver</h3>
-            <div className="bg-gray-50 rounded-xl p-3 space-y-1">
-              <p className="text-xs text-gray-500">บัญชีที่ผูกไว้</p>
-              <div className="flex items-center gap-2">
-                <span className="text-sm">🏦</span>
-                <div>
-                  <p className="text-sm font-medium text-gray-800">กสิกรไทย</p>
-                  <p className="text-xs text-gray-400">XXX-X-X5678-X</p>
-                </div>
+        <h2 className="text-base font-semibold text-gray-800 mb-3">💎 Silver Point — รับอย่างไร?</h2>
+        <div className="space-y-2">
+          {[
+            { icon: "👤", label: "Signup Bonus", desc: "รับเมื่อสมัครครั้งแรก" },
+            { icon: "🔧", label: "Engagement", desc: "รับเมื่อทำธุรกรรม (ซ่อม/ขาย/บำรุง)" },
+            { icon: "🎁", label: "Admin แจก", desc: "โปรโมชั่นพิเศษจากระบบ" },
+          ].map(item => (
+            <div key={item.label} className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5">
+              <span className="text-lg">{item.icon}</span>
+              <div>
+                <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                <p className="text-xs text-gray-500">{item.desc}</p>
               </div>
             </div>
-            <p className="text-xs text-red-400">❌ Silver ถอนเป็นเงินไม่ได้</p>
-          </div>
+          ))}
+        </div>
+        <div className="mt-3 bg-red-50 rounded-xl px-3 py-2.5">
+          <p className="text-xs text-red-600 font-medium">❌ Silver ถอนเป็นเงินไม่ได้ · ใช้ได้แค่ชำระค่าบริการ · หมดอายุ 90 วัน</p>
         </div>
       </div>
 

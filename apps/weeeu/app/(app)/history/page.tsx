@@ -1,6 +1,7 @@
-﻿import type { Metadata } from "next";
+"use client";
+// ─── ประวัติ & รายงาน (/history) — FIX-3: use client + filter tabs interactive
 
-export const metadata: Metadata = { title: "ประวัติ & รายงาน" };
+import { useState } from "react";
 
 const historyItems = [
   {
@@ -36,13 +37,26 @@ const historyItems = [
 ];
 
 const summaryStats = [
-  { label: "รายการทั้งหมด", value: "12", icon: "📋", color: "bg-weeeu-surface text-weeeu-primary" },
+  { label: "รายการทั้งหมด", value: "12",    icon: "📋", color: "bg-weeeu-surface text-weeeu-primary" },
   { label: "ค่าใช้จ่ายรวม", value: "฿8,450", icon: "💸", color: "bg-red-50 text-red-700" },
-  { label: "รายได้จากขาย", value: "฿1,250", icon: "💰", color: "bg-green-50 text-green-700" },
+  { label: "รายได้จากขาย",  value: "฿1,250", icon: "💰", color: "bg-green-50 text-green-700" },
   { label: "Silver Point รับ", value: "+580", icon: "💎", color: "bg-gray-50 text-gray-700" },
 ];
 
+const FILTER_TABS = ["ทั้งหมด", "ซ่อม", "ซื้อ/ขาย", "ซาก", "บำรุงรักษา"];
+const TYPE_MAP: Record<string, string> = {
+  "ซ่อม": "repair", "ซื้อ/ขาย": "resell", "ซาก": "scrap", "บำรุงรักษา": "maintain",
+};
+const PERIODS = ["เดือนนี้", "3 เดือน", "6 เดือน", "ปีนี้"];
+
 export default function HistoryPage() {
+  const [activeTab, setActiveTab] = useState("ทั้งหมด");
+  const [period, setPeriod] = useState("เดือนนี้");
+
+  const filtered = activeTab === "ทั้งหมด"
+    ? historyItems
+    : historyItems.filter(item => item.type === TYPE_MAP[activeTab]);
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">ประวัติ & รายงาน</h1>
@@ -58,14 +72,15 @@ export default function HistoryPage() {
         ))}
       </div>
 
-      {/* Filter */}
+      {/* Filter — FIX-3: interactive tabs + period */}
       <div className="flex gap-3">
         <div className="flex gap-2 flex-1 overflow-x-auto">
-          {["ทั้งหมด", "ซ่อม", "ซื้อ/ขาย", "ซาก", "บำรุงรักษา"].map((tab) => (
+          {FILTER_TABS.map((tab) => (
             <button
               key={tab}
+              onClick={() => setActiveTab(tab)}
               className={`flex-shrink-0 text-xs px-4 py-2 rounded-full font-medium transition-colors ${
-                tab === "ทั้งหมด"
+                activeTab === tab
                   ? "bg-weeeu-primary text-white"
                   : "bg-gray-100 text-gray-500 hover:bg-gray-200"
               }`}
@@ -74,48 +89,56 @@ export default function HistoryPage() {
             </button>
           ))}
         </div>
-        <select className="border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-600 flex-shrink-0">
-          <option>เดือนนี้</option>
-          <option>3 เดือน</option>
-          <option>6 เดือน</option>
-          <option>ปีนี้</option>
+        <select
+          value={period}
+          onChange={e => setPeriod(e.target.value)}
+          className="border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-600 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+        >
+          {PERIODS.map(p => <option key={p}>{p}</option>)}
         </select>
       </div>
 
       {/* History list */}
-      <div className="space-y-3">
-        {historyItems.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-weeeu-surface transition-colors cursor-pointer"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
-                {item.icon}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-semibold text-gray-900">{item.title}</p>
-                    <p className="text-sm text-gray-500 mt-0.5">{item.detail}</p>
-                    <p className="text-xs text-gray-400 mt-1">🏪 {item.weeer}</p>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="font-bold text-gray-900">{item.amount}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{item.date}</p>
-                  </div>
+      {filtered.length === 0 ? (
+        <div className="text-center py-16">
+          <p className="text-4xl mb-3">📋</p>
+          <p className="text-gray-500 font-medium">ไม่พบรายการในหมวดนี้</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-weeeu-primary/20 transition-colors cursor-pointer"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                  {item.icon}
                 </div>
-                <div className="flex items-center justify-between mt-3">
-                  <span className="text-xs text-gray-400">#{item.id}</span>
-                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${item.statusColor}`}>
-                    {item.status}
-                  </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-gray-900">{item.title}</p>
+                      <p className="text-sm text-gray-500 mt-0.5">{item.detail}</p>
+                      <p className="text-xs text-gray-400 mt-1">🏪 {item.weeer}</p>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <p className="font-bold text-gray-900">{item.amount}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{item.date}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="text-xs text-gray-400">#{item.id}</span>
+                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${item.statusColor}`}>
+                      {item.status}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Export */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

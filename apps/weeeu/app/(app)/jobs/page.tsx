@@ -53,8 +53,8 @@ export default function JobsPage() {
             onClick={() => setFilter(opt.value)}
             className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               filter === opt.value
-                ? "bg-indigo-600 text-white"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+                ? "bg-weeeu-primary text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:border-weeeu-primary/30"
             }`}
           >
             {opt.label}
@@ -76,7 +76,7 @@ export default function JobsPage() {
             <Link
               key={job.jobId}
               href={`/jobs/${job.jobId}`}
-              className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:border-indigo-200 transition-colors"
+              className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:border-weeeu-primary/20 transition-colors"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -89,7 +89,7 @@ export default function JobsPage() {
               </div>
 
               {job.currentSubStage && (
-                <p className="mt-2 text-xs text-indigo-600 font-medium">
+                <p className="mt-2 text-xs text-weeeu-primary font-medium">
                   → {job.currentSubStage.replace(/_/g, " ")}
                 </p>
               )}

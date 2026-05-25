@@ -4,6 +4,7 @@
 // หน้าตลาดซื้อ-ขายอะไหล่ B2B (Business-to-Business ร้านถึงร้าน)
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { PART_LISTINGS_MOCK } from "../_lib/mock-data";
 import type { PartListing } from "../_lib/types";
 import { PartCard } from "../../../../components/parts/PartCard";
@@ -13,6 +14,7 @@ import { MarketplaceStatsCard } from "../../../../components/parts/MarketplaceSt
 import { getCurrentShopId, getListings, saveListings, usePartsSync } from "../../../../lib/utils/parts-sync";
 
 export default function MarketplacePage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<PartFilters>(defaultFilters);
   const [shopId, setShopId] = useState("S001");
@@ -107,7 +109,9 @@ export default function MarketplacePage() {
       ) : (
         <div className="grid grid-cols-2 gap-3">
           {filtered.map((l) => (
-            <PartCard key={l.id} listing={l} currentShopId={shopId} />
+            <div key={l.id} onClick={() => router.push(`/parts/marketplace/${l.id}`)} className="cursor-pointer">
+              <PartCard listing={l} currentShopId={shopId} />
+            </div>
           ))}
         </div>
       )}

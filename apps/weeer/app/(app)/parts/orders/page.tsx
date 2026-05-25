@@ -15,6 +15,7 @@ import {
   ORDER_STATUS_COLOR,
 } from "../../../../lib/parts-api";
 import type { PartsOrderDto } from "../../../../lib/parts-api";
+import { MOCK_WEEER_PROFILE } from "../../../../lib/mock-data/weeer-profile";
 
 // ── Mock fallback (ใช้เมื่อ API ล้มเหลวหรือ dev offline) ─────────────────────
 const MOCK_ORDERS: PartsOrderDto[] = [
@@ -71,8 +72,8 @@ const MOCK_ORDERS: PartsOrderDto[] = [
   },
 ];
 
-// TODO Sub-CMD-10+: ดึง userId จริงจาก auth context
-const PLACEHOLDER_USER_ID = "usr-weeer-current";
+// ใช้ mock shopId (จะแทนด้วย real auth ใน Sub-CMD-10+)
+const CURRENT_USER_ID = MOCK_WEEER_PROFILE.shopId;
 
 type Tab = "buyer" | "seller";
 
@@ -91,8 +92,8 @@ export default function PartsOrdersPage() {
       // Sub-CMD-9: ใช้ list endpoint จริง
       const params =
         currentTab === "buyer"
-          ? { buyerId: PLACEHOLDER_USER_ID, limit: 50 }
-          : { sellerId: PLACEHOLDER_USER_ID, limit: 50 };
+          ? { buyerId: CURRENT_USER_ID, limit: 50 }
+          : { sellerId: CURRENT_USER_ID, limit: 50 };
       const result = await listMyOrders(params);
       setOrders(result.items);
       setUseMock(false);
