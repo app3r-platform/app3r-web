@@ -418,7 +418,10 @@ async function main() {
   console.error(`\n📊 ${arr.length} file(s) → ${totalExtracted} images extracted, ${totalSkipped} skipped, ${totalErrors} error(s)`)
 }
 
-main().catch(e => {
-  console.error('Fatal:', e)
-  process.exit(1)
-})
+// CJS guard: only run as CLI, not when imported as a module
+if (require.main === module) {
+  main().catch(e => {
+    console.error('Fatal:', e)
+    process.exit(1)
+  })
+}

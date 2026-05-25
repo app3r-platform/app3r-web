@@ -640,7 +640,10 @@ async function main() {
   console.error(`\n📊 Parsed ${arr.length} file(s) → ${totalRows} import rows, ${totalErrors} error(s)`)
 }
 
-main().catch(e => {
-  console.error('Fatal:', e)
-  process.exit(1)
-})
+// CJS guard: only run as CLI, not when imported as a module
+if (require.main === module) {
+  main().catch(e => {
+    console.error('Fatal:', e)
+    process.exit(1)
+  })
+}

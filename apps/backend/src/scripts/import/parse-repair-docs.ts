@@ -213,9 +213,17 @@ const APPLIANCE_KEYWORDS: Record<string, string[]> = {
 }
 
 function detectApplianceType(xml: string, filename: string): string {
-  const combined = (xml + ' ' + filename).toLowerCase()
+  // Priority 1: filename — most reliable signal (filenames are explicit Thai category names)
+  const fname = filename.toLowerCase()
   for (const [type, keywords] of Object.entries(APPLIANCE_KEYWORDS)) {
-    if (keywords.some(kw => combined.includes(kw.toLowerCase()))) {
+    if (keywords.some(kw => fname.includes(kw.toLowerCase()))) {
+      return type
+    }
+  }
+  // Priority 2: XML content (fallback — less reliable due to cross-references)
+  const xmlLower = xml.toLowerCase()
+  for (const [type, keywords] of Object.entries(APPLIANCE_KEYWORDS)) {
+    if (keywords.some(kw => xmlLower.includes(kw.toLowerCase()))) {
       return type
     }
   }
@@ -485,16 +493,21 @@ type TableType = 'parts' | 'checklist' | 'symptoms' | 'pricing' | 'unknown'
 
 function classifyTable(table: XmlTable): TableType {
   if (table.rows.length === 0) return 'unknown'
-  const header = table.rows[0].join(' ').toLowerCase()
+  const headerRow = table.rows[0]
+  const firstCol = (headerRow[0] ?? '').toLowerCase()
+  const header = headerRow.join(' ').toLowerCase()
 
-  if (header.includes('ชิ้นส่วน') || header.includes('อุปกรณ์ภายใน') || header.includes('part')) {
-    return 'parts'
+  // Variant 7 fix: Table 0 (symptom↔parts map) has "อาการ" as FIRST column header.
+  // Must check first column BEFORE checking other columns — otherwise "ชิ้นส่วน"
+  // in col 1 incorrectly wins and Table 0 is misclassified as 'parts'.
+  if (firstCol.includes('อาการ') || firstCol.includes('symptom')) {
+    return 'symptoms'
   }
   if (header.includes('ตรวจ') || header.includes('checklist') || header.includes('ตรวจสอบ')) {
     return 'checklist'
   }
-  if (header.includes('อาการ') || header.includes('symptom')) {
-    return 'symptoms'
+  if (header.includes('ชิ้นส่วน') || header.includes('อุปกรณ์ภายใน') || header.includes('part')) {
+    return 'parts'
   }
   if (header.includes('ราคา') || header.includes('price') || header.includes('ค่าบริการ')) {
     return 'pricing'
@@ -648,7 +661,10 @@ async function main() {
   console.error(`\n📊 Parsed ${arr.length} file(s) → ${totalParts} parts, ${totalErrors} error(s)`)
 }
 
-main().catch(e => {
-  console.error('Fatal:', e)
-  process.exit(1)
-})
+// CJS guard: only run as CLI, not when imported as a module
+if (require.main === module) {
+  main().catch(e => {
+    console.error('Fatal:', e)
+    process.exit(1)
+  })
+}
