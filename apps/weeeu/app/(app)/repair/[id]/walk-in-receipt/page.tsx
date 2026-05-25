@@ -20,6 +20,21 @@ type ReceiptData = {
   pickup_deadline_days: number | null;
 };
 
+const MOCK_WALKIN_RECEIPT: ReceiptData = {
+  id: "mock-job-001",
+  receipt_code: "WI-MOCK01",
+  appliance_name: "เครื่องซักผ้า Samsung",
+  issue_summary: "เครื่องไม่ปั่นน้ำออก",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  weeer_address: "99/1 ถนนลาดพร้าว แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900",
+  weeer_phone: "02-123-4567",
+  weeer_open_hours: "จันทร์–เสาร์ 09:00–18:00",
+  inspection_fee: 150,
+  created_at: "2026-05-25T08:00:00.000Z",
+  storage_fee_per_day: 10,
+  pickup_deadline_days: 30,
+};
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString("th-TH", {
     day: "numeric", month: "long", year: "numeric",
@@ -53,7 +68,7 @@ export default function WalkInReceiptPage() {
           pickup_deadline_days: d.pickup_deadline_days ?? null,
         });
       })
-      .catch(() => setError("ไม่สามารถโหลด Receipt ได้"))
+      .catch(() => { setReceipt(prev => prev ?? MOCK_WALKIN_RECEIPT); })
       .finally(() => setLoading(false));
   }, [id]);
 

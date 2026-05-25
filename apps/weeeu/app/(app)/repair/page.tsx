@@ -89,6 +89,39 @@ const ACTIVE_STATUSES: RepairStatus[] = [
 
 const CLOSED_STATUSES: RepairStatus[] = ["closed", "cancelled", "converted_scrap"];
 
+// ── Mock fallback ──────────────────────────────────────────────────────────────
+const MOCK_LISTINGS: RepairListing[] = [
+  {
+    id: "listing-001", appliance_name: "แอร์ Daikin ห้องนอน",
+    issue_summary: "เสียงดังผิดปกติ — คาดว่าคอมเพรสเซอร์เสื่อม",
+    status: "open", offer_count: 3, created_at: new Date(Date.now() - 86400000).toISOString(),
+  },
+];
+
+const MOCK_JOBS: RepairJob[] = [
+  {
+    id: "job-001", listing_id: "listing-099", appliance_name: "เครื่องซักผ้า LG",
+    issue_summary: "ไม่ปั่นแห้ง — มอเตอร์ผิดปกติ", status: "in_progress",
+    weeer_name: "ร้านซ่อมดีเจริญ", decision_branch: null,
+    scheduled_at: new Date(Date.now() + 86400000).toISOString(),
+    priority: "normal", progress_percent: 60,
+  },
+  {
+    id: "job-002", listing_id: "listing-098", appliance_name: "ตู้เย็น Sharp",
+    issue_summary: "ไม่เย็น — ระบบทำความเย็นขัดข้อง", status: "awaiting_review",
+    weeer_name: "ช่างแอร์ไทย", decision_branch: null,
+    scheduled_at: new Date(Date.now() - 86400000).toISOString(),
+    priority: "urgent", progress_percent: 100,
+  },
+  {
+    id: "job-003", listing_id: "listing-097", appliance_name: "โทรทัศน์ Samsung",
+    issue_summary: "หน้าจอดับ — backlight เสีย", status: "closed",
+    weeer_name: "อาร์แอร์เซอร์วิส", decision_branch: null,
+    scheduled_at: new Date(Date.now() - 86400000 * 7).toISOString(),
+    priority: "normal", progress_percent: 100,
+  },
+];
+
 function getActionLink(job: RepairJob): string {
   if (job.status === "awaiting_entry") return `/repair/${job.id}/approve-entry`;
   if (job.status === "awaiting_user") {
@@ -115,8 +148,11 @@ export default function RepairListPage() {
       apiFetch("/api/v1/repair/listings?role=weeeu").then(r => r.ok ? r.json() : { items: [] }),
       apiFetch("/api/v1/repair/jobs?role=weeeu").then(r => r.ok ? r.json() : { items: [] }),
     ]).then(([ld, jd]) => {
-      setListings(ld.items ?? []);
-      setJobs(jd.items ?? []);
+      setListings(ld.items?.length ? ld.items : MOCK_LISTINGS);
+      setJobs(jd.items?.length ? jd.items : MOCK_JOBS);
+    }).catch(() => {
+      setListings(MOCK_LISTINGS);
+      setJobs(MOCK_JOBS);
     }).finally(() => setLoading(false));
   }, []);
 

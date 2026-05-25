@@ -53,6 +53,28 @@ type FeeSettleData = {
   confirmed_at: string | null;
 };
 
+// ── Mock fallback ─────────────────────────────────────────────────────────────
+const MOCK_FEE_SETTLE: FeeSettleData = {
+  job_id: "mock-job-001",
+  appliance_name: "แอร์ Daikin 12000 BTU",
+  weeer_name: "ร้านซ่อมแอร์สมศักดิ์",
+  settle_mode: "normal",
+  axes: [
+    { axis: 2, label: "ค่าตรวจสอบ",      amount: 150,  note: null,                          locked: true  },
+    { axis: 3, label: "ค่าแรงซ่อม",       amount: 800,  note: "ซ่อมคอมเพรสเซอร์ + ล้างแผง", locked: true  },
+    { axis: 5, label: "ค่าอะไหล่",        amount: 400,  note: "น้ำยาแอร์ R32 + ฟิลเตอร์",   locked: true  },
+    { axis: 6, label: "รับประกัน",        amount: 0,    note: "รับประกัน 30 วัน",             locked: true  },
+    { axis: 1, label: "หักมัดจำ",         amount: -300, note: "มัดจำที่ชำระแล้วตอนจอง",       locked: true  },
+  ],
+  subtotal: 1350,
+  deposit_credit: 300,
+  total_due: 1050,
+  customer_point_balance: 1500,
+  can_confirm: true,
+  status: "pending_confirm",
+  confirmed_at: null,
+};
+
 const SETTLE_MODE_LABEL: Record<SettleMode, { label: string; color: string; icon: string }> = {
   normal:   { label: "ชำระค่าซ่อมปกติ",     color: "bg-weeeu-surface border-weeeu-primary", icon: "🔧" },
   abort_c7: { label: "ยุติงาน (C7)",         color: "bg-orange-50 border-orange-300",        icon: "⚠️" },
@@ -115,7 +137,9 @@ export default function FeeSettlePage() {
     apiFetch(`/api/v1/repair/jobs/${id}/fee-settle`)
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(setData)
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลการชำระได้"))
+      .catch(() => {
+        setData(prev => prev ?? MOCK_FEE_SETTLE);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

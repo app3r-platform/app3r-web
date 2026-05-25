@@ -152,6 +152,73 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   parcel_confirmed: "bg-green-100 text-green-700",
 };
 
+// ── Mock fallback ──────────────────────────────────────────────────────────────
+const MOCK_JOB_DETAIL: RepairJobDetail = {
+  id: "job-001",
+  listing_id: "listing-099",
+  appliance_name: "เครื่องซักผ้า LG",
+  issue_summary: "ไม่ปั่นแห้ง — มอเตอร์ผิดปกติ",
+  issue_detail: "เครื่องซักผ้าหมุนได้แต่ไม่ปั่นแห้ง เสียงดังผิดปกติตอนเข้าโหมดปั่นแห้ง",
+  service_type: "onsite",
+  status: "in_progress",
+  decision_branch: null,
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  weeer_id: "weeer-001",
+  weeet_name: "ช่างสมชาย",
+  scheduled_at: new Date(Date.now() + 86400000).toISOString(),
+  departed_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+  arrived_at: new Date(Date.now() - 3600000).toISOString(),
+  entry_approved_at: new Date(Date.now() - 3600000 + 300000).toISOString(),
+  completed_at: null,
+  closed_at: null,
+  original_price: 800,
+  proposed_price: null,
+  final_price: null,
+  inspection_fee: 100,
+  deposit_amount: 200,
+  storage_fee_per_day: null,
+  storage_fee_total: null,
+  pickup_deadline: null,
+  receipt_code: null,
+  parcel_courier: null,
+  parcel_tracking_out: null,
+  parcel_tracking_back: null,
+  priority: "normal",
+  progress_percent: 60,
+  diagnosis_note: "มอเตอร์ปั่นแห้งเสื่อม — ต้องเปลี่ยนใหม่",
+  technician_note: "อะไหล่สั่งแล้ว คาดว่าซ่อมเสร็จภายในวันนี้",
+  labor_cost: 300,
+  parts_cost: 500,
+  warranty_days: 30,
+  warranty_expires_at: null,
+  customer_note: "กรุณาโทรแจ้งก่อนมาถึง 30 นาที",
+  cancelled_reason: null,
+  cancelled_at: null,
+  timeline: [
+    {
+      id: "ev-003",
+      event_type: "entry_approved",
+      description: "คุณอนุมัติให้ช่างเข้าหน้างาน",
+      created_at: new Date(Date.now() - 3600000 + 300000).toISOString(),
+      actor_role: "weeeu",
+    },
+    {
+      id: "ev-002",
+      event_type: "arrived",
+      description: "ช่างสมชายถึงหน้างานแล้ว",
+      created_at: new Date(Date.now() - 3600000).toISOString(),
+      actor_role: "weeet",
+    },
+    {
+      id: "ev-001",
+      event_type: "assigned",
+      description: "ร้านซ่อมดีเจริญรับงานแล้ว",
+      created_at: new Date(Date.now() - 86400000).toISOString(),
+      actor_role: "weeer",
+    },
+  ],
+};
+
 function formatDate(iso: string | null) {
   if (!iso) return "—";
   return new Date(iso).toLocaleString("th-TH", {
@@ -182,7 +249,10 @@ export default function RepairJobDetailPage() {
         parcel_tracking_out: d.parcel_tracking_out ?? null,
         parcel_tracking_back: d.parcel_tracking_back ?? null,
       }))
-      .catch(() => setError("ไม่พบข้อมูลงานซ่อม"))
+      .catch(() => {
+        setJob(prev => prev ?? MOCK_JOB_DETAIL);
+        setLoading(false);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

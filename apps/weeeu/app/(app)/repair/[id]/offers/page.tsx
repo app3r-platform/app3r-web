@@ -441,6 +441,21 @@ function OfferCard({
         )}
       </div>
 
+      {/* ── Escrow info card — Gold ที่จะถูกล็อก (CMD A3) ──────────── */}
+      <div className="px-5 pb-3">
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-3">
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-xs font-semibold text-weeeu-dark">🔒 Gold ที่จะถูกล็อก</p>
+            <p className="text-sm font-bold text-weeeu-primary">
+              {(offer.quoted_price + (offer.deposit_amount ?? 0)).toLocaleString()} Point
+            </p>
+          </div>
+          <p className="text-[10px] text-gray-500 leading-relaxed">
+            ระบบจะล็อก Gold ชั่วคราวเมื่อเลือกร้าน — ปลดล็อกอัตโนมัติหากงานไม่สำเร็จ
+          </p>
+        </div>
+      </div>
+
       {/* Select button */}
       <div className="px-5 pb-5 pt-2">
         <button

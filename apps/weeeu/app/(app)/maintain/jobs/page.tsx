@@ -57,6 +57,58 @@ const FILTERS: { value: StatusFilter; label: string }[] = [
   { value: "cancelled",     label: "ยกเลิก" },
 ];
 
+// ── Mock fallback ─────────────────────────────────────────────────────────────
+const MOCK_MAINTAIN_JOBS: MaintainJob[] = [
+  {
+    id: "mock-maintain-001",
+    serviceCode: "M-2026-001",
+    customerId: "current-user",
+    shopId: "shop-001",
+    technicianId: "weeet-001",
+    status: "in_progress",
+    applianceType: "AC",
+    cleaningType: "deep",
+    serviceMethod: "on_site",
+    scheduledAt: new Date(Date.now() - 3600000).toISOString(),
+    estimatedDuration: 3,
+    address: { lat: 13.7563, lng: 100.5018, address: "123 ถ.สุขุมวิท แขวงคลองเตย กรุงเทพ 10110" },
+    totalPrice: 800,
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    id: "mock-maintain-002",
+    serviceCode: "M-2026-002",
+    customerId: "current-user",
+    status: "awaiting_offer",
+    applianceType: "WashingMachine",
+    cleaningType: "general",
+    serviceMethod: "on_site",
+    scheduledAt: new Date(Date.now() + 86400000 * 2).toISOString(),
+    estimatedDuration: 2,
+    address: { lat: 13.7563, lng: 100.5018, address: "123 ถ.สุขุมวิท แขวงคลองเตย กรุงเทพ 10110" },
+    totalPrice: 0,
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    id: "mock-maintain-003",
+    serviceCode: "M-2026-003",
+    customerId: "current-user",
+    shopId: "shop-002",
+    status: "completed",
+    applianceType: "AC",
+    cleaningType: "sanitize",
+    serviceMethod: "on_site",
+    scheduledAt: new Date(Date.now() - 86400000 * 7).toISOString(),
+    estimatedDuration: 4,
+    address: { lat: 13.7563, lng: 100.5018, address: "456 ถ.พระราม 9 ห้วยขวาง กรุงเทพ 10310" },
+    totalPrice: 1200,
+    createdAt: new Date(Date.now() - 86400000 * 8).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 6).toISOString(),
+  },
+];
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString("th-TH", {
     day: "numeric", month: "short", year: "numeric",
@@ -73,7 +125,9 @@ export default function MaintainJobsPage() {
     apiFetch("/api/v1/maintain/jobs/customer/")
       .then(r => r.ok ? r.json() : { items: [] })
       .then(d => setJobs(d.items ?? d ?? []))
-      .catch(() => setJobs([]))
+      .catch(() => {
+        setJobs(prev => prev.length > 0 ? prev : MOCK_MAINTAIN_JOBS);
+      })
       .finally(() => setLoading(false));
   }, []);
 

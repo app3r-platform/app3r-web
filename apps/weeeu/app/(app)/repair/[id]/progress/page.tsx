@@ -34,7 +34,7 @@ const STATUS_ICON: Record<ServiceProgressStatus, string> = {
 const STATUS_COLOR: Record<ServiceProgressStatus, string> = {
   pending:     "border-gray-300 bg-gray-50",
   accepted:    "border-weeeu-primary bg-weeeu-surface",
-  in_progress: "border-indigo-500 bg-indigo-50",
+  in_progress: "border-weeeu-dark bg-weeeu-surface",
   paused:      "border-yellow-400 bg-yellow-50",
   completed:   "border-green-500 bg-green-50",
   cancelled:   "border-red-400 bg-red-50",
@@ -94,7 +94,7 @@ function progressColor(status: ServiceProgressStatus | null): string {
   if (status === "completed") return "bg-green-500";
   if (status === "cancelled") return "bg-red-400";
   if (status === "paused")    return "bg-yellow-400";
-  return "bg-indigo-400";
+  return "bg-weeeu-primary";
 }
 
 function formatDate(iso: string | null | undefined): string {
@@ -122,7 +122,7 @@ function EntryCard({
       <div className="flex flex-col items-center">
         <div
           data-testid={`entry-bullet-${entry.id}`}
-          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm flex-shrink-0 ${colorCls} ${isLatest ? "ring-2 ring-offset-1 ring-indigo-300" : ""}`}
+          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm flex-shrink-0 ${colorCls} ${isLatest ? "ring-2 ring-offset-1 ring-weeeu-primary/40" : ""}`}
         >
           {icon}
         </div>
@@ -135,14 +135,14 @@ function EntryCard({
       <div className={`pb-4 flex-1 ${isFirst ? "pb-0" : ""}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className={`text-sm font-semibold ${isLatest ? "text-indigo-700" : "text-gray-700"}`}>
+            <span className={`text-sm font-semibold ${isLatest ? "text-weeeu-dark" : "text-gray-700"}`}>
               {label}
             </span>
-            <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-weeeu-primary bg-weeeu-surface px-1.5 py-0.5 rounded-full">
               {entry.progressPercent}%
             </span>
             {isLatest && (
-              <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium animate-pulse">
+              <span className="text-xs bg-weeeu-surface text-weeeu-primary px-2 py-0.5 rounded-full font-medium animate-pulse">
                 ล่าสุด
               </span>
             )}
@@ -192,11 +192,22 @@ export default function RepairProgressPage() {
   const [lastFetched, setLastFetched] = useState<Date | null>(null);
 
   // ── C7: ยุติงาน abort flow ──────────────────────────────────────────────────
+  // ── C7: ยุติงาน abort flow ──────────────────────────────────────────────────
   const [showAbortModal, setShowAbortModal] = useState(false);
   const [abortReason, setAbortReason] = useState<AbortReason | "">("");
   const [abortNote, setAbortNote] = useState("");
   const [abortSubmitting, setAbortSubmitting] = useState(false);
   const [abortError, setAbortError] = useState<string | null>(null);
+
+  // ── CMD A3: ยืนยันรับงานเสร็จ + toast ──────────────────────────────────────
+  const [jobConfirmed, setJobConfirmed] = useState(false);
+  const [toast, setToast] = useState("");
+
+  const handleConfirmJob = () => {
+    setJobConfirmed(true);
+    setToast("บันทึกแล้ว (Mockup)");
+    setTimeout(() => setToast(""), 2500);
+  };
 
   // ── Fetch helper ────────────────────────────────────────────────────────────
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -287,7 +298,7 @@ export default function RepairProgressPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">สถานะปัจจุบัน</p>
-                <p className="text-sm font-semibold text-indigo-700">
+                <p className="text-sm font-semibold text-weeeu-dark">
                   {timeline.latestStatus
                     ? (SERVICE_PROGRESS_STATUS_LABEL[timeline.latestStatus] ?? timeline.latestStatus)
                     : "รอดำเนินการ"}
@@ -296,7 +307,7 @@ export default function RepairProgressPage() {
               <div className="text-right">
                 <p
                   data-testid="main-progress-percent"
-                  className="text-2xl font-bold text-indigo-600"
+                  className="text-2xl font-bold text-weeeu-primary"
                 >
                   {timeline.latestPercent}%
                 </p>
@@ -341,6 +352,53 @@ export default function RepairProgressPage() {
               <p>อัพเดตล่าสุด: {lastFetched.toLocaleTimeString("th-TH", { timeStyle: "short" })}</p>
             )}
           </div>
+
+          {/* ── CMD A3: toast ────────────────────────────────────────────── */}
+          {toast && (
+            <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-gray-800 text-white text-xs px-4 py-2 rounded-full shadow-lg">
+              {toast}
+            </div>
+          )}
+
+          {/* ── CMD A3: ยืนยันรับงานเสร็จ (completed only) ───────────────── */}
+          {timeline.latestStatus === "completed" && !jobConfirmed && (
+            <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+              <p className="text-sm font-semibold text-weeeu-dark mb-1">ช่างรายงานว่าซ่อมเสร็จแล้ว ✅</p>
+              <p className="text-xs text-gray-500 mb-3">กรุณายืนยันว่าได้รับเครื่องคืนและทำงานได้ปกติ</p>
+              <button
+                type="button"
+                onClick={handleConfirmJob}
+                className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+              >
+                ยืนยันรับงานเสร็จ ✅
+              </button>
+            </div>
+          )}
+          {jobConfirmed && (
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-center">
+              <p className="text-sm font-semibold text-green-700">✅ ยืนยันรับงานแล้ว (Mockup)</p>
+            </div>
+          )}
+
+          {/* ── CMD A3: dispute + fee-settle links ───────────────────────── */}
+          {timeline.latestStatus && ["in_progress", "completed"].includes(timeline.latestStatus) && (
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => router.push(`/repair/${id}/dispute`)}
+                className="flex-1 border border-orange-200 text-orange-600 hover:bg-orange-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
+              >
+                ⚠️ มีปัญหา? → โต้แย้ง
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push(`/repair/${id}/fee-settle`)}
+                className="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
+              >
+                🔒 Gold ที่ล็อก
+              </button>
+            </div>
+          )}
 
           {/* C7: ยุติงาน — แสดงเฉพาะสถานะที่ยังยุติได้ */}
           {timeline.latestStatus &&

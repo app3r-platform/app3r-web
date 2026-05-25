@@ -40,6 +40,7 @@ export default function MaintainBookPage() {
   const [recurringInterval, setRecurringInterval] = useState<RecurringInterval>("3_months");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [mockBooked, setMockBooked] = useState(false);
 
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1);
@@ -92,7 +93,12 @@ export default function MaintainBookPage() {
       const data = await res.json();
       router.push(`/maintain/jobs/${data.id}`);
     } catch {
-      setErrors({ general: "เกิดข้อผิดพลาด กรุณาลองใหม่" });
+      // Mock fallback: แสดงข้อความจองสำเร็จ (Mockup) แทน redirect
+      setTimeout(() => {
+        setMockBooked(true);
+        setSubmitting(false);
+      }, 1500);
+      return;
     } finally {
       setSubmitting(false);
     }
@@ -112,6 +118,14 @@ export default function MaintainBookPage() {
       {errors.general && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3">
           <p className="text-sm text-red-700">{errors.general}</p>
+        </div>
+      )}
+
+      {mockBooked && (
+        <div className="bg-weeeu-surface border border-weeeu-primary/40 rounded-2xl p-4 text-center space-y-1">
+          <p className="text-2xl">✅</p>
+          <p className="text-sm font-semibold text-weeeu-text">จองแล้ว (Mockup)</p>
+          <p className="text-xs text-weeeu-primary">WeeeR ในพื้นที่จะส่งข้อเสนอให้เร็วๆ นี้</p>
         </div>
       )}
 

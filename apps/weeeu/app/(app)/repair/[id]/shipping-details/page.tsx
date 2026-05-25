@@ -16,6 +16,17 @@ type ShippingDetailsData = {
   confirmed_cost_split: string | null;
 };
 
+const MOCK_SHIPPING_DETAILS: ShippingDetailsData = {
+  id: "mock-job-001",
+  appliance_name: "เครื่องซักผ้า Samsung",
+  issue_summary: "เครื่องไม่ปั่นน้ำออก",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  shop_address: "ร้านซ่อมดีเจริญ 99/1 ถนนลาดพร้าว แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900",
+  already_confirmed: false,
+  confirmed_courier: null,
+  confirmed_cost_split: null,
+};
+
 const COURIERS = [
   { value: "kerry", label: "Kerry Express", icon: "🟠" },
   { value: "flash", label: "Flash Express", icon: "⚡" },
@@ -60,7 +71,7 @@ export default function ShippingDetailsPage() {
         if (d.confirmed_courier) setCourier(d.confirmed_courier);
         if (d.confirmed_cost_split) setCostSplit(d.confirmed_cost_split);
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลการขนส่งได้"))
+      .catch(() => { setData(prev => prev ?? MOCK_SHIPPING_DETAILS); })
       .finally(() => setLoading(false));
   }, [id]);
 

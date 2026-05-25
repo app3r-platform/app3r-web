@@ -7,6 +7,12 @@ import { apiFetch } from "@/lib/api-client";
 
 type Appliance = { id: string; name: string; brand: string; model: string };
 
+const MOCK_APPLIANCES_FOR_PICKUP: Appliance[] = [
+  { id: "mock-app-001", name: "เครื่องซักผ้า", brand: "Samsung", model: "WW90T534DAW" },
+  { id: "mock-app-002", name: "เครื่องปรับอากาศ", brand: "Mitsubishi", model: "MSY-GN18VF" },
+  { id: "mock-app-003", name: "ตู้เย็น", brand: "LG", model: "GN-B392PLGK" },
+];
+
 export default function PickupSchedulePage() {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -48,7 +54,8 @@ export default function PickupSchedulePage() {
 
     apiFetch("/api/v1/appliances")
       .then(r => r.ok ? r.json() : { items: [] })
-      .then(d => setAppliances(d.items ?? []));
+      .then(d => setAppliances(d.items ?? []))
+      .catch(() => { setAppliances(prev => prev.length > 0 ? prev : MOCK_APPLIANCES_FOR_PICKUP); });
   }, []);
 
   const clearErr = (key: string) =>
