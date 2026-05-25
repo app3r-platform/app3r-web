@@ -4,10 +4,10 @@ import Link from "next/link";
 export const metadata: Metadata = { title: "หน้าหลัก" };
 
 const quickActions = [
-  { href: "/modules/repair", icon: "🔧", label: "แจ้งซ่อม", color: "bg-orange-50 text-orange-600 border-orange-100" },
-  { href: "/modules/resell", icon: "💰", label: "ขาย/ซื้อ", color: "bg-green-50 text-green-600 border-green-100" },
-  { href: "/modules/scrap", icon: "♻️", label: "ทิ้งซาก", color: "bg-teal-50 text-teal-600 border-teal-100" },
-  { href: "/modules/maintain", icon: "🛠️", label: "บำรุงรักษา", color: "bg-purple-50 text-purple-600 border-purple-100" },
+  { href: "/repair/new", icon: "🔧", label: "แจ้งซ่อม", color: "bg-orange-50 text-orange-600 border-orange-100" },
+  { href: "/sell/new", icon: "💰", label: "ขาย/ซื้อ", color: "bg-green-50 text-green-600 border-green-100" },
+  { href: "/scrap/new", icon: "♻️", label: "ทิ้งซาก", color: "bg-teal-50 text-teal-600 border-teal-100" },
+  { href: "/maintain/book", icon: "🛠️", label: "บำรุงรักษา", color: "bg-purple-50 text-purple-600 border-purple-100" },
 ];
 
 const recentActivities = [

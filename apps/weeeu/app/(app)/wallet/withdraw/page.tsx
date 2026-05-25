@@ -1,13 +1,11 @@
 "use client";
-// ─── หน้าขอถอนแต้ม (/wallet/withdraw) — Decision Record C Phase 1 ─────────────
-// ระบุจำนวน + บัญชีธนาคารปลายทาง → POST /api/v1/transfers/withdraw
-// WeeeU = customer → admin โอนเงินให้ภายหลัง
+// ─── D91: WeeeU ถอน Gold Point — Mockup (Backend CMD-B2 parallel) ──────────
+// Flow: form → submitting → pending (รอ Admin) → settled (demo)
+// 1 Gold = 1 บาท · Admin อนุมัติ → โอนเงินจริงเข้าบัญชี user
 
 import { useState } from "react";
 import Link from "next/link";
-import { getAdapter } from "@/lib/dal";
 
-// รายการธนาคารที่รองรับ
 const BANKS = [
   "ธนาคารกสิกรไทย (KBank)",
   "ธนาคารไทยพาณิชย์ (SCB)",
@@ -17,191 +15,289 @@ const BANKS = [
   "ธนาคารทหารไทยธนชาต (TTB)",
 ];
 
+const QUICK_AMOUNTS = [100, 200, 500, 1000];
+
+// Mock Gold balance
+const MOCK_GOLD_BALANCE = 350;
+
+type FlowState = "form" | "submitting" | "pending" | "settled";
+
 export default function WithdrawPage() {
-  const [points, setPoints] = useState("");
+  const [amount, setAmount] = useState("");
   const [bankName, setBankName] = useState("");
   const [bankAccount, setBankAccount] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [accountHolder, setAccountHolder] = useState("");
+  const [flowState, setFlowState] = useState<FlowState>("form");
+  const [fieldError, setFieldError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsedPoints = parseInt(points, 10);
-    if (!parsedPoints || parsedPoints <= 0) {
-      setSubmitError("กรุณาระบุจำนวนแต้มที่ต้องการถอน");
-      return;
-    }
-    if (!bankName) {
-      setSubmitError("กรุณาเลือกธนาคาร");
-      return;
-    }
-    if (!bankAccount.trim()) {
-      setSubmitError("กรุณาระบุเลขบัญชีธนาคาร");
-      return;
-    }
+  const parsedAmount = parseInt(amount, 10) || 0;
+  const canSubmit =
+    parsedAmount > 0 &&
+    parsedAmount <= MOCK_GOLD_BALANCE &&
+    !!bankName &&
+    bankAccount.trim().length > 0 &&
+    accountHolder.trim().length > 0;
 
-    setSubmitting(true);
-    setSubmitError("");
-    try {
-      const dal = getAdapter();
-      const result = await dal.transfer.withdraw({
-        points: parsedPoints,
-        bankName,
-        bankAccount: bankAccount.trim(),
-      });
-      if (!result.ok) throw new Error(result.error);
-      setSubmitSuccess(true);
-    } catch (e: unknown) {
-      setSubmitError(e instanceof Error ? e.message : "ส่งคำขอถอนแต้มไม่สำเร็จ");
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmit = () => {
+    setFieldError("");
+    if (parsedAmount <= 0) { setFieldError("กรุณาระบุจำนวน Gold ที่ต้องการถอน"); return; }
+    if (parsedAmount > MOCK_GOLD_BALANCE) { setFieldError(`Gold ไม่พอ — คงเหลือ ${MOCK_GOLD_BALANCE} Gold`); return; }
+    if (!bankName) { setFieldError("กรุณาเลือกธนาคาร"); return; }
+    if (!bankAccount.trim()) { setFieldError("กรุณาระบุเลขบัญชีธนาคาร"); return; }
+    if (!accountHolder.trim()) { setFieldError("กรุณาระบุชื่อเจ้าของบัญชี"); return; }
+
+    setFlowState("submitting");
+    setTimeout(() => setFlowState("pending"), 1200);
   };
 
-  if (submitSuccess) {
+  // ─── Pending state (รอ Admin อนุมัติ) ─────────────────────────────────────
+  if (flowState === "pending" || flowState === "settled") {
+    const isSettled = flowState === "settled";
     return (
-      <div className="space-y-6">
+      <div className="space-y-5">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <Link href="/wallet/history" className="text-gray-400 hover:text-gray-600">
-            ←
-          </Link>
-          <h1 className="text-xl font-bold text-gray-900">ขอถอนแต้ม</h1>
+          <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-xl leading-none">←</Link>
+          <h1 className="text-xl font-bold text-gray-900">ถอน Gold Point</h1>
         </div>
 
-        {/* Success card */}
-        <div className="bg-green-50 border border-green-100 rounded-2xl p-8 text-center space-y-3">
-          <p className="text-4xl">✅</p>
-          <h2 className="text-lg font-bold text-green-800">ส่งคำขอสำเร็จ!</h2>
-          <p className="text-sm text-green-600">
-            admin จะโอนเงินให้ภายใน 1-3 วันทำการ
+        {/* Status card */}
+        <div className={`rounded-2xl p-8 text-center space-y-3 border ${
+          isSettled
+            ? "bg-green-50 border-green-100"
+            : "bg-weeeu-surface border-weeeu-primary/20"
+        }`}>
+          <p className="text-5xl">{isSettled ? "✅" : "⏳"}</p>
+          <p className="text-lg font-bold text-gray-800">
+            {isSettled ? "โอนเงินสำเร็จแล้ว!" : "รอ Admin อนุมัติ"}
           </p>
-          <p className="text-xs text-green-500 mt-2">
-            {points} แต้ม ≈ ฿{parseInt(points).toLocaleString("th-TH")}
+          <p className="text-sm text-gray-500">
+            {isSettled
+              ? "เงินโอนเข้าบัญชีของคุณเรียบร้อยแล้ว"
+              : "Admin จะโอนเงินให้ภายใน 1-3 วันทำการ"}
           </p>
+          <div className="bg-white/70 rounded-xl px-4 py-3 inline-block mt-2 space-y-1">
+            <p className="text-2xl font-bold text-weeeu-primary">{parsedAmount.toLocaleString()} Gold</p>
+            <p className="text-xs text-gray-500">≈ ฿{parsedAmount.toLocaleString("th-TH")}</p>
+            <p className="text-xs text-gray-400 mt-1">{bankName}</p>
+            <p className="text-xs text-gray-400">บัญชี {bankAccount}</p>
+            <p className="text-xs text-gray-400">ชื่อ {accountHolder}</p>
+          </div>
         </div>
+
+        {/* Status timeline */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-3">
+          <h2 className="text-sm font-semibold text-gray-700">สถานะคำขอ</h2>
+          {[
+            { label: "ส่งคำขอถอนสำเร็จ", done: true, time: "เมื่อกี้" },
+            { label: "Admin ตรวจสอบและอนุมัติ", done: isSettled, time: isSettled ? "เมื่อกี้" : "ภายใน 1-3 วันทำการ" },
+            { label: "โอนเงินเข้าบัญชีของคุณ", done: isSettled, time: isSettled ? "เมื่อกี้" : "หลัง Admin อนุมัติ" },
+          ].map((step, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold ${
+                step.done ? "bg-weeeu-primary text-white" : "bg-gray-100 text-gray-400"
+              }`}>
+                {step.done ? "✓" : i + 1}
+              </div>
+              <div>
+                <p className={`text-sm font-medium ${step.done ? "text-gray-800" : "text-gray-400"}`}>{step.label}</p>
+                <p className="text-xs text-gray-400">{step.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Demo: simulate admin approve */}
+        {!isSettled && (
+          <button
+            onClick={() => setFlowState("settled")}
+            className="w-full border border-dashed border-weeeu-primary/40 text-weeeu-primary text-xs py-2.5 rounded-xl hover:bg-weeeu-surface transition-colors"
+          >
+            🛠 Demo: จำลอง Admin อนุมัติ → Settled
+          </button>
+        )}
 
         <div className="flex gap-3">
           <Link
-            href="/wallet/history"
-            className="flex-1 text-center bg-indigo-600 text-white py-3 rounded-2xl text-sm font-semibold"
+            href="/wallet"
+            className="flex-1 text-center bg-weeeu-primary hover:bg-weeeu-dark text-white py-3 rounded-2xl text-sm font-semibold transition-colors"
           >
-            ดูประวัติรายการ
+            กลับ Wallet
           </Link>
           <Link
             href="/dashboard"
             className="flex-1 text-center bg-gray-100 text-gray-700 py-3 rounded-2xl text-sm font-semibold"
           >
-            กลับหน้าหลัก
+            หน้าหลัก
           </Link>
         </div>
+
+        <p className="text-xs text-center text-gray-400">* Mockup — ไม่บันทึกข้อมูลจริง · Backend CMD-B2 parallel</p>
       </div>
     );
   }
 
+  // ─── Form state ────────────────────────────────────────────────────────────
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/wallet/history" className="text-gray-400 hover:text-gray-600">
-          ←
-        </Link>
-        <h1 className="text-xl font-bold text-gray-900">ขอถอนแต้ม</h1>
+        <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-xl leading-none">←</Link>
+        <h1 className="text-xl font-bold text-gray-900">ถอน Gold Point</h1>
       </div>
 
-      {/* Info banner */}
-      <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-sm text-amber-700">
-        <p className="font-medium mb-1">📋 ขั้นตอนการถอนแต้ม</p>
-        <ol className="list-decimal list-inside space-y-1 text-xs">
-          <li>กรอกจำนวนแต้มและบัญชีธนาคารปลายทาง</li>
-          <li>admin ตรวจสอบและโอนเงินให้ภายใน 1-3 วันทำการ</li>
-          <li>อัตรา: 1 แต้ม = ฿1.00</li>
+      {/* Gold balance banner */}
+      <div className="wallet-gold rounded-2xl p-4 text-white flex items-center justify-between">
+        <div>
+          <p className="text-xs font-medium opacity-80">Gold Point คงเหลือ</p>
+          <p className="text-2xl font-bold">{MOCK_GOLD_BALANCE.toLocaleString()}</p>
+          <p className="text-xs opacity-70">≈ ฿{MOCK_GOLD_BALANCE.toLocaleString("th-TH")}</p>
+        </div>
+        <span className="text-4xl">🥇</span>
+      </div>
+
+      {/* Flow info */}
+      <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
+        <p className="text-sm font-semibold text-amber-800 mb-1">📋 ขั้นตอนการถอน Gold</p>
+        <ol className="list-decimal list-inside space-y-1 text-xs text-amber-700">
+          <li>กรอกจำนวน Gold + บัญชีธนาคารปลายทาง</li>
+          <li>Admin ตรวจสอบและอนุมัติ (1-3 วันทำการ)</li>
+          <li>Admin โอนเงินจริงเข้าบัญชีของคุณ</li>
         </ol>
+        <p className="text-xs text-amber-600 mt-2 font-medium">อัตรา: 1 Gold = ฿1.00</p>
       </div>
 
-      {/* Withdraw form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 space-y-4 shadow-sm">
-          <h2 className="text-base font-semibold text-gray-800">รายละเอียดการถอนแต้ม</h2>
+      {/* Form */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 space-y-4 shadow-sm">
+        <h2 className="text-sm font-semibold text-gray-700">รายละเอียดการถอน</h2>
 
-          {/* Points input */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5">
-              จำนวนแต้มที่ต้องการถอน <span className="text-red-400">*</span>
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 text-sm">💎</span>
-              <input
-                type="number"
-                value={points}
-                onChange={(e) => setPoints(e.target.value)}
-                placeholder="0"
-                min="1"
-                step="1"
-                required
-                className="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              />
-            </div>
-            {points && parseInt(points) > 0 && (
-              <p className="text-xs text-indigo-500 mt-1">
-                ≈ ฿{parseInt(points).toLocaleString("th-TH")}
-              </p>
-            )}
-          </div>
-
-          {/* Bank selection */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5">
-              ธนาคาร <span className="text-red-400">*</span>
-            </label>
-            <select
-              value={bankName}
-              onChange={(e) => setBankName(e.target.value)}
-              required
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
-            >
-              <option value="">-- เลือกธนาคาร --</option>
-              {BANKS.map((bank) => (
-                <option key={bank} value={bank}>{bank}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Bank account */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1.5">
-              เลขบัญชีธนาคาร <span className="text-red-400">*</span>
-            </label>
+        {/* Amount */}
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-gray-500">
+            จำนวน Gold ที่ต้องการถอน <span className="text-red-400">*</span>
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg">🥇</span>
             <input
-              type="text"
-              value={bankAccount}
-              onChange={(e) => setBankAccount(e.target.value)}
-              placeholder="เช่น 123-4-56789-0"
-              required
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+              type="number"
+              value={amount}
+              onChange={e => setAmount(e.target.value)}
+              placeholder="0"
+              min="1"
+              max={MOCK_GOLD_BALANCE}
+              step="1"
+              className="w-full pl-9 pr-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
             />
+          </div>
+          {parsedAmount > 0 && (
+            <p className="text-xs text-weeeu-primary">≈ ฿{parsedAmount.toLocaleString("th-TH")}</p>
+          )}
+          {parsedAmount > MOCK_GOLD_BALANCE && (
+            <p className="text-xs text-red-500">Gold ไม่พอ — คงเหลือ {MOCK_GOLD_BALANCE} Gold</p>
+          )}
+          {/* Quick presets */}
+          <div className="grid grid-cols-4 gap-2">
+            {QUICK_AMOUNTS.map(amt => (
+              <button
+                key={amt}
+                type="button"
+                onClick={() => setAmount(String(amt))}
+                disabled={amt > MOCK_GOLD_BALANCE}
+                className={`border text-xs py-1.5 rounded-xl transition-colors ${
+                  amount === String(amt)
+                    ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary font-semibold"
+                    : "border-gray-200 text-gray-500 hover:border-gray-300 disabled:opacity-40"
+                }`}
+              >
+                {amt.toLocaleString()}
+              </button>
+            ))}
           </div>
         </div>
 
-        {submitError && (
-          <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-            {submitError}
-          </p>
-        )}
+        {/* Bank selection */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">
+            ธนาคาร <span className="text-red-400">*</span>
+          </label>
+          <select
+            value={bankName}
+            onChange={e => setBankName(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+          >
+            <option value="">-- เลือกธนาคาร --</option>
+            {BANKS.map(bank => (
+              <option key={bank} value={bank}>{bank}</option>
+            ))}
+          </select>
+        </div>
 
-        <button
-          type="submit"
-          disabled={submitting || !points || !bankName || !bankAccount}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
-        >
-          {submitting ? "กำลังส่งคำขอ..." : "💸 ยืนยันการถอนแต้ม"}
-        </button>
-      </form>
+        {/* Bank account */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">
+            เลขบัญชีธนาคาร <span className="text-red-400">*</span>
+          </label>
+          <input
+            type="text"
+            value={bankAccount}
+            onChange={e => setBankAccount(e.target.value)}
+            placeholder="เช่น 123-4-56789-0"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+          />
+        </div>
 
-      <p className="text-xs text-center text-gray-400">
-        admin จะโอนเงินให้ภายใน 1-3 วันทำการ
-      </p>
+        {/* Account holder */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">
+            ชื่อเจ้าของบัญชี <span className="text-red-400">*</span>
+          </label>
+          <input
+            type="text"
+            value={accountHolder}
+            onChange={e => setAccountHolder(e.target.value)}
+            placeholder="ชื่อ-นามสกุล ตามสมุดบัญชี"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+          />
+        </div>
+      </div>
+
+      {/* Confirm summary */}
+      {canSubmit && (
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 space-y-1.5">
+          <p className="text-xs font-semibold text-weeeu-text mb-2">สรุปการถอน</p>
+          <div className="flex justify-between text-xs text-gray-600">
+            <span>จำนวน Gold</span><span className="font-semibold text-weeeu-primary">{parsedAmount.toLocaleString()} Gold</span>
+          </div>
+          <div className="flex justify-between text-xs text-gray-600">
+            <span>มูลค่าเงินจริง</span><span>฿{parsedAmount.toLocaleString("th-TH")}</span>
+          </div>
+          <div className="flex justify-between text-xs text-gray-600">
+            <span>ธนาคาร</span><span>{bankName}</span>
+          </div>
+          <div className="flex justify-between text-xs text-gray-600">
+            <span>บัญชี</span><span>{bankAccount}</span>
+          </div>
+          <div className="flex justify-between text-xs text-gray-600">
+            <span>ชื่อ</span><span>{accountHolder}</span>
+          </div>
+        </div>
+      )}
+
+      {fieldError && (
+        <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+          {fieldError}
+        </p>
+      )}
+
+      <button
+        onClick={handleSubmit}
+        disabled={!canSubmit || flowState === "submitting"}
+        className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl transition-colors"
+      >
+        {flowState === "submitting" ? "⟳ กำลังส่งคำขอ..." : "🥇 ยืนยันถอน Gold Point (Mockup)"}
+      </button>
+
+      <p className="text-xs text-center text-gray-400">* Mockup — ไม่บันทึกข้อมูลจริง · Backend CMD-B2 parallel</p>
     </div>
   );
 }
