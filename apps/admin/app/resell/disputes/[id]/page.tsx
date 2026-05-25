@@ -193,7 +193,7 @@ export default function AdminDisputeDetailPage() {
           <div className="bg-white border border-orange-200 rounded-xl p-3">
             <p className="text-xs font-medium text-orange-600 mb-1">เหตุผลจากผู้ซื้อ</p>
             <p className="text-sm text-gray-800">
-              "สีตู้เย็นไม่ตรงกับรูปในประกาศ และมีรอยบุบที่ด้านข้างซึ่งไม่ได้แจ้งไว้"
+              &quot;สีตู้เย็นไม่ตรงกับรูปในประกาศ และมีรอยบุบที่ด้านข้างซึ่งไม่ได้แจ้งไว้&quot;
             </p>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function AdminDisputeDetailPage() {
           <p className="text-sm font-semibold text-yellow-800">📦 พัสดุเสียหายระหว่างขนส่ง</p>
           <div className="bg-white border border-yellow-200 rounded-xl p-3">
             <p className="text-xs font-medium text-yellow-600 mb-1">รายงานจากผู้ซื้อ</p>
-            <p className="text-sm text-gray-800">"กล่องบุบ ด้านในสินค้ามีรอยแตก ถ่ายรูปไว้แล้ว"</p>
+            <p className="text-sm text-gray-800">&quot;กล่องบุบ ด้านในสินค้ามีรอยแตก ถ่ายรูปไว้แล้ว&quot;</p>
           </div>
           <p className="text-xs text-yellow-700">
             พิจารณา: ผู้ขายแพ็คดีหรือไม่? บริษัทขนส่งรับผิดชอบ?

@@ -1,164 +1,278 @@
 "use client";
-
-// ── M6 — WeeeR ถอนงานหลังยืนยัน ──────────────────────────────────────────────
-// 3 สาเหตุ: ร้านเอง / ลูกค้าผิด / สุดวิสัย + แนบหลักฐาน
+/**
+ * WeeeR — Maintain Job Withdraw
+ * Route: /maintain/jobs/[id]/withdraw
+ * Flow: WeeeR ถอนรับงานหลังยืนยัน → modal เหตุผล + ยืนยัน → POST withdraw → แจ้ง WeeeU
+ *
+ * Logic mirrors: /maintain/jobs/[id]/mockup/m6-withdraw/page.tsx
+ * canWithdraw mock fallback: status === "assigned" | dev override ด้านล่าง
+ *
+ * Maintain Gen 4 · 2026-05-25
+ */
 
 import { use, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { maintainApi } from "../../../_lib/api";
-import type { MaintainJob, WithdrawReason } from "../../../_lib/types";
-import { WITHDRAW_REASON_LABEL, APPLIANCE_LABEL, CLEANING_LABEL } from "../../../_lib/types";
+import type { MaintainJob } from "../../../_lib/types";
+import {
+  APPLIANCE_LABEL,
+  CLEANING_LABEL,
+  MAINTAIN_STATUS_LABEL,
+  MAINTAIN_STATUS_COLOR,
+} from "../../../_lib/types";
 
-const WITHDRAW_REASON_NOTE: Record<WithdrawReason, string> = {
-  shop_fault:     "ร้านจะถูกหักคะแนน / penalty ตามนโยบาย — lูกค้าได้ reroute ฟรี",
-  customer_fault: "ไม่มี penalty ร้าน — ลูกค้าอาจถูกหัก fee ตาม offer",
-  force_majeure:  "Admin ตรวจสอบ — ไม่มี penalty ถ้า verify ผ่าน",
-};
+/* ─── Mock fallback — ลบก่อน prod ─── */
+const DEV_FORCE_CAN_WITHDRAW = process.env.NODE_ENV === "development";
 
-const REASONS: WithdrawReason[] = ["shop_fault", "customer_fault", "force_majeure"];
+function fmt(iso: string) {
+  return new Date(iso).toLocaleString("th-TH", {
+    day: "numeric", month: "long", year: "numeric",
+    hour: "2-digit", minute: "2-digit",
+  });
+}
 
 export default function MaintainWithdrawPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const router = useRouter();
+  const { id }    = use(params);
+  const router    = useRouter();
 
-  const [job, setJob] = useState<MaintainJob | null>(null);
-  const [loadingJob, setLoadingJob] = useState(true);
-  const [jobError, setJobError] = useState("");
+  const [job,        setJob]        = useState<MaintainJob | null>(null);
+  const [loading,    setLoading]    = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const [reason, setReason] = useState<WithdrawReason>("shop_fault");
-  const [evidence, setEvidence] = useState("");
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [showModal,  setShowModal]  = useState(false);
+  const [reason,     setReason]     = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+  const [apiError,   setApiError]   = useState<string | null>(null);
+  const [withdrawn,  setWithdrawn]  = useState(false);
 
   useEffect(() => {
     maintainApi.getJob(id)
       .then(setJob)
-      .catch((e: Error) => setJobError(e.message))
-      .finally(() => setLoadingJob(false));
+      .catch((e: Error) => setFetchError(e.message))
+      .finally(() => setLoading(false));
   }, [id]);
 
-  async function handleSubmit() {
+  if (loading) {
+    return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;
+  }
+  if (fetchError) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">
+        {fetchError}
+      </div>
+    );
+  }
+  if (!job) return null;
+
+  /* canWithdraw: "assigned" เท่านั้น (ก่อน WeeeT ออกเดินทาง) */
+  const canWithdraw = DEV_FORCE_CAN_WITHDRAW || job.status === "assigned";
+  const canSubmit   = reason.trim().length >= 10 && !submitting;
+
+  const handleWithdraw = async () => {
+    if (!canSubmit) return;
     setSubmitting(true);
-    setSubmitError("");
+    setApiError(null);
     try {
-      await maintainApi.withdrawJob(id, reason, evidence.trim() || undefined);
-      router.push("/maintain/jobs");
-    } catch (err) {
-      setSubmitError((err as Error).message);
-      setShowConfirm(false);
+      await maintainApi.withdrawJob(id, reason.trim());
+      setWithdrawn(true);
+      setShowModal(false);
+    } catch (e) {
+      setApiError((e as Error).message);
     } finally {
       setSubmitting(false);
     }
-  }
-
-  if (loadingJob) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;
-  if (jobError) return <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">{jobError}</div>;
+  };
 
   return (
-    <div className="space-y-5 max-w-xl">
+    <div className="space-y-5 max-w-xl pb-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href={`/maintain/jobs/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">ถอนงาน</h1>
-          {job && (
-            <p className="text-xs text-gray-500 mt-0.5">
-              {APPLIANCE_LABEL[job.applianceType]} — {CLEANING_LABEL[job.cleaningType]} · {job.serviceCode}
-            </p>
-          )}
+        <button onClick={() => router.back()} className="text-gray-400 hover:text-gray-600">←</button>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-bold text-gray-900 truncate">ถอนรับงาน</h1>
+            <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${
+              withdrawn ? "bg-red-100 text-red-600" : MAINTAIN_STATUS_COLOR[job.status]
+            }`}>
+              {withdrawn ? "ถอนรับงานแล้ว" : MAINTAIN_STATUS_LABEL[job.status]}
+            </span>
+          </div>
+          <p className="text-xs text-gray-400 mt-0.5">{job.serviceCode}</p>
         </div>
       </div>
 
-      {/* Warning */}
-      <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-start gap-2">
-        <span className="text-base">⚠️</span>
-        <p className="text-xs text-red-700">การถอนงานหลังยืนยันอาจมี penalty ตามสาเหตุ — เลือกสาเหตุที่ตรงกับข้อเท็จจริง</p>
-      </div>
-
-      {/* Job summary */}
-      {job && (
-        <div className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl p-3 space-y-0.5">
-          <p className="text-xs font-semibold text-[#4A1B0C]">
-            {job.applianceType === "AC" ? "❄️" : "🫧"} {APPLIANCE_LABEL[job.applianceType]} — {CLEANING_LABEL[job.cleaningType]}
-          </p>
-          <p className="text-xs text-[#FF663A]">📍 {job.address.address}</p>
-          <p className="text-xs text-[#FF9C80]">
-            🗓 {new Date(job.scheduledAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
-          </p>
+      {/* ─── Withdrawn confirmation ─── */}
+      {withdrawn && (
+        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">✅</span>
+            <div>
+              <p className="font-semibold text-gray-700">ถอนรับงานเรียบร้อย</p>
+              <p className="text-sm text-gray-500">
+                แจ้ง WeeeU แล้ว · ระบบ settle ตามนโยบายที่ lock ไว้
+              </p>
+              <p className="text-xs text-[#FF663A] mt-1">
+                ⚠️ ค่าเดินทาง — ไม่ได้รับ (WeeeR เป็นผู้ถอน)
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/maintain/jobs"
+            className="block w-full text-center border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
+          >
+            ← กลับรายการงาน
+          </Link>
         </div>
       )}
 
-      {/* Reason selector */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-3">
-        <p className="text-sm font-semibold text-gray-800">สาเหตุการถอนงาน <span className="text-red-500">*</span></p>
-        <div className="space-y-2">
-          {REASONS.map((r) => (
-            <label key={r}
-              className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
-                ${reason === r ? "border-red-300 bg-red-50" : "border-gray-100 hover:border-gray-200"}`}>
-              <input type="radio" name="reason" className="sr-only" checked={reason === r} onChange={() => setReason(r)} />
-              <div className="w-4 h-4 rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center
-                ${reason === r ? 'border-red-400' : 'border-gray-300'}">
-                {reason === r && <div className="w-2 h-2 rounded-full bg-red-500" />}
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-800">{WITHDRAW_REASON_LABEL[r]}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{WITHDRAW_REASON_NOTE[r]}</p>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Evidence */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-2">
-        <p className="text-sm font-semibold text-gray-800">แนบหลักฐาน (ถ้ามี)</p>
-        <input
-          type="url"
-          value={evidence}
-          onChange={e => setEvidence(e.target.value)}
-          placeholder="URL รูปภาพ / สกรีนช็อต / เอกสาร…"
-          className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-300"
-        />
-        <p className="text-xs text-gray-400">หลักฐานช่วยลด penalty และเร่ง Admin ตรวจสอบ</p>
-      </div>
-
-      {submitError && <p className="text-sm text-red-500 text-center">{submitError}</p>}
-
-      <button
-        type="button"
-        onClick={() => setShowConfirm(true)}
-        disabled={submitting}
-        className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
-        ↩️ ดำเนินการถอนงาน
-      </button>
-
-      {/* Confirm modal */}
-      {showConfirm && (
-        <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
-          <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">ยืนยันการถอนงาน</h2>
-            <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-              <p className="text-xs text-red-800 font-medium">สาเหตุที่เลือก:</p>
-              <p className="text-sm font-semibold text-red-700 mt-1">{WITHDRAW_REASON_LABEL[reason]}</p>
-              <p className="text-xs text-red-500 mt-0.5">{WITHDRAW_REASON_NOTE[reason]}</p>
-            </div>
-            <p className="text-sm text-gray-600">ยืนยันการถอนงานนี้? ไม่สามารถยกเลิกได้ภายหลัง</p>
-            <div className="flex gap-3">
-              <button onClick={() => setShowConfirm(false)}
-                className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors">
-                กลับ
-              </button>
-              <button onClick={handleSubmit} disabled={submitting}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
-                {submitting ? "กำลังส่ง…" : "ยืนยันถอน"}
-              </button>
-            </div>
+      {/* ─── Job info card ─── */}
+      {!withdrawn && (
+        <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">รายละเอียดงาน</p>
+          <div className="space-y-2.5">
+            <Row label="เครื่อง"    value={`${APPLIANCE_LABEL[job.applianceType]} — ${CLEANING_LABEL[job.cleaningType]}`} />
+            <Row label="วันนัด"     value={fmt(job.scheduledAt)} />
+            <Row label="ที่อยู่"    value={job.address.address} />
+            <Row label="ราคารวม"   value={`${job.totalPrice.toLocaleString()} pts`} />
+            {job.technicianId && (
+              <Row label="ช่าง"    value={job.technicianId} />
+            )}
           </div>
         </div>
       )}
+
+      {/* ─── Not eligible banner ─── */}
+      {!withdrawn && !canWithdraw && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2">
+          <div className="flex items-start gap-3">
+            <span className="text-xl shrink-0">⚠️</span>
+            <div>
+              <p className="font-semibold text-amber-800">ไม่สามารถถอนรับงานได้</p>
+              <p className="text-sm text-amber-700 mt-1">
+                งานสามารถถอนได้เฉพาะขณะสถานะ "มอบหมายช่างแล้ว" เท่านั้น
+                (ปัจจุบัน: {MAINTAIN_STATUS_LABEL[job.status]})
+              </p>
+            </div>
+          </div>
+          <Link
+            href={`/maintain/jobs/${id}`}
+            className="block w-full text-center border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
+          >
+            ← กลับรายละเอียดงาน
+          </Link>
+        </div>
+      )}
+
+      {/* ─── Policy card ─── */}
+      {!withdrawn && canWithdraw && !showModal && (
+        <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-2.5">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">นโยบายถอนรับงาน</p>
+          <div className="space-y-1.5 text-sm">
+            <div className="flex items-start gap-2 text-gray-600">
+              <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
+              <span>มัดจำที่รับไว้ — คืนให้ WeeeU เต็มจำนวน</span>
+            </div>
+            <div className="flex items-start gap-2 text-gray-600">
+              <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
+              <span>ค่าเดินทาง — ไม่ได้รับ (WeeeR เป็นผู้ถอน)</span>
+            </div>
+            <div className="flex items-start gap-2 text-gray-600">
+              <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
+              <span>อาจมีค่าปรับถ้าแจ้งน้อยกว่า 2 ชั่วโมงก่อนนัด</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400">
+            * settle จะคำนวณตาม offer lock ที่ระบุตอนยื่นข้อเสนอ
+          </p>
+        </div>
+      )}
+
+      {/* ─── Withdraw trigger button ─── */}
+      {!withdrawn && canWithdraw && !showModal && (
+        <button
+          onClick={() => setShowModal(true)}
+          className="w-full border border-[#FF663A]/50 text-[#FF663A] hover:bg-[#FF663A]/5 font-medium py-3 rounded-2xl transition-colors text-sm"
+        >
+          ⚠️ ถอนรับงาน
+        </button>
+      )}
+
+      {/* ─── Withdraw modal ─── */}
+      {!withdrawn && canWithdraw && showModal && (
+        <div className="bg-white border border-[#FF663A]/30 rounded-2xl p-5 space-y-4 shadow-sm">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl shrink-0">⚠️</span>
+            <div>
+              <p className="font-semibold text-gray-800">ยืนยันถอนรับงาน?</p>
+              <p className="text-sm text-gray-500 mt-1">
+                การถอนหลังยืนยัน: WeeeR เป็นผู้ผิดนัด — มัดจำคืน WeeeU เต็มจำนวน
+                และ WeeeR ไม่ได้ค่าเดินทาง
+              </p>
+            </div>
+          </div>
+
+          {/* Consequence summary */}
+          <div className="bg-[#FF663A]/8 border border-[#FF663A]/20 rounded-xl p-3 space-y-1.5 text-xs text-gray-600">
+            <p className="font-semibold text-gray-700">ผลกระทบ (ตาม Policy ถอนหลังยืนยัน)</p>
+            <div className="flex justify-between">
+              <span>มัดจำ — คืน WeeeU</span>
+              <span className="text-[#FF663A] font-medium">ไม่ได้รับ</span>
+            </div>
+            <div className="flex justify-between">
+              <span>ค่าเดินทาง</span>
+              <span className="text-[#FF663A] font-medium">ไม่ได้รับ</span>
+            </div>
+          </div>
+
+          {/* Reason textarea — บังคับ ≥ 10 chars */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-700">
+              เหตุผลที่ถอน <span className="text-[#FF663A]">*</span>
+            </label>
+            <textarea
+              value={reason}
+              onChange={e => setReason(e.target.value)}
+              rows={3}
+              placeholder="ระบุเหตุผลอย่างน้อย 10 ตัวอักษร เช่น ช่างติดอุบัติเหตุ..."
+              className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#FF663A]/60 resize-none"
+            />
+            <p className="text-xs text-gray-400">{reason.trim().length}/10 ตัวอักษรขั้นต่ำ</p>
+          </div>
+
+          {/* API error */}
+          {apiError && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+              {apiError}
+            </p>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              onClick={handleWithdraw}
+              disabled={!canSubmit}
+              className="flex-1 bg-[#FF663A] hover:bg-[#e5522a] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors text-sm"
+            >
+              {submitting ? "กำลังส่ง..." : "ยืนยันถอนรับงาน"}
+            </button>
+            <button
+              onClick={() => { setShowModal(false); setReason(""); setApiError(null); }}
+              className="flex-1 border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium py-3 rounded-xl transition-colors text-sm"
+            >
+              ย้อนกลับ
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-start justify-between gap-3">
+      <p className="text-sm text-gray-500 shrink-0">{label}</p>
+      <p className="text-sm font-medium text-gray-800 text-right">{value}</p>
     </div>
   );
 }
