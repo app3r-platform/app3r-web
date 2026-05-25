@@ -83,3 +83,7 @@ export * from './repair-pricing'       // Round 3: B6 Used Pricing Wizard (8 tab
 // Phase D-5: D92 Appliance Master Reference + D89 asset_images canonical
 // Migration: 0016_appliance_master_d92.sql
 export * from './appliance-master'    // appliance_brands + appliance_models + asset_images
+
+// Phase D-5: D88 Repair Part Catalog + Symptom↔Part Links
+// Migration: 0018_repair_part_catalog.sql
+export * from './repair-part-catalog' // repair_part_catalog + repair_symptom_part_links
