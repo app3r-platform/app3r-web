@@ -7,6 +7,21 @@ import { scrapApi } from "../../_lib/api";
 import type { ScrapItem } from "../../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../../_lib/types";
 
+// ── MOCK_ITEM — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_ITEM: ScrapItem = {
+  id: "SCR-002",
+  sellerId: "weeeu-demo-001",
+  sellerType: "WeeeU",
+  conditionGrade: "grade_C",
+  workingParts: ["พัดลม", "แผงวงจร PCB"],
+  description: "แอร์ Mitsubishi 12000 BTU ซ่อมไม่คุ้ม",
+  photos: [],
+  price: 380,
+  status: "available",
+  createdAt: "2026-05-18T10:00:00+07:00",
+  updatedAt: "2026-05-18T10:00:00+07:00",
+};
+
 export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
@@ -19,7 +34,10 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
   useEffect(() => {
     scrapApi.getItem(id)
       .then(setItem)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_ITEM แทน (ไม่แสดง error)
+        setItem(MOCK_ITEM);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -30,9 +48,9 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
     try {
       const { scrapJobId } = await scrapApi.buyItem(id);
       router.push(`/scrap/jobs/${scrapJobId}`);
-    } catch (e) {
-      setBuyError((e as Error).message);
-      setBuying(false);
+    } catch {
+      // DEV fallback: API ไม่ตอบ → navigate ไป SPJ-001 (align กับ MOCK_JOBS)
+      router.push("/scrap/jobs/SPJ-001");
     }
   };
 

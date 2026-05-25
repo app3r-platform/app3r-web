@@ -5,6 +5,20 @@ import Link from "next/link";
 import { scrapApi } from "../../../_lib/api";
 import type { ScrapJob, EWasteCertificate } from "../../../_lib/types";
 
+// ── MOCK_JOB — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_JOB: ScrapJob = {
+  id: "SPJ-001",
+  scrapItemId: "SCR-002",
+  buyerId: "weeer-demo-001",
+  buyerType: "WeeeR",
+  decision: "dispose",
+  status: "in_progress",
+  createdAt: "2026-05-20T10:00:00+07:00",
+  updatedAt: "2026-05-24T10:00:00+07:00",
+  scrapItemDescription: "แอร์ Mitsubishi 12000 BTU ซ่อมไม่คุ้ม",
+  conditionGrade: "grade_C",
+};
+
 export default function DisposePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [job, setJob] = useState<ScrapJob | null>(null);
@@ -25,7 +39,11 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
           return scrapApi.getCertificate(id).then(setCert);
         }
       })
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_JOB แทน (ไม่แสดง error)
+        setJob(MOCK_JOB);
+        setItemDescription(MOCK_JOB.scrapItemDescription ?? "");
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

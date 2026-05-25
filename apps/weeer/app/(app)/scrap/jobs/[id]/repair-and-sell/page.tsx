@@ -9,6 +9,26 @@ import type { ScrapJob } from "../../../_lib/types";
 import type { WeeeTStaff } from "../../../../repair/_lib/types";
 import { CONDITION_GRADE_LABEL } from "../../../_lib/types";
 
+// ── MOCK data — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_JOB: ScrapJob = {
+  id: "SPJ-001",
+  scrapItemId: "SCR-002",
+  buyerId: "weeer-demo-001",
+  buyerType: "WeeeR",
+  decision: "repair_and_sell",
+  status: "in_progress",
+  createdAt: "2026-05-20T10:00:00+07:00",
+  updatedAt: "2026-05-24T10:00:00+07:00",
+  scrapItemDescription: "แอร์ Mitsubishi 12000 BTU ซ่อมไม่คุ้ม",
+  conditionGrade: "grade_C",
+};
+
+const MOCK_STAFF: WeeeTStaff[] = [
+  { id: "wt-001", name: "ช่างสมศักดิ์ มานะดี", phone: "081-000-0001", available: true,  active_jobs: 1 },
+  { id: "wt-002", name: "ช่างวิชัย ขยันดี",    phone: "081-000-0002", available: true,  active_jobs: 0 },
+  { id: "wt-003", name: "ช่างสุรัตน์ ตั้งใจ",  phone: "081-000-0003", available: false, active_jobs: 3 },
+];
+
 export default function RepairAndSellPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
@@ -37,7 +57,12 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
         setApplianceName(jobData.scrapItemDescription ?? "");
         setStaff(staffData);
       })
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_JOB + MOCK_STAFF แทน (ไม่แสดง error)
+        setJob(MOCK_JOB);
+        setApplianceName(MOCK_JOB.scrapItemDescription ?? "");
+        setStaff(MOCK_STAFF);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

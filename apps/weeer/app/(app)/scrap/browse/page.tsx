@@ -6,6 +6,49 @@ import { scrapApi } from "../_lib/api";
 import type { ScrapItem } from "../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../_lib/types";
 
+// ── MOCK_ITEMS — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
+const MOCK_ITEMS: ScrapItem[] = [
+  {
+    id: "SCR-002",
+    sellerId: "weeeu-demo-001",
+    sellerType: "WeeeU",
+    conditionGrade: "grade_C",
+    workingParts: ["พัดลม", "แผงวงจร PCB"],
+    description: "แอร์ Mitsubishi 12000 BTU ซ่อมไม่คุ้ม",
+    photos: [],
+    price: 380,
+    status: "available",
+    createdAt: "2026-05-18T10:00:00+07:00",
+    updatedAt: "2026-05-18T10:00:00+07:00",
+  },
+  {
+    id: "SCR-005",
+    sellerId: "weeeu-demo-002",
+    sellerType: "WeeeU",
+    conditionGrade: "grade_B",
+    workingParts: ["มอเตอร์คอมเพรสเซอร์"],
+    description: "ตู้เย็น LG 2 ประตู มอเตอร์พัง",
+    photos: [],
+    price: 500,
+    status: "available",
+    createdAt: "2026-05-22T14:00:00+07:00",
+    updatedAt: "2026-05-22T14:00:00+07:00",
+  },
+  {
+    id: "SCR-006",
+    sellerId: "weeeu-demo-003",
+    sellerType: "WeeeU",
+    conditionGrade: "grade_C",
+    workingParts: [],
+    description: "เครื่องซักผ้า Samsung ฝาบน พัง",
+    photos: [],
+    price: 200,
+    status: "available",
+    createdAt: "2026-05-18T09:00:00+07:00",
+    updatedAt: "2026-05-18T09:00:00+07:00",
+  },
+];
+
 const GRADES = ["", "grade_A", "grade_B", "grade_C"] as const;
 
 export default function ScrapBrowsePage() {
@@ -24,7 +67,10 @@ export default function ScrapBrowsePage() {
       maxPrice: maxPrice || undefined,
     })
       .then(setItems)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => {
+        // DEV fallback: API ไม่ตอบ → ใช้ MOCK_ITEMS แทน (ไม่แสดง error)
+        setItems(MOCK_ITEMS);
+      })
       .finally(() => setLoading(false));
   }, [grade, minPrice, maxPrice]);
 
