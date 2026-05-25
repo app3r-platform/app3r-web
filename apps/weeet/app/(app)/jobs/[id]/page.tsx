@@ -118,12 +118,21 @@ function ActionButton({
     }
     if (status === "in_progress") {
       return (
-        <button
-          onClick={() => go("post-repair")}
-          className="w-full bg-green-700 hover:bg-green-600 text-white font-semibold py-3 rounded-xl transition-colors"
-        >
-          📸 บันทึกหลังซ่อม
-        </button>
+        <div className="space-y-2">
+          <button
+            onClick={() => go("post-repair")}
+            className="w-full bg-green-700 hover:bg-green-600 text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            📸 บันทึกหลังซ่อม
+          </button>
+          {/* B5 — Parts Reserve & Request */}
+          <button
+            onClick={() => go("parts")}
+            className="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-medium py-3 rounded-xl transition-colors border border-gray-700 hover:border-weeet-dark/50 text-sm"
+          >
+            🔩 ขออะไหล่
+          </button>
+        </div>
       );
     }
     if (status === "awaiting_review") {
