@@ -1,124 +1,150 @@
-﻿import Link from "next/link";
-import Image from "next/image";
-import Footer from "@/components/Footer";
+"use client";
+// ─── (app) layout — A2 redesign: desktop sidebar → mobile-first bottom-tab 5 แท็บ ─
+// อ้างอิง: A2 spec (36a813ec-7277-8152-aed5-cb90594db76b) · Advisor Gen 83 · 2026-05-25
+//
+// SCOPE: เฉพาะ navigation structure — ห้ามแตะ content pages
 
-const navItems = [
-  { href: "/dashboard", icon: "🏠", label: "หน้าหลัก" },
-  { href: "/wallet", icon: "👛", label: "กระเป๋าตังค์" },
-  { href: "/appliances", icon: "🔌", label: "เครื่องใช้ไฟฟ้า" },
-  { href: "/notifications", icon: "🔔", label: "การแจ้งเตือน", badge: 3 },
-  { href: "/history", icon: "📋", label: "ประวัติ" },
-  // ─── Module placeholders (Phase 2b) ───
-  { type: "divider", label: "บริการ" },
-  { href: "/modules/repair", icon: "🔧", label: "แจ้งซ่อม", module: true },
-  { href: "/sell", icon: "💰", label: "ประกาศขาย" },
-  { href: "/listings", icon: "🛒", label: "ตลาดซื้อ-ขาย" },
-  { href: "/offers", icon: "🤝", label: "ข้อเสนอของฉัน" },
-  { href: "/modules/scrap", icon: "♻️", label: "ขายซาก/ทิ้งซาก", module: true },
-  { href: "/maintain/book", icon: "🛁", label: "จองล้าง" },
-  { href: "/maintain/jobs", icon: "🛠️", label: "งานล้างของฉัน" },
-  { href: "/modules/parts", icon: "🔩", label: "อะไหล่", module: true },
-  { href: "/jobs", icon: "📋", label: "งานซ่อมของฉัน" },
-];
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+
+// ── 5 Bottom tabs (A2 spec — icon + label + active prefix matching) ────────────
+const BOTTOM_TABS = [
+  {
+    href: "/dashboard",
+    icon: "🏠",
+    label: "บัญชีของฉัน",
+    // Tab 1 = hub สำหรับ dashboard + wallet + เครื่อง + ประวัติ + โปรไฟล์
+    matchPrefixes: [
+      "/dashboard", "/wallet", "/appliances",
+      "/history", "/profile", "/notifications",
+      "/settings", "/transactions",
+    ],
+  },
+  {
+    href: "/repair",
+    icon: "🔧",
+    label: "ซ่อม",
+    // repair flow + jobs (งานซ่อมของฉัน)
+    matchPrefixes: ["/repair", "/jobs"],
+  },
+  {
+    href: "/maintain/book",
+    icon: "✨",
+    label: "บำรุงรักษา",
+    matchPrefixes: ["/maintain"],
+  },
+  {
+    href: "/sell",
+    icon: "🛍️",
+    label: "ซื้อ-ขาย",
+    // sell + listings + offers + resell sub-flows
+    matchPrefixes: ["/sell", "/listings", "/offers", "/resell"],
+  },
+  {
+    href: "/scrap",
+    icon: "♻️",
+    label: "ซากเครื่อง",
+    matchPrefixes: ["/scrap"],
+  },
+] as const;
+
+type Tab = (typeof BOTTOM_TABS)[number];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  function isActive(tab: Tab): boolean {
+    return tab.matchPrefixes.some(prefix => pathname.startsWith(prefix));
+  }
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* ─── Sidebar ─── */}
-      <aside className="w-60 bg-white border-r border-gray-100 flex flex-col shadow-sm fixed inset-y-0 left-0 z-30">
-        {/* Logo */}
-        <div className="h-16 flex items-center px-5 border-b border-gray-100">
-          <Image src="/logo/WeeeU.png" alt="WeeeU" width={32} height={32} className="rounded-lg mr-2" />
-          <span className="text-lg font-bold text-weeeu-primary">WeeeU</span>
-        </div>
+    <div className="min-h-screen bg-gray-50">
 
-        {/* User info */}
-        <div className="px-4 py-4 border-b border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-weeeu-surface rounded-full flex items-center justify-center text-weeeu-primary font-bold text-sm">
-              สม
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-gray-800 truncate">สมชาย ใจดี</p>
-              <p className="text-xs text-gray-400">081-234-5678</p>
-            </div>
+      {/* ── Top header ─────────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-20 bg-white border-b border-gray-100 shadow-sm">
+        <div className="max-w-lg mx-auto h-14 flex items-center px-4 gap-3">
+
+          {/* Logo + brand name */}
+          <div className="flex items-center gap-2 flex-1">
+            <Image
+              src="/logo/WeeeU.png"
+              alt="WeeeU"
+              width={28}
+              height={28}
+              className="rounded-lg"
+            />
+            <span className="text-base font-bold text-weeeu-primary">WeeeU</span>
           </div>
-        </div>
 
-        {/* Nav items */}
-        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
-          {navItems.map((item, i) => {
-            if ("type" in item && item.type === "divider") {
-              return (
-                <div key={i} className="pt-3 pb-1 px-2">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    {item.label}
-                  </p>
-                </div>
-              );
-            }
+          {/* 🔔 Notification bell — ไอคอนมุมขวาบน (A2 ข้อ 4) */}
+          <Link
+            href="/notifications"
+            className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors"
+          >
+            <span className="text-xl">🔔</span>
+            {/* Red dot badge — mock unread */}
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+          </Link>
+
+          {/* 👛 Wallet shortcut */}
+          <Link
+            href="/wallet"
+            className="flex items-center gap-1.5 bg-weeeu-surface hover:bg-green-100 px-3 py-1.5 rounded-xl transition-colors"
+          >
+            <span className="text-sm">👛</span>
+            <span className="text-sm font-semibold text-weeeu-primary">฿ 1,250</span>
+          </Link>
+
+        </div>
+      </header>
+
+      {/* ── Page content ───────────────────────────────────────────────────── */}
+      {/* pb-20 = 80px — เผื่อ bottom nav ความสูง ~60px */}
+      <main className="max-w-lg mx-auto px-4 py-5 pb-20">
+        {children}
+      </main>
+
+      {/* ── Bottom navigation bar (5 แท็บ) ─────────────────────────────────── */}
+      <nav
+        className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-100"
+        style={{ boxShadow: "0 -1px 8px rgba(0,0,0,0.06)" }}
+      >
+        <div className="max-w-lg mx-auto flex">
+          {BOTTOM_TABS.map(tab => {
+            const active = isActive(tab);
             return (
               <Link
-                key={item.href}
-                href={item.href as string}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-weeeu-surface hover:text-weeeu-primary transition-all duration-150"
+                key={tab.href}
+                href={tab.href}
+                className={`flex-1 flex flex-col items-center justify-center pt-1 pb-2 gap-0.5 transition-colors select-none ${
+                  active
+                    ? "text-weeeu-primary"
+                    : "text-gray-400 hover:text-gray-600"
+                }`}
               >
-                <span className="text-base">{item.icon}</span>
-                <span className="flex-1">{item.label}</span>
-                {"badge" in item && item.badge ? (
-                  <span className="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
-                    {item.badge}
-                  </span>
-                ) : null}
-                {"module" in item && item.module ? (
-                  <span className="text-xs text-gray-300 font-normal">›</span>
-                ) : null}
+                {/* Active indicator bar */}
+                <div
+                  className={`h-0.5 w-5 rounded-full transition-all duration-200 ${
+                    active ? "bg-weeeu-primary" : "bg-transparent"
+                  }`}
+                />
+                {/* Icon */}
+                <span className="text-[22px] leading-none">{tab.icon}</span>
+                {/* Label */}
+                <span
+                  className={`text-[10px] leading-tight text-center ${
+                    active ? "font-semibold" : "font-normal"
+                  }`}
+                >
+                  {tab.label}
+                </span>
               </Link>
             );
           })}
-        </nav>
-
-        {/* Bottom: Profile + Logout */}
-        <div className="px-3 py-4 border-t border-gray-100 space-y-1">
-          <Link
-            href="/profile"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all"
-          >
-            <span>⚙️</span>
-            <span>โปรไฟล์ & ตั้งค่า</span>
-          </Link>
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all">
-            <span>🚪</span>
-            <span>ออกจากระบบ</span>
-          </button>
         </div>
-      </aside>
+      </nav>
 
-      {/* ─── Main content ─── */}
-      <div className="flex-1 ml-60 flex flex-col min-h-screen">
-        {/* Top header (mobile-friendly) */}
-        <header className="h-16 bg-white border-b border-gray-100 flex items-center px-6 gap-4 sticky top-0 z-20 shadow-sm">
-          <div className="flex-1" />
-          {/* Notification bell */}
-          <Link href="/notifications" className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors">
-            <span className="text-xl">🔔</span>
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-          </Link>
-          {/* Wallet shortcut */}
-          <Link href="/wallet" className="flex items-center gap-2 bg-weeeu-surface hover:bg-weeeu-surface px-3 py-1.5 rounded-xl transition-colors">
-            <span>👛</span>
-            <span className="text-sm font-semibold text-weeeu-primary">฿ 1,250</span>
-          </Link>
-        </header>
-
-        {/* Page content */}
-        <main className="flex-1 p-6 max-w-5xl w-full mx-auto">
-          {children}
-        </main>
-
-        {/* Footer — Sub-CMD-4 D78 */}
-        <Footer />
-      </div>
     </div>
   );
 }
