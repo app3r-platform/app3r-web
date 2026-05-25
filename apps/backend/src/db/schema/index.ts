@@ -79,3 +79,7 @@ export * from './testimonials'
 export * from './repair-master-data'   // Round 1: D82 Master Data (9 domain + 1 audit)
 export * from './repair-workflow'      // Round 2: Workflow B3/B3.5/B2.5 (8 tables)
 export * from './repair-pricing'       // Round 3: B6 Used Pricing Wizard (8 tables)
+
+// Phase D-5: D92 Appliance Master Reference + D89 asset_images canonical
+// Migration: 0016_appliance_master_d92.sql
+export * from './appliance-master'    // appliance_brands + appliance_models + asset_images
