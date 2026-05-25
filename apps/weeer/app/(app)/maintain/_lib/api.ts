@@ -54,4 +54,11 @@ export const maintainApi = {
       method: "POST",
       body: JSON.stringify({ technicianId }),
     }),
+
+  // POST /maintain/jobs/{id}/withdraw/  body: { reason }
+  withdrawJob: (id: string, reason: string) =>
+    apiFetch<MaintainJob>(`/maintain/jobs/${id}/withdraw/`, {
+      method: "POST",
+      body: JSON.stringify({ reason }),
+    }),
 };
