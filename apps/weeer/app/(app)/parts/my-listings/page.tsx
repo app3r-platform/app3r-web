@@ -4,6 +4,7 @@
 // มุมผู้ขาย: คลังของฉัน + คำสั่งซื้อที่เข้ามา
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { PART_LISTINGS_MOCK, PART_ORDERS_MOCK } from "../_lib/mock-data";
 import type { PartListing, PartOrder } from "../_lib/types";
 import { PartCard } from "../../../../components/parts/PartCard";
@@ -21,6 +22,7 @@ import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
 type TabType = "listings" | "incoming";
 
 export default function MyListingsPage() {
+  const router = useRouter();
   const [shopId, setShopId] = useState("S001");
   const [listings, setListings] = useState<PartListing[]>([]);
   const [orders, setOrders] = useState<PartOrder[]>([]);
@@ -138,7 +140,11 @@ export default function MyListingsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {listings.map((l) => <PartCard key={l.id} listing={l} currentShopId={shopId} />)}
+              {listings.map((l) => (
+                <div key={l.id} onClick={() => router.push(`/parts/marketplace/${l.id}`)} className="cursor-pointer">
+                  <PartCard listing={l} currentShopId={shopId} />
+                </div>
+              ))}
             </div>
           )}
         </>
