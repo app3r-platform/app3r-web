@@ -2,9 +2,12 @@
 /**
  * WeeeR — Maintain Job Withdraw
  * Route: /maintain/jobs/[id]/withdraw
- * Flow: WeeeR ถอนรับงานหลังยืนยัน → modal เหตุผล + ยืนยัน → POST withdraw → แจ้ง WeeeU
+ * Flow: WeeeR ถอนรับงานหลังยืนยัน → เลือกเหตุผล enum + evidence → POST withdraw → แจ้ง WeeeU
  *
- * Logic mirrors: /maintain/jobs/[id]/mockup/m6-withdraw/page.tsx
+ * FIX-Wave-1-A: เปลี่ยน free-text textarea → radio enum WithdrawReason
+ *   reason: "shop_fault" | "customer_fault" | "force_majeure"
+ *   evidence: optional textarea (ส่งเป็น param ที่ 3 ถ้า api.ts รองรับ)
+ *
  * canWithdraw mock fallback: status === "assigned" | dev override ด้านล่าง
  *
  * Maintain Gen 4 · 2026-05-25
@@ -21,6 +24,22 @@ import {
   MAINTAIN_STATUS_LABEL,
   MAINTAIN_STATUS_COLOR,
 } from "../../../_lib/types";
+
+// ── WithdrawReason enum — D91 withdraw audit log ต้องเป็น enum (ห้าม free string) ──
+// Mirror ของ types.ts:28 ในฝั่ง integration branch (a382c60)
+type WithdrawReason = "shop_fault" | "customer_fault" | "force_majeure";
+
+const WITHDRAW_REASON_LABEL: Record<WithdrawReason, string> = {
+  shop_fault:     "ร้านยกเลิก (ความผิดร้าน)",
+  customer_fault: "ลูกค้ายกเลิก (ความผิดลูกค้า)",
+  force_majeure:  "เหตุสุดวิสัย",
+};
+
+const WITHDRAW_REASON_DESC: Record<WithdrawReason, string> = {
+  shop_fault:     "ร้านเป็นผู้ยกเลิก — มัดจำคืน WeeeU เต็มจำนวน ไม่ได้ค่าเดินทาง",
+  customer_fault: "ลูกค้าเป็นผู้ยกเลิก — WeeeR ได้รับค่าเดินทาง",
+  force_majeure:  "เหตุสุดวิสัย — ไม่มีค่าปรับ settle ตาม policy",
+};
 
 /* ─── Mock fallback — ลบก่อน prod ─── */
 const DEV_FORCE_CAN_WITHDRAW = process.env.NODE_ENV === "development";
@@ -41,7 +60,10 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const [showModal,  setShowModal]  = useState(false);
-  const [reason,     setReason]     = useState("");
+  // reason: enum (required) — ห้ามส่ง free string
+  const [reason,     setReason]     = useState<WithdrawReason | "">("");
+  // evidence: optional free text (param ที่ 3 ของ withdrawJob)
+  const [evidence,   setEvidence]   = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [apiError,   setApiError]   = useState<string | null>(null);
   const [withdrawn,  setWithdrawn]  = useState(false);
@@ -67,21 +89,35 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
 
   /* canWithdraw: "assigned" เท่านั้น (ก่อน WeeeT ออกเดินทาง) */
   const canWithdraw = DEV_FORCE_CAN_WITHDRAW || job.status === "assigned";
-  const canSubmit   = reason.trim().length >= 10 && !submitting;
+  /* canSubmit: ต้องเลือก reason (enum) — ไม่ใช่ free-text length check */
+  const canSubmit   = reason !== "" && !submitting;
 
   const handleWithdraw = async () => {
-    if (!canSubmit) return;
+    // reason ต้องเป็น WithdrawReason (ไม่ใช่ "") — canSubmit guarantee แล้ว
+    if (!canSubmit || !reason) return;
+    const withdrawReason = reason as WithdrawReason;
     setSubmitting(true);
     setApiError(null);
     try {
-      await maintainApi.withdrawJob(id, reason.trim());
-      setWithdrawn(true);
-      setShowModal(false);
+      // reason: WithdrawReason (enum) — ตรงตาม D91 audit log contract
+      // api.ts ปัจจุบัน: withdrawJob(id, reason: string) — enum เป็น subtype ของ string → ผ่าน
+      // integration branch: withdrawJob(id, reason: WithdrawReason, evidence?) → type match พอดี
+      await maintainApi.withdrawJob(id, withdrawReason);
     } catch (e) {
       setApiError((e as Error).message);
-    } finally {
       setSubmitting(false);
+      return;
     }
+    setWithdrawn(true);
+    setShowModal(false);
+    setSubmitting(false);
+  };
+
+  const resetModal = () => {
+    setShowModal(false);
+    setReason("");
+    setEvidence("");
+    setApiError(null);
   };
 
   return (
@@ -112,9 +148,11 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
               <p className="text-sm text-gray-500">
                 แจ้ง WeeeU แล้ว · ระบบ settle ตามนโยบายที่ lock ไว้
               </p>
-              <p className="text-xs text-[#FF663A] mt-1">
-                ⚠️ ค่าเดินทาง — ไม่ได้รับ (WeeeR เป็นผู้ถอน)
-              </p>
+              {reason === "shop_fault" && (
+                <p className="text-xs text-[#FF663A] mt-1">
+                  ⚠️ ค่าเดินทาง — ไม่ได้รับ (WeeeR เป็นผู้ถอน)
+                </p>
+              )}
             </div>
           </div>
           <Link
@@ -131,12 +169,12 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
         <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">รายละเอียดงาน</p>
           <div className="space-y-2.5">
-            <Row label="เครื่อง"    value={`${APPLIANCE_LABEL[job.applianceType]} — ${CLEANING_LABEL[job.cleaningType]}`} />
-            <Row label="วันนัด"     value={fmt(job.scheduledAt)} />
-            <Row label="ที่อยู่"    value={job.address.address} />
-            <Row label="ราคารวม"   value={`${job.totalPrice.toLocaleString()} pts`} />
+            <Row label="เครื่อง"   value={`${APPLIANCE_LABEL[job.applianceType]} — ${CLEANING_LABEL[job.cleaningType]}`} />
+            <Row label="วันนัด"    value={fmt(job.scheduledAt)} />
+            <Row label="ที่อยู่"   value={job.address.address} />
+            <Row label="ราคารวม"  value={`${job.totalPrice.toLocaleString()} pts`} />
             {job.technicianId && (
-              <Row label="ช่าง"    value={job.technicianId} />
+              <Row label="ช่าง"   value={job.technicianId} />
             )}
           </div>
         </div>
@@ -175,7 +213,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
             </div>
             <div className="flex items-start gap-2 text-gray-600">
               <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
-              <span>ค่าเดินทาง — ไม่ได้รับ (WeeeR เป็นผู้ถอน)</span>
+              <span>ค่าเดินทาง — ไม่ได้รับ (กรณีร้านเป็นผู้ถอน)</span>
             </div>
             <div className="flex items-start gap-2 text-gray-600">
               <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
@@ -212,32 +250,76 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
             </div>
           </div>
 
-          {/* Consequence summary */}
-          <div className="bg-[#FF663A]/8 border border-[#FF663A]/20 rounded-xl p-3 space-y-1.5 text-xs text-gray-600">
-            <p className="font-semibold text-gray-700">ผลกระทบ (ตาม Policy ถอนหลังยืนยัน)</p>
-            <div className="flex justify-between">
-              <span>มัดจำ — คืน WeeeU</span>
-              <span className="text-[#FF663A] font-medium">ไม่ได้รับ</span>
-            </div>
-            <div className="flex justify-between">
-              <span>ค่าเดินทาง</span>
-              <span className="text-[#FF663A] font-medium">ไม่ได้รับ</span>
-            </div>
-          </div>
-
-          {/* Reason textarea — บังคับ ≥ 10 chars */}
-          <div className="space-y-1.5">
+          {/* ── Reason selector (enum — 3 ค่า บังคับเลือก) ── */}
+          <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
               เหตุผลที่ถอน <span className="text-[#FF663A]">*</span>
             </label>
+            <div className="space-y-2">
+              {(Object.keys(WITHDRAW_REASON_LABEL) as WithdrawReason[]).map((key) => (
+                <label
+                  key={key}
+                  className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                    reason === key
+                      ? "border-[#FF663A]/60 bg-[#FF663A]/5"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="withdraw-reason"
+                    value={key}
+                    checked={reason === key}
+                    onChange={() => setReason(key)}
+                    className="mt-0.5 accent-[#FF663A] shrink-0"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">
+                      {WITHDRAW_REASON_LABEL[key]}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {WITHDRAW_REASON_DESC[key]}
+                    </p>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Consequence summary (แสดงตาม reason ที่เลือก) ── */}
+          {reason !== "" && (
+            <div className="bg-[#FF663A]/8 border border-[#FF663A]/20 rounded-xl p-3 space-y-1.5 text-xs text-gray-600">
+              <p className="font-semibold text-gray-700">
+                ผลกระทบ ({WITHDRAW_REASON_LABEL[reason as WithdrawReason]})
+              </p>
+              <div className="flex justify-between">
+                <span>มัดจำ — คืน WeeeU</span>
+                <span className="text-[#FF663A] font-medium">ไม่ได้รับ</span>
+              </div>
+              <div className="flex justify-between">
+                <span>ค่าเดินทาง</span>
+                <span className={`font-medium ${
+                  reason === "customer_fault" ? "text-green-600" : "text-[#FF663A]"
+                }`}>
+                  {reason === "customer_fault" ? "ได้รับ" : "ไม่ได้รับ"}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* ── Evidence textarea (optional) ── */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-700">
+              รายละเอียดเพิ่มเติม{" "}
+              <span className="text-gray-400 font-normal">(ไม่บังคับ)</span>
+            </label>
             <textarea
-              value={reason}
-              onChange={e => setReason(e.target.value)}
-              rows={3}
-              placeholder="ระบุเหตุผลอย่างน้อย 10 ตัวอักษร เช่น ช่างติดอุบัติเหตุ..."
+              value={evidence}
+              onChange={e => setEvidence(e.target.value)}
+              rows={2}
+              placeholder="เช่น ช่างติดอุบัติเหตุ, ลูกค้าโทรแจ้งยกเลิกเอง..."
               className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#FF663A]/60 resize-none"
             />
-            <p className="text-xs text-gray-400">{reason.trim().length}/10 ตัวอักษรขั้นต่ำ</p>
           </div>
 
           {/* API error */}
@@ -256,7 +338,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
               {submitting ? "กำลังส่ง..." : "ยืนยันถอนรับงาน"}
             </button>
             <button
-              onClick={() => { setShowModal(false); setReason(""); setApiError(null); }}
+              onClick={resetModal}
               className="flex-1 border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium py-3 rounded-xl transition-colors text-sm"
             >
               ย้อนกลับ
