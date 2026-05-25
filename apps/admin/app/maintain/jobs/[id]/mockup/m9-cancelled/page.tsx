@@ -116,7 +116,7 @@ export default function M9CancelledAdminMockupPage() {
             {/* Cancel reason */}
             <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2">
               <p className="text-xs font-semibold text-red-700 uppercase tracking-wider">เหตุผลยกเลิก</p>
-              <p className="text-sm text-gray-800">"{JOB.cancelReason}"</p>
+              <p className="text-sm text-gray-800">&quot;{JOB.cancelReason}&quot;</p>
               <p className="text-xs text-gray-500">— {JOB.cancelledBy} · {fmt(JOB.cancelledAt)}</p>
             </div>
 

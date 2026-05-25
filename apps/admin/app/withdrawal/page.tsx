@@ -12,6 +12,7 @@ interface WithdrawalRequest {
   id: number;
   user_id: number;
   user_name: string;
+  user_role: "WeeeU" | "WeeeR";   /* D91 — WeeeU + WeeeR ถอนได้ทั้งคู่ */
   amount: number;
   bank_code: string;
   bank_name: string;
@@ -31,6 +32,14 @@ interface PaginatedWithdrawal {
   pages: number;
 }
 
+/* D91 — role filter options */
+type RoleFilter = "" | "WeeeU" | "WeeeR";
+
+const ROLE_META: Record<"WeeeU" | "WeeeR", { label: string; color: string }> = {
+  WeeeU: { label: "WeeeU", color: "bg-blue-50 text-blue-700" },
+  WeeeR: { label: "WeeeR", color: "bg-orange-50 text-orange-700" },
+};
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WithdrawalPage() {
@@ -43,6 +52,7 @@ export default function WithdrawalPage() {
 
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("pending");
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>("");  /* D91 */
 
   // Modal: reject
   const [rejectModal, setRejectModal] = useState<{ id: number; userName: string } | null>(null);
@@ -60,6 +70,7 @@ export default function WithdrawalPage() {
     try {
       const params = new URLSearchParams({ page: String(page), limit: "20" });
       if (statusFilter) params.set("status", statusFilter);
+      if (roleFilter)   params.set("role", roleFilter);   /* D91 */
       const result = await api.get<PaginatedWithdrawal>(`/admin/withdrawal/requests?${params}`);
       setData(result);
     } catch {
@@ -67,7 +78,7 @@ export default function WithdrawalPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, router]);
+  }, [page, statusFilter, roleFilter, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -148,7 +159,7 @@ export default function WithdrawalPage() {
       <main className="flex-1 p-8 min-w-0">
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">อนุมัติการถอนเงิน</h1>
+          <h1 className="text-2xl font-bold">🏦 อนุมัติการถอนเงิน</h1>
           {statusFilter === "pending" && data && (
             <span className="bg-orange-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
               รอดำเนินการ {data.total} รายการ
@@ -156,22 +167,22 @@ export default function WithdrawalPage() {
           )}
         </div>
         <p className="text-gray-500 text-sm mb-6">
-          ตรวจสอบบัญชีธนาคาร · อนุมัติ → โอนเงินจริงภายนอก → ยืนยัน Transfer
+          WeeeU + WeeeR ถอน Gold ได้ (D91) · ตรวจสอบบัญชีธนาคาร → อนุมัติ → โอนเงินจริง → ยืนยัน Transfer
         </p>
 
         {/* Flow Info */}
-        <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5 text-sm text-gray-500">
-          <span className="text-white font-medium">ขั้นตอน: </span>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5 text-sm">
+          <span className="text-gray-700 font-medium">ขั้นตอน: </span>
           <span className="text-yellow-700">pending</span>
-          <span className="mx-2">→ กด Approve →</span>
-          <span className="text-blue-400">approved</span>
-          <span className="mx-2">→ โอนเงินจริง → กด Confirm Transfer →</span>
-          <span className="text-green-600">transferred</span>
-          <span className="text-gray-600 ml-2">(Point หักถาวร)</span>
+          <span className="mx-2 text-gray-500">→ กด Approve →</span>
+          <span className="text-blue-700">approved</span>
+          <span className="mx-2 text-gray-500">→ โอนเงินจริง → กด Confirm Transfer →</span>
+          <span className="text-green-700">transferred</span>
+          <span className="text-gray-500 ml-2">(Point หักถาวร)</span>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex gap-2 mb-5">
+        {/* Filter Tabs — Status */}
+        <div className="flex gap-2 mb-3 flex-wrap">
           {[
             { val: "pending",     label: "รอดำเนินการ" },
             { val: "approved",    label: "อนุมัติแล้ว (รอโอน)" },
@@ -184,8 +195,32 @@ export default function WithdrawalPage() {
               onClick={() => { setStatusFilter(val); setPage(1); }}
               className={`px-4 py-2 text-sm rounded-lg transition-colors ${
                 statusFilter === val
-                  ? "bg-admin-surface text-admin-primary"
+                  ? "bg-admin-surface text-admin-primary border border-admin-primary/30"
                   : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Filter — Role (D91) */}
+        <div className="flex gap-2 mb-5 items-center">
+          <span className="text-xs text-gray-500">กรอง Role:</span>
+          {([
+            { val: "" as RoleFilter,       label: "ทั้งหมด" },
+            { val: "WeeeU" as RoleFilter,  label: "🙋 WeeeU" },
+            { val: "WeeeR" as RoleFilter,  label: "🔧 WeeeR" },
+          ] as { val: RoleFilter; label: string }[]).map(({ val, label }) => (
+            <button
+              key={val}
+              onClick={() => { setRoleFilter(val); setPage(1); }}
+              className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
+                roleFilter === val
+                  ? val === "WeeeU"  ? "bg-blue-50 text-blue-700 border-blue-200"
+                  : val === "WeeeR"  ? "bg-orange-50 text-orange-700 border-orange-200"
+                  : "bg-admin-surface text-admin-primary border-admin-primary/30"
+                  : "bg-white text-gray-500 border-gray-300 hover:text-gray-700"
               }`}
             >
               {label}
@@ -210,6 +245,7 @@ export default function WithdrawalPage() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3 w-12">ID</th>
                   <th className="px-5 py-3">ผู้ใช้</th>
+                  <th className="px-5 py-3">Role</th>
                   <th className="px-5 py-3">จำนวน</th>
                   <th className="px-5 py-3">บัญชีธนาคาร</th>
                   <th className="px-5 py-3">สถานะ</th>
@@ -218,97 +254,107 @@ export default function WithdrawalPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {data.items.map((req) => (
-                  <tr key={req.id} className="hover:bg-gray-100 transition-colors">
-                    <td className="px-5 py-3.5 text-gray-500 text-xs">{req.id}</td>
+                {data.items.map((req) => {
+                  const rm = ROLE_META[req.user_role] ?? { label: req.user_role, color: "bg-gray-100 text-gray-600" };
+                  return (
+                    <tr key={req.id} className="hover:bg-gray-100/40 transition-colors">
+                      <td className="px-5 py-3.5 text-gray-500 text-xs">{req.id}</td>
 
-                    <td className="px-5 py-3.5">
-                      <div className="font-medium">{req.user_name}</div>
-                      <div className="text-xs text-gray-500">UID: {req.user_id}</div>
-                    </td>
+                      <td className="px-5 py-3.5">
+                        <div className="font-medium text-gray-800">{req.user_name}</div>
+                        <div className="text-xs text-gray-500">UID: {req.user_id}</div>
+                      </td>
 
-                    <td className="px-5 py-3.5">
-                      <span className="text-lg font-bold text-gray-900">
-                        {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
-                      </span>
-                      <span className="text-xs text-gray-500 ml-1">Points</span>
-                    </td>
+                      {/* D91 — Role badge */}
+                      <td className="px-5 py-3.5">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${rm.color}`}>
+                          {rm.label}
+                        </span>
+                      </td>
 
-                    <td className="px-5 py-3.5">
-                      <div className="font-medium text-white">{req.bank_name} ({req.bank_code})</div>
-                      <div className="text-xs text-gray-500 font-mono">{req.account_no}</div>
-                      <div className="text-xs text-gray-500">{req.account_name}</div>
-                      {req.transfer_ref && (
-                        <div className="text-xs text-green-600 font-mono mt-0.5">
-                          Ref: {req.transfer_ref}
-                        </div>
-                      )}
-                    </td>
+                      <td className="px-5 py-3.5">
+                        <span className="text-lg font-bold text-gray-900">
+                          {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
+                        </span>
+                        <span className="text-xs text-gray-500 ml-1">Gold</span>
+                      </td>
 
-                    <td className="px-5 py-3.5">
-                      <WithdrawalStatusBadge status={req.status} />
-                      {req.reject_reason && (
-                        <div className="text-xs text-red-600 mt-1 max-w-[140px] truncate" title={req.reject_reason}>
-                          {req.reject_reason}
-                        </div>
-                      )}
-                    </td>
-
-                    <td className="px-5 py-3.5 text-gray-500 text-xs">
-                      {new Date(req.created_at).toLocaleDateString("th-TH", {
-                        day: "2-digit", month: "short", year: "2-digit",
-                        hour: "2-digit", minute: "2-digit",
-                      })}
-                    </td>
-
-                    <td className="px-5 py-3.5">
-                      <div className="flex gap-2 justify-end">
-                        {req.status === "pending" && (
-                          <>
-                            <button
-                              onClick={() => handleApprove(req.id)}
-                              disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-blue-700 hover:bg-blue-600 disabled:opacity-50 text-white rounded-lg transition-colors"
-                            >
-                              {actionLoading === req.id ? "..." : "✓ Approve"}
-                            </button>
-                            <button
-                              onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
-                              disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
-                            >
-                              ✕ ปฏิเสธ
-                            </button>
-                          </>
+                      <td className="px-5 py-3.5">
+                        <div className="text-sm text-gray-800">{req.bank_name} ({req.bank_code})</div>
+                        <div className="text-xs text-gray-500 font-mono">{req.account_no}</div>
+                        <div className="text-xs text-gray-500">{req.account_name}</div>
+                        {req.transfer_ref && (
+                          <div className="text-xs text-green-600 font-mono mt-0.5">
+                            Ref: {req.transfer_ref}
+                          </div>
                         )}
-                        {req.status === "approved" && (
-                          <>
-                            <button
-                              onClick={() => setTransferModal({
-                                id: req.id,
-                                userName: req.user_name,
-                                amount: req.amount,
-                                bankName: `${req.bank_name} (${req.bank_code})`,
-                                accountNo: req.account_no,
-                              })}
-                              disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
-                            >
-                              {actionLoading === req.id ? "..." : "💸 Confirm Transfer"}
-                            </button>
-                            <button
-                              onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
-                              disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
-                            >
-                              ✕ ปฏิเสธ
-                            </button>
-                          </>
+                      </td>
+
+                      <td className="px-5 py-3.5">
+                        <WithdrawalStatusBadge status={req.status} />
+                        {req.reject_reason && (
+                          <div className="text-xs text-red-600 mt-1 max-w-[140px] truncate" title={req.reject_reason}>
+                            {req.reject_reason}
+                          </div>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+
+                      <td className="px-5 py-3.5 text-gray-500 text-xs">
+                        {new Date(req.created_at).toLocaleDateString("th-TH", {
+                          day: "2-digit", month: "short", year: "2-digit",
+                          hour: "2-digit", minute: "2-digit",
+                        })}
+                      </td>
+
+                      <td className="px-5 py-3.5">
+                        <div className="flex gap-2 justify-end">
+                          {req.status === "pending" && (
+                            <>
+                              <button
+                                onClick={() => handleApprove(req.id)}
+                                disabled={actionLoading === req.id}
+                                className="px-3 py-1.5 text-xs bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors"
+                              >
+                                {actionLoading === req.id ? "..." : "✓ Approve"}
+                              </button>
+                              <button
+                                onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
+                                disabled={actionLoading === req.id}
+                                className="px-3 py-1.5 text-xs bg-white hover:bg-red-50 border border-red-300 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
+                              >
+                                ✕ ปฏิเสธ
+                              </button>
+                            </>
+                          )}
+                          {req.status === "approved" && (
+                            <>
+                              <button
+                                onClick={() => setTransferModal({
+                                  id: req.id,
+                                  userName: req.user_name,
+                                  amount: req.amount,
+                                  bankName: `${req.bank_name} (${req.bank_code})`,
+                                  accountNo: req.account_no,
+                                })}
+                                disabled={actionLoading === req.id}
+                                className="px-3 py-1.5 text-xs bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
+                              >
+                                {actionLoading === req.id ? "..." : "💸 Confirm Transfer"}
+                              </button>
+                              <button
+                                onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
+                                disabled={actionLoading === req.id}
+                                className="px-3 py-1.5 text-xs bg-white hover:bg-red-50 border border-red-300 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
+                              >
+                                ✕ ปฏิเสธ
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
@@ -322,11 +368,11 @@ export default function WithdrawalPage() {
             </p>
             <div className="flex gap-2">
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg">
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded-lg">
                 ← ก่อนหน้า
               </button>
               <button onClick={() => setPage((p) => Math.min(data.pages, p + 1))} disabled={page === data.pages}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg">
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded-lg">
                 ถัดไป →
               </button>
             </div>
@@ -337,13 +383,13 @@ export default function WithdrawalPage() {
       {/* Transfer Confirm Modal */}
       {transferModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-white border border-gray-300 rounded-2xl p-6 w-full max-w-md shadow-2xl">
-            <h3 className="text-lg font-bold mb-4">ยืนยันการโอนเงิน</h3>
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">ยืนยันการโอนเงิน</h3>
 
-            <div className="bg-gray-100 rounded-xl p-4 mb-5 space-y-2 text-sm">
+            <div className="bg-gray-50 rounded-xl p-4 mb-5 space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-500">ผู้รับ</span>
-                <span className="text-white font-medium">{transferModal.userName}</span>
+                <span className="text-gray-800 font-medium">{transferModal.userName}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">จำนวน</span>
@@ -353,7 +399,7 @@ export default function WithdrawalPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">ธนาคาร</span>
-                <span className="text-white">{transferModal.bankName}</span>
+                <span className="text-gray-800">{transferModal.bankName}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">บัญชี</span>
@@ -368,7 +414,7 @@ export default function WithdrawalPage() {
               value={transferRef}
               onChange={(e) => setTransferRef(e.target.value)}
               placeholder="เลขที่รายการ / Transaction ID จากธนาคาร"
-              className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
+              className="w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-admin-primary placeholder-gray-400"
             />
             <p className="text-xs text-gray-500 mt-2">
               หลังยืนยัน Point จะถูกหักออกจากระบบถาวร
@@ -396,10 +442,10 @@ export default function WithdrawalPage() {
       {/* Reject Modal */}
       {rejectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-white border border-gray-300 rounded-2xl p-6 w-full max-w-md shadow-2xl">
-            <h3 className="text-lg font-bold mb-1">ปฏิเสธคำขอถอนเงิน</h3>
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h3 className="text-lg font-bold text-gray-900 mb-1">ปฏิเสธคำขอถอนเงิน</h3>
             <p className="text-sm text-gray-500 mb-4">
-              ผู้ใช้: <span className="text-white">{rejectModal.userName}</span>
+              ผู้ใช้: <span className="text-gray-800 font-medium">{rejectModal.userName}</span>
               {" — Point จะถูกคืนกลับกระเป๋าทันที"}
             </p>
             <label className="block text-sm text-gray-500 mb-2">
@@ -410,7 +456,7 @@ export default function WithdrawalPage() {
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder="เช่น: บัญชีไม่ถูกต้อง, ข้อมูลไม่ครบ..."
               rows={3}
-              className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
+              className="w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-admin-primary placeholder-gray-400 resize-none"
             />
             <div className="flex gap-3 mt-5">
               <button
@@ -422,7 +468,7 @@ export default function WithdrawalPage() {
               <button
                 onClick={handleReject}
                 disabled={actionLoading !== null}
-                className="flex-1 py-2.5 text-sm bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white rounded-lg"
+                className="flex-1 py-2.5 text-sm bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white rounded-lg"
               >
                 {actionLoading !== null ? "กำลังดำเนินการ..." : "ยืนยันปฏิเสธ"}
               </button>
@@ -447,10 +493,10 @@ export default function WithdrawalPage() {
 
 function WithdrawalStatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    pending:     { label: "รอดำเนินการ",     cls: "bg-yellow-900 text-yellow-700" },
-    approved:    { label: "อนุมัติ รอโอน",   cls: "bg-blue-900 text-blue-300" },
-    transferred: { label: "โอนแล้ว",         cls: "bg-green-900 text-green-700" },
-    rejected:    { label: "ปฏิเสธแล้ว",      cls: "bg-red-900 text-red-700" },
+    pending:     { label: "รอดำเนินการ",   cls: "bg-yellow-50 text-yellow-700" },
+    approved:    { label: "อนุมัติ รอโอน", cls: "bg-blue-50 text-blue-700" },
+    transferred: { label: "โอนแล้ว",       cls: "bg-green-50 text-green-700" },
+    rejected:    { label: "ปฏิเสธแล้ว",    cls: "bg-red-50 text-red-700" },
   };
   const s = map[status] ?? { label: status, cls: "bg-gray-100 text-gray-500" };
   return (
