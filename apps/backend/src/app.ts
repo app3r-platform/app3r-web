@@ -44,6 +44,12 @@ import {
   testimonialsAdminRouter,
 } from './routes/testimonials'
 
+// D-6: Parts B2B — Catalog / Cart / Requests / Returns
+import { partsCatalogRouter } from './routes/parts-catalog'
+import { partsCartRouter } from './routes/parts-cart'
+import { partsRequestsRouter } from './routes/parts-requests'
+import { partsReturnsRouter } from './routes/parts-returns'
+
 export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -92,7 +98,22 @@ app.route('/api/v1/services', servicesRouter)
 app.route('/api/v1/parts/orders', partsOrdersRouter)
 app.route('/api/v1/parts/orders/', partsOrdersRouter)
 
-// NOTE-SUB4: Parts inventory (registered AFTER partsOrdersRouter — see HONO-TRIE-FIX above)
+// D-6: Parts B2B catalog, cart, requests, returns
+// HONO-TRIE-FIX: ALL specific paths must be registered BEFORE the general /api/v1/parts router
+// (partsRouter has GET /:id/ which matches any segment — specific paths must come first)
+// Returns router shares the /api/v1/parts/orders mount with partsOrdersRouter (non-overlapping routes)
+app.route('/api/v1/parts/catalog', partsCatalogRouter)
+app.route('/api/v1/parts/catalog/', partsCatalogRouter)
+app.route('/api/v1/parts/cart', partsCartRouter)
+app.route('/api/v1/parts/cart/', partsCartRouter)
+app.route('/api/v1/parts/requests', partsRequestsRouter)
+app.route('/api/v1/parts/requests/', partsRequestsRouter)
+// partsReturnsRouter handles /:id/warranty, /:id/return-defective, /:id/refund-approve, /:id/return
+// Non-overlapping with partsOrdersRouter (/:id/fulfill, /:id/close, /:id/dispute, /:id/rate)
+app.route('/api/v1/parts/orders', partsReturnsRouter)
+app.route('/api/v1/parts/orders/', partsReturnsRouter)
+
+// NOTE-SUB4: Parts inventory (registered AFTER all specific D-6 + Sub-8 routes — see HONO-TRIE-FIX)
 app.route('/api/v1/parts', partsRouter)
 
 // Sub-CMD-2: Manual Bank Transfer (อ.PP decision — primary Phase D-2)

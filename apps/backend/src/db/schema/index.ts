@@ -91,3 +91,11 @@ export * from './appliance-master'    // appliance_brands + appliance_models + a
 // Phase D-5: D88 Repair Part Catalog + Symptom↔Part Links
 // Migration: 0018_repair_part_catalog.sql
 export * from './repair-part-catalog' // repair_part_catalog + repair_symptom_part_links
+
+// D-6: Parts B2B — 6 new tables + is_multi_item column on parts_orders
+// Migration: 0021_d6_parts_b2b.sql
+export * from './parts-listings'      // parts_listings (public catalog)
+export * from './parts-cart'          // parts_cart_items (expire 24h)
+export * from './parts-order-items'   // parts_order_items (multi-item additive)
+export * from './parts-requests'      // parts_requests + parts_request_quotes (cross-shop)
+export * from './parts-returns'       // parts_returns (defective return)
