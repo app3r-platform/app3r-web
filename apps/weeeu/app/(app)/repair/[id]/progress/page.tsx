@@ -40,6 +40,55 @@ const STATUS_COLOR: Record<ServiceProgressStatus, string> = {
   cancelled:   "border-red-400 bg-red-50",
 };
 
+// ── Mock fallback (CMD-FIX-2a) — try API → catch → fallback MOCK ─────────────
+const MOCK_TIMELINE: ServiceProgressTimelineDto = {
+  serviceId: "job-001",
+  latestStatus: "in_progress",
+  latestPercent: 55,
+  entries: [
+    {
+      id: "prog-001",
+      serviceId: "job-001",
+      status: "pending",
+      progressPercent: 0,
+      note: "รับแจ้งซ่อม — แอร์ Daikin เสียงดังผิดปกติ",
+      photoR2Key: null,
+      updatedBy: "u-001",
+      createdAt: "2026-05-25T09:00:00.000Z",
+    },
+    {
+      id: "prog-002",
+      serviceId: "job-001",
+      status: "accepted",
+      progressPercent: 20,
+      note: "ร้านซ่อมดีเจริญ รับงานแล้ว — นัดช่างเข้าวันนี้",
+      photoR2Key: null,
+      updatedBy: "r-101",
+      createdAt: "2026-05-25T09:30:00.000Z",
+    },
+    {
+      id: "prog-003",
+      serviceId: "job-001",
+      status: "in_progress",
+      progressPercent: 40,
+      note: "ช่างถึงหน้างานแล้ว — กำลังเริ่มตรวจสอบระบบ",
+      photoR2Key: null,
+      updatedBy: "t-201",
+      createdAt: "2026-05-25T10:30:00.000Z",
+    },
+    {
+      id: "prog-004",
+      serviceId: "job-001",
+      status: "in_progress",
+      progressPercent: 55,
+      note: "พบปัญหาคอมเพรสเซอร์เสื่อม — กำลังเตรียมเปลี่ยนอะไหล่",
+      photoR2Key: null,
+      updatedBy: "t-201",
+      createdAt: "2026-05-25T11:15:00.000Z",
+    },
+  ],
+};
+
 // ── Progress bar color ────────────────────────────────────────────────────────
 function progressColor(status: ServiceProgressStatus | null): string {
   if (status === "completed") return "bg-green-500";
@@ -168,7 +217,10 @@ export default function RepairProgressPage() {
         })
         .catch(() => {
           if (!cancelled) {
-            setError("ไม่สามารถโหลดข้อมูลความคืบหน้าได้");
+            // API ไม่พร้อม — fallback MOCK (CMD-FIX-2a No-seed fix)
+            setTimeline(prev => prev ?? MOCK_TIMELINE);
+            setError(null);
+            setLastFetched(new Date());
             setLoading(false);
           }
         });
