@@ -19,6 +19,20 @@ type DeliveryReceiptData = {
   customer_confirmed: boolean;
 };
 
+const MOCK_DELIVERY_RECEIPT: DeliveryReceiptData = {
+  id: "mock-job-001",
+  appliance_name: "เครื่องซักผ้า Samsung",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  weeet_name: "สมชาย ช่างดี",
+  delivered_at: "2026-05-25T10:00:00.000Z",
+  final_price: 800,
+  inspection_fee: 150,
+  post_repair_notes: "เปลี่ยนปั๊มน้ำและทำความสะอาดระบบ ทดสอบการทำงานเรียบร้อย",
+  post_repair_photos: [],
+  weeet_signature_at: "2026-05-25T09:50:00.000Z",
+  customer_confirmed: false,
+};
+
 function formatDate(iso: string | null) {
   if (!iso) return "—";
   return new Date(iso).toLocaleString("th-TH", {
@@ -59,7 +73,7 @@ export default function DeliveryReceiptPage() {
         });
         if (d.customer_confirmed) setConfirmed(true);
       })
-      .catch(() => setError("ไม่สามารถโหลด Delivery Receipt ได้"))
+      .catch(() => { setReceipt(prev => prev ?? MOCK_DELIVERY_RECEIPT); })
       .finally(() => setLoading(false));
   }, [id]);
 

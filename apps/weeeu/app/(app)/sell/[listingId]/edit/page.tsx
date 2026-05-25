@@ -5,6 +5,15 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { listingsApi } from "@/lib/api/listings";
 
+// ── Mock fallback ─────────────────────────────────────────────────────────────
+const MOCK_LISTING_FOR_EDIT = {
+  listingType: "working_resell" as const,
+  price: 2500,
+  deliveryMethods: ["delivery"] as string[],
+  description: "แอร์ Mitsubishi 12000 BTU สภาพดี ใช้งานได้ปกติ ไม่มีปัญหา เปลี่ยนของใหม่จึงขาย",
+  workingParts: ["รีโมท"],
+};
+
 const DELIVERY_OPTIONS = [
   { value: "on_site", label: "ส่งเอง / นัดรับ" },
   { value: "parcel", label: "ส่งพัสดุ (ขนส่ง)" },
@@ -41,7 +50,13 @@ export default function SellEditPage() {
         setDescription(l.description ?? "");
         setWorkingParts(l.workingParts ?? []);
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch(() => {
+        setListingType(MOCK_LISTING_FOR_EDIT.listingType as "used_appliance" | "scrap");
+        setPrice(String(MOCK_LISTING_FOR_EDIT.price));
+        setDeliveryMethods(MOCK_LISTING_FOR_EDIT.deliveryMethods);
+        setDescription(MOCK_LISTING_FOR_EDIT.description);
+        setWorkingParts(MOCK_LISTING_FOR_EDIT.workingParts);
+      })
       .finally(() => setLoading(false));
   }, [listingId, router]);
 

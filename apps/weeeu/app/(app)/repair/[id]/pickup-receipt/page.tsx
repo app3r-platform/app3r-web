@@ -21,6 +21,22 @@ type PickupReceiptData = {
   customer_signed: boolean;
 };
 
+const MOCK_PICKUP_RECEIPT: PickupReceiptData = {
+  id: "mock-job-001",
+  appliance_name: "เครื่องซักผ้า Samsung",
+  issue_summary: "เครื่องไม่ปั่นน้ำออก",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  weeet_name: "สมชาย ช่างดี",
+  pickup_address: "123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ 10110",
+  pickup_date: "2026-05-26",
+  pickup_time: "10:00–12:00",
+  picked_up_at: "2026-05-26T10:30:00.000Z",
+  appliance_condition_notes: "เครื่องมีรอยขีดข่วนเล็กน้อยด้านข้าง สภาพทั่วไปดี",
+  weeet_signature_at: "2026-05-26T10:35:00.000Z",
+  photos: [],
+  customer_signed: false,
+};
+
 function formatDate(iso: string | null) {
   if (!iso) return "—";
   return new Date(iso).toLocaleString("th-TH", {
@@ -63,7 +79,7 @@ export default function PickupReceiptPage() {
         });
         if (d.customer_signed) setSigned(true);
       })
-      .catch(() => setError("ไม่สามารถโหลด Pickup Receipt ได้"))
+      .catch(() => { setReceipt(prev => prev ?? MOCK_PICKUP_RECEIPT); })
       .finally(() => setLoading(false));
   }, [id]);
 

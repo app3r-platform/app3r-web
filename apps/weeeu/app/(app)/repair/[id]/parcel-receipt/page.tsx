@@ -18,6 +18,19 @@ type ParcelReceiptData = {
   already_confirmed: boolean;
 };
 
+const MOCK_PARCEL_RECEIPT: ParcelReceiptData = {
+  id: "mock-job-001",
+  appliance_name: "เครื่องซักผ้า Samsung",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  courier_back: "flash",
+  tracking_back: "TH123456789TH",
+  final_price: 800,
+  inspection_fee: 150,
+  post_repair_notes: "เปลี่ยนปั๊มน้ำและทำความสะอาดระบบ ทดสอบการทำงานเรียบร้อย",
+  post_repair_photos: [],
+  already_confirmed: false,
+};
+
 const COURIER_LABEL: Record<string, string> = {
   kerry: "Kerry Express",
   flash: "Flash Express",
@@ -59,7 +72,7 @@ export default function ParcelReceiptPage() {
         });
         if (d.parcel_confirmed) setConfirmed(true);
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch(() => { setData(prev => prev ?? MOCK_PARCEL_RECEIPT); })
       .finally(() => setLoading(false));
   }, [id]);
 

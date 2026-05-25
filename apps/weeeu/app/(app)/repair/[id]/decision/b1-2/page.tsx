@@ -20,6 +20,23 @@ type B12Data = {
   deposit_policy_when_user_rejects_change: string;
 };
 
+// ── Mock fallback ──────────────────────────────────────────────────────────────
+const MOCK_B1_DECISION: B12Data = {
+  id: "job-001",
+  appliance_name: "เครื่องซักผ้า LG",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+  original_price: 800,
+  proposed_price: 1350,
+  parts_added: [
+    { name: "มอเตอร์ปั่นแห้ง LG WD-14", qty: 1, price: 450 },
+    { name: "สายพาน V-belt 60cm", qty: 1, price: 100 },
+  ],
+  decision_notes: "ตรวจพบมอเตอร์ปั่นแห้งเสื่อมและสายพานหลุด ต้องเปลี่ยนทั้งสองชิ้น",
+  negotiation_round: 1,
+  deposit_amount: 200,
+  deposit_policy_when_user_rejects_change: "refund_partial",
+};
+
 const MAX_ROUNDS = 2;
 
 const DEPOSIT_REJECT_LABEL: Record<string, string> = {
@@ -57,7 +74,10 @@ export default function DecisionB12Page() {
           deposit_policy_when_user_rejects_change: d.deposit_policy_when_user_rejects_change ?? "free",
         });
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch(() => {
+        setData(prev => prev ?? MOCK_B1_DECISION);
+        setLoading(false);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

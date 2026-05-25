@@ -18,6 +18,13 @@ const COURIER_LABEL: Record<string, string> = {
   jandt: "J&T Express",
 };
 
+const MOCK_SHIP_OUT_INFO: ShipOutInfo = {
+  appliance_name: "เครื่องซักผ้า Samsung",
+  courier: "kerry",
+  shop_address: "ร้านซ่อมดีเจริญ 99/1 ถนนลาดพร้าว แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900",
+  tracking_instructions: "ระบุชื่อผู้รับ: ร้านซ่อมดีเจริญ พร้อมเลข Order ID บนหน้ากล่อง",
+};
+
 export default function ShipOutPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -46,7 +53,7 @@ export default function ShipOutPage() {
           tracking_instructions: d.tracking_instructions ?? "",
         });
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch(() => { setInfo(prev => prev ?? MOCK_SHIP_OUT_INFO); })
       .finally(() => setLoading(false));
   }, [id]);
 

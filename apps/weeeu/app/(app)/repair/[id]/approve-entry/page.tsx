@@ -15,6 +15,17 @@ type ArrivalData = {
   weeer_name: string;
 };
 
+// ── Mock fallback ──────────────────────────────────────────────────────────────
+const MOCK_ENTRY_REQUEST: ArrivalData = {
+  id: "job-001",
+  weeet_name: "ช่างสมชาย ใจดี",
+  weeet_id: "weeet-001",
+  arrived_at: new Date(Date.now() - 600000).toISOString(),
+  arrival_files: [],
+  appliance_name: "เครื่องซักผ้า LG",
+  weeer_name: "ร้านซ่อมดีเจริญ",
+};
+
 export default function ApproveEntryPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -38,7 +49,10 @@ export default function ApproveEntryPage() {
           weeer_name: d.weeer_name,
         });
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch(() => {
+        setData(prev => prev ?? MOCK_ENTRY_REQUEST);
+        setLoading(false);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

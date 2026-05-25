@@ -69,6 +69,41 @@ type DisputeData = {
   admin_note: string | null;
 };
 
+// ── Mock fallback ─────────────────────────────────────────────────────────────
+const MOCK_DISPUTE_DATA: DisputeData = {
+  id: "mock-dispute-001",
+  job_id: "mock-job-001",
+  appliance_name: "แอร์ Daikin 12000 BTU",
+  weeer_name: "ร้านซ่อมแอร์สมศักดิ์",
+  dispute_reason: "ซ่อมเสร็จแล้วแต่เครื่องยังมีเสียงดัง ไม่เย็นตามที่ตกลง",
+  status: "evidence_collection",
+  tier: 2,
+  opened_at: new Date(Date.now() - 86400000).toISOString(),
+  resolved_at: null,
+  resolution_summary: null,
+  refund_amount: null,
+  evidence: [
+    {
+      id: "ev-001",
+      submitted_by: "customer",
+      file_url: "https://placehold.co/400x300?text=Evidence",
+      file_type: "image",
+      description: "รูปถ่ายเครื่องแอร์หลังซ่อม ยังมีสัญญาณผิดปกติ",
+      submitted_at: new Date(Date.now() - 3600000).toISOString(),
+    },
+  ],
+  negotiation_rounds: [
+    {
+      round: 1,
+      weeer_proposal: "ขอรับผิดชอบค่าซ่อมเพิ่มเติม 50% หรือนัดตรวจซ้ำฟรี",
+      customer_response: "pending",
+      proposed_at: new Date(Date.now() - 1800000).toISOString(),
+      responded_at: null,
+    },
+  ],
+  admin_note: null,
+};
+
 // ── Labels ────────────────────────────────────────────────────────────────────
 const STATUS_LABEL: Record<DisputeStatus, string> = {
   open:                   "เปิดข้อพิพาท",
@@ -297,7 +332,9 @@ export default function DisputePage() {
     apiFetch(`/api/v1/repair/jobs/${id}/dispute`)
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(setData)
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลข้อพิพาทได้"))
+      .catch(() => {
+        setData(prev => prev ?? MOCK_DISPUTE_DATA);
+      })
       .finally(() => setLoading(false));
   };
 

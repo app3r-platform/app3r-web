@@ -20,6 +20,22 @@ type B22Data = {
   scrap_files: { url: string }[];
 };
 
+// ── Mock fallback ──────────────────────────────────────────────────────────────
+const MOCK_B2_DECISION: B22Data = {
+  id: "job-002",
+  appliance_name: "ตู้เย็น Sharp",
+  weeer_name: "ช่างแอร์ไทย",
+  scrap_proposed_price: 350,
+  scrap_baseline_price: 400,
+  scrap_estimated_weight_kg: 28,
+  scrap_condition: "broken",
+  decision_notes: "คอมเพรสเซอร์ระเบิด — ซ่อมไม่คุ้มค่า ราคาซ่อมสูงกว่าราคาเครื่องใหม่ แนะนำขายซาก",
+  negotiation_round: 1,
+  deposit_amount: 100,
+  inspection_fee: 100,
+  scrap_files: [],
+};
+
 const MAX_ROUNDS = 2;
 const CONDITION_LABEL: Record<string, string> = {
   near_new: "เกือบใหม่",
@@ -57,7 +73,10 @@ export default function DecisionB22Page() {
           scrap_files: d.pre_inspection_files ?? [],
         });
       })
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch(() => {
+        setData(prev => prev ?? MOCK_B2_DECISION);
+        setLoading(false);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

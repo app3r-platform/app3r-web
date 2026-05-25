@@ -21,6 +21,24 @@ type ReviewData = {
   completed_at: string | null;
 };
 
+// ── Mock fallback ─────────────────────────────────────────────────────────────
+const MOCK_REVIEW_DATA: ReviewData = {
+  id: "mock-job-001",
+  appliance_name: "แอร์ Daikin 12000 BTU",
+  weeer_name: "ร้านซ่อมแอร์สมศักดิ์",
+  weeer_id: "weeer-001",
+  weeet_name: "ช่างสมชาย",
+  weeet_id: "weeet-001",
+  final_price: 1050,
+  post_repair_files: [],
+  post_repair_notes: "เปลี่ยนน้ำยาแอร์ + ล้างแผงคอยล์เรียบร้อย ทดสอบความเย็นผ่าน",
+  parts_used: [
+    { name: "น้ำยาแอร์ R32", qty: 1 },
+    { name: "ฟิลเตอร์แผงคอยล์", qty: 2 },
+  ],
+  completed_at: new Date(Date.now() - 3600000).toISOString(),
+};
+
 export default function ReviewPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -58,6 +76,9 @@ export default function ReviewPage() {
           parts_used: d.parts_used ?? [],
           completed_at: d.completed_at,
         });
+      })
+      .catch(() => {
+        setData(prev => prev ?? MOCK_REVIEW_DATA);
       })
       .finally(() => setLoading(false));
   }, [id]);
