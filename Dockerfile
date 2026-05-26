@@ -30,8 +30,8 @@ COPY packages ./packages
 ARG BACKEND_URL=http://app3r_backend:8000
 ENV BACKEND_URL=${BACKEND_URL}
 
-# Build all 5 apps via turbo
-RUN pnpm build
+# Build 5 Next.js apps via turbo (exclude @app3r/backend — TypeScript/Node, ไม่ต้องการใน container นี้)
+RUN pnpm turbo build --filter=admin --filter=weeer --filter=weeeu --filter=weeet --filter=app3r
 
 # ─── Stage 2: Runner ──────────────────────────────────────────────────────────
 FROM node:22-alpine AS runner
