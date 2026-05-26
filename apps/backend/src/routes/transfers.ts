@@ -11,14 +11,14 @@
  * GET    /api/v1/transfers/history/            — ประวัติ (ผู้ใช้ + Admin)
  * GET    /api/v1/transfers/qr/                 — PromptPay QR payload
  *
- * @needs-point-review: wallet/point_ledger sync on deposit.verify + withdraw.confirm
+ * @needs-point-review: wallet/point_ledger sync on deposit.verify (withdraw.confirm — DONE D91)
  * PDPA: slip images contain financial data — ownership check enforced
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
 import { db } from '../db/client'
-import { bankTransfers, wallets } from '../db/schema'
-import { eq, and, or, desc } from 'drizzle-orm'
+import { bankTransfers, wallets, pointLedger } from '../db/schema'
+import { eq, and, or, desc, sql } from 'drizzle-orm'
 import { verifyAccessToken } from '../lib/jwt'
 import { r2Adapter, generateR2Key } from '../lib/r2'
 import { generatePromptPayQrForDeposit } from '../lib/promptpay'
@@ -291,7 +291,7 @@ const confirmWithdrawRoute = createRoute({
   method: 'patch',
   path: '/withdraw/:id/confirm/',
   tags: ['Transfers'],
-  summary: 'Admin confirms withdrawal transferred → debit user wallet (@needs-point-review)',
+  summary: 'Admin confirms withdrawal transferred → debit wallet + insert point_ledger (D91)',
   security: [{ bearerAuth: [] }],
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -324,23 +324,53 @@ transfersRouter.openapi(confirmWithdrawRoute, async (c) => {
   const { id } = c.req.valid('param')
   const body = c.req.valid('json')
 
-  const [updated] = await db
-    .update(bankTransfers)
-    .set({
-      status: 'completed',
-      slipR2Key: body.slipR2Key ?? null,
-      adminNote: body.adminNote ?? null,
-      verifiedBy: user.userId,
-      verifiedAt: new Date(),
-      updatedAt: new Date(),
+  // D91: wrap in transaction — bankTransfer update + wallet debit + point_ledger insert (atomic)
+  const updated = await db.transaction(async (tx) => {
+    const [transfer] = await tx
+      .update(bankTransfers)
+      .set({
+        status: 'completed',
+        slipR2Key: body.slipR2Key ?? null,
+        adminNote: body.adminNote ?? null,
+        verifiedBy: user.userId,
+        verifiedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(and(eq(bankTransfers.id, id), eq(bankTransfers.type, 'withdraw')))
+      .returning()
+
+    if (!transfer) return null
+
+    // 1. Debit wallet (cash pointType)
+    const [wallet] = await tx
+      .update(wallets)
+      .set({
+        balance: sql`${wallets.balance} - ${transfer.amountThb}`,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(wallets.userId, transfer.userId), eq(wallets.pointType, 'cash')))
+      .returning({ newBalance: wallets.balance })
+
+    const newBalance = wallet?.newBalance ?? 0
+
+    // 2. Insert point_ledger — append-only (D75: amount as integer, 1 Gold = 1 THB)
+    // numeric('amount_thb') → string in TypeScript; Math.round ensures integer (D75)
+    const amountInt = Math.round(Number(transfer.amountThb))
+    await tx.insert(pointLedger).values({
+      userId: transfer.userId,
+      type: 'withdraw',
+      direction: 'debit',
+      pointType: 'cash',
+      amount: amountInt,
+      balanceAfter: newBalance,
+      reference: `transfer:${id}`,
+      idempotencyKey: `withdraw:${id}`,
     })
-    .where(and(eq(bankTransfers.id, id), eq(bankTransfers.type, 'withdraw')))
-    .returning()
+
+    return transfer
+  })
 
   if (!updated) return c.json(err('Transfer not found.'), 404)
-
-  // @needs-point-review: debit user point_ledger (withdraw confirmed)
-  console.log(`[Transfers] Withdraw ${id} confirmed — @needs-point-review: debit ${updated.amountThb} THB from user ${updated.userId}`)
 
   return c.json(mapTransfer(updated), 200)
 })
