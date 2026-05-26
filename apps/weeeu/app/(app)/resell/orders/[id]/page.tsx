@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * Resell Order Detail — WeeeU (Extended transaction page)
@@ -178,7 +178,7 @@ export default function ResellOrderPage() {
         <p className="text-sm text-gray-600">
           {order.is_buyer ? `ผู้ขาย: ${order.seller_name}` : `ผู้ซื้อ: ${order.buyer_name}`}
         </p>
-        <p className="text-xl font-bold text-indigo-600">
+        <p className="text-xl font-bold text-weeeu-primary">
           {order.agreed_price.toLocaleString()} ฿
         </p>
         <p className="text-sm text-gray-500">
@@ -360,7 +360,7 @@ export default function ResellOrderPage() {
                 )
               }
               disabled={submitting}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
+              className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
             >
               โต้แย้ง → Dispute
             </button>
@@ -484,7 +484,7 @@ export default function ResellOrderPage() {
                     )
                   }
                   disabled={submitting}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+                  className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
                 >
                   {submitting ? "กำลังส่ง..." : "ยืนยันส่งคำขอ"}
                 </button>
@@ -496,12 +496,12 @@ export default function ResellOrderPage() {
 
       {/* R12 — Seller receives mutual cancel request */}
       {state === "mutual_cancel_pending" && !order.is_buyer && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-5 space-y-3">
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-5 space-y-3">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🤝</span>
-            <p className="font-semibold text-indigo-800">คำขอยกเลิกร่วมกัน</p>
+            <p className="font-semibold text-weeeu-dark">คำขอยกเลิกร่วมกัน</p>
           </div>
-          <p className="text-sm text-indigo-700">
+          <p className="text-sm text-weeeu-dark">
             ผู้ซื้อ (<strong>{order.buyer_name}</strong>) ส่งคำขอยกเลิกธุรกรรม
             — Escrow จะคืนเต็มจำนวน ไม่มีการลงโทษทั้งสองฝ่าย
           </p>
@@ -515,7 +515,7 @@ export default function ResellOrderPage() {
                 )
               }
               disabled={submitting}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
+              className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
             >
               {submitting ? "กำลังดำเนินการ..." : "✅ ยืนยันยกเลิกร่วมกัน"}
             </button>
@@ -572,10 +572,10 @@ export default function ResellOrderPage() {
       )}
 
       {state === "mutual_cancel_pending" && order.is_buyer && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-5 text-center space-y-2">
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-5 text-center space-y-2">
           <p className="text-3xl">⏳</p>
-          <p className="font-semibold text-indigo-800">รอผู้ขายยืนยัน</p>
-          <p className="text-sm text-indigo-600">คำขอยกเลิกร่วมกันถูกส่งแล้ว — ผู้ขายจะได้รับแจ้งทันที</p>
+          <p className="font-semibold text-weeeu-dark">รอผู้ขายยืนยัน</p>
+          <p className="text-sm text-weeeu-primary">คำขอยกเลิกร่วมกันถูกส่งแล้ว — ผู้ขายจะได้รับแจ้งทันที</p>
         </div>
       )}
 

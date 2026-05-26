@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -118,7 +118,7 @@ const STATUS_LABEL: Record<RepairStatus, string> = {
 };
 
 const STATUS_COLOR: Record<RepairStatus, string> = {
-  assigned: "bg-indigo-100 text-indigo-700",
+  assigned: "bg-weeeu-surface text-weeeu-dark",
   traveling: "bg-amber-100 text-amber-700",
   arrived: "bg-amber-100 text-amber-700",
   awaiting_entry: "bg-orange-100 text-orange-700",
@@ -134,7 +134,7 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   // Pickup workflow
   en_route_pickup: "bg-purple-100 text-purple-700",
   picked_up: "bg-purple-100 text-purple-700",
-  appliance_at_shop: "bg-indigo-100 text-indigo-700",
+  appliance_at_shop: "bg-weeeu-surface text-weeeu-dark",
   ready: "bg-green-100 text-green-700",
   en_route_delivery: "bg-purple-100 text-purple-700",
   delivered: "bg-yellow-100 text-yellow-700",
@@ -143,8 +143,8 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   awaiting_shipping_details: "bg-orange-100 text-orange-700",
   shipping_confirmed: "bg-orange-100 text-orange-700",
   in_transit_to_shop: "bg-amber-100 text-amber-700",
-  received_at_shop: "bg-indigo-100 text-indigo-700",
-  parcel_inspecting: "bg-indigo-100 text-indigo-700",
+  received_at_shop: "bg-weeeu-surface text-weeeu-dark",
+  parcel_inspecting: "bg-weeeu-surface text-weeeu-dark",
   parcel_in_progress: "bg-weeeu-surface text-weeeu-primary",
   ready_to_ship_back: "bg-green-100 text-green-700",
   in_transit_to_customer: "bg-amber-100 text-amber-700",
@@ -389,11 +389,11 @@ export default function RepairJobDetailPage() {
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-indigo-400 rounded-full transition-all"
+                  className="h-full bg-weeeu-primary rounded-full transition-all"
                   style={{ width: `${job.progress_percent}%` }}
                 />
               </div>
-              <span className="text-xs text-indigo-600 font-medium">{job.progress_percent}%</span>
+              <span className="text-xs text-weeeu-primary font-medium">{job.progress_percent}%</span>
             </div>
           </div>
         )}
@@ -507,14 +507,14 @@ export default function RepairJobDetailPage() {
         "in_transit_to_shop", "parcel_inspecting", "parcel_in_progress"].includes(job.status) && (
         <Link
           href={`/repair/${job.id}/progress`}
-          className="block bg-indigo-50 border border-indigo-100 rounded-2xl p-4 hover:bg-indigo-100 transition-colors"
+          className="block bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 hover:bg-green-50 transition-colors"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-indigo-700">📍 ติดตามความคืบหน้า</p>
-              <p className="text-xs text-indigo-500 mt-0.5">ดู timeline งานซ่อมแบบละเอียด</p>
+              <p className="text-sm font-semibold text-weeeu-dark">📍 ติดตามความคืบหน้า</p>
+              <p className="text-xs text-weeeu-primary mt-0.5">ดู timeline งานซ่อมแบบละเอียด</p>
             </div>
-            <span className="text-indigo-400 text-lg">›</span>
+            <span className="text-weeeu-primary text-lg">›</span>
           </div>
         </Link>
       )}
@@ -562,11 +562,11 @@ export default function RepairJobDetailPage() {
 
       {/* Pickup: appliance_at_shop / in_progress / ready */}
       {(job.status === "appliance_at_shop" || job.status === "ready") && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
-          <p className="text-sm font-semibold text-indigo-800">
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-weeeu-dark">
             {job.status === "ready" ? "✅ ซ่อมเสร็จแล้ว — กำลังนัดส่งคืน" : "🏪 เครื่องอยู่ที่ร้านซ่อมแล้ว"}
           </p>
-          <p className="text-xs text-indigo-600 mt-1">
+          <p className="text-xs text-weeeu-primary mt-1">
             {job.status === "ready" ? "ช่างจะติดต่อนัดเวลาส่งคืนเครื่อง" : "รอผลการตรวจสอบจากร้านซ่อม"}
           </p>
         </div>
@@ -604,14 +604,14 @@ export default function RepairJobDetailPage() {
 
       {/* Parcel: at shop states */}
       {(job.status === "received_at_shop" || job.status === "parcel_inspecting" || job.status === "parcel_in_progress" || job.status === "ready_to_ship_back") && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
-          <p className="text-sm font-semibold text-indigo-800">
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-weeeu-dark">
             {job.status === "received_at_shop" && "🏪 ร้านรับพัสดุแล้ว — รอตรวจสภาพ"}
             {job.status === "parcel_inspecting" && "🔍 กำลังตรวจสอบสภาพเครื่อง"}
             {job.status === "parcel_in_progress" && "🔧 กำลังซ่อมเครื่อง"}
             {job.status === "ready_to_ship_back" && "✅ ซ่อมเสร็จแล้ว — รอส่งคืน"}
           </p>
-          <p className="text-xs text-indigo-600 mt-1">
+          <p className="text-xs text-weeeu-primary mt-1">
             {job.status === "ready_to_ship_back" ? "ร้านจะส่งพัสดุคืนและแจ้ง Tracking ให้คุณ" : "ระบบจะแจ้งเตือนเมื่อมีความคืบหน้า"}
           </p>
         </div>

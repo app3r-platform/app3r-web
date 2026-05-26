@@ -210,7 +210,7 @@ export default function SellDetailPage() {
     <div className="text-center py-16">
       <p className="text-4xl mb-3">📦</p>
       <p className="text-gray-600 font-medium">{error}</p>
-      <Link href="/sell" className="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline">
+      <Link href="/sell" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">
         ← กลับรายการขาย
       </Link>
     </div>
@@ -221,7 +221,7 @@ export default function SellDetailPage() {
   const canCancel = listing.status === "announced" || listing.status === "receiving_offers";
   const pendingOffers = offers.filter((o) => o.status === "pending");
   const selectedOffer = offers.find((o) => o.status === "selected");
-  const statusColor = STATUS_COLOR[listing.status] ?? "bg-indigo-100 text-indigo-700";
+  const statusColor = STATUS_COLOR[listing.status] ?? "bg-weeeu-surface text-weeeu-dark";
 
   // ─── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -233,7 +233,7 @@ export default function SellDetailPage() {
         {canEdit && (
           <Link
             href={`/sell/${listingId}/edit`}
-            className="ml-auto text-sm text-indigo-600 font-medium hover:underline"
+            className="ml-auto text-sm text-weeeu-primary font-medium hover:underline"
           >
             แก้ไข
           </Link>
@@ -338,7 +338,7 @@ export default function SellDetailPage() {
           <div className="flex gap-2">
             <Link
               href={`/sell/${listingId}/edit`}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-3 rounded-2xl text-center transition-colors"
+              className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-semibold py-3 rounded-2xl text-center transition-colors"
             >
               ✏️ แก้ไขแล้วประกาศใหม่
             </Link>
@@ -408,7 +408,7 @@ export default function SellDetailPage() {
                 </p>
                 <span className="text-xs text-gray-400">{OFFER_STATUS_LABEL[offer.status]}</span>
               </div>
-              <p className="text-sm font-bold text-indigo-600">
+              <p className="text-sm font-bold text-weeeu-primary">
                 {offer.offerPrice.toLocaleString()} ฿
               </p>
               <p className="text-xs text-gray-500">
@@ -421,7 +421,7 @@ export default function SellDetailPage() {
                 <button
                   onClick={() => handleSelectOffer(offer.id)}
                   disabled={selecting === offer.id}
-                  className="w-full mt-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-xs font-semibold py-2 rounded-lg transition-colors"
+                  className="w-full mt-1 bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white text-xs font-semibold py-2 rounded-lg transition-colors"
                 >
                   {selecting === offer.id ? "กำลังเลือก..." : "✅ เลือกข้อเสนอนี้"}
                 </button>
@@ -445,7 +445,7 @@ export default function SellDetailPage() {
       {listing.status === "inspection_period" && (
         <Link
           href={`/transactions/${listingId}`}
-          className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
+          className="block w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
         >
           📋 ดูสถานะธุรกรรม
         </Link>
@@ -512,7 +512,7 @@ export default function SellDetailPage() {
               <textarea
                 value={appealText}
                 onChange={(e) => setAppealText(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none h-28 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none h-28 focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
                 placeholder="อธิบายเหตุผล เช่น 'รูปสินค้าครบแล้ว ข้อมูลถูกต้องทุกอย่าง...'"
               />
             </div>
@@ -529,7 +529,7 @@ export default function SellDetailPage() {
               <button
                 onClick={handleAppeal}
                 disabled={appealing || !appealText.trim()}
-                className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+                className="flex-1 bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
               >
                 {appealing ? "กำลังส่ง..." : "ส่งอุทธรณ์"}
               </button>
@@ -546,7 +546,7 @@ function InfoRow({ label, value, bold }: { label: string; value: string; bold?: 
   return (
     <div className="flex items-start justify-between gap-3">
       <p className="text-sm text-gray-500 shrink-0">{label}</p>
-      <p className={`text-sm text-right ${bold ? "font-bold text-indigo-600" : "font-medium text-gray-800"}`}>
+      <p className={`text-sm text-right ${bold ? "font-bold text-weeeu-primary" : "font-medium text-gray-800"}`}>
         {value}
       </p>
     </div>

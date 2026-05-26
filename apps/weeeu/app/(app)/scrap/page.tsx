@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * WeeeU — รายการซากของฉัน
@@ -84,7 +84,7 @@ const MOCK_LISTINGS: MyScrapListing[] = [
 const STATUS_META: Record<ListingStatus, { label: string; color: string }> = {
   available:     { label: "รอข้อเสนอ",      color: "bg-gray-100 text-gray-500" },
   pending_offer: { label: "มีข้อเสนอ",      color: "bg-blue-100 text-blue-700" },
-  accepted:      { label: "เลือกแล้ว",      color: "bg-indigo-100 text-indigo-700" },
+  accepted:      { label: "เลือกแล้ว",      color: "bg-weeeu-surface text-weeeu-dark" },
   in_progress:   { label: "กำลังดำเนินการ", color: "bg-orange-100 text-orange-700" },
   completed:     { label: "เสร็จสิ้น",      color: "bg-green-100 text-green-700" },
   expired:       { label: "หมดอายุ",        color: "bg-gray-200 text-gray-500" },

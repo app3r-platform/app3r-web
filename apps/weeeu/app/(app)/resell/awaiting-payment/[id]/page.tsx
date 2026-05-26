@@ -86,7 +86,7 @@ export default function AwaitingPaymentPage() {
             รายการ
           </p>
           <p className="font-semibold text-gray-900">{order.listing_title}</p>
-          <p className="text-xl font-bold text-indigo-600">
+          <p className="text-xl font-bold text-weeeu-primary">
             {order.agreed_price.toLocaleString()} ฿
           </p>
         </div>
@@ -163,7 +163,7 @@ export default function AwaitingPaymentPage() {
         </p>
         <p className="font-semibold text-gray-900">{order.listing_title}</p>
         <p className="text-sm text-gray-600">ผู้ขาย: {order.seller_name}</p>
-        <p className="text-2xl font-bold text-indigo-600">
+        <p className="text-2xl font-bold text-weeeu-primary">
           {order.agreed_price.toLocaleString()} Gold
         </p>
         <p className="text-xs text-gray-400">
@@ -247,7 +247,7 @@ export default function AwaitingPaymentPage() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">ต้องใช้ (Escrow)</span>
-              <span className="font-bold text-indigo-600">
+              <span className="font-bold text-weeeu-primary">
                 {order.required_gold.toLocaleString()} Gold
               </span>
             </div>
