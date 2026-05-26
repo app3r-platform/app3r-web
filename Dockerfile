@@ -30,6 +30,10 @@ COPY packages ./packages
 ARG BACKEND_URL=http://app3r_backend:8000
 ENV BACKEND_URL=${BACKEND_URL}
 
+# DevNav flag — bake into Next.js bundle at build time (NEXT_PUBLIC_ must be build-time)
+ARG NEXT_PUBLIC_DEV_NAV=false
+ENV NEXT_PUBLIC_DEV_NAV=${NEXT_PUBLIC_DEV_NAV}
+
 # Build 5 Next.js apps via turbo (exclude @app3r/backend — TypeScript/Node, ไม่ต้องการใน container นี้)
 RUN pnpm turbo build --filter=admin --filter=weeer --filter=weeeu --filter=weeet --filter=app3r
 
