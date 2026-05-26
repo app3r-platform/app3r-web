@@ -144,7 +144,7 @@ export default function SellEditPage() {
           min="1"
           value={price}
           onChange={e => setPrice(e.target.value)}
-          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
         />
       </div>
 
@@ -161,8 +161,8 @@ export default function SellEditPage() {
               onClick={() => toggleDelivery(d.value)}
               className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
                 deliveryMethods.includes(d.value)
-                  ? "bg-indigo-50 border-indigo-400 text-indigo-800 font-medium"
-                  : "border-gray-200 text-gray-600 hover:border-indigo-200"
+                  ? "bg-weeeu-surface border-weeeu-primary text-weeeu-dark font-medium"
+                  : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
               }`}
             >
               {deliveryMethods.includes(d.value) && <span className="mr-2">✅</span>}
@@ -223,7 +223,7 @@ export default function SellEditPage() {
           value={description}
           onChange={e => setDescription(e.target.value)}
           rows={3}
-          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
         />
       </div>
 
@@ -231,7 +231,7 @@ export default function SellEditPage() {
         onClick={handleSave}
         disabled={submitting}
         className={`w-full disabled:opacity-60 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2 ${
-          listingType === "scrap" ? "bg-green-600 hover:bg-green-700" : "bg-indigo-600 hover:bg-indigo-700"
+          listingType === "scrap" ? "bg-green-600 hover:bg-green-700" : "bg-weeeu-primary hover:bg-weeeu-dark"
         }`}
       >
         {submitting ? <><span className="animate-spin">⟳</span> กำลังบันทึก...</> : "💾 บันทึกการแก้ไข"}

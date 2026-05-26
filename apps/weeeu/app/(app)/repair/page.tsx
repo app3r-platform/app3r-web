@@ -66,7 +66,7 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   draft: "bg-gray-100 text-gray-600",
   open: "bg-weeeu-surface text-weeeu-primary",
   matching: "bg-weeeu-surface text-weeeu-primary",
-  assigned: "bg-indigo-100 text-indigo-700",
+  assigned: "bg-weeeu-surface text-weeeu-dark",
   traveling: "bg-amber-100 text-amber-700",
   arrived: "bg-amber-100 text-amber-700",
   awaiting_entry: "bg-orange-100 text-orange-700",
@@ -251,17 +251,17 @@ export default function RepairListPage() {
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-indigo-400 rounded-full"
+                            className="h-full bg-weeeu-primary rounded-full"
                             style={{ width: `${job.progress_percent}%` }}
                           />
                         </div>
-                        <span className="text-xs text-indigo-500 font-medium">{job.progress_percent}%</span>
+                        <span className="text-xs text-weeeu-primary font-medium">{job.progress_percent}%</span>
                       </div>
                     </div>
                   )}
                   {/* Sub-5: link to progress timeline */}
                   {["in_progress", "inspecting", "assigned", "traveling", "arrived"].includes(job.status) && (
-                    <p className="text-xs text-indigo-600 font-medium mt-1.5">📍 ดูความคืบหน้า →</p>
+                    <p className="text-xs text-weeeu-primary font-medium mt-1.5">📍 ดูความคืบหน้า →</p>
                   )}
                 </div>
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${STATUS_COLOR[job.status]}`}>
