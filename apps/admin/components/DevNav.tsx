@@ -24,7 +24,9 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ ดูรายละเอียด",          href: "/maintain/jobs/m001",               type: "next-step",  forPath: "/maintain/jobs" },
   { label: "→ ดูรายละเอียด",          href: "/scrap/jobs/s001",                  type: "next-step",  forPath: "/scrap/jobs" },
   { label: "→ ดูรายละเอียด",          href: "/resell/listings/r001",             type: "next-step",  forPath: "/resell/listings" },
-  { label: "→ ดูรายละเอียด order",    href: "/parts/orders/p001",                type: "next-step",  forPath: "/parts" },
+  { label: "→ ดู Parts orders",        href: "/parts/orders",                     type: "next-step",  forPath: "/parts" },
+  { label: "→ ดูรายละเอียด order",    href: "/parts/orders/p001",                type: "next-step",  forPath: "/parts/orders" },
+  { label: "→ ดู Parts Disputes",     href: "/disputes",                         type: "next-step",  forPath: "/parts/orders/p001" },
   { label: "→ ดูรายละเอียด WeeeR",    href: "/kyc/shop-001",                     type: "next-step",  forPath: "/kyc" },
 ];
 

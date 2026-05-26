@@ -16,11 +16,17 @@ const devNavLinks: DevNavLink[] = [
   { label: "🔗 WeeeU ดูสถานะ", href: "http://localhost:3002/maintain/jobs/m001", type: "cross-app", forPath: "/maintain/jobs/m001" },
   { label: "→ มอบหมายช่าง", href: "/maintain/jobs/m001/assign/weeet", type: "next-step", forPath: "/maintain/jobs/m001/assign" },
 
-  // ── Resell (WeeeR — ผู้ซื้อ) ──────────────────────────────────────────────────
-  { label: "→ ดูรายละเอียด", href: "/resell/listings/r001", type: "next-step", forPath: "/resell/listings" },
-  { label: "→ [ยื่นข้อเสนอ]", href: "/resell/listings/r001/offer", type: "branch", forPath: "/resell/listings/r001" },
-  { label: "→ [ใช้ SmartPicker]", href: "/resell/listings/r001/smart-pick", type: "branch", forPath: "/resell/listings/r001" },
-  { label: "🔗 WeeeU ดูข้อเสนอ", href: "http://localhost:3002/listings/r001/offers", type: "cross-app", forPath: "/resell/listings/r001/offer" },
+  // ── Resell — WeeeR ผู้ขาย (Seller) ──────────────────────────────────────────
+  { label: "→ ดูรายละเอียด listing ของฉัน", href: "/resell/listings/r001", type: "next-step", forPath: "/resell/listings" },
+  { label: "🔗 WeeeU ดูรายการ (ผู้ซื้อ)", href: "http://localhost:3002/listings/r001", type: "cross-app", forPath: "/resell/listings/r001" },
+
+  // ── Resell — WeeeR ผู้ซื้อ Flow A: B6 รับซื้อจากลูกค้า ──────────────────────
+  { label: "→ [B6] เริ่ม wizard รับซื้อ", href: "/resell/buy/wizard", type: "next-step", forPath: "/resell/buy" },
+
+  // ── Resell — WeeeR ผู้ซื้อ Flow B: Marketplace ───────────────────────────────
+  { label: "→ ดูรายละเอียด listing", href: "/resell/marketplace/r001", type: "next-step", forPath: "/resell/marketplace" },
+  { label: "→ [ยื่นข้อเสนอ]", href: "/resell/marketplace/r001/offer", type: "branch", forPath: "/resell/marketplace/r001" },
+  { label: "🔗 WeeeU ดูข้อเสนอ", href: "http://localhost:3002/listings/r001/offers", type: "cross-app", forPath: "/resell/marketplace/r001/offer" },
   { label: "→ ดูรายละเอียด order", href: "/resell/purchases/r001", type: "next-step", forPath: "/resell/purchases" },
   { label: "→ [รับของแล้ว - R10]", href: "/resell/purchases", type: "branch", forPath: "/resell/purchases/r001" },
   { label: "→ [แจ้งปัญหา - R11]", href: "/resell/purchases/r001/dispute", type: "branch", forPath: "/resell/purchases/r001" },
