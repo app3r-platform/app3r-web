@@ -12,11 +12,21 @@ import { useState } from "react";
 interface DevNavLink {
   label: string;
   href: string;
+  type?: "next-step" | "cross-app";
+  forPath?: string;
   group?: string;
 }
 
-// Link map — Advisor จะส่งมาในรอบถัดไป
-const devNavLinks: DevNavLink[] = [];
+// Link map — Phase 3 Sign-off Prep (HUB Gen 33 CMD)
+const devNavLinks: DevNavLink[] = [
+  { label: "→ ดูรายละเอียด job",      href: "/repair/jobs/job-001",              type: "next-step",  forPath: "/repair/jobs" },
+  { label: "🔗 WeeeR ดูงาน",           href: "http://localhost:3001/repair/jobs",  type: "cross-app",  forPath: "/repair/jobs/job-001" },
+  { label: "→ ดูรายละเอียด",          href: "/maintain/jobs/m001",               type: "next-step",  forPath: "/maintain/jobs" },
+  { label: "→ ดูรายละเอียด",          href: "/scrap/jobs/s001",                  type: "next-step",  forPath: "/scrap/jobs" },
+  { label: "→ ดูรายละเอียด",          href: "/resell/listings/r001",             type: "next-step",  forPath: "/resell/listings" },
+  { label: "→ ดูรายละเอียด order",    href: "/parts/orders/p001",                type: "next-step",  forPath: "/parts" },
+  { label: "→ ดูรายละเอียด WeeeR",    href: "/kyc/shop-001",                     type: "next-step",  forPath: "/kyc" },
+];
 
 const DEV_NAV_ENABLED = process.env.NEXT_PUBLIC_DEV_NAV === "true";
 

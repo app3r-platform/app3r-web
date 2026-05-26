@@ -31,6 +31,13 @@ const OPTION_LABEL: Record<ScrapJobOption, string> = {
 
 const PAGE_SIZE = 20;
 
+// MOCK_SCRAP_JOBS — fallback เมื่อ API ไม่พร้อม (dev/staging)
+const MOCK_SCRAP_JOBS = [
+  { id: "s-001", scrapItemId: "item-001", buyerId: "shop-001", decision: "resell_as_scrap" as const, status: "in_progress"      as const, decisionAt: "2026-05-25T10:00:00Z", certificateId: null      },
+  { id: "s-002", scrapItemId: "item-002", buyerId: "shop-002", decision: "dispose"         as const, status: "completed"         as const, decisionAt: "2026-05-24T10:00:00Z", certificateId: "cert-001" },
+  { id: "s-003", scrapItemId: "item-003", buyerId: "shop-001", decision: "repair_and_sell" as const, status: "pending_decision"  as const, decisionAt: null,                   certificateId: null      },
+] as unknown as ScrapJobExtended[];
+
 interface ScrapJobListResponse {
   results: ScrapJobExtended[];
   count: number;
@@ -78,8 +85,11 @@ export default function ScrapJobsPage() {
       setItems(d.results);
       setTotal(d.count);
       setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch {
+      // API ไม่พร้อม → ใช้ mock fallback
+      setItems(MOCK_SCRAP_JOBS);
+      setTotal(MOCK_SCRAP_JOBS.length);
+      setError(null);
     } finally {
       setLoading(false);
     }

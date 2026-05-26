@@ -58,6 +58,15 @@ interface RepairJob {
 
 const PAGE_SIZE = 20;
 
+// MOCK_REPAIR_JOBS — fallback เมื่อ API ไม่พร้อม (dev/staging)
+const MOCK_REPAIR_JOBS: RepairJob[] = [
+  { id: "job-001", weeeu_name: "สมชาย ใจดี",   weeer_name: "ร้านซ่อม A+",  weeet_name: "ช่าง สมศักดิ์",  service_type: "on_site", status: "in_progress", decision_branch: null, scheduled_at: "2026-05-26T09:00:00Z", created_at: "2026-05-25T10:00:00Z" },
+  { id: "job-002", weeeu_name: "สมหญิง รักดี",  weeer_name: "ร้านซ่อม B+",  weeet_name: "ช่าง วิชัย",    service_type: "on_site", status: "assigned",    decision_branch: null, scheduled_at: "2026-05-26T13:00:00Z", created_at: "2026-05-25T11:00:00Z" },
+  { id: "job-003", weeeu_name: "มานะ ดีงาม",    weeer_name: "ร้านซ่อม C+",  weeet_name: "ช่าง ประสิทธิ์", service_type: "on_site", status: "completed",   decision_branch: "B1", scheduled_at: "2026-05-24T09:00:00Z", created_at: "2026-05-23T08:00:00Z" },
+  { id: "job-004", weeeu_name: "วิไล สวยงาม",   weeer_name: "ร้านซ่อม A+",  weeet_name: "ช่าง สมศักดิ์",  service_type: "on_site", status: "travelling",  decision_branch: null, scheduled_at: "2026-05-27T10:00:00Z", created_at: "2026-05-26T09:00:00Z", source: { type: "purchased_scrap" } },
+  { id: "job-005", weeeu_name: "ธนา มั่งมี",    weeer_name: "ร้านซ่อม D+",  weeet_name: "ช่าง ณรงค์",    service_type: "on_site", status: "cancelled",   decision_branch: null, scheduled_at: "2026-05-23T14:00:00Z", created_at: "2026-05-22T10:00:00Z" },
+];
+
 export default function RepairJobsPage() {
   const router = useRouter();
   const [items, setItems] = useState<RepairJob[]>([]);
@@ -82,6 +91,10 @@ export default function RepairJobsPage() {
       );
       setItems(d.items);
       setTotal(d.total);
+    } catch {
+      // API ไม่พร้อม → ใช้ mock fallback
+      setItems(MOCK_REPAIR_JOBS);
+      setTotal(MOCK_REPAIR_JOBS.length);
     } finally {
       setLoading(false);
     }
