@@ -17,17 +17,38 @@ interface DevNavLink {
   group?: string;
 }
 
-// Link map — Phase 3 Sign-off Prep (HUB Gen 33 CMD)
+// Link map v2 — Advisor Gen 94 Gap Fill ครบ 6 โมดูล
 const devNavLinks: DevNavLink[] = [
-  { label: "→ ดูรายละเอียด job",      href: "/repair/jobs/job-001",              type: "next-step",  forPath: "/repair/jobs" },
-  { label: "🔗 WeeeR ดูงาน",           href: "http://localhost:3001/repair/jobs",  type: "cross-app",  forPath: "/repair/jobs/job-001" },
-  { label: "→ ดูรายละเอียด",          href: "/maintain/jobs/m001",               type: "next-step",  forPath: "/maintain/jobs" },
-  { label: "→ ดูรายละเอียด",          href: "/scrap/jobs/s001",                  type: "next-step",  forPath: "/scrap/jobs" },
-  { label: "→ ดูรายละเอียด",          href: "/resell/listings/r001",             type: "next-step",  forPath: "/resell/listings" },
-  { label: "→ ดู Parts orders",        href: "/parts/orders",                     type: "next-step",  forPath: "/parts" },
-  { label: "→ ดูรายละเอียด order",    href: "/parts/orders/p001",                type: "next-step",  forPath: "/parts/orders" },
-  { label: "→ ดู Parts Disputes",     href: "/disputes",                         type: "next-step",  forPath: "/parts/orders/p001" },
-  { label: "→ ดูรายละเอียด WeeeR",    href: "/kyc/shop-001",                     type: "next-step",  forPath: "/kyc" },
+  // ── Repair (Admin) ───────────────────────────────────────────────────────────
+  { label: "→ ดูงานทุกใบ",                      href: "/repair/jobs/c001",                         type: "next-step", forPath: "/repair/jobs" },
+  { label: "→ [intervene dispute-C9]",           href: "/repair/disputes/c001",                     type: "branch",    forPath: "/repair/jobs/c001" },
+  { label: "🔗 ดูฝั่ง WeeeR",                   href: "http://localhost:3001/repair/jobs/c001",     type: "cross-app", forPath: "/repair/jobs/c001" },
+
+  // ── Maintain (Admin) ─────────────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด",                    href: "/maintain/jobs/m001",                       type: "next-step", forPath: "/maintain/jobs" },
+
+  // ── Scrap (Admin) ────────────────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด",                    href: "/scrap/jobs/s001",                          type: "next-step", forPath: "/scrap/jobs" },
+  { label: "→ [dispute-S11]",                   href: "/scrap/disputes/s001",                      type: "branch",    forPath: "/scrap/jobs/s001" },
+  { label: "→ [A] คืน escrow ผู้รับซาก",        href: "/scrap/disputes",                           type: "branch",    forPath: "/scrap/disputes/s001" },
+  { label: "→ [B] โอน escrow เจ้าของซาก",       href: "/scrap/disputes",                           type: "branch",    forPath: "/scrap/disputes/s001" },
+  { label: "→ ออก E-Waste Cert (S4)",           href: "/scrap/certificates",                       type: "next-step", forPath: "/scrap/certificates/s001" },
+
+  // ── Resell (Admin) ───────────────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด listing",            href: "/resell/listings/r001",                     type: "next-step", forPath: "/resell/listings" },
+  { label: "→ ดูรายละเอียด dispute Resell",     href: "/resell/disputes/r001",                     type: "next-step", forPath: "/resell/disputes" },
+  { label: "→ [A] ตัดสินให้ผู้ซื้อ",            href: "/resell/disputes",                          type: "branch",    forPath: "/resell/disputes/r001" },
+  { label: "→ [B] ตัดสินให้ผู้ขาย",             href: "/resell/disputes",                          type: "branch",    forPath: "/resell/disputes/r001" },
+  { label: "→ [C] แบ่งกลาง",                   href: "/resell/disputes",                          type: "branch",    forPath: "/resell/disputes/r001" },
+
+  // ── Parts (Admin) ────────────────────────────────────────────────────────────
+  { label: "→ ดู Parts orders",                 href: "/parts/orders",                             type: "next-step", forPath: "/parts" },
+  { label: "→ ดูรายละเอียด order",              href: "/parts/orders/p001",                        type: "next-step", forPath: "/parts/orders" },
+  { label: "🔗 ดูฝั่ง WeeeR ผู้ขาย",            href: "http://localhost:3001/parts/orders/p001",   type: "cross-app", forPath: "/parts/orders/p001" },
+  { label: "→ ดูรายละเอียด dispute Parts",      href: "/disputes/p001",                            type: "next-step", forPath: "/disputes" },
+
+  // ── KYC (Admin) ──────────────────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด WeeeR",              href: "/kyc/shop-001",                             type: "next-step", forPath: "/kyc" },
 ];
 
 const DEV_NAV_ENABLED = process.env.NEXT_PUBLIC_DEV_NAV === "true";
