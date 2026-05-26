@@ -33,13 +33,13 @@
 | M2 | หมดอายุ (booking expired) | WeeeU | U: maintain/jobs/[id] → **[หมดอายุ-M2]** → mockup/m2-expired | ✅ | D4: เพิ่ม DevNav branch link แล้ว |
 | M3 | เลื่อนนัด | WeeeU, WeeeT | U: jobs/[id] → jobs/reschedule · T: ไม่มี explicit M3 link | ✅ | WeeeU covered |
 | M4 | พบปัญหาเพิ่ม / extra cost | WeeeT, WeeeU, WeeeR | T: jobs/inspect → jobs/issue · U: jobs/extra-cost (A/B) · R: cross-link | ✅ | ครบ 3 app |
-| M5 | **cross-module: เจอของต้องซ่อม → ปรับเป็น Repair** | WeeeT, WeeeR | ไม่มี DevNav path และไม่มี page แยกสำหรับ M5 cross-module | ❌ | ⚠️ Advisor Gen 95 D5: ชื่อเดิมผิด · ไม่มี page/path → รายงาน |
+| M5 | **cross-module: เจอของต้องซ่อม → ปรับเป็น Repair** | WeeeT→WeeeU | T: /jobs/m001/inspect → 🔗 **[M5] WeeeU /repair/new?from=maintain-m001** | ✅ | Advisor Gen 95 D5+M5: cross-link เพิ่มแล้ว · /repair/new WeeeU มีอยู่แล้ว (full mock) |
 | M6 | WeeeR ถอนงาน | WeeeR | R: maintain/jobs/[id] → branch M6 ถอน | ✅ | |
 | M7 | WeeeT ปฏิเสธรับ (No-show ลูกค้าไม่อยู่) | WeeeT | T: jobs/[id] → branch ไม่รับ → /jobs | ✅ | |
 | M8 | Admin Dispute (Maintain) 4 ชั้น | Admin | A: maintain/jobs/m001 → **[dispute-M8]** → /disputes กลาง | ✅ | D2: เพิ่ม Admin DevNav cross-link แล้ว |
 | M9 | ยุติงานกลางคัน (in-progress) | WeeeU, WeeeR | U: jobs/[id] → cancel · U: jobs/[id] → **withdraw** · R: jobs/[id]/cancel | ✅ | D5: เพิ่ม link → withdraw แล้ว · หน้า withdraw = M9 (ไม่ใช่ M5) |
 
-**Maintain: ✅ 8/9 · ❌ 1 (M5 cross-module ไม่มี path)**
+**Maintain: ✅ 9/9 🎉 · ❌ 0**
 
 ---
 
@@ -111,25 +111,25 @@
 | Module | Total | ✅ | ⚠️ | ❌ | (auto) |
 |--------|-------|----|----|----|----|
 | Repair C1-C10 | 10 | **10** 🎉 | 0 | 0 | 1 (C8) |
-| Maintain M1-M9 | 9 | 8 | 0 | **1** | 0 |
+| Maintain M1-M9 | 9 | **9** 🎉 | 0 | 0 | 0 |
 | Resell R1-R12 | 12 | 10 | 2 | 0 | 3 (R6,R7,R10) |
 | Scrap S1-S12 | 12 | **12** 🎉 | 0 | 0 | 0 |
 | Parts P1-P12 | 12 | 8 | 4 | 0 | 1 (P8) |
-| **TOTAL** | **55** | **48** | **6** | **1** | **5** |
+| **TOTAL** | **55** | **49** | **6** | **0** 🎉 | **5** |
 
 ---
 
-### ❌ REMAINING GAP — 1 case (รายงาน Advisor)
-- **M5** — cross-module: เจอของต้องซ่อม → ปรับเป็น Repair · ไม่มีทั้ง page และ DevNav path ใน WeeeT/WeeeR · รอ Advisor ตัดสิน: auto หรือสร้าง cross-app link?
+### ✅ ไม่มี ❌ gaps เหลือ 🎉
 
 ### ⚠️ ต้องการ Spec ชัดเจน — 6 cases (ไม่กระทบ Phase 3 Review)
 - R4, R11 (Resell) — label/forPath ใน DevNav ต้องตรวจ
 - P9, P10, P11, P12 (Parts) — รอ Advisor ระบุ spec
 
-### ✅ RESOLVED (Advisor Gen 95 D1-D5)
+### ✅ RESOLVED (Advisor Gen 95 D1-D5 + M5)
 - **C8** → ✅(auto) — ประกาศหมดอายุ ไม่ใช่ No-show
 - **M2** → ✅ — เพิ่ม DevNav link → mockup/m2-expired (WeeeU)
 - **M8** → ✅ — เพิ่ม Admin DevNav cross-link → /disputes
+- **M5** → ✅ — cross-link WeeeT inspect → WeeeU /repair/new?from=maintain-m001 · /repair/new มีอยู่แล้ว
 - **M9** → ✅ — เพิ่ม link → /withdraw (WeeeU) · หน้า withdraw = M9
 - **R6** → ✅(auto) — seller no-ship ไม่มี screen แยก
 

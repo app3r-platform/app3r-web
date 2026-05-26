@@ -41,6 +41,7 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [ไม่รับงาน-M7]",               href: "/jobs",                                     type: "branch",    forPath: "/jobs/m001" },
   { label: "→ [บำรุงรักษาเสร็จ]",             href: "/jobs/m001/complete",                       type: "branch",    forPath: "/jobs/m001/inspect" },
   { label: "→ [พบปัญหาเพิ่ม-M4]",             href: "/jobs/m001/issue",                          type: "branch",    forPath: "/jobs/m001/inspect" },
+  { label: "🔗 [M5] WeeeU แจ้งซ่อมใหม่",     href: "http://localhost:3002/repair/new?from=maintain-m001", type: "cross-app", forPath: "/jobs/m001/inspect" },
   { label: "🔗 WeeeU อนุมัติค่าใช้จ่าย-M4",  href: "http://localhost:3002/maintain/jobs/m001/extra-cost", type: "cross-app", forPath: "/jobs/m001/issue" },
   { label: "🔗 WeeeU ดูผล",                   href: "http://localhost:3002/maintain/jobs/m001/review",     type: "cross-app", forPath: "/jobs/m001/complete" },
 
