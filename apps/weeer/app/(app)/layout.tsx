@@ -1,6 +1,55 @@
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../../components/Footer";
+import DevNav, { type DevNavLink } from "../../components/DevNav";
+
+// ── Dev Navigator link map ────────────────────────────────────────────────────
+// Phase 3 Sign-off: ครอบคลุม Repair / Maintain / Resell / Scrap / Parts
+const devNavLinks: DevNavLink[] = [
+  // ── Repair ──────────────────────────────────────────────────────────────────
+  { label: "→ เปิดหน้ายื่นข้อเสนอ (Repair)", href: "/repair/announcements/r001/offer", type: "next-step", forPath: "/repair/announcements" },
+
+  // ── Maintain ─────────────────────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด", href: "/maintain/jobs/m001", type: "next-step", forPath: "/maintain/jobs" },
+  { label: "→ [ยืนยันรับงาน]", href: "/maintain/jobs/m001/assign", type: "branch", forPath: "/maintain/jobs/m001" },
+  { label: "→ [ปฏิเสธ]", href: "/maintain/jobs", type: "branch", forPath: "/maintain/jobs/m001" },
+  { label: "🔗 WeeeU ดูสถานะ", href: "http://localhost:3002/maintain/jobs/m001", type: "cross-app", forPath: "/maintain/jobs/m001" },
+  { label: "→ มอบหมายช่าง", href: "/maintain/jobs/m001/assign/weeet", type: "next-step", forPath: "/maintain/jobs/m001/assign" },
+
+  // ── Resell (WeeeR — ผู้ซื้อ) ──────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด", href: "/resell/listings/r001", type: "next-step", forPath: "/resell/listings" },
+  { label: "→ [ยื่นข้อเสนอ]", href: "/resell/listings/r001/offer", type: "branch", forPath: "/resell/listings/r001" },
+  { label: "→ [ใช้ SmartPicker]", href: "/resell/listings/r001/smart-pick", type: "branch", forPath: "/resell/listings/r001" },
+  { label: "🔗 WeeeU ดูข้อเสนอ", href: "http://localhost:3002/listings/r001/offers", type: "cross-app", forPath: "/resell/listings/r001/offer" },
+  { label: "→ ดูรายละเอียด order", href: "/resell/purchases/r001", type: "next-step", forPath: "/resell/purchases" },
+  { label: "→ [รับของแล้ว - R10]", href: "/resell/purchases", type: "branch", forPath: "/resell/purchases/r001" },
+  { label: "→ [แจ้งปัญหา - R11]", href: "/resell/purchases/r001/dispute", type: "branch", forPath: "/resell/purchases/r001" },
+
+  // ── Scrap (WeeeR — ผู้รับซาก) ────────────────────────────────────────────────
+  { label: "→ ดูรายละเอียด", href: "/scrap/announcements/s001", type: "next-step", forPath: "/scrap/announcements" },
+  { label: "→ [ยื่นข้อเสนอรับซื้อ]", href: "/scrap/announcements/s001/offer", type: "branch", forPath: "/scrap/announcements/s001" },
+  { label: "→ [รับทิ้งฟรี]", href: "/scrap/announcements/s001/offer", type: "branch", forPath: "/scrap/announcements/s001" },
+  { label: "🔗 WeeeU ดูข้อเสนอ", href: "http://localhost:3002/scrap/s001/offers", type: "cross-app", forPath: "/scrap/announcements/s001/offer" },
+  { label: "→ [มอบหมาย WeeeT]", href: "/scrap/jobs/s001/assign", type: "branch", forPath: "/scrap/jobs/s001" },
+  { label: "🔗 WeeeT รับงาน", href: "http://localhost:3003/jobs/s001", type: "cross-app", forPath: "/scrap/jobs/s001/assign" },
+
+  // ── Parts — ผู้ขาย (ShopIdSwitcher: WeeeR seller) ────────────────────────────
+  { label: "[ผู้ขาย] → สร้าง listing ใหม่", href: "/parts/my-listings/new", type: "next-step", forPath: "/parts/my-listings" },
+  { label: "[ผู้ขาย] → ดู orders ที่เข้ามา", href: "/parts/orders", type: "next-step", forPath: "/parts/my-listings/p001" },
+  { label: "[ผู้ขาย] → ดูรายละเอียด order", href: "/parts/orders/p001", type: "next-step", forPath: "/parts/orders" },
+  { label: "[ผู้ขาย] → [ยืนยัน order]", href: "/parts/orders", type: "branch", forPath: "/parts/orders/p001" },
+  { label: "[ผู้ขาย] → [ยกเลิก]", href: "/parts/orders", type: "branch", forPath: "/parts/orders/p001" },
+  { label: "🔗 [ผู้ขาย] WeeeR ผู้ซื้อ ดู order", href: "http://localhost:3001/parts/my-orders/p001", type: "cross-app", forPath: "/parts/orders/p001" },
+
+  // ── Parts — ผู้ซื้อ (ShopIdSwitcher: WeeeR buyer) ────────────────────────────
+  { label: "[ผู้ซื้อ] → ดูรายละเอียดชิ้นส่วน", href: "/parts/marketplace/p001", type: "next-step", forPath: "/parts/marketplace" },
+  { label: "[ผู้ซื้อ] → [สั่งซื้อ]", href: "/parts/my-orders/new", type: "branch", forPath: "/parts/marketplace/p001" },
+  { label: "[ผู้ซื้อ] → [ใช้ SmartPicker]", href: "/parts/marketplace/p001/smart-pick", type: "branch", forPath: "/parts/marketplace/p001" },
+  { label: "[ผู้ซื้อ] → ดูรายละเอียด order", href: "/parts/my-orders/p001", type: "next-step", forPath: "/parts/my-orders" },
+  { label: "[ผู้ซื้อ] → [รับของแล้ว]", href: "/parts/my-orders", type: "branch", forPath: "/parts/my-orders/p001" },
+  { label: "[ผู้ซื้อ] → [ยกเลิก]", href: "/parts/my-orders", type: "branch", forPath: "/parts/my-orders/p001" },
+  { label: "🔗 [ผู้ซื้อ] WeeeR ผู้ขาย ดู order", href: "http://localhost:3001/parts/orders/p001", type: "cross-app", forPath: "/parts/my-orders/p001" },
+];
 
 const navItems = [
   { href: "/dashboard",      icon: "🏠", label: "Dashboard" },
@@ -118,6 +167,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Footer — Sub-4 D78 contact info */}
         <Footer />
       </div>
+
+      {/* Dev Navigator — dev only */}
+      {process.env.NEXT_PUBLIC_DEV_NAV === "true" && (
+        <DevNav links={devNavLinks} />
+      )}
     </div>
   );
 }
