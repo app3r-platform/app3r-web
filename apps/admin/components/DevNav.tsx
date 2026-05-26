@@ -12,7 +12,7 @@ import { useState } from "react";
 interface DevNavLink {
   label: string;
   href: string;
-  type?: "next-step" | "cross-app";
+  type?: "next-step" | "cross-app" | "branch";
   forPath?: string;
   group?: string;
 }
