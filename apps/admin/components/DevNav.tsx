@@ -26,6 +26,7 @@ const devNavLinks: DevNavLink[] = [
 
   // ── Maintain (Admin) ─────────────────────────────────────────────────────────
   { label: "→ ดูรายละเอียด",                    href: "/maintain/jobs/m001",                       type: "next-step", forPath: "/maintain/jobs" },
+  { label: "→ [dispute-M8] Admin ตัดสิน",       href: "/disputes",                                 type: "branch",    forPath: "/maintain/jobs/m001" },
 
   // ── Scrap (Admin) ────────────────────────────────────────────────────────────
   { label: "→ ดูรายละเอียด",                    href: "/scrap/jobs/s001",                          type: "next-step", forPath: "/scrap/jobs" },
