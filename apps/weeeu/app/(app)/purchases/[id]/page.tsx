@@ -8,8 +8,8 @@ const MOCK_ORDER = {
   status: "📦 รอจัดส่ง",
 };
 
-export default function PurchaseDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function PurchaseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   return (
     <div className="bg-gray-50 min-h-screen">

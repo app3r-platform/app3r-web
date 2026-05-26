@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const REASONS = [
@@ -10,8 +10,8 @@ const REASONS = [
   "ไม่ได้รับสินค้า",
 ];
 
-export default function PurchaseDisputePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function PurchaseDisputePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [selectedReason, setSelectedReason] = useState("");
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);

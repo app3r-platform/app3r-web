@@ -10,8 +10,8 @@ const MOCK_OFFERS = [
   { id: "so-003", shop: "ร้านอิเล็กทรอ", type: "buy", price: 650, note: "", date: "24 พ.ค. 2569", transport: "ส่งพัสดุ" },
 ];
 
-export default function ScrapOffersPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function ScrapOffersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   return (
     <div className="bg-gray-50 min-h-screen">

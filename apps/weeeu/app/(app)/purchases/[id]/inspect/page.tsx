@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const MOCK_ITEM = {
@@ -15,8 +15,8 @@ const CHECKLIST = [
   "ไม่มีรอยแตกหัก",
 ];
 
-export default function PurchaseInspectPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function PurchaseInspectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [checked, setChecked] = useState<boolean[]>(CHECKLIST.map(() => false));
 
   const toggleCheck = (i: number) => {

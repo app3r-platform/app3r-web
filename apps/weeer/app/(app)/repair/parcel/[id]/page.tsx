@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const STEPS = [
@@ -10,8 +10,8 @@ const STEPS = [
   { label: "ซ่อม", done: false },
 ];
 
-export default function RepairParcelDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function RepairParcelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [photoTaken, setPhotoTaken] = useState(false);
 
   return (

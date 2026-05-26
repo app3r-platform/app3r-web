@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const MOCK_OFFERS = [
@@ -9,8 +9,8 @@ const MOCK_OFFERS = [
   { id: "off-003", buyer: "ร้านดีเจริญ", price: 4000, note: "", date: "24 พ.ค. 2569", status: "pending" },
 ];
 
-export default function ListingOffersPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function ListingOffersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [accepted, setAccepted] = useState<string | null>(null);
   const [rejected, setRejected] = useState<string[]>([]);
 

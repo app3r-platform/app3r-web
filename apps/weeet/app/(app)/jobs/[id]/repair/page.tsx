@@ -1,10 +1,10 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
-export default function RepairCompletePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function RepairCompletePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [repairNote, setRepairNote] = useState("");
   const [parts, setParts] = useState("");
   const [finalPrice, setFinalPrice] = useState("1800");

@@ -1,7 +1,7 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
-export default function PartsOrderDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function PartsOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const hasDispute = false;
 
   return (

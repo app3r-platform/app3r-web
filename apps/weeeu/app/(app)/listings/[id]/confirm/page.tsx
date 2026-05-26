@@ -5,8 +5,8 @@ const MOCK_OFFER = {
   price: 4200,
 };
 
-export default function ListingConfirmPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function ListingConfirmPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   return (
     <div className="bg-gray-50 min-h-screen">

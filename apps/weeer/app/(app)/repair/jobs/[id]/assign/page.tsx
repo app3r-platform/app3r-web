@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const STAFF = [
@@ -9,8 +9,8 @@ const STAFF = [
   { id: "tech-003", name: "สมศรี", role: "ช่างใหม่", status: "ว่างครึ่งวัน", rating: 4.5 },
 ];
 
-export default function RepairJobAssignPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function RepairJobAssignPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [selectedStaff, setSelectedStaff] = useState("");
   const [assigned, setAssigned] = useState(false);
 

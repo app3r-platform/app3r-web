@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const STAFF_OPTIONS = [
@@ -16,8 +16,8 @@ const STEPS = [
   { label: "กำลังซ่อม", active: true },
 ];
 
-export default function RepairWalkInDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function RepairWalkInDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [selectedStaff, setSelectedStaff] = useState("tech-001");
   const assignedTech = STAFF_OPTIONS.find((s) => s.value === "tech-001");
 

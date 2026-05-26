@@ -1,11 +1,11 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function ScrapPickupPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function ScrapPickupPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [conditionMatch, setConditionMatch] = useState<boolean | null>(null);
   const [gpsRecorded, setGpsRecorded] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
 const CHECKLIST = [
@@ -10,8 +10,8 @@ const CHECKLIST = [
   "ไม่มีความเสียหายที่ไม่ได้แจ้ง",
 ];
 
-export default function ResellPurchaseInspectPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function ResellPurchaseInspectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [checked, setChecked] = useState<boolean[]>(CHECKLIST.map(() => false));
 
   function toggle(i: number) {

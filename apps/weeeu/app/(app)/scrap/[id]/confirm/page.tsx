@@ -6,8 +6,8 @@ const MOCK_OFFER = {
   transport: "รับไปเอง",
 };
 
-export default function ScrapConfirmPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function ScrapConfirmPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   return (
     <div className="bg-gray-50 min-h-screen">

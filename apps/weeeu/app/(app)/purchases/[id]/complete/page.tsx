@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-export default function PurchaseCompletePage({ params }: { params: { id: string } }) {
+export default async function PurchaseCompletePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
@@ -12,7 +13,7 @@ export default function PurchaseCompletePage({ params }: { params: { id: string 
           <div className="space-y-2">
             <h1 className="text-xl font-bold text-weeeu-dark">ยืนยันรับสินค้าแล้ว</h1>
             <p className="text-sm text-gray-500">ระบบปล่อยเงินให้ร้านแล้ว</p>
-            <p className="text-xs text-gray-400">การซื้อ #{params.id} เสร็จสมบูรณ์</p>
+            <p className="text-xs text-gray-400">การซื้อ #{id} เสร็จสมบูรณ์</p>
           </div>
         </div>
 

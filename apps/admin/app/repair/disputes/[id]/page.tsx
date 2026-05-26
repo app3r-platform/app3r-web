@@ -1,10 +1,10 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 
-export default function RepairDisputeDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function RepairDisputeDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [action, setAction] = useState<string | null>(null);
   const [note, setNote] = useState("");
 

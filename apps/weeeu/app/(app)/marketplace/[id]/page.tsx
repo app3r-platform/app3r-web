@@ -13,7 +13,8 @@ const MOCK_ITEM = {
   image: "https://picsum.photos/seed/r001/600/400",
 };
 
-export default function MarketplaceDetailPage({ params }: { params: { id: string } }) {
+export default async function MarketplaceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const item = MOCK_ITEM;
 
   return (
@@ -64,7 +65,7 @@ export default function MarketplaceDetailPage({ params }: { params: { id: string
 
         {/* Action buttons */}
         <div className="space-y-3 pt-2">
-          <Link href={`/marketplace/${params.id}/offer`}>
+          <Link href={`/marketplace/${id}/offer`}>
             <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
               ยื่นข้อเสนอซื้อ
             </button>

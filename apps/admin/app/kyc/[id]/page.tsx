@@ -1,7 +1,7 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
-export default function KycReviewPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function KycReviewPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   const documents = [
     { name: "สำเนาบัตรประชาชน", status: "ready" },

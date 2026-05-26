@@ -8,8 +8,8 @@ const STEPS = [
   { label: "เสร็จสิ้น", done: false },
 ];
 
-export default function ResellPurchaseDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function ResellPurchaseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   return (
     <div className="space-y-5 max-w-xl">
