@@ -67,6 +67,7 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [ยื่นข้อเสนอซื้อ-Pair3]",        href: "/marketplace/r001/offer",                   type: "branch",    forPath: "/marketplace/r001" },
   { label: "🔗 WeeeU ผู้ขาย ดูข้อเสนอ",        href: "http://localhost:3002/listings/r001/offers", type: "cross-app", forPath: "/marketplace/r001/offer" },
   { label: "→ [รับของ + ตรวจ-R1]",             href: "/purchases/r001/inspect",                   type: "branch",    forPath: "/purchases/r001" },
+  { label: "→ [dispute-R11]",                  href: "/purchases/r001/dispute",                   type: "branch",    forPath: "/purchases/r001" },
   { label: "→ [A] ตรงปก ยืนยันรับ",            href: "/purchases/r001/complete",                  type: "branch",    forPath: "/purchases/r001/inspect" },
   { label: "→ [B] ไม่ตรงปก dispute-R8",         href: "/purchases/r001/dispute",                   type: "branch",    forPath: "/purchases/r001/inspect" },
 

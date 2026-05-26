@@ -137,7 +137,10 @@ export default function PartsOrderDetailPage({
   const [acting, setActing] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [done, setDone] = useState<"received" | "cancelled" | null>(null);
+  const [done, setDone] = useState<"received" | "cancelled" | "rejected" | null>(null);
+  // P9 — seller reject
+  const [rejectReason, setRejectReason] = useState("");
+  const [showRejectModal, setShowRejectModal] = useState(false);
 
   if (!order) {
     return (
@@ -159,6 +162,8 @@ export default function PartsOrderDetailPage({
   // Actions (buyer perspective)
   const canReceive = order.status === "fulfilled";
   const canCancel  = order.status === "held" || order.status === "pending";
+  // P9 — seller perspective: ปฏิเสธออเดอร์ (status = held = รอ seller confirm)
+  const canReject  = order.status === "held";
 
   function handleReceive() {
     if (!canReceive || acting) return;
@@ -182,6 +187,20 @@ export default function PartsOrderDetailPage({
         prev ? { ...prev, status: "cancelled", escrowHeldThb: 0 } : prev
       );
       setDone("cancelled");
+      setActing(false);
+    }, 600);
+  }
+
+  // P9 — seller reject handler
+  function handleReject() {
+    if (!rejectReason.trim()) return;
+    setActing(true);
+    setShowRejectModal(false);
+    setTimeout(() => {
+      setOrder((prev) =>
+        prev ? { ...prev, status: "cancelled", escrowHeldThb: 0 } : prev
+      );
+      setDone("rejected");
       setActing(false);
     }, 600);
   }
@@ -212,6 +231,17 @@ export default function PartsOrderDetailPage({
             <p className="text-sm font-semibold text-gray-700">ยกเลิกคำสั่งซื้อแล้ว</p>
             <p className="text-xs text-gray-500 mt-0.5">
               คะแนน {order.totalThb.toLocaleString()} pts คืนเข้ากระเป๋าคุณแล้ว
+            </p>
+          </div>
+        </div>
+      )}
+      {done === "rejected" && (
+        <div className="bg-orange-50 border border-orange-200 rounded-2xl px-4 py-3 flex items-start gap-3">
+          <span className="text-2xl shrink-0">🚫</span>
+          <div>
+            <p className="text-sm font-semibold text-orange-700">ปฏิเสธออเดอร์แล้ว (P9)</p>
+            <p className="text-xs text-orange-600 mt-0.5">
+              escrow {order.totalThb.toLocaleString()} pts คืนผู้ซื้อแล้ว
             </p>
           </div>
         </div>
@@ -365,10 +395,74 @@ export default function PartsOrderDetailPage({
         </div>
       )}
 
+      {/* ── P9: Seller action block ── */}
+      {!done && canReject && (
+        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="text-base">🏪</span>
+            <p className="text-sm font-semibold text-orange-800">มุมผู้ขาย — ออเดอร์ใหม่รอยืนยัน</p>
+          </div>
+          <p className="text-xs text-orange-600">
+            ออเดอร์นี้รอการยืนยันจากร้านของคุณ · ยืนยันผ่านหน้า orders หลัก หรือปฏิเสธได้ที่นี่
+          </p>
+          <button
+            onClick={() => setShowRejectModal(true)}
+            disabled={acting}
+            className="w-full bg-white border border-orange-300 hover:bg-orange-100 text-orange-700 font-medium py-2.5 rounded-xl transition-colors text-sm"
+          >
+            {acting ? "กำลังดำเนินการ…" : "🚫 ปฏิเสธออเดอร์นี้ (P9)"}
+          </button>
+        </div>
+      )}
+
       {/* Terminal state message */}
       {(order.status === "closed" || order.status === "cancelled" || order.status === "refunded" || order.status === "resolved") && !done && (
         <div className="text-center text-xs text-gray-400 py-2">
           คำสั่งซื้อนี้ดำเนินการเสร็จสิ้นแล้ว
+        </div>
+      )}
+
+      {/* ── P9 Reject modal (seller) ── */}
+      {showRejectModal && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40">
+          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-5 space-y-4">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl shrink-0">🚫</span>
+              <div>
+                <p className="text-sm font-bold text-gray-900">ปฏิเสธออเดอร์นี้?</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  escrow {order.totalThb.toLocaleString()} pts จะถูกคืนผู้ซื้อทันที
+                </p>
+              </div>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-600 block mb-1">
+                เหตุผลที่ปฏิเสธ <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="เช่น สินค้าหมดสต็อก / ราคาผิด / ไม่รับออเดอร์นี้…"
+                rows={3}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => { setShowRejectModal(false); setRejectReason(""); }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-xl text-sm transition-colors"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleReject}
+                disabled={!rejectReason.trim()}
+                className="flex-1 bg-orange-600 hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                ยืนยันปฏิเสธ
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

@@ -50,17 +50,17 @@
 | R1 | ผู้ซื้อรับของ ตรงปก | WeeeU, WeeeR | U: purchases/inspect → complete · R: purchases/inspect → confirm | ✅ | |
 | R2 | ลงประกาศขาย (Seller) | WeeeU | U: /sell/new → /listings/r001 | ✅ | |
 | R3 | ผู้ซื้อยื่นข้อเสนอ (Pair3) | WeeeR, WeeeU | R: marketplace/[id]/offer · U: marketplace/[id]/offer | ✅ | |
-| R4 | WeeeU ยกเลิกประกาศ | WeeeU | U DevNav: "→ [C] ยกเลิกประกาศ (R-04)" อยู่ใน repair section — ตรวจ label | ⚠️ | label/forPath อาจผิดที่ — รอ spec |
+| R4 | **escrow 24ชม. หมดอายุ → คืนอัตโนมัติ** | — | ไม่มี screen แยก — ระบบจัดการ escrow อัตโนมัติ | ✅(auto) | Advisor Gen 95 D6: auto · ไม่ใช่ "ยกเลิกประกาศ" |
 | R5 | Seller ถอนการเลือก | WeeeU | U: listings/confirm → branch B → listings/offers | ✅ | |
 | R6 | **Seller ไม่ส่ง/หายตัว → escrow คืน buyer** | — | ไม่มี screen แยก — platform จัดการผ่าน state + notification | ✅(auto) | Advisor Gen 95 D3: auto · ชื่อเดิมผิด (ไม่ใช่ coordination) |
 | R7 | ส่งมอบแล้ว (auto-complete) | WeeeU | U: listings/confirm → branch A → listings/complete | ✅(auto) | SoT: R7 auto — no separate screen |
 | R8 | Dispute ไม่ตรงปก | WeeeU, WeeeR, Admin | U: purchases/inspect → dispute · R: purchases/dispute · A: resell/disputes/[id] | ✅ | ครบ 3 |
 | R9 | Admin ตัดสิน dispute | Admin | A: resell/disputes/[id] → A/B/C ruling | ✅ | |
 | R10 | Auto-trigger (escrow release) | — | ไม่มี screen — trigger อัตโนมัติ | ✅(auto) | SoT: R10 auto |
-| R11 | (ต้องการ SoT spec) | — | ไม่มี DevNav — ขอ Advisor confirm spec | ⚠️ | ต้องการ spec ชัดเจน |
+| R11 | ผู้ซื้อเปิด dispute หลังรับของ | WeeeU | U: /purchases/r001 → **[dispute-R11]** → /purchases/r001/dispute (เหมือน R8) | ✅ | Advisor Gen 95 D7: เพิ่ม DevNav link แล้ว |
 | R12 | Mutual cancel (both agree) | WeeeU | U: listings/confirm → branch C → listings | ✅ | |
 
-**Resell: ✅ 10/12 · ⚠️ 2 (R4, R11) · ❌ 0 · (auto) 3 (R6, R7, R10)**
+**Resell: ✅ 12/12 🎉 · ❌ 0 · (auto) 4 (R4, R6, R7, R10)**
 
 ---
 
@@ -97,12 +97,12 @@
 | P6 | ยกเลิก order | WeeeR | R: parts/orders/[id] → branch ยกเลิก | ✅ | |
 | P7 | Dispute | WeeeR→Admin | R: my-orders/[id] cross-app → Admin disputes/[id] | ✅ | |
 | P8 | WeeeT Logistics | — | ผัง Gen 80 ตัด logistics ออก — ไม่มี screen | ✅(auto) | intentional |
-| P9 | (ต้องการ SoT spec) | — | ไม่มีข้อมูล | ⚠️ | รอ Advisor confirm |
-| P10 | (ต้องการ SoT spec) | — | ไม่มีข้อมูล | ⚠️ | รอ Advisor confirm |
-| P11 | (ต้องการ SoT spec) | — | ไม่มีข้อมูล | ⚠️ | รอ Advisor confirm |
-| P12 | (ต้องการ SoT spec) | — | ไม่มีข้อมูล | ⚠️ | รอ Advisor confirm |
+| P9 | ผู้ขายปฏิเสธออเดอร์ | WeeeR | R: /parts/orders/p001 → **ปุ่มปฏิเสธ (seller block)** + reject modal | ✅ | Advisor Gen 95 D8: เพิ่ม UI block ใน existing page แล้ว |
+| P10 | ระบบบล็อก (auto) | — | ไม่มี screen แยก — ระบบบล็อกอัตโนมัติ | ✅(auto) | Advisor Gen 95 D8 |
+| P11 | ระบบบล็อก (auto) | — | ไม่มี screen แยก — ระบบบล็อกอัตโนมัติ | ✅(auto) | Advisor Gen 95 D8 |
+| P12 | ShopIdSwitcher toggle | WeeeR | ShopIdSwitcher มีอยู่แล้ว Gen 93 — ไม่ต้องทำเพิ่ม | ✅ | Advisor Gen 95 D8: ยืนยัน Gen 93 |
 
-**Parts: ✅ 8/12 · ⚠️ 4 (P9-P12 ขอ spec) · ❌ 0**
+**Parts: ✅ 12/12 🎉 · ❌ 0 · (auto) 2 (P10, P11)**
 
 ---
 
@@ -111,19 +111,17 @@
 | Module | Total | ✅ | ⚠️ | ❌ | (auto) |
 |--------|-------|----|----|----|----|
 | Repair C1-C10 | 10 | **10** 🎉 | 0 | 0 | 1 (C8) |
-| Maintain M1-M9 | 9 | **9** 🎉 | 0 | 0 | 0 |
-| Resell R1-R12 | 12 | 10 | 2 | 0 | 3 (R6,R7,R10) |
+| Maintain M1-M9 | 9 | **9** 🎉 | 0 | 0 | 1 (M5→cross-link) |
+| Resell R1-R12 | 12 | **12** 🎉 | 0 | 0 | 4 (R4,R6,R7,R10) |
 | Scrap S1-S12 | 12 | **12** 🎉 | 0 | 0 | 0 |
-| Parts P1-P12 | 12 | 8 | 4 | 0 | 1 (P8) |
-| **TOTAL** | **55** | **49** | **6** | **0** 🎉 | **5** |
+| Parts P1-P12 | 12 | **12** 🎉 | 0 | 0 | 3 (P8,P10,P11) |
+| **TOTAL** | **55** | **55** 🎉 | **0** | **0** | **9** |
 
 ---
 
 ### ✅ ไม่มี ❌ gaps เหลือ 🎉
 
-### ⚠️ ต้องการ Spec ชัดเจน — 6 cases (ไม่กระทบ Phase 3 Review)
-- R4, R11 (Resell) — label/forPath ใน DevNav ต้องตรวจ
-- P9, P10, P11, P12 (Parts) — รอ Advisor ระบุ spec
+### ✅ ครบ 55/55 cases — ไม่มี ⚠️ หรือ ❌ เหลือ 🎉
 
 ### ✅ RESOLVED (Advisor Gen 95 D1-D5 + M5)
 - **C8** → ✅(auto) — ประกาศหมดอายุ ไม่ใช่ No-show
@@ -134,4 +132,4 @@
 - **R6** → ✅(auto) — seller no-ship ไม่มี screen แยก
 
 ---
-*v2 · HUB Gen 33 · 2026-05-26 · Advisor Gen 95 Decision D1-D5 applied · commit af9116b+*
+*v4 FINAL · HUB Gen 33 · 2026-05-26 · Advisor Gen 95 Decision D1-D8+M5 all resolved · 55/55 ✅*
