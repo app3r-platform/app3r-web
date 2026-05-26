@@ -1,5 +1,13 @@
 'use client'
 // Sub-5a D80 list + Sub-5b drawer/CRUD — users
+// MOCK_USERS — reference data (mock provided via useAdminUsersStore / lib/mocks/users.seed.ts)
+// const MOCK_USERS = [
+//   { id: "u-001", name: "สมชาย ใจดี",    email: "somchai@test.com",   role: "weeeu",  status: "active"    },
+//   { id: "u-002", name: "สมหญิง รักดี",   email: "somying@test.com",   role: "weeeu",  status: "active"    },
+//   { id: "u-003", name: "ร้านซ่อม A+",    email: "shopaplus@test.com", role: "weeer",  status: "active"    },
+//   { id: "u-004", name: "ช่าง สมศักดิ์",  email: "somsak@test.com",    role: "weeet",  status: "active"    },
+//   { id: "u-005", name: "มานะ ดีงาม",     email: "mana@test.com",      role: "weeeu",  status: "suspended" },
+// ];
 import { useMemo, useState } from 'react'
 import { Sidebar } from '@/components/sidebar'
 import { AdminListPage } from '@/components/admin-list/AdminListPage'

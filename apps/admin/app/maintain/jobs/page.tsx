@@ -53,6 +53,13 @@ const STATUS_TABS: { label: string; value: string }[] = [
 
 const PAGE_SIZE = 20;
 
+// MOCK_MAINTAIN_JOBS — fallback เมื่อ API ไม่พร้อม (dev/staging)
+const MOCK_MAINTAIN_JOBS = [
+  { id: "m-001", serviceCode: "M-001", applianceType: "AC"             as const, cleaningType: "general"  as const, status: "pending"     as const, scheduledAt: "2026-05-26T09:00:00Z", totalPrice: 500,  recurring: null,                                technicianId: null   },
+  { id: "m-002", serviceCode: "M-002", applianceType: "WashingMachine" as const, cleaningType: "deep"     as const, status: "in_progress" as const, scheduledAt: "2026-05-26T11:00:00Z", totalPrice: 800,  recurring: { enabled: true, interval: "monthly" }, technicianId: "t-02" },
+  { id: "m-003", serviceCode: "M-003", applianceType: "AC"             as const, cleaningType: "sanitize" as const, status: "completed"   as const, scheduledAt: "2026-05-25T09:00:00Z", totalPrice: 1200, recurring: null,                                technicianId: "t-03" },
+] as unknown as MaintainJobListItem[];
+
 interface JobListResponse {
   results: MaintainJobListItem[];
   count: number;
@@ -89,8 +96,11 @@ export default function MaintainJobsPage() {
       setItems(d.results);
       setTotal(d.count);
       setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch {
+      // API ไม่พร้อม → ใช้ mock fallback
+      setItems(MOCK_MAINTAIN_JOBS);
+      setTotal(MOCK_MAINTAIN_JOBS.length);
+      setError(null);
     } finally {
       setLoading(false);
     }

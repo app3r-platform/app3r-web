@@ -1,5 +1,11 @@
 'use client'
 // Sub-5a D80 list + Sub-5b drawer/CRUD — points
+// MOCK_POINTS_TRANSACTIONS — reference data (mock provided via useAdminPointsStore / lib/mocks/points.seed.ts)
+// const MOCK_POINTS_TRANSACTIONS = [
+//   { id: "pt-001", user_name: "สมชาย ใจดี",   points: 500,  type: "topup",    created_at: "2026-05-25T10:00:00Z" },
+//   { id: "pt-002", user_name: "สมหญิง รักดี",  points: -200, type: "withdraw", created_at: "2026-05-24T11:00:00Z" },
+//   { id: "pt-003", user_name: "ร้านซ่อม A+",   points: 1000, type: "topup",    created_at: "2026-05-23T09:00:00Z" },
+// ];
 import { useMemo, useState } from 'react'
 import { Sidebar } from '@/components/sidebar'
 import { AdminListPage } from '@/components/admin-list/AdminListPage'

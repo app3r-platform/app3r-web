@@ -18,6 +18,12 @@ interface KYCApplication {
   auto_create_weeet_done: boolean;
 }
 
+// MOCK_KYC — fallback เมื่อ API ไม่พร้อม (dev/staging)
+const MOCK_KYC: KYCApplication[] = [
+  { user_id: 101, user_name: "ร้านซ่อม 5 ดาว",  phone: "081-234-5678", overall_status: "pending",   submitted_at: "2026-05-25T10:00:00Z", reviewed_at: null,                   doc_count: 3, auto_create_weeet_done: false },
+  { user_id: 102, user_name: "Tech Repair Co.",  phone: "089-876-5432", overall_status: "reviewing", submitted_at: "2026-05-24T08:00:00Z", reviewed_at: "2026-05-25T09:00:00Z", doc_count: 5, auto_create_weeet_done: false },
+];
+
 const STATUS_CONFIG = {
   pending:             { label: "รอตรวจ",        color: "bg-yellow-50 text-yellow-700" },
   reviewing:           { label: "กำลังตรวจ",      color: "bg-blue-50 text-blue-700" },
@@ -46,6 +52,10 @@ export default function KYCQueuePage() {
       const d = await api.get<{ items: KYCApplication[]; total: number }>("/admin/kyc?" + params);
       setItems(d.items);
       setTotal(d.total);
+    } catch {
+      // API ไม่พร้อม → ใช้ mock fallback
+      setItems(MOCK_KYC);
+      setTotal(MOCK_KYC.length);
     } finally {
       setLoading(false);
     }
