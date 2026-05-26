@@ -6,6 +6,7 @@
  */
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { swaggerUI } from '@hono/swagger-ui'
+import { serveStatic } from '@hono/node-server/serve-static'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 
@@ -54,6 +55,12 @@ export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use('*', logger())
+
+// D-5 Assets: serve static files from public/ directory
+// parts/ symptoms/ checklist/ pricing-samples/ ui/
+// e.g. GET /assets/parts/ac-001-compressor.jpeg → 200 image/jpeg
+app.use('/assets/*', serveStatic({ root: './public' }))
+
 app.use(
   '/api/*',
   cors({
