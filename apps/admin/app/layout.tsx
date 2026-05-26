@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { DevNav } from "@/components/DevNav";
+import { ScreenBadge } from "@/components/ScreenBadge";
 
 export const metadata: Metadata = {
   title: "App3R Admin",
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <DevNav />
+        <ScreenBadge />
       </body>
     </html>
   );

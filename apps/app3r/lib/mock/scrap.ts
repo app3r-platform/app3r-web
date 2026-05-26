@@ -26,8 +26,8 @@ export const mockScrapListings: ScrapListing[] = [
     province: "กรุงเทพฯ",
     material: "เหล็ก",
     images: [
-      "/demo/เครื่องซักผ้าฝาบน(ถังคู่).png",
-      "/demo/เครื่องซักผ้าฝาบน(ถังเดี่ยว).png",
+      "https://picsum.photos/seed/117/400/300",
+      "https://picsum.photos/seed/104/400/300",
     ],
     seller: sellers[0],
     status: "active",
@@ -51,7 +51,7 @@ export const mockScrapListings: ScrapListing[] = [
     province: "กรุงเทพฯ",
     material: "ทองแดง",
     images: [
-      "/demo/แอร์เคลื่ิอนที่.png",
+      "https://picsum.photos/seed/122/400/300",
     ],
     seller: sellers[1],
     status: "active",
@@ -76,7 +76,7 @@ export const mockScrapListings: ScrapListing[] = [
     province: "นนทบุรี",
     material: "อลูมิเนียม",
     images: [
-      "/demo/Refrigerator_Commercial.png",
+      "https://picsum.photos/seed/123/400/300",
     ],
     seller: sellers[2],
     status: "active",
@@ -99,8 +99,8 @@ export const mockScrapListings: ScrapListing[] = [
     province: "สมุทรปราการ",
     material: "ทองแดง",
     images: [
-      "/demo/เครื่องซักผ้าฝาบน(ถังเดี่ยว).png",
-      "/demo/เครื่องซักผ้าฝาหน้า(ซักและอบ).png",
+      "https://picsum.photos/seed/104/400/300",
+      "https://picsum.photos/seed/115/400/300",
     ],
     seller: sellers[3],
     status: "active",
@@ -123,7 +123,7 @@ export const mockScrapListings: ScrapListing[] = [
     province: "ขอนแก่น",
     material: "พลาสติก",
     images: [
-      "/demo/Television_CRT.png",
+      "https://picsum.photos/seed/124/400/300",
     ],
     seller: sellers[0],
     status: "active",
@@ -146,8 +146,8 @@ export const mockScrapListings: ScrapListing[] = [
     province: "เชียงใหม่",
     material: "เหล็ก",
     images: [
-      "/demo/แอร์ตู้ตั้ง.png",
-      "/demo/แอร์ซ่อนในฝ้า.png",
+      "https://picsum.photos/seed/125/400/300",
+      "https://picsum.photos/seed/126/400/300",
     ],
     seller: sellers[1],
     status: "active",
@@ -170,7 +170,7 @@ export const mockScrapListings: ScrapListing[] = [
     province: "ระยอง",
     material: "ทองแดง",
     images: [
-      "/demo/เตาอบ.png",
+      "https://picsum.photos/seed/110/400/300",
     ],
     seller: sellers[2],
     status: "active",
@@ -193,7 +193,7 @@ export const mockScrapListings: ScrapListing[] = [
     province: "ชลบุรี",
     material: "อลูมิเนียม",
     images: [
-      "/demo/แอร์เคลื่ิอนที่.png",
+      "https://picsum.photos/seed/122/400/300",
     ],
     seller: sellers[3],
     status: "active",

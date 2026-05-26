@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Footer from "../../components/Footer";
 import DevNav, { type DevNavLink } from "../../components/DevNav";
+import { ScreenBadge } from "../../components/ScreenBadge";
 
 // ── Dev Navigator link map ────────────────────────────────────────────────────
 // Phase 3 Sign-off: ครอบคลุม Repair / Maintain / Resell / Scrap / Parts
@@ -194,6 +195,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {process.env.NEXT_PUBLIC_DEV_NAV === "true" && (
         <DevNav links={devNavLinks} />
       )}
+      {/* Screen ID Badge — dev only */}
+      <ScreenBadge />
     </div>
   );
 }

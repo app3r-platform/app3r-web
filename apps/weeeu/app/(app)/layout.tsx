@@ -7,6 +7,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { ScreenBadge } from "@/components/ScreenBadge";
 
 // ── 5 Bottom tabs (A2 spec — icon + label + active prefix matching) ────────────
 const BOTTOM_TABS = [
@@ -144,6 +145,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           })}
         </div>
       </nav>
+
+      {/* ── Screen ID Badge (dev only) ─────────────────────────────────────── */}
+      <ScreenBadge />
 
     </div>
   );

@@ -31,8 +31,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     problemDescription:
       'แอร์ Daikin 12000 BTU อายุ 5 ปี เปิดแล้วลมออกแต่ไม่เย็น อาจต้องเติมน้ำยา หรือคอมเพรสเซอร์มีปัญหา ต้องการช่างมาตรวจที่บ้าน',
     photos: [
-      '/demo/แอร์ติดผนัง.png',
-      '/demo/แอร์สี่ทิศทาง.png',
+      'https://picsum.photos/seed/100/400/300',
+      'https://picsum.photos/seed/101/400/300',
     ],
     estimatedBudget: 1500,
     customerName: 'รอยืนยัน (Phase D)',
@@ -52,8 +52,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     problemDescription:
       'ทีวี Sony Bravia 55 นิ้ว มีเส้นดำแนวตั้งประมาณ 3 เส้น ปรากฏตลอดเวลา เสียงปกติ ต้องการช่างรับไปซ่อมและส่งคืน',
     photos: [
-      '/demo/Television_LCD.png',
-      '/demo/Television_OLED.png',
+      'https://picsum.photos/seed/102/400/300',
+      'https://picsum.photos/seed/103/400/300',
     ],
     estimatedBudget: 3500,
     customerName: 'รอยืนยัน (Phase D)',
@@ -72,7 +72,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-003',
     problemDescription:
       'เครื่องซักผ้า LG ฝาบน 10 กก. ใช้งานมา 4 ปี เริ่มมีเสียงดังผิดปกติตอนปั่น และบางครั้งถังไม่หมุน น้ำระบายปกติ ต้องการช่างมาดูที่บ้าน',
-    photos: ['/demo/เครื่องซักผ้าฝาบน(ถังเดี่ยว).png'],
+    photos: ['https://picsum.photos/seed/104/400/300'],
     estimatedBudget: 1200,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
@@ -90,9 +90,9 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     problemDescription:
       'ตู้เย็น Hitachi 2 ประตู 14 คิว ทำงานมา 7 ปี เริ่มเย็นน้อยลง คอมเพรสเซอร์มีเสียงดัง จะนำมาซ่อมที่ร้านได้เลย ต้องการประเมินราคาก่อน',
     photos: [
-      '/demo/Refrigerator_Top-Freezer.png',
-      '/demo/Refrigerator_Side-by-Side.png',
-      '/demo/Refrigerator_French Door.png',
+      'https://picsum.photos/seed/105/400/300',
+      'https://picsum.photos/seed/106/400/300',
+      'https://picsum.photos/seed/107/400/300',
     ],
     estimatedBudget: 2500,
     customerName: 'รอยืนยัน (Phase D)',
@@ -110,7 +110,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-005',
     problemDescription:
       'ไมโครเวฟ Panasonic 25 ลิตร เปิดสวิตช์แล้วจอไม่ติด ไม่ให้ความร้อน ฟิวส์อาจขาด หรือบอร์ดเสีย สามารถส่งพัสดุมาซ่อมได้',
-    photos: ['/demo/ไมโครเวฟ.png'],
+    photos: ['https://picsum.photos/seed/108/400/300'],
     estimatedBudget: 800,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
@@ -127,7 +127,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-006',
     problemDescription:
       'พัดลมตั้งพื้น Hatari 16 นิ้ว หมุนช้าทุกสปีด มีเสียงพัดดัง น่าจะลูกปืนหรือคาปาซิเตอร์เสีย จะนำมาซ่อมที่ร้านเอง',
-    photos: ['/demo/พัดลมตั้งพื้น.png'],
+    photos: ['https://picsum.photos/seed/109/400/300'],
     estimatedBudget: 500,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
@@ -144,7 +144,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-007',
     problemDescription:
       'หม้อหุงข้าว Toshiba 1.8 ลิตร ฝาไม่ล็อกแน่น กดสวิตช์แล้วข้ามไปโหมด warm เลย ข้าวไม่สุก คาดว่าเทอร์โมสตัทเสีย',
-    photos: ['/demo/เตาอบ.png'],
+    photos: ['https://picsum.photos/seed/110/400/300'],
     estimatedBudget: 600,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
@@ -162,8 +162,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     problemDescription:
       'แอร์ Samsung Inverter 18000 BTU รุ่นใหม่อายุ 2 ปี น้ำหยดจากตัวในลงพื้นห้อง อาจท่อระบายน้ำตัน หรืออีวาพอเรเตอร์น้ำแข็งเกาะ ต้องการช่างด่วนวันนี้',
     photos: [
-      '/demo/แอร์ติดผนัง.png',
-      '/demo/แอร์แขวนใต้ฝ้า.png',
+      'https://picsum.photos/seed/100/400/300',
+      'https://picsum.photos/seed/111/400/300',
     ],
     estimatedBudget: 700,
     customerName: 'รอยืนยัน (Phase D)',
@@ -181,7 +181,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-009',
     problemDescription:
       'เครื่องดูดฝุ่น Dyson V11 ใช้มา 3 ปี แบตเสื่อมชัดเจน ใช้ได้แค่ 5 นาที ต้องการเปลี่ยนแบตใหม่ หรือตรวจหัวดูดด้วย สามารถส่งพัสดุได้',
-    photos: ['/demo/พัดลมอุตสาหกรรม.png'],
+    photos: ['https://picsum.photos/seed/112/400/300'],
     estimatedBudget: 2000,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
@@ -199,8 +199,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     problemDescription:
       'ตู้เย็น Sharp 2 ประตู ช่องฟรีซไม่แข็ง น้ำแข็งละลายตอนกลางคืน ช่องธรรมดายังเย็นอยู่บ้าง น่าจะแก๊สรั่วหรือ defrost timer เสีย',
     photos: [
-      '/demo/Refrigerator_Bottom-Freezer.png',
-      '/demo/Refrigerator_Mini.png',
+      'https://picsum.photos/seed/113/400/300',
+      'https://picsum.photos/seed/114/400/300',
     ],
     estimatedBudget: 1800,
     customerName: 'รอยืนยัน (Phase D)',
@@ -218,7 +218,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-011',
     problemDescription:
       'เครื่องซักผ้า Bosch ฝาหน้า 8 กก. ขึ้น Error E18 ทุกรอบ น้ำไม่ระบาย ลองทำความสะอาดกรองแล้วยังเป็นอยู่ อาจปั๊มน้ำเสีย',
-    photos: ['/demo/เครื่องซักผ้าฝาหน้า(ซักและอบ).png'],
+    photos: ['https://picsum.photos/seed/115/400/300'],
     estimatedBudget: 1500,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
@@ -235,7 +235,7 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     ownerId: 'user-012',
     problemDescription:
       'ทีวี LG Smart TV 43 นิ้ว เปิดไม่ติด ไฟ standby กระพริบแดง 3 ครั้งแล้วดับ น่าจะบอร์ดจ่ายไฟเสีย ต้องการนำมาให้ช่างดูที่ร้าน',
-    photos: ['/demo/Television_Plasma.png'],
+    photos: ['https://picsum.photos/seed/116/400/300'],
     estimatedBudget: 2200,
     customerName: 'รอยืนยัน (Phase D)',
     customerPhone: '0xx-xxx-xxxx (Phase D)',
