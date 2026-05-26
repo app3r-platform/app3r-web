@@ -141,7 +141,7 @@ export default function MyListingsPage() {
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {listings.map((l) => (
-                <div key={l.id} onClick={() => router.push(`/parts/marketplace/${l.id}`)} className="cursor-pointer">
+                <div key={l.id} onClick={() => router.push(`/parts/my-listings/${l.id}`)} className="cursor-pointer">
                   <PartCard listing={l} currentShopId={shopId} />
                 </div>
               ))}

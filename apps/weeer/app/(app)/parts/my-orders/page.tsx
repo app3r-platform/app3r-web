@@ -172,7 +172,7 @@ export default function MyOrdersPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map((o) => (
-            <div key={o.id} onClick={() => router.push(`/parts/orders/${o.id}`)} className="cursor-pointer">
+            <div key={o.id} onClick={() => router.push(`/parts/my-orders/${o.id}`)} className="cursor-pointer">
               <OrderCard order={o} role={sideTab} onAction={handleAction} />
             </div>
           ))}
