@@ -1,0 +1,24 @@
+# Force LF line endings for shell scripts (Docker containers run Linux)
+*.sh           text eol=lf
+docker-entrypoint.sh  text eol=lf
+Dockerfile     text eol=lf
+*.Dockerfile   text eol=lf
+
+# Force LF for YAML/JSON config files used by Docker/CI
+*.yml          text eol=lf
+*.yaml         text eol=lf
+
+# Allow Git to auto-detect text files; CRLF preferred for .bat (Windows only)
+*.bat          text eol=crlf
+*.ps1          text eol=crlf
+
+# Binary files — no conversion
+*.png          binary
+*.jpg          binary
+*.jpeg         binary
+*.gif          binary
+*.ico          binary
+*.woff         binary
+*.woff2        binary
+*.ttf          binary
+*.pdf          binary

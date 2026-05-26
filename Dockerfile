@@ -49,8 +49,9 @@ ENV NODE_ENV=production
 COPY --from=builder /app .
 
 # Copy + set entrypoint script
+# Strip CRLF (defense-in-depth — .gitattributes ควรกันได้แต่ถ้าใครพลาด commit CRLF ยังรัน Linux ได้)
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+RUN sed -i 's/\r$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 EXPOSE 3000 3001 3002 3003 3004
 
