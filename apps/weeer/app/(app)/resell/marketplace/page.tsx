@@ -13,29 +13,86 @@ const SELLER_TYPES: { value: string; label: string }[] = [
   { value: "WeeeU", label: "บุคคล (WeeeU)" },
 ];
 
+// ── Dev-mode fallback mock — seeds ตรงกับ WeeeU /marketplace (r001-r006) ──────
+const FALLBACK_MOCK_LISTINGS: Listing[] = [
+  {
+    id: "r001", sellerId: "shop-001", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "แอร์ Daikin 12000 BTU มือสอง", applianceBrand: "Daikin", price: 4500,
+    imageUrl: "https://picsum.photos/seed/r001/300/200",
+    deliveryMethods: ["นัดรับ"], status: "receiving_offers",
+    expiresAt: "2026-06-26", createdAt: "2026-05-26", updatedAt: "2026-05-26",
+  },
+  {
+    id: "r002", sellerId: "shop-002", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "ตู้เย็น Samsung 2 ประตู 14 คิว", applianceBrand: "Samsung", price: 3200,
+    imageUrl: "https://picsum.photos/seed/r002/300/200",
+    deliveryMethods: ["นัดรับ", "จัดส่ง"], status: "receiving_offers",
+    expiresAt: "2026-06-26", createdAt: "2026-05-26", updatedAt: "2026-05-26",
+  },
+  {
+    id: "r003", sellerId: "shop-003", sellerType: "WeeeU", listingType: "used_appliance",
+    applianceName: "เครื่องซักผ้า LG 8 kg", applianceBrand: "LG", price: 2800,
+    imageUrl: "https://picsum.photos/seed/r003/300/200",
+    deliveryMethods: ["จัดส่ง"], status: "announced",
+    expiresAt: "2026-06-26", createdAt: "2026-05-25", updatedAt: "2026-05-25",
+  },
+  {
+    id: "r004", sellerId: "shop-001", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "ทีวี Sony 43\" Smart TV", applianceBrand: "Sony", price: 5500,
+    imageUrl: "https://picsum.photos/seed/r004/300/200",
+    deliveryMethods: ["นัดรับ", "จัดส่ง"], status: "receiving_offers",
+    expiresAt: "2026-06-26", createdAt: "2026-05-24", updatedAt: "2026-05-24",
+  },
+  {
+    id: "r005", sellerId: "shop-002", sellerType: "WeeeU", listingType: "used_appliance",
+    applianceName: "ไมโครเวฟ Sharp 25L", applianceBrand: "Sharp", price: 900,
+    imageUrl: "https://picsum.photos/seed/r005/300/200",
+    deliveryMethods: ["จัดส่ง"], status: "announced",
+    expiresAt: "2026-06-26", createdAt: "2026-05-24", updatedAt: "2026-05-24",
+  },
+  {
+    id: "r006", sellerId: "shop-003", sellerType: "WeeeU", listingType: "used_appliance",
+    applianceName: "เครื่องทำน้ำอุ่น Panasonic", applianceBrand: "Panasonic", price: 650,
+    imageUrl: "https://picsum.photos/seed/r006/300/200",
+    deliveryMethods: ["นัดรับ"], status: "announced",
+    expiresAt: "2026-06-26", createdAt: "2026-05-23", updatedAt: "2026-05-23",
+  },
+];
+
 export default function ResellMarketplacePage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [usingMock, setUsingMock] = useState(false);
   const [category, setCategory] = useState("");
   const [sellerType, setSellerType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
+    setLoading(true);
     resellApi.marketplaceList({
       category: category || undefined,
       sellerType: sellerType || undefined,
       minPrice: minPrice || undefined,
       maxPrice: maxPrice || undefined,
     })
-      .then(setListings)
-      .catch((e: Error) => setError(e.message))
+      .then((data) => {
+        if (data.length === 0) {
+          setListings(FALLBACK_MOCK_LISTINGS);
+          setUsingMock(true);
+        } else {
+          setListings(data);
+          setUsingMock(false);
+        }
+      })
+      .catch(() => {
+        setListings(FALLBACK_MOCK_LISTINGS);
+        setUsingMock(true);
+      })
       .finally(() => setLoading(false));
   }, [category, sellerType, minPrice, maxPrice]);
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;
-  if (error) return <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-yellow-700 text-sm">⚠️ ระบบขายมือสองกำลังพัฒนา — {error}</div>;
 
   return (
     <div className="space-y-5">
@@ -44,6 +101,13 @@ export default function ResellMarketplacePage() {
         <h1 className="text-xl font-bold text-gray-900">🛒 Marketplace</h1>
         <span className="ml-auto text-xs text-gray-400">{listings.length} รายการ</span>
       </div>
+
+      {/* Dev mock notice */}
+      {usingMock && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2 text-xs text-indigo-600">
+          🖼️ แสดงข้อมูล mock (seeds r001-r006) — API ยังไม่พร้อม
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">

@@ -56,7 +56,7 @@
 | R7 | ส่งมอบแล้ว (auto-complete) | WeeeU | U: listings/confirm → branch A → listings/complete | ✅(auto) | SoT: R7 auto — no separate screen |
 | R8 | Dispute ไม่ตรงปก | WeeeU, WeeeR, Admin | U: purchases/inspect → dispute · R: purchases/dispute · A: resell/disputes/[id] | ✅ | ครบ 3 |
 | R9 | Admin ตัดสิน dispute | Admin | A: resell/disputes/[id] → A/B/C ruling | ✅ | |
-| R10 | Auto-trigger (escrow release) | — | ไม่มี screen — trigger อัตโนมัติ | ✅(auto) | SoT: R10 auto |
+| R10 | Dispute — auto-execute ruling | — | ไม่มี screen — trigger อัตโนมัติหลัง Admin ตัดสิน dispute (R9) | ✅(auto) | SoT: R10 auto · Advisor Gen 95: label = dispute |
 | R11 | ผู้ซื้อเปิด dispute หลังรับของ | WeeeU | U: /purchases/r001 → **[dispute-R11]** → /purchases/r001/dispute (เหมือน R8) | ✅ | Advisor Gen 95 D7: เพิ่ม DevNav link แล้ว |
 | R12 | Mutual cancel (both agree) | WeeeU | U: listings/confirm → branch C → listings | ✅ | |
 
@@ -132,4 +132,4 @@
 - **R6** → ✅(auto) — seller no-ship ไม่มี screen แยก
 
 ---
-*v4 FINAL · HUB Gen 33 · 2026-05-26 · Advisor Gen 95 Decision D1-D8+M5 all resolved · 55/55 ✅*
+*v5 FINAL · HUB Gen 34 · 2026-05-26 · Advisor Gen 95 Sign-off all resolved · 55/55 ✅ · R10 label fixed (dispute)*
