@@ -11,6 +11,8 @@ const devNavLinks: DevNavLink[] = [
   // ── Repair — WeeeR ผู้รับงานซ่อม ─────────────────────────────────────────────
   { label: "→ ดูรายละเอียดประกาศ",             href: "/repair/announcements/c001",                type: "next-step", forPath: "/repair/announcements" },
   { label: "→ [ยื่นข้อเสนอ]",                  href: "/repair/announcements/c001/offer",           type: "branch",    forPath: "/repair/announcements/c001" },
+  { label: "→ [C7-success] ส่งข้อเสนอสำเร็จ", href: "/repair/announcements/c001/offer/success",   type: "next-step", forPath: "/repair/announcements/c001/offer" },
+  { label: "→ ดูประกาศทั้งหมด",               href: "/repair/announcements",                       type: "next-step", forPath: "/repair/announcements/c001/offer/success" },
   { label: "→ คิว walk-in (R-01 ลูกค้ามาเอง)", href: "/repair/walk-in/c001",                      type: "next-step", forPath: "/repair/walk-in/queue" },
   { label: "→ คิวพัสดุ (R-03 parcel)",         href: "/repair/parcel/c001",                       type: "next-step", forPath: "/repair/parcel/queue" },
   { label: "→ ดูรายละเอียดงานซ่อม",            href: "/repair/jobs/c001",                         type: "next-step", forPath: "/repair/jobs" },
@@ -26,8 +28,12 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [ถอนงานหลังยืนยัน-M6]",          href: "/maintain/jobs",                            type: "branch",    forPath: "/maintain/jobs/m001" },
   { label: "🔗 WeeeU ดูสถานะ",                 href: "http://localhost:3002/maintain/jobs/m001",   type: "cross-app", forPath: "/maintain/jobs/m001" },
   { label: "→ มอบหมายช่าง",                    href: "/maintain/jobs/m001/assign/weeet",           type: "next-step", forPath: "/maintain/jobs/m001/assign" },
+  { label: "→ [C8-success] รับงาน Maintain",   href: "/maintain/queue/m001/offer/success",         type: "next-step", forPath: "/maintain/queue/m001/offer" },
+  { label: "→ ดูคิวงาน",                       href: "/maintain/queue",                            type: "next-step", forPath: "/maintain/queue/m001/offer/success" },
 
   // ── Resell — WeeeR ผู้ขาย (Seller) ──────────────────────────────────────────
+  { label: "[C10-success] ลงประกาศ Resell",     href: "/resell/listings/new/success",              type: "next-step", forPath: "/resell/listings/new" },
+  { label: "→ ดูประกาศของฉัน",                  href: "/resell/listings",                          type: "next-step", forPath: "/resell/listings/new/success" },
   { label: "→ ดูรายละเอียด listing ของฉัน",    href: "/resell/listings/r001",                     type: "next-step", forPath: "/resell/listings" },
   { label: "🔗 WeeeU ดูรายการ (ผู้ซื้อ)",      href: "http://localhost:3002/listings/r001",        type: "cross-app", forPath: "/resell/listings/r001" },
 
@@ -56,6 +62,8 @@ const devNavLinks: DevNavLink[] = [
   { label: "🔗 WeeeT รับงาน",                  href: "http://localhost:3003/jobs/s001",            type: "cross-app", forPath: "/scrap/jobs/s001" },
 
   // ── Parts — ผู้ขาย (ShopIdSwitcher: WeeeR seller) ────────────────────────────
+  { label: "[C9-success] ลงขายอะไหล่สำเร็จ",   href: "/parts/new/success",                        type: "next-step", forPath: "/parts/new" },
+  { label: "→ ดูรายการขายของฉัน",              href: "/parts/my-listings",                        type: "next-step", forPath: "/parts/new/success" },
   { label: "[ผู้ขาย] → สร้าง listing ใหม่",    href: "/parts/my-listings/new",                    type: "next-step", forPath: "/parts/my-listings" },
   { label: "[ผู้ขาย] → ดู orders ที่เข้ามา",   href: "/parts/orders",                             type: "next-step", forPath: "/parts/my-listings/p001" },
   { label: "[ผู้ขาย] → ดูรายละเอียด order",    href: "/parts/orders/p001",                        type: "next-step", forPath: "/parts/orders" },
