@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { SuccessTrackingBanner } from "@/components/shared/SuccessTrackingBanner";
 
 export default async function PurchaseCompletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
+        {/* Tracking ref banner */}
+        <SuccessTrackingBanner title="รับของเรียบร้อยแล้ว" />
+
         {/* Success screen */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center text-center space-y-4">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">

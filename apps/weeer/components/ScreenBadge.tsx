@@ -6,6 +6,7 @@ type ScreenInfo = { num: string; code: string };
 
 const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/dashboard",                          info: { num: "R-01", code: "DASHBOARD" } },
+  { pattern: "/repair/announcements/[id]/offer/success", info: { num: "R-38", code: "REPAIR-BID-SUCCESS" } },
   { pattern: "/repair/announcements/[id]/offer",    info: { num: "R-03", code: "REPAIR-BID" } },
   { pattern: "/repair/announcements/[id]",          info: { num: "R-04", code: "REPAIR-ANNOUNCE-DETAIL" } },
   { pattern: "/repair/announcements",               info: { num: "R-02", code: "REPAIR-ANNOUNCE-LIST" } },
@@ -17,6 +18,7 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/repair/jobs/[id]/assign",            info: { num: "R-10", code: "REPAIR-ASSIGN-TECH" } },
   { pattern: "/repair/jobs/[id]",                   info: { num: "R-11", code: "REPAIR-JOB-DETAIL" } },
   { pattern: "/repair/jobs",                        info: { num: "R-09", code: "REPAIR-JOBS" } },
+  { pattern: "/maintain/queue/[id]/offer/success",   info: { num: "R-39", code: "MAINTAIN-OFFER-SUCCESS" } },
   { pattern: "/maintain/jobs/[id]/assign/weeet",    info: { num: "R-13b", code: "MAINTAIN-ASSIGN-WEEET" } },
   { pattern: "/maintain/jobs/[id]/assign",          info: { num: "R-13", code: "MAINTAIN-ASSIGN-TECH" } },
   { pattern: "/maintain/jobs/[id]",                 info: { num: "R-14", code: "MAINTAIN-JOB-DETAIL" } },
@@ -41,6 +43,8 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/scrap/jobs/[id]/dispose",            info: { num: "R-28e", code: "SCRAP-S4-DECISION" } },
   { pattern: "/scrap/jobs/[id]",                    info: { num: "R-28", code: "SCRAP-JOB-DETAIL" } },
   { pattern: "/scrap/jobs",                         info: { num: "R-27", code: "SCRAP-JOBS" } },
+  { pattern: "/parts/new/success",                   info: { num: "R-40", code: "PARTS-NEW-SUCCESS" } },
+  { pattern: "/resell/listings/new/success",        info: { num: "R-41", code: "RESELL-NEW-SUCCESS" } },
   { pattern: "/parts/my-listings/new",              info: { num: "R-29b", code: "PARTS-NEW-LISTING" } },
   { pattern: "/parts/my-listings/[id]",             info: { num: "R-29c", code: "PARTS-LISTING-DETAIL" } },
   { pattern: "/parts/my-listings",                  info: { num: "R-29", code: "PARTS-MY-LISTINGS" } },

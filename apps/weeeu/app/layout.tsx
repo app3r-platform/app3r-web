@@ -23,6 +23,8 @@ export const viewport: Viewport = {
 // ── Dev Navigator link map v2 (Advisor Gen 94 — Gap Fill ครบ 6 โมดูล) ─────────
 const devNavLinks: DevNavLink[] = [
   // ── Repair (WeeeU ลูกค้า) ────────────────────────────────────────────────────
+  { label: "→ ✅ ผลการส่งคำขอ",               href: "/repair/new/success",                        type: "next-step", forPath: "/repair/new" },
+  { label: "→ ดูสถานะงานซ่อม",                href: "/repair",                                    type: "next-step", forPath: "/repair/new/success" },
   { label: "→ ดูประกาศที่สร้าง",              href: "/repair/c001",                              type: "next-step", forPath: "/repair/new" },
   { label: "→ ดูข้อเสนอจากร้าน",              href: "/repair/c001/offers",                       type: "next-step", forPath: "/repair/c001" },
   { label: "→ [A] เลือกข้อเสนอ (1 ร้าน)",     href: "/repair/c001/progress",                     type: "branch",    forPath: "/repair/c001/offers" },
@@ -37,6 +39,8 @@ const devNavLinks: DevNavLink[] = [
 
   // ── Maintain ─────────────────────────────────────────────────────────────────
   { label: "→ ยืนยันการจอง",                  href: "/maintain/book/confirm",                    type: "next-step", forPath: "/maintain/book" },
+  { label: "→ ✅ จองสำเร็จ",                  href: "/maintain/book/confirm/success",             type: "next-step", forPath: "/maintain/book/confirm" },
+  { label: "→ ดูนัดหมาย",                     href: "/maintain/jobs",                            type: "next-step", forPath: "/maintain/book/confirm/success" },
   { label: "→ [A] ยืนยัน",                   href: "/maintain/jobs",                            type: "branch",    forPath: "/maintain/book/confirm" },
   { label: "→ [B] ยกเลิก",                   href: "/maintain/book",                            type: "branch",    forPath: "/maintain/book/confirm" },
   { label: "→ ดูรายละเอียดงาน",               href: "/maintain/jobs/m001",                       type: "next-step", forPath: "/maintain/jobs" },
@@ -52,6 +56,8 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [B] ข้ามการให้คะแนน",            href: "/maintain/jobs",                            type: "branch",    forPath: "/maintain/jobs/m001/review" },
 
   // ── Resell — ผู้ขาย (WeeeU seller) ──────────────────────────────────────────
+  { label: "→ ✅ ลงประกาศสำเร็จ",              href: "/sell/new/success",                          type: "next-step", forPath: "/sell/new" },
+  { label: "→ ดูประกาศของฉัน",               href: "/sell/listings",                            type: "next-step", forPath: "/sell/new/success" },
   { label: "→ ดูประกาศที่สร้าง",              href: "/listings/r001",                            type: "next-step", forPath: "/sell/new" },
   { label: "→ ดูข้อเสนอที่ได้รับ",             href: "/listings/r001/offers",                     type: "next-step", forPath: "/listings/r001" },
   { label: "→ [A] ยืนยันข้อเสนอ",             href: "/listings/r001/confirm",                    type: "branch",    forPath: "/listings/r001/offers" },
@@ -66,12 +72,18 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ ดูสินค้ามือสอง (C2C)",           href: "/marketplace/r001",                         type: "next-step", forPath: "/marketplace" },
   { label: "→ [ยื่นข้อเสนอซื้อ-Pair3]",        href: "/marketplace/r001/offer",                   type: "branch",    forPath: "/marketplace/r001" },
   { label: "🔗 WeeeU ผู้ขาย ดูข้อเสนอ",        href: "http://localhost:3002/listings/r001/offers", type: "cross-app", forPath: "/marketplace/r001/offer" },
+  { label: "→ ✅ ส่งข้อเสนอสำเร็จ",             href: "/marketplace/r001/offer/success",            type: "next-step", forPath: "/marketplace/r001/offer" },
+  { label: "→ กลับตลาดกลาง",                  href: "/marketplace",                              type: "next-step", forPath: "/marketplace/r001/offer/success" },
   { label: "→ [รับของ + ตรวจ-R1]",             href: "/purchases/r001/inspect",                   type: "branch",    forPath: "/purchases/r001" },
   { label: "→ [dispute-R11]",                  href: "/purchases/r001/dispute",                   type: "branch",    forPath: "/purchases/r001" },
+  { label: "→ ✅ Dispute สำเร็จ",              href: "/purchases/r001/dispute/success",            type: "next-step", forPath: "/purchases/r001/dispute" },
+  { label: "→ ดูการสั่งซื้อ",                 href: "/purchases",                                type: "next-step", forPath: "/purchases/r001/dispute/success" },
   { label: "→ [A] ตรงปก ยืนยันรับ",            href: "/purchases/r001/complete",                  type: "branch",    forPath: "/purchases/r001/inspect" },
   { label: "→ [B] ไม่ตรงปก dispute-R8",         href: "/purchases/r001/dispute",                   type: "branch",    forPath: "/purchases/r001/inspect" },
 
   // ── Scrap (เจ้าของซาก) ───────────────────────────────────────────────────────
+  { label: "→ ✅ ส่งคำขอซากสำเร็จ",             href: "/scrap/new/success",                         type: "next-step", forPath: "/scrap/new" },
+  { label: "→ ดูสถานะซาก",                   href: "/scrap",                                    type: "next-step", forPath: "/scrap/new/success" },
   { label: "→ ดูประกาศที่สร้าง",              href: "/scrap/s001",                               type: "next-step", forPath: "/scrap/new" },
   { label: "→ ดูข้อเสนอรับซาก",               href: "/scrap/s001/offers",                        type: "next-step", forPath: "/scrap/s001" },
   { label: "→ [A] เลือกขาย (มีราคา)",          href: "/scrap/s001/confirm",                       type: "branch",    forPath: "/scrap/s001/offers" },

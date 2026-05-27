@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 
 const REASONS = [
@@ -15,6 +15,22 @@ export default function PurchaseDisputePage({ params }: { params: Promise<{ id: 
   const [selectedReason, setSelectedReason] = useState("");
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  // D3: dev mock — minimal state for evidence file (UI placeholder only)
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+
+  // ── D3: DEV mock attach — pre-select reason + attach mock evidence ────────────
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return;
+    setSelectedReason(REASONS[0]);
+    try {
+      const b64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAAQCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k=";
+      const bin = atob(b64);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const blob = new Blob([arr], { type: "image/jpeg" });
+      setPhotoFiles([new File([blob], "mock-evidence.jpg", { type: "image/jpeg" })]);
+    } catch { /* ignore — dev only */ }
+  }, []);
 
   const canSubmit = selectedReason !== "" && !submitted;
 
@@ -89,7 +105,10 @@ export default function PurchaseDisputePage({ params }: { params: Promise<{ id: 
             <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-5 flex flex-col items-center justify-center gap-2">
               <p className="text-2xl">📎</p>
               <p className="text-sm text-gray-500 font-medium">แนบรูปหลักฐาน</p>
-              <p className="text-xs text-gray-300">รูปภาพสินค้า / หลักฐานปัญหา</p>
+              {photoFiles.length > 0
+                ? <p className="text-xs text-weeeu-primary font-medium">✅ {photoFiles.length} ไฟล์ (mock)</p>
+                : <p className="text-xs text-gray-300">รูปภาพสินค้า / หลักฐานปัญหา</p>
+              }
               <button className="mt-1 border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm px-4 py-2 rounded-xl transition-colors">
                 เลือกรูป
               </button>

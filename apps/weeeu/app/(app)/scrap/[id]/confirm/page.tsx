@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SuccessTrackingBanner } from "@/components/shared/SuccessTrackingBanner";
 
 const MOCK_OFFER = {
   shop: "ร้านรับซากดีเจริญ",
@@ -16,6 +17,9 @@ export default async function ScrapConfirmPage({ params }: { params: Promise<{ i
         <Link href={`/scrap/${id}/offers`} className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1">
           ← กลับดูข้อเสนอ
         </Link>
+
+        {/* Tracking ref banner */}
+        <SuccessTrackingBanner title="ยืนยันสำเร็จ" variant="weeeu" />
 
         {/* Header */}
         <h1 className="text-xl font-bold text-weeeu-dark">ยืนยันการเลือกข้อเสนอ</h1>
