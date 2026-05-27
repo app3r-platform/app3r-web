@@ -1,13 +1,21 @@
 ﻿"use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function RepairCompletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
   const [repairNote, setRepairNote] = useState("");
   const [parts, setParts] = useState("");
   const [finalPrice, setFinalPrice] = useState("1800");
+  const [otp, setOtp] = useState("");
+
+  // D2 — Mock OTP pre-fill (Phase 3 dev only)
+  useEffect(() => {
+    setOtp("123456");
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -88,9 +96,30 @@ export default function RepairCompletePage({ params }: { params: Promise<{ id: s
           </div>
         </div>
 
+        {/* OTP input */}
+        <div className="bg-gray-900 rounded-2xl p-4 border border-gray-700 mb-6">
+          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-1">OTP ยืนยันการรับมอบ</p>
+          <p className="text-xs text-gray-600 mb-3">WeeeU จะได้รับ OTP — กรอกเพื่อยืนยัน</p>
+          <input
+            type="text"
+            name="otp"
+            inputMode="numeric"
+            maxLength={6}
+            value={otp}
+            onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            placeholder="______"
+            data-otp
+            className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-center text-2xl font-mono font-bold tracking-[0.5em] text-white placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+        </div>
+
         {/* Submit button */}
-        <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm mb-3">
-          📲 ส่งมอบ + OTP
+        <button
+          onClick={() => router.push(`/jobs/${id}/repair/success`)}
+          disabled={otp.length !== 6}
+          className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-semibold py-3 rounded-xl text-sm mb-3 transition-colors"
+        >
+          📲 ส่งมอบ + ยืนยัน OTP
         </button>
         <p className="text-xs text-gray-500 text-center">
           WeeeU จะได้รับ OTP ยืนยันการรับงาน

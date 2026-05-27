@@ -32,7 +32,8 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [รออะไหล่ นัดใหม่-C3]",         href: "/jobs/c001/schedule",                       type: "branch",    forPath: "/jobs/c001/diagnose" },
   { label: "→ [เสนอซื้อซาก-C4]",              href: "/jobs/c001/scrap-offer",                    type: "branch",    forPath: "/jobs/c001/diagnose" },
   { label: "🔗 WeeeR ดูผลวินิจฉัย",           href: "http://localhost:3001/repair/jobs/c001",    type: "cross-app", forPath: "/jobs/c001/diagnose" },
-  { label: "→ [ส่งมอบ + OTP]",                href: "/jobs/c001/complete",                       type: "branch",    forPath: "/jobs/c001/repair" },
+  { label: "→ [ส่งมอบ + OTP ✅]",             href: "/jobs/c001/repair/success",                 type: "branch",    forPath: "/jobs/c001/repair" },
+  { label: "→ กลับหน้างาน",                   href: "/jobs",                                     type: "next-step", forPath: "/jobs/c001/repair/success" },
   { label: "🔗 WeeeU ดูผลสุดท้าย",            href: "http://localhost:3002/repair/c001/review",  type: "cross-app", forPath: "/jobs/c001/complete" },
 
   // ── Maintain (WeeeT ช่าง) ─────────────────────────────────────────────────────
