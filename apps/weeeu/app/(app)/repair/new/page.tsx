@@ -128,6 +128,24 @@ export default function RepairNewPage() {
     if (aid) setForm(f => ({ ...f, appliance_id: aid }));
   }, []);
 
+  // ── D1: DEV mock attach — pre-fill 3 photos so on_site validation passes ──────
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return;
+    try {
+      // Minimal 1×1 white JPEG
+      const b64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAAQCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k=";
+      const bin = atob(b64);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const blob = new Blob([arr], { type: "image/jpeg" });
+      const mockFiles = Array.from({ length: 3 }, (_, i) =>
+        new File([blob], `mock-photo-${i + 1}.jpg`, { type: "image/jpeg" })
+      );
+      setPhotos(mockFiles);
+      setPhotoUrls(mockFiles.map(() => URL.createObjectURL(blob)));
+    } catch { /* ignore — dev only */ }
+  }, []);
+
   const clearErr = (key: string) =>
     setErrors(e => { const c = { ...e }; delete c[key]; return c; });
 

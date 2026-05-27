@@ -51,6 +51,13 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/profile",                         info: { num: "U-35", code: "PROFILE" } },
   { pattern: "/notifications",                   info: { num: "U-36", code: "NOTIFICATIONS" } },
   { pattern: "/history",                         info: { num: "U-37", code: "HISTORY" } },
+  // ── Phase 3 C+D success pages ────────────────────────────────────────────────
+  { pattern: "/repair/new/success",                    info: { num: "U-38", code: "REPAIR-CREATE-SUCCESS" } },
+  { pattern: "/maintain/book/confirm/success",         info: { num: "U-39", code: "MAINTAIN-BOOK-SUCCESS" } },
+  { pattern: "/sell/new/success",                      info: { num: "U-40", code: "SELL-CREATE-SUCCESS" } },
+  { pattern: "/scrap/new/success",                     info: { num: "U-41", code: "SCRAP-CREATE-SUCCESS" } },
+  { pattern: "/marketplace/[id]/offer/success",        info: { num: "U-42", code: "MARKET-OFFER-SUCCESS" } },
+  { pattern: "/purchases/[id]/dispute/success",        info: { num: "U-43", code: "DISPUTE-SUCCESS" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
