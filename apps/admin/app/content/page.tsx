@@ -15,9 +15,11 @@ const STATUS_OPTIONS = [
 ]
 
 const TYPE_LABELS: Record<string, string> = {
-  article:   'บทความ',
-  marketing: 'การตลาด',
-  contact:   'ติดต่อ',
+  article:      'บทความ',
+  marketing:    'การตลาด',
+  contact:      'ติดต่อเรา',
+  legal:        'ข้อกำหนดทางกฎหมาย',
+  social_links: 'ลิงก์โซเชียล',
 }
 
 export default function ContentPage() {

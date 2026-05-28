@@ -4,7 +4,7 @@
 export interface ContentRecord {
   id: string
   title: string
-  type: 'article' | 'marketing' | 'contact'
+  type: 'article' | 'marketing' | 'contact' | 'legal' | 'social_links'
   author: string
   status: 'draft' | 'published' | 'archived'
   createdAt: string

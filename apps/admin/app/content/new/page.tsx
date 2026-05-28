@@ -9,10 +9,13 @@ import type { ContentType } from '@/lib/types/content'
 const ContentEditor = dynamic(() => import('@/components/cms/ContentEditor'), { ssr: false })
 
 const TYPE_OPTIONS: { value: ContentType; label: string }[] = [
-  { value: 'hero', label: 'Hero Banner' },
-  { value: 'about', label: 'เกี่ยวกับเรา' },
-  { value: 'faq', label: 'คำถามที่พบบ่อย' },
-  { value: 'static', label: 'หน้าคงที่' },
+  { value: 'hero',         label: 'Hero Banner' },
+  { value: 'about',        label: 'เกี่ยวกับเรา' },
+  { value: 'faq',          label: 'คำถามที่พบบ่อย' },
+  { value: 'static',       label: 'หน้าคงที่' },
+  { value: 'legal',        label: 'ข้อกำหนดทางกฎหมาย' },
+  { value: 'contact',      label: 'ติดต่อเรา' },
+  { value: 'social_links', label: 'ลิงก์โซเชียล' },
 ]
 
 function getToken(): string {
@@ -109,7 +112,7 @@ export default function NewContentPage() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">เนื้อหา</label>
-          <ContentEditor onChange={setBody} />
+          <ContentEditor type={type} onChange={setBody} />
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}

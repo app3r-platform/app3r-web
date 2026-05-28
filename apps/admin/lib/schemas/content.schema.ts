@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 export const contentSchema = z.object({
   title: z.string().min(1, 'กรอกหัวข้อ'),
-  type: z.enum(['article', 'marketing', 'contact']),
+  type: z.enum(['article', 'marketing', 'contact', 'legal', 'social_links']),
   author: z.string().min(1, 'กรอกผู้เขียน'),
   status: z.enum(['draft', 'published', 'archived']),
 })
