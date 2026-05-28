@@ -123,7 +123,7 @@ export default function ProductsPage() {
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/products/${product.id}`}
+            href="/listings/resell"
             className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition group"
           >
             {/* Product image */}

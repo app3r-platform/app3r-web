@@ -21,8 +21,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero content={heroContent} />
-      <PersonasGrid />
       <FeaturedListings />
+      <PersonasGrid />
       <Testimonials />
       <SignUpCTA />
     </>

@@ -8,7 +8,10 @@ import { Suspense } from 'react';
 import { getRepairJobs } from '../../../lib/api/customer-jobs';
 import RepairJobCard from '../../../components/listings/RepairJobCard';
 import ServiceTypeFilter from '../../../components/listings/ServiceTypeFilter';
+import AreaSelect from '../../../components/listings/AreaSelect';
 import { ALL_SERVICE_TYPES } from '../../../lib/constants/service-types';
+
+const REPAIR_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
 
 export const metadata: Metadata = {
   title: 'ประกาศซ่อมเครื่องใช้ไฟฟ้า — App3R',
@@ -80,26 +83,12 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5 sticky top-20">
             <h3 className="font-semibold text-gray-900">กรองประกาศ</h3>
 
-            {/* Area filter */}
+            {/* Area filter — QF4: ใช้ AreaSelect (Client Component) แทน inline onChange */}
             <div>
               <label className="block text-sm text-gray-700 font-medium mb-2">จังหวัด</label>
-              <select
-                defaultValue={areaParam ?? ''}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={(e) => {
-                  const url = new URL(window.location.href);
-                  if (e.target.value) url.searchParams.set('area', e.target.value);
-                  else url.searchParams.delete('area');
-                  window.location.href = url.toString();
-                }}
-              >
-                <option value="">ทุกจังหวัด</option>
-                {['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'].map(
-                  (p) => (
-                    <option key={p} value={p}>{p}</option>
-                  )
-                )}
-              </select>
+              <Suspense fallback={<div className="h-9 bg-gray-100 animate-pulse rounded-lg" />}>
+                <AreaSelect areas={REPAIR_AREAS} current={areaParam} accentColor="blue" />
+              </Suspense>
             </div>
 
             {/* Appliance filter */}
