@@ -28,7 +28,14 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
-  const sorted = [...SCREEN_MAP].sort((a, b) => b.pattern.length - a.pattern.length);
+  // QF2 fix: static patterns (ไม่มี '[') มาก่อน dynamic patterns (มี '[')
+  // ภายใน group เดียวกัน sort by length descending (longer = more specific)
+  const sorted = [...SCREEN_MAP].sort((a, b) => {
+    const aDyn = a.pattern.includes("[");
+    const bDyn = b.pattern.includes("[");
+    if (aDyn !== bDyn) return aDyn ? 1 : -1;
+    return b.pattern.length - a.pattern.length;
+  });
   for (const { pattern, info } of sorted) {
     const regexStr =
       "^" +

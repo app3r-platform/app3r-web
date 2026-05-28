@@ -8,7 +8,10 @@ import { Suspense } from 'react';
 import { getMaintainJobs } from '../../../lib/api/customer-jobs';
 import MaintainJobCard from '../../../components/listings/MaintainJobCard';
 import ServiceTypeFilter from '../../../components/listings/ServiceTypeFilter';
+import AreaSelect from '../../../components/listings/AreaSelect';
 import { MAINTAIN_ALLOWED_TYPES } from '../../../lib/constants/service-types';
+
+const MAINTAIN_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
 
 export const metadata: Metadata = {
   title: 'ประกาศบำรุงรักษาเครื่องใช้ไฟฟ้า — App3R',
@@ -77,26 +80,12 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5 sticky top-20">
             <h3 className="font-semibold text-gray-900">กรองประกาศ</h3>
 
-            {/* Area filter */}
+            {/* Area filter — QF4: ใช้ AreaSelect (Client Component) แทน inline onChange */}
             <div>
               <label className="block text-sm text-gray-700 font-medium mb-2">จังหวัด</label>
-              <select
-                defaultValue={areaParam ?? ''}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                onChange={(e) => {
-                  const url = new URL(window.location.href);
-                  if (e.target.value) url.searchParams.set('area', e.target.value);
-                  else url.searchParams.delete('area');
-                  window.location.href = url.toString();
-                }}
-              >
-                <option value="">ทุกจังหวัด</option>
-                {['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'].map(
-                  (p) => (
-                    <option key={p} value={p}>{p}</option>
-                  )
-                )}
-              </select>
+              <Suspense fallback={<div className="h-9 bg-gray-100 animate-pulse rounded-lg" />}>
+                <AreaSelect areas={MAINTAIN_AREAS} current={areaParam} accentColor="orange" />
+              </Suspense>
             </div>
 
             {/* Service type filter — maintain only allows type 1 */}

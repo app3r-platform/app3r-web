@@ -68,7 +68,7 @@ export default function WeeeRLoginGate({
         {/* CTA */}
         <div className="space-y-3">
           <Link
-            href="http://localhost:3003/login"
+            href="http://localhost:3001/login"
             className={`block w-full bg-${accentColor === 'blue' ? 'blue' : 'orange'}-600 text-white py-3 rounded-xl font-semibold hover:bg-${accentColor === 'blue' ? 'blue' : 'orange'}-700 transition`}
           >
             เข้าสู่ระบบ WeeeR
