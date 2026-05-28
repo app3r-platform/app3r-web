@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getScrapListing } from "../../../../lib/api/listings";
+import { getMockRoleFromCookie } from "../../../../lib/auth/mock-auth";
 import PhotoGallery from "../../../../components/listings/PhotoGallery";
 import TypeBadge from "../../../../components/listings/TypeBadge";
 import AdBanner from "../../../../components/ads/AdBanner";
@@ -34,6 +35,11 @@ export default async function ScrapDetailPage({ params }: PageProps) {
   const { id } = await params;
   const listing = getScrapListing(id);
   if (!listing) notFound();
+
+  // W-2-D (D6): Tier-based privacy (เหมือน resell)
+  const role = await getMockRoleFromCookie();
+  const canSeeSeller = role !== "anonymous";
+  const canInterest = role === "weeeu" || role === "weeer" || role === "weeeu-owner";
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -136,40 +142,70 @@ export default async function ScrapDetailPage({ params }: PageProps) {
                 <span className="font-extrabold text-purple-700">{listing.estimatedValueLabel}</span>
               </div>
             </div>
-            <InterestedButton listingTitle={listing.title} />
+            {/* W-2-D (D6): Tier-based "สนใจ" button */}
+            {canInterest ? (
+              <InterestedButton listingTitle={listing.title} />
+            ) : role === "weeet" ? (
+              <button
+                disabled
+                title="WeeeT (ช่าง) ไม่สามารถยื่นข้อเสนอซื้อซากได้ — เฉพาะ WeeeU/WeeeR"
+                className="w-full bg-gray-200 text-gray-400 py-3 rounded-xl font-semibold cursor-not-allowed"
+              >
+                สนใจซาก (เฉพาะ WeeeU/WeeeR)
+              </button>
+            ) : (
+              <InterestedButton listingTitle={listing.title} />
+            )}
             <p className="text-xs text-gray-400 text-center">
               การติดต่อผ่านระบบ WeeeU — มีระบบ Escrow คุ้มครอง
             </p>
           </div>
 
-          {/* Seller info */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
-            <h2 className="font-semibold text-gray-900">ข้อมูลผู้ขาย</h2>
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 font-bold text-lg">
-                {listing.seller.displayName.charAt(0)}
+          {/* Seller info — W-2-D (D6): ซ่อนสำหรับ Anonymous */}
+          {canSeeSeller ? (
+            <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
+              <h2 className="font-semibold text-gray-900">ข้อมูลผู้ขาย</h2>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 font-bold text-lg">
+                  {listing.seller.displayName.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">{listing.seller.displayName}</p>
+                  <p className="text-xs text-gray-500">สมาชิกตั้งแต่ปี {listing.seller.joinedYear}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-semibold text-gray-900">{listing.seller.displayName}</p>
-                <p className="text-xs text-gray-500">สมาชิกตั้งแต่ปี {listing.seller.joinedYear}</p>
+              <div className="flex items-center gap-4 text-sm">
+                <div>
+                  <span className="text-yellow-500">★</span>{" "}
+                  <span className="font-semibold">{listing.seller.rating}</span>
+                  <span className="text-gray-500"> /5</span>
+                </div>
+                <div className="text-gray-500">
+                  ขายแล้ว {listing.seller.totalSales} รายการ
+                </div>
               </div>
+              {listing.seller.verified && (
+                <div className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-lg w-fit">
+                  <span>✓</span> ผ่านการยืนยันตัวตน
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-4 text-sm">
-              <div>
-                <span className="text-yellow-500">★</span>{" "}
-                <span className="font-semibold">{listing.seller.rating}</span>
-                <span className="text-gray-500"> /5</span>
-              </div>
-              <div className="text-gray-500">
-                ขายแล้ว {listing.seller.totalSales} รายการ
-              </div>
+          ) : (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-2">
+              <h2 className="font-semibold text-amber-900 flex items-center gap-2">
+                <span>🔒</span> ข้อมูลผู้ขายถูกซ่อนไว้
+              </h2>
+              <p className="text-xs text-amber-800">
+                สมัครสมาชิกหรือเข้าสู่ระบบเพื่อดูชื่อผู้ขายและติดต่อโดยตรง
+              </p>
+              <Link
+                href="/register/weeer"
+                className="block bg-amber-500 text-white text-center py-2 rounded-lg text-sm font-semibold hover:bg-amber-600 transition mt-2"
+              >
+                สมัครสมาชิก →
+              </Link>
             </div>
-            {listing.seller.verified && (
-              <div className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-lg w-fit">
-                <span>✓</span> ผ่านการยืนยันตัวตน
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>

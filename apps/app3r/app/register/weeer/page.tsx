@@ -54,7 +54,12 @@ const serviceTypeOptions = [
   "รับซื้อซากเครื่องใช้ไฟฟ้า",
 ];
 
+const WEEER_APP_URL = process.env.NEXT_PUBLIC_WEEER_APP_URL ?? "http://localhost:3001";
+
 export default function RegisterWeeeRPage() {
+  // W-2-C (D4): default = landing page → CTA redirect ไป WeeeR app
+  // กด "ใช้ form ทางลัด" → แสดง 4-step form เดิม (fallback ป้องกัน WeeeR app down)
+  const [showLocalForm, setShowLocalForm] = useState(false);
   const [step, setStep] = useState<Step>(1);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState<Partial<FormData>>({
@@ -62,6 +67,103 @@ export default function RegisterWeeeRPage() {
     agreeTerms: false,
     agreePrivacy: false,
   });
+
+  // W-2-C: Landing page (default view)
+  if (!showLocalForm && !submitted) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-10 px-4">
+        <div className="max-w-3xl mx-auto">
+          {/* Breadcrumb */}
+          <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
+            <Link href="/" className="hover:text-website-brand-500">หน้าหลัก</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">สมัคร WeeeR</span>
+          </nav>
+
+          {/* Hero */}
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-8 sm:p-10 mb-6 shadow-lg">
+            <div className="text-4xl mb-3">🔧</div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">สมัครเป็นร้าน WeeeR</h1>
+            <p className="text-orange-100 text-base sm:text-lg max-w-2xl">
+              ร้านซ่อม / ร้านบำรุงรักษา / ร้านรับซื้อเครื่องใช้ไฟฟ้ามือสองและซาก
+              — เข้าร่วมเครือข่าย App3R ทั่วประเทศ
+            </p>
+          </div>
+
+          {/* What is WeeeR */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">WeeeR คือใคร?</h2>
+            <ul className="space-y-3 text-sm text-gray-700">
+              <li className="flex gap-3">
+                <span className="text-orange-500 text-lg shrink-0">✓</span>
+                <span><strong>ร้านซ่อม / ช่างมืออาชีพ</strong> — รับงานซ่อมและบำรุงรักษาจากลูกค้าที่ลงประกาศบน App3R</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-orange-500 text-lg shrink-0">✓</span>
+                <span><strong>ร้านรับซื้อมือสอง / ซาก</strong> — เห็นประกาศขายมือสอง+ซากจากทั่วประเทศ ยื่นข้อเสนอได้ทันที</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-orange-500 text-lg shrink-0">✓</span>
+                <span><strong>สิทธิ์เพิ่มเติม</strong> — จัดการช่าง WeeeT ในร้าน · ระบบ Escrow · รายงานยอดขาย</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Benefits */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+              <div className="text-2xl mb-1">📊</div>
+              <p className="font-semibold text-emerald-900 text-sm">รายงานยอดขาย</p>
+              <p className="text-xs text-emerald-700 mt-0.5">Dashboard real-time</p>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+              <div className="text-2xl mb-1">🛡️</div>
+              <p className="font-semibold text-blue-900 text-sm">Escrow คุ้มครอง</p>
+              <p className="text-xs text-blue-700 mt-0.5">รับเงินตรงเวลา</p>
+            </div>
+            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center">
+              <div className="text-2xl mb-1">👥</div>
+              <p className="font-semibold text-purple-900 text-sm">ทีมช่าง WeeeT</p>
+              <p className="text-xs text-purple-700 mt-0.5">ฟรี 1 บัญชี/ร้าน</p>
+            </div>
+          </div>
+
+          {/* Primary CTA → WeeeR app */}
+          <div className="bg-white border-2 border-orange-300 rounded-2xl p-6 mb-4 text-center">
+            <p className="text-sm text-gray-600 mb-3">สมัครรวดเร็ว ปลอดภัย ผ่านแอป WeeeR โดยตรง</p>
+            <a
+              href={`${WEEER_APP_URL}/register`}
+              className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-xl text-lg transition shadow-md"
+            >
+              เริ่มสมัคร →
+            </a>
+            <p className="text-xs text-gray-400 mt-3">
+              คุณจะถูกพาไปยัง WeeeR app — ใช้ฟอร์มทันสมัย ตรวจสอบเอกสารอัตโนมัติ
+            </p>
+          </div>
+
+          {/* Fallback link */}
+          <div className="text-center text-xs text-gray-500">
+            WeeeR app ไม่พร้อมใช้งาน?{" "}
+            <button
+              onClick={() => setShowLocalForm(true)}
+              className="text-orange-600 hover:text-orange-700 hover:underline font-semibold"
+            >
+              ใช้ form ทางลัด →
+            </button>
+          </div>
+
+          {/* Login link */}
+          <p className="text-center text-gray-500 text-sm mt-6">
+            มีบัญชี WeeeR แล้ว?{" "}
+            <a href={`${WEEER_APP_URL}/login`} className="text-orange-600 hover:underline font-medium">
+              เข้าสู่ระบบ
+            </a>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const updateForm = (field: keyof FormData, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -128,9 +230,22 @@ export default function RegisterWeeeRPage() {
         </nav>
 
         <h1 className="text-2xl font-bold text-gray-900 mb-1">สมัครเป็นสมาชิก WeeeR</h1>
-        <p className="text-gray-500 text-sm mb-8">
+        <p className="text-gray-500 text-sm mb-3">
           ร้านซ่อม / บริษัทบริการ / ร้านรับซื้อเครื่องใช้ไฟฟ้า
         </p>
+
+        {/* W-2-C: ปุ่มกลับไป landing (สำหรับใช้ WeeeR app แทน) */}
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-6 flex items-center justify-between gap-3">
+          <span className="text-xs text-amber-800">
+            💡 ใช้ form นี้เป็นทางลัด — สมัครแบบครบครันที่ WeeeR app
+          </span>
+          <button
+            onClick={() => setShowLocalForm(false)}
+            className="text-xs text-orange-700 hover:text-orange-800 font-semibold whitespace-nowrap"
+          >
+            ใช้ WeeeR app →
+          </button>
+        </div>
 
         {/* Progress */}
         <div className="flex items-center justify-between mb-8">
@@ -469,7 +584,7 @@ export default function RegisterWeeeRPage() {
 
         <p className="text-center text-gray-500 text-xs mt-5">
           มีบัญชีแล้ว?{" "}
-          <Link href="http://localhost:3001/login" className="text-purple-700 hover:underline font-medium">
+          <Link href={`${WEEER_APP_URL}/login`} className="text-purple-700 hover:underline font-medium">
             เข้าสู่ระบบ WeeeR
           </Link>
         </p>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Hero from "@/components/marketing/Hero";
 import PersonasGrid from "@/components/marketing/PersonasGrid";
-import FeaturedListings from "@/components/marketing/FeaturedListings";
+import HomeListings from "@/components/marketing/HomeListings";
 import Testimonials from "@/components/marketing/Testimonials";
 import SignUpCTA from "@/components/marketing/SignUpCTA";
 import { getHeroContent } from "@/lib/content-api";
@@ -21,7 +21,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero content={heroContent} />
-      <FeaturedListings />
+      {/* W-2-A: HomeListings 4 groups (Resell/Scrap/Repair/Maintain) — D1 */}
+      <HomeListings />
       <PersonasGrid />
       <Testimonials />
       <SignUpCTA />

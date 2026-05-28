@@ -14,6 +14,19 @@ const provinces = [
 const brands = ["Samsung", "LG", "Daikin", "Mitsubishi", "Panasonic", "Sharp", "Dyson", "Xiaomi"];
 const materials = ["อลูมิเนียม", "ทองแดง", "เหล็ก", "พลาสติก", "อื่นๆ"];
 
+// W-2-D (D5): ประเภทเครื่องใช้ไฟฟ้า + สภาพ
+const APPLIANCE_TYPES = [
+  "แอร์", "ตู้เย็น", "เครื่องซักผ้า", "ทีวี",
+  "เครื่องดูดฝุ่น", "ไมโครเวฟ", "เตาอบ", "พัดลม", "เครื่องฟอกอากาศ", "อื่นๆ",
+];
+
+const CONDITIONS = [
+  { value: "new", label: "ใหม่ / มือ 1" },
+  { value: "good", label: "ดี (มือสอง สภาพดี)" },
+  { value: "fair", label: "พอใช้" },
+  { value: "needs-repair", label: "ต้องซ่อม" },
+];
+
 interface FilterSidebarProps {
   mode: "resell" | "scrap" | "all";
   baseHref: string;
@@ -29,6 +42,12 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
   const [brand, setBrand] = useState(searchParams.get("brand") ?? "");
   const [material, setMaterial] = useState(searchParams.get("material") ?? "");
   const [sort, setSort] = useState(searchParams.get("sort") ?? "latest");
+  // W-2-D (D5): filters ใหม่ 5 อย่าง
+  const [applianceType, setApplianceType] = useState(searchParams.get("applianceType") ?? "");
+  const [condition, setCondition] = useState(searchParams.get("condition") ?? "");
+  const [dateFrom, setDateFrom] = useState(searchParams.get("dateFrom") ?? "");
+  const [dateTo, setDateTo] = useState(searchParams.get("dateTo") ?? "");
+  const [warranty, setWarranty] = useState(searchParams.get("warranty") ?? "all");
 
   function handleSearch() {
     const params = new URLSearchParams();
@@ -37,6 +56,11 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
     if (priceMax) params.set("priceMax", priceMax);
     if (brand) params.set("brand", brand);
     if (material) params.set("material", material);
+    if (applianceType) params.set("applianceType", applianceType);
+    if (condition) params.set("condition", condition);
+    if (dateFrom) params.set("dateFrom", dateFrom);
+    if (dateTo) params.set("dateTo", dateTo);
+    if (warranty && warranty !== "all") params.set("warranty", warranty);
     if (sort && sort !== "latest") params.set("sort", sort);
     params.set("page", "1");
     router.push(`${baseHref}?${params.toString()}`);
@@ -48,8 +72,30 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
     setPriceMax("");
     setBrand("");
     setMaterial("");
+    setApplianceType("");
+    setCondition("");
+    setDateFrom("");
+    setDateTo("");
+    setWarranty("all");
     setSort("latest");
     router.push(`${baseHref}?page=1`);
+  }
+
+  // W-2-D (D5): preset "7 วันล่าสุด"
+  function handleLast7Days() {
+    const today = new Date();
+    const week = new Date(today);
+    week.setDate(today.getDate() - 7);
+    const toStr = today.toISOString().slice(0, 10);
+    const fromStr = week.toISOString().slice(0, 10);
+    setDateFrom(fromStr);
+    setDateTo(toStr);
+    // auto-apply
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("dateFrom", fromStr);
+    params.set("dateTo", toStr);
+    params.set("page", "1");
+    router.push(`${baseHref}?${params.toString()}`);
   }
 
   const sortOptions =
@@ -141,6 +187,90 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
               <option key={m} value={m}>{m}</option>
             ))}
           </select>
+        </div>
+      )}
+
+      {/* W-2-D (D5): Appliance Type filter */}
+      <div>
+        <label className="block text-sm text-gray-700 font-medium mb-2">ประเภทเครื่องใช้ไฟฟ้า</label>
+        <select
+          value={applianceType}
+          onChange={(e) => setApplianceType(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
+        >
+          <option value="">ทุกประเภท</option>
+          {APPLIANCE_TYPES.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* W-2-D (D5): Condition — เฉพาะ resell mode */}
+      {mode !== "scrap" && (
+        <div>
+          <label className="block text-sm text-gray-700 font-medium mb-2">สภาพการใช้งาน</label>
+          <select
+            value={condition}
+            onChange={(e) => setCondition(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
+          >
+            <option value="">ทั้งหมด</option>
+            {CONDITIONS.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* W-2-D (D5): Date range */}
+      <div>
+        <label className="block text-sm text-gray-700 font-medium mb-2">ช่วงวันที่ประกาศ</label>
+        <div className="flex gap-2 mb-2">
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-website-brand-500"
+          />
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-website-brand-500"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleLast7Days}
+          className="w-full text-xs text-website-brand-600 hover:text-website-brand-700 border border-website-brand-300 hover:border-website-brand-500 py-1.5 rounded-lg font-medium transition"
+        >
+          📅 7 วันล่าสุด
+        </button>
+      </div>
+
+      {/* W-2-D (D5): Warranty — เฉพาะ resell mode */}
+      {mode !== "scrap" && (
+        <div>
+          <label className="block text-sm text-gray-700 font-medium mb-2">การรับประกัน</label>
+          <div className="space-y-1.5">
+            {[
+              { value: "all", label: "ทั้งหมด" },
+              { value: "yes", label: "มีรับประกัน" },
+              { value: "no", label: "ไม่มีรับประกัน" },
+            ].map((opt) => (
+              <label key={opt.value} className="flex items-center gap-2 cursor-pointer text-sm">
+                <input
+                  type="radio"
+                  name="warranty"
+                  value={opt.value}
+                  checked={warranty === opt.value}
+                  onChange={(e) => setWarranty(e.target.value)}
+                  className="text-website-brand-500 focus:ring-website-brand-500"
+                />
+                <span className="text-gray-700">{opt.label}</span>
+              </label>
+            ))}
+          </div>
         </div>
       )}
 
