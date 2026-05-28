@@ -2,7 +2,8 @@
 // ห้าม import โดยตรงจาก packages/shared/dal/ (Lesson #33)
 // T+2: switch to real import หลัง Backend merge
 
-export type ContentType = 'hero' | 'about' | 'faq' | 'static'
+// W-3-A (fa93432) extended backend Zod enum → mirror here
+export type ContentType = 'hero' | 'about' | 'faq' | 'static' | 'legal' | 'contact' | 'social_links'
 export type ContentStatus = 'draft' | 'published'
 
 export interface ContentImageDto {

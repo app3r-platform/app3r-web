@@ -107,9 +107,11 @@ export const formFieldsRegistry: Record<ModuleKey, FormFieldsConfig> = {
     fields: [
       { name: 'title', label: 'หัวข้อ', type: 'text', required: true },
       { name: 'type', label: 'ประเภท', type: 'select', required: true, options: [
-        { value: 'article', label: 'บทความ' },
-        { value: 'marketing', label: 'การตลาด' },
-        { value: 'contact', label: 'ติดต่อ' },
+        { value: 'article',      label: 'บทความ' },
+        { value: 'marketing',    label: 'การตลาด' },
+        { value: 'contact',      label: 'ติดต่อเรา' },
+        { value: 'legal',        label: 'ข้อกำหนดทางกฎหมาย' },
+        { value: 'social_links', label: 'ลิงก์โซเชียล' },
       ] },
       { name: 'author', label: 'ผู้เขียน', type: 'text', required: true },
       { name: 'status', label: 'สถานะ', type: 'select', required: true, options: [

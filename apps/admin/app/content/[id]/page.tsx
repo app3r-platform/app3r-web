@@ -219,7 +219,7 @@ export default function EditContentPage({ params }: EditContentPageProps) {
         {/* tab content */}
         <div>
           {activeTab === 'editor' && (
-            <ContentEditor initialContent={body} onChange={setBody} />
+            <ContentEditor type={page.type} initialContent={body} onChange={setBody} />
           )}
 
           {activeTab === 'images' && (
