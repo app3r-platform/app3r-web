@@ -2,11 +2,15 @@
 // components/marketing/groups/ResellGroup.tsx
 // W-2-A: กลุ่ม 1 — ขายมือสอง (Resell)
 // มีรูปประกอบ · group by category · 4 ต่อแถว · 2 แถวต่อประเภท · เรียงล่าสุดก่อน
+// W-2-B (D1 role-based): WeeeU เห็นเฉพาะของตัวเอง · Anon คลิก → /register/weeer
 // ============================================================
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { mockResellListings } from "@/lib/mock/resell";
 import ListingCard from "@/components/listings/ListingCard";
 import ApplianceTypeRow from "./ApplianceTypeRow";
+import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { ResellListing } from "@/lib/types";
 
 /**
@@ -23,13 +27,36 @@ function groupByCategory(items: ResellListing[]): Record<string, ResellListing[]
   }, {});
 }
 
-export default function ResellGroup() {
+export default async function ResellGroup() {
+  // W-2-B: อ่าน mock role จาก cookie (Server Component)
+  const cookieStore = await cookies();
+  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+
   // กรอง active เท่านั้น
-  const activeListings = mockResellListings.filter((l) => l.status === "active");
+  let activeListings = mockResellListings.filter((l) => l.status === "active");
+
+  // D1 role-based filter: WeeeU เห็นเฉพาะของตัวเอง
+  if (role === "weeeu") {
+    const myId = MOCK_USERS.weeeu.id;
+    activeListings = activeListings.filter((l) => l.seller.id === myId);
+  }
+
   const grouped = groupByCategory(activeListings);
   const categories = Object.keys(grouped);
 
-  if (categories.length === 0) return null;
+  if (categories.length === 0) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+          <p className="text-gray-500 text-sm">
+            {role === "weeeu"
+              ? "📭 คุณยังไม่มีประกาศขายมือสอง"
+              : "📭 ยังไม่มีประกาศขายมือสอง"}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
@@ -55,7 +82,11 @@ export default function ResellGroup() {
           applianceType={category}
           items={grouped[category]}
           rowsPerType={2}
-          renderItem={(item) => <ListingCard listing={item} />}
+          renderItem={(item) => (
+            <RoleAwareCard href={`/listings/resell/${item.id}`}>
+              <ListingCard listing={item} />
+            </RoleAwareCard>
+          )}
         />
       ))}
     </section>

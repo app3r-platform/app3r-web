@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import DevAuthBanner from "../components/dev/DevAuthBanner";
 import { ScreenBadge } from "../components/ScreenBadge";
+import MockAuthSwitcher from "../components/auth/MockAuthSwitcher";
 
 export const metadata: Metadata = {
   title: {
@@ -51,6 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         {process.env.NODE_ENV === "development" && <DevAuthBanner />}
         <ScreenBadge />
+        {/* W-2-B (D3): Mock Auth Switcher — R4 mitigated (env-gated + middleware guard) */}
+        <MockAuthSwitcher />
       </body>
     </html>
   );

@@ -4,9 +4,12 @@
 // มีรูปประกอบ · group by material · 4 ต่อแถว · 1 แถวต่อประเภท · เรียงล่าสุดก่อน
 // ============================================================
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { mockScrapListings } from "@/lib/mock/scrap";
 import ListingCard from "@/components/listings/ListingCard";
 import ApplianceTypeRow from "./ApplianceTypeRow";
+import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { ScrapListing } from "@/lib/types";
 
 // Scrap ไม่มี postedDaysAgo ใน type — ใช้ลำดับใน array แทน (assume sorted newest first ใน mock)
@@ -19,12 +22,32 @@ function groupByMaterial(items: ScrapListing[]): Record<string, ScrapListing[]> 
   }, {});
 }
 
-export default function ScrapGroup() {
-  const activeListings = mockScrapListings.filter((l) => l.status === "active");
+export default async function ScrapGroup() {
+  const cookieStore = await cookies();
+  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+
+  let activeListings = mockScrapListings.filter((l) => l.status === "active");
+
+  // D1 role-based filter: WeeeU เห็นเฉพาะของตัวเอง
+  if (role === "weeeu") {
+    const myId = MOCK_USERS.weeeu.id;
+    activeListings = activeListings.filter((l) => l.seller.id === myId);
+  }
+
   const grouped = groupByMaterial(activeListings);
   const materials = Object.keys(grouped);
 
-  if (materials.length === 0) return null;
+  if (materials.length === 0) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+          <p className="text-gray-500 text-sm">
+            {role === "weeeu" ? "📭 คุณยังไม่มีประกาศซาก" : "📭 ยังไม่มีประกาศซาก"}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
@@ -50,7 +73,11 @@ export default function ScrapGroup() {
           applianceType={material}
           items={grouped[material]}
           rowsPerType={1}
-          renderItem={(item) => <ListingCard listing={item} />}
+          renderItem={(item) => (
+            <RoleAwareCard href={`/listings/scrap/${item.id}`}>
+              <ListingCard listing={item} />
+            </RoleAwareCard>
+          )}
         />
       ))}
     </section>

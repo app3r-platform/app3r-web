@@ -4,8 +4,11 @@
 // ❌ ไม่มีรูป · group by applianceType · 4 ต่อแถว · 2 แถวต่อประเภท · เรียงล่าสุดก่อน
 // ============================================================
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { maintainJobs } from "@/lib/mock/maintain-jobs";
 import ApplianceTypeRow from "./ApplianceTypeRow";
+import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { AuthenticatedJobProjection } from "@/lib/types/listings-customer-jobs";
 
 function groupByApplianceType(
@@ -49,12 +52,32 @@ function JobCardNoImage({ job }: { job: AuthenticatedJobProjection }) {
   );
 }
 
-export default function MaintainRequestGroup() {
-  const active = maintainJobs.filter((j) => j.status === "ANNOUNCED");
+export default async function MaintainRequestGroup() {
+  const cookieStore = await cookies();
+  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+
+  let active = maintainJobs.filter((j) => j.status === "ANNOUNCED");
+
+  // D1 role-based filter: WeeeU เห็นเฉพาะของตัวเอง
+  if (role === "weeeu") {
+    const myId = MOCK_USERS.weeeu.id;
+    active = active.filter((j) => j.ownerId === myId);
+  }
+
   const grouped = groupByApplianceType(active);
   const types = Object.keys(grouped);
 
-  if (types.length === 0) return null;
+  if (types.length === 0) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+          <p className="text-gray-500 text-sm">
+            {role === "weeeu" ? "📭 คุณยังไม่มีงานบำรุงรักษาที่แจ้ง" : "📭 ยังไม่มีงานบำรุงรักษา"}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
@@ -80,7 +103,11 @@ export default function MaintainRequestGroup() {
           applianceType={type}
           items={grouped[type]}
           rowsPerType={2}
-          renderItem={(job) => <JobCardNoImage job={job} />}
+          renderItem={(job) => (
+            <RoleAwareCard href={`/listings/maintain/${job.id}`}>
+              <JobCardNoImage job={job} />
+            </RoleAwareCard>
+          )}
         />
       ))}
     </section>
