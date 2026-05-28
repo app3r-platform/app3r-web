@@ -15,7 +15,7 @@ import { listPublishedPages, getPageBySlug } from '../services/content-service'
 
 export const contentPublicRouter = new OpenAPIHono()
 
-const ContentTypeParam = z.enum(['hero', 'about', 'faq', 'static'])
+const ContentTypeParam = z.enum(['hero', 'about', 'faq', 'static', 'legal', 'contact', 'social_links'])
 
 // ── GET /api/content/:type ────────────────────────────────────────────────────
 const listRoute = createRoute({

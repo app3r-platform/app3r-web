@@ -13,7 +13,7 @@ export const contentPages = pgTable(
   {
     id:          uuid('id').primaryKey().defaultRandom(),
     slug:        text('slug').notNull(),
-    type:        text('type').notNull(),                       // 'hero' | 'about' | 'faq' | 'static'
+    type:        text('type').notNull(),                       // 'hero' | 'about' | 'faq' | 'static' | 'legal' | 'contact' | 'social_links'
     title:       text('title').notNull(),
     body:        jsonb('body').notNull().default({}),
     status:      text('status').notNull().default('draft'),
