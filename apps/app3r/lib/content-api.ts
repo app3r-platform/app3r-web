@@ -11,6 +11,13 @@ import type { ContentPageDetailDto, ContentPreviewTokenDto } from './types/conte
 /** revalidate (วินาที) สำหรับ ISR (Incremental Static Regeneration) */
 const REVALIDATE = 60;
 
+/**
+ * W-3-E-1 fix: CMS backend URL (Hono on :8787 ตั้งแต่ W-3-A)
+ * Override ได้ผ่าน env var เมื่อ deploy (เช่น Docker → http://host.docker.internal:8787)
+ * Default :8787 = Hono CMS API (ไม่ใช่ Python backend :8000)
+ */
+const CMS_BACKEND_URL = process.env.CMS_BACKEND_URL ?? 'http://localhost:8787';
+
 // ============================================================
 // Internal fetch helpers
 // ============================================================
@@ -27,8 +34,8 @@ async function fetchContentPage(
     const path = slug
       ? `/api/content/${type}/${slug}`
       : `/api/content/${type}`;
-    // ใช้ relative URL → Next.js rewrite proxy จัดการส่งต่อไป backend (localhost:8000)
-    const res = await fetch(`http://localhost:8000${path}`, {
+    // W-3-E-1 fix: เรียก Hono CMS API ตรง (:8787) ไม่ใช่ Python backend (:8000)
+    const res = await fetch(`${CMS_BACKEND_URL}${path}`, {
       next: { revalidate: REVALIDATE },
     });
     if (!res.ok) return null;
@@ -151,8 +158,9 @@ export async function getPreviewPage(
   token: string,
 ): Promise<ContentPageDetailDto | null> {
   try {
+    // W-3-E-1 fix: เรียก Hono CMS API (:8787) ไม่ใช่ Python backend (:8000)
     const res = await fetch(
-      `http://localhost:8000/api/content/preview/${token}`,
+      `${CMS_BACKEND_URL}/api/content/preview/${token}`,
       { cache: 'no-store' }, // ห้าม cache — preview ต้องสดทุกครั้ง
     );
     if (!res.ok) return null;
