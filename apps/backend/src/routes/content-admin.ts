@@ -41,7 +41,7 @@ async function getAuthUser(c: { req: { header: (k: string) => string | undefined
 const err = (detail: string) => ({ detail })
 
 // ── Shared schemas ─────────────────────────────────────────────────────────────
-const ContentTypeEnum = z.enum(['hero', 'about', 'faq', 'static'])
+const ContentTypeEnum = z.enum(['hero', 'about', 'faq', 'static', 'legal', 'contact', 'social_links'])
 
 const PageDtoSchema = z.object({
   id: z.string().uuid(),

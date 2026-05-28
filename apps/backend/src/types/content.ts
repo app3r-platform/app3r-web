@@ -18,7 +18,7 @@
  */
 
 // ── Status & Type ──────────────────────────────────────────────────────────────
-export type ContentType = 'hero' | 'about' | 'faq' | 'static'
+export type ContentType = 'hero' | 'about' | 'faq' | 'static' | 'legal' | 'contact' | 'social_links'
 export type ContentStatus = 'draft' | 'published'
 
 // ── Image DTO ──────────────────────────────────────────────────────────────────
