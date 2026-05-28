@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { footerContent } from "@/lib/content/footer";
+import { getSocialLinks } from "@/lib/content-api";
 
 const footerLinks = {
   ประกาศ: [
@@ -26,9 +27,13 @@ const socialIcons: Record<string, string> = {
   instagram: 'ig',
 };
 
-export default function Footer() {
+export default async function Footer() {
   const year = new Date().getFullYear();
   const copyright = footerContent.copyrightTemplate.replace('{year}', String(year));
+
+  // W-3-C Sub-C.4: Social links จาก CMS — fallback to static (ใน getSocialLinks)
+  // ซ่อน link ที่ url ว่างเปล่า (อยู่ใน getSocialLinks ด้วย)
+  const socialLinks = await getSocialLinks();
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -46,21 +51,23 @@ export default function Footer() {
             <p className="text-xs text-gray-500">
               แพลตฟอร์มตัวกลางด้านเครื่องใช้ไฟฟ้าครบวงจร — ซื้อขาย ซ่อม บำรุงรักษา ในที่เดียว
             </p>
-            {/* Social links */}
-            <div className="flex gap-2">
-              {footerContent.socialLinks.map((s) => (
-                <a
-                  key={s.platform}
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="bg-gray-800 hover:bg-gray-700 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition"
-                >
-                  {socialIcons[s.platform] ?? s.platform[0].toUpperCase()}
-                </a>
-              ))}
-            </div>
+            {/* Social links — W-3-C CMS-driven (ซ่อนถ้า url ว่าง) */}
+            {socialLinks.length > 0 && (
+              <div className="flex gap-2">
+                {socialLinks.map((s) => (
+                  <a
+                    key={s.platform}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="bg-gray-800 hover:bg-gray-700 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition"
+                  >
+                    {socialIcons[s.platform] ?? s.platform[0].toUpperCase()}
+                  </a>
+                ))}
+              </div>
+            )}
             <div className="flex gap-3">
               <Link
                 href="/download"

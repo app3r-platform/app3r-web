@@ -179,3 +179,154 @@ export async function getPreviewPage(
 export function isPreviewTokenExpired(expiresAt: string): boolean {
   return new Date(expiresAt).getTime() < Date.now();
 }
+
+// ============================================================
+// W-3-C — Public Read Extensions (Sub-C.1)
+// Legal pages / Contact / Social Links — มี fallback เป็น static stub
+// Note: Backend Hono (W-3-A) → port 8787; แต่ Docker container ใช้
+//       BACKEND_URL ผ่าน Next.js rewrites → fallback ทำงานเสมอเมื่อ unreachable
+// ============================================================
+
+import { staticPages } from './content/static-pages';
+import { contactInfo } from './content/contact-info';
+import { footerContent } from './content/footer';
+import type { StaticPage } from './content/types';
+import type { ContactInfo } from './types/contact';
+
+// ── Sub-C.1.a — Legal pages ─────────────────────────────────
+export type LegalSlug = 'terms' | 'privacy' | 'cookies' | 'refund';
+
+// map: CMD slug "refund" ↔ static stub key "refund-policy"
+const STATIC_SLUG_MAP: Record<LegalSlug, string> = {
+  terms: 'terms',
+  privacy: 'privacy',
+  cookies: 'cookies',
+  refund: 'refund-policy',
+};
+
+export interface LegalPageData {
+  slug: LegalSlug;
+  title: string;
+  body: string;          // markdown
+  lastModified?: string;
+  effectiveDate?: string;
+  source: 'cms' | 'static';
+}
+
+/**
+ * ดึง legal page จาก CMS — fallback → static stub (lib/content/static-pages.ts)
+ * Backend response: { id, slug, type:'legal', title, body:{markdown?:string}, ... }
+ */
+export async function getLegalPage(slug: LegalSlug): Promise<LegalPageData | null> {
+  // 1. Try CMS
+  const page = await fetchContentPage('legal', slug);
+  if (page && page.title) {
+    const body = page.body as { markdown?: string } | undefined;
+    const markdown = body?.markdown;
+    if (typeof markdown === 'string' && markdown.length > 0) {
+      return {
+        slug,
+        title: page.title,
+        body: markdown,
+        lastModified: page.updatedAt?.slice(0, 10),
+        effectiveDate: page.publishedAt?.slice(0, 10),
+        source: 'cms',
+      };
+    }
+  }
+  // 2. Fallback → static stub
+  const staticKey = STATIC_SLUG_MAP[slug];
+  const stub = staticPages[staticKey];
+  if (!stub) return null;
+  return {
+    slug,
+    title: stub.title,
+    body: stub.body,
+    lastModified: stub.lastModified,
+    effectiveDate: stub.effectiveDate,
+    source: 'static',
+  };
+}
+
+// ── Sub-C.1.b — Contact page ────────────────────────────────
+export interface ContactPageData {
+  title: string;
+  info: ContactInfo;
+  source: 'cms' | 'static';
+}
+
+/**
+ * ดึง contact page จาก CMS — fallback → static stub (lib/content/contact-info.ts)
+ * Backend response: { title, body: { phone?, email?, address?, lineId?, openingHours?, categories? }, ... }
+ */
+export async function getContactPage(): Promise<ContactPageData> {
+  const page = await fetchContentPage('contact', 'main');
+  if (page && page.body && typeof page.body === 'object') {
+    const b = page.body as Partial<ContactInfo> & {
+      phone?: string;
+      email?: string;
+      address?: string;
+      lineId?: string;
+      openingHours?: string;
+    };
+    // merge: ใช้ CMS data ก่อน, fallback field ที่ไม่มีกับ static
+    const merged: ContactInfo = {
+      companyName: contactInfo.companyName,
+      address: b.address ?? contactInfo.address,
+      phones: b.phone ? [b.phone] : contactInfo.phones,
+      emails: contactInfo.emails, // emails array — CMS ไม่ได้ extend ใน W-3-C
+      businessHours: b.openingHours ?? contactInfo.businessHours,
+      lineId: b.lineId ?? contactInfo.lineId,
+    };
+    // ถ้า CMS มี field อะไรซักอย่างที่ไม่ใช่ defaults → ถือว่าใช้ CMS
+    const hasCmsContent = !!(b.phone || b.email || b.address || b.lineId || b.openingHours);
+    return {
+      title: page.title || 'ติดต่อเรา',
+      info: merged,
+      source: hasCmsContent ? 'cms' : 'static',
+    };
+  }
+  // Fallback → static
+  return {
+    title: 'ติดต่อเรา',
+    info: contactInfo,
+    source: 'static',
+  };
+}
+
+// ── Sub-C.1.c — Social Links ────────────────────────────────
+export interface SocialLink {
+  platform: 'facebook' | 'line' | 'instagram' | string;
+  url: string;
+  label: string;
+}
+
+/**
+ * ดึง social links จาก CMS — fallback → static (lib/content/footer.ts)
+ * Backend response: { body: { facebook, line, instagram } }
+ * ⚠️ ซ่อน link ที่ url ว่าง (per CMD)
+ */
+export async function getSocialLinks(): Promise<SocialLink[]> {
+  const page = await fetchContentPage('social_links', 'footer');
+  if (page && page.body && typeof page.body === 'object') {
+    const b = page.body as Record<string, string>;
+    const links: SocialLink[] = [];
+    if (typeof b.facebook === 'string' && b.facebook.trim()) {
+      links.push({ platform: 'facebook', url: b.facebook, label: 'Facebook' });
+    }
+    if (typeof b.line === 'string' && b.line.trim()) {
+      links.push({ platform: 'line', url: b.line, label: 'LINE Official' });
+    }
+    if (typeof b.instagram === 'string' && b.instagram.trim()) {
+      links.push({ platform: 'instagram', url: b.instagram, label: 'Instagram' });
+    }
+    if (links.length > 0) return links;
+  }
+  // Fallback → static (kill empty url entries)
+  return footerContent.socialLinks
+    .filter((s) => s.url && s.url.trim().length > 0)
+    .map((s) => ({ platform: s.platform, url: s.url, label: s.label }));
+}
+
+// Re-export type alias for caller
+export type { StaticPage };
