@@ -6,8 +6,9 @@
 
 export type MockRole = "anonymous" | "weeeu" | "weeer" | "weeet";
 
-export const MOCK_ROLE_COOKIE = "mock_role";
-export const MOCK_ROLE_STORAGE = "mock_role";
+// ใช้ cookie/storage key เดียวกับ DevAuthBanner เดิม (existing system) — sync ได้
+export const MOCK_ROLE_COOKIE = "app3r-mock-role";
+export const MOCK_ROLE_STORAGE = "app3r-mock-role";
 
 export const MOCK_ROLES: { value: MockRole; label: string; color: string; emoji: string }[] = [
   { value: "anonymous", label: "ผู้เยี่ยมชม", color: "bg-gray-200 text-gray-800", emoji: "👤" },

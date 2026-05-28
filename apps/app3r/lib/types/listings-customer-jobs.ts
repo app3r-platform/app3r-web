@@ -42,4 +42,7 @@ export interface AuthenticatedJobProjection extends PublicJobProjection {
   customerName: string;  // 'รอยืนยัน (Phase D)' for mock
   customerPhone: string; // '0xx-xxx-xxxx (Phase D)' for mock
   featured?: boolean;
+  // W-2-D (D6): location detail — เพิ่ม subDistrict/district
+  subDistrict?: string;  // ตำบล (optional — เพิ่มในข้อมูลใหม่)
+  district?: string;     // เขต / อำเภอ (optional)
 }

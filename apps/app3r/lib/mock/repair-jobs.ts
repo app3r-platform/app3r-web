@@ -24,6 +24,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
     title: 'แอร์ไม่เย็น ต้องการช่างมาดูที่บ้าน',
     applianceType: 'แอร์',
     area: 'กรุงเทพมหานคร',
+    district: 'เขตบางกะปิ',     // W-2-D D6: ตำบล/เขต
+    subDistrict: 'แขวงหัวหมาก',
     serviceType: 1,
     postedAt: '2026-05-08',
     status: 'ANNOUNCED',

@@ -30,7 +30,7 @@ function groupByCategory(items: ResellListing[]): Record<string, ResellListing[]
 export default async function ResellGroup() {
   // W-2-B: อ่าน mock role จาก cookie (Server Component)
   const cookieStore = await cookies();
-  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+  const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
   // กรอง active เท่านั้น
   let activeListings = mockResellListings.filter((l) => l.status === "active");

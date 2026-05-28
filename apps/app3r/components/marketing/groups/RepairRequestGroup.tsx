@@ -62,7 +62,7 @@ function JobCardNoImage({ job, kind }: { job: AuthenticatedJobProjection; kind: 
 
 export default async function RepairRequestGroup() {
   const cookieStore = await cookies();
-  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+  const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
   // กรอง ANNOUNCED status เท่านั้น (active)
   let active = repairJobs.filter((j) => j.status === "ANNOUNCED");

@@ -51,7 +51,10 @@ export default function RepairJobDetail({ job }: RepairJobDetailProps) {
               <tbody>
                 {[
                   { label: 'ประเภทเครื่อง', value: job.applianceType },
-                  { label: 'พื้นที่',         value: job.area },
+                  { label: 'จังหวัด',        value: job.area },
+                  // W-2-D (D6): ตำบล / เขต — แสดงเฉพาะเมื่อ mock มีข้อมูล
+                  ...(job.district ? [{ label: 'เขต / อำเภอ', value: job.district }] : []),
+                  ...(job.subDistrict ? [{ label: 'ตำบล / แขวง', value: job.subDistrict }] : []),
                   { label: 'ประเภทบริการ',   value: getServiceTypeLabel(job.serviceType) },
                   { label: 'โพสต์เมื่อ',     value: job.postedAt },
                   { label: 'งบประมาณ',       value: `${job.estimatedBudget.toLocaleString()} บาท` },

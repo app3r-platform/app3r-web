@@ -24,7 +24,7 @@ function groupByMaterial(items: ScrapListing[]): Record<string, ScrapListing[]> 
 
 export default async function ScrapGroup() {
   const cookieStore = await cookies();
-  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+  const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
   let activeListings = mockScrapListings.filter((l) => l.status === "active");
 

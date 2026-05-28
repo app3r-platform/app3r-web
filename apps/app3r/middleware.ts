@@ -14,12 +14,12 @@ export function middleware(request: NextRequest) {
 
   const isProd = process.env.NODE_ENV === "production";
   const devNavEnabled = process.env.NEXT_PUBLIC_DEV_NAV === "true";
-  const mockRoleCookie = request.cookies.get("mock_role");
+  const mockRoleCookie = request.cookies.get("app3r-mock-role");
 
   // R4 GUARD: ถ้าอยู่ production + DEV_NAV ไม่เปิด + พบ mock_role cookie
   // → ลบ cookie ทันที (กัน mock auth leak)
   if (isProd && !devNavEnabled && mockRoleCookie) {
-    response.cookies.delete("mock_role");
+    response.cookies.delete("app3r-mock-role");
     // log warning (จะเห็นใน serverless runtime logs)
     console.warn(
       "[R4 GUARD] Stripped mock_role cookie in production environment. " +

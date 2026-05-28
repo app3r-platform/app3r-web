@@ -54,7 +54,7 @@ function JobCardNoImage({ job }: { job: AuthenticatedJobProjection }) {
 
 export default async function MaintainRequestGroup() {
   const cookieStore = await cookies();
-  const role = getMockRoleFromCookie(cookieStore.get("mock_role")?.value);
+  const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
   let active = maintainJobs.filter((j) => j.status === "ANNOUNCED");
 

@@ -25,6 +25,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
     title: 'ล้างแอร์ 2 เครื่อง พร้อมเช็คน้ำยา',
     applianceType: 'แอร์',
     area: 'กรุงเทพมหานคร',
+    district: 'เขตจตุจักร',       // W-2-D D6: ตำบล/เขต
+    subDistrict: 'แขวงลาดยาว',
     postedAt: '2026-05-09',
     status: 'ANNOUNCED',
     ownerId: 'user-021',
