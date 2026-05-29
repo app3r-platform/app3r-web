@@ -10,6 +10,9 @@
  * TD-W3-01 (no STRUCTURAL drift): ปิดได้เมื่อ test นี้ผ่าน — introspect ยืนยัน
  *   ตาราง/คอลัมน์หลัก (รวม Wave 1.2 listing_meta surface) ครบตาม schema.
  *
+ * CI re-trigger (HUB Gen 36): touch นี้เพื่อให้ Migration Guard รันด้วย SHA ใหม่
+ *   (พิสูจน์ B1 guard ทำงานจริงใน CI หลัง fix pnpm packageManager) — harmless comment เท่านั้น
+ *
  * ⚠️ TD-W3-02 (pre-existing, NOT Wave 1.2): seed 0019_seed_pricing.sql + 0024_d5_seed_pricing.sql
  *   INSERT ลงคอลัมน์ "notes" ของ used_pricing_models ที่ไม่มีใน 0014 + schema repair-pricing.ts
  *   → seed-data drift บน main (commit eb5a148 / 6bcb817, คนละ chat). routed → HUB → repair chat.
