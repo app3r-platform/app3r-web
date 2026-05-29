@@ -2,7 +2,7 @@
  * W-Round-1 Wave 2 (WeeeR) — QuestionsList (GR-5)
  *
  * Renders Q&A. Backend applies visibility filter server-side (anonymous = is_visible=true).
- * snake_case contract (Ruling 1E/1F). Structural ref: apps/app3r/components/listings/QuestionsList.tsx.
+ * camelCase contract (live Backend). Structural ref: apps/app3r/components/listings/QuestionsList.tsx.
  */
 import type { Question } from "@/lib/types/listing-meta";
 
@@ -48,7 +48,7 @@ export function QuestionsList({
                   ถาม: {q.body}
                 </p>
                 <span className="text-xs text-gray-500 shrink-0">
-                  {formatDateTh(q.created_at)}
+                  {formatDateTh(q.createdAt)}
                 </span>
               </div>
 
@@ -58,7 +58,7 @@ export function QuestionsList({
                     <li key={rep.id} className="text-xs text-gray-700">
                       <span className="font-semibold text-green-700">ตอบ:</span>{" "}
                       <span className="whitespace-pre-line">{rep.body}</span>
-                      <div className="text-gray-400 mt-0.5">{formatDateTh(rep.created_at)}</div>
+                      <div className="text-gray-400 mt-0.5">{formatDateTh(rep.createdAt)}</div>
                     </li>
                   ))}
                 </ul>

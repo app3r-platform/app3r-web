@@ -81,16 +81,16 @@ export default function ListingByIdPage({
       const [reviewsRes, questionsRes, tambon] = await Promise.all([
         getListingReviews(id),
         getListingQuestions(id),
-        meta.tambon_id ? getTambonDetail(meta.tambon_id) : Promise.resolve(null),
+        meta.tambonId ? getTambonDetail(meta.tambonId) : Promise.resolve(null),
       ]);
       if (cancelled) return;
 
       setState({
         phase: "ready",
         meta,
-        reviews: reviewsRes?.results ?? [],
-        questions: questionsRes?.results ?? [],
-        questionsClosed: questionsRes?.is_closed ?? false,
+        reviews: reviewsRes?.items ?? [],
+        questions: questionsRes?.items ?? [],
+        questionsClosed: questionsRes?.isClosed ?? false,
         tambon,
       });
     })();
@@ -130,7 +130,7 @@ export default function ListingByIdPage({
   }
 
   const { meta, reviews, questions, questionsClosed, tambon } = state;
-  const domainSegment = DOMAIN_PATH[meta.listing_type];
+  const domainSegment = DOMAIN_PATH[meta.listingType];
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -140,7 +140,7 @@ export default function ListingByIdPage({
         </Link>
         <span>/</span>
         <span className="text-gray-900 font-medium break-all">
-          #{meta.listing_id.slice(0, 8)}
+          #{meta.listingId.slice(0, 8)}
         </span>
       </nav>
 
@@ -171,13 +171,13 @@ export default function ListingByIdPage({
             <h3 className="font-semibold text-gray-800 mb-2">เกี่ยวกับประกาศนี้</h3>
             <p>
               ประกาศ ID:{" "}
-              <code className="text-[10px] break-all">{meta.listing_id}</code>
+              <code className="text-[10px] break-all">{meta.listingId}</code>
             </p>
-            <p className="mt-1">ประเภท: {meta.listing_type}</p>
+            <p className="mt-1">ประเภท: {meta.listingType}</p>
             <p className="mt-1">สถานะ: {meta.state}</p>
-            {meta.tambon_id && (
+            {meta.tambonId && (
               <p className="mt-1">
-                Tambon ID: <code className="text-[10px]">{meta.tambon_id}</code>
+                Tambon ID: <code className="text-[10px]">{meta.tambonId}</code>
               </p>
             )}
           </div>

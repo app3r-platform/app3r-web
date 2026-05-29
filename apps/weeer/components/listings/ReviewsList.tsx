@@ -2,7 +2,7 @@
  * W-Round-1 Wave 2 (WeeeR) — ReviewsList (D86)
  *
  * Renders visible reviews (Backend filters server-side). Owner replies inline.
- * snake_case contract (Ruling 1E/1F). Structural ref: apps/app3r/components/listings/ReviewsList.tsx.
+ * camelCase contract (live Backend). Structural ref: apps/app3r/components/listings/ReviewsList.tsx.
  */
 import type { Review } from "@/lib/types/listing-meta";
 
@@ -62,7 +62,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
           <li key={r.id} className="border-l-4 border-green-200 pl-4 py-2">
             <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
               <StarRating rating={r.rating} />
-              <span className="text-xs text-gray-500">{formatDateTh(r.created_at)}</span>
+              <span className="text-xs text-gray-500">{formatDateTh(r.createdAt)}</span>
             </div>
             {r.comment ? (
               <p className="text-sm text-gray-800 whitespace-pre-line">{r.comment}</p>
@@ -78,7 +78,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
                       เจ้าของประกาศตอบ (Owner reply):
                     </span>{" "}
                     <span className="whitespace-pre-line">{rep.body}</span>
-                    <div className="text-gray-400 mt-0.5">{formatDateTh(rep.created_at)}</div>
+                    <div className="text-gray-400 mt-0.5">{formatDateTh(rep.createdAt)}</div>
                   </li>
                 ))}
               </ul>
