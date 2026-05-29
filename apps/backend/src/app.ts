@@ -59,6 +59,7 @@ import { listingReviewsRouter } from './routes/listing-reviews'
 import { listingQuestionsRouter } from './routes/listing-questions'
 import { moderationRouter } from './routes/moderation'
 import { adsRouter } from './routes/ads'
+import { offersRouter } from './routes/offers' // Wave 2.x Part1 (D61)
 
 export const app = new OpenAPIHono()
 
@@ -190,6 +191,9 @@ app.route('/api/v1/admin/moderation', moderationRouter)
 app.route('/api/v1/admin/moderation/', moderationRouter)
 app.route('/api/v1/ads', adsRouter)
 app.route('/api/v1/ads/', adsRouter)
+// Wave 2.x Part1: D61 offers (buyer offers API)
+app.route('/api/v1/offers', offersRouter)
+app.route('/api/v1/offers/', offersRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)

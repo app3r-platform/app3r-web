@@ -18,15 +18,29 @@ import { listingMeta, adminConfigAudit } from '../db/schema'
 import type { ListingState } from '../db/schema'
 import { debitGold, creditGold, type Tx } from './point-service'
 
-// allowed transitions (forward + cancel) — single source of truth
+// allowed transitions — D59 canonical (Ruling 1B) · single source of truth
 const TRANSITIONS: Record<ListingState, ListingState[]> = {
-  draft: ['published', 'cancelled'],
-  published: ['has_offer', 'cancelled'],
-  has_offer: ['matched', 'cancelled'],
-  matched: ['completed', 'cancelled'],
+  draft: ['announced', 'cancelled'],
+  announced: ['receiving_offers', 'cancelled'],
+  receiving_offers: ['offer_selected', 'cancelled'],
+  offer_selected: ['buyer_confirmed', 'cancelled', 'disputed'],
+  buyer_confirmed: ['in_progress', 'cancelled', 'disputed'],
+  in_progress: ['delivered', 'disputed', 'cancelled'],
+  delivered: ['inspection_period', 'disputed'],
+  inspection_period: ['completed', 'disputed'],
   completed: [], // terminal
   cancelled: [], // terminal
+  disputed: ['completed', 'cancelled'], // admin resolves
 }
+
+// D83 overlay (Ruling 1C): states ที่ escrow ถูก hold แล้ว → cancel = refund ผู้ซื้อ
+const ESCROW_LOCKED: ReadonlySet<ListingState> = new Set([
+  'offer_selected',
+  'buyer_confirmed',
+  'in_progress',
+  'delivered',
+  'inspection_period',
+])
 
 export function canTransition(from: ListingState, to: ListingState): boolean {
   return TRANSITIONS[from]?.includes(to) ?? false
@@ -68,10 +82,12 @@ export async function transitionListingState(args: TransitionArgs) {
     const from = listing.state as ListingState
     if (!canTransition(from, args.to)) throw new StateTransitionError(from, args.to)
 
-    // ── point lock side-effects ────────────────────────────────────────────────
-    if (args.to === 'matched') {
+    // ── point lock side-effects (Ruling 1D · Gold Point · D75 ปัดเต็ม) ───────────
+    // select-offer/matched → hold เต็มจำนวน · completed → release ให้ผู้ขาย ·
+    // cancel จาก escrow-locked state → refund ผู้ซื้อ
+    if (args.to === 'offer_selected') {
       if (!args.buyerUserId || args.pointAmount == null) {
-        throw new Error('MATCHED_REQUIRES_BUYER_AND_AMOUNT')
+        throw new Error('OFFER_SELECTED_REQUIRES_BUYER_AND_AMOUNT')
       }
       await debitGold(tx, {
         userId: args.buyerUserId,
@@ -82,7 +98,7 @@ export async function transitionListingState(args: TransitionArgs) {
         metadata: { escrow: true, phase: 'hold' },
       })
     } else if (args.to === 'completed') {
-      // release escrow → owner (ผู้รับงาน/ผู้ขาย)
+      // release escrow → owner (ผู้ขาย)
       if (args.pointAmount != null) {
         await creditGold(tx, {
           userId: listing.ownerId,
@@ -93,8 +109,8 @@ export async function transitionListingState(args: TransitionArgs) {
           metadata: { escrow: true, phase: 'release' },
         })
       }
-    } else if (args.to === 'cancelled' && from === 'matched') {
-      // refund คืนผู้ซื้อ
+    } else if (args.to === 'cancelled' && ESCROW_LOCKED.has(from)) {
+      // refund คืนผู้ซื้อ (เฉพาะ state ที่ hold escrow ไว้แล้ว)
       if (args.buyerUserId && args.pointAmount != null) {
         await creditGold(tx, {
           userId: args.buyerUserId,

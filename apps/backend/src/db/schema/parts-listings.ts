@@ -77,6 +77,9 @@ export const partsListings = pgTable(
     // สถานะ listing: 'active' | 'inactive' | 'sold_out' | 'deleted'
     status: text('status').notNull().default('active'),
 
+    // Wave 2.x Ruling 2: ประเภทอะไหล่ (compressor/motor/pcb/…) — additive nullable
+    category: text('category'),
+
     // W-Round-1 Wave 1.2 B2: link → listing_meta (universal id) — additive, nullable
     listingMetaId: uuid('listing_meta_id').references(() => listingMeta.listingId, {
       onDelete: 'set null',

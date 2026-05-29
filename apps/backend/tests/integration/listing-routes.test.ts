@@ -37,7 +37,7 @@ describe('Wave 1.2 listing routes — mount + no 5xx', () => {
 
 describe('Wave 1.2 auth gates', () => {
   it('POST /listings/{id}/transition without token → 401', async () => {
-    const r = await req('POST', `/api/v1/listings/${FAKE}/transition`, { to: 'published' })
+    const r = await req('POST', `/api/v1/listings/${FAKE}/transition`, { to: 'announced' })
     expect(r.status).toBe(401)
   })
 

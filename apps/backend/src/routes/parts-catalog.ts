@@ -73,6 +73,10 @@ function mapListing(row: typeof partsListings.$inferSelect) {
     photos: row.photos,
     warrantyDays: row.warrantyDays,
     status: row.status,
+    // Ruling 2: catalog reference DTO — unit_price=THB (ราคาอ้างอิง) + category + shop_name
+    category: row.category ?? null,
+    // shop_name: ยังไม่มี field ใน schema (users มีแค่ email) → null รอ profile/shop name (gap → HUB)
+    shopName: null as string | null,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   }
@@ -176,6 +180,8 @@ partsCatalogRouter.post('/', async (c) => {
     status: z.enum(['active', 'inactive']).default('active'),
     // B6 single-source-of-truth: ตำบล (GR-9) เก็บที่ listing_meta (parts_listings ไม่มี column)
     tambonId: z.number().int().positive().optional(),
+    // Ruling 2: ประเภทอะไหล่ (free text รอ confirm enum กับ reference data)
+    category: z.string().max(100).optional(),
   })
 
   const parsed = Schema.safeParse(body)
@@ -206,6 +212,7 @@ partsCatalogRouter.post('/', async (c) => {
         tierPricing: d.tierPricing,
         photos: d.photos,
         status: d.status,
+        category: d.category,
       })
       .returning()
 
@@ -217,7 +224,7 @@ partsCatalogRouter.post('/', async (c) => {
         domainRefId: partRow!.id,
         ownerId: user.userId,
         tambonId: d.tambonId ?? null,
-        state: d.status === 'active' ? 'published' : 'draft',
+        state: d.status === 'active' ? 'announced' : 'draft',
       })
       .returning({ listingId: listingMeta.listingId })
 

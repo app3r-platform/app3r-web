@@ -117,3 +117,8 @@ export * from './listing-meta'        // listing_meta + listing_views
 export * from './listing-engagement'  // D86 reviews+replies · GR-5 questions+replies
 export * from './moderation'          // D82 moderation_queue + moderation_audit_log
 export * from './ads'                 // C12 ads (Gold Point D75)
+
+// W-Round-1 Wave 2.x Part1 (Ruling 1A): D59 resell domain + D61 offers
+// Migration: 0030_offers_resell.sql
+export * from './used-appliance-listings' // D59 used_appliance_listings (resell/scrap)
+export * from './offers'                  // D61 offers

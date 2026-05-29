@@ -64,8 +64,17 @@ export interface PublicCounters {
  * GR-8 visibility: matched แล้ว → ซ่อน offer_count จากคนนอก
  * @param isInsider เจ้าของ listing / admin / ผู้เกี่ยวข้อง (เห็นจำนวนเสมอ)
  */
+// D59: เมื่อเลือก offer แล้ว (offer_selected เป็นต้นไป) ซ่อน offer_count จากคนนอก (GR-8)
+const OFFER_HIDDEN_STATES: ReadonlySet<string> = new Set([
+  'offer_selected',
+  'buyer_confirmed',
+  'in_progress',
+  'delivered',
+  'inspection_period',
+])
+
 export function publicCounters(listing: Pick<ListingMeta, 'state' | 'viewCount' | 'offerCount'>, isInsider: boolean): PublicCounters {
-  const hideOffer = listing.state === 'matched' && !isInsider
+  const hideOffer = OFFER_HIDDEN_STATES.has(listing.state) && !isInsider
   return {
     viewCount: listing.viewCount,
     offerCount: hideOffer ? null : listing.offerCount,

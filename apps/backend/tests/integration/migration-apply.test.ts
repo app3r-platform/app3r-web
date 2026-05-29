@@ -84,6 +84,8 @@ const EXPECTED_TABLES = [
   'listing_reviews', 'listing_review_replies',
   'listing_questions', 'listing_question_replies',
   'moderation_queue', 'moderation_audit_log', 'ads',
+  // Wave 2.x Part1 (0030): D59 resell domain + D61 offers
+  'used_appliance_listings', 'offers',
 ]
 
 // คอลัมน์/FK วิกฤตที่ต้องยืนยัน (table → columns)

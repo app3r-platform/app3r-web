@@ -1,0 +1,160 @@
+/**
+ * offers.ts — W-Round-1 Wave 2.x Part1 (Ruling 1F · D61) — buyer offers API
+ *
+ * Mounted at: /api/v1/offers
+ *   POST /api/v1/offers              → create (body {listing_id,...}) — ตรง WeeeU offers.create
+ *   GET  /api/v1/offers/mine         → offers ที่ buyer ยื่น
+ *   POST /api/v1/offers/{id}/withdraw → buyer ถอน offer → status=withdrawn
+ *
+ * (POST/GET /api/v1/listings/{id}/offers อยู่ใน routes/listings.ts)
+ * Contract: snake_case (1E)
+ */
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
+import { z } from 'zod'
+import { and, eq, desc } from 'drizzle-orm'
+import { db } from '../db/client'
+import { offers, listingMeta } from '../db/schema'
+import { verifyAccessToken } from '../lib/jwt'
+import { sellerTypeFromRole, getFee, chargeFee } from '../lib/listing-helpers'
+
+export const offersRouter = new OpenAPIHono()
+
+async function getAuthUser(c: { req: { header: (k: string) => string | undefined } }) {
+  const auth = c.req.header('Authorization')
+  if (!auth?.startsWith('Bearer ')) return null
+  return verifyAccessToken(auth.slice(7)).catch(() => null)
+}
+const unauthorized = (c: { json: (b: unknown, s: 401) => Response }) =>
+  c.json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } }, 401)
+
+function offerDto(o: typeof offers.$inferSelect) {
+  return {
+    id: o.id,
+    listing_id: o.listingMetaId,
+    buyer_id: o.buyerId,
+    buyer_type: o.buyerType,
+    offer_price: Number(o.offerPrice),
+    delivery_method: o.deliveryMethod,
+    message: o.message,
+    status: o.status,
+    created_at: o.createdAt.toISOString(),
+    updated_at: o.updatedAt.toISOString(),
+  }
+}
+
+// ── GET /mine — offers ที่ buyer ยื่น ──────────────────────────────────────────
+const mineRoute = createRoute({
+  method: 'get',
+  path: '/mine',
+  tags: ['Offers'],
+  summary: "Buyer's own offers",
+  security: [{ bearerAuth: [] }],
+  responses: { 200: { description: 'My offers' }, 401: { description: 'Unauthorized' } },
+})
+
+offersRouter.openapi(mineRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const rows = await db.select().from(offers).where(eq(offers.buyerId, user.userId)).orderBy(desc(offers.createdAt))
+  return c.json(rows.map(offerDto), 200)
+})
+
+// ── POST / — create offer (listing_id in body) ────────────────────────────────
+const createRoute_ = createRoute({
+  method: 'post',
+  path: '/',
+  tags: ['Offers'],
+  summary: 'Create offer (D61) — listing_id in body + offer_fee (1D)',
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            listing_id: z.string().uuid(),
+            offer_price: z.number().nonnegative(),
+            delivery_method: z.string(),
+            message: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: { description: 'Offer created' },
+    401: { description: 'Unauthorized' },
+    404: { description: 'Listing not found' },
+  },
+})
+
+offersRouter.openapi(createRoute_, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const b = c.req.valid('json')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, b.listing_id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+
+  const created = await db.transaction(async (tx) => {
+    const [row] = await tx
+      .insert(offers)
+      .values({
+        listingMetaId: b.listing_id,
+        buyerId: user.userId,
+        buyerType: sellerTypeFromRole(user.role),
+        offerPrice: String(b.offer_price),
+        deliveryMethod: b.delivery_method,
+        message: b.message ?? null,
+        status: 'pending',
+      })
+      .returning()
+    await tx
+      .update(listingMeta)
+      .set({
+        offerCount: listing.offerCount + 1,
+        state: listing.state === 'announced' ? 'receiving_offers' : listing.state,
+        updatedAt: new Date(),
+      })
+      .where(eq(listingMeta.listingId, b.listing_id))
+    const fee = await getFee(tx, 'offer_fee')
+    await chargeFee(tx, { userId: user.userId, amount: fee, reference: `offer:${row!.id}`, kind: 'offer_fee' })
+    return row!
+  })
+  return c.json(offerDto(created), 201)
+})
+
+// ── POST /{id}/withdraw — buyer ถอน offer ──────────────────────────────────────
+const withdrawRoute = createRoute({
+  method: 'post',
+  path: '/{id}/withdraw',
+  tags: ['Offers'],
+  summary: 'Buyer withdraws own pending offer → withdrawn',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Withdrawn' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not offer owner' },
+    404: { description: 'Not found' },
+    409: { description: 'Not pending' },
+  },
+})
+
+offersRouter.openapi(withdrawRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const [offer] = await db.select().from(offers).where(eq(offers.id, id)).limit(1)
+  if (!offer) return c.json({ error: { code: 'NOT_FOUND', message: 'Offer not found' } }, 404)
+  if (offer.buyerId !== user.userId) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Not your offer' } }, 403)
+  }
+  if (offer.status !== 'pending') {
+    return c.json({ error: { code: 'NOT_PENDING', message: `Offer is ${offer.status}` } }, 409)
+  }
+  const [row] = await db
+    .update(offers)
+    .set({ status: 'withdrawn', updatedAt: new Date() })
+    .where(and(eq(offers.id, id), eq(offers.status, 'pending')))
+    .returning()
+  return c.json(offerDto(row!), 200)
+})
