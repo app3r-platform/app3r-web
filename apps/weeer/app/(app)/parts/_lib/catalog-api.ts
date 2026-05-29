@@ -76,6 +76,8 @@ export interface CatalogSearchResponse extends CatalogListResponse {
 }
 
 export interface CatalogListParams {
+  // index signature → assignable to toQs(Record<string, string | undefined>) (กัน TS2345)
+  [key: string]: string | undefined;
   search?: string;
   sourceType?: string;
   minScore?: string;
