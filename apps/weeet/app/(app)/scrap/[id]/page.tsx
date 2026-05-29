@@ -273,7 +273,7 @@ export default function WeeeTScrapJobDetailPage({
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">ราคา offer</span>
-              <span className="font-mono font-bold text-green-600">{job.offeredPrice} Gold</span>
+              <span className="font-mono font-bold text-green-600">{job.offeredPrice} พอยต์ทอง (Gold Point)</span>
             </div>
           </div>
 
@@ -382,7 +382,7 @@ export default function WeeeTScrapJobDetailPage({
               {/* เสนอราคาใหม่ */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  ราคาที่เสนอใหม่ (Gold)
+                  ราคาที่เสนอใหม่ (พอยต์ทอง)
                 </label>
                 <div className="relative">
                   <input
@@ -392,13 +392,13 @@ export default function WeeeTScrapJobDetailPage({
                     min={0}
                     className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-400 pr-16"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">Gold</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">พอยต์ทอง</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
-                  ราคาเดิม: {job.offeredPrice} Gold
+                  ราคาเดิม: {job.offeredPrice} พอยต์ทอง
                   {Number(mismatchPrice) !== job.offeredPrice && (
                     <span className="ml-2 text-orange-600">
-                      (ลด {job.offeredPrice - Number(mismatchPrice)} Gold)
+                      (ลด {job.offeredPrice - Number(mismatchPrice)} พอยต์ทอง)
                     </span>
                   )}
                 </p>

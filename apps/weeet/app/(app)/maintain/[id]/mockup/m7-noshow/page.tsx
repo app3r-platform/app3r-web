@@ -126,7 +126,7 @@ export default function M7NoShowWeeeTMockupPage() {
               <p className="font-semibold text-amber-300">นโยบาย No-show (ตาม offer lock)</p>
               <div className="flex justify-between text-gray-300">
                 <span>ค่าเสียเที่ยวที่ WeeeU ต้องรับผิดชอบ</span>
-                <span className="font-bold text-amber-400">{JOB.noShowFee} Point</span>
+                <span className="font-bold text-amber-400">{JOB.noShowFee} พอยต์ทอง (Gold Point)</span>
               </div>
               <p className="text-gray-500 mt-1">
                 WeeeU จะถูกแจ้ง — เลือก นัดใหม่ หรือ ยกเลิกงาน

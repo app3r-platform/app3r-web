@@ -188,7 +188,7 @@ export default function ServiceListingDetailPage({
               </div>
               <p className="text-2xl font-bold text-white">
                 ฿{escrow.pointAmount.toLocaleString()}
-                <span className="text-xs text-gray-500 font-normal ml-1">Gold Point</span>
+                <span className="text-xs text-gray-500 font-normal ml-1">พอยต์ทอง (Gold Point)</span>
               </p>
               <p className="text-xs text-gray-500">
                 {escrow.phase === "held" &&
