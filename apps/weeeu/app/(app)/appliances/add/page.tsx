@@ -161,7 +161,7 @@ export default function AddAppliancePage() {
         {/* Serial + Warranty */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Serial Number</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">หมายเลขเครื่อง (Serial Number)</label>
             <input
               type="text"
               value={serial}

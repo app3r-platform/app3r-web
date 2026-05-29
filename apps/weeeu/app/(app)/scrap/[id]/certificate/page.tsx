@@ -57,7 +57,7 @@ export default async function ScrapCertificatePage({ params }: { params: Promise
           {/* QR placeholder */}
           <div className="flex justify-center pt-2">
             <div className="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center">
-              <p className="text-xs text-gray-400 text-center leading-tight">QR<br/>Mockup</p>
+              <p className="text-xs text-gray-400 text-center leading-tight">QR<br/>(ตัวอย่าง)</p>
             </div>
           </div>
         </div>

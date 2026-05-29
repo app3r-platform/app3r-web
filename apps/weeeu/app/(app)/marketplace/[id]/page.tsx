@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ReviewsSection } from "@/components/listing/ReviewsSection";
+import { ReportButton } from "@/components/listing/ReportButton";
 
 const MOCK_ITEM = {
   id: "r001",
@@ -74,6 +76,12 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
             แชทกับร้าน
           </button>
         </div>
+
+        {/* D86 — รีวิวและคะแนน */}
+        <ReviewsSection listingId={id} />
+
+        {/* D82 — รายงานประกาศ */}
+        <ReportButton listingId={id} />
       </div>
     </div>
   );

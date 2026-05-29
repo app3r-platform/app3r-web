@@ -235,7 +235,7 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="flex items-center justify-between px-5 py-4">
-            <p className="text-sm text-gray-500">Email</p>
+            <p className="text-sm text-gray-500">อีเมล (Email)</p>
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium text-gray-900 truncate max-w-[160px]">{user.email}</p>
               <button onClick={() => setSection("email")} className="text-xs text-weeeu-primary hover:text-weeeu-primary">เปลี่ยน</button>
