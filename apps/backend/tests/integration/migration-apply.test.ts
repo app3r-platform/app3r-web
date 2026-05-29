@@ -37,6 +37,33 @@ function extractForwardSql(raw: string): string {
   return idx > -1 ? raw.slice(0, idx).trim() : raw.trim()
 }
 
+// apply migrations 0000→ล่าสุด ตามลำดับ ลง client ที่ส่งมา (ราย-ไฟล์ BEGIN/COMMIT)
+// reuse ทั้ง structural guard (ephemeral DB) + A′ smoke (app DATABASE_URL DB)
+// → deterministic same-job: ตาราง migrated มีจริงก่อน app boot query
+async function applyAllMigrations(
+  client: Client,
+): Promise<{ applied: string[]; failures: { file: string; message: string }[] }> {
+  const applied: string[] = []
+  const failures: { file: string; message: string }[] = []
+  const files = readdirSync(MIGRATIONS_DIR)
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+  for (const file of files) {
+    const sql = extractForwardSql(readFileSync(join(MIGRATIONS_DIR, file), 'utf-8'))
+    if (!sql) continue
+    try {
+      await client.query('BEGIN')
+      await client.query(sql)
+      await client.query('COMMIT')
+      applied.push(file)
+    } catch (err) {
+      await client.query('ROLLBACK')
+      failures.push({ file, message: err instanceof Error ? err.message : String(err) })
+    }
+  }
+  return { applied, failures }
+}
+
 // ── TD-W3-02 known pre-existing seed drift allowlist ───────────────────────────
 // key = migration filename · pattern = error message ที่ "ยอมรับได้" (รู้สาเหตุแล้ว)
 const KNOWN_SEED_DRIFT: Record<string, RegExp> = {
@@ -106,23 +133,9 @@ describe('B1 CI Guard — migration-apply (TD-W3-01)', () => {
     const guard = new Client({ connectionString: guardUrl() })
     await guard.connect()
     try {
-      const files = readdirSync(MIGRATIONS_DIR)
-        .filter((f) => f.endsWith('.sql'))
-        .sort()
-
-      for (const file of files) {
-        const sql = extractForwardSql(readFileSync(join(MIGRATIONS_DIR, file), 'utf-8'))
-        if (!sql) continue
-        try {
-          await guard.query('BEGIN')
-          await guard.query(sql)
-          await guard.query('COMMIT')
-          applied.push(file)
-        } catch (err) {
-          await guard.query('ROLLBACK')
-          failures.push({ file, message: err instanceof Error ? err.message : String(err) })
-        }
-      }
+      const res = await applyAllMigrations(guard)
+      applied.push(...res.applied)
+      failures.push(...res.failures)
 
       // 3) introspect — สร้าง map table → set(columns) จาก public schema
       const { rows } = await guard.query<{ table_name: string; column_name: string }>(`
@@ -206,6 +219,22 @@ describe('B1 CI Guard — migration-apply (TD-W3-01)', () => {
 
 // ── D14 / B-D14 smoke: route ต้อง mount เปิดได้ ไม่ error routing ────────────────
 describe('B1 CI Guard — route smoke (D14)', () => {
+  // A′ (Advisor Gen 101): app boot ชี้ DATABASE_URL — ต้อง apply migrations ลง DB นั้น
+  // ใน job เดียวกันก่อน boot query (deterministic same-job · ไม่พึ่ง ephemeral ข้าม job ·
+  // ไม่ seed/db:migrate:all → เลี่ยง TD-W3-02). ตาราง migrated มีจริง → route query ได้ → 200 []
+  // (ตาราง "already exists" บน DB ที่ migrate แล้ว = caught ใน applyAllMigrations · idempotent-safe)
+  beforeAll(async () => {
+    const url = process.env.DATABASE_URL
+    if (!url) throw new Error('DATABASE_URL required for D14 smoke (A′)')
+    const appDb = new Client({ connectionString: url })
+    await appDb.connect()
+    try {
+      await applyAllMigrations(appDb)
+    } finally {
+      await appDb.end()
+    }
+  }, 120_000)
+
   it('GET /health → 200 (app boots, router mounts)', async () => {
     const res = await app.request('/health')
     expect(res.status).toBe(200)
