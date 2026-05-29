@@ -362,7 +362,7 @@ function generatePricingSql(pricingResults: PricingSheetResult[]): string {
             `  (gen_random_uuid(),\n` +
             `   (SELECT id FROM used_pricing_models WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code=${sqlStr(catCode)}) AND code=${sqlStr(slugify(row.model, 45))} LIMIT 1),\n` +
             `   '${dims.replace(/'/g, "''")}', ${sqlStr(dimsHash)},\n` +
-            `   ${sqlStr(String(cost))}, NULL, NULL, TRUE, NOW())`
+            `   ${sqlStr(String(cost))}, NOW())`
           )
           counts.pricePoints++
         }
@@ -397,7 +397,7 @@ function generatePricingSql(pricingResults: PricingSheetResult[]): string {
             `  (gen_random_uuid(),\n` +
             `   (SELECT id FROM used_pricing_models WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code=${sqlStr(catCode)}) AND code=${sqlStr(slugify(row.model, 45))} LIMIT 1),\n` +
             `   '${dims.replace(/'/g, "''")}', ${sqlStr(dimsHash)},\n` +
-            `   ${sqlStr(String(row.cost))}, NULL, NULL, TRUE, NOW())`
+            `   ${sqlStr(String(row.cost))}, NOW())`
           )
           counts.pricePoints++
         }
@@ -441,10 +441,10 @@ function generatePricingSql(pricingResults: PricingSheetResult[]): string {
 
   if (pricePointInserts.length > 0) {
     lines.push(`-- ── 3. used_pricing_price_points (${counts.pricePoints} rows) ────────────────`)
-    lines.push(`INSERT INTO "used_pricing_price_points" ("id", "model_id", "dimensions", "dimensions_hash", "base_price", "min_price", "max_price", "is_active", "created_at")`)
+    lines.push(`INSERT INTO "used_pricing_price_points" ("id", "model_id", "dimensions", "dimensions_hash", "price", "created_at")`)
     lines.push(`VALUES`)
     lines.push(pricePointInserts.join(',\n'))
-    lines.push(`ON CONFLICT ("dimensions_hash") DO NOTHING;`)
+    lines.push(`ON CONFLICT ("model_id", "dimensions_hash", "is_multi_issue") DO NOTHING;`)
     lines.push(``)
   }
 

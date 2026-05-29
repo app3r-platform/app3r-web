@@ -1208,4950 +1208,4950 @@ VALUES
 ON CONFLICT ("category_id", "code") DO NOTHING;
 
 -- ── 3. used_pricing_price_points (824 rows) ────────────────
-INSERT INTO "used_pricing_price_points" ("id", "model_id", "dimensions", "dimensions_hash", "base_price", "min_price", "max_price", "is_multi_issue", "is_active", "created_at")
+INSERT INTO "used_pricing_price_points" ("id", "model_id", "dimensions", "dimensions_hash", "price", "is_multi_issue", "created_at")
 VALUES
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11', NULL, NULL, FALSE, TRUE, NOW()),
+   '11', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '400', NULL, NULL, FALSE, TRUE, NOW()),
+   '400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18', NULL, NULL, FALSE, TRUE, NOW()),
+   '18', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '400', NULL, NULL, FALSE, TRUE, NOW()),
+   '400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20', NULL, NULL, FALSE, TRUE, NOW()),
+   '20', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21', NULL, NULL, FALSE, TRUE, NOW()),
+   '21', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22', NULL, NULL, FALSE, TRUE, NOW()),
+   '22', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '900', NULL, NULL, FALSE, TRUE, NOW()),
+   '900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23', NULL, NULL, FALSE, TRUE, NOW()),
+   '23', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '800', NULL, NULL, FALSE, TRUE, NOW()),
+   '800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25', NULL, NULL, FALSE, TRUE, NOW()),
+   '25', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26', NULL, NULL, FALSE, TRUE, NOW()),
+   '26', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1500', NULL, NULL, FALSE, TRUE, NOW()),
+   '1500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27', NULL, NULL, FALSE, TRUE, NOW()),
+   '27', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24', NULL, NULL, FALSE, TRUE, NOW()),
+   '24', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2300', NULL, NULL, FALSE, TRUE, NOW()),
+   '2300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28', NULL, NULL, FALSE, TRUE, NOW()),
+   '28', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '29', NULL, NULL, FALSE, TRUE, NOW()),
+   '29', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '30', NULL, NULL, FALSE, TRUE, NOW()),
+   '30', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2600', NULL, NULL, FALSE, TRUE, NOW()),
+   '2600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1000', NULL, NULL, FALSE, TRUE, NOW()),
+   '1000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1000', NULL, NULL, FALSE, TRUE, NOW()),
+   '1000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1000', NULL, NULL, FALSE, TRUE, NOW()),
+   '1000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1000', NULL, NULL, FALSE, TRUE, NOW()),
+   '1000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1000', NULL, NULL, FALSE, TRUE, NOW()),
+   '1000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4500', NULL, NULL, FALSE, TRUE, NOW()),
+   '4500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1500', NULL, NULL, FALSE, TRUE, NOW()),
+   '1500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1500', NULL, NULL, FALSE, TRUE, NOW()),
+   '1500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1500', NULL, NULL, FALSE, TRUE, NOW()),
+   '1500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1500', NULL, NULL, FALSE, TRUE, NOW()),
+   '1500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1500', NULL, NULL, FALSE, TRUE, NOW()),
+   '1500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5000', NULL, NULL, FALSE, TRUE, NOW()),
+   '5000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2000', NULL, NULL, FALSE, TRUE, NOW()),
+   '2000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2000', NULL, NULL, FALSE, TRUE, NOW()),
+   '2000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2000', NULL, NULL, FALSE, TRUE, NOW()),
+   '2000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2000', NULL, NULL, FALSE, TRUE, NOW()),
+   '2000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2000', NULL, NULL, FALSE, TRUE, NOW()),
+   '2000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2300', NULL, NULL, FALSE, TRUE, NOW()),
+   '2300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '91', NULL, NULL, FALSE, TRUE, NOW()),
+   '91', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '91', NULL, NULL, FALSE, TRUE, NOW()),
+   '91', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '91', NULL, NULL, FALSE, TRUE, NOW()),
+   '91', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '91', NULL, NULL, FALSE, TRUE, NOW()),
+   '91', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '91', NULL, NULL, FALSE, TRUE, NOW()),
+   '91', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '91', NULL, NULL, FALSE, TRUE, NOW()),
+   '91', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '92', NULL, NULL, FALSE, TRUE, NOW()),
+   '92', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2800', NULL, NULL, FALSE, TRUE, NOW()),
+   '2800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='92' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3300', NULL, NULL, FALSE, TRUE, NOW()),
+   '3300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '600', NULL, NULL, FALSE, TRUE, NOW()),
+   '600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='93' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4400', NULL, NULL, FALSE, TRUE, NOW()),
+   '4400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5100', NULL, NULL, FALSE, TRUE, NOW()),
+   '5100', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1700', NULL, NULL, FALSE, TRUE, NOW()),
+   '1700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1700', NULL, NULL, FALSE, TRUE, NOW()),
+   '1700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1700', NULL, NULL, FALSE, TRUE, NOW()),
+   '1700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1700', NULL, NULL, FALSE, TRUE, NOW()),
+   '1700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1700', NULL, NULL, FALSE, TRUE, NOW()),
+   '1700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3400', NULL, NULL, FALSE, TRUE, NOW()),
+   '3400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38', NULL, NULL, FALSE, TRUE, NOW()),
+   '38', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38', NULL, NULL, FALSE, TRUE, NOW()),
+   '38', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38', NULL, NULL, FALSE, TRUE, NOW()),
+   '38', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38', NULL, NULL, FALSE, TRUE, NOW()),
+   '38', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38', NULL, NULL, FALSE, TRUE, NOW()),
+   '38', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38', NULL, NULL, FALSE, TRUE, NOW()),
+   '38', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3900', NULL, NULL, FALSE, TRUE, NOW()),
+   '3900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '39', NULL, NULL, FALSE, TRUE, NOW()),
+   '39', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '40', NULL, NULL, FALSE, TRUE, NOW()),
+   '40', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4900', NULL, NULL, FALSE, TRUE, NOW()),
+   '4900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6200', NULL, NULL, FALSE, TRUE, NOW()),
+   '6200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '37', NULL, NULL, FALSE, TRUE, NOW()),
+   '37', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '37', NULL, NULL, FALSE, TRUE, NOW()),
+   '37', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '37', NULL, NULL, FALSE, TRUE, NOW()),
+   '37', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '37', NULL, NULL, FALSE, TRUE, NOW()),
+   '37', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '37', NULL, NULL, FALSE, TRUE, NOW()),
+   '37', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '37', NULL, NULL, FALSE, TRUE, NOW()),
+   '37', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '41', NULL, NULL, FALSE, TRUE, NOW()),
+   '41', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7100', NULL, NULL, FALSE, TRUE, NOW()),
+   '7100', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7600', NULL, NULL, FALSE, TRUE, NOW()),
+   '7600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9200', NULL, NULL, FALSE, TRUE, NOW()),
+   '9200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3200', NULL, NULL, FALSE, TRUE, NOW()),
+   '3200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3200', NULL, NULL, FALSE, TRUE, NOW()),
+   '3200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3200', NULL, NULL, FALSE, TRUE, NOW()),
+   '3200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3200', NULL, NULL, FALSE, TRUE, NOW()),
+   '3200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3200', NULL, NULL, FALSE, TRUE, NOW()),
+   '3200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10000', NULL, NULL, FALSE, TRUE, NOW()),
+   '10000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4200', NULL, NULL, FALSE, TRUE, NOW()),
+   '4200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4200', NULL, NULL, FALSE, TRUE, NOW()),
+   '4200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4200', NULL, NULL, FALSE, TRUE, NOW()),
+   '4200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4200', NULL, NULL, FALSE, TRUE, NOW()),
+   '4200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4200', NULL, NULL, FALSE, TRUE, NOW()),
+   '4200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11000', NULL, NULL, FALSE, TRUE, NOW()),
+   '11000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4700', NULL, NULL, FALSE, TRUE, NOW()),
+   '4700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4700', NULL, NULL, FALSE, TRUE, NOW()),
+   '4700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4700', NULL, NULL, FALSE, TRUE, NOW()),
+   '4700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4700', NULL, NULL, FALSE, TRUE, NOW()),
+   '4700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4700', NULL, NULL, FALSE, TRUE, NOW()),
+   '4700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11200', NULL, NULL, FALSE, TRUE, NOW()),
+   '11200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12200', NULL, NULL, FALSE, TRUE, NOW()),
+   '12200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13200', NULL, NULL, FALSE, TRUE, NOW()),
+   '13200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5900', NULL, NULL, FALSE, TRUE, NOW()),
+   '5900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8900', NULL, NULL, FALSE, TRUE, NOW()),
+   '8900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7400', NULL, NULL, FALSE, TRUE, NOW()),
+   '7400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2700', NULL, NULL, FALSE, TRUE, NOW()),
+   '2700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3700', NULL, NULL, FALSE, TRUE, NOW()),
+   '3700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3700', NULL, NULL, FALSE, TRUE, NOW()),
+   '3700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3700', NULL, NULL, FALSE, TRUE, NOW()),
+   '3700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3700', NULL, NULL, FALSE, TRUE, NOW()),
+   '3700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3700', NULL, NULL, FALSE, TRUE, NOW()),
+   '3700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10800', NULL, NULL, FALSE, TRUE, NOW()),
+   '10800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '31', NULL, NULL, FALSE, TRUE, NOW()),
+   '31', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13000', NULL, NULL, FALSE, TRUE, NOW()),
+   '13000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6200', NULL, NULL, FALSE, TRUE, NOW()),
+   '6200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6200', NULL, NULL, FALSE, TRUE, NOW()),
+   '6200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6200', NULL, NULL, FALSE, TRUE, NOW()),
+   '6200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6200', NULL, NULL, FALSE, TRUE, NOW()),
+   '6200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6200', NULL, NULL, FALSE, TRUE, NOW()),
+   '6200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7200', NULL, NULL, FALSE, TRUE, NOW()),
+   '7200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14900', NULL, NULL, FALSE, TRUE, NOW()),
+   '14900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8200', NULL, NULL, FALSE, TRUE, NOW()),
+   '8200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8200', NULL, NULL, FALSE, TRUE, NOW()),
+   '8200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8200', NULL, NULL, FALSE, TRUE, NOW()),
+   '8200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8200', NULL, NULL, FALSE, TRUE, NOW()),
+   '8200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8200', NULL, NULL, FALSE, TRUE, NOW()),
+   '8200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15700', NULL, NULL, FALSE, TRUE, NOW()),
+   '15700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '700', NULL, NULL, FALSE, TRUE, NOW()),
+   '700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15600', NULL, NULL, FALSE, TRUE, NOW()),
+   '15600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8700', NULL, NULL, FALSE, TRUE, NOW()),
+   '8700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16600', NULL, NULL, FALSE, TRUE, NOW()),
+   '16600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2200', NULL, NULL, FALSE, TRUE, NOW()),
+   '2200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12700', NULL, NULL, FALSE, TRUE, NOW()),
+   '12700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13700', NULL, NULL, FALSE, TRUE, NOW()),
+   '13700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6700', NULL, NULL, FALSE, TRUE, NOW()),
+   '6700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14700', NULL, NULL, FALSE, TRUE, NOW()),
+   '14700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14200', NULL, NULL, FALSE, TRUE, NOW()),
+   '14200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7500', NULL, NULL, FALSE, TRUE, NOW()),
+   '7500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7500', NULL, NULL, FALSE, TRUE, NOW()),
+   '7500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7500', NULL, NULL, FALSE, TRUE, NOW()),
+   '7500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7500', NULL, NULL, FALSE, TRUE, NOW()),
+   '7500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7500', NULL, NULL, FALSE, TRUE, NOW()),
+   '7500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15200', NULL, NULL, FALSE, TRUE, NOW()),
+   '15200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16200', NULL, NULL, FALSE, TRUE, NOW()),
+   '16200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17900', NULL, NULL, FALSE, TRUE, NOW()),
+   '17900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18900', NULL, NULL, FALSE, TRUE, NOW()),
+   '18900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '19700', NULL, NULL, FALSE, TRUE, NOW()),
+   '19700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20500', NULL, NULL, FALSE, TRUE, NOW()),
+   '20500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5700', NULL, NULL, FALSE, TRUE, NOW()),
+   '5700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21600', NULL, NULL, FALSE, TRUE, NOW()),
+   '21600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '22200', NULL, NULL, FALSE, TRUE, NOW()),
+   '22200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13000', NULL, NULL, FALSE, TRUE, NOW()),
+   '13000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13000', NULL, NULL, FALSE, TRUE, NOW()),
+   '13000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13000', NULL, NULL, FALSE, TRUE, NOW()),
+   '13000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13000', NULL, NULL, FALSE, TRUE, NOW()),
+   '13000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13000', NULL, NULL, FALSE, TRUE, NOW()),
+   '13000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23200', NULL, NULL, FALSE, TRUE, NOW()),
+   '23200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24500', NULL, NULL, FALSE, TRUE, NOW()),
+   '24500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15000', NULL, NULL, FALSE, TRUE, NOW()),
+   '15000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15000', NULL, NULL, FALSE, TRUE, NOW()),
+   '15000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15000', NULL, NULL, FALSE, TRUE, NOW()),
+   '15000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15000', NULL, NULL, FALSE, TRUE, NOW()),
+   '15000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15000', NULL, NULL, FALSE, TRUE, NOW()),
+   '15000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7700', NULL, NULL, FALSE, TRUE, NOW()),
+   '7700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17700', NULL, NULL, FALSE, TRUE, NOW()),
+   '17700', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4000', NULL, NULL, FALSE, TRUE, NOW()),
+   '4000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18900', NULL, NULL, FALSE, TRUE, NOW()),
+   '18900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5000', NULL, NULL, FALSE, TRUE, NOW()),
+   '5000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5000', NULL, NULL, FALSE, TRUE, NOW()),
+   '5000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20000', NULL, NULL, FALSE, TRUE, NOW()),
+   '20000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6000', NULL, NULL, FALSE, TRUE, NOW()),
+   '6000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6000', NULL, NULL, FALSE, TRUE, NOW()),
+   '6000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21500', NULL, NULL, FALSE, TRUE, NOW()),
+   '21500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14000', NULL, NULL, FALSE, TRUE, NOW()),
+   '14000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8500', NULL, NULL, FALSE, TRUE, NOW()),
+   '8500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24000', NULL, NULL, FALSE, TRUE, NOW()),
+   '24000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16000', NULL, NULL, FALSE, TRUE, NOW()),
+   '16000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16000', NULL, NULL, FALSE, TRUE, NOW()),
+   '16000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16500', NULL, NULL, FALSE, TRUE, NOW()),
+   '16500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16000', NULL, NULL, FALSE, TRUE, NOW()),
+   '16000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16000', NULL, NULL, FALSE, TRUE, NOW()),
+   '16000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25000', NULL, NULL, FALSE, TRUE, NOW()),
+   '25000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12000', NULL, NULL, FALSE, TRUE, NOW()),
+   '12000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25000', NULL, NULL, FALSE, TRUE, NOW()),
+   '25000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '17500', NULL, NULL, FALSE, TRUE, NOW()),
+   '17500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '26000', NULL, NULL, FALSE, TRUE, NOW()),
+   '26000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13500', NULL, NULL, FALSE, TRUE, NOW()),
+   '13500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13500', NULL, NULL, FALSE, TRUE, NOW()),
+   '13500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27000', NULL, NULL, FALSE, TRUE, NOW()),
+   '27000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '19000', NULL, NULL, FALSE, TRUE, NOW()),
+   '19000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '19000', NULL, NULL, FALSE, TRUE, NOW()),
+   '19000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '19000', NULL, NULL, FALSE, TRUE, NOW()),
+   '19000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '19000', NULL, NULL, FALSE, TRUE, NOW()),
+   '19000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14500', NULL, NULL, FALSE, TRUE, NOW()),
+   '14500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '19000', NULL, NULL, FALSE, TRUE, NOW()),
+   '19000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '14500', NULL, NULL, FALSE, TRUE, NOW()),
+   '14500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '28000', NULL, NULL, FALSE, TRUE, NOW()),
+   '28000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20000', NULL, NULL, FALSE, TRUE, NOW()),
+   '20000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20000', NULL, NULL, FALSE, TRUE, NOW()),
+   '20000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20000', NULL, NULL, FALSE, TRUE, NOW()),
+   '20000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20000', NULL, NULL, FALSE, TRUE, NOW()),
+   '20000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15500', NULL, NULL, FALSE, TRUE, NOW()),
+   '15500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '20000', NULL, NULL, FALSE, TRUE, NOW()),
+   '20000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '15500', NULL, NULL, FALSE, TRUE, NOW()),
+   '15500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '32500', NULL, NULL, FALSE, TRUE, NOW()),
+   '32500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24500', NULL, NULL, FALSE, TRUE, NOW()),
+   '24500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24500', NULL, NULL, FALSE, TRUE, NOW()),
+   '24500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24500', NULL, NULL, FALSE, TRUE, NOW()),
+   '24500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24500', NULL, NULL, FALSE, TRUE, NOW()),
+   '24500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21000', NULL, NULL, FALSE, TRUE, NOW()),
+   '21000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '24500', NULL, NULL, FALSE, TRUE, NOW()),
+   '24500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '21000', NULL, NULL, FALSE, TRUE, NOW()),
+   '21000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '35000', NULL, NULL, FALSE, TRUE, NOW()),
+   '35000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27000', NULL, NULL, FALSE, TRUE, NOW()),
+   '27000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27000', NULL, NULL, FALSE, TRUE, NOW()),
+   '27000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27000', NULL, NULL, FALSE, TRUE, NOW()),
+   '27000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27000', NULL, NULL, FALSE, TRUE, NOW()),
+   '27000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23500', NULL, NULL, FALSE, TRUE, NOW()),
+   '23500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '27000', NULL, NULL, FALSE, TRUE, NOW()),
+   '27000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '23500', NULL, NULL, FALSE, TRUE, NOW()),
+   '23500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '38000', NULL, NULL, FALSE, TRUE, NOW()),
+   '38000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '30000', NULL, NULL, FALSE, TRUE, NOW()),
+   '30000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '30000', NULL, NULL, FALSE, TRUE, NOW()),
+   '30000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '30000', NULL, NULL, FALSE, TRUE, NOW()),
+   '30000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '30000', NULL, NULL, FALSE, TRUE, NOW()),
+   '30000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25500', NULL, NULL, FALSE, TRUE, NOW()),
+   '25500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '30000', NULL, NULL, FALSE, TRUE, NOW()),
+   '30000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '25500', NULL, NULL, FALSE, TRUE, NOW()),
+   '25500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '45', NULL, NULL, FALSE, TRUE, NOW()),
+   '45', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '47', NULL, NULL, FALSE, TRUE, NOW()),
+   '47', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1300', NULL, NULL, FALSE, TRUE, NOW()),
+   '1300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1300', NULL, NULL, FALSE, TRUE, NOW()),
+   '1300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '70', NULL, NULL, FALSE, TRUE, NOW()),
+   '70', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '71', NULL, NULL, FALSE, TRUE, NOW()),
+   '71', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1600', NULL, NULL, FALSE, TRUE, NOW()),
+   '1600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1900', NULL, NULL, FALSE, TRUE, NOW()),
+   '1900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2900', NULL, NULL, FALSE, TRUE, NOW()),
+   '2900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4200', NULL, NULL, FALSE, TRUE, NOW()),
+   '4200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5500', NULL, NULL, FALSE, TRUE, NOW()),
+   '5500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '57', NULL, NULL, FALSE, TRUE, NOW()),
+   '57', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '58', NULL, NULL, FALSE, TRUE, NOW()),
+   '58', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '800', NULL, NULL, FALSE, TRUE, NOW()),
+   '800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '900', NULL, NULL, FALSE, TRUE, NOW()),
+   '900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1900', NULL, NULL, FALSE, TRUE, NOW()),
+   '1900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2900', NULL, NULL, FALSE, TRUE, NOW()),
+   '2900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1600', NULL, NULL, FALSE, TRUE, NOW()),
+   '1600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2600', NULL, NULL, FALSE, TRUE, NOW()),
+   '2600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3800', NULL, NULL, FALSE, TRUE, NOW()),
+   '3800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5000', NULL, NULL, FALSE, TRUE, NOW()),
+   '5000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2900', NULL, NULL, FALSE, TRUE, NOW()),
+   '2900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '4300', NULL, NULL, FALSE, TRUE, NOW()),
+   '4300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '5800', NULL, NULL, FALSE, TRUE, NOW()),
+   '5800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '6000', NULL, NULL, FALSE, TRUE, NOW()),
+   '6000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '2600', NULL, NULL, FALSE, TRUE, NOW()),
+   '2600', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '3500', NULL, NULL, FALSE, TRUE, NOW()),
+   '3500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '7000', NULL, NULL, FALSE, TRUE, NOW()),
+   '7000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '8000', NULL, NULL, FALSE, TRUE, NOW()),
+   '8000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '9500', NULL, NULL, FALSE, TRUE, NOW()),
+   '9500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '10500', NULL, NULL, FALSE, TRUE, NOW()),
+   '10500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '11500', NULL, NULL, FALSE, TRUE, NOW()),
+   '11500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '12500', NULL, NULL, FALSE, TRUE, NOW()),
+   '12500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '13500', NULL, NULL, FALSE, TRUE, NOW()),
+   '13500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '16000', NULL, NULL, FALSE, TRUE, NOW()),
+   '16000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='smartphone' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"boot_state":"","accessory":"","problem":"8","scratch_level":"9"}', 'e9905c8e3dfa992149f849dea17f2f644a7e735b19f1f673bab9de376c09c59b',
-   '18000', NULL, NULL, FALSE, TRUE, NOW()),
+   '18000', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='7' LIMIT 1),
    '{"service_type":"500"}', '46d5d9376c90a128f63e88901be1dc6a8369c64bdebe9f4cbbee5103d639d395',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='8' LIMIT 1),
    '{"service_type":"800"}', '98d1b2d39f2a8459ee4f6e739979d7c91815ee58b7f4bbf9815a5686150a88a3',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='9' LIMIT 1),
    '{"service_type":"1000"}', '31100e209b3cff4fe80db641a4b60b9f8ade7cc4b9bb37e352fdce8c49adccbc',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='10' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='12' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='13' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='14' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='15' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='16' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='17' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='19' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"service_type":"6000"}', '56863f94535d2fb8703f659cd1009984aa3a185968317c36cfb9817e2c02ed3d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"service_type":"6500"}', '84bd74b9f7e8403b142035577269b28be54ab3f6ebbea9b5e262ef99b004d95e',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"service_type":"5500"}', '983fe1894d3424cc385478bec28f4a801346a4b25ec3e1d496b158d5714de3a0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"service_type":"6000"}', '56863f94535d2fb8703f659cd1009984aa3a185968317c36cfb9817e2c02ed3d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='31' LIMIT 1),
    '{"service_type":"6500"}', '84bd74b9f7e8403b142035577269b28be54ab3f6ebbea9b5e262ef99b004d95e',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"service_type":"6000"}', '56863f94535d2fb8703f659cd1009984aa3a185968317c36cfb9817e2c02ed3d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"service_type":"8000"}', 'aec9dbeb5d50086bf5fd7f5eecd1ef658dba77130020b1cc08ff1897d32bcf79',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"service_type":"8500"}', '2a61070e65b208dd36cd4951d8af415b8ec5675f8d7bd4a48b4400e931ef8eda',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"service_type":"2800"}', '96cc3107105c44c12cbfe5f71daa79018e8afdd21b018781273ce78f4129dab4',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"service_type":"5500"}', '983fe1894d3424cc385478bec28f4a801346a4b25ec3e1d496b158d5714de3a0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"service_type":"6000"}', '56863f94535d2fb8703f659cd1009984aa3a185968317c36cfb9817e2c02ed3d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"service_type":"6000"}', '56863f94535d2fb8703f659cd1009984aa3a185968317c36cfb9817e2c02ed3d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"service_type":"6500"}', '84bd74b9f7e8403b142035577269b28be54ab3f6ebbea9b5e262ef99b004d95e',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"service_type":"7500"}', 'dc624092ab5c1a2490f5e54cc61ac7947b35edfa0eb446fd8e6429df649c54f7',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"service_type":"7500"}', 'dc624092ab5c1a2490f5e54cc61ac7947b35edfa0eb446fd8e6429df649c54f7',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"service_type":"7500"}', 'dc624092ab5c1a2490f5e54cc61ac7947b35edfa0eb446fd8e6429df649c54f7',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"service_type":"7500"}', 'dc624092ab5c1a2490f5e54cc61ac7947b35edfa0eb446fd8e6429df649c54f7',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"service_type":"7500"}', 'dc624092ab5c1a2490f5e54cc61ac7947b35edfa0eb446fd8e6429df649c54f7',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='notebook' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"service_type":"0"}', '433938b130dae870bf33622c8256897d1694262d92edde14b03ddd05c4a94203',
-   '363100', NULL, NULL, FALSE, TRUE, NOW()),
+   '363100', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='7' LIMIT 1),
    '{"service_type":"100"}', '37a47f2566dfb64e9ce2aeb74dd6697636678a27230f22eb9a67577ea50c2d4e',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='8' LIMIT 1),
    '{"service_type":"100"}', '37a47f2566dfb64e9ce2aeb74dd6697636678a27230f22eb9a67577ea50c2d4e',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='9' LIMIT 1),
    '{"service_type":"400"}', '0edb055d711dfedcad97b8bbb9b32b59b8d561962fd6d62208f168764d349e80',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='10' LIMIT 1),
    '{"service_type":"450"}', '286f4223220a229dbaf6d7c19dfded5c456aa6f297c25f5c0244f5fc236835f3',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='11' LIMIT 1),
    '{"service_type":"900"}', '161fc44b73085e23caf2a4118d646b60a87b022585f6f9be9eb0f8a6b699e52c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='12' LIMIT 1),
    '{"service_type":"1000"}', '31100e209b3cff4fe80db641a4b60b9f8ade7cc4b9bb37e352fdce8c49adccbc',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='13' LIMIT 1),
    '{"service_type":"1400"}', 'b07de61402c4ad6fd15396ffb132490f944320a00d4e9df6d24e133d0700a10c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='14' LIMIT 1),
    '{"service_type":"1800"}', '18b4ebf62ec76a1d3a01cd0b2f21105d99833443997a6509e499d86512181fc0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='15' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='16' LIMIT 1),
    '{"service_type":"400"}', '0edb055d711dfedcad97b8bbb9b32b59b8d561962fd6d62208f168764d349e80',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='17' LIMIT 1),
    '{"service_type":"500"}', '46d5d9376c90a128f63e88901be1dc6a8369c64bdebe9f4cbbee5103d639d395',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='18' LIMIT 1),
    '{"service_type":"800"}', '98d1b2d39f2a8459ee4f6e739979d7c91815ee58b7f4bbf9815a5686150a88a3',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='19' LIMIT 1),
    '{"service_type":"900"}', '161fc44b73085e23caf2a4118d646b60a87b022585f6f9be9eb0f8a6b699e52c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='20' LIMIT 1),
    '{"service_type":"1900"}', 'cd0d93e3ff4314e92e71aac52c70c8e125cbfa004a59a5c198213422ff4fbbd9',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='21' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='22' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='23' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='24' LIMIT 1),
    '{"service_type":"1000"}', '31100e209b3cff4fe80db641a4b60b9f8ade7cc4b9bb37e352fdce8c49adccbc',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='25' LIMIT 1),
    '{"service_type":"1400"}', 'b07de61402c4ad6fd15396ffb132490f944320a00d4e9df6d24e133d0700a10c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='26' LIMIT 1),
    '{"service_type":"1800"}', '18b4ebf62ec76a1d3a01cd0b2f21105d99833443997a6509e499d86512181fc0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='27' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='28' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='29' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='30' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='31' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='32' LIMIT 1),
    '{"service_type":"8000"}', 'aec9dbeb5d50086bf5fd7f5eecd1ef658dba77130020b1cc08ff1897d32bcf79',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='33' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='34' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='35' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='36' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='37' LIMIT 1),
    '{"service_type":"5500"}', '983fe1894d3424cc385478bec28f4a801346a4b25ec3e1d496b158d5714de3a0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='38' LIMIT 1),
    '{"service_type":"400"}', '0edb055d711dfedcad97b8bbb9b32b59b8d561962fd6d62208f168764d349e80',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='39' LIMIT 1),
    '{"service_type":"500"}', '46d5d9376c90a128f63e88901be1dc6a8369c64bdebe9f4cbbee5103d639d395',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='40' LIMIT 1),
    '{"service_type":"500"}', '46d5d9376c90a128f63e88901be1dc6a8369c64bdebe9f4cbbee5103d639d395',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='41' LIMIT 1),
    '{"service_type":"600"}', '4783341e41690a7042eb0c84b0ca004fb4c2e576c9d8591295795e47a7fbac9d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='42' LIMIT 1),
    '{"service_type":"800"}', '98d1b2d39f2a8459ee4f6e739979d7c91815ee58b7f4bbf9815a5686150a88a3',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='43' LIMIT 1),
    '{"service_type":"1000"}', '31100e209b3cff4fe80db641a4b60b9f8ade7cc4b9bb37e352fdce8c49adccbc',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='44' LIMIT 1),
    '{"service_type":"1200"}', 'a744e8ced23c6c88ef8e9fb7a0a539a34108e32ecd75b35d4f9cf5416d90d73a',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='45' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='46' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='47' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='48' LIMIT 1),
    '{"service_type":"700"}', '43b9d909a437f09198a412d7c4eca7b19175078f3cc65b0a422af2df4faa64b3',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='49' LIMIT 1),
    '{"service_type":"900"}', '161fc44b73085e23caf2a4118d646b60a87b022585f6f9be9eb0f8a6b699e52c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='50' LIMIT 1),
    '{"service_type":"900"}', '161fc44b73085e23caf2a4118d646b60a87b022585f6f9be9eb0f8a6b699e52c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='51' LIMIT 1),
    '{"service_type":"1000"}', '31100e209b3cff4fe80db641a4b60b9f8ade7cc4b9bb37e352fdce8c49adccbc',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='52' LIMIT 1),
    '{"service_type":"1300"}', '039dab4a786e49c14d4a9e864670db35e73e3eef626a73c4f3e9e9f027b042ef',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='53' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='54' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='55' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='56' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='57' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='58' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='59' LIMIT 1),
    '{"service_type":"2800"}', '96cc3107105c44c12cbfe5f71daa79018e8afdd21b018781273ce78f4129dab4',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='60' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='61' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='62' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='63' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='64' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='65' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='66' LIMIT 1),
    '{"service_type":"2500"}', '05630462acd34159f03f3c423b14c79a47088db4dff8c66657c83cc6c74bc855',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='67' LIMIT 1),
    '{"service_type":"2000"}', 'c0f86c80af85ad9a81eebf8456f02f550065768379ba13217f75fc0893c24412',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='68' LIMIT 1),
    '{"service_type":"2800"}', '96cc3107105c44c12cbfe5f71daa79018e8afdd21b018781273ce78f4129dab4',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='69' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='70' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='71' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='72' LIMIT 1),
    '{"service_type":"3800"}', '36122dc2682f76f065e9e4482672a6fec0f9f27851a5bae01777b2e210566ab0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='73' LIMIT 1),
    '{"service_type":"3800"}', '36122dc2682f76f065e9e4482672a6fec0f9f27851a5bae01777b2e210566ab0',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='74' LIMIT 1),
    '{"service_type":"3000"}', '07fde70bff45db4eabdcf9285e60f8d3edafb8b1f0b2891fac1dfb1e18ad8d9c',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='75' LIMIT 1),
    '{"service_type":"3500"}', 'a7037969e7ce17f1b4b7cd67d529acf20616ce30e71b4c62f61ebc2edd555dfa',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='76' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='77' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='78' LIMIT 1),
    '{"service_type":"4000"}', 'e4ce5bcbf8dd4f857926034a944a72cd0ca8bd3032767330a7563845a996f237',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='79' LIMIT 1),
    '{"service_type":"4500"}', '1125fe7ac4cb4c8d813689b58150ec5c6daa4a7766a37c1738e952849f688d88',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='80' LIMIT 1),
    '{"service_type":"5000"}', '20ad0668e8739985489902fcf96a76d23281672708e1aa4fc291bd279598c6da',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='81' LIMIT 1),
    '{"service_type":"6000"}', '56863f94535d2fb8703f659cd1009984aa3a185968317c36cfb9817e2c02ed3d',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='82' LIMIT 1),
    '{"service_type":"6500"}', '84bd74b9f7e8403b142035577269b28be54ab3f6ebbea9b5e262ef99b004d95e',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='83' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='84' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='85' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='86' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='87' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='88' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='89' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='90' LIMIT 1),
    '{"service_type":"7000"}', '8ab78ac0e4711fc217f5d901ece78c36f8f636412625176fd9d8b3ac50231353',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='desktop_pc' LIMIT 1)
     AND code='91' LIMIT 1),
    '{"service_type":"0"}', '433938b130dae870bf33622c8256897d1694262d92edde14b03ddd05c4a94203',
-   '245350', NULL, NULL, FALSE, TRUE, NOW()),
+   '245350', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='2021' LIMIT 1),
    '{"service_type":"200"}', '61925c4f2a8814a96656ad70cc142641976f118c1536236f06471cf1b34664ed',
-   '300', NULL, NULL, FALSE, TRUE, NOW()),
+   '300', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='96' LIMIT 1),
    '{"service_type":"300"}', 'cf9532f7ddfb28e4c616e6528759ba6e333c4ac332b4f014608fe4925b1ce080',
-   '400', NULL, NULL, FALSE, TRUE, NOW()),
+   '400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='97' LIMIT 1),
    '{"service_type":"300"}', 'cf9532f7ddfb28e4c616e6528759ba6e333c4ac332b4f014608fe4925b1ce080',
-   '400', NULL, NULL, FALSE, TRUE, NOW()),
+   '400', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='98' LIMIT 1),
    '{"service_type":"400"}', '0edb055d711dfedcad97b8bbb9b32b59b8d561962fd6d62208f168764d349e80',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='99' LIMIT 1),
    '{"service_type":"400"}', '0edb055d711dfedcad97b8bbb9b32b59b8d561962fd6d62208f168764d349e80',
-   '500', NULL, NULL, FALSE, TRUE, NOW()),
+   '500', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='100' LIMIT 1),
    '{"service_type":"800"}', '98d1b2d39f2a8459ee4f6e739979d7c91815ee58b7f4bbf9815a5686150a88a3',
-   '900', NULL, NULL, FALSE, TRUE, NOW()),
+   '900', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='101' LIMIT 1),
    '{"service_type":"1000"}', '31100e209b3cff4fe80db641a4b60b9f8ade7cc4b9bb37e352fdce8c49adccbc',
-   '1200', NULL, NULL, FALSE, TRUE, NOW()),
+   '1200', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='102' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='monitor' LIMIT 1)
     AND code='103' LIMIT 1),
    '{"service_type":"1500"}', '4e31d3b8a82fe9c025732170a5a31fbcd18905170d9edc30e3361784a683160c',
-   '1800', NULL, NULL, FALSE, TRUE, NOW()),
+   '1800', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='printer' LIMIT 1)
     AND code='105' LIMIT 1),
    '{"service_type":"300"}', 'cf9532f7ddfb28e4c616e6528759ba6e333c4ac332b4f014608fe4925b1ce080',
-   '149', NULL, NULL, FALSE, TRUE, NOW()),
+   '149', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='printer' LIMIT 1)
     AND code='109' LIMIT 1),
    '{"service_type":"800"}', '98d1b2d39f2a8459ee4f6e739979d7c91815ee58b7f4bbf9815a5686150a88a3',
-   '150', NULL, NULL, FALSE, TRUE, NOW()),
+   '150', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='printer' LIMIT 1)
     AND code='110' LIMIT 1),
    '{"service_type":"300"}', 'cf9532f7ddfb28e4c616e6528759ba6e333c4ac332b4f014608fe4925b1ce080',
-   '0', NULL, NULL, FALSE, TRUE, NOW()),
+   '0', FALSE, NOW()),
   (gen_random_uuid(),
    (SELECT id FROM used_pricing_models
     WHERE category_id=(SELECT id FROM used_pricing_categories WHERE code='printer' LIMIT 1)
     AND code='111' LIMIT 1),
    '{"service_type":"800"}', '98d1b2d39f2a8459ee4f6e739979d7c91815ee58b7f4bbf9815a5686150a88a3',
-   '0', NULL, NULL, FALSE, TRUE, NOW())
-ON CONFLICT ("dimensions_hash") DO NOTHING;
+   '0', FALSE, NOW())
+ON CONFLICT ("model_id", "dimensions_hash", "is_multi_issue") DO NOTHING;
