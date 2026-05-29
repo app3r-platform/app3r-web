@@ -50,6 +50,10 @@ const EXPECTED_TABLES = [
   'admin_config', 'admin_config_audit',
   // Wave 1.2
   'listing_meta', 'listing_views',
+  // Wave 1.2 [5] downstream
+  'listing_reviews', 'listing_review_replies',
+  'listing_questions', 'listing_question_replies',
+  'moderation_queue', 'moderation_audit_log', 'ads',
 ]
 
 // คอลัมน์/FK วิกฤตที่ต้องยืนยัน (table → columns)

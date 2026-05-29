@@ -111,3 +111,9 @@ export * from './admin-config'        // admin_config + admin_config_audit
 // W-Round-1 Wave 1.2: B2 universal listing_meta + GR-8 listing_views
 // Migration: 0027_listing_meta.sql · domain FK: 0028_domain_listing_meta_fk.sql
 export * from './listing-meta'        // listing_meta + listing_views
+
+// W-Round-1 Wave 1.2 [5]: downstream (FK → listing_meta.listing_id)
+// Migration: 0029_downstream_listing.sql
+export * from './listing-engagement'  // D86 reviews+replies · GR-5 questions+replies
+export * from './moderation'          // D82 moderation_queue + moderation_audit_log
+export * from './ads'                 // C12 ads (Gold Point D75)
