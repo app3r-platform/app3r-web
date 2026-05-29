@@ -55,7 +55,7 @@ export async function chargeFee(
   })
 }
 
-/** snake_case listing DTO (Ruling 1E) — join listing_meta + used_appliance_listings (nullable) */
+/** listing DTO — camelCase API contract (HUB Gen 37 casing FINAL) · join listing_meta + used_appliance_listings */
 export function toListingDto(
   meta: ListingMeta,
   used: UsedApplianceListing | null,
@@ -64,23 +64,23 @@ export function toListingDto(
   const counters = publicCounters(meta, insider)
   return {
     id: meta.listingId,
-    listing_meta_id: meta.listingId,
-    seller_id: used?.sellerId ?? meta.ownerId,
-    seller_type: used?.sellerType ?? null,
-    listing_type: used?.listingType ?? meta.listingType,
-    appliance_id: used?.applianceId ?? null,
+    listingMetaId: meta.listingId,
+    sellerId: used?.sellerId ?? meta.ownerId,
+    sellerType: used?.sellerType ?? null,
+    listingType: used?.listingType ?? meta.listingType,
+    applianceId: used?.applianceId ?? null,
     warranty: used?.warranty ?? null,
-    scrap_item_id: used?.scrapItemId ?? null,
-    condition_grade: used?.conditionGrade ?? null,
-    working_parts: used?.workingParts ?? null,
+    scrapItemId: used?.scrapItemId ?? null,
+    conditionGrade: used?.conditionGrade ?? null,
+    workingParts: used?.workingParts ?? null,
     price: used ? Number(used.price) : null,
-    delivery_methods: used?.deliveryMethods ?? [],
+    deliveryMethods: used?.deliveryMethods ?? [],
     status: meta.state,
-    tambon_id: meta.tambonId,
-    view_count: counters.viewCount,
-    offer_count: counters.offerCount,
-    expires_at: used?.expiresAt?.toISOString() ?? null,
-    created_at: meta.createdAt.toISOString(),
-    updated_at: meta.updatedAt.toISOString(),
+    tambonId: meta.tambonId,
+    viewCount: counters.viewCount,
+    offerCount: counters.offerCount,
+    expiresAt: used?.expiresAt?.toISOString() ?? null,
+    createdAt: meta.createdAt.toISOString(),
+    updatedAt: meta.updatedAt.toISOString(),
   }
 }

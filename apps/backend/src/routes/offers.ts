@@ -2,12 +2,12 @@
  * offers.ts — W-Round-1 Wave 2.x Part1 (Ruling 1F · D61) — buyer offers API
  *
  * Mounted at: /api/v1/offers
- *   POST /api/v1/offers              → create (body {listing_id,...}) — ตรง WeeeU offers.create
+ *   POST /api/v1/offers              → create (body {listingId,...}) — ตรง WeeeU offers.create
  *   GET  /api/v1/offers/mine         → offers ที่ buyer ยื่น
  *   POST /api/v1/offers/{id}/withdraw → buyer ถอน offer → status=withdrawn
  *
  * (POST/GET /api/v1/listings/{id}/offers อยู่ใน routes/listings.ts)
- * Contract: snake_case (1E)
+ * Contract: camelCase (HUB Gen 37 casing FINAL · DB snake_case map ที่ serialize)
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
@@ -30,15 +30,15 @@ const unauthorized = (c: { json: (b: unknown, s: 401) => Response }) =>
 function offerDto(o: typeof offers.$inferSelect) {
   return {
     id: o.id,
-    listing_id: o.listingMetaId,
-    buyer_id: o.buyerId,
-    buyer_type: o.buyerType,
-    offer_price: Number(o.offerPrice),
-    delivery_method: o.deliveryMethod,
+    listingId: o.listingMetaId,
+    buyerId: o.buyerId,
+    buyerType: o.buyerType,
+    offerPrice: Number(o.offerPrice),
+    deliveryMethod: o.deliveryMethod,
     message: o.message,
     status: o.status,
-    created_at: o.createdAt.toISOString(),
-    updated_at: o.updatedAt.toISOString(),
+    createdAt: o.createdAt.toISOString(),
+    updatedAt: o.updatedAt.toISOString(),
   }
 }
 
@@ -59,21 +59,21 @@ offersRouter.openapi(mineRoute, async (c) => {
   return c.json(rows.map(offerDto), 200)
 })
 
-// ── POST / — create offer (listing_id in body) ────────────────────────────────
+// ── POST / — create offer (listingId in body) ────────────────────────────────
 const createRoute_ = createRoute({
   method: 'post',
   path: '/',
   tags: ['Offers'],
-  summary: 'Create offer (D61) — listing_id in body + offer_fee (1D)',
+  summary: 'Create offer (D61) — listingId in body + offer_fee (1D)',
   security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: {
         'application/json': {
           schema: z.object({
-            listing_id: z.string().uuid(),
-            offer_price: z.number().nonnegative(),
-            delivery_method: z.string(),
+            listingId: z.string().uuid(),
+            offerPrice: z.number().nonnegative(),
+            deliveryMethod: z.string(),
             message: z.string().optional(),
           }),
         },
@@ -91,18 +91,18 @@ offersRouter.openapi(createRoute_, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return unauthorized(c)
   const b = c.req.valid('json')
-  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, b.listing_id)).limit(1)
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, b.listingId)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
 
   const created = await db.transaction(async (tx) => {
     const [row] = await tx
       .insert(offers)
       .values({
-        listingMetaId: b.listing_id,
+        listingMetaId: b.listingId,
         buyerId: user.userId,
         buyerType: sellerTypeFromRole(user.role),
-        offerPrice: String(b.offer_price),
-        deliveryMethod: b.delivery_method,
+        offerPrice: String(b.offerPrice),
+        deliveryMethod: b.deliveryMethod,
         message: b.message ?? null,
         status: 'pending',
       })
@@ -114,7 +114,7 @@ offersRouter.openapi(createRoute_, async (c) => {
         state: listing.state === 'announced' ? 'receiving_offers' : listing.state,
         updatedAt: new Date(),
       })
-      .where(eq(listingMeta.listingId, b.listing_id))
+      .where(eq(listingMeta.listingId, b.listingId))
     const fee = await getFee(tx, 'offer_fee')
     await chargeFee(tx, { userId: user.userId, amount: fee, reference: `offer:${row!.id}`, kind: 'offer_fee' })
     return row!
