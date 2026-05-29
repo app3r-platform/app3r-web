@@ -53,6 +53,13 @@ import { partsCartRouter } from './routes/parts-cart'
 import { partsRequestsRouter } from './routes/parts-requests'
 import { partsReturnsRouter } from './routes/parts-returns'
 
+// W-Round-1 Wave 1.2: listing_meta downstream (D83 state · GR-8 counters · D86 reviews · GR-5 Q&A · D82 moderation · C12 ads)
+import { listingsRouter } from './routes/listings'
+import { listingReviewsRouter } from './routes/listing-reviews'
+import { listingQuestionsRouter } from './routes/listing-questions'
+import { moderationRouter } from './routes/moderation'
+import { adsRouter } from './routes/ads'
+
 export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -171,6 +178,18 @@ app.route('/api/testimonials', testimonialsPublicRouter)
 app.route('/api/testimonials/', testimonialsPublicRouter)
 app.route('/api/admin/testimonials', testimonialsAdminRouter)
 app.route('/api/admin/testimonials/', testimonialsAdminRouter)
+
+// W-Round-1 Wave 1.2: listing downstream
+// HONO-TRIE-FIX: reviews + questions routers mount alongside listingsRouter at /api/v1/listings
+// (distinct sub-paths /{id}/reviews, /{id}/questions vs /{id}, /{id}/transition — register specific first)
+app.route('/api/v1/listings', listingReviewsRouter)
+app.route('/api/v1/listings', listingQuestionsRouter)
+app.route('/api/v1/listings', listingsRouter)
+// D82 moderation queue (admin) · C12 ads
+app.route('/api/v1/admin/moderation', moderationRouter)
+app.route('/api/v1/admin/moderation/', moderationRouter)
+app.route('/api/v1/ads', adsRouter)
+app.route('/api/v1/ads/', adsRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)
