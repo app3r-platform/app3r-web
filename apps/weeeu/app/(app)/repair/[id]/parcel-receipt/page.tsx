@@ -150,7 +150,7 @@ export default function ParcelReceiptPage() {
                   <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ข้อมูลพัสดุขากลับ</p>
                   <InfoRow label="บริษัทขนส่ง" value={COURIER_LABEL[data.courier_back ?? ""] ?? (data.courier_back ?? "—")} />
                   <div className="flex items-start justify-between gap-3">
-                    <p className="text-sm text-gray-500 shrink-0">Tracking</p>
+                    <p className="text-sm text-gray-500 shrink-0">เลขติดตามพัสดุ (Tracking)</p>
                     <p className="text-sm font-mono font-bold text-orange-600 text-right">{data.tracking_back}</p>
                   </div>
                 </div>

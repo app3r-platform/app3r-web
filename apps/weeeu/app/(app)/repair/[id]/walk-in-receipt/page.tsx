@@ -98,7 +98,7 @@ export default function WalkInReceiptPage() {
 
       {/* Receipt code — large and prominent */}
       <div className="bg-white rounded-2xl border-2 border-green-300 shadow-sm p-6 text-center space-y-3">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Receipt Code</p>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">รหัสใบเสร็จ (Receipt Code)</p>
         <p className="text-4xl font-bold tracking-[0.25em] text-gray-900 font-mono">
           {receipt.receipt_code}
         </p>

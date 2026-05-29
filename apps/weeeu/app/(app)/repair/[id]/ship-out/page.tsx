@@ -209,7 +209,7 @@ export default function ShipOutPage() {
 
               {/* Serial number */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Serial Number</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">หมายเลขเครื่อง (Serial Number)</p>
                 <input
                   type="text"
                   value={serialNumber}
