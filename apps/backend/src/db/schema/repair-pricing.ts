@@ -29,6 +29,7 @@ import {
   boolean,
   numeric,
   jsonb,
+  text,
   timestamp,
   index,
   uniqueIndex,
@@ -78,6 +79,8 @@ export const usedPricingModels = pgTable(
     specAttributes: jsonb('spec_attributes').notNull().default(sql`'{}'::jsonb`),
     // ราคาตลาดอ้างอิง (base ก่อนหัก deductions)
     baseMarketPrice: numeric('base_market_price', { precision: 12, scale: 2 }),
+    // TD-W3-02: nullable admin note — synced with seeds 0019/0024 + migration 0018_used_pricing_notes
+    notes: text('notes'),
     isActive: boolean('is_active').notNull().default(true),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
