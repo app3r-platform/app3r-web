@@ -16,7 +16,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
 import { db } from '../db/client'
-import { partsListings } from '../db/schema'
+import { partsListings, listingMeta } from '../db/schema'
 import { eq, and, ilike, or, gte, lte, sql } from 'drizzle-orm'
 import { verifyAccessToken } from '../lib/jwt'
 
@@ -73,6 +73,10 @@ function mapListing(row: typeof partsListings.$inferSelect) {
     photos: row.photos,
     warrantyDays: row.warrantyDays,
     status: row.status,
+    // Ruling 2: catalog reference DTO — unit_price=THB (ราคาอ้างอิง) + category + shop_name
+    category: row.category ?? null,
+    // shop_name: ยังไม่มี field ใน schema (users มีแค่ email) → null รอ profile/shop name (gap → HUB)
+    shopName: null as string | null,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   }
@@ -174,6 +178,10 @@ partsCatalogRouter.post('/', async (c) => {
     tierPricing: z.array(z.unknown()).default([]),
     photos: z.array(z.string()).default([]),
     status: z.enum(['active', 'inactive']).default('active'),
+    // B6 single-source-of-truth: ตำบล (GR-9) เก็บที่ listing_meta (parts_listings ไม่มี column)
+    tambonId: z.number().int().positive().optional(),
+    // Ruling 2: ประเภทอะไหล่ (free text รอ confirm enum กับ reference data)
+    category: z.string().max(100).optional(),
   })
 
   const parsed = Schema.safeParse(body)
@@ -182,28 +190,54 @@ partsCatalogRouter.post('/', async (c) => {
   }
 
   const d = parsed.data
-  const [created] = await db
-    .insert(partsListings)
-    .values({
-      weeerUserId: user.userId,
-      partName: d.partName,
-      partNumber: d.partNumber,
-      manufacturer: d.manufacturer,
-      sourceType: d.sourceType,
-      sourceScrapId: d.sourceScrapId,
-      conditionScore: d.conditionScore,
-      unitPrice: String(d.unitPrice),
-      qtyAvailable: d.qtyAvailable,
-      warrantyDays: d.warrantyDays,
-      inventoryItemId: d.inventoryItemId,
-      oemCompatibility: d.oemCompatibility,
-      tierPricing: d.tierPricing,
-      photos: d.photos,
-      status: d.status,
-    })
-    .returning()
+  // Ruling 1A: ทุก listing ต้องมี listing_meta (B6) — insert parts row + listing_meta
+  // + เซ็ต listing_meta_id ใน transaction เดียว (กัน orphan → /transition|reviews|questions ใช้ได้)
+  const created = await db.transaction(async (tx) => {
+    // 1) insert parts_listings ก่อน (ได้ id ไว้เป็น domain_ref_id)
+    const [partRow] = await tx
+      .insert(partsListings)
+      .values({
+        weeerUserId: user.userId,
+        partName: d.partName,
+        partNumber: d.partNumber,
+        manufacturer: d.manufacturer,
+        sourceType: d.sourceType,
+        sourceScrapId: d.sourceScrapId,
+        conditionScore: d.conditionScore,
+        unitPrice: String(d.unitPrice),
+        qtyAvailable: d.qtyAvailable,
+        warrantyDays: d.warrantyDays,
+        inventoryItemId: d.inventoryItemId,
+        oemCompatibility: d.oemCompatibility,
+        tierPricing: d.tierPricing,
+        photos: d.photos,
+        status: d.status,
+        category: d.category,
+      })
+      .returning()
 
-  return c.json(mapListing(created!), 201)
+    // 2) insert listing_meta (universal id) — active listing → state 'published'
+    const [meta] = await tx
+      .insert(listingMeta)
+      .values({
+        listingType: 'parts',
+        domainRefId: partRow!.id,
+        ownerId: user.userId,
+        tambonId: d.tambonId ?? null,
+        state: d.status === 'active' ? 'announced' : 'draft',
+      })
+      .returning({ listingId: listingMeta.listingId })
+
+    // 3) backlink parts_listings.listing_meta_id (integrity 2 ทาง)
+    const [linked] = await tx
+      .update(partsListings)
+      .set({ listingMetaId: meta!.listingId, updatedAt: new Date() })
+      .where(eq(partsListings.id, partRow!.id))
+      .returning()
+    return linked!
+  })
+
+  return c.json(mapListing(created), 201)
 })
 
 // ── PATCH /catalog/:id/ — WeeeR อัพเดต listing ───────────────────────────────
@@ -274,10 +308,19 @@ partsCatalogRouter.delete('/:id', async (c) => {
   if (!existing) return c.json(err('ไม่พบ listing'), 404)
   if (existing.weeerUserId !== user.userId) return c.json(err('ไม่มีสิทธิ์ลบ listing นี้'), 403)
 
-  await db
-    .update(partsListings)
-    .set({ status: 'deleted', updatedAt: new Date() })
-    .where(eq(partsListings.id, id))
+  // soft delete + cascade state ไป listing_meta (D83 cancelled) ใน transaction เดียว
+  await db.transaction(async (tx) => {
+    await tx
+      .update(partsListings)
+      .set({ status: 'deleted', updatedAt: new Date() })
+      .where(eq(partsListings.id, id))
+    if (existing.listingMetaId) {
+      await tx
+        .update(listingMeta)
+        .set({ state: 'cancelled', updatedAt: new Date() })
+        .where(eq(listingMeta.listingId, existing.listingMetaId))
+    }
+  })
 
   return c.json({ success: true, id })
 })

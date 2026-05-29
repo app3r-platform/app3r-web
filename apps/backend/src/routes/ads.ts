@@ -15,7 +15,7 @@
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
-import { and, eq, desc } from 'drizzle-orm'
+import { and, eq, desc, lte, gte, sql } from 'drizzle-orm'
 import { db } from '../db/client'
 import { ads, adminConfig, AD_POSITIONS, type AdPosition } from '../db/schema'
 import { verifyAccessToken } from '../lib/jwt'
@@ -47,6 +47,49 @@ async function rateForPosition(position: AdPosition): Promise<number> {
   const r = overrides?.[position]
   return typeof r === 'number' && r >= 0 ? r : DEFAULT_RATES[position]
 }
+
+// ── GET /public — B1 active ads สำหรับแสดงผล (no auth) ─────────────────────────
+// status=active + อยู่ในช่วง start/end date · optional ?position= filter
+const publicRoute = createRoute({
+  method: 'get',
+  path: '/public',
+  tags: ['Ads'],
+  summary: 'Public active ads for display (B1) — filter by position',
+  request: { query: z.object({ position: z.enum(AD_POSITIONS).optional() }) },
+  responses: { 200: { description: 'Active ads' } },
+})
+
+adsRouter.openapi(publicRoute, async (c) => {
+  const { position } = c.req.valid('query')
+  const now = new Date()
+  const conds = [
+    eq(ads.status, 'active'),
+    lte(ads.startDate, now),
+    // endDate ว่าง = ไม่หมดอายุ · ถ้ามี ต้อง >= now
+    sql`(${ads.endDate} IS NULL OR ${ads.endDate} >= ${now})`,
+  ]
+  if (position) conds.push(eq(ads.position, position))
+  const rows = await db
+    .select()
+    .from(ads)
+    .where(and(...conds))
+    .orderBy(desc(ads.startDate))
+  return c.json(
+    {
+      items: rows.map((r) => ({
+        id: r.id,
+        adType: r.adType,
+        listingId: r.listingId,
+        position: r.position,
+        bannerImage: r.bannerImage,
+        targetUrl: r.targetUrl,
+        startDate: r.startDate?.toISOString() ?? null,
+        endDate: r.endDate?.toISOString() ?? null,
+      })),
+    },
+    200,
+  )
+})
 
 // ── POST / — buy ad (debit Gold D75) ──────────────────────────────────────────
 const buyRoute = createRoute({

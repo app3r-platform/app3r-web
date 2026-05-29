@@ -14,14 +14,20 @@ import { sql } from 'drizzle-orm'
 import { users } from './users'
 import { tambons } from './location-master'
 
-// D83 listing states
+// Listing states — D59 canonical (Advisor Gen 101 Ruling 1B) + `draft` (additive front)
+// D83 = ชั้นกฎ overlay (lock/bad_record/escrow) ไม่ใช่ enum แยก — ดู lib/listing-state.ts
 export const LISTING_STATES = [
-  'draft',
-  'published',
-  'has_offer',
-  'matched',
-  'completed',
-  'cancelled',
+  'draft',             // ก่อน publish (D83: edit/delete อิสระ)
+  'announced',         // published (D83: edit/cancel ได้)
+  'receiving_offers',  // has_offer (D83: lock edit · cancel→bad_record)
+  'offer_selected',    // matched-1 (D83: escrow lock)
+  'buyer_confirmed',   // matched-2 (D83: escrow lock)
+  'in_progress',       // fulfillment (D59)
+  'delivered',         // fulfillment (D59)
+  'inspection_period', // fulfillment (D59)
+  'completed',         // ปิด → ปลดจ่าย escrow
+  'cancelled',         // ยกเลิก (D83 bad_record ตาม state)
+  'disputed',          // escalate admin
 ] as const
 export type ListingState = (typeof LISTING_STATES)[number]
 
