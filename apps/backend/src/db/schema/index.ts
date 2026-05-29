@@ -99,3 +99,11 @@ export * from './parts-cart'          // parts_cart_items (expire 24h)
 export * from './parts-order-items'   // parts_order_items (multi-item additive)
 export * from './parts-requests'      // parts_requests + parts_request_quotes (cross-shop)
 export * from './parts-returns'       // parts_returns (defective return)
+
+// W-Round-1 Wave 1: D87 Thai location master reference (L1 Static, standalone — no user FK)
+// Migration: 0025_d87_location_master.sql
+export * from './location-master'     // provinces + amphoes + tambons
+
+// W-Round-1 Wave 1: D84 admin-tunable config + change audit (standalone — no user FK)
+// Migration: 0026_d84_admin_config.sql
+export * from './admin-config'        // admin_config + admin_config_audit

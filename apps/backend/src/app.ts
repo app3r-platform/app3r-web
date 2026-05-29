@@ -19,6 +19,8 @@ import { filesRouter } from './routes/files'
 import { pushRouter } from './routes/push'
 import { paymentRouter } from './routes/payment'
 import { locationRouter } from './routes/location'
+import { locationMasterRouter } from './routes/location-master' // D87 W-Round-1 Wave 1
+import { adminConfigRouter } from './routes/admin-config' // D84 W-Round-1 Wave 1
 import { servicesRouter } from './routes/services'
 import { partsRouter } from './routes/parts'
 import { transfersRouter } from './routes/transfers'
@@ -93,6 +95,13 @@ app.route('/api/v1/payment', paymentRouter)
 
 // D90: Location (Google Maps proxy + live location NOTE-SUB5)
 app.route('/api/v1/location', locationRouter)
+
+// D87 W-Round-1 Wave 1: Thai admin location reference (GR-9 cascade + GR-10 nearby, public)
+app.route('/api/v1/locations', locationMasterRouter)
+
+// D84 W-Round-1 Wave 1: admin-tunable config + audit (Bad Record Policy)
+app.route('/api/v1/admin/config', adminConfigRouter)
+app.route('/api/v1/admin/config/', adminConfigRouter)
 
 // D90 NOTE-D90-1: Services stub CRUD
 app.route('/api/v1/services', servicesRouter)
