@@ -107,3 +107,7 @@ export * from './location-master'     // provinces + amphoes + tambons
 // W-Round-1 Wave 1: D84 admin-tunable config + change audit (standalone — no user FK)
 // Migration: 0026_d84_admin_config.sql
 export * from './admin-config'        // admin_config + admin_config_audit
+
+// W-Round-1 Wave 1.2: B2 universal listing_meta + GR-8 listing_views
+// Migration: 0027_listing_meta.sql · domain FK: 0028_domain_listing_meta_fk.sql
+export * from './listing-meta'        // listing_meta + listing_views
