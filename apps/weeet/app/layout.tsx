@@ -55,6 +55,11 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [รับซากเสร็จ]",                 href: "/jobs/s001/complete",                       type: "branch",    forPath: "/jobs/s001/inspect" },
   { label: "🔗 WeeeR ยืนยัน",                href: "http://localhost:3001/scrap/jobs/s001",      type: "cross-app", forPath: "/jobs/s001/complete" },
   { label: "🔗 WeeeU ดูใบรับรอง",            href: "http://localhost:3002/scrap/s001/certificate", type: "cross-app", forPath: "/jobs/s001/complete" },
+
+  // ── Service Listing (W-Round-1 Wave 2 · listing_meta + D83 + Escrow) ──────────
+  { label: "→ ประกาศบริการของฉัน",           href: "/listings",                                 type: "next-step", forPath: "/jobs" },
+  { label: "→ [งานจับคู่แล้ว-matched]",       href: "/listings/demo-svc-001",                    type: "branch",    forPath: "/listings" },
+  { label: "→ [งานเสร็จแล้ว-completed]",      href: "/listings/demo-svc-003",                    type: "branch",    forPath: "/listings" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

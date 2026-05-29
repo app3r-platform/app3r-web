@@ -20,6 +20,8 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/profile",              info: { num: "T-12", code: "PROFILE" } },
   { pattern: "/notifications",        info: { num: "T-13", code: "NOTIFICATIONS" } },
   { pattern: "/wallet",               info: { num: "T-14", code: "WALLET" } },
+  { pattern: "/listings/[id]",        info: { num: "T-16", code: "SERVICE-LISTING-DETAIL" } },
+  { pattern: "/listings",             info: { num: "T-17", code: "SERVICE-LISTINGS" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
