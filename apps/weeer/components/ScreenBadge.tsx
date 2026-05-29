@@ -6,6 +6,7 @@ type ScreenInfo = { num: string; code: string };
 
 const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/dashboard",                          info: { num: "R-01", code: "DASHBOARD" } },
+  { pattern: "/listings/[id]",                      info: { num: "R-42", code: "LISTING-META-DETAIL" } },
   { pattern: "/repair/announcements/[id]/offer/success", info: { num: "R-38", code: "REPAIR-BID-SUCCESS" } },
   { pattern: "/repair/announcements/[id]/offer",    info: { num: "R-03", code: "REPAIR-BID" } },
   { pattern: "/repair/announcements/[id]",          info: { num: "R-04", code: "REPAIR-ANNOUNCE-DETAIL" } },
