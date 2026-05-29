@@ -99,3 +99,21 @@ export * from './parts-cart'          // parts_cart_items (expire 24h)
 export * from './parts-order-items'   // parts_order_items (multi-item additive)
 export * from './parts-requests'      // parts_requests + parts_request_quotes (cross-shop)
 export * from './parts-returns'       // parts_returns (defective return)
+
+// W-Round-1 Wave 1: D87 Thai location master reference (L1 Static, standalone — no user FK)
+// Migration: 0025_d87_location_master.sql
+export * from './location-master'     // provinces + amphoes + tambons
+
+// W-Round-1 Wave 1: D84 admin-tunable config + change audit (standalone — no user FK)
+// Migration: 0026_d84_admin_config.sql
+export * from './admin-config'        // admin_config + admin_config_audit
+
+// W-Round-1 Wave 1.2: B2 universal listing_meta + GR-8 listing_views
+// Migration: 0027_listing_meta.sql · domain FK: 0028_domain_listing_meta_fk.sql
+export * from './listing-meta'        // listing_meta + listing_views
+
+// W-Round-1 Wave 1.2 [5]: downstream (FK → listing_meta.listing_id)
+// Migration: 0029_downstream_listing.sql
+export * from './listing-engagement'  // D86 reviews+replies · GR-5 questions+replies
+export * from './moderation'          // D82 moderation_queue + moderation_audit_log
+export * from './ads'                 // C12 ads (Gold Point D75)

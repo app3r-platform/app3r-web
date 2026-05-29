@@ -19,6 +19,8 @@ import { filesRouter } from './routes/files'
 import { pushRouter } from './routes/push'
 import { paymentRouter } from './routes/payment'
 import { locationRouter } from './routes/location'
+import { locationMasterRouter } from './routes/location-master' // D87 W-Round-1 Wave 1
+import { adminConfigRouter } from './routes/admin-config' // D84 W-Round-1 Wave 1
 import { servicesRouter } from './routes/services'
 import { partsRouter } from './routes/parts'
 import { transfersRouter } from './routes/transfers'
@@ -50,6 +52,13 @@ import { partsCatalogRouter } from './routes/parts-catalog'
 import { partsCartRouter } from './routes/parts-cart'
 import { partsRequestsRouter } from './routes/parts-requests'
 import { partsReturnsRouter } from './routes/parts-returns'
+
+// W-Round-1 Wave 1.2: listing_meta downstream (D83 state · GR-8 counters · D86 reviews · GR-5 Q&A · D82 moderation · C12 ads)
+import { listingsRouter } from './routes/listings'
+import { listingReviewsRouter } from './routes/listing-reviews'
+import { listingQuestionsRouter } from './routes/listing-questions'
+import { moderationRouter } from './routes/moderation'
+import { adsRouter } from './routes/ads'
 
 export const app = new OpenAPIHono()
 
@@ -93,6 +102,13 @@ app.route('/api/v1/payment', paymentRouter)
 
 // D90: Location (Google Maps proxy + live location NOTE-SUB5)
 app.route('/api/v1/location', locationRouter)
+
+// D87 W-Round-1 Wave 1: Thai admin location reference (GR-9 cascade + GR-10 nearby, public)
+app.route('/api/v1/locations', locationMasterRouter)
+
+// D84 W-Round-1 Wave 1: admin-tunable config + audit (Bad Record Policy)
+app.route('/api/v1/admin/config', adminConfigRouter)
+app.route('/api/v1/admin/config/', adminConfigRouter)
 
 // D90 NOTE-D90-1: Services stub CRUD
 app.route('/api/v1/services', servicesRouter)
@@ -162,6 +178,18 @@ app.route('/api/testimonials', testimonialsPublicRouter)
 app.route('/api/testimonials/', testimonialsPublicRouter)
 app.route('/api/admin/testimonials', testimonialsAdminRouter)
 app.route('/api/admin/testimonials/', testimonialsAdminRouter)
+
+// W-Round-1 Wave 1.2: listing downstream
+// HONO-TRIE-FIX: reviews + questions routers mount alongside listingsRouter at /api/v1/listings
+// (distinct sub-paths /{id}/reviews, /{id}/questions vs /{id}, /{id}/transition — register specific first)
+app.route('/api/v1/listings', listingReviewsRouter)
+app.route('/api/v1/listings', listingQuestionsRouter)
+app.route('/api/v1/listings', listingsRouter)
+// D82 moderation queue (admin) · C12 ads
+app.route('/api/v1/admin/moderation', moderationRouter)
+app.route('/api/v1/admin/moderation/', moderationRouter)
+app.route('/api/v1/ads', adsRouter)
+app.route('/api/v1/ads/', adsRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)

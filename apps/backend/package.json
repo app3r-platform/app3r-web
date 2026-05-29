@@ -14,7 +14,9 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "seed:w3": "tsx src/db/seeds/0002_w3_cms_content.ts"
+    "seed:w3": "tsx src/db/seeds/0002_w3_cms_content.ts",
+    "import:locations": "tsx src/scripts/import-location-master.ts",
+    "seed:d84": "tsx src/db/seeds/0003_d84_admin_config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",

@@ -25,6 +25,7 @@ import {
 import { sql } from 'drizzle-orm'
 import { users } from './users'
 import { partsInventory } from './parts-inventory'
+import { listingMeta } from './listing-meta' // W-Round-1 Wave 1.2 B2
 
 export const partsListings = pgTable(
   'parts_listings',
@@ -76,6 +77,11 @@ export const partsListings = pgTable(
     // สถานะ listing: 'active' | 'inactive' | 'sold_out' | 'deleted'
     status: text('status').notNull().default('active'),
 
+    // W-Round-1 Wave 1.2 B2: link → listing_meta (universal id) — additive, nullable
+    listingMetaId: uuid('listing_meta_id').references(() => listingMeta.listingId, {
+      onDelete: 'set null',
+    }),
+
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
@@ -84,6 +90,7 @@ export const partsListings = pgTable(
     index('idx_parts_listings_status').on(table.status),
     index('idx_parts_listings_part_name').on(table.partName),
     index('idx_parts_listings_part_number').on(table.partNumber),
+    index('idx_parts_listings_listing_meta').on(table.listingMetaId),
     check(
       'chk_parts_listings_source_type',
       sql`${table.sourceType} IN ('new', 'used', 'disassembled')`,

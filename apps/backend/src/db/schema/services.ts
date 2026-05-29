@@ -22,6 +22,7 @@ import {
   index,
 } from 'drizzle-orm/pg-core'
 import { users } from './users'
+import { listingMeta } from './listing-meta' // W-Round-1 Wave 1.2 B2
 
 export const services = pgTable(
   'services',
@@ -54,6 +55,11 @@ export const services = pgTable(
     // กำหนดเสร็จงาน — Sub-5 deadline alert
     deadline: timestamp('deadline', { withTimezone: true }),
 
+    // W-Round-1 Wave 1.2 B2: link → listing_meta (universal id) — additive, nullable
+    listingMetaId: uuid('listing_meta_id').references(() => listingMeta.listingId, {
+      onDelete: 'set null',
+    }),
+
     // ── Timestamps ────────────────────────────────────────────────────────────
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
@@ -64,6 +70,7 @@ export const services = pgTable(
     // Sub-CMD-4: เพิ่ม index สำหรับ query ที่จะใช้บ่อย
     index('idx_services_type').on(table.serviceType),
     index('idx_services_deadline').on(table.deadline),
+    index('idx_services_listing_meta').on(table.listingMetaId),
   ],
 )
 
