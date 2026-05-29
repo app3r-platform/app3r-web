@@ -118,12 +118,12 @@ export default function SellNewPage() {
     setError("");
     setSubmitting(true);
     try {
+      // contract Backend Part1 (488cae4): create ไม่รับ description — ส่งเฉพาะ field ที่ schema จริงมี
       const body: Parameters<typeof listingsApi.create>[0] = {
         listing_type: listingType,
         condition_grade: conditionGrade,
         price: Number(price),
         delivery_methods: deliveryMethods,
-        description: description.trim() || undefined,
       };
       if (listingType === "used_appliance") {
         body.appliance_id = applianceId;
