@@ -395,7 +395,7 @@ function generatePricingSql(
           `    WHERE category_id=${pricingCatIdSql(catCode)}\n` +
           `    AND code=${sqlStr(modelCode)} LIMIT 1),\n` +
           `   '${dimsJson.replace(/'/g, "''")}', ${sqlStr(dHash)},\n` +
-          `   ${sqlStr(String(cost))}, NULL, NULL, ${sqlBool(isMulti)}, TRUE, NOW())`
+          `   ${sqlStr(String(cost))}, ${sqlBool(isMulti)}, NOW())`
         )
         counts.pricePoints++
       }
@@ -460,7 +460,7 @@ function generatePricingSql(
           `    WHERE category_id=${pricingCatIdSql(catCode)}\n` +
           `    AND code=${sqlStr(modelCode)} LIMIT 1),\n` +
           `   '${dimsJson.replace(/'/g, "''")}', ${sqlStr(dHash)},\n` +
-          `   ${sqlStr(String(row.cost))}, NULL, NULL, FALSE, TRUE, NOW())`
+          `   ${sqlStr(String(row.cost))}, FALSE, NOW())`
         )
         counts.pricePoints++
       }
@@ -506,10 +506,10 @@ function generatePricingSql(
 
   if (pricePointInserts.length > 0) {
     lines.push(`-- ── 3. used_pricing_price_points (${counts.pricePoints} rows) ────────────────`)
-    lines.push(`INSERT INTO "used_pricing_price_points" ("id", "model_id", "dimensions", "dimensions_hash", "base_price", "min_price", "max_price", "is_multi_issue", "is_active", "created_at")`)
+    lines.push(`INSERT INTO "used_pricing_price_points" ("id", "model_id", "dimensions", "dimensions_hash", "price", "is_multi_issue", "created_at")`)
     lines.push(`VALUES`)
     lines.push(pricePointInserts.join(',\n'))
-    lines.push(`ON CONFLICT ("dimensions_hash") DO NOTHING;`)
+    lines.push(`ON CONFLICT ("model_id", "dimensions_hash", "is_multi_issue") DO NOTHING;`)
     lines.push(``)
   }
 
