@@ -29,7 +29,16 @@ export function PartDetailHeader({ listing, isOwn }: PartDetailHeaderProps) {
         ร้าน: <span className="font-medium text-gray-700">{listing.shopName}</span>
       </p>
       <div className="flex items-center justify-between">
-        <p className="text-2xl font-bold text-green-700">{listing.pricePoints.toLocaleString()} pts</p>
+        {listing.pricePoints > 0 ? (
+          <p className="text-2xl font-bold text-green-700">{listing.pricePoints.toLocaleString()} pts</p>
+        ) : listing.unitPriceThb != null ? (
+          <p className="text-2xl font-bold text-gray-800">
+            ฿{listing.unitPriceThb.toLocaleString()}
+            <span className="text-xs font-normal text-gray-400"> ราคาอ้างอิง (catalog)</span>
+          </p>
+        ) : (
+          <p className="text-2xl font-bold text-gray-400">—</p>
+        )}
         <PartStockIndicator stock={listing.stock} />
       </div>
       {listing.description && (

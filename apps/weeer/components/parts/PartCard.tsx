@@ -53,7 +53,16 @@ export function PartCard({ listing, currentShopId }: PartCardProps) {
           <PartConditionBadge condition={listing.condition} />
         </div>
         <div className="flex items-center justify-between pt-0.5">
-          <p className="text-sm font-bold text-green-700">{listing.pricePoints.toLocaleString()} pts</p>
+          {listing.pricePoints > 0 ? (
+            <p className="text-sm font-bold text-green-700">{listing.pricePoints.toLocaleString()} pts</p>
+          ) : listing.unitPriceThb != null ? (
+            <p className="text-sm font-bold text-gray-700">
+              ฿{listing.unitPriceThb.toLocaleString()}
+              <span className="text-[10px] font-normal text-gray-400"> ราคาอ้างอิง</span>
+            </p>
+          ) : (
+            <p className="text-sm font-medium text-gray-400">—</p>
+          )}
           <PartStockIndicator stock={listing.stock} />
         </div>
       </div>
