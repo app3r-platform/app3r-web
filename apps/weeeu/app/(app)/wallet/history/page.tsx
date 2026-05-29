@@ -41,8 +41,8 @@ const STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
 };
 
 const TYPE_CONFIG: Record<string, { icon: string; label: string; amountPrefix: string; amountCls: string }> = {
-  deposit:  { icon: "💰", label: "เติม Gold",  amountPrefix: "+", amountCls: "text-green-600" },
-  withdraw: { icon: "💸", label: "แจ้งถอน Gold", amountPrefix: "-", amountCls: "text-red-600" },
+  deposit:  { icon: "💰", label: "เติมพอยต์ทอง",  amountPrefix: "+", amountCls: "text-green-600" },
+  withdraw: { icon: "💸", label: "แจ้งถอนพอยต์ทอง", amountPrefix: "-", amountCls: "text-red-600" },
 };
 
 // ─── TransferItem ─────────────────────────────────────────────────────────────
@@ -72,7 +72,7 @@ function TransferItem({ transfer }: { transfer: Transfer }) {
       </div>
       <div className="text-right flex-shrink-0">
         <p className={`text-sm font-bold ${type.amountCls}`}>
-          {type.amountPrefix}{transfer.points.toLocaleString("th-TH")} Gold
+          {type.amountPrefix}{transfer.points.toLocaleString("th-TH")} พอยต์ทอง
         </p>
         <p className="text-xs text-gray-400 mt-0.5">฿{transfer.amount.toLocaleString("th-TH")}</p>
         <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${status.cls}`}>
@@ -112,7 +112,7 @@ export default function WalletHistoryPage() {
 
   const filterTabs: Array<{ value: TransferType | "all"; label: string }> = [
     { value: "all",      label: "ทั้งหมด" },
-    { value: "deposit",  label: "เติม Gold" },
+    { value: "deposit",  label: "เติมพอยต์ทอง" },
     { value: "withdraw", label: "แจ้งถอน" },
   ];
 
@@ -122,7 +122,7 @@ export default function WalletHistoryPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/wallet" className="text-gray-400 hover:text-gray-600">←</Link>
-          <h1 className="text-xl font-bold text-gray-900">ประวัติ Gold Point</h1>
+          <h1 className="text-xl font-bold text-gray-900">ประวัติพอยต์ทอง (Gold Point)</h1>
         </div>
       </div>
 
@@ -132,13 +132,13 @@ export default function WalletHistoryPage() {
           href="/wallet/deposit"
           className="flex items-center justify-center gap-2 bg-weeeu-primary hover:bg-weeeu-dark text-white py-3 rounded-2xl text-sm font-semibold transition-colors"
         >
-          💰 เติม Gold
+          💰 เติมพอยต์ทอง
         </Link>
         <Link
           href="/wallet/withdraw"
           className="flex items-center justify-center gap-2 bg-white border border-weeeu-primary/20 text-weeeu-primary hover:bg-weeeu-surface py-3 rounded-2xl text-sm font-semibold transition-colors"
         >
-          💸 แจ้งถอน Gold
+          💸 แจ้งถอนพอยต์ทอง
         </Link>
       </div>
 
@@ -170,7 +170,7 @@ export default function WalletHistoryPage() {
             <p className="text-3xl">📭</p>
             <p className="text-sm">ยังไม่มีรายการ</p>
             <Link href="/wallet/deposit" className="text-xs text-weeeu-primary hover:underline">
-              เติม Gold ครั้งแรก →
+              เติมพอยต์ทองครั้งแรก →
             </Link>
           </div>
         ) : (
@@ -181,7 +181,7 @@ export default function WalletHistoryPage() {
       </div>
 
       <p className="text-xs text-center text-gray-400">
-        1 Gold = 1 บาท · Gold ไม่หมดอายุ · * แสดง Mock ถ้า API ไม่พร้อม
+        1 พอยต์ทอง = 1 บาท · พอยต์ทองไม่หมดอายุ · * แสดง Mock ถ้า API ไม่พร้อม
       </p>
     </div>
   );

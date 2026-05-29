@@ -40,8 +40,8 @@ export default function WithdrawPage() {
 
   const handleSubmit = () => {
     setFieldError("");
-    if (parsedAmount <= 0) { setFieldError("กรุณาระบุจำนวน Gold ที่ต้องการถอน"); return; }
-    if (parsedAmount > MOCK_GOLD_BALANCE) { setFieldError(`Gold ไม่พอ — คงเหลือ ${MOCK_GOLD_BALANCE} Gold`); return; }
+    if (parsedAmount <= 0) { setFieldError("กรุณาระบุจำนวนพอยต์ทองที่ต้องการถอน"); return; }
+    if (parsedAmount > MOCK_GOLD_BALANCE) { setFieldError(`พอยต์ทองไม่พอ — คงเหลือ ${MOCK_GOLD_BALANCE} พอยต์ทอง`); return; }
     if (!bankName) { setFieldError("กรุณาเลือกธนาคาร"); return; }
     if (!bankAccount.trim()) { setFieldError("กรุณาระบุเลขบัญชีธนาคาร"); return; }
     if (!accountHolder.trim()) { setFieldError("กรุณาระบุชื่อเจ้าของบัญชี"); return; }
@@ -58,7 +58,7 @@ export default function WithdrawPage() {
         {/* Header */}
         <div className="flex items-center gap-3">
           <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-xl leading-none">←</Link>
-          <h1 className="text-xl font-bold text-gray-900">ถอน Gold Point</h1>
+          <h1 className="text-xl font-bold text-gray-900">ถอนพอยต์ทอง (Gold Point)</h1>
         </div>
 
         {/* Status card */}
@@ -77,7 +77,7 @@ export default function WithdrawPage() {
               : "Admin จะโอนเงินให้ภายใน 1-3 วันทำการ"}
           </p>
           <div className="bg-white/70 rounded-xl px-4 py-3 inline-block mt-2 space-y-1">
-            <p className="text-2xl font-bold text-weeeu-primary">{parsedAmount.toLocaleString()} Gold</p>
+            <p className="text-2xl font-bold text-weeeu-primary">{parsedAmount.toLocaleString()} พอยต์ทอง</p>
             <p className="text-xs text-gray-500">≈ ฿{parsedAmount.toLocaleString("th-TH")}</p>
             <p className="text-xs text-gray-400 mt-1">{bankName}</p>
             <p className="text-xs text-gray-400">บัญชี {bankAccount}</p>
@@ -149,7 +149,7 @@ export default function WithdrawPage() {
       {/* Gold balance banner */}
       <div className="wallet-gold rounded-2xl p-4 text-white flex items-center justify-between">
         <div>
-          <p className="text-xs font-medium opacity-80">Gold Point คงเหลือ</p>
+          <p className="text-xs font-medium opacity-80">พอยต์ทอง (Gold Point) คงเหลือ</p>
           <p className="text-2xl font-bold">{MOCK_GOLD_BALANCE.toLocaleString()}</p>
           <p className="text-xs opacity-70">≈ ฿{MOCK_GOLD_BALANCE.toLocaleString("th-TH")}</p>
         </div>
@@ -158,13 +158,13 @@ export default function WithdrawPage() {
 
       {/* Flow info */}
       <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
-        <p className="text-sm font-semibold text-amber-800 mb-1">📋 ขั้นตอนการถอน Gold</p>
+        <p className="text-sm font-semibold text-amber-800 mb-1">📋 ขั้นตอนการถอนพอยต์ทอง</p>
         <ol className="list-decimal list-inside space-y-1 text-xs text-amber-700">
-          <li>กรอกจำนวน Gold + บัญชีธนาคารปลายทาง</li>
+          <li>กรอกจำนวนพอยต์ทอง + บัญชีธนาคารปลายทาง</li>
           <li>Admin ตรวจสอบและอนุมัติ (1-3 วันทำการ)</li>
           <li>Admin โอนเงินจริงเข้าบัญชีของคุณ</li>
         </ol>
-        <p className="text-xs text-amber-600 mt-2 font-medium">อัตรา: 1 Gold = ฿1.00</p>
+        <p className="text-xs text-amber-600 mt-2 font-medium">อัตรา: 1 พอยต์ทอง = ฿1.00</p>
       </div>
 
       {/* Form */}
@@ -174,7 +174,7 @@ export default function WithdrawPage() {
         {/* Amount */}
         <div className="space-y-2">
           <label className="block text-xs font-medium text-gray-500">
-            จำนวน Gold ที่ต้องการถอน <span className="text-red-400">*</span>
+            จำนวนพอยต์ทองที่ต้องการถอน <span className="text-red-400">*</span>
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg">🥇</span>
@@ -193,7 +193,7 @@ export default function WithdrawPage() {
             <p className="text-xs text-weeeu-primary">≈ ฿{parsedAmount.toLocaleString("th-TH")}</p>
           )}
           {parsedAmount > MOCK_GOLD_BALANCE && (
-            <p className="text-xs text-red-500">Gold ไม่พอ — คงเหลือ {MOCK_GOLD_BALANCE} Gold</p>
+            <p className="text-xs text-red-500">พอยต์ทองไม่พอ — คงเหลือ {MOCK_GOLD_BALANCE} พอยต์ทอง</p>
           )}
           {/* Quick presets */}
           <div className="grid grid-cols-4 gap-2">
@@ -266,7 +266,7 @@ export default function WithdrawPage() {
         <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 space-y-1.5">
           <p className="text-xs font-semibold text-weeeu-text mb-2">สรุปการถอน</p>
           <div className="flex justify-between text-xs text-gray-600">
-            <span>จำนวน Gold</span><span className="font-semibold text-weeeu-primary">{parsedAmount.toLocaleString()} Gold</span>
+            <span>จำนวนพอยต์ทอง</span><span className="font-semibold text-weeeu-primary">{parsedAmount.toLocaleString()} พอยต์ทอง</span>
           </div>
           <div className="flex justify-between text-xs text-gray-600">
             <span>มูลค่าเงินจริง</span><span>฿{parsedAmount.toLocaleString("th-TH")}</span>
@@ -294,7 +294,7 @@ export default function WithdrawPage() {
         disabled={!canSubmit || flowState === "submitting"}
         className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl transition-colors"
       >
-        {flowState === "submitting" ? "⟳ กำลังส่งคำขอ..." : "🥇 ยืนยันถอน Gold Point (Mockup)"}
+        {flowState === "submitting" ? "⟳ กำลังส่งคำขอ..." : "🥇 ยืนยันถอนพอยต์ทอง (Mockup)"}
       </button>
 
       <p className="text-xs text-center text-gray-400">* Mockup — ไม่บันทึกข้อมูลจริง · Backend CMD-B2 parallel</p>
