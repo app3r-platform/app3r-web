@@ -18,7 +18,7 @@ const apps = [
       "ลงประกาศขาย/ซ่อม/บำรุงรักษา",
       "รับ offer จากร้านที่ผ่านการรับรอง",
       "ติดตามสถานะงานแบบ Real-time",
-      "ระบบ Wallet Silver & Gold",
+      "ระบบ Wallet พอยต์เงิน (Silver Point) & พอยต์ทอง (Gold Point)",
       "Notification แจ้งเตือนครบ",
     ],
     status: "coming-soon",
