@@ -14,7 +14,12 @@
  *   POST /api/v1/listings/{id}/view        → GR-8 record unique view              [existing]
  *   POST /api/v1/listings/{id}/offer       → increment offer_count (raw)          [existing]
  *
- * Contract (Ruling 1E): snake_case · list browse คืน {results,count} · mine คืน array (ตรง WeeeU fetch)
+ * Contract (จริงใน code นี้ — mixed ตาม endpoint):
+ *   - field naming: GET /{id} = camelCase (listing_meta-level legacy) · create/mine/browse = snake_case (toListingDto)
+ *   - envelope: error = { error: {...} } object · /browse = { results, count } · /mine = array
+ *     · GET /{id} = bare object · offers list = array
+ *   (reviews/questions routers แยกไฟล์ใช้ envelope { items })
+ *   B2 category enum (CHECK) = defer → Wave 3 (canonical taxonomy author จากข้อมูลจริง)
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
