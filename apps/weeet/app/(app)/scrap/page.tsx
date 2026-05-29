@@ -201,7 +201,7 @@ export default function WeeeTScrapJobsPage() {
                     {sm.emoji} {sm.label}
                   </span>
                   {job.offeredPrice > 0 && (
-                    <p className="text-xs font-mono text-green-600 mt-1">{job.offeredPrice} Gold</p>
+                    <p className="text-xs font-mono text-green-600 mt-1">{job.offeredPrice} พอยต์ทอง (Gold Point)</p>
                   )}
                 </div>
               </div>

@@ -179,7 +179,7 @@ export default function ProfilePage() {
             {auth.accountType === "rented" ? (
               <p className="text-sm text-white">
                 Mode 2 — เช่ารายปี{" "}
-                <span className="text-amber-400 text-xs">(5,000 Gold / ปี)</span>
+                <span className="text-amber-400 text-xs">(5,000 พอยต์ทอง (Gold Point) / ปี)</span>
               </p>
             ) : (
               <p className="text-sm text-white">

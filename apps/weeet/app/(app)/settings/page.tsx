@@ -79,7 +79,7 @@ export default function SettingsPage() {
           label="โหมดช่าง"
           description={
             auth.accountType === "rented"
-              ? "Mode 2 — เช่ารายปี (5,000 Gold) · Admin อนุมัติแล้ว"
+              ? "Mode 2 — เช่ารายปี (5,000 พอยต์ทอง (Gold Point)) · Admin อนุมัติแล้ว"
               : "Mode 1 — ฟรี 1 ตัว · สร้างอัตโนมัติโดยร้าน"
           }
           value={auth.accountType === "rented" ? "Mode 2" : "Mode 1"}
