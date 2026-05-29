@@ -29,21 +29,21 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 gap-4">
         {/* Silver */}
         <Link href="/wallet?tab=silver" className="wallet-silver rounded-2xl p-5 text-white hover:opacity-90 transition-opacity">
-          <p className="text-xs font-medium opacity-80 mb-1">Silver Point</p>
+          <p className="text-xs font-medium opacity-80 mb-1">พอยต์เงิน (Silver Point)</p>
           <p className="text-2xl font-bold">1,250</p>
           <p className="text-xs opacity-70 mt-1">≈ ฿125.00</p>
           <div className="mt-3 flex items-center gap-1 opacity-80">
-            <span className="text-xs">💎 Silver</span>
+            <span className="text-xs">💎 พอยต์เงิน</span>
           </div>
         </Link>
 
         {/* Gold */}
         <Link href="/wallet?tab=gold" className="wallet-gold rounded-2xl p-5 text-white hover:opacity-90 transition-opacity">
-          <p className="text-xs font-medium opacity-80 mb-1">Gold Point</p>
+          <p className="text-xs font-medium opacity-80 mb-1">พอยต์ทอง (Gold Point)</p>
           <p className="text-2xl font-bold">350</p>
           <p className="text-xs opacity-70 mt-1">≈ ฿35.00</p>
           <div className="mt-3 flex items-center gap-1 opacity-80">
-            <span className="text-xs">🥇 Gold</span>
+            <span className="text-xs">🥇 พอยต์ทอง</span>
           </div>
         </Link>
       </div>

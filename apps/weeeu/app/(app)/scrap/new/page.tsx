@@ -89,7 +89,7 @@ function NewScrapForm() {
             ช่างวินิจฉัย: <span className="font-medium">{repairData.diagnosis}</span>
           </p>
           <p className="text-xs text-orange-600">
-            ราคาประเมิน: <span className="font-mono font-semibold">{repairData.weeetAssessedPrice} Gold Point</span>
+            ราคาประเมิน: <span className="font-mono font-semibold">{repairData.weeetAssessedPrice} พอยต์ทอง (Gold Point)</span>
             {" "}· น้ำหนักประมาณ {repairData.estimatedWeightKg} กก.
           </p>
           <p className="text-xs text-orange-500">
@@ -117,13 +117,13 @@ function NewScrapForm() {
                     : "border-gray-200 text-gray-400 hover:border-gray-300"
                 }`}
               >
-                {t === "sell" ? "💰 ขายซาก (WeeeR จ่าย Gold Point ให้คุณ)" : "🆓 ทิ้งซาก (ฟรี — ไม่รับเงิน)"}
+                {t === "sell" ? "💰 ขายซาก (WeeeR จ่ายพอยต์ทองให้คุณ)" : "🆓 ทิ้งซาก (ฟรี — ไม่รับเงิน)"}
               </button>
             ))}
           </div>
           {listingType === "sell" && (
             <p className="text-xs text-green-600 mt-2">
-              ⚠️ escrow กลับทิศ: WeeeR (ร้าน) เป็นผู้จ่าย Gold Point ให้คุณ ไม่ใช่คุณจ่าย
+              ⚠️ escrow กลับทิศ: WeeeR (ร้าน) เป็นผู้จ่ายพอยต์ทองให้คุณ ไม่ใช่คุณจ่าย
             </p>
           )}
         </div>
@@ -171,10 +171,10 @@ function NewScrapForm() {
         {listingType === "sell" && (
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
-              ราคาที่ต้องการ (Gold Point)
+              ราคาที่ต้องการ (พอยต์ทอง)
               {repairData && (
                 <span className="ml-2 text-xs text-orange-500">
-                  (ราคาประเมินจาก WeeeT: {repairData.weeetAssessedPrice} Gold)
+                  (ราคาประเมินจาก WeeeT: {repairData.weeetAssessedPrice} พอยต์ทอง)
                 </span>
               )}
             </label>
@@ -188,7 +188,7 @@ function NewScrapForm() {
                 className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400 pr-16"
                 required={listingType === "sell"}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">Gold</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">พอยต์ทอง</span>
             </div>
           </div>
         )}

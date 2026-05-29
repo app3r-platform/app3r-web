@@ -66,17 +66,17 @@ export default function DepositPage() {
       <div className="space-y-6">
         <div className="flex items-center gap-3">
           <Link href="/wallet" className="text-gray-400 hover:text-gray-600">←</Link>
-          <h1 className="text-xl font-bold text-gray-900">เติม Gold Point</h1>
+          <h1 className="text-xl font-bold text-gray-900">เติมพอยต์ทอง (Gold Point)</h1>
         </div>
 
         <div className="bg-green-50 border border-green-100 rounded-2xl p-8 text-center space-y-3">
           <p className="text-4xl">✅</p>
           <h2 className="text-lg font-bold text-green-800">ส่งคำขอสำเร็จ!</h2>
           <p className="text-sm text-green-600">
-            Admin จะตรวจสอบสลิปและยืนยันการเติม Gold ภายใน 1-2 ชั่วโมง
+            Admin จะตรวจสอบสลิปและยืนยันการเติมพอยต์ทองภายใน 1-2 ชั่วโมง
           </p>
           <p className="text-xs text-green-500">
-            อัตรา: 1 บาท = {depositInfo?.pointRate ?? 1} Gold Point
+            อัตรา: 1 บาท = {depositInfo?.pointRate ?? 1} พอยต์ทอง
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function DepositPage() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/wallet" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">เติม Gold Point</h1>
+        <h1 className="text-xl font-bold text-gray-900">เติมพอยต์ทอง (Gold Point)</h1>
       </div>
 
       {/* Bank info card */}
@@ -135,7 +135,7 @@ export default function DepositPage() {
             </div>
             <div className="flex justify-between">
               <span className="text-weeeu-primary/70">อัตราแลก</span>
-              <span className="font-medium text-weeeu-primary">1 บาท = {depositInfo.pointRate} Gold</span>
+              <span className="font-medium text-weeeu-primary">1 บาท = {depositInfo.pointRate} พอยต์ทอง</span>
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default function DepositPage() {
       {/* Deposit form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="bg-white border border-gray-100 rounded-2xl p-5 space-y-4 shadow-sm">
-          <h2 className="text-base font-semibold text-gray-800">รายละเอียดการเติม Gold</h2>
+          <h2 className="text-base font-semibold text-gray-800">รายละเอียดการเติมพอยต์ทอง</h2>
 
           {/* Amount */}
           <div>
@@ -166,7 +166,7 @@ export default function DepositPage() {
             </div>
             {amount && parseInt(amount) > 0 && depositInfo && (
               <p className="text-xs text-weeeu-primary mt-1">
-                ≈ {(parseInt(amount) * depositInfo.pointRate).toLocaleString()} Gold Point
+                ≈ {(parseInt(amount) * depositInfo.pointRate).toLocaleString()} พอยต์ทอง
               </p>
             )}
           </div>
@@ -190,7 +190,7 @@ export default function DepositPage() {
           disabled={submitting || !slipFileId || !amount}
           className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
         >
-          {submitting ? "⟳ กำลังส่งคำขอ..." : "💰 ยืนยันการเติม Gold (Mockup)"}
+          {submitting ? "⟳ กำลังส่งคำขอ..." : "💰 ยืนยันการเติมพอยต์ทอง (Mockup)"}
         </button>
       </form>
 

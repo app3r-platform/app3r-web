@@ -281,9 +281,9 @@ function ScrapListingDetailContent({
           </p>
           <div className="flex items-center gap-2 text-xs text-yellow-700">
             <span>ราคาเดิม:</span>
-            <span className="font-mono line-through">{listing.mismatchReport.originalPrice} Gold</span>
+            <span className="font-mono line-through">{listing.mismatchReport.originalPrice} พอยต์ทอง (Gold Point)</span>
             <span>→ ราคาใหม่ที่เสนอ:</span>
-            <span className="font-mono font-bold text-yellow-800">{listing.mismatchReport.proposedPrice} Gold</span>
+            <span className="font-mono font-bold text-yellow-800">{listing.mismatchReport.proposedPrice} พอยต์ทอง</span>
           </div>
           {!mismatchAction && (
             <div className="flex gap-3">
@@ -303,7 +303,7 @@ function ScrapListingDetailContent({
           )}
           {mismatchAction === "accept" && (
             <div className="space-y-2">
-              <p className="text-xs text-yellow-700">ยืนยันรับราคาใหม่ {listing.mismatchReport.proposedPrice} Gold?</p>
+              <p className="text-xs text-yellow-700">ยืนยันรับราคาใหม่ {listing.mismatchReport.proposedPrice} พอยต์ทอง?</p>
               <div className="flex gap-2">
                 <button onClick={handleMismatchAccept} disabled={submitting}
                   className="flex-1 py-2 bg-green-500 text-white text-sm rounded-xl disabled:opacity-50">
@@ -395,7 +395,7 @@ function ScrapListingDetailContent({
           {listing.price > 0 && (
             <div>
               <p className="text-xs text-gray-400">ราคาประกาศ</p>
-              <p className="font-mono font-bold text-green-600">{listing.price} Gold</p>
+              <p className="font-mono font-bold text-green-600">{listing.price} พอยต์ทอง</p>
             </div>
           )}
         </div>
@@ -440,7 +440,7 @@ function ScrapListingDetailContent({
                 </div>
                 <div className="text-right shrink-0">
                   <p className="font-mono font-bold text-green-600 text-lg">{offer.offeredPrice}</p>
-                  <p className="text-xs text-gray-400">Gold Point</p>
+                  <p className="text-xs text-gray-400">พอยต์ทอง</p>
                 </div>
               </div>
 

@@ -213,7 +213,7 @@ export default function MyScrapListingsPage() {
                     <span>{item.listingType === "sell" ? "💰 ขาย" : "🆓 ทิ้ง"}</span>
                     {item.price > 0 && (
                       <span className="text-green-600 font-mono font-semibold">
-                        {item.price.toLocaleString()} Gold
+                        {item.price.toLocaleString()} พอยต์ทอง
                       </span>
                     )}
                     <span>#{item.id}</span>
