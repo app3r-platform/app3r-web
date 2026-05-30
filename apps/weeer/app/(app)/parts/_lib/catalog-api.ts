@@ -58,6 +58,10 @@ export interface CatalogListing {
   photos: unknown; // string[] (r2 keys)
   warrantyDays: number;
   status: string; // 'active' | 'inactive' | 'sold_out' | 'deleted'
+  // Ruling 2 (live @9f86df9): catalog reference DTO
+  category: string | null; // free-string (backend POST schema z.string()) — ยังไม่ใช่ enum
+  shopName: string | null; // ยังเป็น null (Wave 3 จะมีแหล่ง) → ต้อง fallback ฝั่ง FE
+  listingMetaId?: string | null; // ⚠️ ปัจจุบัน mapListing ยังไม่คืนค่านี้ (gap → HUB) — optional เผื่อ Backend เพิ่ม
   createdAt: string;
   updatedAt: string;
 }
@@ -72,6 +76,8 @@ export interface CatalogSearchResponse extends CatalogListResponse {
 }
 
 export interface CatalogListParams {
+  // index signature → assignable to toQs(Record<string, string | undefined>) (กัน TS2345)
+  [key: string]: string | undefined;
   search?: string;
   sourceType?: string;
   minScore?: string;
@@ -122,9 +128,42 @@ export function catalogPhotos(photos: unknown): string[] {
   return Array.isArray(photos) ? photos.filter((p): p is string => typeof p === "string") : [];
 }
 
+const PART_CATEGORIES = ["electronic", "mechanical", "consumable", "tool"] as const;
+type PartCategoryT = (typeof PART_CATEGORIES)[number];
+
 /**
- * ⚠️ ยังไม่ map → PartListing เต็มรูปแบบ เพราะ 2 ฟิลด์ขาด/ไม่ตรงหน่วย (ห้ามเดา — ข้อ 4):
- *   - category: backend parts_listings ไม่มีคอลัมน์นี้
- *   - pricePoints (Gold) ↔ unitPrice (THB): คนละหน่วย ต้องรอ ruling pricing-unit contract
- * เมื่อ HUB ตัดสิน contract แล้วค่อยเติม mapCatalogToPartListing() ที่นี่.
+ * catalog category (free-string) → PartCategory enum.
+ * ⚠️ backend เก็บเป็น free-string (POST schema z.string()) ยังไม่มี controlled vocab (gap → HUB).
+ * match ค่าที่รู้จัก; ไม่รู้จัก/null → 'electronic' (default badge เท่านั้น ไม่กระทบ identity/price).
  */
+export function parseCategory(raw: string | null): PartCategoryT {
+  const v = (raw ?? "").toLowerCase().trim();
+  return (PART_CATEGORIES as readonly string[]).includes(v) ? (v as PartCategoryT) : "electronic";
+}
+
+/**
+ * Faithful adapter: CatalogListing (backend) → PartListing (marketplace UI).
+ * Ruling 2 · currency LOCKED:
+ *   - unitPriceThb = Number(unitPrice)  ← THB (ราคาอ้างอิง)
+ *   - pricePoints  = 0                  ← catalog ไม่มี Gold price; order flow คิดราคาฝั่ง backend (createPartsOrder by partId)
+ *     (UI แสดง ฿ reference เมื่อ pricePoints=0 — ไม่โชว์ pts ปลอม)
+ */
+export function mapCatalogToPartListing(c: CatalogListing): import("./types").PartListing {
+  const thb = Number(c.unitPrice);
+  return {
+    id: c.id,
+    shopId: c.weeerUserId,
+    shopName: c.shopName ?? "ร้านค้า WeeeR", // fallback (shopName ยัง null — Wave 3)
+    category: parseCategory(c.category),
+    name: c.partName,
+    brand: c.manufacturer ?? "—",
+    condition: sourceTypeToCondition(c.sourceType),
+    pricePoints: 0, // Gold ไม่มีใน catalog — ราคาจริงคิดฝั่ง backend
+    stock: c.qtyAvailable,
+    images: catalogPhotos(c.photos),
+    description: undefined,
+    createdAt: c.createdAt,
+    unitPriceThb: Number.isFinite(thb) ? thb : undefined,
+    listingMetaId: c.listingMetaId ?? null,
+  };
+}

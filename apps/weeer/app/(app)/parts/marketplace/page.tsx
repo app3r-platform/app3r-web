@@ -12,6 +12,8 @@ import { PartSearchBar } from "../../../../components/parts/PartSearchBar";
 import { PartFilterPanel, defaultFilters, type PartFilters } from "../../../../components/parts/PartFilterPanel";
 import { MarketplaceStatsCard } from "../../../../components/parts/MarketplaceStatsCard";
 import { getCurrentShopId, getListings, saveListings, usePartsSync } from "../../../../lib/utils/parts-sync";
+import { FEATURE_FLAGS } from "../../../../lib/dal";
+import { catalogApi, mapCatalogToPartListing } from "../_lib/catalog-api";
 
 export default function MarketplacePage() {
   const router = useRouter();
@@ -20,10 +22,19 @@ export default function MarketplacePage() {
   const [shopId, setShopId] = useState("S001");
   const [showFilter, setShowFilter] = useState(false);
   const [listings, setListings] = useState<PartListing[]>([]);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  // โหลดข้อมูล — ถ้า localStorage ว่างใช้ mock data
+  // โหลดข้อมูล — flag เปิด: catalog API จริง / flag ปิด: localStorage mock (D-2)
   useEffect(() => {
     setShopId(getCurrentShopId());
+    if (FEATURE_FLAGS.parts) {
+      // W-R1 Wave 2: source จาก /api/v1/parts/catalog จริง (Ruling 1A)
+      catalogApi
+        .list({ status: "active" })
+        .then((res) => setListings(res.items.map(mapCatalogToPartListing)))
+        .catch((e) => setApiError(e instanceof Error ? e.message : "โหลด catalog ไม่สำเร็จ"));
+      return;
+    }
     const stored = getListings();
     if (stored.length === 0) {
       saveListings(PART_LISTINGS_MOCK);
@@ -60,6 +71,11 @@ export default function MarketplacePage() {
 
   return (
     <div className="space-y-4">
+      {apiError && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
+          ⚠️ ไม่สามารถโหลดข้อมูลตลาดจากระบบได้ขณะนี้ — กรุณาลองใหม่ภายหลัง
+        </div>
+      )}
       {/* Header */}
       <div>
         <h1 className="text-xl font-bold text-gray-900">ตลาดอะไหล่ B2B</h1>

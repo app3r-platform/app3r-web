@@ -105,6 +105,9 @@ export interface PartListing {
   images: string[];           // Lorem Picsum URLs
   description?: string;
   createdAt: string;
+  // ── W-R1 Wave 2 (Ruling 2 · currency LOCKED): catalog reference fields ───────
+  unitPriceThb?: number;      // ราคาอ้างอิงจาก catalog (THB) — แยกจาก pricePoints (Gold/D81)
+  listingMetaId?: string | null; // B2 universal id → /api/v1/listings/{id}/* (transition/reviews/Q&A)
 }
 
 export type OrderStage =

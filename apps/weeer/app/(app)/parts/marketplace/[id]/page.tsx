@@ -18,6 +18,9 @@ import { SHOPS_MOCK } from "../../../../../lib/mock-data/shops";
 import type { PartOrder, DeliveryMethod } from "../../_lib/types";
 // Sub-CMD-8: typed adapter สำหรับ real Backend B2B orders API
 import { createPartsOrder } from "../../../../../lib/parts-api";
+import { FEATURE_FLAGS } from "../../../../../lib/dal";
+import { catalogApi, mapCatalogToPartListing } from "../../_lib/catalog-api";
+import { ListingEngagement } from "../../../../../components/parts/ListingEngagement";
 
 export default function MarketplaceDetailPage({
   params,
@@ -36,6 +39,14 @@ export default function MarketplaceDetailPage({
 
   useEffect(() => {
     setShopId(getCurrentShopId());
+    if (FEATURE_FLAGS.parts) {
+      // W-R1 Wave 2: detail จาก /api/v1/parts/catalog/:id จริง (Ruling 1A)
+      catalogApi
+        .get(id)
+        .then((c) => setListing(mapCatalogToPartListing(c)))
+        .catch(() => setListing(null));
+      return;
+    }
     const stored = getListings();
     const found = stored.find((l) => l.id === id) ?? PART_LISTINGS_MOCK.find((l) => l.id === id);
     setListing(found ?? null);
@@ -211,7 +222,13 @@ export default function MarketplaceDetailPage({
           disabled={ordering}
           className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
         >
-          {ordering ? "กำลังสั่งซื้อ…" : `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`}
+          {ordering
+            ? "กำลังสั่งซื้อ…"
+            : listing.pricePoints > 0
+              ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
+              : listing.unitPriceThb != null
+                ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง)`
+                : "🛒 สั่งซื้อ"}
         </button>
       )}
 
@@ -219,6 +236,14 @@ export default function MarketplaceDetailPage({
         <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-sm text-blue-700">
           🏪 นี่คือรายการของร้านคุณ — ไม่สามารถซื้อจากตัวเองได้
         </div>
+      )}
+
+      {/* รีวิว + ถาม-ตอบ + สถานะ (B2 listing_meta) — แสดงเมื่อมี listingMetaId */}
+      {listing.listingMetaId && (
+        <ListingEngagement
+          listingMetaId={listing.listingMetaId}
+          isOwn={isOwn}
+        />
       )}
 
       {/* Modal สั่งซื้อ */}
