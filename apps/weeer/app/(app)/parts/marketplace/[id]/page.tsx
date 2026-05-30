@@ -20,6 +20,7 @@ import type { PartOrder, DeliveryMethod } from "../../_lib/types";
 import { createPartsOrder } from "../../../../../lib/parts-api";
 import { FEATURE_FLAGS } from "../../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../../_lib/catalog-api";
+import { ListingEngagement } from "../../../../../components/parts/ListingEngagement";
 
 export default function MarketplaceDetailPage({
   params,
@@ -235,6 +236,14 @@ export default function MarketplaceDetailPage({
         <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-sm text-blue-700">
           🏪 นี่คือรายการของร้านคุณ — ไม่สามารถซื้อจากตัวเองได้
         </div>
+      )}
+
+      {/* รีวิว + ถาม-ตอบ + สถานะ (B2 listing_meta) — แสดงเมื่อมี listingMetaId */}
+      {listing.listingMetaId && (
+        <ListingEngagement
+          listingMetaId={listing.listingMetaId}
+          isOwn={isOwn}
+        />
       )}
 
       {/* Modal สั่งซื้อ */}
