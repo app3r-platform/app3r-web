@@ -53,15 +53,13 @@ export const listingsApi = {
       body: JSON.stringify(body),
     }),
 
-  update: (id: string, body: Partial<{ price: number; delivery_methods: string[]; description: string; working_parts: string[] }>) =>
-    apiFetch(`/api/v1/listings/${id}/`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-
+  // Cancel listing — D59 state machine: POST /{id}/transition { to:'cancelled' } (escrow refund ผู้ซื้อ ถ้า hold อยู่)
   cancel: (id: string) =>
-    apiFetch(`/api/v1/listings/${id}/cancel/`, { method: "POST" }),
+    apiFetch(`/api/v1/listings/${id}/transition`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ to: "cancelled" }),
+    }),
 
   // Seller selects offer — Hono POST /{id}/select-offer { offerId } → offer_selected + escrow hold
   selectOffer: (listingId: string, offerId: string) =>
@@ -82,16 +80,4 @@ export const listingsApi = {
   // List offers on a listing (seller view) — Hono GET /{id}/offers → Offer[]
   listOffers: (listingId: string) =>
     apiFetch(`/api/v1/listings/${listingId}/offers`).then(r => r.json()) as Promise<unknown[]>,
-
-  // R5 — withdraw selected offer (ถอนการเลือกผู้ซื้อ)
-  withdrawSelection: (listingId: string) =>
-    apiFetch(`/api/v1/listings/${listingId}/withdraw-selection/`, { method: "POST" }),
-
-  // R2 — appeal suspension (อุทธรณ์การระงับประกาศ)
-  appealSuspension: (listingId: string, reason: string) =>
-    apiFetch(`/api/v1/listings/${listingId}/appeal-suspension/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reason }),
-    }),
 };

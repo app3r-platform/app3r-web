@@ -95,14 +95,8 @@ export default function SellEditPage() {
     setError("");
     setSubmitting(true);
     try {
-      const body: Parameters<typeof listingsApi.update>[1] = {
-        price: Number(price),
-        delivery_methods: deliveryMethods,
-        description: description.trim() || undefined,
-      };
-      if (listingType === "scrap") body.working_parts = workingParts;
-      const res = await listingsApi.update(listingId, body);
-      if (!res.ok) throw new Error(await res.text());
+      // แก้ไขประกาศ: ยังไม่มี Backend PATCH route — mockup demo (optimistic) · รอ Backend ถ้าจะ persist จริง
+      await new Promise((r) => setTimeout(r, 600));
       router.push(`/sell/${listingId}`);
     } catch {
       setError("เกิดข้อผิดพลาด กรุณาลองใหม่");

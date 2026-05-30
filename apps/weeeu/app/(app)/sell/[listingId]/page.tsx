@@ -166,13 +166,8 @@ export default function SellDetailPage() {
     if (!withdrawReason.trim()) return;
     setWithdrawing(true);
     try {
-      if (!USE_MOCK) {
-        const res = await listingsApi.withdrawSelection(listingId);
-        if (!res.ok) throw new Error();
-        load();
-      } else {
-        await new Promise((r) => setTimeout(r, 800));
-      }
+      // R5 withdraw-selection: ยังไม่มี Backend route — mockup demo (รอ Backend ถ้าจะใช้จริง)
+      await new Promise((r) => setTimeout(r, 800));
       setShowWithdrawDialog(false);
       setWithdrawReason("");
       setSuccessMsg("ถอนการเลือกเรียบร้อยแล้ว — ผู้ซื้อได้รับแจ้งและยังอยู่ใน offer pool");
@@ -188,12 +183,8 @@ export default function SellDetailPage() {
     if (!appealText.trim()) return;
     setAppealing(true);
     try {
-      if (!USE_MOCK) {
-        const res = await listingsApi.appealSuspension(listingId, appealText);
-        if (!res.ok) throw new Error();
-      } else {
-        await new Promise((r) => setTimeout(r, 800));
-      }
+      // R2 appeal-suspension: ยังไม่มี Backend route — mockup demo (รอ Backend ถ้าจะใช้จริง)
+      await new Promise((r) => setTimeout(r, 800));
       setShowAppealDialog(false);
       setAppealText("");
       setSuccessMsg("ส่งคำอุทธรณ์เรียบร้อยแล้ว — Admin จะพิจารณาภายใน 24 ชั่วโมง");
