@@ -1,178 +1,145 @@
 "use client";
-// ─── LocationPicker (D90) — Places Autocomplete + Geocode + Map Preview ───────
+// ─── LocationPicker (D90 · W-Round-1 Remediate) ──────────────────────────────
+// Cascade dropdown จังหวัด → อำเภอ/เขต → ตำบล/แขวง (แทน freetext autocomplete เดิม)
+// + ปุ่ม near-me (GPS / โปรไฟล์) — แสดงเฉพาะเมื่อผู้ใช้ล็อกอินเท่านั้น
 
-import { useState, useRef, useEffect } from "react";
-import { getAdapter } from "@/lib/dal";
-import type { GeocodeResult, SavedLocation } from "@app3r/shared/dal/weeeu";
+import { useState } from "react";
+import { useAuth } from "@/lib/use-auth";
 
-interface Props {
-  onSelected?: (location: GeocodeResult) => void;
-  onSaved?: (saved: SavedLocation) => void;
-  showSave?: boolean;
-  placeholder?: string;
+export interface CascadeLocation {
+  province: string;
+  district: string;
+  subdistrict: string;
 }
 
-// Places Autocomplete suggestions (mock สำหรับ Phase C — Phase D-2 ใช้ Google Maps JS API จริง)
-const MOCK_SUGGESTIONS = [
-  { placeId: "place-001", description: "สยามพารากอน, กรุงเทพมหานคร" },
-  { placeId: "place-002", description: "จตุจักร, กรุงเทพมหานคร" },
-  { placeId: "place-003", description: "อนุสาวรีย์ชัยสมรภูมิ, กรุงเทพมหานคร" },
-  { placeId: "place-004", description: "เซ็นทรัลเวิลด์, กรุงเทพมหานคร" },
-  { placeId: "place-005", description: "ท่าอากาศยานสุวรรณภูมิ, สมุทรปราการ" },
-];
+interface Props {
+  onSelected?: (loc: CascadeLocation) => void;
+}
 
-export function LocationPicker({
-  onSelected,
-  onSaved,
-  showSave = true,
-  placeholder = "ค้นหาสถานที่...",
-}: Props) {
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState<typeof MOCK_SUGGESTIONS>([]);
-  const [selected, setSelected] = useState<GeocodeResult | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [label, setLabel] = useState("");
-  const [error, setError] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+// Mock TH geo dataset (Phase C — Phase D-2 จะดึงจาก dataset/API จริง ครบ 77 จังหวัด)
+const GEO: Record<string, Record<string, string[]>> = {
+  "กรุงเทพมหานคร": {
+    "บางรัก": ["สีลม", "สุริยวงศ์", "มหาพฤฒาราม"],
+    "จตุจักร": ["ลาดยาว", "จตุจักร", "จอมพล"],
+    "ปทุมวัน": ["ลุมพินี", "ปทุมวัน", "รองเมือง"],
+  },
+  "เชียงใหม่": {
+    "เมืองเชียงใหม่": ["ศรีภูมิ", "พระสิงห์", "หายยา"],
+    "สันทราย": ["สันทรายหลวง", "หนองหาร", "หนองจ๊อม"],
+  },
+  "ขอนแก่น": {
+    "เมืองขอนแก่น": ["ในเมือง", "ศิลา", "บ้านเป็ด"],
+    "ชุมแพ": ["ชุมแพ", "โนนหัน", "หนองไผ่"],
+  },
+  "ชลบุรี": {
+    "เมืองชลบุรี": ["บางปลาสร้อย", "มะขามหย่ง", "บ้านสวน"],
+    "ศรีราชา": ["ศรีราชา", "สุรศักดิ์", "หนองขาม"],
+  },
+  "อุบลราชธานี": {
+    "เมืองอุบลราชธานี": ["ในเมือง", "ขามใหญ่", "ปทุม"],
+    "วารินชำราบ": ["วารินชำราบ", "ธาตุ", "คำน้ำแซบ"],
+  },
+};
 
-  // Filter suggestions (Phase C mock — Phase D-2: debounce + Google Places API)
-  useEffect(() => {
-    if (query.length < 2) { setSuggestions([]); return; }
-    const filtered = MOCK_SUGGESTIONS.filter(s =>
-      s.description.toLowerCase().includes(query.toLowerCase())
+const PROVINCES = Object.keys(GEO);
+
+export function LocationPicker({ onSelected }: Props) {
+  const user = useAuth();
+  const [province, setProvince] = useState("");
+  const [district, setDistrict] = useState("");
+  const [subdistrict, setSubdistrict] = useState("");
+  const [locating, setLocating] = useState(false);
+  const [geoError, setGeoError] = useState("");
+
+  const districts = province ? Object.keys(GEO[province] ?? {}) : [];
+  const subdistricts = province && district ? GEO[province]?.[district] ?? [] : [];
+
+  const emit = (p: string, d: string, s: string) => {
+    if (p && d && s) onSelected?.({ province: p, district: d, subdistrict: s });
+  };
+
+  const handleProvince = (v: string) => { setProvince(v); setDistrict(""); setSubdistrict(""); };
+  const handleDistrict = (v: string) => { setDistrict(v); setSubdistrict(""); };
+  const handleSubdistrict = (v: string) => { setSubdistrict(v); emit(province, district, v); };
+
+  const handleNearMe = () => {
+    setGeoError("");
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoError("อุปกรณ์ไม่รองรับ GPS");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      () => {
+        // Phase C mock: ยังไม่มี reverse-geocode จริง → เลือกตำแหน่งตัวอย่างใกล้เคียง
+        const p = PROVINCES[0];
+        const d = Object.keys(GEO[p])[0];
+        const s = GEO[p][d][0];
+        setProvince(p); setDistrict(d); setSubdistrict(s);
+        emit(p, d, s);
+        setLocating(false);
+      },
+      () => { setGeoError("ไม่สามารถเข้าถึงตำแหน่งได้ — กรุณาเลือกด้วยตนเอง"); setLocating(false); },
     );
-    setSuggestions(filtered);
-    setShowDropdown(true);
-  }, [query]);
-
-  const handleSelect = async (placeId: string, description: string) => {
-    setQuery(description);
-    setShowDropdown(false);
-    setLoading(true);
-    setError("");
-    try {
-      const dal = getAdapter();
-      const result = await dal.location.geocode(placeId);
-      if (!result.ok) throw new Error(result.error);
-      setSelected(result.data);
-      onSelected?.(result.data);
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Geocode ไม่สำเร็จ");
-    } finally {
-      setLoading(false);
-    }
   };
 
-  const handleSave = async () => {
-    if (!selected) return;
-    setSaving(true);
-    setError("");
-    try {
-      const dal = getAdapter();
-      const result = await dal.location.save({
-        lat: selected.lat,
-        lng: selected.lng,
-        formattedAddress: selected.formattedAddress,
-        label: label.trim() || undefined,
-      });
-      if (!result.ok) throw new Error(result.error);
-      onSaved?.(result.data);
-      setLabel("");
-      setSelected(null);
-      setQuery("");
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "บันทึกสถานที่ไม่สำเร็จ");
-    } finally {
-      setSaving(false);
-    }
-  };
+  const selectCls =
+    "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-weeeu-primary disabled:bg-gray-50 disabled:text-gray-400";
 
   return (
     <div className="space-y-3">
-      {/* Search input */}
-      <div className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
-          placeholder={placeholder}
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
-        />
-        {loading && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-            ⏳
-          </div>
-        )}
-
-        {/* Dropdown suggestions */}
-        {showDropdown && suggestions.length > 0 && (
-          <div className="absolute z-10 left-0 right-0 top-full mt-1 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden">
-            {suggestions.map((s) => (
-              <button
-                key={s.placeId}
-                onClick={() => handleSelect(s.placeId, s.description)}
-                className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-weeeu-surface text-left transition-colors"
-              >
-                <span className="text-gray-400">📍</span>
-                {s.description}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Selected location card + map preview */}
-      {selected && (
-        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-4 space-y-3">
-          <div className="flex items-start gap-2">
-            <span className="text-weeeu-primary shrink-0">📍</span>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-weeeu-text">{selected.formattedAddress}</p>
-              <p className="text-xs text-weeeu-primary mt-0.5">
-                {selected.lat.toFixed(6)}, {selected.lng.toFixed(6)}
-              </p>
-            </div>
-          </div>
-
-          {/* Map preview (Static map via OpenStreetMap thumbnail — Phase C mock) */}
-          <div className="rounded-lg overflow-hidden border border-weeeu-primary/20 h-32 bg-weeeu-surface flex items-center justify-center">
-            {/* Phase D-2: Google Maps embed จริง */}
-            <div className="text-center text-weeeu-primary">
-              <p className="text-2xl">🗺️</p>
-              <p className="text-xs mt-1">แผนที่ (Phase D-2: Google Maps)</p>
-              <p className="text-xs">{selected.lat.toFixed(4)}, {selected.lng.toFixed(4)}</p>
-            </div>
-          </div>
-
-          {/* Save label + button */}
-          {showSave && (
-            <div className="space-y-2">
-              <input
-                type="text"
-                value={label}
-                onChange={(e) => setLabel(e.target.value)}
-                placeholder="ชื่อสถานที่ (เช่น บ้าน, ที่ทำงาน) — ไม่บังคับ"
-                className="w-full rounded-lg border border-weeeu-primary/20 bg-white px-3 py-2 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-weeeu-primary"
-              />
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white text-xs font-semibold py-2.5 rounded-lg transition-colors"
-              >
-                {saving ? "กำลังบันทึก..." : "💾 บันทึกสถานที่นี้"}
-              </button>
-            </div>
-          )}
-        </div>
+      {/* near-me — แสดงเฉพาะผู้ล็อกอิน */}
+      {user && (
+        <button
+          type="button"
+          onClick={handleNearMe}
+          disabled={locating}
+          className="w-full flex items-center justify-center gap-2 rounded-xl border border-weeeu-primary/30 bg-weeeu-surface py-2.5 text-sm font-medium text-weeeu-dark hover:bg-weeeu-surface/70 transition-colors disabled:opacity-60"
+        >
+          <span>📍</span> {locating ? "กำลังหาตำแหน่ง..." : "ใช้ตำแหน่งใกล้ฉัน (GPS)"}
+        </button>
       )}
 
-      {error && (
-        <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-          {error}
+      {/* จังหวัด */}
+      <select
+        aria-label="จังหวัด"
+        value={province}
+        onChange={(e) => handleProvince(e.target.value)}
+        className={selectCls}
+      >
+        <option value="">— เลือกจังหวัด —</option>
+        {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
+      </select>
+
+      {/* อำเภอ/เขต */}
+      <select
+        aria-label="อำเภอ"
+        value={district}
+        onChange={(e) => handleDistrict(e.target.value)}
+        disabled={!province}
+        className={selectCls}
+      >
+        <option value="">— เลือกอำเภอ/เขต —</option>
+        {districts.map((d) => <option key={d} value={d}>{d}</option>)}
+      </select>
+
+      {/* ตำบล/แขวง */}
+      <select
+        aria-label="ตำบล"
+        value={subdistrict}
+        onChange={(e) => handleSubdistrict(e.target.value)}
+        disabled={!district}
+        className={selectCls}
+      >
+        <option value="">— เลือกตำบล/แขวง —</option>
+        {subdistricts.map((s) => <option key={s} value={s}>{s}</option>)}
+      </select>
+
+      {geoError && <p className="text-xs text-amber-600">⚠️ {geoError}</p>}
+
+      {province && district && subdistrict && (
+        <p className="text-xs text-weeeu-primary flex items-center gap-1">
+          <span>✅</span> {subdistrict}, {district}, {province}
         </p>
       )}
     </div>

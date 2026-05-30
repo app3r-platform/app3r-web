@@ -16,6 +16,47 @@ const recentActivities = [
   { icon: "✅", title: "ซ่อมเครื่องซักผ้า", status: "เสร็จแล้ว", date: "28 เม.ย. 69", statusColor: "text-green-600 bg-green-50" },
 ];
 
+// Home feed 4 หมวด — role-agnostic (Mockup — Phase D-2 ดึงจาก feed API จริง)
+type FeedItem = { icon: string; name: string; meta: string };
+const feedGroups: { key: string; title: string; href: string; items: FeedItem[] }[] = [
+  {
+    key: "used", title: "🛒 มือสอง", href: "/listings",
+    items: [
+      { icon: "🧊", name: "ตู้เย็น Sharp", meta: "3,500 ฿" },
+      { icon: "❄️", name: "แอร์ Daikin", meta: "5,900 ฿" },
+      { icon: "🫧", name: "ซักผ้า LG", meta: "2,800 ฿" },
+      { icon: "📺", name: "ทีวี Samsung", meta: "4,200 ฿" },
+    ],
+  },
+  {
+    key: "scrap", title: "♻️ ซาก / ชิ้นส่วน", href: "/listings?type=scrap",
+    items: [
+      { icon: "🔩", name: "คอมเพรสเซอร์", meta: "800 ฿" },
+      { icon: "⚙️", name: "มอเตอร์พัดลม", meta: "350 ฿" },
+      { icon: "🔌", name: "แผงวงจร PCB", meta: "500 ฿" },
+      { icon: "🪛", name: "ซากเครื่องซักผ้า", meta: "1,200 ฿" },
+    ],
+  },
+  {
+    key: "repair", title: "🔧 งานซ่อม", href: "/repair",
+    items: [
+      { icon: "❄️", name: "ซ่อมแอร์ไม่เย็น", meta: "ประเมินฟรี" },
+      { icon: "🫧", name: "เครื่องซักผ้าไม่ปั่น", meta: "ประเมินฟรี" },
+      { icon: "🧊", name: "ตู้เย็นไม่เย็น", meta: "ประเมินฟรี" },
+      { icon: "📺", name: "ทีวีจอดับ", meta: "ประเมินฟรี" },
+    ],
+  },
+  {
+    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain",
+    items: [
+      { icon: "❄️", name: "ล้างแอร์", meta: "เริ่ม 500 ฿" },
+      { icon: "🌀", name: "ล้างเครื่องซักผ้า", meta: "เริ่ม 400 ฿" },
+      { icon: "🧴", name: "เคลือบคอยล์", meta: "เริ่ม 350 ฿" },
+      { icon: "🔍", name: "ตรวจเช็กประจำปี", meta: "เริ่ม 300 ฿" },
+    ],
+  },
+];
+
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
@@ -64,6 +105,31 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* Home feed 4 หมวด — แถวละ 4 (role-agnostic) */}
+      {feedGroups.map((group) => (
+        <div key={group.key}>
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-base font-semibold text-gray-800">{group.title}</h2>
+            <Link href={group.href} className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">
+              ดูทั้งหมด →
+            </Link>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {group.items.map((item, i) => (
+              <Link
+                key={i}
+                href={group.href}
+                className="flex flex-col items-center gap-1 p-2.5 rounded-2xl border border-gray-100 bg-white shadow-sm hover:border-weeeu-primary/40 transition-colors"
+              >
+                <span className="text-2xl">{item.icon}</span>
+                <span className="text-[11px] font-medium text-gray-700 text-center leading-tight line-clamp-2">{item.name}</span>
+                <span className="text-[10px] text-weeeu-primary font-semibold">{item.meta}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      ))}
 
       {/* My appliances summary */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
