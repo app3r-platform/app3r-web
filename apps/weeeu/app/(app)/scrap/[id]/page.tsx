@@ -12,6 +12,7 @@
 import { Suspense, use, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { PublicQAThread } from "@/components/listing/PublicQAThread";
 
 // ── Mock types ────────────────────────────────────────────────────────────────
 interface ScrapOffer {
@@ -578,6 +579,7 @@ function ScrapListingDetailContent({
           </div>
         </div>
       )}
+      <PublicQAThread />
     </div>
   );
 }

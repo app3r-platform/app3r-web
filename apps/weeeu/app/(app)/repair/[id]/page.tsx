@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { PublicQAThread } from "@/components/listing/PublicQAThread";
 
 // Sub-4: inline type — TODO: import from @app3r/types/services when Backend exports
 type ServicePriority = "normal" | "urgent" | "vip";
@@ -639,6 +640,7 @@ export default function RepairJobDetailPage() {
           <p className="text-xs text-amber-600">เตรียมรับพัสดุ — ตรวจสอบสภาพเครื่องเมื่อได้รับ</p>
         </div>
       )}
+      <PublicQAThread />
     </div>
   );
 }
