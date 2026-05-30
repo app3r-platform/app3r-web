@@ -159,18 +159,18 @@ export default function ParcelReceiptPage() {
               {/* Price breakdown */}
               {data.final_price !== null && (
                 <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ยอดที่หัก</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ยอดที่หัก (พอยต์ทอง / Gold Point)</p>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">ค่าซ่อม</span>
-                    <span className="font-medium text-gray-800">{formatCurrency(data.final_price)} Point</span>
+                    <span className="font-medium text-gray-800">{formatCurrency(data.final_price)} พอยต์ทอง</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">ค่าตรวจ (Parcel)</span>
-                    <span className="font-medium text-gray-800">{formatCurrency(data.inspection_fee)} Point</span>
+                    <span className="font-medium text-gray-800">{formatCurrency(data.inspection_fee)} พอยต์ทอง</span>
                   </div>
                   <div className="flex justify-between text-sm font-semibold border-t border-gray-200 pt-2">
                     <span className="text-gray-700">รวม</span>
-                    <span className="text-orange-600">{formatCurrency(data.final_price + data.inspection_fee)} Point</span>
+                    <span className="text-orange-600">{formatCurrency(data.final_price + data.inspection_fee)} พอยต์ทอง</span>
                   </div>
                 </div>
               )}
@@ -246,7 +246,7 @@ export default function ParcelReceiptPage() {
               </button>
 
               <p className="text-xs text-center text-gray-400">
-                หลังยืนยัน — ระบบจะหัก Point และเปิดหน้ารีวิว
+                หลังยืนยัน — ระบบจะหักพอยต์ทอง และเปิดหน้ารีวิว
               </p>
             </>
           )}

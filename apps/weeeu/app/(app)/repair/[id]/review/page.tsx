@@ -163,7 +163,7 @@ export default function ReviewPage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center space-y-4">
         <div className="text-5xl">✅</div>
         <h2 className="text-xl font-bold text-gray-900">ตรวจรับงานเสร็จสิ้น</h2>
-        <p className="text-sm text-gray-500">ขอบคุณที่ใช้บริการ — Point จะถูกโอนให้ร้านซ่อมในไม่ช้า</p>
+        <p className="text-sm text-gray-500">ขอบคุณที่ใช้บริการ — พอยต์ทองจะถูกโอนให้ร้านซ่อมในไม่ช้า</p>
         <Link
           href="/repair"
           className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
@@ -235,8 +235,8 @@ export default function ReviewPage() {
 
           {/* Final price */}
           <div className="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
-            <p className="text-sm text-gray-500">ยอดที่จะหัก</p>
-            <p className="text-lg font-bold text-weeeu-primary">{data.final_price.toLocaleString()} Point</p>
+            <p className="text-sm text-gray-500">ยอดที่จะหัก (พอยต์ทอง / Gold Point)</p>
+            <p className="text-lg font-bold text-weeeu-primary">{data.final_price.toLocaleString()} พอยต์ทอง</p>
           </div>
 
           {inspectError && (

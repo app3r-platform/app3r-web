@@ -152,8 +152,8 @@ export default function SelectShopPage() {
                 <span className="text-gray-700 font-medium">{shop.open_hours}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gray-400">ค่าตรวจ</span>
-                <span className="text-gray-700 font-medium">{shop.inspection_fee.toLocaleString()} Point</span>
+                <span className="text-gray-400">ค่าตรวจ (พอยต์ทอง / Gold Point)</span>
+                <span className="text-gray-700 font-medium">{shop.inspection_fee.toLocaleString()} พอยต์ทอง</span>
               </div>
               {shop.services.length > 0 && (
                 <div className="flex flex-wrap gap-1 pt-1">

@@ -125,7 +125,7 @@ export default function WalkInReceiptPage() {
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-gray-500">ค่าตรวจ</span>
-          <span className="font-medium text-gray-800">{receipt.inspection_fee.toLocaleString()} Point</span>
+          <span className="font-medium text-gray-800">{receipt.inspection_fee.toLocaleString()} พอยต์ทอง (Gold Point)</span>
         </div>
       </div>
 
@@ -160,7 +160,7 @@ export default function WalkInReceiptPage() {
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
           <p className="text-sm font-semibold text-amber-800">⏳ กรุณารับเครื่องภายใน {receipt.pickup_deadline_days} วัน</p>
           <p className="text-xs text-amber-600 mt-1">
-            หากเกินกำหนด จะมีค่าฝากเครื่อง {receipt.storage_fee_per_day.toLocaleString()} Point/วัน
+            หากเกินกำหนด จะมีค่าฝากเครื่อง {receipt.storage_fee_per_day.toLocaleString()} พอยต์ทอง/วัน
             จนกว่าจะมารับ
           </p>
         </div>

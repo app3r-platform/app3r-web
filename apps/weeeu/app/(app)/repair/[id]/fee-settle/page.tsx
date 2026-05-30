@@ -46,7 +46,7 @@ type FeeSettleData = {
   axes: AxisItem[];
   subtotal: number;      // ก่อนหักมัดจำ
   deposit_credit: number; // มัดจำที่นับเป็น credit (ลบออกจาก total)
-  total_due: number;     // ยอดสุทธิที่ต้องชำระ (Point)
+  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง)
   customer_point_balance: number;
   can_confirm: boolean;  // false = ยอดไม่พอ / ยังไม่ lock ครบ
   status: "pending_confirm" | "confirmed" | "cancelled";
@@ -117,7 +117,7 @@ function AxisRow({ ax }: { ax: AxisItem }) {
         )}
       </div>
       <p className={`text-sm flex-shrink-0 ${amountClass(ax.amount)}`}>
-        {formatAmount(ax.amount)} Point
+        {formatAmount(ax.amount)} พอยต์ทอง
       </p>
     </div>
   );
@@ -215,17 +215,17 @@ export default function FeeSettlePage() {
 
           {/* Summary */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">สรุปยอด</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">สรุปยอด (พอยต์ทอง / Gold Point)</p>
 
             <div className="flex justify-between text-sm">
               <p className="text-gray-500">รวมก่อนหักมัดจำ</p>
-              <p className="text-gray-700 font-medium">{data.subtotal.toLocaleString()} Point</p>
+              <p className="text-gray-700 font-medium">{data.subtotal.toLocaleString()} พอยต์ทอง</p>
             </div>
 
             {data.deposit_credit > 0 && (
               <div className="flex justify-between text-sm">
                 <p className="text-gray-500">หักมัดจำที่ชำระแล้ว</p>
-                <p className="text-green-600 font-medium">−{data.deposit_credit.toLocaleString()} Point</p>
+                <p className="text-green-600 font-medium">−{data.deposit_credit.toLocaleString()} พอยต์ทอง</p>
               </div>
             )}
 
@@ -233,16 +233,16 @@ export default function FeeSettlePage() {
               <p className="text-base font-bold text-gray-900">ยอดสุทธิ</p>
               <p className={`text-xl font-bold ${data.total_due > 0 ? "text-weeeu-primary" : "text-green-600"}`}>
                 {data.total_due > 0
-                  ? `${data.total_due.toLocaleString()} Point`
-                  : `คืน ${Math.abs(data.total_due).toLocaleString()} Point`}
+                  ? `${data.total_due.toLocaleString()} พอยต์ทอง`
+                  : `คืน ${Math.abs(data.total_due).toLocaleString()} พอยต์ทอง`}
               </p>
             </div>
 
             {/* Point balance */}
             <div className="bg-gray-50 rounded-xl p-3 flex justify-between text-xs">
-              <p className="text-gray-500">Point คงเหลือของคุณ</p>
+              <p className="text-gray-500">พอยต์ทอง คงเหลือของคุณ</p>
               <p className={`font-semibold ${data.customer_point_balance >= data.total_due ? "text-gray-700" : "text-red-500"}`}>
-                {data.customer_point_balance.toLocaleString()} Point
+                {data.customer_point_balance.toLocaleString()} พอยต์ทอง
                 {data.customer_point_balance < data.total_due && " (ไม่เพียงพอ)"}
               </p>
             </div>
@@ -273,12 +273,12 @@ export default function FeeSettlePage() {
               >
                 {confirming
                   ? <><span className="animate-spin">⟳</span> กำลังยืนยัน...</>
-                  : `ยืนยันชำระ ${data.total_due > 0 ? `${data.total_due.toLocaleString()} Point` : ""}`}
+                  : `ยืนยันชำระ ${data.total_due > 0 ? `${data.total_due.toLocaleString()} พอยต์ทอง` : ""}`}
               </button>
               {!data.can_confirm && (
                 <p className="text-xs text-center text-gray-400">
                   {data.customer_point_balance < data.total_due
-                    ? "Point ไม่เพียงพอ — กรุณาเติม Point ก่อน"
+                    ? "พอยต์ทองไม่เพียงพอ — กรุณาเติมพอยต์ทองก่อน"
                     : "ยังมีแกนที่รอยืนยัน — รอช่างล็อกก่อน"}
                 </p>
               )}

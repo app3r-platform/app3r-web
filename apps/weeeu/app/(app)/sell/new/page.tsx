@@ -118,19 +118,19 @@ export default function SellNewPage() {
     setError("");
     setSubmitting(true);
     try {
+      // contract Backend Part1 (488cae4): create ไม่รับ description — ส่งเฉพาะ field ที่ schema จริงมี
       const body: Parameters<typeof listingsApi.create>[0] = {
-        listing_type: listingType,
-        condition_grade: conditionGrade,
+        listingType,
+        conditionGrade,
         price: Number(price),
-        delivery_methods: deliveryMethods,
-        description: description.trim() || undefined,
+        deliveryMethods,
       };
       if (listingType === "used_appliance") {
-        body.appliance_id = applianceId;
-        if (sourceWarranty) body.source_warranty = Number(sourceWarranty);
-        if (additionalWarranty) body.additional_warranty = Number(additionalWarranty);
+        body.applianceId = applianceId;
+        if (sourceWarranty) body.sourceWarranty = Number(sourceWarranty);
+        if (additionalWarranty) body.additionalWarranty = Number(additionalWarranty);
       } else {
-        body.working_parts = workingParts;
+        body.workingParts = workingParts;
       }
       const res = await listingsApi.create(body);
       if (!res.ok) throw new Error(await res.text());

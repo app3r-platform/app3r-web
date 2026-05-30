@@ -48,7 +48,7 @@ type RepairOffer = {
   scope_creep_policy: string | null; // นโยบายงานบานปลาย
   scope_creep_threshold_pct: number | null; // % เกินงานเดิมที่ต้องแจ้งก่อน
   // แกน 9
-  liability_cap: number | null; // วงเงินสูงสุดความรับผิด (Point)
+  liability_cap: number | null; // วงเงินสูงสุดความรับผิด (พอยต์ทอง)
   liability_policy: string | null;
   // ทั่วไป
   estimated_duration_days: number;
@@ -305,7 +305,7 @@ function OfferCard({
           </div>
           <div className="text-right">
             <p className="text-lg font-bold text-weeeu-primary">{offer.quoted_price.toLocaleString()}</p>
-            <p className="text-xs text-gray-400">Point</p>
+            <p className="text-xs text-gray-400">พอยต์ทอง</p>
           </div>
         </div>
       </div>
@@ -313,14 +313,14 @@ function OfferCard({
       {/* ── เงื่อนไขหลัก (always visible) ─────────────────────────────────── */}
       <div className="px-5 py-4 space-y-2">
         {/* แกน 2: ค่าตรวจ */}
-        <OfferRow label="แกน 2 · ค่าตรวจ" value={`${offer.inspection_fee.toLocaleString()} Point (ไม่คืน)`} />
+        <OfferRow label="แกน 2 · ค่าตรวจ" value={`${offer.inspection_fee.toLocaleString()} พอยต์ทอง (ไม่คืน)`} />
 
         {/* แกน 1: มัดจำ */}
         {offer.deposit_amount != null && (
           <div className="space-y-0.5">
             <OfferRow
               label="แกน 1 · มัดจำ"
-              value={`${offer.deposit_amount.toLocaleString()} Point`}
+              value={`${offer.deposit_amount.toLocaleString()} พอยต์ทอง`}
             />
             <div className="flex justify-end">
               <span className="text-xs text-amber-600">
@@ -339,7 +339,7 @@ function OfferCard({
             label="แกน 3 · ค่าเดินทาง"
             value={
               offer.travel_fee != null
-                ? `${offer.travel_fee.toLocaleString()} Point${offer.travel_fee_policy ? ` (${offer.travel_fee_policy})` : ""}`
+                ? `${offer.travel_fee.toLocaleString()} พอยต์ทอง${offer.travel_fee_policy ? ` (${offer.travel_fee_policy})` : ""}`
                 : offer.travel_fee_policy ?? "—"
             }
           />
@@ -376,7 +376,7 @@ function OfferCard({
                 label="แกน 4 · ค่าแรงยุติ"
                 value={
                   offer.labor_cancel_fee != null
-                    ? `${offer.labor_cancel_fee.toLocaleString()} Point${offer.labor_cancel_fee_policy ? ` — ${offer.labor_cancel_fee_policy}` : ""}`
+                    ? `${offer.labor_cancel_fee.toLocaleString()} พอยต์ทอง${offer.labor_cancel_fee_policy ? ` — ${offer.labor_cancel_fee_policy}` : ""}`
                     : offer.labor_cancel_fee_policy ?? "—"
                 }
               />
@@ -400,7 +400,7 @@ function OfferCard({
                 label="แกน 7 · No-show / ฝาก"
                 value={
                   offer.no_show_fee != null
-                    ? `${offer.no_show_fee.toLocaleString()} Point${offer.no_show_policy ? ` — ${offer.no_show_policy}` : ""}`
+                    ? `${offer.no_show_fee.toLocaleString()} พอยต์ทอง${offer.no_show_policy ? ` — ${offer.no_show_policy}` : ""}`
                     : offer.no_show_policy ?? "—"
                 }
               />
@@ -424,7 +424,7 @@ function OfferCard({
                 label="แกน 9 · วงเงินความรับผิด"
                 value={
                   offer.liability_cap != null
-                    ? `ไม่เกิน ${offer.liability_cap.toLocaleString()} Point${offer.liability_policy ? ` — ${offer.liability_policy}` : ""}`
+                    ? `ไม่เกิน ${offer.liability_cap.toLocaleString()} พอยต์ทอง${offer.liability_policy ? ` — ${offer.liability_policy}` : ""}`
                     : offer.liability_policy ?? "—"
                 }
               />
@@ -441,17 +441,17 @@ function OfferCard({
         )}
       </div>
 
-      {/* ── Escrow info card — Gold ที่จะถูกล็อก (CMD A3) ──────────── */}
+      {/* ── Escrow info card — พอยต์ทองที่จะถูกล็อก (CMD A3) ──────────── */}
       <div className="px-5 pb-3">
         <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-3">
           <div className="flex items-center justify-between mb-1">
-            <p className="text-xs font-semibold text-weeeu-dark">🔒 Gold ที่จะถูกล็อก</p>
+            <p className="text-xs font-semibold text-weeeu-dark">🔒 พอยต์ทอง (Gold Point) ที่จะถูกล็อก</p>
             <p className="text-sm font-bold text-weeeu-primary">
-              {(offer.quoted_price + (offer.deposit_amount ?? 0)).toLocaleString()} Point
+              {(offer.quoted_price + (offer.deposit_amount ?? 0)).toLocaleString()} พอยต์ทอง
             </p>
           </div>
           <p className="text-[10px] text-gray-500 leading-relaxed">
-            ระบบจะล็อก Gold ชั่วคราวเมื่อเลือกร้าน — ปลดล็อกอัตโนมัติหากงานไม่สำเร็จ
+            ระบบจะล็อกพอยต์ทองชั่วคราวเมื่อเลือกร้าน — ปลดล็อกอัตโนมัติหากงานไม่สำเร็จ
           </p>
         </div>
       </div>

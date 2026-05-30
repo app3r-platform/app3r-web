@@ -194,19 +194,19 @@ export default function DeliveryReceiptPage() {
               {/* Price */}
               {receipt.final_price !== null && (
                 <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ยอดที่หัก</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ยอดที่หัก (พอยต์ทอง / Gold Point)</p>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">ค่าซ่อม</span>
-                    <span className="font-medium text-gray-800">{receipt.final_price.toLocaleString()} Point</span>
+                    <span className="font-medium text-gray-800">{receipt.final_price.toLocaleString()} พอยต์ทอง</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">ค่าตรวจ (Pickup)</span>
-                    <span className="font-medium text-gray-800">{receipt.inspection_fee.toLocaleString()} Point</span>
+                    <span className="font-medium text-gray-800">{receipt.inspection_fee.toLocaleString()} พอยต์ทอง</span>
                   </div>
                   <div className="flex justify-between text-sm font-semibold border-t border-gray-200 pt-2">
                     <span className="text-gray-700">รวม</span>
                     <span className="text-purple-700">
-                      {(receipt.final_price + receipt.inspection_fee).toLocaleString()} Point
+                      {(receipt.final_price + receipt.inspection_fee).toLocaleString()} พอยต์ทอง
                     </span>
                   </div>
                 </div>
@@ -302,7 +302,7 @@ export default function DeliveryReceiptPage() {
               </button>
 
               <p className="text-xs text-center text-gray-400">
-                หลังยืนยัน — ระบบจะหัก Point และเปิดหน้ารีวิว
+                หลังยืนยัน — ระบบจะหักพอยต์ทอง และเปิดหน้ารีวิว
               </p>
             </>
           )}
