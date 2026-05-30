@@ -56,7 +56,7 @@ export function ServiceProgressTimeline({ jobId }: Props) {
         <p className="text-gray-600 font-medium">ไม่พบข้อมูลงานนี้</p>
         <Link
           href="/jobs"
-          className="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline"
+          className="mt-3 inline-block text-weeeu-dark text-sm font-medium hover:underline"
         >
           ← กลับรายการงาน
         </Link>
@@ -99,7 +99,7 @@ export function ServiceProgressTimeline({ jobId }: Props) {
                 {/* Connector line between nodes */}
                 {i < ALL_STAGES.length - 1 && (
                   <div
-                    className={`absolute top-5 left-1/2 w-full h-0.5 -z-10 ${i < stageIndex ? "bg-indigo-400" : "bg-gray-200"}`}
+                    className={`absolute top-5 left-1/2 w-full h-0.5 -z-10 ${i < stageIndex ? "bg-weeeu-primary/70" : "bg-gray-200"}`}
                   />
                 )}
               </div>
@@ -111,7 +111,7 @@ export function ServiceProgressTimeline({ jobId }: Props) {
         {job.currentSubStage && (
           <div className="mt-4 pt-4 border-t border-gray-50 text-center">
             <p className="text-xs text-gray-500">ขั้นตอนปัจจุบัน</p>
-            <p className="text-sm font-semibold text-indigo-700 mt-0.5">
+            <p className="text-sm font-semibold text-weeeu-dark mt-0.5">
               {job.currentSubStage.replace(/_/g, " ")}
             </p>
           </div>

@@ -54,7 +54,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 const STATUS_COLOR: Record<string, string> = {
   suspended: "bg-red-100 text-red-700",
-  offer_selected: "bg-purple-100 text-purple-700",
+  offer_selected: "bg-weeeu-surface text-weeeu-dark",
   completed: "bg-green-100 text-green-700",
   cancelled: "bg-gray-100 text-gray-500",
   disputed: "bg-orange-100 text-orange-700",

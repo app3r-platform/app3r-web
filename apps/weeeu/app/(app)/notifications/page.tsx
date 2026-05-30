@@ -41,7 +41,7 @@ const categoryColors: Record<string, string> = {
   repair:   "bg-orange-50",
   resell:   "bg-green-50",
   wallet:   "bg-yellow-50",
-  maintain: "bg-purple-50",
+  maintain: "bg-weeeu-surface",
   system:   "bg-weeeu-surface",
 };
 

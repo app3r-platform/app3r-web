@@ -170,9 +170,9 @@ export default function DeliveryReceiptPage() {
         </div>
       ) : (
         <>
-          <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
-            <p className="text-sm font-semibold text-purple-800">🚛 ช่างส่งเครื่องคืนแล้ว — กรุณาตรวจรับ</p>
-            <p className="text-xs text-purple-600 mt-1">ตรวจสอบงานซ่อมก่อนเซ็นรับ</p>
+          <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+            <p className="text-sm font-semibold text-weeeu-text">🚛 ช่างส่งเครื่องคืนแล้ว — กรุณาตรวจรับ</p>
+            <p className="text-xs text-weeeu-dark mt-1">ตรวจสอบงานซ่อมก่อนเซ็นรับ</p>
           </div>
 
           {error && (
@@ -205,7 +205,7 @@ export default function DeliveryReceiptPage() {
                   </div>
                   <div className="flex justify-between text-sm font-semibold border-t border-gray-200 pt-2">
                     <span className="text-gray-700">รวม</span>
-                    <span className="text-purple-700">
+                    <span className="text-weeeu-dark">
                       {(receipt.final_price + receipt.inspection_fee).toLocaleString()} พอยต์ทอง
                     </span>
                   </div>
@@ -296,7 +296,7 @@ export default function DeliveryReceiptPage() {
               <button
                 onClick={handleConfirm}
                 disabled={confirming || !hasSignature || satisfied === null}
-                className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+                className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
               >
                 {confirming ? <><span className="animate-spin">⟳</span> กำลังยืนยัน...</> : "✅ ยืนยันรับเครื่องคืน"}
               </button>

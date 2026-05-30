@@ -224,7 +224,7 @@ export default function TransactionPage() {
       {tx.status === "disputed" && (
         <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-4 space-y-2">
           <p className="text-sm font-bold text-red-800">⚖️ มีข้อพิพาท — รอ Admin ตัดสิน (R10)</p>
-          <p className="text-xs text-red-600">Gold ใน Escrow ถูกล็อกไว้จนกว่า Admin จะตัดสิน</p>
+          <p className="text-xs text-red-600">Gold ในระบบพักเงินกลาง (Escrow) ถูกล็อกไว้จนกว่า Admin จะตัดสิน</p>
           <p className="text-xs text-gray-500">เหตุผล: {disputeReason === "not_as_described" ? "สินค้าไม่ตรงปก" : "อื่นๆ"}</p>
         </div>
       )}
@@ -233,7 +233,7 @@ export default function TransactionPage() {
       {tx.status === "cancelled" && (
         <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
           <p className="text-sm font-semibold text-gray-700">❌ ธุรกรรมถูกยกเลิก</p>
-          <p className="text-xs text-gray-500 mt-1">Point ค่า offer และค่าประกาศถูกคืนให้ทุกฝ่ายแล้ว</p>
+          <p className="text-xs text-gray-500 mt-1">พอยต์ทองค่า offer และค่าประกาศถูกคืนให้ทุกฝ่ายแล้ว</p>
         </div>
       )}
 
@@ -485,7 +485,7 @@ export default function TransactionPage() {
       {cancelRequested && (
         <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
           <p className="text-sm font-semibold text-gray-700">📨 ส่งคำขอยกเลิกร่วมแล้ว (R12)</p>
-          <p className="text-xs text-gray-500 mt-1">รออีกฝ่ายยืนยัน — ถ้าตกลงกัน Point จะคืนทุกฝ่าย</p>
+          <p className="text-xs text-gray-500 mt-1">รออีกฝ่ายยืนยัน — ถ้าตกลงกัน พอยต์ทองจะคืนทุกฝ่าย</p>
         </div>
       )}
 
@@ -587,8 +587,8 @@ export default function TransactionPage() {
             <p className="text-base font-bold text-gray-900">🤝 ขอยกเลิกร่วมกัน (R12)</p>
             <div className="bg-gray-50 rounded-xl p-3 space-y-1">
               <p className="text-xs text-gray-700 font-medium">เมื่อยกเลิกร่วม:</p>
-              <p className="text-xs text-gray-500">• Point ค่า offer คืนผู้ซื้อ</p>
-              <p className="text-xs text-gray-500">• Point ค่าประกาศคืนผู้ขาย</p>
+              <p className="text-xs text-gray-500">• พอยต์ทองค่า offer คืนผู้ซื้อ</p>
+              <p className="text-xs text-gray-500">• พอยต์ทองค่าประกาศคืนผู้ขาย</p>
               <p className="text-xs text-gray-500">• ต้องรออีกฝ่ายยืนยันด้วย</p>
             </div>
             <div className="flex gap-2">

@@ -255,7 +255,7 @@ export default function ResellOrderPage() {
             <div className="flex gap-2">
               <button
                 onClick={() =>
-                  doTransition("completed", "✅ ยืนยันรับสินค้าเรียบร้อย — ธุรกรรมเสร็จสมบูรณ์! Escrow โอนให้ผู้ขายแล้ว", "success")
+                  doTransition("completed", "✅ ยืนยันรับสินค้าเรียบร้อย — ธุรกรรมเสร็จสมบูรณ์! ระบบพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว", "success")
                 }
                 disabled={submitting}
                 className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"

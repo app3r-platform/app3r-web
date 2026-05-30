@@ -10,7 +10,7 @@ type ServicePriority = "normal" | "urgent" | "vip";
 const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string }> = {
   normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪" },
   urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶" },
-  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑" },
+  vip:    { label: "VIP",      cls: "bg-weeeu-surface text-weeeu-dark", icon: "👑" },
 };
 
 type RepairStatus =
@@ -70,8 +70,8 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   traveling: "bg-amber-100 text-amber-700",
   arrived: "bg-amber-100 text-amber-700",
   awaiting_entry: "bg-orange-100 text-orange-700",
-  inspecting: "bg-purple-100 text-purple-700",
-  awaiting_decision: "bg-purple-100 text-purple-700",
+  inspecting: "bg-weeeu-surface text-weeeu-dark",
+  awaiting_decision: "bg-weeeu-surface text-weeeu-dark",
   awaiting_user: "bg-red-100 text-red-700",
   in_progress: "bg-weeeu-surface text-weeeu-primary",
   completed: "bg-green-100 text-green-700",

@@ -133,13 +133,13 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
               {notify.depositAmount > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">มัดจำ (WeeeR รับไว้)</span>
-                  <span className="font-medium text-gray-800">{notify.depositAmount} Point</span>
+                  <span className="font-medium text-gray-800">{notify.depositAmount} พอยต์ทอง</span>
                 </div>
               )}
               {notify.travelFee > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">ค่าเดินทาง</span>
-                  <span className="font-medium text-gray-800">{notify.travelFee} Point</span>
+                  <span className="font-medium text-gray-800">{notify.travelFee} พอยต์ทอง</span>
                 </div>
               )}
               <p className="text-xs text-gray-400 pt-1">
@@ -171,7 +171,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
             <div className="bg-white border border-red-200 rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-gray-800">ยืนยันยกเลิกงาน?</p>
               <p className="text-xs text-gray-500">
-                ระบบจะ settle มัดจำ {notify.depositAmount} Point คืนให้คุณ
+                ระบบจะ settle มัดจำ {notify.depositAmount} พอยต์ทอง คืนให้คุณ
                 เนื่องจาก WeeeR เป็นผู้ถอน
               </p>
               <div className="flex gap-2">
@@ -209,7 +209,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
           <p className="text-2xl">✅</p>
           <p className="font-semibold text-gray-700">ยกเลิกงานเรียบร้อย</p>
           <p className="text-sm text-gray-500">
-            มัดจำ {notify.depositAmount} Point จะคืนภายใน 1-3 วันทำการ
+            มัดจำ {notify.depositAmount} พอยต์ทอง จะคืนภายใน 1-3 วันทำการ
           </p>
         </div>
       )}

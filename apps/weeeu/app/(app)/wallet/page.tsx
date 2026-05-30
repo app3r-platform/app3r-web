@@ -75,7 +75,7 @@ export default function WalletPage() {
             <div className="text-4xl opacity-80">🥇</div>
           </div>
           <div className="bg-white/20 rounded-xl p-2 mb-4">
-            <p className="text-xs opacity-90">🔒 พอยต์ทอง = ซื้อขายได้ · เข้า Escrow · ถอนได้</p>
+            <p className="text-xs opacity-90">🔒 พอยต์ทอง = ซื้อขายได้ · เข้าระบบพักเงินกลาง (Escrow) · ถอนได้</p>
             <p className="text-xs opacity-70">1 พอยต์ทอง = 1 บาท · ไม่หมดอายุ</p>
           </div>
           <div className="flex gap-2">

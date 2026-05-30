@@ -24,7 +24,7 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_COLOR: Record<string, string> = {
   announced: "bg-weeeu-surface text-weeeu-primary",
   receiving_offers: "bg-weeeu-surface text-weeeu-primary",
-  offer_selected: "bg-purple-100 text-purple-700",
+  offer_selected: "bg-weeeu-surface text-weeeu-dark",
   buyer_confirmed: "bg-orange-100 text-orange-700",
   in_progress: "bg-yellow-100 text-yellow-700",
   delivered: "bg-teal-100 text-teal-700",
@@ -89,7 +89,7 @@ export default function SellPage() {
 
   // R5: Seller ถอนการเลือก offer (ยังไม่ยืนยัน)
   const handleUnselectOffer = async (listingId: string) => {
-    if (!confirm("ถอนการเลือกข้อเสนอนี้? ผู้ยื่นจะได้รับ Point คืน")) return;
+    if (!confirm("ถอนการเลือกข้อเสนอนี้? ผู้ยื่นจะได้รับพอยต์ทองคืน")) return;
     setCancellingSelection(listingId);
     try {
       const res = await apiFetch(`/api/v1/listings/${listingId}/unselect-offer/`, { method: "POST" });
@@ -109,7 +109,7 @@ export default function SellPage() {
 
   // R2/R3: ยกเลิก listing SUSPENDED
   const handleCancelSuspended = async (listingId: string) => {
-    if (!confirm("ยกเลิกประกาศนี้? Point ค่าประกาศจะคืนให้คุณ")) return;
+    if (!confirm("ยกเลิกประกาศนี้? พอยต์ทองค่าประกาศจะคืนให้คุณ")) return;
     try {
       const res = await apiFetch(`/api/v1/listings/${listingId}/cancel/`, { method: "POST" });
       if (!res.ok) throw new Error();
@@ -189,8 +189,8 @@ export default function SellPage() {
           </div>
 
           <div className="bg-white rounded-xl p-3 space-y-1">
-            <p className="text-xs text-gray-600 font-medium">📋 Point ค่าประกาศจะคืนถ้าคุณยกเลิก</p>
-            <p className="text-xs text-gray-500">แก้ไข+ประกาศใหม่ = Listing v2 (Point ถูก HOLD ใหม่)</p>
+            <p className="text-xs text-gray-600 font-medium">📋 พอยต์ทองค่าประกาศจะคืนถ้าคุณยกเลิก</p>
+            <p className="text-xs text-gray-500">แก้ไข+ประกาศใหม่ = Listing v2 (พอยต์ทองถูก HOLD ใหม่)</p>
           </div>
 
           <div className="flex gap-2">
@@ -252,7 +252,7 @@ export default function SellPage() {
               {/* R5: Seller ถอนการเลือก offer (ยังก่อน buyer_confirmed) */}
               {l.status === "offer_selected" && (
                 <div className="mt-2 pt-2 border-t border-gray-50 space-y-2">
-                  <p className="text-xs text-purple-600 font-medium">✅ คุณเลือกข้อเสนอแล้ว — รอผู้ซื้อยืนยัน Gold</p>
+                  <p className="text-xs text-weeeu-dark font-medium">✅ คุณเลือกข้อเสนอแล้ว — รอผู้ซื้อยืนยัน Gold</p>
                   <div className="flex gap-2">
                     <Link
                       href={`/transactions/${l.id}`}

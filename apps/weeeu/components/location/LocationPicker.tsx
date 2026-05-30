@@ -100,7 +100,7 @@ export function LocationPicker({
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
           placeholder={placeholder}
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
@@ -115,7 +115,7 @@ export function LocationPicker({
               <button
                 key={s.placeId}
                 onClick={() => handleSelect(s.placeId, s.description)}
-                className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 text-left transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-weeeu-surface text-left transition-colors"
               >
                 <span className="text-gray-400">📍</span>
                 {s.description}
@@ -127,21 +127,21 @@ export function LocationPicker({
 
       {/* Selected location card + map preview */}
       {selected && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 space-y-3">
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-4 space-y-3">
           <div className="flex items-start gap-2">
-            <span className="text-indigo-500 shrink-0">📍</span>
+            <span className="text-weeeu-primary shrink-0">📍</span>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-indigo-800">{selected.formattedAddress}</p>
-              <p className="text-xs text-indigo-400 mt-0.5">
+              <p className="text-sm font-medium text-weeeu-text">{selected.formattedAddress}</p>
+              <p className="text-xs text-weeeu-primary mt-0.5">
                 {selected.lat.toFixed(6)}, {selected.lng.toFixed(6)}
               </p>
             </div>
           </div>
 
           {/* Map preview (Static map via OpenStreetMap thumbnail — Phase C mock) */}
-          <div className="rounded-lg overflow-hidden border border-indigo-200 h-32 bg-indigo-100 flex items-center justify-center">
+          <div className="rounded-lg overflow-hidden border border-weeeu-primary/20 h-32 bg-weeeu-surface flex items-center justify-center">
             {/* Phase D-2: Google Maps embed จริง */}
-            <div className="text-center text-indigo-400">
+            <div className="text-center text-weeeu-primary">
               <p className="text-2xl">🗺️</p>
               <p className="text-xs mt-1">แผนที่ (Phase D-2: Google Maps)</p>
               <p className="text-xs">{selected.lat.toFixed(4)}, {selected.lng.toFixed(4)}</p>
@@ -156,12 +156,12 @@ export function LocationPicker({
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
                 placeholder="ชื่อสถานที่ (เช่น บ้าน, ที่ทำงาน) — ไม่บังคับ"
-                className="w-full rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-300"
+                className="w-full rounded-lg border border-weeeu-primary/20 bg-white px-3 py-2 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-weeeu-primary"
               />
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-xs font-semibold py-2.5 rounded-lg transition-colors"
+                className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white text-xs font-semibold py-2.5 rounded-lg transition-colors"
               >
                 {saving ? "กำลังบันทึก..." : "💾 บันทึกสถานที่นี้"}
               </button>

@@ -27,7 +27,7 @@ const JOB = {
   offerLock: {
     shopName:       "ร้านเทพล้างแอร์",
     noShowFee:      300, // ค่าเสียเที่ยว ถ้าลูกค้าไม่อยู่ (ตาม offer)
-    noShowPolicy:   "คิดค่าเสียเที่ยว 300 Point ถ้าลูกค้าไม่อยู่เมื่อช่างถึงที่",
+    noShowPolicy:   "คิดค่าเสียเที่ยว 300 พอยต์ทอง ถ้าลูกค้าไม่อยู่เมื่อช่างถึงที่",
   },
 };
 
@@ -76,7 +76,7 @@ export default function M7NoShowWeeeUMockupPage() {
             <p className="text-sm text-gray-700">{JOB.offerLock.noShowPolicy}</p>
             <div className="flex justify-between text-sm pt-1">
               <span className="text-gray-600">ค่าเสียเที่ยว</span>
-              <span className="font-bold text-amber-700">{JOB.offerLock.noShowFee} Point</span>
+              <span className="font-bold text-amber-700">{JOB.offerLock.noShowFee} พอยต์ทอง</span>
             </div>
           </div>
 
@@ -107,7 +107,7 @@ export default function M7NoShowWeeeUMockupPage() {
                 className="w-full border border-[#0DC36C]/40 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-[#0DC36C]"
               />
               <p className="text-xs text-gray-500">
-                * ค่าเสียเที่ยว {JOB.offerLock.noShowFee} Point จะถูกหักจากงานนี้
+                * ค่าเสียเที่ยว {JOB.offerLock.noShowFee} พอยต์ทอง จะถูกหักจากงานนี้
               </p>
               <div className="flex gap-2">
                 <button
@@ -131,7 +131,7 @@ export default function M7NoShowWeeeUMockupPage() {
             <div className="bg-white border border-red-200 rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-gray-800">ยืนยันยกเลิกงาน?</p>
               <p className="text-xs text-gray-500">
-                ระบบจะหักค่าเสียเที่ยว {JOB.offerLock.noShowFee} Point จาก Point ของคุณ
+                ระบบจะหักค่าเสียเที่ยว {JOB.offerLock.noShowFee} พอยต์ทอง จากพอยต์ทองของคุณ
                 (ตาม offer ที่ระบุไว้)
               </p>
               <div className="flex gap-2">

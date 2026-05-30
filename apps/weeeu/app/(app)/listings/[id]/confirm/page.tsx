@@ -36,7 +36,7 @@ export default async function ListingConfirmPage({ params }: { params: Promise<{
         {/* Note */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
           <p className="text-sm text-amber-700">
-            หลังยืนยัน ระบบจะล็อก escrow และแจ้งผู้ซื้อเตรียมชำระเงิน
+            หลังยืนยัน ระบบจะล็อกระบบพักเงินกลาง (Escrow) และแจ้งผู้ซื้อเตรียมชำระเงิน
           </p>
         </div>
 

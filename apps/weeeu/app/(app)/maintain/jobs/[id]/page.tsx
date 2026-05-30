@@ -389,7 +389,7 @@ export default function MaintainJobDetailPage() {
             <Row label="นัดถัดไป" value={formatDate(job.recurring.nextScheduledAt)} />
           )}
           {job.totalPrice > 0 && (
-            <Row label="ราคา" value={`${job.totalPrice.toLocaleString()} Point`} />
+            <Row label="ราคา" value={`${job.totalPrice.toLocaleString()} พอยต์ทอง`} />
           )}
         </div>
       </div>

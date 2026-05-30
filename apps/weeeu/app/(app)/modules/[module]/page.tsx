@@ -27,7 +27,7 @@ const moduleConfig: Record<string, {
   maintain: {
     icon: "🛠️", title: "บำรุงรักษา", comingSoon: false,
     description: "จองล้างแอร์ ล้างเครื่องซักผ้า บำรุงรักษาเครื่องใช้ไฟฟ้าประจำปี",
-    color: "from-purple-500 to-violet-400",
+    color: "from-weeeu-primary to-weeeu-dark",
   },
   parts: {
     icon: "🔩", title: "อะไหล่", comingSoon: false,

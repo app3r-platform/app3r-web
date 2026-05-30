@@ -277,7 +277,7 @@ export default function ProfilePage() {
         <div className="divide-y divide-gray-50">
           {([
             { key: "repair_updates" as const,  icon: "🔧", label: "สถานะงานซ่อม",      desc: "อัพเดตความคืบหน้าและการแจ้งเตือนจากช่าง" },
-            { key: "promotions"     as const,  icon: "🎁", label: "โปรโมชั่น / Point",  desc: "ข่าวสาร โปรโมชั่น และ Point bonus" },
+            { key: "promotions"     as const,  icon: "🎁", label: "โปรโมชั่น / พอยต์",  desc: "ข่าวสาร โปรโมชั่น และพอยต์โบนัส" },
             { key: "system_notices" as const,  icon: "🔔", label: "แจ้งเตือนระบบ",       desc: "ความปลอดภัยและการเปลี่ยนแปลงบัญชี (ปิดไม่ได้)" },
           ] as const).map((item) => (
             <div key={item.key} className="flex items-center justify-between px-5 py-4 gap-3">

@@ -123,7 +123,7 @@ function NewScrapForm() {
           </div>
           {listingType === "sell" && (
             <p className="text-xs text-green-600 mt-2">
-              ⚠️ escrow กลับทิศ: WeeeR (ร้าน) เป็นผู้จ่ายพอยต์ทองให้คุณ ไม่ใช่คุณจ่าย
+              ⚠️ ระบบพักเงินกลาง (Escrow) กลับทิศ: WeeeR (ร้าน) เป็นผู้จ่ายพอยต์ทองให้คุณ ไม่ใช่คุณจ่าย
             </p>
           )}
         </div>
