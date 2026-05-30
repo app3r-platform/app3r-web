@@ -31,10 +31,10 @@ export function ReviewSubmitForm({ jobId, onSubmitted }: Props) {
   };
 
   return (
-    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 space-y-4">
+    <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-5 space-y-4">
       <div>
-        <p className="text-sm font-semibold text-indigo-800 mb-1">⭐ รีวิวบริการ</p>
-        <p className="text-xs text-indigo-600">งานเสร็จสมบูรณ์แล้ว — กรุณาให้คะแนนและความคิดเห็น</p>
+        <p className="text-sm font-semibold text-weeeu-text mb-1">⭐ รีวิวบริการ</p>
+        <p className="text-xs text-weeeu-dark">งานเสร็จสมบูรณ์แล้ว — กรุณาให้คะแนนและความคิดเห็น</p>
       </div>
 
       {/* Star rating */}
@@ -54,7 +54,7 @@ export function ReviewSubmitForm({ jobId, onSubmitted }: Props) {
           ))}
         </div>
         {rating > 0 && (
-          <p className="text-xs text-indigo-600 font-medium">
+          <p className="text-xs text-weeeu-dark font-medium">
             {rating === 5 ? "ยอดเยี่ยม!" : rating === 4 ? "ดีมาก" : rating === 3 ? "ปานกลาง" : rating === 2 ? "พอใช้" : "ต้องปรับปรุง"}
           </p>
         )}
@@ -68,7 +68,7 @@ export function ReviewSubmitForm({ jobId, onSubmitted }: Props) {
           onChange={(e) => setComment(e.target.value)}
           placeholder="เขียนความคิดเห็นของคุณ..."
           rows={3}
-          className="w-full rounded-xl border border-indigo-200 bg-white px-3 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
+          className="w-full rounded-xl border border-weeeu-primary/20 bg-white px-3 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
         />
       </div>
 
@@ -81,7 +81,7 @@ export function ReviewSubmitForm({ jobId, onSubmitted }: Props) {
       <button
         onClick={handleSubmit}
         disabled={submitting || rating === 0}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+        className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3 rounded-xl text-sm transition-colors"
       >
         {submitting ? "กำลังบันทึก..." : "📝 ส่งรีวิว"}
       </button>

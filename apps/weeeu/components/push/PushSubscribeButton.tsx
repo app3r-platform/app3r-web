@@ -102,7 +102,7 @@ export function PushSubscribeButton() {
       <button
         onClick={handleSubscribe}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
+        className="w-full flex items-center justify-center gap-2 bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
       >
         {loading ? "กำลังเปิด..." : "🔔 เปิดการแจ้งเตือน"}
       </button>

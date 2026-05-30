@@ -29,14 +29,14 @@ interface Props {
 export function ProgressStageNode({ stage, state, isLast }: Props) {
   const circleClass =
     state === "done"
-      ? "bg-indigo-600 text-white border-indigo-600"
+      ? "bg-weeeu-primary text-white border-weeeu-primary"
       : state === "active"
-        ? "bg-white text-indigo-600 border-indigo-600 ring-2 ring-indigo-200"
+        ? "bg-white text-weeeu-dark border-weeeu-primary ring-2 ring-weeeu-primary/30"
         : "bg-white text-gray-300 border-gray-200";
 
   const labelClass =
     state === "active"
-      ? "text-indigo-700 font-semibold"
+      ? "text-weeeu-dark font-semibold"
       : state === "done"
         ? "text-gray-700 font-medium"
         : "text-gray-400";
@@ -56,7 +56,7 @@ export function ProgressStageNode({ stage, state, isLast }: Props) {
       {/* Connector line (hidden for last) */}
       {!isLast && (
         <div
-          className={`hidden md:block absolute top-5 left-1/2 w-full h-0.5 ${state === "done" ? "bg-indigo-400" : "bg-gray-200"}`}
+          className={`hidden md:block absolute top-5 left-1/2 w-full h-0.5 ${state === "done" ? "bg-weeeu-primary/70" : "bg-gray-200"}`}
           style={{ zIndex: -1 }}
         />
       )}

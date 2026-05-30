@@ -17,7 +17,7 @@ type ServicePriority = "normal" | "urgent" | "vip";
 const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string; waitMin: number; waitMax: number; waitDefault: number }> = {
   normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪", waitMin: 1, waitMax: 7, waitDefault: 7 },
   urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶", waitMin: 1, waitMax: 2, waitDefault: 2 },
-  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑", waitMin: 0, waitMax: 1, waitDefault: 1 },
+  vip:    { label: "VIP",      cls: "bg-weeeu-surface text-weeeu-dark", icon: "👑", waitMin: 0, waitMax: 1, waitDefault: 1 },
 };
 
 // ─── R2-1: อาการเสีย by appliance type (D-5 mock) ───────────────────────────
@@ -292,7 +292,7 @@ export default function RepairNewPage() {
               const conf = {
                 on_site: { icon: "🏠", label: "On-site\nช่างมาบ้าน",    active: "bg-weeeu-primary border-weeeu-primary text-white" },
                 walk_in: { icon: "🚶", label: "Walk-in\nไปร้านเอง",      active: "bg-green-600 border-green-600 text-white" },
-                pickup:  { icon: "🚛", label: "Pickup\nช่างมารับ-ส่ง",   active: "bg-purple-600 border-purple-600 text-white" },
+                pickup:  { icon: "🚛", label: "Pickup\nช่างมารับ-ส่ง",   active: "bg-weeeu-primary border-weeeu-primary text-white" },
                 parcel:  { icon: "📦", label: "Parcel\nส่งพัสดุ",        active: "bg-orange-500 border-orange-500 text-white" },
               }[type];
               return (
@@ -615,9 +615,9 @@ export default function RepairNewPage() {
 
         {/* Pickup info */}
         {serviceType === "pickup" && (
-          <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 space-y-2">
-            <p className="text-sm font-semibold text-purple-800">🚛 Pickup — ช่างมารับเครื่องถึงบ้าน</p>
-            <p className="text-xs text-purple-600">ขั้นตอนถัดไป: กรอกที่อยู่รับเครื่อง + เลือกวัน/เวลานัดรับ</p>
+          <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 space-y-2">
+            <p className="text-sm font-semibold text-weeeu-text">🚛 Pickup — ช่างมารับเครื่องถึงบ้าน</p>
+            <p className="text-xs text-weeeu-dark">ขั้นตอนถัดไป: กรอกที่อยู่รับเครื่อง + เลือกวัน/เวลานัดรับ</p>
           </div>
         )}
 
@@ -652,7 +652,7 @@ export default function RepairNewPage() {
             serviceType === "walk_in"
               ? "bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white"
               : serviceType === "pickup"
-              ? "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white"
+              ? "bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white"
               : serviceType === "parcel"
               ? "bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white"
               : "bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white"

@@ -181,9 +181,9 @@ export default function PickupReceiptPage() {
         </div>
       ) : (
         <>
-          <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
-            <p className="text-sm font-semibold text-purple-800">🚛 ช่างมารับเครื่องแล้ว — กรุณาตรวจสอบและเซ็นรับ</p>
-            <p className="text-xs text-purple-600 mt-1">ตรวจสอบสภาพเครื่องก่อนส่งมอบให้ช่าง</p>
+          <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+            <p className="text-sm font-semibold text-weeeu-text">🚛 ช่างมารับเครื่องแล้ว — กรุณาตรวจสอบและเซ็นรับ</p>
+            <p className="text-xs text-weeeu-dark mt-1">ตรวจสอบสภาพเครื่องก่อนส่งมอบให้ช่าง</p>
           </div>
 
           {error && (
@@ -272,7 +272,7 @@ export default function PickupReceiptPage() {
                     value={customerNotes}
                     onChange={e => setCustomerNotes(e.target.value)}
                     placeholder="ข้อสังเกตเพิ่มเติมเกี่ยวกับสภาพเครื่อง"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
                   />
                 </div>
               </div>
@@ -280,7 +280,7 @@ export default function PickupReceiptPage() {
               <button
                 onClick={handleSign}
                 disabled={signing || !hasSignature}
-                className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+                className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
               >
                 {signing ? <><span className="animate-spin">⟳</span> กำลังบันทึก...</> : "✅ เซ็นรับมอบเครื่อง"}
               </button>

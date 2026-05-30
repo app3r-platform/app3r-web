@@ -34,7 +34,7 @@ export function ProgressStepDetail({ step, index }: Props) {
         className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
       >
         {/* Step number */}
-        <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0">
+        <span className="w-6 h-6 rounded-full bg-weeeu-surface text-weeeu-dark text-xs font-bold flex items-center justify-center shrink-0">
           {index + 1}
         </span>
 

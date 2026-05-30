@@ -131,7 +131,7 @@ export default function AwaitingPaymentPage() {
           <p className="text-5xl">✅</p>
           <p className="font-bold text-green-800 text-lg">ชำระเงินสำเร็จ!</p>
           <p className="text-sm text-green-600">
-            Gold {order.agreed_price.toLocaleString()} ถูกล็อคใน Escrow แล้ว
+            Gold {order.agreed_price.toLocaleString()} ถูกล็อคในระบบพักเงินกลาง (Escrow) แล้ว
             <br />
             รอผู้ขายจัดส่งสินค้า
           </p>

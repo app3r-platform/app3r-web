@@ -80,13 +80,13 @@ export default function M6WeeeRWithdrewMockupPage() {
               {JOB.offerLock.depositAmount > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">มัดจำ (WeeeR รับไว้)</span>
-                  <span className="font-medium text-gray-800">{JOB.offerLock.depositAmount} Point</span>
+                  <span className="font-medium text-gray-800">{JOB.offerLock.depositAmount} พอยต์ทอง</span>
                 </div>
               )}
               {JOB.offerLock.travelFee > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">ค่าเดินทาง</span>
-                  <span className="font-medium text-gray-800">{JOB.offerLock.travelFee} Point</span>
+                  <span className="font-medium text-gray-800">{JOB.offerLock.travelFee} พอยต์ทอง</span>
                 </div>
               )}
               <p className="text-xs text-gray-400 pt-1">
@@ -118,7 +118,7 @@ export default function M6WeeeRWithdrewMockupPage() {
             <div className="bg-white border border-red-200 rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-gray-800">ยืนยันยกเลิกงาน?</p>
               <p className="text-xs text-gray-500">
-                ระบบจะ settle มัดจำ {JOB.offerLock.depositAmount} Point คืนให้คุณ
+                ระบบจะ settle มัดจำ {JOB.offerLock.depositAmount} พอยต์ทอง คืนให้คุณ
                 เนื่องจาก WeeeR เป็นผู้ถอน
               </p>
               <div className="flex gap-2">
@@ -155,7 +155,7 @@ export default function M6WeeeRWithdrewMockupPage() {
         <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-center space-y-2">
           <p className="text-2xl">✅</p>
           <p className="font-semibold text-gray-700">ยกเลิกงานเรียบร้อย</p>
-          <p className="text-sm text-gray-500">มัดจำ {JOB.offerLock.depositAmount} Point จะคืนภายใน 1-3 วันทำการ</p>
+          <p className="text-sm text-gray-500">มัดจำ {JOB.offerLock.depositAmount} พอยต์ทอง จะคืนภายใน 1-3 วันทำการ</p>
         </div>
       )}
 

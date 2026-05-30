@@ -12,6 +12,7 @@
 import { Suspense, use, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { PublicQAThread } from "@/components/listing/PublicQAThread";
 
 // ── Mock types ────────────────────────────────────────────────────────────────
 interface ScrapOffer {
@@ -349,7 +350,7 @@ function ScrapListingDetailContent({
             </div>
           </div>
           <p className="text-xs text-red-600 bg-red-100 rounded-xl px-3 py-2">
-            ⚠️ ค่าเสียเที่ยวอาจถูกหักจาก escrow ตามเงื่อนไข offer ที่ตกลงไว้
+            ⚠️ ค่าเสียเที่ยวอาจถูกหักจากระบบพักเงินกลาง (Escrow) ตามเงื่อนไข offer ที่ตกลงไว้
           </p>
           {!noShowAction && (
             <div className="flex gap-3">
@@ -578,6 +579,7 @@ function ScrapListingDetailContent({
           </div>
         </div>
       )}
+      <PublicQAThread />
     </div>
   );
 }

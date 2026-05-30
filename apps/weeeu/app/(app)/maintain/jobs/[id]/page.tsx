@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 import type { MaintainJob } from "@/lib/types";
+import { PublicQAThread } from "@/components/listing/PublicQAThread";
 
 const STATUS_LABEL: Record<MaintainJob["status"], string> = {
   awaiting_offer:  "รอข้อเสนอ",
@@ -389,7 +390,7 @@ export default function MaintainJobDetailPage() {
             <Row label="นัดถัดไป" value={formatDate(job.recurring.nextScheduledAt)} />
           )}
           {job.totalPrice > 0 && (
-            <Row label="ราคา" value={`${job.totalPrice.toLocaleString()} Point`} />
+            <Row label="ราคา" value={`${job.totalPrice.toLocaleString()} พอยต์ทอง`} />
           )}
         </div>
       </div>
@@ -518,6 +519,7 @@ export default function MaintainJobDetailPage() {
           </div>
         </div>
       )}
+      <PublicQAThread />
     </div>
   );
 }

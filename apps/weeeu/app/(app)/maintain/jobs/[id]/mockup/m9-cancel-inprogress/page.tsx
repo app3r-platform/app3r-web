@@ -81,7 +81,7 @@ export default function M9CancelInProgressMockupPage() {
             <div>
               <p className="font-semibold text-gray-700">ยกเลิกงานเรียบร้อย</p>
               <p className="text-sm text-gray-500">
-                WeeeR ได้รับแจ้งแล้ว · คาดว่า settle {JOB.offerLock.estimatedSettle} Point ภายใน 1-3 วัน
+                WeeeR ได้รับแจ้งแล้ว · คาดว่า settle {JOB.offerLock.estimatedSettle} พอยต์ทอง ภายใน 1-3 วัน
               </p>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function M9CancelInProgressMockupPage() {
             <p className="text-xs text-gray-500">{JOB.offerLock.cancelMidPolicy}</p>
             <div className="flex justify-between text-sm pt-1">
               <span className="text-gray-600">คาดว่า WeeeR ได้รับ</span>
-              <span className="font-bold text-red-600">{JOB.offerLock.estimatedSettle} Point</span>
+              <span className="font-bold text-red-600">{JOB.offerLock.estimatedSettle} พอยต์ทอง</span>
             </div>
           </div>
 

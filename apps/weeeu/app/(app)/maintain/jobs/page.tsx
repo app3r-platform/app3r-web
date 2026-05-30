@@ -239,7 +239,7 @@ export default function MaintainJobsPage() {
                       {STATUS_LABEL[job.status]}
                     </span>
                     {job.totalPrice > 0 && (
-                      <p className="text-xs font-semibold text-weeeu-dark">{job.totalPrice.toLocaleString()} Point</p>
+                      <p className="text-xs font-semibold text-weeeu-dark">{job.totalPrice.toLocaleString()} พอยต์ทอง</p>
                     )}
                   </div>
                 </div>

@@ -122,7 +122,7 @@ export default function PickupSchedulePage() {
   };
 
   const inputCls = (f: string) =>
-    `w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+    `w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary ${
       errors[f] ? "border-red-400 bg-red-50" : "border-gray-200"
     }`;
 
@@ -142,22 +142,22 @@ export default function PickupSchedulePage() {
         <Link href="/repair/new" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <div>
           <h1 className="text-xl font-bold text-gray-900">นัดหมาย Pickup</h1>
-          {fromNew && <p className="text-xs text-purple-600 mt-0.5">ต่อจากขั้นที่ 1 — กรอกที่อยู่และเวลารับเครื่อง</p>}
+          {fromNew && <p className="text-xs text-weeeu-dark mt-0.5">ต่อจากขั้นที่ 1 — กรอกที่อยู่และเวลารับเครื่อง</p>}
         </div>
       </div>
 
       {/* Progress */}
       {fromNew && (
         <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium">1. เลือกเครื่อง ✓</span>
+          <span className="bg-weeeu-surface text-weeeu-dark px-2 py-1 rounded-full font-medium">1. เลือกเครื่อง ✓</span>
           <span className="text-gray-300">→</span>
-          <span className="bg-purple-600 text-white px-2 py-1 rounded-full font-medium">2. นัดหมาย</span>
+          <span className="bg-weeeu-primary text-white px-2 py-1 rounded-full font-medium">2. นัดหมาย</span>
         </div>
       )}
 
-      <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
-        <p className="text-sm font-semibold text-purple-800">🚛 Pickup — ช่างมารับเครื่องถึงบ้าน</p>
-        <p className="text-xs text-purple-600 mt-1">ระบุที่อยู่และเวลาที่สะดวกให้ช่างมารับเครื่อง</p>
+      <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+        <p className="text-sm font-semibold text-weeeu-text">🚛 Pickup — ช่างมารับเครื่องถึงบ้าน</p>
+        <p className="text-xs text-weeeu-dark mt-1">ระบุที่อยู่และเวลาที่สะดวกให้ช่างมารับเครื่อง</p>
       </div>
 
       {errors.general && (
@@ -206,7 +206,7 @@ export default function PickupSchedulePage() {
               onChange={e => setForm(f => ({ ...f, issue_detail: e.target.value }))}
               placeholder="เริ่มเป็นตั้งแต่เมื่อไร / เกิดขึ้นบ่อยแค่ไหน"
               rows={2}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none"
             />
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function PickupSchedulePage() {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-purple-300 hover:text-purple-500 transition-colors text-xs gap-1"
+                className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-weeeu-primary/40 hover:text-weeeu-primary transition-colors text-xs gap-1"
               >
                 <span className="text-2xl leading-none">+</span>
                 <span>เพิ่มรูป</span>
@@ -257,7 +257,7 @@ export default function PickupSchedulePage() {
               onChange={e => { setForm(f => ({ ...f, address: e.target.value })); clearErr("address"); }}
               placeholder="บ้านเลขที่ / ถนน / แขวง / เขต / จังหวัด / รหัสไปรษณีย์"
               rows={3}
-              className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none ${
+              className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary resize-none ${
                 errors.address ? "border-red-400 bg-red-50" : "border-gray-200"
               }`}
             />
@@ -270,7 +270,7 @@ export default function PickupSchedulePage() {
               value={form.address_note}
               onChange={e => setForm(f => ({ ...f, address_note: e.target.value }))}
               placeholder="เช่น ห้อง A101 / หน้าปั๊มน้ำมัน / โทรก่อนมาถึง"
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
             />
           </div>
         </div>
@@ -303,8 +303,8 @@ export default function PickupSchedulePage() {
                   onClick={() => { setForm(f => ({ ...f, pickup_time: slot })); clearErr("pickup_time"); }}
                   className={`py-2 px-2 rounded-xl border text-xs font-medium transition-colors ${
                     form.pickup_time === slot
-                      ? "bg-purple-600 border-purple-600 text-white"
-                      : "border-gray-200 text-gray-600 hover:border-purple-300"
+                      ? "bg-weeeu-primary border-weeeu-primary text-white"
+                      : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
                   }`}
                 >
                   {slot}
@@ -321,7 +321,7 @@ export default function PickupSchedulePage() {
               onChange={e => setForm(f => ({ ...f, budget_max: e.target.value }))}
               placeholder="ไม่ระบุ = ไม่จำกัด"
               min={0}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary"
             />
           </div>
         </div>
@@ -329,7 +329,7 @@ export default function PickupSchedulePage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
         >
           {submitting
             ? <><span className="animate-spin">⟳</span> กำลังส่งคำขอ...</>

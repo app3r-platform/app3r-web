@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { PublicQAThread } from "@/components/listing/PublicQAThread";
 
 // Sub-4: inline type — TODO: import from @app3r/types/services when Backend exports
 type ServicePriority = "normal" | "urgent" | "vip";
 const PRIORITY_CONFIG: Record<ServicePriority, { label: string; cls: string; icon: string }> = {
   normal: { label: "ปกติ",     cls: "bg-gray-100 text-gray-600",    icon: "⚪" },
   urgent: { label: "เร่งด่วน", cls: "bg-orange-100 text-orange-700", icon: "🔶" },
-  vip:    { label: "VIP",      cls: "bg-purple-100 text-purple-700", icon: "👑" },
+  vip:    { label: "VIP",      cls: "bg-weeeu-surface text-weeeu-dark", icon: "👑" },
 };
 
 type RepairStatus =
@@ -122,8 +123,8 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   traveling: "bg-amber-100 text-amber-700",
   arrived: "bg-amber-100 text-amber-700",
   awaiting_entry: "bg-orange-100 text-orange-700",
-  inspecting: "bg-purple-100 text-purple-700",
-  awaiting_decision: "bg-purple-100 text-purple-700",
+  inspecting: "bg-weeeu-surface text-weeeu-dark",
+  awaiting_decision: "bg-weeeu-surface text-weeeu-dark",
   awaiting_user: "bg-red-100 text-red-700",
   in_progress: "bg-weeeu-surface text-weeeu-primary",
   completed: "bg-green-100 text-green-700",
@@ -132,11 +133,11 @@ const STATUS_COLOR: Record<RepairStatus, string> = {
   cancelled: "bg-gray-100 text-gray-500",
   converted_scrap: "bg-teal-100 text-teal-700",
   // Pickup workflow
-  en_route_pickup: "bg-purple-100 text-purple-700",
-  picked_up: "bg-purple-100 text-purple-700",
+  en_route_pickup: "bg-weeeu-surface text-weeeu-dark",
+  picked_up: "bg-weeeu-surface text-weeeu-dark",
   appliance_at_shop: "bg-weeeu-surface text-weeeu-dark",
   ready: "bg-green-100 text-green-700",
-  en_route_delivery: "bg-purple-100 text-purple-700",
+  en_route_delivery: "bg-weeeu-surface text-weeeu-dark",
   delivered: "bg-yellow-100 text-yellow-700",
   confirmed: "bg-green-100 text-green-700",
   // Parcel workflow
@@ -554,9 +555,9 @@ export default function RepairJobDetailPage() {
 
       {/* Pickup: en_route_pickup tracking */}
       {job.status === "en_route_pickup" && (
-        <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-          <p className="text-sm font-semibold text-purple-800">🚛 ช่างกำลังออกมารับเครื่อง</p>
-          <p className="text-xs text-purple-600 mt-1">เตรียมเครื่องให้พร้อม — ช่างจะมาถึงตามนัด</p>
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-weeeu-text">🚛 ช่างกำลังออกมารับเครื่อง</p>
+          <p className="text-xs text-weeeu-dark mt-1">เตรียมเครื่องให้พร้อม — ช่างจะมาถึงตามนัด</p>
         </div>
       )}
 
@@ -574,9 +575,9 @@ export default function RepairJobDetailPage() {
 
       {/* Pickup: en_route_delivery tracking */}
       {job.status === "en_route_delivery" && (
-        <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-          <p className="text-sm font-semibold text-purple-800">🚛 ช่างกำลังส่งเครื่องคืน</p>
-          <p className="text-xs text-purple-600 mt-1">เตรียมตัวรับเครื่อง — ช่างกำลังเดินทางมาส่ง</p>
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+          <p className="text-sm font-semibold text-weeeu-text">🚛 ช่างกำลังส่งเครื่องคืน</p>
+          <p className="text-xs text-weeeu-dark mt-1">เตรียมตัวรับเครื่อง — ช่างกำลังเดินทางมาส่ง</p>
         </div>
       )}
 
@@ -639,6 +640,7 @@ export default function RepairJobDetailPage() {
           <p className="text-xs text-amber-600">เตรียมรับพัสดุ — ตรวจสอบสภาพเครื่องเมื่อได้รับ</p>
         </div>
       )}
+      <PublicQAThread />
     </div>
   );
 }

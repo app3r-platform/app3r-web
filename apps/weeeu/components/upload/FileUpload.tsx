@@ -117,7 +117,7 @@ export function FileUpload({
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         onClick={() => inputRef.current?.click()}
-        className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors"
+        className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center cursor-pointer hover:border-weeeu-primary/40 hover:bg-weeeu-surface/30 transition-colors"
       >
         {uploaded ? (
           <div className="space-y-2">
@@ -160,7 +160,7 @@ export function FileUpload({
           </div>
           <div className="w-full bg-gray-100 rounded-full h-2">
             <div
-              className="bg-indigo-500 h-2 rounded-full transition-all duration-300"
+              className="bg-weeeu-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -178,7 +178,7 @@ export function FileUpload({
       {uploaded && !uploading && (
         <button
           onClick={() => { setUploaded(null); inputRef.current?.click(); }}
-          className="w-full text-xs text-indigo-600 hover:underline"
+          className="w-full text-xs text-weeeu-dark hover:underline"
         >
           เปลี่ยนไฟล์
         </button>

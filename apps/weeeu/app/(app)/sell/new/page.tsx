@@ -62,6 +62,13 @@ export default function SellNewPage() {
   const [usedWarrantyDays, setUsedWarrantyDays] = useState("30");
   const [liabilityPolicy, setLiabilityPolicy] = useState("full_refund");
 
+  // Media (Mockup — 3 รูป + 1 คลิป · create contract 488cae4 ยังไม่รับ media → local preview เท่านั้น)
+  const MAX_IMAGES = 3;
+  const [images, setImages] = useState<{ url: string; name: string }[]>([]);
+  const [clip, setClip] = useState<{ url: string; name: string } | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const clipInputRef = useRef<HTMLInputElement>(null);
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -96,6 +103,25 @@ export default function SellNewPage() {
 
   const removePart = (p: string) => setWorkingParts(prev => prev.filter(x => x !== p));
 
+  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    setImages(prev => {
+      const next = [...prev];
+      for (const f of files) {
+        if (next.length >= MAX_IMAGES) break;
+        next.push({ url: URL.createObjectURL(f), name: f.name });
+      }
+      return next;
+    });
+    e.target.value = "";
+  };
+  const handleRemoveImage = (i: number) => setImages(prev => prev.filter((_, idx) => idx !== i));
+  const handleSetClip = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) setClip({ url: URL.createObjectURL(f), name: f.name });
+    e.target.value = "";
+  };
+
   const handlePartKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
@@ -115,6 +141,8 @@ export default function SellNewPage() {
     if (listingType === "scrap" && workingParts.length === 0) {
       setError("กรุณาระบุชิ้นส่วนที่ใช้งานได้อย่างน้อย 1 รายการ"); return;
     }
+    if (images.length < MAX_IMAGES) { setError(`กรุณาเพิ่มรูปสินค้าให้ครบ ${MAX_IMAGES} รูป`); return; }
+    if (!clip) { setError("กรุณาเพิ่มคลิปวิดีโอสินค้า 1 คลิป"); return; }
     setError("");
     setSubmitting(true);
     try {
@@ -441,6 +469,64 @@ export default function SellNewPage() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Media — 3 รูป + 1 คลิป (Mockup — local preview, create contract ยังไม่รับ media) */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          รูปและคลิปสินค้า <span className="text-red-500">*</span>
+        </p>
+        <p className="text-xs text-gray-400">เพิ่มรูป {MAX_IMAGES} รูป + คลิปวิดีโอ 1 คลิป เพื่อให้ผู้ซื้อเห็นสภาพจริง</p>
+
+        {/* 3 image slots */}
+        <div className="grid grid-cols-3 gap-2">
+          {Array.from({ length: MAX_IMAGES }).map((_, slot) => {
+            const img = images[slot];
+            return img ? (
+              <div key={slot} className="relative aspect-square rounded-xl overflow-hidden border border-gray-200">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img.url} alt={`รูปสินค้า ${slot + 1}`} className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(slot)}
+                  className="absolute top-1 right-1 bg-black/50 text-white text-xs w-5 h-5 rounded-full leading-none flex items-center justify-center"
+                >×</button>
+              </div>
+            ) : (
+              <button
+                key={slot}
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                className="aspect-square rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-weeeu-primary/40 hover:text-weeeu-primary transition-colors"
+              >
+                <span className="text-xl">📷</span>
+                <span className="text-[10px] mt-0.5">รูป {slot + 1}</span>
+              </button>
+            );
+          })}
+        </div>
+        <input ref={imageInputRef} type="file" accept="image/*" multiple onChange={handleAddImage} className="hidden" />
+
+        {/* 1 clip slot */}
+        {clip ? (
+          <div className="relative rounded-xl overflow-hidden border border-gray-200">
+            <video src={clip.url} className="w-full max-h-48 bg-black" controls />
+            <button
+              type="button"
+              onClick={() => setClip(null)}
+              className="absolute top-1 right-1 bg-black/50 text-white text-xs w-5 h-5 rounded-full leading-none flex items-center justify-center"
+            >×</button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => clipInputRef.current?.click()}
+            className="w-full py-3 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center gap-2 text-gray-400 hover:border-weeeu-primary/40 hover:text-weeeu-primary transition-colors text-sm"
+          >
+            <span className="text-lg">🎬</span> เพิ่มคลิปวิดีโอ (1 คลิป)
+          </button>
+        )}
+        <input ref={clipInputRef} type="file" accept="video/*" onChange={handleSetClip} className="hidden" />
       </div>
 
       {/* Description */}

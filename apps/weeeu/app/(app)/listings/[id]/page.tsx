@@ -133,8 +133,11 @@ export default function ListingDetailPage() {
   if (!listing) return null;
 
   // D61 Rule: hide offer button for scrap listings for WeeeU users
-  const canMakeOffer = listing.listingType !== "scrap" &&
-    (listing.status === "announced" || listing.status === "receiving_offers");
+  const isPreSelection = listing.status === "announced" || listing.status === "receiving_offers";
+  const canMakeOffer = listing.listingType !== "scrap" && isPreSelection;
+  // GR-8 engagement counters — แสดงเฉพาะก่อนเลือกข้อเสนอ (ซ่อนหลัง offer_selected/matched)
+  const showEngagement = isPreSelection &&
+    (typeof listing.viewCount === "number" || typeof listing.offerCount === "number");
 
   return (
     <div className="max-w-xl space-y-5">
@@ -143,15 +146,18 @@ export default function ListingDetailPage() {
         <h1 className="text-xl font-bold text-gray-900">รายละเอียดสินค้า</h1>
       </div>
 
-      {/* Images */}
-      {listing.images && listing.images.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {listing.images.map((img, i) => (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img key={i} src={img.url} alt="" className="w-32 h-32 object-cover rounded-xl border border-gray-200 shrink-0" />
-          ))}
+      {/* Media gallery — รูป + clip slot */}
+      <div className="flex gap-2 overflow-x-auto pb-1">
+        {listing.images?.map((img, i) => (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img key={i} src={img.url} alt="" className="w-32 h-32 object-cover rounded-xl border border-gray-200 shrink-0" />
+        ))}
+        {/* Clip slot (Mockup — Listing DTO ยังไม่มี field คลิป) */}
+        <div className="w-32 h-32 shrink-0 rounded-xl border border-gray-200 bg-gray-900/90 flex flex-col items-center justify-center text-white gap-1">
+          <span className="text-2xl">🎬</span>
+          <span className="text-[10px] opacity-80">คลิปวิดีโอสินค้า</span>
         </div>
-      )}
+      </div>
 
       {/* Main info */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
@@ -172,6 +178,14 @@ export default function ListingDetailPage() {
         </div>
 
         <p className="text-2xl font-bold text-weeeu-primary">{listing.price.toLocaleString()} ฿</p>
+
+        {showEngagement && (
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            <span>👁 ดู {(listing.viewCount ?? 0).toLocaleString()}</span>
+            <span>·</span>
+            <span>📩 ข้อเสนอ {(listing.offerCount ?? 0).toLocaleString()}</span>
+          </div>
+        )}
 
         <div className="border-t border-gray-50 pt-3 space-y-2">
           <InfoRow label="จัดส่ง" value={listing.deliveryMethods.map(d => DELIVERY_LABEL[d] ?? d).join(", ")} />

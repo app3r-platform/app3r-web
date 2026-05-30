@@ -120,7 +120,7 @@ const STATUS_COLOR: Record<DisputeStatus, string> = {
   open:                "bg-yellow-50 border-yellow-200 text-yellow-800",
   evidence_collection: "bg-amber-50 border-amber-200 text-amber-800",
   negotiating:         "bg-sky-50 border-sky-200 text-sky-700",
-  escalated_admin:     "bg-purple-50 border-purple-200 text-purple-800",
+  escalated_admin:     "bg-weeeu-surface border-weeeu-primary/20 text-weeeu-text",
   resolved_customer:   "bg-green-50 border-green-200 text-green-800",
   resolved_weeer:      "bg-orange-50 border-orange-200 text-orange-800",
   resolved_split:      "bg-teal-50 border-teal-200 text-teal-800",
@@ -409,8 +409,8 @@ export default function DisputePage() {
 
           {/* ── Admin note ─────────────────────────────────────────────────── */}
           {data.admin_note && (
-            <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
-              <p className="text-xs font-semibold text-purple-700 mb-1">📋 บันทึก Admin (Tier 4)</p>
+            <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4">
+              <p className="text-xs font-semibold text-weeeu-dark mb-1">📋 บันทึก Admin (Tier 4)</p>
               <p className="text-sm text-gray-700">{data.admin_note}</p>
             </div>
           )}
@@ -444,8 +444,8 @@ export default function DisputePage() {
 
           {/* ── Admin escalation notice ─────────────────────────────────────── */}
           {data.status === "escalated_admin" && (
-            <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4 text-center space-y-1">
-              <p className="text-sm font-semibold text-purple-800">⚖️ กำลังรอ Admin ตัดสิน</p>
+            <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 text-center space-y-1">
+              <p className="text-sm font-semibold text-weeeu-text">⚖️ กำลังรอ Admin ตัดสิน</p>
               <p className="text-xs text-gray-500">
                 ผ่านการเจรจา 2 รอบแล้ว — Admin จะตรวจสอบหลักฐานและออกคำตัดสินภายใน 3-5 วันทำการ
               </p>

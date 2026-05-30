@@ -50,13 +50,13 @@ export function CheckoutButton({ serviceId, amount, description, onSuccess, onEr
   return (
     <div className="space-y-3">
       {/* Amount display */}
-      <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-center">
-        <p className="text-xs text-indigo-500 mb-1">ยอดชำระ</p>
-        <p className="text-2xl font-bold text-indigo-700">
+      <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 text-center">
+        <p className="text-xs text-weeeu-primary mb-1">ยอดชำระ</p>
+        <p className="text-2xl font-bold text-weeeu-dark">
           ฿{amount.toLocaleString("th-TH")}
         </p>
         {description && (
-          <p className="text-xs text-indigo-400 mt-1">{description}</p>
+          <p className="text-xs text-weeeu-primary mt-1">{description}</p>
         )}
       </div>
 
