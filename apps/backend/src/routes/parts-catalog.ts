@@ -73,10 +73,12 @@ function mapListing(row: typeof partsListings.$inferSelect) {
     photos: row.photos,
     warrantyDays: row.warrantyDays,
     status: row.status,
-    // Ruling 2: catalog reference DTO — unit_price=THB (ราคาอ้างอิง) + category + shop_name
+    // Ruling 2: catalog reference DTO — unitPrice=THB (ราคาอ้างอิง) + category + shopName
     category: row.category ?? null,
-    // shop_name: ยังไม่มี field ใน schema (users มีแค่ email) → null รอ profile/shop name (gap → HUB)
+    // shopName: ยังไม่มี field ใน schema (users มีแค่ email) → null รอ profile/shop name (gap → HUB)
     shopName: null as string | null,
+    // expose listingMetaId → Parts unblock transition/reviews/Q&A (casing FINAL)
+    listingMetaId: row.listingMetaId ?? null,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   }

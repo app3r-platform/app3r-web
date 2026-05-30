@@ -8,13 +8,18 @@
  *   GET  /api/v1/listings/browse           → public feed ({results,count})        [1E/1F]
  *   GET  /api/v1/listings/{id}             → meta + public counters (GR-8)        [existing]
  *   POST /api/v1/listings/{id}/transition  → D59 state machine + Escrow (D83 1D)  [existing]
- *   POST /api/v1/listings/{id}/select-offer → {offer_id} → selected + offer_selected + escrow [1F]
+ *   POST /api/v1/listings/{id}/select-offer → {offerId} → selected + offer_selected + escrow [1F]
  *   POST /api/v1/listings/{id}/offers      → buyer ยื่น offer (D61)               [1F]
  *   GET  /api/v1/listings/{id}/offers      → offers บน listing (seller view)      [1F]
  *   POST /api/v1/listings/{id}/view        → GR-8 record unique view              [existing]
  *   POST /api/v1/listings/{id}/offer       → increment offer_count (raw)          [existing]
  *
- * Contract (Ruling 1E): snake_case · list browse คืน {results,count} · mine คืน array (ตรง WeeeU fetch)
+ * Contract (HUB Gen 37 casing FINAL): API = camelCase ทั้งหมด (request body + response + DTO)
+ *   - DB columns = snake_case (map ที่ชั้น serialize เท่านั้น — ไม่แตะ migration/schema)
+ *   - envelope: error = { error: {...} } object · /browse = { results, count } · /mine = array
+ *     · GET /{id} = bare object · offers list = array
+ *   (reviews/questions routers แยกไฟล์ใช้ envelope { items })
+ *   B2 category enum (CHECK) = defer → Wave 3 (canonical taxonomy author จากข้อมูลจริง)
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
@@ -58,16 +63,16 @@ const createListingRoute = createRoute({
       content: {
         'application/json': {
           schema: z.object({
-            listing_type: z.enum(['used_appliance', 'scrap']),
-            appliance_id: z.string().uuid().optional(),
-            condition_grade: z.string().optional(),
-            working_parts: z.array(z.string()).optional(),
+            listingType: z.enum(['used_appliance', 'scrap']),
+            applianceId: z.string().uuid().optional(),
+            conditionGrade: z.string().optional(),
+            workingParts: z.array(z.string()).optional(),
             price: z.number().nonnegative(),
-            delivery_methods: z.array(z.string()).default([]),
-            source_warranty: z.number().optional(),
-            additional_warranty: z.number().optional(),
-            scrap_item_id: z.string().uuid().optional(),
-            tambon_id: z.number().int().positive().optional(),
+            deliveryMethods: z.array(z.string()).default([]),
+            sourceWarranty: z.number().optional(),
+            additionalWarranty: z.number().optional(),
+            scrapItemId: z.string().uuid().optional(),
+            tambonId: z.number().int().positive().optional(),
             status: z.enum(['draft', 'announced']).default('draft'),
           }),
         },
@@ -85,8 +90,8 @@ listingsRouter.openapi(createListingRoute, async (c) => {
   if (!user) return unauthorized(c)
   const b = c.req.valid('json')
   const warranty =
-    b.source_warranty != null || b.additional_warranty != null
-      ? { sourceWarranty: b.source_warranty ?? 0, additionalWarranty: b.additional_warranty ?? 0 }
+    b.sourceWarranty != null || b.additionalWarranty != null
+      ? { sourceWarranty: b.sourceWarranty ?? 0, additionalWarranty: b.additionalWarranty ?? 0 }
       : null
 
   const { meta, used } = await db.transaction(async (tx) => {
@@ -94,9 +99,9 @@ listingsRouter.openapi(createListingRoute, async (c) => {
     const [m] = await tx
       .insert(listingMeta)
       .values({
-        listingType: b.listing_type === 'scrap' ? 'scrap' : 'resell',
+        listingType: b.listingType === 'scrap' ? 'scrap' : 'resell',
         ownerId: user.userId,
-        tambonId: b.tambon_id ?? null,
+        tambonId: b.tambonId ?? null,
         state: b.status,
       })
       .returning()
@@ -107,14 +112,14 @@ listingsRouter.openapi(createListingRoute, async (c) => {
         listingMetaId: m!.listingId,
         sellerId: user.userId,
         sellerType: sellerTypeFromRole(user.role),
-        listingType: b.listing_type,
-        applianceId: b.appliance_id ?? null,
+        listingType: b.listingType,
+        applianceId: b.applianceId ?? null,
         warranty,
-        scrapItemId: b.scrap_item_id ?? null,
-        conditionGrade: b.condition_grade ?? null,
-        workingParts: b.working_parts ?? null,
+        scrapItemId: b.scrapItemId ?? null,
+        conditionGrade: b.conditionGrade ?? null,
+        workingParts: b.workingParts ?? null,
         price: String(b.price),
-        deliveryMethods: b.delivery_methods,
+        deliveryMethods: b.deliveryMethods,
         status: b.status,
       })
       .returning()
@@ -143,7 +148,7 @@ const mineRoute = createRoute({
   request: {
     query: z.object({
       status: z.enum(LISTING_STATES).optional(),
-      listing_type: z.string().optional(),
+      listingType: z.string().optional(),
     }),
   },
   responses: { 200: { description: 'My listings' }, 401: { description: 'Unauthorized' } },
@@ -175,13 +180,13 @@ const browseRoute = createRoute({
   summary: 'Public browse feed (live) — {results,count}',
   request: {
     query: z.object({
-      listing_type: z.string().optional(),
-      tambon_id: z.coerce.number().int().positive().optional(),
-      min_price: z.coerce.number().optional(),
-      max_price: z.coerce.number().optional(),
+      listingType: z.string().optional(),
+      tambonId: z.coerce.number().int().positive().optional(),
+      minPrice: z.coerce.number().optional(),
+      maxPrice: z.coerce.number().optional(),
       status: z.enum(PUBLIC_BROWSE_STATES).optional(),
       page: z.coerce.number().int().min(1).optional(),
-      page_size: z.coerce.number().int().min(1).max(100).optional(),
+      pageSize: z.coerce.number().int().min(1).max(100).optional(),
     }),
   },
   responses: { 200: { description: 'Public feed' } },
@@ -192,8 +197,8 @@ listingsRouter.openapi(browseRoute, async (c) => {
   const conds = [
     q.status ? eq(listingMeta.state, q.status) : inArray(listingMeta.state, [...PUBLIC_BROWSE_STATES]),
   ]
-  if (q.tambon_id) conds.push(eq(listingMeta.tambonId, q.tambon_id))
-  const pageSize = q.page_size ?? 20
+  if (q.tambonId) conds.push(eq(listingMeta.tambonId, q.tambonId))
+  const pageSize = q.pageSize ?? 20
   const offset = ((q.page ?? 1) - 1) * pageSize
   const rows = await db
     .select()
@@ -206,10 +211,10 @@ listingsRouter.openapi(browseRoute, async (c) => {
   let results = rows
     .filter((r) => {
       const u = r.used_appliance_listings
-      if (q.listing_type && u?.listingType !== q.listing_type) return false
+      if (q.listingType && u?.listingType !== q.listingType) return false
       const price = u ? Number(u.price) : null
-      if (q.min_price != null && (price == null || price < q.min_price)) return false
-      if (q.max_price != null && (price == null || price > q.max_price)) return false
+      if (q.minPrice != null && (price == null || price < q.minPrice)) return false
+      if (q.maxPrice != null && (price == null || price > q.maxPrice)) return false
       return true
     })
     .map((r) =>
@@ -304,7 +309,7 @@ listingsRouter.openapi(transitionRoute, async (c) => {
   }
 })
 
-// ── POST /{id}/select-offer — {offer_id} → selected + offer_selected + escrow ──
+// ── POST /{id}/select-offer — {offerId} → selected + offer_selected + escrow ──
 const selectOfferRoute = createRoute({
   method: 'post',
   path: '/{id}/select-offer',
@@ -313,7 +318,7 @@ const selectOfferRoute = createRoute({
   security: [{ bearerAuth: [] }],
   request: {
     params: z.object({ id: z.string().uuid() }),
-    body: { content: { 'application/json': { schema: z.object({ offer_id: z.string().uuid() }) } } },
+    body: { content: { 'application/json': { schema: z.object({ offerId: z.string().uuid() }) } } },
   },
   responses: {
     200: { description: 'Offer selected + escrow held' },
@@ -328,7 +333,7 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return unauthorized(c)
   const { id } = c.req.valid('param')
-  const { offer_id } = c.req.valid('json')
+  const { offerId } = c.req.valid('json')
 
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
@@ -336,7 +341,7 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
   if (listing.ownerId !== user.userId && !isAdmin) {
     return c.json({ error: { code: 'FORBIDDEN', message: 'Only listing owner can select offer' } }, 403)
   }
-  const [offer] = await db.select().from(offers).where(eq(offers.id, offer_id)).limit(1)
+  const [offer] = await db.select().from(offers).where(eq(offers.id, offerId)).limit(1)
   if (!offer || offer.listingMetaId !== id) {
     return c.json({ error: { code: 'NOT_FOUND', message: 'Offer not found on this listing' } }, 404)
   }
@@ -344,7 +349,7 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
   try {
     const updated = await db.transaction(async (tx) => {
       // mark selected + reject อื่น ๆ ที่ยัง pending
-      await tx.update(offers).set({ status: 'selected', updatedAt: new Date() }).where(eq(offers.id, offer_id))
+      await tx.update(offers).set({ status: 'selected', updatedAt: new Date() }).where(eq(offers.id, offerId))
       await tx
         .update(offers)
         .set({ status: 'rejected', updatedAt: new Date() })
@@ -362,7 +367,7 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
     })
     void updated
     return c.json(
-      { listingId: res.listingId, state: res.state, offer_id, held_amount: Math.round(Number(offer.offerPrice)) },
+      { listingId: res.listingId, state: res.state, offerId, heldAmount: Math.round(Number(offer.offerPrice)) },
       200,
     )
   } catch (err) {
@@ -387,8 +392,8 @@ const createOfferRoute = createRoute({
       content: {
         'application/json': {
           schema: z.object({
-            offer_price: z.number().nonnegative(),
-            delivery_method: z.string(),
+            offerPrice: z.number().nonnegative(),
+            deliveryMethod: z.string(),
             message: z.string().optional(),
           }),
         },
@@ -417,8 +422,8 @@ listingsRouter.openapi(createOfferRoute, async (c) => {
         listingMetaId: id,
         buyerId: user.userId,
         buyerType: sellerTypeFromRole(user.role),
-        offerPrice: String(b.offer_price),
-        deliveryMethod: b.delivery_method,
+        offerPrice: String(b.offerPrice),
+        deliveryMethod: b.deliveryMethod,
         message: b.message ?? null,
         status: 'pending',
       })
@@ -496,19 +501,19 @@ listingsRouter.openapi(offerRoute, async (c) => {
   return c.json({ offerCount }, 200)
 })
 
-// snake_case offer DTO (D61)
+// offer DTO (D61) — camelCase API contract
 function offerDto(o: typeof offers.$inferSelect) {
   return {
     id: o.id,
-    listing_id: o.listingMetaId,
-    buyer_id: o.buyerId,
-    buyer_type: o.buyerType,
-    offer_price: Number(o.offerPrice),
-    delivery_method: o.deliveryMethod,
+    listingId: o.listingMetaId,
+    buyerId: o.buyerId,
+    buyerType: o.buyerType,
+    offerPrice: Number(o.offerPrice),
+    deliveryMethod: o.deliveryMethod,
     message: o.message,
     status: o.status,
-    created_at: o.createdAt.toISOString(),
-    updated_at: o.updatedAt.toISOString(),
+    createdAt: o.createdAt.toISOString(),
+    updatedAt: o.updatedAt.toISOString(),
   }
 }
 
