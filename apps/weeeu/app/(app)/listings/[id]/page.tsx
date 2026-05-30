@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { listingsApi } from "@/lib/api/listings";
-import { offersApi } from "@/lib/api/offers";
 import type { Listing } from "@/lib/types";
 
 type ListingDetail = Listing & {
@@ -97,10 +96,9 @@ export default function ListingDetailPage() {
     setError("");
     setSubmitting(true);
     try {
-      const res = await offersApi.create({
-        listing_id: id,
-        offer_price: Number(offerPrice),
-        delivery_method: deliveryMethod,
+      const res = await listingsApi.createOffer(id, {
+        offerPrice: Number(offerPrice),
+        deliveryMethod: deliveryMethod,
         message: message.trim() || undefined,
       });
       if (!res.ok) throw new Error(await res.text());

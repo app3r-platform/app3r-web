@@ -11,6 +11,8 @@ export interface Appliance {
 
 export interface Listing {
   id: string;
+  // listingMetaId — universal listing_meta id (Backend toListingDto · = id ในปัจจุบัน)
+  listingMetaId?: string;
   sellerId: string;
   sellerType: "WeeeU" | "WeeeR";
   listingType: "used_appliance" | "scrap";
@@ -21,6 +23,10 @@ export interface Listing {
   workingParts?: string[];
   price: number;
   deliveryMethods: string[];
+  // GR-8 public counters + ตำบล (Backend toListingDto camelCase)
+  tambonId?: number | null;
+  viewCount?: number;
+  offerCount?: number;
   status:
     | "announced"
     | "receiving_offers"
@@ -48,8 +54,10 @@ export interface Offer {
   deliveryMethod: string;
   message?: string;
   status: "pending" | "selected" | "rejected" | "withdrawn";
-  expiresAt: string;
+  // expiresAt — ไม่มีใน Backend offerDto (camelCase contract) → optional
+  expiresAt?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 // ─── ScrapItem (D62 verbatim — App3R-Advisor Gen 20) ─────────────────────────
