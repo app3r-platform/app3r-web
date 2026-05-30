@@ -351,14 +351,14 @@ export default function RepairJobDetailPage() {
           )}
           {job.storage_fee_total && job.storage_fee_total > 0 ? (
             <p className="text-sm font-bold text-red-700 mt-1">
-              ค่าฝากสะสม: {job.storage_fee_total.toLocaleString()} Point
+              ค่าฝากสะสม: {job.storage_fee_total.toLocaleString()} พอยต์ทอง
               <span className="text-xs font-normal text-red-500 ml-1">
-                ({job.storage_fee_per_day.toLocaleString()} Point/วัน)
+                ({job.storage_fee_per_day.toLocaleString()} พอยต์ทอง/วัน)
               </span>
             </p>
           ) : (
             <p className="text-xs text-amber-600 mt-1">
-              หากไม่รับตามกำหนด จะมีค่าฝาก {job.storage_fee_per_day.toLocaleString()} Point/วัน
+              หากไม่รับตามกำหนด จะมีค่าฝาก {job.storage_fee_per_day.toLocaleString()} พอยต์ทอง/วัน
             </p>
           )}
         </div>
@@ -427,14 +427,14 @@ export default function RepairJobDetailPage() {
       {(job.original_price || job.inspection_fee) ? (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ราคา</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ราคา (พอยต์ทอง / Gold Point)</p>
           </div>
           <div className="p-5 space-y-3">
-            {job.original_price && <Row label="ราคาที่ตกลง" value={`${job.original_price.toLocaleString()} Point`} />}
+            {job.original_price && <Row label="ราคาที่ตกลง" value={`${job.original_price.toLocaleString()} พอยต์ทอง`} />}
             {job.proposed_price && job.proposed_price !== job.original_price && (
-              <Row label="ราคาที่เสนอใหม่" value={`${job.proposed_price.toLocaleString()} Point`} highlight />
+              <Row label="ราคาที่เสนอใหม่" value={`${job.proposed_price.toLocaleString()} พอยต์ทอง`} highlight />
             )}
-            {job.final_price && <Row label="ราคาสุดท้าย" value={`${job.final_price.toLocaleString()} Point`} />}
+            {job.final_price && <Row label="ราคาสุดท้าย" value={`${job.final_price.toLocaleString()} พอยต์ทอง`} />}
             <Row
               label={
                 job.service_type === "walk_in" ? "ค่าตรวจ (Walk-in)"
@@ -442,12 +442,12 @@ export default function RepairJobDetailPage() {
                 : job.service_type === "parcel" ? "ค่าตรวจ (Parcel)"
                 : "ค่าตรวจ (On-site)"
               }
-              value={`${job.inspection_fee.toLocaleString()} Point`}
+              value={`${job.inspection_fee.toLocaleString()} พอยต์ทอง`}
             />
-            {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} Point`} />}
+            {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} พอยต์ทอง`} />}
             {/* Sub-4: labor/parts breakdown */}
-            {job.labor_cost != null && <Row label="ค่าแรง" value={`${job.labor_cost.toLocaleString()} Point`} />}
-            {job.parts_cost != null && <Row label="ค่าอะไหล่" value={`${job.parts_cost.toLocaleString()} Point`} />}
+            {job.labor_cost != null && <Row label="ค่าแรง" value={`${job.labor_cost.toLocaleString()} พอยต์ทอง`} />}
+            {job.parts_cost != null && <Row label="ค่าอะไหล่" value={`${job.parts_cost.toLocaleString()} พอยต์ทอง`} />}
           </div>
         </div>
       ) : null}

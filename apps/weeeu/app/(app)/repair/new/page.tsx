@@ -583,7 +583,7 @@ export default function RepairNewPage() {
 
             {/* R2-4: Budget slider */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">งบประมาณสูงสุด (Gold Point)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">งบประมาณสูงสุด พอยต์ทอง (Gold Point)</label>
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <button type="button"
@@ -601,7 +601,7 @@ export default function RepairNewPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-weeeu-primary">
-                    {budgetValue === 0 ? "ไม่จำกัด" : `${budgetValue.toLocaleString()} Gold`}
+                    {budgetValue === 0 ? "ไม่จำกัด" : `${budgetValue.toLocaleString()} พอยต์ทอง`}
                   </span>
                   {budgetValue > 0 && (
                     <button type="button" onClick={() => setBudgetValue(0)}
@@ -629,7 +629,7 @@ export default function RepairNewPage() {
           </div>
         )}
 
-        {/* R2-5: on-site info — ลบค่าตรวจ 100 Point */}
+        {/* R2-5: on-site info — ลบค่าตรวจ 100 พอยต์ทอง */}
         {serviceType === "on_site" && (
           <div className="bg-weeeu-surface border border-weeeu-primary/10 rounded-xl p-3">
             <p className="text-xs text-weeeu-primary">

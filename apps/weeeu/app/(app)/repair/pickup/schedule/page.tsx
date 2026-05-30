@@ -314,7 +314,7 @@ export default function PickupSchedulePage() {
             {errors.pickup_time && <p className="text-red-500 text-xs mt-1">{errors.pickup_time}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">งบประมาณสูงสุด (Point)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">งบประมาณสูงสุด พอยต์ทอง (Gold Point)</label>
             <input
               type="number"
               value={form.budget_max}

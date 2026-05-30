@@ -137,10 +137,10 @@ export default function DecisionB22Page() {
             <div className="text-center bg-teal-50 rounded-xl p-4">
               <p className="text-xs text-teal-500 mb-1">ราคารับซื้อซาก</p>
               <p className="text-3xl font-bold text-teal-700">{data.scrap_proposed_price.toLocaleString()}</p>
-              <p className="text-sm text-teal-500">Point</p>
+              <p className="text-sm text-teal-500">พอยต์ทอง (Gold Point)</p>
               {data.scrap_baseline_price && (
                 <p className="text-xs text-teal-400 mt-1">
-                  ราคาอ้างอิง: {data.scrap_baseline_price.toLocaleString()} Point
+                  ราคาอ้างอิง: {data.scrap_baseline_price.toLocaleString()} พอยต์ทอง
                 </p>
               )}
             </div>
@@ -183,22 +183,22 @@ export default function DecisionB22Page() {
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">สรุปยอดที่คุณจะได้รับ</p>
             <div className="flex justify-between text-sm">
               <p className="text-gray-500">ราคาซาก</p>
-              <p className="font-medium text-gray-800">+{data.scrap_proposed_price.toLocaleString()} Point</p>
+              <p className="font-medium text-gray-800">+{data.scrap_proposed_price.toLocaleString()} พอยต์ทอง</p>
             </div>
             <div className="flex justify-between text-sm">
               <p className="text-gray-500">ค่าตรวจ (On-site)</p>
-              <p className="font-medium text-red-600">-{data.inspection_fee.toLocaleString()} Point</p>
+              <p className="font-medium text-red-600">-{data.inspection_fee.toLocaleString()} พอยต์ทอง</p>
             </div>
             {data.deposit_amount && (
               <div className="flex justify-between text-sm">
                 <p className="text-gray-500">มัดจำ (หักลบ)</p>
-                <p className="font-medium text-red-600">-{data.deposit_amount.toLocaleString()} Point</p>
+                <p className="font-medium text-red-600">-{data.deposit_amount.toLocaleString()} พอยต์ทอง</p>
               </div>
             )}
             <div className="flex justify-between text-sm font-semibold border-t border-gray-200 pt-2">
               <p className="text-gray-700">รวมสุทธิ</p>
               <p className="text-teal-700">
-                {(data.scrap_proposed_price - data.inspection_fee - (data.deposit_amount ?? 0)).toLocaleString()} Point
+                {(data.scrap_proposed_price - data.inspection_fee - (data.deposit_amount ?? 0)).toLocaleString()} พอยต์ทอง
               </p>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function DecisionB22Page() {
             <div className="bg-white rounded-2xl border border-weeeu-dark p-5 space-y-4">
               <p className="text-sm font-semibold text-weeeu-dark">ต่อรองราคาซาก (รอบ {data.negotiation_round + 1}/{MAX_ROUNDS})</p>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ราคาซากที่คุณต้องการ (Point)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ราคาซากที่คุณต้องการ (พอยต์ทอง)</label>
                 <input
                   type="number"
                   value={counterPrice}
@@ -274,7 +274,7 @@ export default function DecisionB22Page() {
             <div className="bg-white rounded-2xl border border-red-200 p-5 space-y-4">
               <p className="text-sm font-semibold text-red-700">ยืนยันการปฏิเสธ?</p>
               <p className="text-xs text-red-600">
-                งานจะถูกยกเลิก — ค่าตรวจ {data.inspection_fee.toLocaleString()} Point จะถูกยึด
+                งานจะถูกยกเลิก — ค่าตรวจ {data.inspection_fee.toLocaleString()} พอยต์ทอง จะถูกยึด
                 {data.deposit_amount && ` + มัดจำตามเงื่อนไขข้อเสนอเดิม`}
               </p>
               <div className="flex gap-2">

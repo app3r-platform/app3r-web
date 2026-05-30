@@ -134,25 +134,25 @@ export default function DecisionB12Page() {
         <>
           {/* Price comparison */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">เปรียบเทียบราคา</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">เปรียบเทียบราคา (พอยต์ทอง / Gold Point)</p>
             <div className="flex items-center justify-between gap-4">
               <div className="flex-1 text-center bg-gray-50 rounded-xl p-3">
                 <p className="text-xs text-gray-400 mb-1">ราคาเดิม</p>
                 <p className="text-lg font-bold text-gray-600">{data.original_price.toLocaleString()}</p>
-                <p className="text-xs text-gray-400">Point</p>
+                <p className="text-xs text-gray-400">พอยต์ทอง</p>
               </div>
               <span className="text-gray-400">→</span>
               <div className="flex-1 text-center bg-orange-50 rounded-xl p-3">
                 <p className="text-xs text-orange-500 mb-1">ราคาใหม่</p>
                 <p className="text-xl font-bold text-orange-700">{data.proposed_price.toLocaleString()}</p>
-                <p className="text-xs text-orange-500">Point</p>
+                <p className="text-xs text-orange-500">พอยต์ทอง</p>
               </div>
             </div>
             <div className="text-center">
               <p className="text-sm text-gray-500">
                 ราคาเพิ่มขึ้น{" "}
                 <span className="font-semibold text-orange-600">
-                  +{(data.proposed_price - data.original_price).toLocaleString()} Point
+                  +{(data.proposed_price - data.original_price).toLocaleString()} พอยต์ทอง
                 </span>
               </p>
             </div>
@@ -165,7 +165,7 @@ export default function DecisionB12Page() {
               {data.parts_added.map((p, i) => (
                 <div key={i} className="flex items-start justify-between gap-3">
                   <p className="text-sm text-gray-700">{p.name} × {p.qty}</p>
-                  <p className="text-sm font-medium text-gray-800">{p.price.toLocaleString()} Point</p>
+                  <p className="text-sm font-medium text-gray-800">{p.price.toLocaleString()} พอยต์ทอง</p>
                 </div>
               ))}
             </div>
@@ -183,7 +183,7 @@ export default function DecisionB12Page() {
           <div className="bg-gray-50 rounded-xl p-3">
             <p className="text-xs text-gray-500">
               หากปฏิเสธ: <strong>{DEPOSIT_REJECT_LABEL[data.deposit_policy_when_user_rejects_change]}</strong>
-              {data.deposit_amount && ` (มัดจำ ${data.deposit_amount.toLocaleString()} Point)`}
+              {data.deposit_amount && ` (มัดจำ ${data.deposit_amount.toLocaleString()} พอยต์ทอง)`}
             </p>
           </div>
 
@@ -228,7 +228,7 @@ export default function DecisionB12Page() {
             <div className="bg-white rounded-2xl border border-weeeu-dark p-5 space-y-4">
               <p className="text-sm font-semibold text-weeeu-dark">ต่อรองราคา (รอบ {data.negotiation_round + 1}/{MAX_ROUNDS})</p>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ราคาที่คุณต้องการ (Point)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ราคาที่คุณต้องการ (พอยต์ทอง)</label>
                 <input
                   type="number"
                   value={counterPrice}
@@ -260,7 +260,7 @@ export default function DecisionB12Page() {
               <p className="text-xs text-red-600">
                 งานจะถูกยกเลิก —{" "}
                 {DEPOSIT_REJECT_LABEL[data.deposit_policy_when_user_rejects_change]}
-                {data.deposit_amount && ` (${data.deposit_amount.toLocaleString()} Point)`}
+                {data.deposit_amount && ` (${data.deposit_amount.toLocaleString()} พอยต์ทอง)`}
               </p>
               <div className="flex gap-2">
                 <button onClick={() => setAction(null)} className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm">
