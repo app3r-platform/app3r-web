@@ -158,7 +158,7 @@ export default function ResellOrderPage() {
     <div className="max-w-xl space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/resell/offers" className="text-gray-500 hover:text-gray-800 text-xl">
+        <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
           ‹
         </Link>
         <h1 className="text-xl font-bold text-gray-900">สถานะคำสั่งซื้อ</h1>
@@ -581,7 +581,7 @@ export default function ResellOrderPage() {
 
       {/* Navigation */}
       <Link
-        href="/resell/offers"
+        href="/offers"
         className="block text-center border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors"
       >
         ← กลับไปข้อเสนอ

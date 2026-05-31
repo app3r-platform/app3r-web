@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { listingsApi } from "@/lib/api/listings";
 import { offersApi } from "@/lib/api/offers";
+import { AdPromoteButton } from "@/components/listing/AdPromoteButton";
 import type { Listing, Offer } from "@/lib/types";
 
 // ─── Demo mock overlay (toggle USE_MOCK = true เพื่อทดสอบ R2/R5) ──────────────
@@ -420,6 +421,11 @@ export default function SellDetailPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* C12 — ลงโฆษณา (โชว์เฉพาะประกาศที่ยัง active) */}
+      {(listing.status === "announced" || listing.status === "receiving_offers") && (
+        <AdPromoteButton listingName={listing.appliance_name ?? undefined} />
       )}
 
       {/* Actions */}

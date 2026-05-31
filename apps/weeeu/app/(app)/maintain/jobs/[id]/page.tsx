@@ -233,7 +233,7 @@ export default function MaintainJobDetailPage() {
             </p>
           </div>
           <Link
-            href={`/repair/book?from_maintain=${id}`}
+            href={`/repair/new`}
             className="block w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm text-center transition-colors"
           >
             🔧 ประกาศซ่อม — สร้างงานซ่อมใหม่
