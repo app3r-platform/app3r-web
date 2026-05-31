@@ -290,7 +290,7 @@ export default function AdminDisputeDetailPage() {
                 value={r}
                 checked={resolution === r}
                 onChange={() => setResolution(r)}
-                className="accent-indigo-600"
+                className="accent-[#2C5E8C]"
               />
               <div className="flex-1">
                 <p className={`text-sm font-semibold ${RESOLUTION_LABEL[r].color.includes("blue") ? "text-blue-700" : RESOLUTION_LABEL[r].color.includes("green") ? "text-green-700" : "text-admin-primary"}`}>
@@ -349,7 +349,7 @@ export default function AdminDisputeDetailPage() {
           <textarea
             value={adminNote}
             onChange={(e) => setAdminNote(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none h-28 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none h-28 focus:outline-none focus:ring-2 focus:ring-[#2C5E8C]/30"
             placeholder="อธิบายเหตุผลการตัดสิน อ้างอิง Offer terms / หลักฐาน / precedent..."
           />
           {!adminNote.trim() && (
