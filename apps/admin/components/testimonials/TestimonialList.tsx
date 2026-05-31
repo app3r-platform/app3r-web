@@ -102,7 +102,7 @@ export default function TestimonialList() {
             type="button"
             onClick={() => {
               setItems(prev => {
-                const sorted = [...prev].sort((a, b) => b.stars - a.stars)
+                const sorted = [...prev].sort((a, b) => b.starsRating - a.starsRating)
                 return sorted.map((t, i) => ({ ...t, sortOrder: i + 1 }))
               })
             }}
