@@ -25,14 +25,21 @@ export function ProgressMediaGallery({ media }: { media: ProgressStepMedia }) {
         </div>
       )}
       {media.videos.length > 0 && (
-        <div className="space-y-1">
+        <div className="space-y-2">
           {media.videos.map((vid) => (
-            <video
-              key={vid.id}
-              src={vid.url}
-              controls
-              className="w-full rounded-lg max-h-48 bg-black"
-            />
+            <div key={vid.id} className="space-y-1">
+              {/* B8 — ป้ายกำกับคลิปก่อน/หลังซ่อม */}
+              {vid.caption && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-weeet-primary bg-weeet-surface/15 border border-weeet-dark/30 rounded-full px-2 py-0.5">
+                  🎬 {vid.caption}
+                </span>
+              )}
+              <video
+                src={vid.url}
+                controls
+                className="w-full rounded-lg max-h-48 bg-black"
+              />
+            </div>
           ))}
         </div>
       )}
