@@ -27,7 +27,7 @@ export function JobProgressFilter<T extends string>({
           onClick={() => onChange(tab.value)}
           className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors
             ${active === tab.value
-              ? "bg-green-700 text-white"
+              ? "bg-[#FF663A] text-white"
               : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
         >
           {tab.label}

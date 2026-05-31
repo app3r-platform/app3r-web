@@ -140,7 +140,7 @@ export default function PushSubscribeButton() {
       <button
         onClick={handleSubscribe}
         disabled={status === "loading" || status === "denied"}
-        className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {status === "loading" ? (
           <>

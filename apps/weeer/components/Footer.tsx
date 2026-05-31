@@ -133,7 +133,7 @@ export default function Footer() {
                       <span className="text-gray-400">{phone.label}: </span>
                       <a
                         href={`tel:${phone.number.replace(/[^+\d]/g, "")}`}
-                        className="hover:text-green-700 transition-colors"
+                        className="hover:text-[#D63B12] transition-colors"
                       >
                         {phone.number}
                       </a>
@@ -154,7 +154,7 @@ export default function Footer() {
                       <span className="text-gray-400">{email.label}: </span>
                       <a
                         href={`mailto:${email.address}`}
-                        className="hover:text-green-700 transition-colors"
+                        className="hover:text-[#D63B12] transition-colors"
                       >
                         {email.address}
                       </a>
@@ -177,7 +177,7 @@ export default function Footer() {
                         href={social.url || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 hover:text-green-700 transition-colors"
+                        className="inline-flex items-center gap-1 hover:text-[#D63B12] transition-colors"
                       >
                         <span>{SOCIAL_ICON[social.platform]}</span>
                         <span>{social.handle}</span>
@@ -192,7 +192,7 @@ export default function Footer() {
                 href={info.mapEmbedUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-green-600 hover:text-green-800 transition-colors"
+                className="inline-flex items-center gap-1 text-[#F04E20] hover:text-[#B8300E] transition-colors"
               >
                 📍 ดูแผนที่
               </a>

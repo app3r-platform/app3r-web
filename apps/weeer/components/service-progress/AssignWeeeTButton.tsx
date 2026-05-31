@@ -67,7 +67,7 @@ export function AssignWeeeTButton({
       <button
         onClick={handleAssign}
         disabled={!selectedId || saving}
-        className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+        className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
       >
         {saving ? "กำลังบันทึก…" : "ยืนยันมอบหมาย"}
       </button>

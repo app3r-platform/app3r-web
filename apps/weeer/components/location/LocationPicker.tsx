@@ -140,7 +140,7 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
         type="button"
         onClick={detectLocation}
         disabled={detecting}
-        className="flex items-center gap-2 text-sm text-green-700 border border-green-200 bg-green-50 rounded-xl px-4 py-2.5 hover:bg-green-100 transition-colors disabled:opacity-60"
+        className="flex items-center gap-2 text-sm text-[#D63B12] border border-[#FFD0BF] bg-[#FFF1ED] rounded-xl px-4 py-2.5 hover:bg-[#FFE0D6] transition-colors disabled:opacity-60"
       >
         {detecting ? (
           <>
@@ -175,7 +175,7 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
           }}
           rows={3}
           placeholder="เช่น 123/45 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ 10110"
-          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none"
         />
       </div>
 
@@ -192,7 +192,7 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
               onClick={() => setServiceArea(km)}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 serviceArea === km
-                  ? "bg-green-600 text-white"
+                  ? "bg-[#FF663A] text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -214,7 +214,7 @@ export default function LocationPicker({ initialLocation, onSave }: LocationPick
         type="button"
         onClick={handleSave}
         disabled={saving || !addressInput.trim()}
-        className="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {saving ? (
           "กำลังบันทึก..."

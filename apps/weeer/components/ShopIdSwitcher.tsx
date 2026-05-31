@@ -32,7 +32,7 @@ export function ShopIdSwitcher({ onShopChange, disabled = false }: ShopIdSwitche
   };
 
   return (
-    <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+    <div className="flex items-center gap-2 bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-3 py-2">
       <span className="text-sm">🏪</span>
       <div className="flex-1 min-w-0">
         <p className="text-xs text-gray-500 leading-none mb-0.5">ร้านปัจจุบัน (demo)</p>
@@ -40,7 +40,7 @@ export function ShopIdSwitcher({ onShopChange, disabled = false }: ShopIdSwitche
           value={shopId}
           onChange={handleChange}
           disabled={disabled}
-          className="text-sm font-semibold text-green-800 bg-transparent border-none outline-none w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          className="text-sm font-semibold text-[#B8300E] bg-transparent border-none outline-none w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {SHOPS_MOCK.map((shop) => (
             <option key={shop.id} value={shop.id}>
@@ -51,7 +51,7 @@ export function ShopIdSwitcher({ onShopChange, disabled = false }: ShopIdSwitche
       </div>
       {currentShop && (
         <div className="shrink-0 text-right">
-          <p className="text-xs text-green-700 font-medium">{currentShop.pointsBalance.toLocaleString()} pts</p>
+          <p className="text-xs text-[#D63B12] font-medium">{currentShop.pointsBalance.toLocaleString()} pts</p>
           <p className="text-xs text-gray-400">{currentShop.address}</p>
         </div>
       )}
