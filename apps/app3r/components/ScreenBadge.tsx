@@ -1,6 +1,12 @@
 "use client";
 // Screen ID Badge — Phase 3 dev tool (ปิดพร้อม NEXT_PUBLIC_DEV_NAV)
+// D15 wire: rendering delegated to the shared @app3r/ui ScreenIdBadge so the
+// Website stops carrying its own inline badge markup (kills the 5x duplication
+// the D15 commons was built to remove). This wrapper keeps the Website-specific
+// path → W-xx screen-ID registry + the dev-only gate (public site must not show
+// the badge in production).
 import { usePathname } from "next/navigation";
+import { ScreenIdBadge } from "@app3r/ui";
 
 type ScreenInfo = { num: string; code: string };
 
@@ -57,12 +63,13 @@ export function ScreenBadge() {
   const info = matchScreen(pathname);
   if (!info) return null;
 
+  // roleTheme = Website brand green (#1E9E5A); pinned top-left to stay clear of
+  // the bottom-right MockAuthSwitcher and not cover page UI.
   return (
-    <div className="fixed top-2 left-2 z-[9997] pointer-events-none select-none">
-      <div className="bg-black/70 backdrop-blur-sm text-white rounded-lg px-2 py-1 text-center shadow-lg">
-        <div className="font-mono text-sm font-bold leading-tight">{info.num}</div>
-        <div className="font-mono text-[10px] opacity-70 leading-tight">{info.code}</div>
-      </div>
-    </div>
+    <ScreenIdBadge
+      screenId={info.num}
+      roleTheme={{ primary: "#1E9E5A" }}
+      position="top-left"
+    />
   );
 }
