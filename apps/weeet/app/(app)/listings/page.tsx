@@ -1,8 +1,9 @@
 "use client";
 // T-17 — ประกาศบริการของฉัน (service listings · listing_meta)
 // W-Round-1 Wave 2 · entry → detail (D83 + Escrow)
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { NearMeFilter } from "@app3r/ui";
 import { getListing, MOCK_LISTING_IDS } from "@/lib/listing-api";
 import {
   type ListingMetaDto,
@@ -22,6 +23,8 @@ const STATE_DOT: Record<string, string> = {
 export default function ServiceListingsPage() {
   const [items, setItems] = useState<ListingMetaDto[]>([]);
   const [loading, setLoading] = useState(true);
+  // GR-10 near-me — set ของ tambon ใกล้ฉัน (null = ไม่กรอง / แสดงทั้งหมด)
+  const [nearbyTambonIds, setNearbyTambonIds] = useState<Set<number> | null>(null);
 
   useEffect(() => {
     Promise.all(MOCK_LISTING_IDS.map((id) => getListing(id).then((r) => r.data).catch(() => null)))
@@ -29,11 +32,37 @@ export default function ServiceListingsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const visibleItems = useMemo(() => {
+    if (!nearbyTambonIds) return items;
+    return items.filter((it) => it.tambonId != null && nearbyTambonIds.has(it.tambonId));
+  }, [items, nearbyTambonIds]);
+
   return (
     <div className="pb-8">
-      <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 z-10">
-        <h1 className="font-bold text-white">ประกาศบริการของฉัน</h1>
-        <p className="text-xs text-gray-500 mt-0.5">งานที่จับคู่แล้ว — ยืนยันส่งมอบเพื่อปล่อยเงิน Escrow</p>
+      <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 z-10 space-y-3">
+        <div>
+          <h1 className="font-bold text-white">ประกาศบริการของฉัน</h1>
+          <p className="text-xs text-gray-500 mt-0.5">งานที่จับคู่แล้ว — ยืนยันส่งมอบเพื่อปล่อยเงิน Escrow</p>
+        </div>
+        {/* GR-10 — กรองงานใกล้ฉัน (NearMeFilter จาก @app3r/ui · roleTheme weeet) */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <NearMeFilter
+            roleTheme={{ primary: "#1696F9" }}
+            defaultRadiusKm={20}
+            onResults={(nearby, origin) =>
+              setNearbyTambonIds(origin ? new Set(nearby.map((n) => n.id)) : null)
+            }
+          />
+          {nearbyTambonIds && (
+            <button
+              type="button"
+              onClick={() => setNearbyTambonIds(null)}
+              className="text-xs text-gray-400 underline hover:text-white"
+            >
+              ล้างตัวกรอง (แสดงทั้งหมด)
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="px-4 pt-4 space-y-3">
@@ -44,15 +73,17 @@ export default function ServiceListingsPage() {
           </div>
         )}
 
-        {!loading && items.length === 0 && (
+        {!loading && visibleItems.length === 0 && (
           <div className="text-center py-12 space-y-2">
             <p className="text-3xl">📋</p>
-            <p className="text-gray-400 text-sm">ยังไม่มีประกาศบริการ</p>
+            <p className="text-gray-400 text-sm">
+              {nearbyTambonIds ? "ไม่มีงานใกล้คุณในรัศมีนี้" : "ยังไม่มีประกาศบริการ"}
+            </p>
           </div>
         )}
 
         {!loading &&
-          items.map((it) => (
+          visibleItems.map((it) => (
             <Link
               key={it.listingId}
               href={`/listings/${it.listingId}`}
