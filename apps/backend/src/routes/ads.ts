@@ -130,16 +130,8 @@ adsRouter.openapi(buyRoute, async (c) => {
 
   try {
     const created = await db.transaction(async (tx) => {
-      if (goldCost > 0) {
-        await debitGold(tx, {
-          userId: user.userId,
-          amount: goldCost,
-          reference: `ad:${listingId}`,
-          idempotencyKey: `ad-buy:${user.userId}:${listingId}:${Date.now()}`,
-          type: 'spend',
-          metadata: { ad: true, position, durationDays },
-        })
-      }
+      // insert ad ก่อน → ได้ adId มาใช้เป็น ledger reference/idempotencyKey
+      // (C12: audit ref = adId · stable idempotent — แก้ปัญหา Date.now() ที่ retry แล้วตัดซ้ำ)
       const [row] = await tx
         .insert(ads)
         .values({
@@ -152,6 +144,17 @@ adsRouter.openapi(buyRoute, async (c) => {
           status: 'pending',
         })
         .returning()
+      // debit Gold (D75 ปัดเต็มมาแล้วใน calcAdCost) — audit log ทุกครั้งผ่าน point_ledger
+      if (goldCost > 0) {
+        await debitGold(tx, {
+          userId: user.userId,
+          amount: goldCost,
+          reference: `ad:${row.id}`,
+          idempotencyKey: `ad-buy:${row.id}`,
+          type: 'spend',
+          metadata: { ad: true, listingId, position, durationDays },
+        })
+      }
       return row
     })
     return c.json({ id: created.id, goldCost: created.goldCost, status: created.status }, 201)

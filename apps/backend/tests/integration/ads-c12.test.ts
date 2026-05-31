@@ -12,8 +12,8 @@
  */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { db } from '../../src/db/client'
-import { ads, users, wallets } from '../../src/db/schema'
-import { eq, sql } from 'drizzle-orm'
+import { ads, users, wallets, pointLedger, listingMeta } from '../../src/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import app from '../../src/app'
 import { signAccessToken } from '../../src/lib/jwt'
 
@@ -312,5 +312,79 @@ describe('C12 Ad System — cancel-refund + list-by-placement', () => {
       await db.delete(ads).where(eq(ads.id, modAd.id))
       await db.delete(ads).where(eq(ads.id, sideAd.id))
     })
+  })
+})
+
+// ── C12 ad-purchase debit (POST buy) — Point scope: debit Gold + audit + D75 ──
+describe('C12 ad-purchase debit (POST /api/v1/ads) — debit + audit (Point)', () => {
+  let buyer: { id: string; email: string; role: string }
+  let poor: { id: string; email: string; role: string }
+  let listingId: string
+
+  beforeAll(async () => {
+    buyer = await createTestUser('ads-c12-buydebit@test.app', 'weeer')
+    poor = await createTestUser('ads-c12-poor@test.app', 'weeer')
+    await seedWallet(buyer.id, 500)
+    await seedWallet(poor.id, 5)
+    // listing_meta จริง (FK ของ ads.listing_id) — owner = buyer
+    const [lm] = await db
+      .insert(listingMeta)
+      .values({ listingType: 'resell', ownerId: buyer.id, state: 'announced' })
+      .returning()
+    listingId = lm!.listingId
+  })
+
+  afterAll(async () => {
+    await db.delete(ads).where(eq(ads.advertiserUserId, buyer.id))
+    await db.delete(ads).where(eq(ads.advertiserUserId, poor.id))
+    await db.delete(listingMeta).where(eq(listingMeta.listingId, listingId))
+  })
+
+  it('debits Gold (D75) + writes single audit ledger row (ref=ad:<adId>, idemp=ad-buy:<adId>)', async () => {
+    // sidebar = 3 Gold/วัน × 10 วัน = 30 (D75 Math.round ปัดเต็ม)
+    const balanceBefore = await getWalletBalance(buyer.id)
+    const headers = await bearerHeader(buyer.id, 'weeer')
+    const res = await app.request('/api/v1/ads', {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ listingId, position: 'sidebar', durationDays: 10 }),
+    })
+    expect(res.status).toBe(201)
+    const body = await res.json()
+    expect(body.goldCost).toBe(30)
+    expect(body.status).toBe('pending')
+
+    // wallet ถูกตัด 30
+    expect(await getWalletBalance(buyer.id)).toBe(balanceBefore - 30)
+
+    // audit: ledger row เดียว · ref=ad:<adId> · spend · cash · debit · amount 30
+    const rows = await db
+      .select()
+      .from(pointLedger)
+      .where(and(eq(pointLedger.reference, `ad:${body.id}`), eq(pointLedger.userId, buyer.id)))
+    expect(rows.length).toBe(1)
+    expect(rows[0]!.direction).toBe('debit')
+    expect(rows[0]!.pointType).toBe('cash')
+    expect(rows[0]!.type).toBe('spend')
+    expect(rows[0]!.amount).toBe(30)
+    expect(rows[0]!.idempotencyKey).toBe(`ad-buy:${body.id}`)
+  })
+
+  it('insufficient Gold → 400, wallet unchanged, ad+ledger rolled back', async () => {
+    const balanceBefore = await getWalletBalance(poor.id) // 5 < 30
+    const headers = await bearerHeader(poor.id, 'weeer')
+    const res = await app.request('/api/v1/ads', {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ listingId, position: 'sidebar', durationDays: 10 }),
+    })
+    expect(res.status).toBe(400)
+    // wallet ไม่เปลี่ยน
+    expect(await getWalletBalance(poor.id)).toBe(balanceBefore)
+    // transaction rollback ครบ → ไม่มี ledger row + ไม่มี ad ของ poor
+    const ledger = await db.select({ id: pointLedger.id }).from(pointLedger).where(eq(pointLedger.userId, poor.id))
+    expect(ledger.length).toBe(0)
+    const poorAds = await db.select().from(ads).where(eq(ads.advertiserUserId, poor.id))
+    expect(poorAds.length).toBe(0)
   })
 })
