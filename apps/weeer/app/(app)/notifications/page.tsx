@@ -24,7 +24,7 @@ export default function NotificationsPage() {
             <span className="text-red-500 text-base">({unreadCount})</span>
           )}
         </h1>
-        <button className="text-sm text-green-700 hover:underline">อ่านทั้งหมด</button>
+        <button className="text-sm text-[#D63B12] hover:underline">อ่านทั้งหมด</button>
       </div>
 
       {/* Push Notification Subscribe Card */}
@@ -41,7 +41,7 @@ export default function NotificationsPage() {
           <div
             key={i}
             className={`p-4 rounded-2xl border transition-colors ${
-              n.unread ? "bg-green-50 border-green-100" : "bg-white border-gray-100"
+              n.unread ? "bg-[#FFF1ED] border-[#FFE0D6]" : "bg-white border-gray-100"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -51,7 +51,7 @@ export default function NotificationsPage() {
                   <span className={`text-sm font-semibold ${n.unread ? "text-gray-900" : "text-gray-700"}`}>
                     {n.title}
                   </span>
-                  {n.unread && <span className="w-2 h-2 bg-green-600 rounded-full shrink-0" />}
+                  {n.unread && <span className="w-2 h-2 bg-[#FF663A] rounded-full shrink-0" />}
                 </div>
                 <p className="text-sm text-gray-600 mt-0.5">{n.body}</p>
                 <p className="text-xs text-gray-400 mt-1">{n.time}</p>

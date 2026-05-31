@@ -99,7 +99,7 @@ export default function ResellListingsNewPage() {
             </div>
           ) : (
             <select value={applianceId} onChange={e => { setApplianceId(e.target.value); setFormErrors(f => ({ ...f, appliance: "" })); }}
-              className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.appliance ? "border-red-400" : "border-gray-200"}`}>
+              className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.appliance ? "border-red-400" : "border-gray-200"}`}>
               <option value="">-- เลือกสินค้า --</option>
               {inventory.map(inv => (
                 <option key={inv.id} value={inv.id}>
@@ -118,7 +118,7 @@ export default function ResellListingsNewPage() {
           </label>
           <input type="number" min={0} value={price}
             onChange={e => { setPrice(e.target.value); setFormErrors(f => ({ ...f, price: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.price ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.price ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.price && <p className="text-xs text-red-500 mt-1">{formErrors.price}</p>}
         </div>
 
@@ -129,7 +129,7 @@ export default function ResellListingsNewPage() {
             {DELIVERY_OPTIONS.map(m => (
               <label key={m}
                 className={`px-3 py-2 rounded-xl border-2 cursor-pointer text-xs font-medium transition-all
-                  ${deliveryMethods.includes(m) ? "border-green-300 bg-green-50 text-green-800" : "border-gray-100 text-gray-600"}`}>
+                  ${deliveryMethods.includes(m) ? "border-[#FF8B66] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="checkbox" className="sr-only" checked={deliveryMethods.includes(m)} onChange={() => toggleDelivery(m)} />
                 {m}
               </label>
@@ -145,12 +145,12 @@ export default function ResellListingsNewPage() {
             <div>
               <label className="block text-xs text-gray-500 mb-1">ประกันต้นทาง</label>
               <input type="number" min={0} value={sourceWarranty} onChange={e => setSourceWarranty(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             </div>
             <div>
               <label className="block text-xs text-gray-500 mb-1">ประกันเพิ่มเติม</label>
               <input type="number" min={0} value={additionalWarranty} onChange={e => setAdditionalWarranty(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             </div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function ResellListingsNewPage() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">หมดอายุประกาศใน (วัน)</label>
           <select value={expiresInDays} onChange={e => setExpiresInDays(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
             <option value="7">7 วัน</option>
             <option value="14">14 วัน</option>
             <option value="30">30 วัน</option>
@@ -171,13 +171,13 @@ export default function ResellListingsNewPage() {
           <label className="block text-sm font-medium text-gray-700 mb-1">รายละเอียดเพิ่มเติม</label>
           <textarea value={description} onChange={e => setDescription(e.target.value)}
             rows={3} placeholder="สภาพ อาการ จุดเด่น ข้อบกพร่อง ฯลฯ"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting || inventory.length === 0}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "📢 ประกาศขาย"}
         </button>
       </form>

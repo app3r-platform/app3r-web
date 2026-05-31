@@ -10,7 +10,7 @@ const DOC_TYPES = [
 
 export default function UploadDocumentsPage() {
   return (
-    <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#FFF1ED] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
         <div className="text-center mb-6">
           <div className="text-4xl mb-3">📄</div>
@@ -24,13 +24,13 @@ export default function UploadDocumentsPage() {
                 {doc.label}
                 {doc.required && <span className="text-red-500 ml-1">*</span>}
               </label>
-              <div className="flex items-center justify-center w-full p-4 border-2 border-dashed border-gray-200 rounded-xl hover:border-green-400 hover:bg-green-50 transition-colors cursor-pointer text-sm text-gray-400">
+              <div className="flex items-center justify-center w-full p-4 border-2 border-dashed border-gray-200 rounded-xl hover:border-[#FF8B66] hover:bg-[#FFF1ED] transition-colors cursor-pointer text-sm text-gray-400">
                 📎 คลิกเพื่อเลือกไฟล์ (PDF, JPG, PNG — สูงสุด 10MB)
               </div>
             </div>
           ))}
           <button type="submit"
-            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors mt-2">
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors mt-2">
             ส่งเอกสาร
           </button>
         </form>

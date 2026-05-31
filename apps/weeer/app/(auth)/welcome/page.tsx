@@ -5,13 +5,13 @@ export const metadata: Metadata = { title: "ยินดีต้อนรับ
 
 export default function WelcomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 px-6 py-12">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFE0D6] px-6 py-12">
       <div className="max-w-sm w-full text-center space-y-8">
         {/* Logo */}
         <div className="space-y-2">
           <div className="text-6xl">♻️</div>
-          <h1 className="text-3xl font-bold text-green-800">WeeeR</h1>
-          <p className="text-green-600 font-medium">แพลตฟอร์มสำหรับผู้ประกอบการ</p>
+          <h1 className="text-3xl font-bold text-[#B8300E]">WeeeR</h1>
+          <p className="text-[#F04E20] font-medium">แพลตฟอร์มสำหรับผู้ประกอบการ</p>
         </div>
 
         {/* Value Props */}
@@ -36,13 +36,13 @@ export default function WelcomePage() {
         <div className="space-y-3 pt-2">
           <Link
             href="/signup"
-            className="block w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3.5 rounded-xl text-center transition-colors"
+            className="block w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3.5 rounded-xl text-center transition-colors"
           >
             สมัครใช้งาน (ฟรี)
           </Link>
           <Link
             href="/login"
-            className="block w-full border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3.5 rounded-xl text-center transition-colors"
+            className="block w-full border-2 border-[#D63B12] text-[#D63B12] hover:bg-[#FFF1ED] font-semibold py-3.5 rounded-xl text-center transition-colors"
           >
             เข้าสู่ระบบ
           </Link>

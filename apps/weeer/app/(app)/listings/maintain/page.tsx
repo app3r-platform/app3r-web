@@ -51,18 +51,18 @@ export default function MaintainListingsPage() {
             ประกาศจากลูกค้า — คลิกเพื่อดูรายละเอียดเต็ม
           </p>
         </div>
-        <Link href="/listings/repair" className="text-xs text-green-600 hover:text-green-800 underline">
+        <Link href="/listings/repair" className="text-xs text-[#F04E20] hover:text-[#B8300E] underline">
           ← งานซ่อม
         </Link>
       </div>
 
       {/* D5 Filter toggle */}
-      <div className="bg-green-50 border border-green-100 rounded-2xl p-4 flex items-center justify-between gap-4">
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-2xl p-4 flex items-center justify-between gap-4">
         <div>
-          <div className="text-sm font-medium text-green-800">
+          <div className="text-sm font-medium text-[#B8300E]">
             {showAll ? "แสดงทุกประเภท" : "แสดงเฉพาะที่ลงทะเบียนรับ"}
           </div>
-          <div className="text-xs text-green-600 mt-0.5">
+          <div className="text-xs text-[#F04E20] mt-0.5">
             ลงทะเบียนรับ:{" "}
             {registeredTypes
               .map((t) => SERVICE_TYPE_SHORT[t])
@@ -76,8 +76,8 @@ export default function MaintainListingsPage() {
           onClick={() => setShowAll((v) => !v)}
           className={`text-xs font-medium px-3 py-1.5 rounded-xl border transition-colors shrink-0 ${
             showAll
-              ? "bg-white border-green-300 text-green-700 hover:bg-green-50"
-              : "bg-green-700 border-green-700 text-white hover:bg-green-800"
+              ? "bg-white border-[#FF8B66] text-[#D63B12] hover:bg-[#FFF1ED]"
+              : "bg-[#FF663A] border-[#FF663A] text-white hover:bg-[#F04E20]"
           }`}
         >
           {showAll ? "← กรองตามที่ลงทะเบียน" : "ดูทั้งหมด"}
@@ -104,7 +104,7 @@ export default function MaintainListingsPage() {
           <p className="text-sm text-gray-500">ไม่มีงานที่ตรงกับประเภทที่ลงทะเบียน</p>
           <button
             onClick={() => setShowAll(true)}
-            className="text-sm text-green-600 underline"
+            className="text-sm text-[#F04E20] underline"
           >
             ดูงานทั้งหมด
           </button>
@@ -115,7 +115,7 @@ export default function MaintainListingsPage() {
             <Link
               key={job.id}
               href={`/listings/maintain/${job.id}`}
-              className="block bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:border-green-200 hover:shadow transition-all"
+              className="block bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:border-[#FFD0BF] hover:shadow transition-all"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
@@ -146,7 +146,7 @@ export default function MaintainListingsPage() {
                 {/* Budget */}
                 <div className="text-right shrink-0">
                   <div className="text-xs text-gray-400">งบประมาณ</div>
-                  <div className="text-sm font-bold text-green-700">{job.estimatedBudget.toLocaleString()} ฿</div>
+                  <div className="text-sm font-bold text-[#D63B12]">{job.estimatedBudget.toLocaleString()} ฿</div>
                   <div className="text-xs text-gray-400">ค่าบริการ {job.feePreview} pts</div>
                 </div>
               </div>

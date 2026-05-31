@@ -21,7 +21,7 @@ export function ProgressMediaGallery({ media }: ProgressMediaGalleryProps) {
           <button
             key={i}
             onClick={() => setLightbox(url)}
-            className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-green-400 transition-colors shrink-0"
+            className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-[#FF8B66] transition-colors shrink-0"
           >
             <Image
               src={url}

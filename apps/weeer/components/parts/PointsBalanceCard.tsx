@@ -9,7 +9,7 @@ interface PointsBalanceCardProps {
 export function PointsBalanceCard({ balance, escrowHeld, shopName }: PointsBalanceCardProps) {
   const available = balance - escrowHeld;
   return (
-    <div className="bg-gradient-to-br from-green-700 to-green-800 rounded-2xl p-4 text-white space-y-2">
+    <div className="bg-gradient-to-br from-[#D63B12] to-[#F04E20] rounded-2xl p-4 text-white space-y-2">
       <p className="text-xs opacity-75">{shopName}</p>
       <div>
         <p className="text-3xl font-bold">{balance.toLocaleString()}</p>

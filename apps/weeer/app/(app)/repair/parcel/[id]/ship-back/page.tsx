@@ -81,14 +81,14 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Job summary */}
-      <div className="bg-teal-50 border border-teal-100 rounded-xl p-4 space-y-1.5">
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4 space-y-1.5">
         <div className="flex items-center gap-2">
           <span className="text-lg">✅</span>
-          <p className="text-sm font-semibold text-teal-800">{job.appliance_name} — ซ่อมเสร็จแล้ว</p>
+          <p className="text-sm font-semibold text-[#B8300E]">{job.appliance_name} — ซ่อมเสร็จแล้ว</p>
         </div>
-        <p className="text-xs text-teal-600">👤 {job.customer_name} · 📍 {job.customer_address}</p>
-        {job.diagnosis_notes && <p className="text-xs text-teal-500 italic">{job.diagnosis_notes}</p>}
-        {job.courier && <p className="text-xs text-teal-500">🚚 ใช้ขนส่ง: {job.courier}</p>}
+        <p className="text-xs text-[#F04E20]">👤 {job.customer_name} · 📍 {job.customer_address}</p>
+        {job.diagnosis_notes && <p className="text-xs text-[#FF663A] italic">{job.diagnosis_notes}</p>}
+        {job.courier && <p className="text-xs text-[#FF663A]">🚚 ใช้ขนส่ง: {job.courier}</p>}
       </div>
 
       {/* Cost summary */}
@@ -107,7 +107,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
               <span>{(p.price * p.qty).toLocaleString()} pts</span>
             </div>
           ))}
-          <div className="flex justify-between text-sm font-bold text-green-700 pt-2 border-t border-gray-100">
+          <div className="flex justify-between text-sm font-bold text-[#D63B12] pt-2 border-t border-gray-100">
             <span>รวม</span>
             <span>{totalCost.toLocaleString()} pts</span>
           </div>
@@ -129,7 +129,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
             <input type="checkbox"
               checked={postPhotoGate}
               onChange={(e) => { setPostPhotoGate(e.target.checked); setFormErrors(f => ({ ...f, postPhoto: "" })); }}
-              className="w-4 h-4 rounded text-green-600" />
+              className="w-4 h-4 rounded text-[#F04E20]" />
             <span className="text-sm font-medium text-gray-700">ยืนยันถ่ายรูปเครื่องหลังซ่อมแล้ว</span>
           </label>
         </div>
@@ -148,7 +148,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
             <input type="checkbox"
               checked={packPhotoGate}
               onChange={(e) => { setPackPhotoGate(e.target.checked); setFormErrors(f => ({ ...f, packPhoto: "" })); }}
-              className="w-4 h-4 rounded text-green-600" />
+              className="w-4 h-4 rounded text-[#F04E20]" />
             <span className="text-sm font-medium text-gray-700">ยืนยันถ่ายรูปการแพ็คแล้ว</span>
           </label>
         </div>
@@ -163,14 +163,14 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
             value={returnTracking}
             onChange={(e) => { setReturnTracking(e.target.value); setFormErrors(f => ({ ...f, tracking: "" })); }}
             placeholder="เช่น TH987654321"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 font-mono ${formErrors.tracking ? "border-red-400" : "border-gray-200"}`}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] font-mono ${formErrors.tracking ? "border-red-400" : "border-gray-200"}`}
           />
           {formErrors.tracking && <p className="text-xs text-red-500 mt-1">{formErrors.tracking}</p>}
         </div>
 
-        <div className="bg-teal-50 border border-teal-100 rounded-xl p-3 flex items-start gap-2">
+        <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 flex items-start gap-2">
           <span className="text-base">🚀</span>
-          <p className="text-xs text-teal-700">
+          <p className="text-xs text-[#D63B12]">
             เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>กำลังส่งคืน</strong> ลูกค้าจะได้รับแจ้งเลข Tracking โดยอัตโนมัติ
           </p>
         </div>
@@ -178,7 +178,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting || !postPhotoGate || !packPhotoGate || !returnTracking.trim()}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
           {submitting ? "กำลังส่ง…" : "🚀 ยืนยันส่งพัสดุคืนลูกค้า"}
         </button>
       </form>

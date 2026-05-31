@@ -31,7 +31,7 @@ export function FeeBreakdown({ totalPoints, quantity, pricePerUnit }: FeeBreakdo
           )}
         </span>
       </div>
-      <div className="flex justify-between font-bold text-green-700 pt-1 border-t border-gray-200">
+      <div className="flex justify-between font-bold text-[#D63B12] pt-1 border-t border-gray-200">
         <span>ยอดโอนให้ผู้ขาย (net)</span>
         <span>{netToSeller.toLocaleString()} pts</span>
       </div>

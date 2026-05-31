@@ -50,7 +50,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
         </div>
         <div>
           <p className="text-gray-400">รวม</p>
-          <p className="font-bold text-green-700">{order.totalPoints.toLocaleString()} pts</p>
+          <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} pts</p>
         </div>
         <div>
           <p className="text-gray-400">จัดส่ง</p>
@@ -89,7 +89,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
           {canReceive && (
             <button
               onClick={() => onAction("receive", order.id)}
-              className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
             >
               ✅ ยืนยันรับของ (P7)
             </button>

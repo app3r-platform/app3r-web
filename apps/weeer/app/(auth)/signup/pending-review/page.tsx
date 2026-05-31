@@ -44,7 +44,7 @@ export default function PendingReviewPage() {
   const cfg = STATUS_CONFIG[MOCK_STATUS];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFE0D6] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md space-y-6">
         {/* Main status card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center space-y-4">
@@ -61,7 +61,7 @@ export default function PendingReviewPage() {
           {MOCK_STATUS === "approved" && (
             <Link
               href="/login"
-              className="block w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors mt-4"
+              className="block w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors mt-4"
             >
               เข้าสู่ระบบ →
             </Link>
@@ -69,7 +69,7 @@ export default function PendingReviewPage() {
           {(MOCK_STATUS === "rejected" || MOCK_STATUS === "additional_required") && (
             <Link
               href="/signup/kyc-upload"
-              className="block w-full border-2 border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-xl transition-colors mt-4"
+              className="block w-full border-2 border-[#D63B12] text-[#D63B12] hover:bg-[#FFF1ED] font-semibold py-3 rounded-xl transition-colors mt-4"
             >
               อัปโหลดเอกสารใหม่
             </Link>
@@ -83,7 +83,7 @@ export default function PendingReviewPage() {
             {STEPS.map((s, i) => (
               <div key={s.label} className="flex items-center gap-3">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0
-                  ${s.done ? "bg-green-600 text-white" : i === STEPS.findIndex((x) => !x.done) ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-400"}`}>
+                  ${s.done ? "bg-[#FF663A] text-white" : i === STEPS.findIndex((x) => !x.done) ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-400"}`}>
                   {s.done ? "✓" : i + 1}
                 </div>
                 <span className={`text-sm ${s.done ? "text-gray-700 font-medium" : "text-gray-400"}`}>{s.label}</span>
@@ -96,7 +96,7 @@ export default function PendingReviewPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2 text-sm text-gray-500">
           <p>📧 แจ้งผลทาง: อีเมลที่ลงทะเบียน</p>
           <p>⏰ ระยะเวลา: 3-5 วันทำการ</p>
-          <p>❓ สอบถาม: <a href="mailto:support@app3r.com" className="text-green-700 hover:underline">support@app3r.com</a></p>
+          <p>❓ สอบถาม: <a href="mailto:support@app3r.com" className="text-[#D63B12] hover:underline">support@app3r.com</a></p>
         </div>
       </div>
     </div>

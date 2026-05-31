@@ -170,7 +170,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
                 </div>
               ))}
               {job.proposed_price && (
-                <div className="flex justify-between text-xs font-bold text-green-700 pt-2 border-t border-gray-100 px-1">
+                <div className="flex justify-between text-xs font-bold text-[#D63B12] pt-2 border-t border-gray-100 px-1">
                   <span>ราคารวมที่ WeeeT เสนอ</span>
                   <span>{job.proposed_price.toLocaleString()} pts</span>
                 </div>
@@ -232,7 +232,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
               value={adjustedPrice}
               onChange={(e) => setAdjustedPrice(e.target.value)}
               placeholder="เช่น 1200"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] bg-white"
             />
           </div>
           {selectedCfg.forwardToUser && (
@@ -252,7 +252,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
           onChange={(e) => setNotes(e.target.value)}
           placeholder="เงื่อนไขพิเศษ หรือข้อความเพิ่มเติม (ถ้ามี)"
           rows={3}
-          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+          className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none"
         />
       </div>
 
@@ -272,7 +272,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
       <button
         onClick={handleSubmit}
         disabled={!selectedBranch || submitting}
-        className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50"
+        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50"
       >
         {submitting ? "กำลังส่ง…" : selectedBranch ? `ยืนยัน ${selectedBranch}` : "เลือกการตัดสินใจก่อน"}
       </button>

@@ -22,7 +22,7 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
       <div className="px-4 pt-10 text-center text-gray-500 space-y-3">
         <p className="text-4xl">📦</p>
         <p className="text-sm">ไม่พบรายการ #{id}</p>
-        <button onClick={() => router.back()} className="text-green-700 text-sm hover:underline">← กลับ</button>
+        <button onClick={() => router.back()} className="text-[#D63B12] text-sm hover:underline">← กลับ</button>
       </div>
     );
   }
@@ -48,7 +48,7 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
             <h2 className="font-bold text-gray-900">{listing.name}</h2>
             <p className="text-xs text-gray-500 mt-0.5">{listing.brand}</p>
           </div>
-          <p className="text-lg font-bold text-green-700 flex-shrink-0">
+          <p className="text-lg font-bold text-[#D63B12] flex-shrink-0">
             {listing.pricePoints.toLocaleString()} pts
           </p>
         </div>

@@ -59,7 +59,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
 
       <ul className="space-y-4">
         {reviews.map((r) => (
-          <li key={r.id} className="border-l-4 border-green-200 pl-4 py-2">
+          <li key={r.id} className="border-l-4 border-[#FFD0BF] pl-4 py-2">
             <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
               <StarRating rating={r.rating} />
               <span className="text-xs text-gray-500">{formatDateTh(r.created_at)}</span>
@@ -74,7 +74,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
               <ul className="mt-3 ml-4 pl-4 border-l-2 border-gray-200 space-y-2">
                 {r.replies.map((rep) => (
                   <li key={rep.id} className="text-xs text-gray-700">
-                    <span className="font-semibold text-green-700">
+                    <span className="font-semibold text-[#D63B12]">
                       เจ้าของประกาศตอบ (Owner reply):
                     </span>{" "}
                     <span className="whitespace-pre-line">{rep.body}</span>

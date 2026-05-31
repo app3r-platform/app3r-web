@@ -23,19 +23,19 @@ export default function RepairDashboardPage() {
   if (!data) return null;
 
   const kpis = [
-    { label: "งานที่กำลังดำเนิน", value: data.active_jobs, icon: "🔧", color: "text-green-700", bg: "bg-green-50" },
+    { label: "งานที่กำลังดำเนิน", value: data.active_jobs, icon: "🔧", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
     { label: "งานเดือนนี้", value: data.jobs_this_month, icon: "📋", color: "text-blue-700", bg: "bg-blue-50" },
     { label: "รายได้เดือนนี้", value: `${data.earnings_this_month.toLocaleString()} pts`, icon: "🪙", color: "text-yellow-700", bg: "bg-yellow-50" },
     { label: "รออนุมัติ", value: data.pending_approvals, icon: "⚠️", color: "text-orange-700", bg: "bg-orange-50" },
     { label: "คะแนนเฉลี่ย", value: data.avg_rating.toFixed(1), icon: "⭐", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
-    { label: "WeeeT ใช้งาน %", value: `${data.weeet_utilization}%`, icon: "👷", color: "text-teal-700", bg: "bg-teal-50" },
+    { label: "WeeeT ใช้งาน %", value: `${data.weeet_utilization}%`, icon: "👷", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">ซ่อม — Dashboard</h1>
-        <Link href="/repair/jobs" className="text-sm text-green-700 hover:underline font-medium">ดูงานทั้งหมด →</Link>
+        <Link href="/repair/jobs" className="text-sm text-[#D63B12] hover:underline font-medium">ดูงานทั้งหมด →</Link>
       </div>
 
       {data.pending_approvals > 0 && (
@@ -66,7 +66,7 @@ export default function RepairDashboardPage() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-gray-700">งานล่าสุด</h2>
-          <Link href="/repair/jobs" className="text-xs text-green-700 hover:underline">ดูทั้งหมด</Link>
+          <Link href="/repair/jobs" className="text-xs text-[#D63B12] hover:underline">ดูทั้งหมด</Link>
         </div>
         <div className="space-y-2">
           {data.recent_jobs.length === 0 && (
@@ -74,7 +74,7 @@ export default function RepairDashboardPage() {
           )}
           {data.recent_jobs.map((job) => (
             <Link key={job.id} href={`/repair/jobs/${job.id}`}
-              className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all">
+              className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-[#FFD0BF] hover:shadow-sm transition-all">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-gray-800 truncate">{job.appliance_name}</p>
@@ -94,13 +94,13 @@ export default function RepairDashboardPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/repair/announcements"
-          className="bg-white border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all text-center">
+          className="bg-white border border-gray-100 rounded-xl p-4 hover:border-[#FFD0BF] hover:shadow-sm transition-all text-center">
           <div className="text-2xl mb-1">📢</div>
           <p className="text-sm font-semibold text-gray-800">ประกาศรับงาน</p>
           <p className="text-xs text-gray-400 mt-0.5">ยื่นข้อเสนอใหม่</p>
         </Link>
         <Link href="/repair/jobs"
-          className="bg-white border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all text-center">
+          className="bg-white border border-gray-100 rounded-xl p-4 hover:border-[#FFD0BF] hover:shadow-sm transition-all text-center">
           <div className="text-2xl mb-1">📋</div>
           <p className="text-sm font-semibold text-gray-800">งานทั้งหมด</p>
           <p className="text-xs text-gray-400 mt-0.5">จัดการ + ติดตาม</p>

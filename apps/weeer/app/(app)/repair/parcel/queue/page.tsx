@@ -47,7 +47,7 @@ export default function ParcelQueuePage() {
             { label: "รอ Shipping",    value: data.awaiting_shipping, color: "text-orange-700", bg: "bg-orange-50" },
             { label: "กำลังมา",        value: data.in_transit_in,     color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
             { label: "ที่ร้าน",        value: data.at_shop,           color: "text-yellow-700", bg: "bg-yellow-50" },
-            { label: "พร้อมส่งคืน",   value: data.ready_to_ship,     color: "text-teal-700",   bg: "bg-teal-50"   },
+            { label: "พร้อมส่งคืน",   value: data.ready_to_ship,     color: "text-[#D63B12]",   bg: "bg-[#FFF1ED]"   },
           ].map((k) => (
             <div key={k.label} className={`${k.bg} rounded-xl p-3 text-center`}>
               <p className={`text-xl font-bold ${k.color}`}>{k.value}</p>
@@ -105,7 +105,7 @@ export default function ParcelQueuePage() {
                   )}
                 </div>
                 <Link href={action.href}
-                  className="shrink-0 bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                  className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
                   {action.label}
                 </Link>
               </div>

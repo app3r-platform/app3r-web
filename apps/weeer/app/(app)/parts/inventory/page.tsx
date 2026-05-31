@@ -268,7 +268,7 @@ export default function InventoryPage() {
         </div>
         <button
           onClick={openAdd}
-          className="shrink-0 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+          className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
         >
           + เพิ่มสินค้า
         </button>
@@ -279,12 +279,12 @@ export default function InventoryPage() {
         <input
           type="text" placeholder="ค้นหาชื่อสินค้า / SKU…"
           value={search} onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
         />
         <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
           {(["grid", "list"] as const).map((m) => (
             <button key={m} onClick={() => setViewMode(m)} title={m}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${viewMode === m ? "bg-white shadow-sm text-green-700" : "text-gray-400 hover:text-gray-600"}`}>
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${viewMode === m ? "bg-white shadow-sm text-[#D63B12]" : "text-gray-400 hover:text-gray-600"}`}>
               {m === "grid" ? "⊞" : "☰"}
             </button>
           ))}
@@ -296,7 +296,7 @@ export default function InventoryPage() {
         <div className="flex gap-1.5 flex-wrap">
           {CATEGORIES.map((c) => (
             <button key={c} onClick={() => setCatFilter(c)}
-              className={`text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${catFilter === c ? "bg-green-700 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+              className={`text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${catFilter === c ? "bg-[#FF663A] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
               {c}
             </button>
           ))}
@@ -321,7 +321,7 @@ export default function InventoryPage() {
           <span className="text-4xl">📦</span>
           <p className="text-sm">ไม่พบสินค้าที่ตรงกัน</p>
           {active.length === 0 && (
-            <button onClick={openAdd} className="text-xs text-green-700 hover:underline">
+            <button onClick={openAdd} className="text-xs text-[#D63B12] hover:underline">
               เพิ่มสินค้าแรกของคลัง
             </button>
           )}
@@ -366,12 +366,12 @@ export default function InventoryPage() {
                     <p className="text-gray-400 text-[10px]">จอง</p>
                     <p className="font-bold text-orange-500">{item.stockReserved}</p>
                   </div>
-                  <div className="bg-green-50 rounded-lg py-1.5">
+                  <div className="bg-[#FFF1ED] rounded-lg py-1.5">
                     <p className="text-gray-400 text-[10px]">ใช้ได้</p>
-                    <p className="font-bold text-green-700">{avail(item)}</p>
+                    <p className="font-bold text-[#D63B12]">{avail(item)}</p>
                   </div>
                 </div>
-                <p className="text-xs font-semibold text-green-700">{item.pricePerUnit.toLocaleString()} pts/ชิ้น</p>
+                <p className="text-xs font-semibold text-[#D63B12]">{item.pricePerUnit.toLocaleString()} pts/ชิ้น</p>
                 {item.scrapJobId && (
                   <p className="text-xs text-emerald-600 bg-emerald-50 rounded-lg px-2 py-0.5 truncate">
                     ♻️ จากซาก: {item.scrapJobId}
@@ -393,7 +393,7 @@ export default function InventoryPage() {
                     ✏️ แก้ไข
                   </button>
                   <button onClick={() => setMarketTarget(item)}
-                    className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 text-xs font-medium py-1.5 rounded-lg transition-colors">
+                    className="flex-1 bg-[#FFF1ED] hover:bg-[#FFE0D6] text-[#D63B12] text-xs font-medium py-1.5 rounded-lg transition-colors">
                     🛒 ลงขาย
                   </button>
                   <button onClick={() => setDeleteTarget(item)} title="ลบ"
@@ -449,8 +449,8 @@ export default function InventoryPage() {
                       {item.stockTotal}
                     </td>
                     <td className="px-4 py-3 text-right text-orange-500 font-medium">{item.stockReserved}</td>
-                    <td className="px-4 py-3 text-right text-green-700 font-semibold">{avail(item)}</td>
-                    <td className="px-4 py-3 text-right text-green-700 font-semibold text-xs">
+                    <td className="px-4 py-3 text-right text-[#D63B12] font-semibold">{avail(item)}</td>
+                    <td className="px-4 py-3 text-right text-[#D63B12] font-semibold text-xs">
                       {item.pricePerUnit.toLocaleString()} pts
                     </td>
                     <td className="px-4 py-3">
@@ -462,7 +462,7 @@ export default function InventoryPage() {
                         <button onClick={() => openEdit(item)} title="แก้ไข"
                           className="p-1.5 rounded-lg text-amber-600 hover:bg-amber-50 text-sm">✏️</button>
                         <button onClick={() => setMarketTarget(item)} title="ลงขาย"
-                          className="p-1.5 rounded-lg text-green-600 hover:bg-green-50 text-sm">🛒</button>
+                          className="p-1.5 rounded-lg text-[#F04E20] hover:bg-[#FFF1ED] text-sm">🛒</button>
                         <button onClick={() => setDeleteTarget(item)} title="ลบ"
                           className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 text-sm">🗑</button>
                       </div>
@@ -489,18 +489,18 @@ export default function InventoryPage() {
                 <label className="text-xs font-medium text-gray-600 block mb-1">ชื่อสินค้า <span className="text-red-500">*</span></label>
                 <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   placeholder="ชื่อสินค้า…"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-600 block mb-1">SKU <span className="text-red-500">*</span></label>
                 <input value={form.sku} onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))}
                   placeholder="SKU-001"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-600 block mb-1">หมวด</label>
                 <select value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
                   {CATEGORIES.filter((c) => c !== "ทั้งหมด").map((c) => <option key={c}>{c}</option>)}
                 </select>
               </div>
@@ -520,34 +520,34 @@ export default function InventoryPage() {
                   <label className="text-xs font-medium text-emerald-700 block mb-1">♻️ มาจากงานซาก (Scrap Job ID)</label>
                   <input value={form.scrapJobId} onChange={(e) => setForm((f) => ({ ...f, scrapJobId: e.target.value }))}
                     placeholder="SJ-2026-XXX"
-                    className="w-full border border-emerald-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+                    className="w-full border border-[#FFD0BF] rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
                 </div>
               )}
               <div>
                 <label className="text-xs font-medium text-gray-600 block mb-1">ราคา/หน่วย (pts)</label>
                 <input type="number" min={0} value={form.pricePerUnit}
                   onChange={(e) => setForm((f) => ({ ...f, pricePerUnit: Number(e.target.value) }))}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-600 block mb-1">Low-stock threshold</label>
                 <input type="number" min={1} value={form.lowStockThreshold}
                   onChange={(e) => setForm((f) => ({ ...f, lowStockThreshold: Number(e.target.value) }))}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               {!editTarget && (
                 <div>
                   <label className="text-xs font-medium text-gray-600 block mb-1">จำนวนเริ่มต้น</label>
                   <input type="number" min={0} value={form.stockTotal}
                     onChange={(e) => setForm((f) => ({ ...f, stockTotal: Number(e.target.value) }))}
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
                 </div>
               )}
               <div className={!editTarget ? "" : "col-span-2"}>
                 <label className="text-xs font-medium text-gray-600 block mb-1">รูปภาพ (URL)</label>
                 <input value={form.imageUrl} onChange={(e) => setForm((f) => ({ ...f, imageUrl: e.target.value }))}
                   placeholder="https://…"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
             </div>
             {(!form.name.trim() || !form.sku.trim()) && (
@@ -555,7 +555,7 @@ export default function InventoryPage() {
             )}
             <div className="flex gap-2">
               <button onClick={handleSave} disabled={!form.name.trim() || !form.sku.trim()}
-                className="flex-1 bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
                 {editTarget ? "✅ บันทึกการแก้ไข" : "➕ เพิ่มสินค้า"}
               </button>
               <button onClick={() => setShowAddEdit(false)}
@@ -701,14 +701,14 @@ export default function InventoryPage() {
             <p className="text-sm text-gray-600">
               ต้องการลงขาย <span className="font-semibold">{marketTarget.name}</span> ใน Parts B2B Marketplace?
             </p>
-            <div className="bg-green-50 border border-green-100 rounded-xl p-3 space-y-1.5 text-xs">
+            <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 space-y-1.5 text-xs">
               <div className="flex justify-between">
                 <span className="text-gray-500">สต็อกพร้อมขาย</span>
-                <span className="font-bold text-green-700">{avail(marketTarget)} ชิ้น</span>
+                <span className="font-bold text-[#D63B12]">{avail(marketTarget)} ชิ้น</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">ราคาแนะนำ</span>
-                <span className="font-bold text-green-700">{marketTarget.pricePerUnit.toLocaleString()} pts/ชิ้น</span>
+                <span className="font-bold text-[#D63B12]">{marketTarget.pricePerUnit.toLocaleString()} pts/ชิ้น</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">แหล่งที่มา</span>
@@ -722,7 +722,7 @@ export default function InventoryPage() {
             </p>
             <div className="flex gap-2">
               <Link href="/parts/my-listings" onClick={() => setMarketTarget(null)}
-                className="flex-1 text-center bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                className="flex-1 text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
                 🛒 ไปหน้าลงขาย →
               </Link>
               <button onClick={() => setMarketTarget(null)}

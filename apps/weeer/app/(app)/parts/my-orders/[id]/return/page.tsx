@@ -79,7 +79,7 @@ export default function ReturnPage({ params }: { params: Promise<{ id: string }>
         <div className="flex gap-3 justify-center">
           <button
             onClick={() => router.push(`/parts/my-orders/${id}`)}
-            className="px-5 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium"
+            className="px-5 py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium"
           >
             ดูออเดอร์
           </button>

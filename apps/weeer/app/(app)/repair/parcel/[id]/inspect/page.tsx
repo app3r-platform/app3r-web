@@ -161,7 +161,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
             <input type="checkbox"
               checked={photoGate}
               onChange={(e) => { setPhotoGate(e.target.checked); setFormErrors(f => ({ ...f, photo: "" })); }}
-              className="w-4 h-4 rounded text-green-600"
+              className="w-4 h-4 rounded text-[#F04E20]"
             />
             <span className="text-sm font-medium text-gray-700">📸 ยืนยันถ่ายรูปสภาพเครื่องแล้ว</span>
           </label>

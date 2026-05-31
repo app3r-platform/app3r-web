@@ -165,7 +165,7 @@ export default function PartsOrdersPage() {
             key={t}
             onClick={() => setTab(t)}
             className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${
-              tab === t ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              tab === t ? "bg-white text-[#D63B12] shadow-sm" : "text-gray-500 hover:text-gray-700"
             }`}
           >
             {t === "buyer" ? "🛒 ฝั่งผู้ซื้อ" : "📦 ฝั่งผู้ขาย"}
@@ -196,7 +196,7 @@ export default function PartsOrdersPage() {
           <p className="text-sm text-gray-500">
             {tab === "buyer" ? "ไม่มีคำสั่งซื้อของคุณ" : "ไม่มีคำสั่งซื้อที่คุณเป็นผู้ขาย"}
           </p>
-          <Link href="/parts/marketplace" className="text-sm text-green-600 underline">
+          <Link href="/parts/marketplace" className="text-sm text-[#F04E20] underline">
             เปิดตลาดอะไหล่
           </Link>
         </div>
@@ -236,7 +236,7 @@ export default function PartsOrdersPage() {
                   </div>
                   <div>
                     <div className="text-xs text-gray-400">รวม</div>
-                    <div className="text-sm font-bold text-green-700">{total.toLocaleString()} บาท</div>
+                    <div className="text-sm font-bold text-[#D63B12]">{total.toLocaleString()} บาท</div>
                   </div>
                 </div>
 
@@ -268,7 +268,7 @@ export default function PartsOrdersPage() {
                     <button
                       onClick={() => void handleClose(order.id)}
                       disabled={isActing}
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-xl px-4 py-2.5 transition-colors disabled:opacity-60"
+                      className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-medium rounded-xl px-4 py-2.5 transition-colors disabled:opacity-60"
                     >
                       {isActing ? "กำลังดำเนินการ…" : "✅ ยืนยันรับของ"}
                     </button>

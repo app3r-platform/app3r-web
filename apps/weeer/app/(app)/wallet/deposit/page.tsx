@@ -186,10 +186,10 @@ export default function DepositPage() {
             value={amount}
             onChange={(e) => { setAmount(e.target.value); setErrorMsg(null); }}
             placeholder="เช่น 500"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
           />
           {pointsPreview > 0 && (
-            <p className="text-xs text-green-600 mt-1.5">
+            <p className="text-xs text-[#F04E20] mt-1.5">
               จะได้รับ <strong>{pointsPreview.toLocaleString()} Silver Points</strong>
               {" "}(อัตรา {THB_PER_POINT} บาท/แต้ม)
             </p>
@@ -202,7 +202,7 @@ export default function DepositPage() {
             สลิปการโอนเงิน
           </label>
           {slipUrl ? (
-            <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-green-200">
+            <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-[#FFD0BF]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={slipUrl} alt="สลิปโอนเงิน" className="w-full h-full object-cover" />
               <button
@@ -218,10 +218,10 @@ export default function DepositPage() {
               type="button"
               onClick={() => inputRef.current?.click()}
               disabled={status === "uploading"}
-              className="w-full border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-green-400 hover:bg-green-50 transition-colors disabled:opacity-60"
+              className="w-full border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-[#FF8B66] hover:bg-[#FFF1ED] transition-colors disabled:opacity-60"
             >
               {status === "uploading" ? (
-                <span className="text-sm text-green-600">กำลังอัพโหลด...</span>
+                <span className="text-sm text-[#F04E20]">กำลังอัพโหลด...</span>
               ) : (
                 <>
                   <div className="text-2xl mb-1">🧾</div>
@@ -252,7 +252,7 @@ export default function DepositPage() {
           type="button"
           onClick={handleSubmit}
           disabled={status === "submitting" || status === "uploading" || !amount || !slipUrl}
-          className="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {status === "submitting" ? "กำลังส่งคำขอ..." : "✅ ยืนยันการเติมแต้ม"}
         </button>

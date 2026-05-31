@@ -105,7 +105,7 @@ export default function ServicesPage() {
         </div>
         <Link
           href="/services/new"
-          className="bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+          className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
         >
           + เพิ่มบริการ
         </Link>
@@ -120,7 +120,7 @@ export default function ServicesPage() {
             onClick={() => setStatusFilter(f.value)}
             className={`shrink-0 text-xs font-medium px-3 py-1.5 rounded-full transition-colors
               ${statusFilter === f.value
-                ? "bg-green-700 text-white"
+                ? "bg-[#FF663A] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
           >
             {f.label}
@@ -163,7 +163,7 @@ export default function ServicesPage() {
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🛠️</span>
           <p className="text-sm">ยังไม่มีบริการ</p>
-          <Link href="/services/new" className="mt-3 text-xs text-green-600 hover:underline font-medium">
+          <Link href="/services/new" className="mt-3 text-xs text-[#F04E20] hover:underline font-medium">
             เพิ่มบริการแรก →
           </Link>
         </div>
@@ -174,7 +174,7 @@ export default function ServicesPage() {
         {items.map((svc) => (
           <div
             key={svc.id}
-            className="bg-white border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all"
+            className="bg-white border border-gray-100 rounded-xl p-4 hover:border-[#FFD0BF] hover:shadow-sm transition-all"
           >
             <div className="flex items-start gap-3">
               <div className="flex-1 min-w-0">
@@ -201,7 +201,7 @@ export default function ServicesPage() {
                 {/* Point amount + deadline */}
                 <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-2">
                   {svc.pointAmount && (
-                    <span className="text-xs font-medium text-green-700">
+                    <span className="text-xs font-medium text-[#D63B12]">
                       💰 {Number(svc.pointAmount).toLocaleString()} pts
                     </span>
                   )}
@@ -229,7 +229,7 @@ export default function ServicesPage() {
                     type="button"
                     onClick={() => handlePublish(svc.id)}
                     disabled={actionId === svc.id}
-                    className="text-xs text-green-700 hover:text-green-900 font-medium px-2 py-1 border border-green-100 rounded-lg hover:bg-green-50 transition-colors disabled:opacity-50"
+                    className="text-xs text-[#D63B12] hover:text-[#B8300E] font-medium px-2 py-1 border border-[#FFE0D6] rounded-lg hover:bg-[#FFF1ED] transition-colors disabled:opacity-50"
                   >
                     {actionId === svc.id ? "…" : "เผยแพร่"}
                   </button>

@@ -68,9 +68,9 @@ export default function PartsStockInPage({ params }: { params: Promise<{ id: str
         <h1 className="text-xl font-bold text-gray-900">รับสต๊อกเข้า</h1>
       </div>
 
-      <div className="bg-green-50 border border-green-100 rounded-xl p-4">
-        <p className="text-sm font-semibold text-green-800">{part.name}</p>
-        <p className="text-xs text-green-600">{part.sku} · สต๊อกปัจจุบัน: <strong>{part.stockQty} {part.unit}</strong></p>
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4">
+        <p className="text-sm font-semibold text-[#B8300E]">{part.name}</p>
+        <p className="text-xs text-[#F04E20]">{part.sku} · สต๊อกปัจจุบัน: <strong>{part.stockQty} {part.unit}</strong></p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 bg-white border border-gray-100 rounded-2xl p-5">
@@ -80,7 +80,7 @@ export default function PartsStockInPage({ params }: { params: Promise<{ id: str
           </label>
           <input type="number" min={1} value={qty}
             onChange={e => { setQty(e.target.value); setFormErrors(f => ({ ...f, qty: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.qty ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.qty ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.qty && <p className="text-xs text-red-500 mt-1">{formErrors.qty}</p>}
         </div>
 
@@ -93,7 +93,7 @@ export default function PartsStockInPage({ params }: { params: Promise<{ id: str
             ] as { value: "purchase" | "receive_from_disassembly"; label: string }[]).map(r => (
               <label key={r.value}
                 className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer text-xs font-medium transition-all
-                  ${reason === r.value ? "border-green-300 bg-green-50 text-green-800" : "border-gray-100 text-gray-600"}`}>
+                  ${reason === r.value ? "border-[#FF8B66] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="radio" className="sr-only" checked={reason === r.value} onChange={() => setReason(r.value)} />
                 {r.label}
               </label>
@@ -105,20 +105,20 @@ export default function PartsStockInPage({ params }: { params: Promise<{ id: str
           <label className="block text-sm font-medium text-gray-700 mb-1">เลขอ้างอิง (ใบสั่งซื้อ / ID ซาก)</label>
           <input type="text" value={refId} onChange={e => setRefId(e.target.value)}
             placeholder="PO-001 / SCRAP-A001"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
           <input type="text" value={note} onChange={e => setNote(e.target.value)}
             placeholder="ข้อมูลเพิ่มเติม"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "📦 ยืนยันรับเข้า"}
         </button>
       </form>

@@ -92,7 +92,7 @@ export default function NewPartsRequestPage() {
         <div className="flex gap-3 justify-center">
           <button
             onClick={() => router.push("/parts/requests/my")}
-            className="px-5 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium"
+            className="px-5 py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium"
           >
             ดู Request ของฉัน
           </button>
@@ -137,7 +137,7 @@ export default function NewPartsRequestPage() {
             <input
               {...field("applianceBrand")}
               placeholder="เช่น Daikin"
-              className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400 ${errors.applianceBrand ? "border-red-300" : "border-gray-200"}`}
+              className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A] ${errors.applianceBrand ? "border-red-300" : "border-gray-200"}`}
             />
             {errors.applianceBrand && <p className="text-xs text-red-500 mt-0.5">{errors.applianceBrand}</p>}
           </div>
@@ -147,7 +147,7 @@ export default function NewPartsRequestPage() {
             <input
               {...field("applianceModel")}
               placeholder="เช่น FTXS25"
-              className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400 ${errors.applianceModel ? "border-red-300" : "border-gray-200"}`}
+              className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A] ${errors.applianceModel ? "border-red-300" : "border-gray-200"}`}
             />
             {errors.applianceModel && <p className="text-xs text-red-500 mt-0.5">{errors.applianceModel}</p>}
           </div>
@@ -161,7 +161,7 @@ export default function NewPartsRequestPage() {
           <input
             {...field("partName")}
             placeholder="เช่น บอร์ดควบคุม, มอเตอร์พัดลม"
-            className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400 ${errors.partName ? "border-red-300" : "border-gray-200"}`}
+            className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A] ${errors.partName ? "border-red-300" : "border-gray-200"}`}
           />
           {errors.partName && <p className="text-xs text-red-500 mt-0.5">{errors.partName}</p>}
         </div>
@@ -173,7 +173,7 @@ export default function NewPartsRequestPage() {
             <input
               {...field("partNumber")}
               placeholder="เช่น CTR-001"
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400"
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A]"
             />
           </div>
           {/* Qty */}
@@ -184,7 +184,7 @@ export default function NewPartsRequestPage() {
               min={1}
               max={50}
               {...field("qtyNeeded")}
-              className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400 ${errors.qtyNeeded ? "border-red-300" : "border-gray-200"}`}
+              className={`w-full bg-gray-50 border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A] ${errors.qtyNeeded ? "border-red-300" : "border-gray-200"}`}
             />
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function NewPartsRequestPage() {
           <label className="text-xs text-gray-500 mb-1 block">ความเร่งด่วน</label>
           <select
             {...field("urgency")}
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400"
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A]"
           >
             {(["normal", "urgent", "emergency"] as UrgencyType[]).map((u) => (
               <option key={u} value={u}>{URGENCY_LABEL[u]}</option>
@@ -213,7 +213,7 @@ export default function NewPartsRequestPage() {
               type="number"
               {...field("maxPricePerUnit")}
               placeholder="ไม่บังคับ"
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400"
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A]"
             />
           </div>
           {/* Needed by */}
@@ -222,7 +222,7 @@ export default function NewPartsRequestPage() {
             <input
               type="date"
               {...field("neededBy")}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400"
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A]"
             />
           </div>
         </div>
@@ -233,7 +233,7 @@ export default function NewPartsRequestPage() {
           <input
             {...field("preferredCondition")}
             placeholder="เช่น ใหม่เท่านั้น, มือสองได้"
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-400"
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#FF663A]"
           />
         </div>
       </div>
@@ -242,7 +242,7 @@ export default function NewPartsRequestPage() {
       <button
         onClick={handleSubmit}
         disabled={submitting}
-        className="w-full py-3 bg-green-600 text-white rounded-xl font-medium text-sm hover:bg-green-700 disabled:opacity-60 transition-colors"
+        className="w-full py-3 bg-[#FF663A] text-white rounded-xl font-medium text-sm hover:bg-[#F04E20] disabled:opacity-60 transition-colors"
       >
         {submitting ? "กำลังส่ง..." : "📢 Broadcast คำขอ"}
       </button>

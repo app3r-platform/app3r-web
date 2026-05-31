@@ -232,7 +232,7 @@ export default function WithdrawPage() {
             value={serviceId}
             onChange={(e) => { setServiceId(e.target.value); setErrorMsg(null); }}
             placeholder="xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
           />
           <p className="text-xs text-gray-400 mt-1">
             {/* TODO Sub-7: แทนด้วย dropdown service picker */}
@@ -253,7 +253,7 @@ export default function WithdrawPage() {
               value={amountThb}
               onChange={(e) => { setAmountThb(e.target.value); setErrorMsg(null); }}
               placeholder={`ขั้นต่ำ ${MIN_AMOUNT_THB} บาท`}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400">บาท</span>
           </div>
@@ -265,7 +265,7 @@ export default function WithdrawPage() {
           <select
             value={bankName}
             onChange={(e) => { setBankName(e.target.value); setErrorMsg(null); }}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] bg-white"
           >
             <option value="">-- เลือกธนาคาร --</option>
             {BANK_OPTIONS.map((b) => (
@@ -282,7 +282,7 @@ export default function WithdrawPage() {
             value={accountNo}
             onChange={(e) => { setAccountNo(e.target.value); setErrorMsg(null); }}
             placeholder="เช่น 1234567890"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
           />
           <p className="text-xs text-gray-400 mt-1">10-12 หลัก</p>
         </div>
@@ -297,7 +297,7 @@ export default function WithdrawPage() {
             value={accountName}
             onChange={(e) => { setAccountName(e.target.value); setErrorMsg(null); }}
             placeholder="เช่น นายสมชาย ใจดี"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
           />
         </div>
 
@@ -313,7 +313,7 @@ export default function WithdrawPage() {
           type="button"
           onClick={handleSubmit}
           disabled={step === "submitting"}
-          className="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium rounded-xl px-4 py-3 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {step === "submitting" ? "กำลังส่งคำขอ…" : "💸 ยืนยันการถอนเงิน"}
         </button>

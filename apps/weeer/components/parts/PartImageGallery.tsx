@@ -36,7 +36,7 @@ export function PartImageGallery({ images, name }: PartImageGalleryProps) {
               key={i}
               onClick={() => setSelected(i)}
               className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-colors ${
-                i === selected ? "border-green-500" : "border-transparent"
+                i === selected ? "border-[#FF663A]" : "border-transparent"
               }`}
             >
               <Image src={url} alt={`${name} ${i + 1}`} width={56} height={56} className="w-full h-full object-cover" unoptimized />

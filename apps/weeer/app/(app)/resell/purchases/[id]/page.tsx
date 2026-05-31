@@ -80,7 +80,7 @@ export default async function ResellPurchaseDetailPage({ params }: { params: Pro
       {/* Action */}
       <Link
         href={`/resell/purchases/${id}/inspect`}
-        className="w-full block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
+        className="w-full block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
       >
         รับของแล้ว → ตรวจสภาพ
       </Link>

@@ -38,13 +38,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-3">
             <Image src="/logo/WeeeR.png" alt="WeeeR" width={72} height={72} priority />
           </div>
-          <h1 className="text-2xl font-bold text-green-800">เข้าสู่ระบบ</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">เข้าสู่ระบบ</h1>
           <p className="text-sm text-gray-500 mt-1">WeeeR — แพลตฟอร์มผู้ประกอบการ</p>
         </div>
 
@@ -70,14 +70,14 @@ export default function LoginPage() {
                 onChange={(e) => set("email", e.target.value)}
                 placeholder="example@email.com"
                 disabled={lockout}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-50"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] disabled:bg-gray-50"
               />
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="text-sm font-medium text-gray-700">รหัสผ่าน</label>
-                <Link href="/forgot-password" className="text-xs text-green-700 hover:underline">ลืมรหัสผ่าน?</Link>
+                <Link href="/forgot-password" className="text-xs text-[#D63B12] hover:underline">ลืมรหัสผ่าน?</Link>
               </div>
               <div className="relative">
                 <input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                   onChange={(e) => set("password", e.target.value)}
                   placeholder="รหัสผ่าน"
                   disabled={lockout}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-16 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-50"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-16 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] disabled:bg-gray-50"
                 />
                 <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-2.5 text-xs text-gray-400">
                   {showPw ? "ซ่อน" : "แสดง"}
@@ -99,7 +99,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || lockout}
-              className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
             >
               {loading ? "กำลังเข้าสู่ระบบ…" : "เข้าสู่ระบบ"}
             </button>
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
           <div className="pt-2 text-center text-sm text-gray-500">
             ยังไม่มีบัญชี?{" "}
-            <Link href="/signup" className="text-green-700 font-medium hover:underline">สมัครใช้งาน</Link>
+            <Link href="/signup" className="text-[#D63B12] font-medium hover:underline">สมัครใช้งาน</Link>
           </div>
         </div>
       </div>

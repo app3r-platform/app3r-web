@@ -100,7 +100,7 @@ export default function SettlementsPage() {
         </div>
         <Link
           href="/wallet/withdraw"
-          className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+          className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
         >
           + ถอนเงิน
         </Link>
@@ -115,7 +115,7 @@ export default function SettlementsPage() {
             onClick={() => setStatusFilter(f.value)}
             className={`shrink-0 text-xs font-medium px-3 py-1.5 rounded-full transition-colors
               ${statusFilter === f.value
-                ? "bg-green-600 text-white"
+                ? "bg-[#FF663A] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
           >
             {f.label}
@@ -135,7 +135,7 @@ export default function SettlementsPage() {
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">💸</span>
           <p className="text-sm">ยังไม่มีประวัติการถอนเงิน</p>
-          <Link href="/wallet/withdraw" className="mt-3 text-xs text-green-600 hover:underline font-medium">
+          <Link href="/wallet/withdraw" className="mt-3 text-xs text-[#F04E20] hover:underline font-medium">
             ถอนเงินครั้งแรก →
           </Link>
         </div>

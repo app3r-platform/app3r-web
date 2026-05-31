@@ -121,7 +121,7 @@ export function ListingEngagement({ listingMetaId, initialState, isOwn }: Props)
                   key={s}
                   onClick={() => doTransition(s)}
                   disabled={busy}
-                  className="text-xs font-medium px-3 py-1.5 rounded-full bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white transition-colors"
+                  className="text-xs font-medium px-3 py-1.5 rounded-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 text-white transition-colors"
                 >
                   → {LISTING_STATE_LABEL[s]}
                 </button>
@@ -155,12 +155,12 @@ export function ListingEngagement({ listingMetaId, initialState, isOwn }: Props)
               onChange={(e) => setComment(e.target.value)}
               placeholder="เขียนรีวิว (ไม่บังคับ)"
               rows={2}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-green-500"
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#FF663A]"
             />
             <button
               onClick={submitReview}
               disabled={busy}
-              className="text-sm font-medium px-4 py-1.5 rounded-lg bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white"
+              className="text-sm font-medium px-4 py-1.5 rounded-lg bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 text-white"
             >
               ส่งรีวิว
             </button>
@@ -177,7 +177,7 @@ export function ListingEngagement({ listingMetaId, initialState, isOwn }: Props)
               </div>
               {r.comment && <p className="text-sm text-gray-600">{r.comment}</p>}
               {r.replies.map((rep) => (
-                <p key={rep.id} className="text-xs text-gray-500 bg-white rounded-lg px-3 py-1.5 ml-3 border-l-2 border-green-200">
+                <p key={rep.id} className="text-xs text-gray-500 bg-white rounded-lg px-3 py-1.5 ml-3 border-l-2 border-[#FFD0BF]">
                   💬 {rep.body}
                 </p>
               ))}
@@ -195,12 +195,12 @@ export function ListingEngagement({ listingMetaId, initialState, isOwn }: Props)
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="ถามผู้ขาย…"
-              className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-green-500"
+              className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#FF663A]"
             />
             <button
               onClick={submitQuestion}
               disabled={busy || !question.trim()}
-              className="text-sm font-medium px-4 py-1.5 rounded-lg bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white whitespace-nowrap"
+              className="text-sm font-medium px-4 py-1.5 rounded-lg bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 text-white whitespace-nowrap"
             >
               ถาม
             </button>
@@ -214,7 +214,7 @@ export function ListingEngagement({ listingMetaId, initialState, isOwn }: Props)
             <div key={q.id} className="bg-gray-50 rounded-xl px-4 py-3 space-y-1">
               <p className="text-sm text-gray-700">❓ {q.body}</p>
               {q.replies.map((rep) => (
-                <p key={rep.id} className="text-xs text-gray-500 bg-white rounded-lg px-3 py-1.5 ml-3 border-l-2 border-green-200">
+                <p key={rep.id} className="text-xs text-gray-500 bg-white rounded-lg px-3 py-1.5 ml-3 border-l-2 border-[#FFD0BF]">
                   💬 {rep.body}
                 </p>
               ))}

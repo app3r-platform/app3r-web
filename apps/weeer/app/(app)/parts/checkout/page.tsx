@@ -65,13 +65,13 @@ function CheckoutContent() {
         <div className="text-6xl">✅</div>
         <div>
           <h2 className="text-xl font-bold text-gray-800">สั่งซื้อสำเร็จ!</h2>
-          <p className="text-gray-500 text-sm mt-1">หมายเลขออเดอร์: <span className="font-mono font-medium text-green-700">{done}</span></p>
+          <p className="text-gray-500 text-sm mt-1">หมายเลขออเดอร์: <span className="font-mono font-medium text-[#D63B12]">{done}</span></p>
         </div>
         <p className="text-sm text-gray-500">ผู้ขายจะยืนยันออเดอร์และแจ้งกำหนดส่งต่อไป</p>
         <div className="flex gap-3 justify-center">
           <button
             onClick={() => router.push("/parts/my-orders")}
-            className="px-5 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700"
+            className="px-5 py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium hover:bg-[#F04E20]"
           >
             ดูออเดอร์
           </button>
@@ -93,7 +93,7 @@ function CheckoutContent() {
         <p className="text-gray-500">ไม่มีสินค้าสำหรับ checkout</p>
         <button
           onClick={() => router.push("/parts/cart")}
-          className="px-4 py-2 bg-green-600 text-white rounded-xl text-sm"
+          className="px-4 py-2 bg-[#FF663A] text-white rounded-xl text-sm"
         >
           ดูตะกร้า
         </button>
@@ -128,16 +128,16 @@ function CheckoutContent() {
                   <p className="text-sm font-medium text-gray-800">{item.listing.partName}</p>
                   <p className="text-xs text-gray-500 mt-0.5">
                     {item.qty} × ฿{unitP.toFixed(2)}
-                    {disc > 0 && <span className="text-green-600 ml-1">(-{(disc * 100).toFixed(0)}%)</span>}
+                    {disc > 0 && <span className="text-[#F04E20] ml-1">(-{(disc * 100).toFixed(0)}%)</span>}
                   </p>
                 </div>
-                <p className="text-sm font-bold text-green-700">฿{(unitP * item.qty).toFixed(2)}</p>
+                <p className="text-sm font-bold text-[#D63B12]">฿{(unitP * item.qty).toFixed(2)}</p>
               </div>
             );
           })}
           <div className="px-4 py-2 bg-gray-50 flex justify-between text-sm">
             <span className="text-gray-500">รวม</span>
-            <span className="font-bold text-green-700">฿{group.subtotal.toFixed(2)}</span>
+            <span className="font-bold text-[#D63B12]">฿{group.subtotal.toFixed(2)}</span>
           </div>
         </div>
       ))}
@@ -153,7 +153,7 @@ function CheckoutContent() {
               value={m}
               checked={delivery === m}
               onChange={() => setDelivery(m)}
-              className="w-4 h-4 text-green-600"
+              className="w-4 h-4 text-[#F04E20]"
             />
             <span className="text-sm text-gray-700">{DELIVERY_LABELS[m]}</span>
           </label>
@@ -168,20 +168,20 @@ function CheckoutContent() {
           onChange={(e) => setNote(e.target.value)}
           rows={2}
           placeholder="ระบุรายละเอียดเพิ่มเติม..."
-          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-green-400 resize-none"
+          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#FF8B66] resize-none"
         />
       </div>
 
       {/* Total + confirm */}
-      <div className="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center justify-between">
+      <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-2xl p-4 flex items-center justify-between">
         <div>
           <p className="text-xs text-gray-500">{totalItems} ชิ้น · {groups.length} ร้าน</p>
-          <p className="text-xl font-bold text-green-700">฿{totalThb.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
+          <p className="text-xl font-bold text-[#D63B12]">฿{totalThb.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
         </div>
         <button
           onClick={handleConfirm}
           disabled={confirming}
-          className="px-6 py-3 bg-green-600 text-white rounded-xl font-medium text-sm hover:bg-green-700 disabled:opacity-60 transition-colors"
+          className="px-6 py-3 bg-[#FF663A] text-white rounded-xl font-medium text-sm hover:bg-[#F04E20] disabled:opacity-60 transition-colors"
         >
           {confirming ? "กำลังสั่งซื้อ..." : "ยืนยันสั่งซื้อ"}
         </button>

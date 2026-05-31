@@ -59,7 +59,7 @@ export function OrderActionButtons({
         </button>
       )}
       {showReceive && (
-        <button onClick={onReceive} className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
+        <button onClick={onReceive} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
           ✅ ยืนยันรับของ & ปลด escrow (P7)
         </button>
       )}

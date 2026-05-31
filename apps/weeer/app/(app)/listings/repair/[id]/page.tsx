@@ -66,7 +66,7 @@ export default async function RepairDetailPage({ params }: Props) {
               <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
                 {job.applianceType}
               </span>
-              <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-700">
+              <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-[#FFE0D6] text-[#D63B12]">
                 {serviceLabel}
               </span>
               {job.featured && (
@@ -113,9 +113,9 @@ export default async function RepairDetailPage({ params }: Props) {
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <h2 className="text-sm font-semibold text-gray-800 mb-3">💰 งบประมาณ & ค่าบริการ</h2>
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-green-50 rounded-xl p-3 text-center">
+          <div className="bg-[#FFF1ED] rounded-xl p-3 text-center">
             <div className="text-xs text-gray-500 mb-1">งบประมาณลูกค้า</div>
-            <div className="text-xl font-bold text-green-700">{job.estimatedBudget.toLocaleString()} ฿</div>
+            <div className="text-xl font-bold text-[#D63B12]">{job.estimatedBudget.toLocaleString()} ฿</div>
           </div>
           <div className="bg-blue-50 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-500 mb-1">ค่าบริการ App3R (5%)</div>

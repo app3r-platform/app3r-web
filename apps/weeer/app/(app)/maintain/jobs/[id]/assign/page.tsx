@@ -108,7 +108,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
                   <input type="radio" name="tech" value={s.id}
                     checked={selectedTech === s.id}
                     onChange={() => { setSelectedTech(s.id); setTechError(""); }}
-                    className="text-green-600" />
+                    className="text-[#F04E20]" />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-gray-800">{s.name}</p>

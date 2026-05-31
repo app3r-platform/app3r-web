@@ -44,12 +44,12 @@ function InventoryImportPrompt({
   };
 
   return (
-    <div className="bg-green-50 border border-green-300 rounded-xl p-4 space-y-3">
+    <div className="bg-[#FFF1ED] border border-[#FF8B66] rounded-xl p-4 space-y-3">
       <div className="flex items-start gap-2">
         <span className="text-2xl">📦</span>
         <div>
-          <p className="text-sm font-semibold text-green-800">รับอะไหล่เข้าสต็อก?</p>
-          <p className="text-xs text-green-600 mt-0.5">
+          <p className="text-sm font-semibold text-[#B8300E]">รับอะไหล่เข้าสต็อก?</p>
+          <p className="text-xs text-[#F04E20] mt-0.5">
             ออเดอร์ปิดแล้ว — ต้องการเพิ่ม <strong>{partName}</strong> ({qty} ชิ้น) เข้าคลังอะไหล่ไหม?
           </p>
         </div>
@@ -60,7 +60,7 @@ function InventoryImportPrompt({
       <div className="flex gap-2">
         <button
           onClick={handleImport}
-          className="flex-1 py-2 bg-green-600 text-white rounded-lg text-xs font-medium hover:bg-green-700 transition-colors"
+          className="flex-1 py-2 bg-[#FF663A] text-white rounded-lg text-xs font-medium hover:bg-[#F04E20] transition-colors"
         >
           ✅ เพิ่มเข้าสต็อก
         </button>
@@ -131,7 +131,7 @@ export default function MyOrderDetailPage({
       <div className="flex flex-col items-center justify-center h-48 text-gray-400 space-y-2">
         <span className="text-4xl">🔍</span>
         <p className="text-sm">ไม่พบคำสั่งซื้อ #{id}</p>
-        <Link href="/parts/my-orders" className="text-xs text-green-700 hover:underline mt-1">
+        <Link href="/parts/my-orders" className="text-xs text-[#D63B12] hover:underline mt-1">
           ‹ กลับรายการคำสั่งซื้อ
         </Link>
       </div>
@@ -235,7 +235,7 @@ export default function MyOrderDetailPage({
           </div>
           <div>
             <p className="text-gray-400">รวม</p>
-            <p className="font-bold text-green-700">{order.totalPoints.toLocaleString()} pts</p>
+            <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} pts</p>
           </div>
           <div>
             <p className="text-gray-400">ค่าธรรมเนียม (3%)</p>
@@ -311,7 +311,7 @@ export default function MyOrderDetailPage({
         {canReceive && !receiveResult && (
           <button
             onClick={() => setShowReceiveModal(true)}
-            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl text-sm transition-colors"
           >
             ✅ ยืนยันรับของ (P7)
           </button>
@@ -344,7 +344,7 @@ export default function MyOrderDetailPage({
         {order.stage === "ordered" && role === "seller" && (
           <p className="text-xs text-center text-gray-400">
             ⏳ รอคุณรับออเดอร์ใน{" "}
-            <Link href="/parts/my-listings" className="text-green-700 hover:underline">
+            <Link href="/parts/my-listings" className="text-[#D63B12] hover:underline">
               จัดการร้าน
             </Link>
           </p>
@@ -377,7 +377,7 @@ export default function MyOrderDetailPage({
                       next[i] = e.target.checked;
                       setChecklist(next);
                     }}
-                    className="w-4 h-4 accent-green-700 shrink-0"
+                    className="w-4 h-4 accent-[#FF663A] shrink-0"
                   />
                   <span
                     className={`text-sm leading-snug ${
@@ -408,7 +408,7 @@ export default function MyOrderDetailPage({
               <button
                 onClick={handleReceive}
                 disabled={!checklistAllDone || receiving}
-                className="flex-1 bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+                className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
               >
                 {receiving ? "กำลังยืนยัน…" : "✅ ยืนยันรับของ"}
               </button>

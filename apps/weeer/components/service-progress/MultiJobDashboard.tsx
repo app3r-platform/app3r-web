@@ -54,7 +54,7 @@ export function MultiJobDashboard({
               <Link
                 key={job.id}
                 href={`/repair/jobs/${job.id}/progress`}
-                className="flex items-center justify-between gap-2 hover:bg-green-50 rounded-lg px-2 py-1.5 transition-colors"
+                className="flex items-center justify-between gap-2 hover:bg-[#FFF1ED] rounded-lg px-2 py-1.5 transition-colors"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-medium text-gray-800 truncate">{job.appliance_name}</p>
@@ -78,7 +78,7 @@ export function MultiJobDashboard({
               <Link
                 key={job.id}
                 href={`/maintain/jobs/${job.id}/progress`}
-                className="flex items-center justify-between gap-2 hover:bg-green-50 rounded-lg px-2 py-1.5 transition-colors"
+                className="flex items-center justify-between gap-2 hover:bg-[#FFF1ED] rounded-lg px-2 py-1.5 transition-colors"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-medium text-gray-800 truncate">
@@ -105,10 +105,10 @@ export function MultiJobDashboard({
 
       {/* Footer links */}
       <div className="flex divide-x divide-gray-100">
-        <Link href="/repair/jobs" className="flex-1 text-center text-xs text-green-700 hover:text-green-900 py-3 transition-colors">
+        <Link href="/repair/jobs" className="flex-1 text-center text-xs text-[#D63B12] hover:text-[#B8300E] py-3 transition-colors">
           ดูงานซ่อม →
         </Link>
-        <Link href="/maintain/jobs" className="flex-1 text-center text-xs text-green-700 hover:text-green-900 py-3 transition-colors">
+        <Link href="/maintain/jobs" className="flex-1 text-center text-xs text-[#D63B12] hover:text-[#B8300E] py-3 transition-colors">
           ดูงาน Maintain →
         </Link>
       </div>

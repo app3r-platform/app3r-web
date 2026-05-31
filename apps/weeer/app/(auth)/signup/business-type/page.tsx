@@ -33,11 +33,11 @@ export default function BusinessTypePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
-          <h1 className="text-2xl font-bold text-green-800">ประเภทผู้ประกอบการ</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">ประเภทผู้ประกอบการ</h1>
           <p className="text-sm text-gray-500 mt-1">เลือกประเภทที่ตรงกับธุรกิจของคุณ</p>
         </div>
 
@@ -52,8 +52,8 @@ export default function BusinessTypePage() {
               onClick={() => setSelected(opt.value)}
               className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                 selected === opt.value
-                  ? "border-green-600 bg-green-50"
-                  : "border-gray-200 hover:border-green-300"
+                  ? "border-[#F04E20] bg-[#FFF1ED]"
+                  : "border-gray-200 hover:border-[#FF8B66]"
               }`}
             >
               <div className="flex items-start gap-3">
@@ -62,7 +62,7 @@ export default function BusinessTypePage() {
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-gray-800">{opt.label}</span>
                     {selected === opt.value && (
-                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="text-[#F04E20] font-bold">✓</span>
                     )}
                   </div>
                   <p className="text-sm text-gray-500 mt-0.5">{opt.desc}</p>
@@ -75,7 +75,7 @@ export default function BusinessTypePage() {
             <button
               onClick={handleNext}
               disabled={!selected}
-              className="w-full bg-green-700 hover:bg-green-800 disabled:bg-gray-200 disabled:text-gray-400 text-white font-semibold py-3 rounded-xl transition-colors"
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:bg-gray-200 disabled:text-gray-400 text-white font-semibold py-3 rounded-xl transition-colors"
             >
               ถัดไป →
             </button>

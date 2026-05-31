@@ -106,7 +106,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
             onChange={(e) => { setShopAddress(e.target.value); setFormErrors(f => ({ ...f, address: "" })); }}
             placeholder="เลขที่ ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
             rows={3}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${formErrors.address ? "border-red-400" : "border-gray-200"}`}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formErrors.address ? "border-red-400" : "border-gray-200"}`}
           />
           {formErrors.address && <p className="text-xs text-red-500 mt-1">{formErrors.address}</p>}
         </div>
@@ -121,11 +121,11 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
             {COURIER_OPTIONS.map((c) => (
               <label key={c}
                 className={`flex items-center gap-2 p-2.5 rounded-xl border-2 cursor-pointer transition-all
-                  ${courier === c ? "border-green-300 bg-green-50" : "border-gray-100 hover:border-gray-200"}`}>
+                  ${courier === c ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}`}>
                 <input type="radio" name="courier" value={c}
                   checked={courier === c}
                   onChange={() => { setCourier(c); setFormErrors(f => ({ ...f, courier: "" })); }}
-                  className="text-green-600" />
+                  className="text-[#F04E20]" />
                 <span className="text-sm text-gray-700">{c}</span>
               </label>
             ))}
@@ -134,7 +134,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
             <input
               type="text"
               placeholder="ระบุชื่อขนส่ง"
-              className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
               onChange={(e) => setCourier(e.target.value)}
             />
           )}
@@ -147,11 +147,11 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
             {COST_SPLIT_OPTIONS.map((opt) => (
               <label key={opt.value}
                 className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
-                  ${costSplit === opt.value ? "border-green-300 bg-green-50" : "border-gray-100 hover:border-gray-200"}`}>
+                  ${costSplit === opt.value ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}`}>
                 <input type="radio" name="cost_split" value={opt.value}
                   checked={costSplit === opt.value}
                   onChange={() => setCostSplit(opt.value)}
-                  className="text-green-600 mt-0.5" />
+                  className="text-[#F04E20] mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-gray-800">{opt.label}</p>
                   <p className="text-xs text-gray-500">{opt.desc}</p>
@@ -169,7 +169,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
             onChange={(e) => setNotes(e.target.value)}
             placeholder="ข้อมูลการแพ็ค, ประกันสินค้า, วันที่ต้องการ ฯลฯ"
             rows={2}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none"
           />
         </div>
 
@@ -181,7 +181,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "📦 ยืนยัน Shipping Details"}
         </button>
       </form>

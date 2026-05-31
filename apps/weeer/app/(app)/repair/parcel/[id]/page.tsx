@@ -105,7 +105,7 @@ export default function RepairParcelDetailPage({ params }: { params: Promise<{ i
         </button>
         <Link
           href={`/repair/jobs/c001/assign`}
-          className="w-full block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
+          className="w-full block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
           🔧 มอบหมายช่าง
         </Link>

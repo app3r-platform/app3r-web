@@ -25,7 +25,7 @@ export default function StaffPage() {
           <h1 className="text-xl font-bold text-gray-900">จัดการทีมช่าง (WeeeT)</h1>
           <p className="text-sm text-gray-500 mt-0.5">Mode 1 ฟรี 1 ตัว | Mode 2 เช่ารายปี (5,000 Gold/ปี)</p>
         </div>
-        <button className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
+        <button className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
           👷 เพิ่ม WeeeT (Mode 2)
         </button>
       </div>
@@ -44,7 +44,7 @@ export default function StaffPage() {
         {WEETS.map((w) => (
           <div key={w.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-lg font-bold text-green-700 shrink-0">
+              <div className="w-12 h-12 bg-[#FFE0D6] rounded-xl flex items-center justify-center text-lg font-bold text-[#D63B12] shrink-0">
                 {w.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
@@ -69,7 +69,7 @@ export default function StaffPage() {
                 {/* Login as WeeeT */}
                 <button
                   disabled={w.status !== "active"}
-                  className="flex items-center gap-1.5 text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-green-50 hover:border-green-300 hover:text-green-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="flex items-center gap-1.5 text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-[#FFF1ED] hover:border-[#FF8B66] hover:text-[#D63B12] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   title="Login as WeeeT — Impersonation per CMD-015b"
                 >
                   🔐 Login as

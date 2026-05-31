@@ -28,7 +28,7 @@ export default function JobQueuePage() {
         <h1 className="text-xl font-bold text-gray-900">คิวงาน</h1>
         <div className="flex gap-2 flex-wrap">
           {Object.entries(STATUS_LABEL).map(([s, l]) => (
-            <button key={s} className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700 transition-colors">{l}</button>
+            <button key={s} className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-[#FFE0D6] hover:text-[#D63B12] transition-colors">{l}</button>
           ))}
         </div>
       </div>
@@ -41,14 +41,14 @@ export default function JobQueuePage() {
               <div className="font-medium text-gray-900 truncate">{j.title}</div>
               <div className="text-xs text-gray-500 mt-0.5">
                 {j.customer}
-                {j.assigned && <span className="text-green-600"> · 👷 {j.assigned}</span>}
+                {j.assigned && <span className="text-[#F04E20]"> · 👷 {j.assigned}</span>}
               </div>
             </div>
             <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${STATUS_STYLE[j.status]}`}>
               {STATUS_LABEL[j.status]}
             </span>
             {j.status === "PENDING" && (
-              <button className="text-sm bg-green-700 hover:bg-green-800 text-white px-3 py-1.5 rounded-lg transition-colors shrink-0">
+              <button className="text-sm bg-[#FF663A] hover:bg-[#F04E20] text-white px-3 py-1.5 rounded-lg transition-colors shrink-0">
                 มอบหมาย
               </button>
             )}

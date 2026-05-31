@@ -42,7 +42,7 @@ export function QuestionsList({
       ) : (
         <ul className="space-y-4">
           {questions.map((q) => (
-            <li key={q.id} className="border-l-4 border-green-200 pl-4 py-2">
+            <li key={q.id} className="border-l-4 border-[#FFD0BF] pl-4 py-2">
               <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
                 <p className="text-sm text-gray-900 whitespace-pre-line font-medium">
                   ถาม: {q.body}
@@ -56,7 +56,7 @@ export function QuestionsList({
                 <ul className="mt-2 ml-4 pl-4 border-l-2 border-gray-200 space-y-2">
                   {q.replies.map((rep) => (
                     <li key={rep.id} className="text-xs text-gray-700">
-                      <span className="font-semibold text-green-700">ตอบ:</span>{" "}
+                      <span className="font-semibold text-[#D63B12]">ตอบ:</span>{" "}
                       <span className="whitespace-pre-line">{rep.body}</span>
                       <div className="text-gray-400 mt-0.5">{formatDateTh(rep.created_at)}</div>
                     </li>

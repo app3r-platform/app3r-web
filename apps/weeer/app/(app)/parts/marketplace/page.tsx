@@ -99,7 +99,7 @@ export default function MarketplacePage() {
         <button
           onClick={() => setShowFilter(!showFilter)}
           className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${
-            activeFilterCount > 0 ? "bg-green-700 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            activeFilterCount > 0 ? "bg-[#FF663A] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
           🔧 กรอง{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
@@ -120,7 +120,7 @@ export default function MarketplacePage() {
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🔍</span>
           <p className="text-sm">ไม่พบรายการที่ตรงกัน</p>
-          <button onClick={() => { setSearch(""); setFilters(defaultFilters); }} className="text-xs text-green-700 mt-2 hover:underline">ล้างตัวกรอง</button>
+          <button onClick={() => { setSearch(""); setFilters(defaultFilters); }} className="text-xs text-[#D63B12] mt-2 hover:underline">ล้างตัวกรอง</button>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-3">

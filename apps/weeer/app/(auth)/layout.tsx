@@ -1,10 +1,10 @@
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFE0D6] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-700 rounded-2xl shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#FF663A] rounded-2xl shadow-lg mb-4">
             <span className="text-white text-2xl font-bold">3R</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">App3R WeeeR</h1>

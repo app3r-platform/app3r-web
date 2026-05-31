@@ -15,10 +15,10 @@ export default function ForgotPasswordPage() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">อีเมล</label>
           <input type="email" placeholder="company@example.com" required
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm" />
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF663A] text-sm" />
         </div>
         <button type="submit"
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors">
           ส่งลิงก์รีเซ็ตรหัสผ่าน
         </button>
       </form>

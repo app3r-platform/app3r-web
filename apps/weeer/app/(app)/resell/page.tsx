@@ -79,7 +79,7 @@ export default function ResellDashboardPage() {
           { label: "สินค้าในสต๊อก",   value: d.total_inventory,            color: "bg-[#FCEAE3]", text: "text-[#FF663A]" },
           { label: "ประกาศ active",    value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
           { label: "ข้อเสนอรอตอบ",    value: d.total_offers_pending,        color: "bg-amber-50",  text: "text-amber-700" },
-          { label: "รายได้รวม (pts)", value: d.total_revenue.toLocaleString(), color: "bg-green-50", text: "text-green-700" },
+          { label: "รายได้รวม (pts)", value: d.total_revenue.toLocaleString(), color: "bg-[#FFF1ED]", text: "text-[#D63B12]" },
         ].map(k => (
           <div key={k.label} className={`${k.color} rounded-xl p-4 text-center`}>
             <p className={`text-2xl font-bold ${k.text}`}>{k.value}</p>

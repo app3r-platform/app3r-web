@@ -103,7 +103,7 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
             value={inboundTracking}
             onChange={(e) => setInboundTracking(e.target.value)}
             placeholder="เช่น TH123456789"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 font-mono"
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] font-mono"
           />
         </div>
 
@@ -122,7 +122,7 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
               type="checkbox"
               checked={photoGate}
               onChange={(e) => { setPhotoGate(e.target.checked); setFormErrors(f => ({ ...f, photo: "" })); }}
-              className="w-4 h-4 rounded text-green-600"
+              className="w-4 h-4 rounded text-[#F04E20]"
             />
             <span className="text-sm font-medium text-gray-700">ยืนยันว่าถ่ายรูปครบถ้วนแล้ว</span>
           </label>
@@ -138,7 +138,7 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
             onChange={(e) => { setConditionNotes(e.target.value); setFormErrors(f => ({ ...f, notes: "" })); }}
             placeholder="บรรยายสภาพกล่อง/บรรจุภัณฑ์ เช่น กล่องครบ ไม่มีรอยบุบ / กล่องยุบด้านข้าง"
             rows={3}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${formErrors.notes ? "border-red-400" : "border-gray-200"}`}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formErrors.notes ? "border-red-400" : "border-gray-200"}`}
           />
           {formErrors.notes && <p className="text-xs text-red-500 mt-1">{formErrors.notes}</p>}
         </div>
@@ -151,7 +151,7 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "📬 ยืนยันรับพัสดุ"}
         </button>
       </form>

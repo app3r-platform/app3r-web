@@ -75,7 +75,7 @@ export default function PickupIntakePage({ params }: { params: Promise<{ id: str
             onChange={(e) => { setConditionNotes(e.target.value); setFormError(""); }}
             placeholder="บรรยายสภาพอุปกรณ์ตอนที่รับมาถึงร้าน เช่น รอยขีดข่วน, ชิ้นส่วนหาย, สภาพทั่วไป"
             rows={4}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${formError ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formError ? "border-red-400" : "border-gray-200"}`} />
           {formError && <p className="text-xs text-red-500 mt-1">{formError}</p>}
         </div>
 
@@ -84,15 +84,15 @@ export default function PickupIntakePage({ params }: { params: Promise<{ id: str
           <p className="text-xs text-blue-600 mt-0.5">บันทึกหลักฐานสภาพก่อนซ่อม — อัปโหลดผ่านระบบหลัง</p>
         </div>
 
-        <div className="bg-green-50 border border-green-100 rounded-xl p-3 flex items-center gap-2">
+        <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 flex items-center gap-2">
           <span className="text-lg">🏪</span>
-          <p className="text-xs text-green-700">เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>เครื่องถึงร้าน</strong> และเริ่มขั้นตอนวินิจฉัย</p>
+          <p className="text-xs text-[#D63B12]">เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>เครื่องถึงร้าน</strong> และเริ่มขั้นตอนวินิจฉัย</p>
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "📥 ยืนยันรับเครื่องเข้าร้าน"}
         </button>
       </form>
