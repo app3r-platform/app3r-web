@@ -75,7 +75,7 @@ export default function AwaitingPaymentPage() {
     return (
       <div className="max-w-xl space-y-5">
         <div className="flex items-center gap-3">
-          <Link href="/resell/offers" className="text-gray-500 hover:text-gray-800 text-xl">
+          <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
             ‹
           </Link>
           <h1 className="text-xl font-bold text-gray-900">รอการชำระเงิน</h1>
@@ -150,7 +150,7 @@ export default function AwaitingPaymentPage() {
     <div className="max-w-xl space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/resell/offers" className="text-gray-500 hover:text-gray-800 text-xl">
+        <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
           ‹
         </Link>
         <h1 className="text-xl font-bold text-gray-900">ชำระเงิน — Escrow</h1>
@@ -223,7 +223,7 @@ export default function AwaitingPaymentPage() {
           </p>
           <div className="pt-2">
             <Link
-              href="/resell/offers"
+              href="/offers"
               className="inline-block border border-gray-300 text-gray-600 font-medium px-5 py-2 rounded-xl text-sm hover:bg-gray-50"
             >
               ← ดูข้อเสนืออื่น
@@ -291,7 +291,7 @@ export default function AwaitingPaymentPage() {
             </button>
           )}
           <Link
-            href="/resell/offers"
+            href="/offers"
             className="w-full block text-center border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors"
           >
             กลับไปข้อเสนืออื่น
