@@ -1,6 +1,12 @@
 "use client";
 // Screen ID Badge — Phase 3 dev tool (ปิดพร้อม NEXT_PUBLIC_DEV_NAV)
+// D15 wire: render ผ่าน shared <ScreenIdBadge> จาก @app3r/ui (roleTheme navy Admin)
+// — registry (SCREEN_MAP) ด้านล่างเป็น source of truth: pathname → เลข A-xx
 import { usePathname } from "next/navigation";
+import { ScreenIdBadge } from "@app3r/ui";
+
+// Admin brand navy — ส่งเป็น roleTheme.primary ให้ badge กลาง (#2C5E8C)
+const ADMIN_PRIMARY = "#2C5E8C";
 
 type ScreenInfo = { num: string; code: string };
 
@@ -49,13 +55,12 @@ export function ScreenBadge() {
   const info = matchScreen(pathname);
   if (!info) return null;
 
-  // Admin: no sidebar at root — top-left is fine
+  // shared commons — มุมจอ (top-left) · roleTheme navy Admin
   return (
-    <div className="fixed top-2 left-2 z-[9997] pointer-events-none select-none">
-      <div className="bg-black/70 backdrop-blur-sm text-white rounded-lg px-2 py-1 text-center shadow-lg">
-        <div className="font-mono text-sm font-bold leading-tight">{info.num}</div>
-        <div className="font-mono text-[10px] opacity-70 leading-tight">{info.code}</div>
-      </div>
-    </div>
+    <ScreenIdBadge
+      screenId={info.num}
+      roleTheme={{ primary: ADMIN_PRIMARY }}
+      position="top-left"
+    />
   );
 }
