@@ -195,10 +195,10 @@ export const ORDER_STATUS_LABEL: Record<PartsOrderStatus, string> = {
 export const ORDER_STATUS_COLOR: Record<PartsOrderStatus, string> = {
   pending:   "bg-yellow-100 text-yellow-700",
   held:      "bg-blue-100 text-blue-700",
-  fulfilled: "bg-indigo-100 text-indigo-700",
+  fulfilled: "bg-[#FFE0D6] text-[#D63B12]",
   closed:    "bg-green-100 text-green-700",
   disputed:  "bg-red-100 text-red-700",
-  resolved:  "bg-purple-100 text-purple-700",
+  resolved:  "bg-[#FFE0D6] text-[#D63B12]",
   refunded:  "bg-orange-100 text-orange-700",
   cancelled: "bg-gray-100 text-gray-500",
 };

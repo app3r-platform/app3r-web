@@ -18,7 +18,7 @@ interface DevNavProps {
 }
 
 function linkColor(type: DevNavLink["type"]): string {
-  if (type === "cross-app") return "#7c3aed";
+  if (type === "cross-app") return "#FF663A";
   if (type === "branch")    return "#d97706";
   return "#0891b2";
 }

@@ -87,10 +87,10 @@ export const STATUS_LABEL: Record<RepairJobStatus, string> = {
 
 export const STATUS_COLOR: Record<RepairJobStatus, string> = {
   assigned: "bg-blue-100 text-blue-700",
-  traveling: "bg-indigo-100 text-indigo-700",
+  traveling: "bg-[#FFE0D6] text-[#D63B12]",
   arrived: "bg-cyan-100 text-cyan-700",
   awaiting_entry: "bg-yellow-100 text-yellow-700",
-  inspecting: "bg-purple-100 text-purple-700",
+  inspecting: "bg-[#FFE0D6] text-[#D63B12]",
   awaiting_decision: "bg-orange-100 text-orange-700",
   awaiting_user: "bg-amber-100 text-amber-700",
   in_progress: "bg-green-100 text-green-700",
@@ -168,7 +168,7 @@ export const WALKIN_STATUS_LABEL: Record<WalkInStatus, string> = {
 export const WALKIN_STATUS_COLOR: Record<WalkInStatus, string> = {
   waiting: "bg-gray-100 text-gray-600",
   received: "bg-blue-100 text-blue-700",
-  inspecting: "bg-purple-100 text-purple-700",
+  inspecting: "bg-[#FFE0D6] text-[#D63B12]",
   in_progress: "bg-green-100 text-green-700",
   ready: "bg-teal-100 text-teal-700",
   closed: "bg-emerald-100 text-emerald-700",
@@ -249,10 +249,10 @@ export const PICKUP_STATUS_LABEL: Record<PickupStatus, string> = {
 export const PICKUP_STATUS_COLOR: Record<PickupStatus, string> = {
   pending_dispatch: "bg-orange-100 text-orange-700",
   dispatched: "bg-blue-100 text-blue-700",
-  en_route: "bg-indigo-100 text-indigo-700",
+  en_route: "bg-[#FFE0D6] text-[#D63B12]",
   at_customer: "bg-cyan-100 text-cyan-700",
   appliance_at_shop: "bg-yellow-100 text-yellow-700",
-  diagnosing: "bg-purple-100 text-purple-700",
+  diagnosing: "bg-[#FFE0D6] text-[#D63B12]",
   repairing: "bg-green-100 text-green-700",
   ready: "bg-teal-100 text-teal-700",
   out_for_delivery: "bg-emerald-100 text-emerald-700",
@@ -330,9 +330,9 @@ export const PARCEL_STATUS_LABEL: Record<ParcelStatus, string> = {
 
 export const PARCEL_STATUS_COLOR: Record<ParcelStatus, string> = {
   awaiting_shipping_details: "bg-orange-100 text-orange-700",
-  in_transit_to_shop:        "bg-indigo-100 text-indigo-700",
+  in_transit_to_shop:        "bg-[#FFE0D6] text-[#D63B12]",
   received:                  "bg-blue-100 text-blue-700",
-  inspecting:                "bg-purple-100 text-purple-700",
+  inspecting:                "bg-[#FFE0D6] text-[#D63B12]",
   repairing:                 "bg-green-100 text-green-700",
   ready_to_ship_back:        "bg-teal-100 text-teal-700",
   in_transit_to_customer:    "bg-emerald-100 text-emerald-700",

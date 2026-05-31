@@ -288,16 +288,16 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
 
       {/* Recurring */}
       {job.recurring?.enabled && (
-        <div className="bg-purple-50 border border-purple-100 rounded-xl p-3 flex items-start gap-2">
+        <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 flex items-start gap-2">
           <span className="text-lg">🔁</span>
           <div>
-            <p className="text-sm font-medium text-purple-800">นัดซ้ำ — {RECURRING_LABEL[job.recurring.interval]}</p>
-            <p className="text-xs text-purple-600 mt-0.5">
+            <p className="text-sm font-medium text-[#D63B12]">นัดซ้ำ — {RECURRING_LABEL[job.recurring.interval]}</p>
+            <p className="text-xs text-[#F04E20] mt-0.5">
               นัดครั้งต่อไป: {new Date(job.recurring.nextScheduledAt).toLocaleDateString("th-TH", {
                 day: "numeric", month: "short", year: "numeric",
               })}
             </p>
-            <p className="text-xs text-purple-500 mt-0.5">✨ ส่วนลด 10% สำหรับนัดซ้ำ</p>
+            <p className="text-xs text-[#F04E20] mt-0.5">✨ ส่วนลด 10% สำหรับนัดซ้ำ</p>
           </div>
         </div>
       )}

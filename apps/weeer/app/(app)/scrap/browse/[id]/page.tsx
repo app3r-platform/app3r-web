@@ -110,7 +110,7 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
 
         <div className="border-t border-gray-50 pt-3 flex items-center justify-between">
           <p className="text-xs text-gray-400">ราคา</p>
-          <p className="text-2xl font-bold text-indigo-700">{item.price.toLocaleString()} pts</p>
+          <p className="text-2xl font-bold text-[#D63B12]">{item.price.toLocaleString()} pts</p>
         </div>
       </div>
 
@@ -124,7 +124,7 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
         disabled={!canBuy || buying}
         className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
           ${canBuy && !buying
-            ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+            ? "bg-[#FF663A] hover:bg-[#F04E20] text-white"
             : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}>
         {buying ? "กำลังซื้อ…"
           : !canBuy ? `ไม่สามารถซื้อได้ (${SCRAP_ITEM_STATUS_LABEL[item.status]})`

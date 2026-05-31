@@ -92,12 +92,12 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Job summary */}
-      <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 space-y-1">
-        <p className="text-sm font-semibold text-purple-800">{job.appliance_name}</p>
-        <p className="text-xs text-purple-600">{job.problem_description}</p>
-        <p className="text-xs text-purple-500">👤 {job.customer_name}</p>
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4 space-y-1">
+        <p className="text-sm font-semibold text-[#D63B12]">{job.appliance_name}</p>
+        <p className="text-xs text-[#F04E20]">{job.problem_description}</p>
+        <p className="text-xs text-[#F04E20]">👤 {job.customer_name}</p>
         {job.condition_notes && (
-          <p className="text-xs text-purple-400 mt-1 italic">สภาพตอนรับ: {job.condition_notes}</p>
+          <p className="text-xs text-[#FF663A] mt-1 italic">สภาพตอนรับ: {job.condition_notes}</p>
         )}
       </div>
 

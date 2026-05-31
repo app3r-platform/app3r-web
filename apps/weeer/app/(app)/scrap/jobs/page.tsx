@@ -191,7 +191,7 @@ export default function ScrapJobsPage() {
                   </p>
                   {/* Escrow status */}
                   {job.escrowStatus === "locked" && (
-                    <span className="text-xs text-purple-600 font-medium">🔐 lock</span>
+                    <span className="text-xs text-[#F04E20] font-medium">🔐 lock</span>
                   )}
                   {job.escrowStatus === "released" && (
                     <span className="text-xs text-green-600 font-medium">✅ release</span>

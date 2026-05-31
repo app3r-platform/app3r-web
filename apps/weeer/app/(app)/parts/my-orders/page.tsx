@@ -190,7 +190,7 @@ export default function MyOrdersPage() {
               จาก {confirmOrder.buyerShopName} — {confirmOrder.quantity} ชิ้น · {confirmOrder.totalPoints.toLocaleString()} pts
             </p>
             <div className="flex gap-2">
-              <button onClick={handleConfirm} className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+              <button onClick={handleConfirm} className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
                 ✅ ยืนยันรับออเดอร์
               </button>
               <button onClick={() => setConfirmOrder(null)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-colors">

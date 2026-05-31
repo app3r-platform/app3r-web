@@ -87,7 +87,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
           })} · ⏱ {job.estimatedDuration} ชม.
         </p>
         {job.recurring?.enabled && (
-          <p className="text-xs text-purple-600">🔁 นัดซ้ำ — ส่วนลด 10%</p>
+          <p className="text-xs text-[#F04E20]">🔁 นัดซ้ำ — ส่วนลด 10%</p>
         )}
       </div>
 

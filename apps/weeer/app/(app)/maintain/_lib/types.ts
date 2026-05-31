@@ -102,7 +102,7 @@ export const MAINTAIN_STATUS_COLOR: Record<MaintainStatus, string> = {
   awaiting_offer:         "bg-yellow-100 text-yellow-700",
   offer_expired:          "bg-gray-100 text-gray-500",
   assigned:               "bg-blue-100 text-blue-700",
-  departed:               "bg-indigo-100 text-indigo-700",
+  departed:               "bg-[#FFE0D6] text-[#D63B12]",
   arrived:                "bg-cyan-100 text-cyan-700",
   in_progress:            "bg-green-100 text-green-700",
   no_show:                "bg-orange-100 text-orange-700",

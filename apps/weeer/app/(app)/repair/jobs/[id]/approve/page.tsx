@@ -52,9 +52,9 @@ const BRANCH_CONFIG: Record<ApproveAction, {
   "B2.2": {
     label: "ยืนยัน — เสนอรับซื้อซาก",
     description: "ส่งราคาซากให้ WeeeU ตัดสินใจ",
-    color: "text-purple-700",
-    bg: "bg-purple-50",
-    border: "border-purple-200",
+    color: "text-[#D63B12]",
+    bg: "bg-[#FFF1ED]",
+    border: "border-[#FFD0BF]",
     icon: "♻️",
     needsPrice: true,
     forwardToUser: true,
@@ -178,7 +178,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
             </div>
           )}
           {job.scrap_agreed_price && (
-            <p className="text-xs font-medium text-purple-700">ราคาซากที่ WeeeT เสนอ: {job.scrap_agreed_price.toLocaleString()} pts</p>
+            <p className="text-xs font-medium text-[#D63B12]">ราคาซากที่ WeeeT เสนอ: {job.scrap_agreed_price.toLocaleString()} pts</p>
           )}
         </div>
       )}

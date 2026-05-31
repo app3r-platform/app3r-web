@@ -133,7 +133,7 @@ export default function DashboardPage() {
               <div className="min-w-0 flex-1">
                 <div className="text-xs font-medium text-gray-800 truncate">{t.name}</div>
                 <div className="flex gap-1 mt-0.5 flex-wrap">
-                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${t.type === "default" ? "bg-green-100 text-green-700" : "bg-purple-100 text-purple-700"}`}>
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${t.type === "default" ? "bg-green-100 text-green-700" : "bg-[#FFE0D6] text-[#D63B12]"}`}>
                     {t.type === "default" ? "ตัวเอง" : "เช่า"}
                   </span>
                   {t.status === "suspended" && <span className="text-xs px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">ระงับ</span>}

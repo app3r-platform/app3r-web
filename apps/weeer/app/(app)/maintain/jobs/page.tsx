@@ -92,7 +92,7 @@ export default function MaintainJobsPage() {
                   </span>
                   <span className="text-xs text-gray-400">{job.serviceCode}</span>
                   {job.recurring?.enabled && (
-                    <span className="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full">🔁 นัดซ้ำ</span>
+                    <span className="text-xs bg-[#FFE0D6] text-[#D63B12] px-1.5 py-0.5 rounded-full">🔁 นัดซ้ำ</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2">

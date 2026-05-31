@@ -112,7 +112,7 @@ export default function PartsDisassemblePage() {
             <div className="text-xs text-gray-400 py-2">กำลังโหลดรายการซาก…</div>
           ) : (
             <select value={selectedJobId} onChange={e => setSelectedJobId(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               <option value="">— ไม่ระบุ ScrapJob —</option>
               {scrapJobs.map(j => (
                 <option key={j.id} value={j.id}>
@@ -134,7 +134,7 @@ export default function PartsDisassemblePage() {
           <input type="text" value={partName}
             onChange={e => { setPartName(e.target.value); setFormErrors(f => ({ ...f, partName: "" })); }}
             placeholder="เช่น คอมเพรสเซอร์ Samsung 12000 BTU"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 ${formErrors.partName ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.partName ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.partName && <p className="text-xs text-red-500 mt-1">{formErrors.partName}</p>}
         </div>
 
@@ -145,7 +145,7 @@ export default function PartsDisassemblePage() {
           <input type="text" value={sku}
             onChange={e => { setSku(e.target.value); setFormErrors(f => ({ ...f, sku: "" })); }}
             placeholder="เช่น COMP-SAM-12K-USED"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-purple-400 ${formErrors.sku ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.sku ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.sku && <p className="text-xs text-red-500 mt-1">{formErrors.sku}</p>}
         </div>
 
@@ -155,7 +155,7 @@ export default function PartsDisassemblePage() {
           </label>
           <input type="number" min={1} value={qty}
             onChange={e => { setQty(e.target.value); setFormErrors(f => ({ ...f, qty: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 ${formErrors.qty ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.qty ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.qty && <p className="text-xs text-red-500 mt-1">{formErrors.qty}</p>}
         </div>
 
@@ -164,13 +164,13 @@ export default function PartsDisassemblePage() {
           <textarea value={note} onChange={e => setNote(e.target.value)}
             placeholder="รายละเอียดเพิ่มเติม สภาพอะไหล่ที่แยกได้ ฯลฯ"
             rows={3}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-purple-700 hover:bg-purple-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#D63B12] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "🔧 บันทึกอะไหล่จากซาก"}
         </button>
       </form>

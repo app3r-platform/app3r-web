@@ -27,7 +27,7 @@ export default function RepairDashboardPage() {
     { label: "งานเดือนนี้", value: data.jobs_this_month, icon: "📋", color: "text-blue-700", bg: "bg-blue-50" },
     { label: "รายได้เดือนนี้", value: `${data.earnings_this_month.toLocaleString()} pts`, icon: "🪙", color: "text-yellow-700", bg: "bg-yellow-50" },
     { label: "รออนุมัติ", value: data.pending_approvals, icon: "⚠️", color: "text-orange-700", bg: "bg-orange-50" },
-    { label: "คะแนนเฉลี่ย", value: data.avg_rating.toFixed(1), icon: "⭐", color: "text-purple-700", bg: "bg-purple-50" },
+    { label: "คะแนนเฉลี่ย", value: data.avg_rating.toFixed(1), icon: "⭐", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
     { label: "WeeeT ใช้งาน %", value: `${data.weeet_utilization}%`, icon: "👷", color: "text-teal-700", bg: "bg-teal-50" },
   ];
 

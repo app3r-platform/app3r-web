@@ -104,7 +104,7 @@ export default function ResellMarketplacePage() {
 
       {/* Dev mock notice */}
       {usingMock && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2 text-xs text-indigo-600">
+        <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-3 py-2 text-xs text-[#F04E20]">
           🖼️ แสดงข้อมูล mock (seeds r001-r006) — API ยังไม่พร้อม
         </div>
       )}
@@ -115,14 +115,14 @@ export default function ResellMarketplacePage() {
           <div>
             <label className="block text-xs text-gray-500 mb-1">หมวดหมู่</label>
             <select value={category} onChange={e => setCategory(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               {CATEGORIES.map(c => <option key={c} value={c}>{c || "ทั้งหมด"}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">ผู้ขาย</label>
             <select value={sellerType} onChange={e => setSellerType(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               {SELLER_TYPES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
           </div>
@@ -130,11 +130,11 @@ export default function ResellMarketplacePage() {
         <div className="flex items-center gap-2">
           <input type="number" value={minPrice} onChange={e => setMinPrice(e.target.value)}
             placeholder="ราคาต่ำสุด"
-            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           <span className="text-gray-400 text-sm">—</span>
           <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
             placeholder="ราคาสูงสุด"
-            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
       </div>
 
@@ -154,7 +154,7 @@ export default function ResellMarketplacePage() {
               <div className="p-3">
                 <p className="text-sm font-semibold text-gray-800 truncate">{l.applianceName ?? "ไม่ระบุ"}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-lg font-bold text-indigo-700">{l.price.toLocaleString()} pts</p>
+                  <p className="text-lg font-bold text-[#D63B12]">{l.price.toLocaleString()} pts</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>

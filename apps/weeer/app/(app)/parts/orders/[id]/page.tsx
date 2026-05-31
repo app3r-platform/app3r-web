@@ -315,11 +315,11 @@ export default function PartsOrderDetailPage({
 
           {/* Tracking */}
           {order.trackingNumber && (
-            <div className="flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2.5">
+            <div className="flex items-center gap-2 bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl px-3 py-2.5">
               <span className="text-base">📦</span>
               <div>
-                <p className="text-xs text-indigo-500">Tracking Number</p>
-                <p className="text-sm font-mono font-semibold text-indigo-700">{order.trackingNumber}</p>
+                <p className="text-xs text-[#F04E20]">Tracking Number</p>
+                <p className="text-sm font-mono font-semibold text-[#D63B12]">{order.trackingNumber}</p>
               </div>
             </div>
           )}
@@ -337,7 +337,7 @@ export default function PartsOrderDetailPage({
               </div>
               {order.fulfilledAt && (
                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF663A] shrink-0" />
                   <span>ผู้ขายส่งของ — {formatDate(order.fulfilledAt)}</span>
                 </div>
               )}

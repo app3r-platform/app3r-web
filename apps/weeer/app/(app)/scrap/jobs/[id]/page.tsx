@@ -159,21 +159,21 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
                 disabled={isDisabled}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all
                   ${isSelected
-                    ? "border-indigo-400 bg-indigo-50"
+                    ? "border-[#FF8B66] bg-[#FFF1ED]"
                     : opt.disabled
                     ? "border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed"
                     : isDisabled
                     ? "border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed"
-                    : "border-gray-100 bg-white hover:border-indigo-200 hover:bg-indigo-50/30"}`}>
+                    : "border-gray-100 bg-white hover:border-[#FFD0BF] hover:bg-[#FFF1ED]/30"}`}>
                 <span className="text-xl">{opt.icon}</span>
                 <div className="min-w-0 flex-1">
-                  <p className={`text-sm font-semibold ${isSelected ? "text-indigo-700" : opt.disabled ? "text-gray-400" : "text-gray-800"}`}>
+                  <p className={`text-sm font-semibold ${isSelected ? "text-[#D63B12]" : opt.disabled ? "text-gray-400" : "text-gray-800"}`}>
                     {opt.label}
                   </p>
                   <p className="text-xs text-gray-400">{opt.desc}</p>
                 </div>
-                {deciding === opt.value && <span className="text-xs text-indigo-500">กำลังบันทึก…</span>}
-                {isSelected && <span className="text-indigo-500 text-sm">✓</span>}
+                {deciding === opt.value && <span className="text-xs text-[#F04E20]">กำลังบันทึก…</span>}
+                {isSelected && <span className="text-[#F04E20] text-sm">✓</span>}
                 {!isSelected && !opt.disabled && deciding === null && <span className="text-gray-300 text-sm">→</span>}
               </button>
             );

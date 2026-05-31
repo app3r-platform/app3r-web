@@ -140,7 +140,7 @@ export default function PartsNewPage() {
               🛒 ซื้อเข้า
             </label>
             <label className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer transition-all text-xs font-medium
-              ${sourceType === "disassembly" ? "border-purple-300 bg-purple-50 text-purple-800" : "border-gray-100 text-gray-600"}`}>
+              ${sourceType === "disassembly" ? "border-[#FF8B66] bg-[#FFF1ED] text-[#D63B12]" : "border-gray-100 text-gray-600"}`}>
               <input type="radio" className="sr-only" checked={sourceType === "disassembly"} onChange={() => setSourceType("disassembly")} />
               🔧 แยกจากซาก
             </label>

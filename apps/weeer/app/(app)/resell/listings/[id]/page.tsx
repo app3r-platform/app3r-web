@@ -74,7 +74,7 @@ function EscrowCountdown() {
   const s = Math.floor((msLeft % 60000) / 1000);
   const urgent = msLeft < 3600000;
   return (
-    <span className={`text-xs font-medium ${urgent ? "text-red-600" : "text-purple-700"}`}>
+    <span className={`text-xs font-medium ${urgent ? "text-red-600" : "text-[#D63B12]"}`}>
       ⏳ {h}:{String(m).padStart(2,"0")}:{String(s).padStart(2,"0")} เหลือ
     </span>
   );
@@ -170,17 +170,17 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
 
       {/* R4: offer_selected → escrow 24h wait */}
       {effectiveStatus === "offer_selected" && !r5Withdrawn && (
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+        <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-purple-800">⏳ รอผู้ซื้อเติม Gold (Escrow)</p>
-              <p className="text-xs text-purple-600 mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
+              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติม Gold (Escrow)</p>
+              <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
             </div>
             <EscrowCountdown />
           </div>
           {/* R5: ถอนการเลือก */}
           <button onClick={() => setShowR5Confirm(true)}
-            className="mt-3 w-full text-xs text-purple-700 border border-purple-300 hover:bg-purple-100 font-medium py-2 rounded-lg transition-colors">
+            className="mt-3 w-full text-xs text-[#D63B12] border border-[#FF8B66] hover:bg-[#FFE0D6] font-medium py-2 rounded-lg transition-colors">
             ⏪ ถอนการเลือก (R5)
           </button>
         </div>

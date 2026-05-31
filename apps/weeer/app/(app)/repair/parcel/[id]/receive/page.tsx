@@ -78,17 +78,17 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
       </div>
 
       {/* Job summary */}
-      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 space-y-1">
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4 space-y-1">
         <div className="flex items-center gap-2">
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${PARCEL_STATUS_COLOR[job.status]}`}>
             {PARCEL_STATUS_LABEL[job.status]}
           </span>
         </div>
-        <p className="text-sm font-semibold text-indigo-800">{job.appliance_name}</p>
-        <p className="text-xs text-indigo-600">{job.problem_description}</p>
-        <p className="text-xs text-indigo-500">👤 {job.customer_name} · 🚚 {job.courier ?? "ไม่ระบุขนส่ง"}</p>
+        <p className="text-sm font-semibold text-[#D63B12]">{job.appliance_name}</p>
+        <p className="text-xs text-[#F04E20]">{job.problem_description}</p>
+        <p className="text-xs text-[#F04E20]">👤 {job.customer_name} · 🚚 {job.courier ?? "ไม่ระบุขนส่ง"}</p>
         {job.inbound_tracking && (
-          <p className="text-xs text-indigo-500">Tracking: <span className="font-mono">{job.inbound_tracking}</span></p>
+          <p className="text-xs text-[#F04E20]">Tracking: <span className="font-mono">{job.inbound_tracking}</span></p>
         )}
       </div>
 

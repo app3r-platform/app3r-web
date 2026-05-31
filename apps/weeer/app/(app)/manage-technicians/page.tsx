@@ -36,7 +36,7 @@ function StatusBadge({ status }: { status: WeeeT["status"] }) {
 }
 function TypeBadge({ type }: { type: WeeeT["type"] }) {
   return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${type === "default" ? "bg-green-100 text-green-700" : "bg-purple-100 text-purple-700"}`}>
+    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${type === "default" ? "bg-green-100 text-green-700" : "bg-[#FFE0D6] text-[#D63B12]"}`}>
       {type === "default" ? "Default" : "Rented"}
     </span>
   );
