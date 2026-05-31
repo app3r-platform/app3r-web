@@ -4,6 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import PasswordInput from "@/components/shared/PasswordInput";
 
+// terms/privacy = canonical ที่ App3R-Website (cross-origin) → ใช้ <a> ไม่ใช่ next/Link
+const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL ?? "http://localhost:3004";
+
 // ─── Password validation rules ────────────────────────────────────────────────
 function validatePassword(pw: string): string | null {
   if (pw.length < 8) return "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร";
@@ -178,9 +181,9 @@ export default function SignupEmailPage() {
             />
             <span className="text-xs text-gray-600 leading-relaxed">
               ฉันยอมรับ{" "}
-              <Link href="/terms" className="text-weeeu-primary hover:underline font-medium">ข้อตกลงการใช้งาน</Link>{" "}
+              <a href={`${WEBSITE_URL}/terms`} className="text-weeeu-primary hover:underline font-medium">ข้อตกลงการใช้งาน</a>{" "}
               และ{" "}
-              <Link href="/privacy" className="text-weeeu-primary hover:underline font-medium">นโยบายความเป็นส่วนตัว</Link>{" "}
+              <a href={`${WEBSITE_URL}/privacy`} className="text-weeeu-primary hover:underline font-medium">นโยบายความเป็นส่วนตัว</a>{" "}
               ของ WeeeU
             </span>
           </label>
