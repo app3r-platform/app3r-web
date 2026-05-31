@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { NearMeFilter, type NearbyTambonDto } from "@app3r/ui";
 import { resellApi } from "../_lib/api";
+import { getApiBase } from "../../../../lib/api-client";
 import type { Listing } from "../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../_lib/types";
 
@@ -67,6 +69,8 @@ export default function ResellMarketplacePage() {
   const [sellerType, setSellerType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  // GR-10 near-me (shared NearMeFilter · @app3r/ui)
+  const [nearby, setNearby] = useState<NearbyTambonDto[] | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -135,6 +139,21 @@ export default function ResellMarketplacePage() {
           <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
             placeholder="ราคาสูงสุด"
             className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
+        </div>
+
+        {/* GR-10 · near-me filter (shared component) */}
+        <div className="border-t border-gray-50 pt-3">
+          <NearMeFilter
+            roleTheme={{ primary: "#FF663A" }}
+            backendUrl={getApiBase()}
+            defaultRadiusKm={20}
+            onResults={(items) => setNearby(items)}
+          />
+          {nearby !== null && (
+            <p className="mt-2 text-xs text-gray-500">
+              📍 พบ {nearby.length} ตำบลใกล้คุณ — ใช้กรองประกาศตามพื้นที่ (ต้องรอ Backend เพิ่มพิกัดในประกาศ)
+            </p>
+          )}
         </div>
       </div>
 

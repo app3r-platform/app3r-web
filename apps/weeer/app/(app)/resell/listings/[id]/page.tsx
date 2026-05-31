@@ -10,6 +10,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { resellApi } from "../../_lib/api";
+import { createAd, estimateGoldCost, AD_POSITION_OPTIONS, type AdPosition } from "../../../../../lib/ads-api";
 import type { Listing, Offer } from "../../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, OFFER_STATUS_LABEL, OFFER_STATUS_COLOR, LISTING_TERMINAL } from "../../_lib/types";
 
@@ -95,17 +96,27 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   const [evidenceUrl, setEvidenceUrl] = useState("");
   const [evidenceSubmitted, setEvidenceSubmitted] = useState(false);
 
-  // ── C12 Ad stub (Backend ads API ยังไม่พร้อม → stub local · ดูสเปก Ad System Gen 100) ──
-  const AD_POSITIONS = [
-    { value: "home-top", label: "แถวแรกหน้าแรก", rate: 5 },
-    { value: "module-top", label: "แถวแรกของโมดูล (หน้า listing)", rate: 3 },
-    { value: "sidebar", label: "ด้านข้างจอ (sidebar)", rate: 3 },
-  ];
+  // ── C12 Ad (Backend ads API · POST /api/v1/ads — ตัด Gold D75 → pending → admin approve) ──
   const [showAd, setShowAd] = useState(false);
-  const [adPos, setAdPos] = useState("module-top");
+  const [adPos, setAdPos] = useState<AdPosition>("module_first_row");
   const [adDays, setAdDays] = useState(7);
-  const adRate = AD_POSITIONS.find((p) => p.value === adPos)?.rate ?? 3;
-  const adCost = adRate * (adDays > 0 ? adDays : 0);
+  const [adSubmitting, setAdSubmitting] = useState(false);
+  const [adError, setAdError] = useState("");
+  const [adSuccess, setAdSuccess] = useState(false);
+  const adCost = estimateGoldCost(adPos, adDays);
+
+  async function handleCreateAd() {
+    setAdSubmitting(true);
+    setAdError("");
+    const res = await createAd({ listingId: id, position: adPos, durationDays: adDays });
+    setAdSubmitting(false);
+    if (res.ok) {
+      setAdSuccess(true);
+      setShowAd(false);
+    } else {
+      setAdError(res.error ?? "ส่งคำขอโฆษณาไม่สำเร็จ");
+    }
+  }
 
   useEffect(() => {
     const mock = MOCK_LISTINGS[id];
@@ -313,13 +324,19 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
       </div>
 
       {/* C12 · ปุ่มลงโฆษณา (ดันประกาศให้เด่น · ตัดพอยต์ทอง) */}
-      {!isTerminal && (
+      {!isTerminal && !adSuccess && (
         <button
           onClick={() => setShowAd(true)}
           className="w-full border border-[#FF663A] text-[#D63B12] hover:bg-[#FFF1ED] rounded-xl py-2.5 text-sm font-medium transition-colors"
         >
           📢 ลงโฆษณา — ดันประกาศนี้ให้เด่นขึ้น
         </button>
+      )}
+      {adSuccess && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
+          <span>✅</span>
+          <p className="text-sm text-green-700 font-medium">ส่งคำขอโฆษณาแล้ว — ตัดพอยต์ทอง (Gold Point) และเข้าคิวรอผู้ดูแล (Admin) อนุมัติ</p>
+        </div>
       )}
 
       {/* C12 Ad modal (stub — ยังไม่ต่อ Backend ads API) */}
@@ -334,10 +351,10 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
               <label className="block text-xs text-gray-500 mb-1">ตำแหน่งโฆษณา</label>
               <select
                 value={adPos}
-                onChange={(e) => setAdPos(e.target.value)}
+                onChange={(e) => setAdPos(e.target.value as AdPosition)}
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
               >
-                {AD_POSITIONS.map((p) => (
+                {AD_POSITION_OPTIONS.map((p) => (
                   <option key={p.value} value={p.value}>{p.label} — {p.rate} พอยต์ทอง/วัน</option>
                 ))}
               </select>
@@ -356,20 +373,18 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
               <span className="text-gray-600">รวมที่จะตัด (พอยต์ทอง / Gold Point)</span>
               <span className="font-bold text-[#D63B12]">{adCost.toLocaleString()} พอยต์ทอง</span>
             </div>
-            <p className="text-xs text-gray-400">* จ่ายล่วงหน้า · เข้าคิวให้ผู้ดูแล (Admin) อนุมัติก่อนเริ่มแสดง · ไม่อนุมัติคืนพอยต์</p>
+            <p className="text-xs text-gray-400">* จ่ายล่วงหน้า · ตัดพอยต์ทอง (Gold Point) แล้วเข้าคิวให้ผู้ดูแล (Admin) อนุมัติก่อนเริ่มแสดง · ไม่อนุมัติคืนพอยต์</p>
+            {adError && <p className="text-xs text-red-600 font-medium" role="alert">⚠️ {adError}</p>}
             <div className="flex gap-2 pt-1">
-              <button onClick={() => setShowAd(false)} className="flex-1 border border-gray-200 hover:bg-gray-50 rounded-xl py-2 text-sm font-medium text-gray-700">
+              <button onClick={() => setShowAd(false)} disabled={adSubmitting} className="flex-1 border border-gray-200 hover:bg-gray-50 rounded-xl py-2 text-sm font-medium text-gray-700 disabled:opacity-60">
                 ยกเลิก
               </button>
               <button
-                onClick={() => {
-                  // TODO(C12): ต่อ Backend ads API (ตัดพอยต์ทอง D75 + เข้าคิว admin อนุมัติ) — ยังไม่พร้อม
-                  setShowAd(false);
-                  alert("ส่งคำขอโฆษณาแล้ว — เข้าคิวรอผู้ดูแล (Admin) อนุมัติ (ตัวอย่าง · ยังไม่ตัดพอยต์จริง)");
-                }}
-                className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white rounded-xl py-2 text-sm font-medium"
+                onClick={handleCreateAd}
+                disabled={adSubmitting}
+                className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white rounded-xl py-2 text-sm font-medium disabled:opacity-60"
               >
-                ยืนยัน ({adCost.toLocaleString()} พอยต์ทอง)
+                {adSubmitting ? "กำลังส่ง…" : `ยืนยัน (${adCost.toLocaleString()} พอยต์ทอง)`}
               </button>
             </div>
           </div>
