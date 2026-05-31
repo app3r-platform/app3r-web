@@ -18,16 +18,16 @@ export default function ContactSubmittedModal({ topic, name, onClose }: Props) {
         <p className="text-gray-600">
           ขอบคุณ <span className="font-semibold">{name}</span> ที่ติดต่อเรา
         </p>
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-left space-y-1">
-          <div className="text-purple-700 font-medium">หัวข้อ:</div>
+        <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-sm text-left space-y-1">
+          <div className="text-website-brand-700 font-medium">หัวข้อ:</div>
           <div className="text-gray-700">{topicLabels[topic]}</div>
         </div>
         <p className="text-gray-500 text-sm">
-          ทีมงานจะติดต่อกลับภายใน <span className="font-semibold text-purple-700">1-2 วันทำการ</span>
+          ทีมงานจะติดต่อกลับภายใน <span className="font-semibold text-website-brand-700">1-2 วันทำการ</span>
         </p>
         <button
           onClick={onClose}
-          className="w-full bg-purple-700 text-white py-3 rounded-xl font-semibold hover:bg-purple-800 transition"
+          className="w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
         >
           ปิด
         </button>

@@ -17,7 +17,7 @@ const roles: { value: MockRole; label: string; color: string }[] = [
   { value: "weeeu",        label: "WeeeU",           color: "bg-blue-200 text-blue-800" },
   { value: "weeer",        label: "WeeeR",           color: "bg-green-200 text-green-800" },
   { value: "weeet",        label: "WeeeT",           color: "bg-yellow-200 text-yellow-800" },
-  { value: "weeeu-owner",  label: "เจ้าของประกาศ",  color: "bg-purple-200 text-purple-800" },
+  { value: "weeeu-owner",  label: "เจ้าของประกาศ",  color: "bg-website-brand-200 text-website-brand-800" },
   { value: "admin",        label: "Admin",           color: "bg-red-200 text-red-800" },
 ];
 

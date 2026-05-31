@@ -39,16 +39,16 @@ export default function ArticlesClient({ articles }: Props) {
               <Link
                 key={article.id}
                 href={`/articles/${article.id}`}
-                className="bg-purple-900 text-white rounded-2xl overflow-hidden hover:opacity-90 transition group"
+                className="bg-website-brand-900 text-white rounded-2xl overflow-hidden hover:opacity-90 transition group"
               >
-                <div className="h-40 bg-purple-800 flex items-center justify-center text-6xl">
+                <div className="h-40 bg-website-brand-800 flex items-center justify-center text-6xl">
                   {article.emoji}
                 </div>
                 <div className="p-5 space-y-2">
-                  <span className="text-xs bg-purple-600 px-2 py-0.5 rounded-full">{article.category}</span>
+                  <span className="text-xs bg-website-brand-600 px-2 py-0.5 rounded-full">{article.category}</span>
                   <h2 className="text-lg font-bold leading-snug group-hover:underline">{article.title}</h2>
-                  <p className="text-purple-200 text-sm line-clamp-2">{article.excerpt}</p>
-                  <div className="flex items-center gap-3 text-purple-300 text-xs pt-1">
+                  <p className="text-website-brand-200 text-sm line-clamp-2">{article.excerpt}</p>
+                  <div className="flex items-center gap-3 text-website-brand-300 text-xs pt-1">
                     <span>{article.date}</span>
                     <span>•</span>
                     <span>⏱ {article.readTime}</span>
@@ -76,11 +76,11 @@ export default function ArticlesClient({ articles }: Props) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">
+                    <span className="text-xs bg-website-brand-100 text-website-brand-700 px-2 py-0.5 rounded-full font-medium">
                       {article.category}
                     </span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-purple-700 transition text-sm sm:text-base leading-snug">
+                  <h3 className="font-semibold text-gray-900 group-hover:text-website-brand-700 transition text-sm sm:text-base leading-snug">
                     {article.title}
                   </h3>
                   <p className="text-gray-500 text-sm mt-1 line-clamp-1">{article.excerpt}</p>

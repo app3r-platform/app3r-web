@@ -26,13 +26,13 @@ export default function FeaturedListings() {
           <p className="text-gray-500 text-sm mt-1">ประกาศคัดสรรจากทุกหมวดหมู่</p>
         </div>
         <div className="hidden sm:flex gap-2">
-          <Link href="/listings/resell" className="text-sm text-purple-700 border border-purple-700 px-3 py-1.5 rounded-lg hover:bg-purple-50">
+          <Link href="/listings/resell" className="text-sm text-website-brand-700 border border-website-brand-700 px-3 py-1.5 rounded-lg hover:bg-website-brand-50">
             ขายมือสอง
           </Link>
-          <Link href="/listings/repair" className="text-sm text-purple-700 border border-purple-700 px-3 py-1.5 rounded-lg hover:bg-purple-50">
+          <Link href="/listings/repair" className="text-sm text-website-brand-700 border border-website-brand-700 px-3 py-1.5 rounded-lg hover:bg-website-brand-50">
             ซ่อม
           </Link>
-          <Link href="/listings/maintain" className="text-sm text-purple-700 border border-purple-700 px-3 py-1.5 rounded-lg hover:bg-purple-50">
+          <Link href="/listings/maintain" className="text-sm text-website-brand-700 border border-website-brand-700 px-3 py-1.5 rounded-lg hover:bg-website-brand-50">
             บำรุงรักษา
           </Link>
         </div>
@@ -62,13 +62,13 @@ export default function FeaturedListings() {
               <span className="inline-block text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium mb-2">
                 ซ่อม
               </span>
-              <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-purple-700 transition mb-2">
+              <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-website-brand-700 transition mb-2">
                 {job.title}
               </h3>
               <div className="text-xs text-gray-500 flex items-center gap-1">
                 <span>📍</span> {job.area}
               </div>
-              <div className="mt-2 pt-2 border-t border-gray-100 text-xs text-purple-700 font-medium">
+              <div className="mt-2 pt-2 border-t border-gray-100 text-xs text-website-brand-700 font-medium">
                 งบ {job.estimatedBudget.toLocaleString()} บาท
               </div>
             </Link>
@@ -82,13 +82,13 @@ export default function FeaturedListings() {
               <span className="inline-block text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium mb-2">
                 บำรุงรักษา
               </span>
-              <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-purple-700 transition mb-2">
+              <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-website-brand-700 transition mb-2">
                 {job.title}
               </h3>
               <div className="text-xs text-gray-500 flex items-center gap-1">
                 <span>📍</span> {job.area}
               </div>
-              <div className="mt-2 pt-2 border-t border-gray-100 text-xs text-purple-700 font-medium">
+              <div className="mt-2 pt-2 border-t border-gray-100 text-xs text-website-brand-700 font-medium">
                 งบ {job.estimatedBudget.toLocaleString()} บาท
               </div>
             </Link>
@@ -99,7 +99,7 @@ export default function FeaturedListings() {
       <div className="text-center mt-8">
         <Link
           href="/listings"
-          className="inline-block bg-purple-700 text-white px-8 py-3 rounded-xl hover:bg-purple-800 transition font-medium"
+          className="inline-block bg-website-brand-700 text-white px-8 py-3 rounded-xl hover:bg-website-brand-800 transition font-medium"
         >
           ดูประกาศทั้งหมด →
         </Link>

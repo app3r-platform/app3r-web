@@ -30,7 +30,7 @@ const products = [
     reviewCount: 189,
     emoji: "🫧",
     badge: "แนะนำ",
-    badgeColor: "bg-purple-100 text-purple-700",
+    badgeColor: "bg-website-brand-100 text-website-brand-700",
     desc: "เครื่องซักผ้าฝาหน้า 9 กก. AI Control + Hygiene Steam",
   },
   {
@@ -94,7 +94,7 @@ export default function ProductsPage() {
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">สินค้า</span>
       </nav>
@@ -109,8 +109,8 @@ export default function ProductsPage() {
             key={cat}
             className={`px-4 py-1.5 rounded-full text-sm font-medium border transition ${
               cat === "ทั้งหมด"
-                ? "bg-purple-700 text-white border-purple-700"
-                : "bg-white text-gray-700 border-gray-300 hover:border-purple-500"
+                ? "bg-website-brand-700 text-white border-website-brand-700"
+                : "bg-white text-gray-700 border-gray-300 hover:border-website-brand-500"
             }`}
           >
             {cat}
@@ -123,7 +123,7 @@ export default function ProductsPage() {
         {products.map((product) => (
           <Link
             key={product.id}
-            href="/listings/resell"
+            href={`/products/${product.id}`}
             className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition group"
           >
             {/* Product image */}
@@ -138,7 +138,7 @@ export default function ProductsPage() {
 
             <div className="p-4 space-y-2">
               <div className="text-xs text-gray-400 font-medium">{product.brand}</div>
-              <h2 className="font-semibold text-gray-900 text-sm group-hover:text-purple-700 transition line-clamp-2">
+              <h2 className="font-semibold text-gray-900 text-sm group-hover:text-website-brand-700 transition line-clamp-2">
                 {product.name}
               </h2>
               <p className="text-gray-500 text-xs line-clamp-2">{product.desc}</p>
@@ -151,12 +151,12 @@ export default function ProductsPage() {
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <span className="font-bold text-purple-700 text-sm">{product.priceRange}</span>
-                <span className="text-xs text-purple-700 hover:underline font-medium">ดูรายละเอียด →</span>
+                <span className="font-bold text-website-brand-700 text-sm">{product.priceRange}</span>
+                <span className="text-xs text-website-brand-700 hover:underline font-medium">ดูรายละเอียด →</span>
               </div>
 
               {/* Find on App3R CTA */}
-              <div className="bg-purple-50 rounded-lg px-3 py-2 text-center text-xs text-purple-700 font-medium">
+              <div className="bg-website-brand-50 rounded-lg px-3 py-2 text-center text-xs text-website-brand-700 font-medium">
                 ค้นหาร้านซ่อม/ขายมือสองบน App3R →
               </div>
             </div>

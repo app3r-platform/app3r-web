@@ -33,7 +33,7 @@ export default function SponsoredListing({ listing }: SponsoredListingProps) {
 
       <div className="p-4 space-y-2">
         <TypeBadge type="resell" />
-        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-purple-700 transition-colors">
+        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-website-brand-700 transition-colors">
           {listing.title}
         </h3>
         <p className="text-xs text-gray-500">{listing.condition}</p>
@@ -42,8 +42,8 @@ export default function SponsoredListing({ listing }: SponsoredListingProps) {
           <span>{listing.postedAt}</span>
         </div>
         <div className="flex items-center justify-between pt-2 border-t border-yellow-200">
-          <span className="font-bold text-purple-700 text-sm">{listing.priceLabel}</span>
-          <Link href={href} className="text-xs text-purple-700 hover:underline font-medium">
+          <span className="font-bold text-website-brand-700 text-sm">{listing.priceLabel}</span>
+          <Link href={href} className="text-xs text-website-brand-700 hover:underline font-medium">
             ดูรายละเอียด →
           </Link>
         </div>

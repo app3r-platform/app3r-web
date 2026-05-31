@@ -6,10 +6,10 @@ interface Props {
 
 export default function ContactInfoCard({ info }: Props) {
   return (
-    <div className="bg-purple-900 text-white rounded-2xl p-8 space-y-6 h-fit">
+    <div className="bg-website-brand-900 text-white rounded-2xl p-8 space-y-6 h-fit">
       <div>
         <h2 className="text-xl font-bold mb-1">ข้อมูลติดต่อ</h2>
-        <p className="text-purple-300 text-sm">{info.companyName}</p>
+        <p className="text-website-brand-300 text-sm">{info.companyName}</p>
       </div>
 
       {/* Address */}
@@ -17,7 +17,7 @@ export default function ContactInfoCard({ info }: Props) {
         <span className="text-2xl">📍</span>
         <div>
           <div className="font-semibold text-sm mb-0.5">ที่อยู่</div>
-          <div className="text-purple-200 text-sm">{info.address}</div>
+          <div className="text-website-brand-200 text-sm">{info.address}</div>
         </div>
       </div>
 
@@ -30,7 +30,7 @@ export default function ContactInfoCard({ info }: Props) {
             <a
               key={phone}
               href={`tel:${phone.replace(/-/g, '')}`}
-              className="block text-purple-200 text-sm hover:text-white transition"
+              className="block text-website-brand-200 text-sm hover:text-white transition"
             >
               {phone}
             </a>
@@ -43,7 +43,7 @@ export default function ContactInfoCard({ info }: Props) {
         <span className="text-2xl">🕐</span>
         <div>
           <div className="font-semibold text-sm mb-0.5">เวลาทำการ</div>
-          <div className="text-purple-200 text-sm">{info.businessHours}</div>
+          <div className="text-website-brand-200 text-sm">{info.businessHours}</div>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export default function ContactInfoCard({ info }: Props) {
             href={`https://line.me/R/ti/p/${info.lineId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-purple-200 text-sm hover:text-white transition"
+            className="text-website-brand-200 text-sm hover:text-white transition"
           >
             {info.lineId}
           </a>
@@ -64,15 +64,15 @@ export default function ContactInfoCard({ info }: Props) {
       </div>
 
       {/* Emails */}
-      <div className="border-t border-purple-700 pt-5">
+      <div className="border-t border-website-brand-700 pt-5">
         <div className="font-semibold text-sm mb-3">อีเมล</div>
         <div className="space-y-2">
           {info.emails.map((e) => (
             <div key={e.email}>
-              <div className="text-xs text-purple-400">{e.label}</div>
+              <div className="text-xs text-website-brand-400">{e.label}</div>
               <a
                 href={`mailto:${e.email}`}
-                className="text-purple-200 text-sm hover:text-white transition break-all"
+                className="text-website-brand-200 text-sm hover:text-white transition break-all"
               >
                 {e.email}
               </a>

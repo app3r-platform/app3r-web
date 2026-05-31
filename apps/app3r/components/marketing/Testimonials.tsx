@@ -48,7 +48,7 @@ export default async function Testimonials() {
   const testimonials = await getTestimonials();
 
   return (
-    <section className="bg-purple-50 py-14 px-4">
+    <section className="bg-website-brand-50 py-14 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-2xl font-bold text-gray-900">เสียงจากผู้ใช้งานจริง</h2>

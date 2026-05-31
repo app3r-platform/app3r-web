@@ -28,7 +28,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">⚡</span>
-            <span className="font-extrabold text-xl text-purple-700">App3R</span>
+            <span className="font-extrabold text-xl text-website-brand-700">App3R</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -39,7 +39,7 @@ export default function Navbar() {
                   <button
                     onMouseEnter={() => setDropdownOpen(true)}
                     onMouseLeave={() => setDropdownOpen(false)}
-                    className="text-gray-700 hover:text-purple-700 font-medium flex items-center gap-1 py-2"
+                    className="text-gray-700 hover:text-website-brand-700 font-medium flex items-center gap-1 py-2"
                   >
                     {link.label}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@ export default function Navbar() {
                         <Link
                           key={child.href}
                           href={child.href}
-                          className="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-700 text-sm"
+                          className="block px-4 py-2 text-gray-700 hover:bg-website-brand-50 hover:text-website-brand-700 text-sm"
                         >
                           {child.label}
                         </Link>
@@ -68,7 +68,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href!}
-                  className="text-gray-700 hover:text-purple-700 font-medium"
+                  className="text-gray-700 hover:text-website-brand-700 font-medium"
                 >
                   {link.label}
                 </Link>
@@ -80,13 +80,13 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <Link
               href="http://localhost:3002/login"
-              className="text-purple-700 border border-purple-700 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-purple-50 transition"
+              className="text-website-brand-700 border border-website-brand-700 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-50 transition"
             >
-              เข้าสู่ระบบ
+              เข้าสู่ระบบ WeeeU
             </Link>
             <Link
               href="/register/weeer"
-              className="bg-purple-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-purple-800 transition"
+              className="bg-website-brand-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-800 transition"
             >
               สมัคร WeeeR
             </Link>
@@ -124,7 +124,7 @@ export default function Navbar() {
                       key={child.href}
                       href={child.href}
                       onClick={() => setMobileOpen(false)}
-                      className="block px-4 py-2 text-gray-700 hover:text-purple-700"
+                      className="block px-4 py-2 text-gray-700 hover:text-website-brand-700"
                     >
                       {child.label}
                     </Link>
@@ -135,7 +135,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href!}
                   onClick={() => setMobileOpen(false)}
-                  className="block px-2 py-2 text-gray-700 hover:text-purple-700 font-medium"
+                  className="block px-2 py-2 text-gray-700 hover:text-website-brand-700 font-medium"
                 >
                   {link.label}
                 </Link>
@@ -145,14 +145,14 @@ export default function Navbar() {
               <Link
                 href="http://localhost:3002/login"
                 onClick={() => setMobileOpen(false)}
-                className="text-center text-purple-700 border border-purple-700 px-4 py-2 rounded-lg text-sm font-medium"
+                className="text-center text-website-brand-700 border border-website-brand-700 px-4 py-2 rounded-lg text-sm font-medium"
               >
-                เข้าสู่ระบบ
+                เข้าสู่ระบบ WeeeU
               </Link>
               <Link
                 href="/register/weeer"
                 onClick={() => setMobileOpen(false)}
-                className="text-center bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+                className="text-center bg-website-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
               >
                 สมัคร WeeeR
               </Link>

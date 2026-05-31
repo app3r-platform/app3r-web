@@ -55,9 +55,9 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
 
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
-        <Link href="/listings" className="hover:text-purple-700">ประกาศ</Link>
+        <Link href="/listings" className="hover:text-website-brand-700">ประกาศ</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">ขายเครื่องใช้ไฟฟ้ามือสอง</span>
       </nav>
@@ -84,8 +84,8 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
               href="/listings/resell?page=1"
               className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
                 !category
-                  ? "bg-purple-700 text-white border-purple-700"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-purple-500"
+                  ? "bg-website-brand-700 text-white border-website-brand-700"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-website-brand-500"
               }`}
             >
               ทั้งหมด
@@ -96,8 +96,8 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
                 href={`/listings/resell?category=${encodeURIComponent(cat)}&page=1`}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
                   category === cat
-                    ? "bg-purple-700 text-white border-purple-700"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-purple-500"
+                    ? "bg-website-brand-700 text-white border-website-brand-700"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-website-brand-500"
                 }`}
               >
                 {cat}

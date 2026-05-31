@@ -39,7 +39,7 @@ export default async function CmsStaticPage({ params }: Props) {
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">{page.title}</span>
       </nav>
@@ -75,7 +75,7 @@ export default async function CmsStaticPage({ params }: Props) {
 
       {/* Back link */}
       <div className="mt-8">
-        <Link href="/" className="text-purple-700 hover:underline text-sm">
+        <Link href="/" className="text-website-brand-700 hover:underline text-sm">
           ← กลับหน้าหลัก
         </Link>
       </div>

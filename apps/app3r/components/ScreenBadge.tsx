@@ -20,6 +20,7 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/listings",                 info: { num: "W-06", code: "LISTINGS-HUB" } },
   { pattern: "/articles/[id]",            info: { num: "W-16", code: "ARTICLE-DETAIL" } },
   { pattern: "/articles",                 info: { num: "W-15", code: "ARTICLES" } },
+  { pattern: "/products/[id]",            info: { num: "W-21", code: "PRODUCT-DETAIL" } },
   { pattern: "/products",                 info: { num: "W-17", code: "PRODUCTS" } },
   { pattern: "/register/weeer",           info: { num: "W-18", code: "REGISTER-WEEER" } },
   { pattern: "/preview/[id]",             info: { num: "W-19", code: "PREVIEW" } },
@@ -50,7 +51,9 @@ function matchScreen(pathname: string): ScreenInfo | null {
 
 export function ScreenBadge() {
   const pathname = usePathname();
-  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+  // Dev-only flag: accept "true" (legacy convention) or "1" (HUB Gen 39 CMD)
+  const flag = process.env.NEXT_PUBLIC_DEV_NAV;
+  if (flag !== "true" && flag !== "1") return null;
   const info = matchScreen(pathname);
   if (!info) return null;
 

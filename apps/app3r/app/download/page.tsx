@@ -69,7 +69,7 @@ export default function DownloadPage() {
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">ดาวน์โหลดแอป</span>
       </nav>
@@ -145,14 +145,14 @@ export default function DownloadPage() {
                 </div>
               </div>
               <p className="text-gray-600 text-sm">{w.desc}</p>
-              <div className="mt-3 text-purple-700 text-sm font-semibold">เปิดในเบราว์เซอร์ →</div>
+              <div className="mt-3 text-website-brand-700 text-sm font-semibold">เปิดในเบราว์เซอร์ →</div>
             </a>
           ))}
         </div>
       </div>
 
       {/* Notify me */}
-      <div className="bg-purple-50 border border-purple-200 rounded-2xl p-6 text-center space-y-4">
+      <div className="bg-website-brand-50 border border-website-brand-200 rounded-2xl p-6 text-center space-y-4">
         <h3 className="font-bold text-gray-900 text-lg">รับแจ้งเตือนเมื่อแอปพร้อม</h3>
         <p className="text-gray-600 text-sm">
           ใส่อีเมลของคุณ เราจะแจ้งเตือนทันทีเมื่อแอปมือถือพร้อมดาวน์โหลด
@@ -161,9 +161,9 @@ export default function DownloadPage() {
           <input
             type="email"
             placeholder="your@email.com"
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
           />
-          <button className="bg-purple-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-purple-800 transition">
+          <button className="bg-website-brand-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-website-brand-800 transition">
             แจ้งเตือนฉัน
           </button>
         </div>

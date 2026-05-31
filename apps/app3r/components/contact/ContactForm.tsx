@@ -151,7 +151,7 @@ export default function ContactForm() {
             <select
               value={topic}
               onChange={(e) => setTopic(e.target.value as ContactTopic | '')}
-              className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+              className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 ${
                 errors.topic ? 'border-red-400' : 'border-gray-300'
               }`}
             >
@@ -174,7 +174,7 @@ export default function ContactForm() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="ชื่อของคุณ"
-                className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 ${
                   errors.name ? 'border-red-400' : 'border-gray-300'
                 }`}
               />
@@ -189,7 +189,7 @@ export default function ContactForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@example.com"
-                className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 ${
                   errors.email ? 'border-red-400' : 'border-gray-300'
                 }`}
               />
@@ -208,7 +208,7 @@ export default function ContactForm() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="0XX-XXX-XXXX"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
               />
             </div>
             <div>
@@ -220,7 +220,7 @@ export default function ContactForm() {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="ชื่อบริษัทหรือร้านค้า"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
               />
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function ContactForm() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="ระบุรายละเอียดที่ต้องการสอบถาม..."
               rows={5}
-              className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none ${
+              className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 resize-none ${
                 errors.message ? 'border-red-400' : 'border-gray-300'
               }`}
             />
@@ -251,7 +251,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-700 text-white py-3 rounded-xl font-semibold hover:bg-purple-800 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

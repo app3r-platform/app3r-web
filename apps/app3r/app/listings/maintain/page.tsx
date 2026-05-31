@@ -9,6 +9,7 @@ import { getMaintainJobs } from '../../../lib/api/customer-jobs';
 import MaintainJobCard from '../../../components/listings/MaintainJobCard';
 import ServiceTypeFilter from '../../../components/listings/ServiceTypeFilter';
 import AreaSelect from '../../../components/listings/AreaSelect';
+import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel';
 import { MAINTAIN_ALLOWED_TYPES } from '../../../lib/constants/service-types';
 
 const MAINTAIN_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
@@ -40,7 +41,7 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">ประกาศบำรุงรักษา</span>
       </nav>
@@ -99,6 +100,12 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
             <div className="text-xs text-gray-400 bg-orange-50 rounded-lg p-2">
               งานบำรุงรักษารองรับเฉพาะ<br />
               <strong>ซ่อมนอกสถานที่</strong> (ช่างมาหาลูกค้า)
+            </div>
+
+            {/* W2 · GR-10 NearMeFilter — geolocation-based nearby tambons */}
+            <div className="border-t pt-4">
+              <label className="block text-sm text-gray-700 font-medium mb-2">ใกล้ฉัน (Near me)</label>
+              <NearbyTambonsPanel />
             </div>
           </div>
         </aside>
