@@ -44,7 +44,7 @@ function parseMarkdown(body: string): React.ReactNode[] {
     // H3
     if (block.startsWith('### ')) {
       return (
-        <h3 key={i} className="text-lg font-bold text-purple-700 mt-6 mb-3">
+        <h3 key={i} className="text-lg font-bold text-website-brand-700 mt-6 mb-3">
           {renderInline(block.slice(4))}
         </h3>
       );
@@ -67,7 +67,7 @@ function parseMarkdown(body: string): React.ReactNode[] {
           {lines.map((line, j) =>
             line.startsWith('- ') ? (
               <div key={j} className="flex gap-2 text-gray-700">
-                <span className="text-purple-700 flex-shrink-0">•</span>
+                <span className="text-website-brand-700 flex-shrink-0">•</span>
                 <span>{renderInline(line.slice(2))}</span>
               </div>
             ) : (
@@ -119,7 +119,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">{page.title}</span>
       </nav>
@@ -136,7 +136,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
                   href={link.href}
                   className={`block px-3 py-2 rounded-lg text-sm transition ${
                     link.href === `/legal/${activeSlug}`
-                      ? 'bg-purple-700 text-white font-medium'
+                      ? 'bg-website-brand-700 text-white font-medium'
                       : 'text-gray-700 hover:bg-gray-200'
                   }`}
                 >

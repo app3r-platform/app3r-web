@@ -121,10 +121,10 @@ export default function RegisterWeeeRPage() {
               <p className="font-semibold text-blue-900 text-sm">Escrow คุ้มครอง</p>
               <p className="text-xs text-blue-700 mt-0.5">รับเงินตรงเวลา</p>
             </div>
-            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center">
+            <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">👥</div>
-              <p className="font-semibold text-purple-900 text-sm">ทีมช่าง WeeeT</p>
-              <p className="text-xs text-purple-700 mt-0.5">ฟรี 1 บัญชี/ร้าน</p>
+              <p className="font-semibold text-website-brand-900 text-sm">ทีมช่าง WeeeT</p>
+              <p className="text-xs text-website-brand-700 mt-0.5">ฟรี 1 บัญชี/ร้าน</p>
             </div>
           </div>
 
@@ -210,7 +210,7 @@ export default function RegisterWeeeRPage() {
           </div>
           <Link
             href="/"
-            className="block bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-800 transition"
+            className="block bg-website-brand-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
           >
             กลับหน้าหลัก
           </Link>
@@ -224,7 +224,7 @@ export default function RegisterWeeeRPage() {
       <div className="max-w-2xl mx-auto">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-          <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+          <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
           <span>/</span>
           <span className="text-gray-900 font-medium">สมัคร WeeeR</span>
         </nav>
@@ -260,13 +260,13 @@ export default function RegisterWeeeRPage() {
                     isDone
                       ? "bg-green-500 text-white"
                       : isActive
-                      ? "bg-purple-700 text-white"
+                      ? "bg-website-brand-700 text-white"
                       : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   {isDone ? "✓" : s}
                 </div>
-                <span className={`text-xs mt-1 hidden sm:block ${isActive ? "text-purple-700 font-medium" : "text-gray-400"}`}>
+                <span className={`text-xs mt-1 hidden sm:block ${isActive ? "text-website-brand-700 font-medium" : "text-gray-400"}`}>
                   {label}
                 </span>
                 {i < stepLabels.length - 1 && (
@@ -292,7 +292,7 @@ export default function RegisterWeeeRPage() {
                   value={form.businessName || ""}
                   onChange={(e) => updateForm("businessName", e.target.value)}
                   placeholder="เช่น ร้านซ่อมแอร์สมหมาย, บริษัท XYZ จำกัด"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                 />
               </div>
               <div>
@@ -302,7 +302,7 @@ export default function RegisterWeeeRPage() {
                 <select
                   value={form.businessType || ""}
                   onChange={(e) => updateForm("businessType", e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                 >
                   <option value="">เลือกประเภท</option>
                   <option>บุคคลธรรมดา (ร้านค้าทั่วไป)</option>
@@ -322,7 +322,7 @@ export default function RegisterWeeeRPage() {
                   onChange={(e) => updateForm("taxId", e.target.value)}
                   placeholder="0-0000-00000-00-0"
                   maxLength={13}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                 />
               </div>
               <div>
@@ -335,7 +335,7 @@ export default function RegisterWeeeRPage() {
                   value={form.registrationNumber || ""}
                   onChange={(e) => updateForm("registrationNumber", e.target.value)}
                   placeholder="เลขทะเบียนพาณิชย์"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                 />
               </div>
             </div>
@@ -355,7 +355,7 @@ export default function RegisterWeeeRPage() {
                     value={form.ownerName || ""}
                     onChange={(e) => updateForm("ownerName", e.target.value)}
                     placeholder="ชื่อ-นามสกุล"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                   />
                 </div>
                 <div>
@@ -367,7 +367,7 @@ export default function RegisterWeeeRPage() {
                     value={form.email || ""}
                     onChange={(e) => updateForm("email", e.target.value)}
                     placeholder="email@example.com"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                   />
                 </div>
                 <div>
@@ -379,7 +379,7 @@ export default function RegisterWeeeRPage() {
                     value={form.phone || ""}
                     onChange={(e) => updateForm("phone", e.target.value)}
                     placeholder="08X-XXX-XXXX"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -392,7 +392,7 @@ export default function RegisterWeeeRPage() {
                     value={form.lineId || ""}
                     onChange={(e) => updateForm("lineId", e.target.value)}
                     placeholder="@yourlineid"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                   />
                 </div>
                 <div>
@@ -404,7 +404,7 @@ export default function RegisterWeeeRPage() {
                     value={form.password || ""}
                     onChange={(e) => updateForm("password", e.target.value)}
                     placeholder="อย่างน้อย 8 ตัวอักษร"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                   />
                 </div>
                 <div>
@@ -416,7 +416,7 @@ export default function RegisterWeeeRPage() {
                     value={form.confirmPassword || ""}
                     onChange={(e) => updateForm("confirmPassword", e.target.value)}
                     placeholder="กรอกรหัสผ่านอีกครั้ง"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                   />
                 </div>
               </div>
@@ -436,21 +436,21 @@ export default function RegisterWeeeRPage() {
                   onChange={(e) => updateForm("address", e.target.value)}
                   placeholder="บ้านเลขที่ ถนน ซอย"
                   rows={2}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 resize-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">แขวง/ตำบล <span className="text-red-500">*</span></label>
-                  <input type="text" value={form.subDistrict || ""} onChange={(e) => updateForm("subDistrict", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                  <input type="text" value={form.subDistrict || ""} onChange={(e) => updateForm("subDistrict", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">เขต/อำเภอ <span className="text-red-500">*</span></label>
-                  <input type="text" value={form.district || ""} onChange={(e) => updateForm("district", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                  <input type="text" value={form.district || ""} onChange={(e) => updateForm("district", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">จังหวัด <span className="text-red-500">*</span></label>
-                  <select value={form.province || ""} onChange={(e) => updateForm("province", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                  <select value={form.province || ""} onChange={(e) => updateForm("province", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500">
                     <option value="">เลือกจังหวัด</option>
                     <option>กรุงเทพฯ</option>
                     <option>นนทบุรี</option>
@@ -462,7 +462,7 @@ export default function RegisterWeeeRPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">รหัสไปรษณีย์ <span className="text-red-500">*</span></label>
-                  <input type="text" value={form.postalCode || ""} onChange={(e) => updateForm("postalCode", e.target.value)} maxLength={5} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                  <input type="text" value={form.postalCode || ""} onChange={(e) => updateForm("postalCode", e.target.value)} maxLength={5} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" />
                 </div>
               </div>
               <div>
@@ -472,12 +472,12 @@ export default function RegisterWeeeRPage() {
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {serviceTypeOptions.map((service) => (
-                    <label key={service} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer p-2 rounded-lg border border-gray-200 hover:border-purple-400 transition">
+                    <label key={service} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer p-2 rounded-lg border border-gray-200 hover:border-website-brand-400 transition">
                       <input
                         type="checkbox"
                         checked={(form.serviceTypes || []).includes(service)}
                         onChange={() => toggleService(service)}
-                        className="rounded border-gray-300 text-purple-600"
+                        className="rounded border-gray-300 text-website-brand-600"
                       />
                       {service}
                     </label>
@@ -493,7 +493,7 @@ export default function RegisterWeeeRPage() {
                   value={form.serviceArea || ""}
                   onChange={(e) => updateForm("serviceArea", e.target.value)}
                   placeholder="เช่น กรุงเทพฯ, นนทบุรี, ปทุมธานี"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
                 />
               </div>
             </div>
@@ -520,7 +520,7 @@ export default function RegisterWeeeRPage() {
                     {doc.label}
                     {doc.required && <span className="text-red-500 ml-1">*</span>}
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-purple-400 transition cursor-pointer">
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-website-brand-400 transition cursor-pointer">
                     <div className="text-3xl mb-1">📁</div>
                     <p className="text-sm text-gray-500">{doc.hint}</p>
                     <p className="text-xs text-gray-400 mt-1">คลิกหรือลากไฟล์มาวาง</p>
@@ -535,11 +535,11 @@ export default function RegisterWeeeRPage() {
                     type="checkbox"
                     checked={form.agreeTerms || false}
                     onChange={(e) => updateForm("agreeTerms", e.target.checked)}
-                    className="mt-0.5 rounded border-gray-300 text-purple-600"
+                    className="mt-0.5 rounded border-gray-300 text-website-brand-600"
                   />
                   <span className="text-sm text-gray-700">
                     ฉันยอมรับ{" "}
-                    <Link href="/terms" className="text-purple-700 underline">ข้อกำหนดการใช้งาน</Link>{" "}
+                    <Link href="/terms" className="text-website-brand-700 underline">ข้อกำหนดการใช้งาน</Link>{" "}
                     และเข้าใจว่าบัญชี WeeeR ต้องรอการอนุมัติจาก App3R ก่อนเริ่มใช้งานได้
                     <span className="text-red-500 ml-1">*</span>
                   </span>
@@ -549,11 +549,11 @@ export default function RegisterWeeeRPage() {
                     type="checkbox"
                     checked={form.agreePrivacy || false}
                     onChange={(e) => updateForm("agreePrivacy", e.target.checked)}
-                    className="mt-0.5 rounded border-gray-300 text-purple-600"
+                    className="mt-0.5 rounded border-gray-300 text-website-brand-600"
                   />
                   <span className="text-sm text-gray-700">
                     ฉันยินยอมให้ App3R เก็บและใช้ข้อมูลส่วนตัวตาม{" "}
-                    <Link href="/privacy" className="text-purple-700 underline">นโยบายความเป็นส่วนตัว</Link>
+                    <Link href="/privacy" className="text-website-brand-700 underline">นโยบายความเป็นส่วนตัว</Link>
                     <span className="text-red-500 ml-1">*</span>
                   </span>
                 </label>
@@ -575,7 +575,7 @@ export default function RegisterWeeeRPage() {
             </div>
             <button
               onClick={handleNext}
-              className="px-6 py-2.5 bg-purple-700 text-white rounded-lg text-sm font-semibold hover:bg-purple-800 transition"
+              className="px-6 py-2.5 bg-website-brand-700 text-white rounded-lg text-sm font-semibold hover:bg-website-brand-800 transition"
             >
               {step === 4 ? "ส่งใบสมัคร ✓" : "ถัดไป →"}
             </button>
@@ -584,7 +584,7 @@ export default function RegisterWeeeRPage() {
 
         <p className="text-center text-gray-500 text-xs mt-5">
           มีบัญชีแล้ว?{" "}
-          <Link href={`${WEEER_APP_URL}/login`} className="text-purple-700 hover:underline font-medium">
+          <Link href={`${WEEER_APP_URL}/login`} className="text-website-brand-700 hover:underline font-medium">
             เข้าสู่ระบบ WeeeR
           </Link>
         </p>

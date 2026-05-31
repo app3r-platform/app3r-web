@@ -47,7 +47,7 @@ export default function ListingGrid({
           {page > 1 && (
             <Link
               href={`${baseHref}?page=${page - 1}`}
-              className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 hover:border-purple-500 text-sm"
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 hover:border-website-brand-500 text-sm"
             >
               ‹
             </Link>
@@ -63,8 +63,8 @@ export default function ListingGrid({
                 href={`${baseHref}?page=${p}`}
                 className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition ${
                   p === page
-                    ? "bg-purple-700 text-white"
-                    : "bg-white border border-gray-300 text-gray-700 hover:border-purple-500"
+                    ? "bg-website-brand-700 text-white"
+                    : "bg-white border border-gray-300 text-gray-700 hover:border-website-brand-500"
                 }`}
               >
                 {p}
@@ -74,7 +74,7 @@ export default function ListingGrid({
           {page < totalPages && (
             <Link
               href={`${baseHref}?page=${page + 1}`}
-              className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 hover:border-purple-500 text-sm"
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 hover:border-website-brand-500 text-sm"
             >
               ›
             </Link>

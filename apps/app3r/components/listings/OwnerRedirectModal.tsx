@@ -17,7 +17,7 @@ export default function OwnerRedirectModal({ jobId, type, title }: OwnerRedirect
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <div className="max-w-md mx-auto bg-white border border-purple-200 rounded-2xl p-8 text-center shadow-sm">
+      <div className="max-w-md mx-auto bg-white border border-website-brand-200 rounded-2xl p-8 text-center shadow-sm">
         <div className="text-5xl mb-4">👤</div>
         <h2 className="text-lg font-bold text-gray-900 mb-2">
           นี่คือประกาศของคุณ
@@ -36,7 +36,7 @@ export default function OwnerRedirectModal({ jobId, type, title }: OwnerRedirect
         <div className="space-y-3">
           <Link
             href={`http://localhost:3002/jobs/${jobId}`}
-            className="block w-full bg-purple-600 text-white py-3 rounded-xl font-semibold hover:bg-purple-700 transition"
+            className="block w-full bg-website-brand-600 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-700 transition"
           >
             ไปจัดการประกาศ (WeeeU)
           </Link>

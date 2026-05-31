@@ -49,7 +49,7 @@ export default function SortBar({ total, baseHref, mode = "resell" }: SortBarPro
         <select
           value={currentSort}
           onChange={(e) => handleSort(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
         >
           {sortOptions.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>

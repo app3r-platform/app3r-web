@@ -47,7 +47,7 @@ export default function ListingCard({
         </span>
 
         {/* Title */}
-        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-purple-700 transition-colors">
+        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-website-brand-700 transition-colors">
           {title}
         </h3>
 
@@ -73,10 +73,10 @@ export default function ListingCard({
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-          <span className="font-bold text-purple-700 text-sm">{priceLabel}</span>
+          <span className="font-bold text-website-brand-700 text-sm">{priceLabel}</span>
           <Link
             href={detailHref}
-            className="text-xs text-purple-700 hover:underline font-medium"
+            className="text-xs text-website-brand-700 hover:underline font-medium"
           >
             ดูรายละเอียด →
           </Link>

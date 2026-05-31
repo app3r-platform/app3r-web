@@ -45,11 +45,11 @@ export default async function ScrapDetailPage({ params }: PageProps) {
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2 flex-wrap">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
-        <Link href="/listings" className="hover:text-purple-700">ประกาศ</Link>
+        <Link href="/listings" className="hover:text-website-brand-700">ประกาศ</Link>
         <span>/</span>
-        <Link href="/listings/scrap" className="hover:text-purple-700">ซาก</Link>
+        <Link href="/listings/scrap" className="hover:text-website-brand-700">ซาก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium line-clamp-1">{listing.title}</span>
       </nav>
@@ -84,7 +84,7 @@ export default async function ScrapDetailPage({ params }: PageProps) {
               </div>
               <div>
                 <p className="text-xs text-gray-500">มูลค่าโดยประมาณ</p>
-                <p className="text-2xl font-extrabold text-purple-700">{listing.estimatedValueLabel}</p>
+                <p className="text-2xl font-extrabold text-website-brand-700">{listing.estimatedValueLabel}</p>
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default async function ScrapDetailPage({ params }: PageProps) {
               </div>
               <div className="flex justify-between border-t pt-2 mt-2">
                 <span className="text-gray-500 font-medium">มูลค่าโดยประมาณ</span>
-                <span className="font-extrabold text-purple-700">{listing.estimatedValueLabel}</span>
+                <span className="font-extrabold text-website-brand-700">{listing.estimatedValueLabel}</span>
               </div>
             </div>
             {/* W-2-D (D6): Tier-based "สนใจ" button */}

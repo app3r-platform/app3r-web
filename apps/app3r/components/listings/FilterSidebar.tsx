@@ -124,7 +124,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
         <select
           value={province}
           onChange={(e) => setProvince(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
         >
           <option value="">ทุกจังหวัด</option>
           {provinces.map((p) => (
@@ -143,14 +143,14 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
               placeholder="ต่ำสุด"
               value={priceMin}
               onChange={(e) => setPriceMin(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
             />
             <input
               type="number"
               placeholder="สูงสุด"
               value={priceMax}
               onChange={(e) => setPriceMax(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
             />
           </div>
         </div>
@@ -163,7 +163,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
           <select
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
           >
             <option value="">ทุกยี่ห้อ</option>
             {brands.map((b) => (
@@ -180,7 +180,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
           <select
             value={material}
             onChange={(e) => setMaterial(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
           >
             <option value="">ทุกวัสดุ</option>
             {materials.map((m) => (
@@ -280,7 +280,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
         >
           {sortOptions.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
@@ -290,7 +290,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
 
       <button
         onClick={handleSearch}
-        className="w-full bg-purple-700 text-white py-2 rounded-lg text-sm font-medium hover:bg-purple-800 transition"
+        className="w-full bg-website-brand-700 text-white py-2 rounded-lg text-sm font-medium hover:bg-website-brand-800 transition"
       >
         ค้นหา
       </button>

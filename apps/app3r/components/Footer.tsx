@@ -17,7 +17,9 @@ const footerLinks = {
   สมาชิก: [
     { href: "http://localhost:3002/register", label: "สมัคร WeeeU (ผู้ใช้ทั่วไป)" },
     { href: "/register/weeer", label: "สมัคร WeeeR (ร้านค้า/บริษัท)" },
-    { href: "http://localhost:3002/login", label: "เข้าสู่ระบบ" },
+    { href: "http://localhost:3002/login", label: "เข้าสู่ระบบ WeeeU" },
+    { href: "http://localhost:3001/login", label: "เข้าสู่ระบบ WeeeR" },
+    { href: "http://localhost:3003/login", label: "เข้าสู่ระบบ WeeeT" },
   ],
 };
 

@@ -17,7 +17,7 @@ export default function InterestedButton({ listingTitle }: InterestedButtonProps
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full bg-purple-700 text-white py-3 rounded-xl font-semibold hover:bg-purple-800 transition text-lg"
+        className="w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition text-lg"
       >
         สนใจสินค้า
       </button>

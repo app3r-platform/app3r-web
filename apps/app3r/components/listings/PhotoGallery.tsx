@@ -39,8 +39,8 @@ export default function PhotoGallery({ images, alt }: PhotoGalleryProps) {
               onClick={() => setSelectedIndex(i)}
               className={`relative w-20 h-20 shrink-0 rounded-lg overflow-hidden border-2 transition ${
                 i === selectedIndex
-                  ? "border-purple-600"
-                  : "border-transparent hover:border-purple-300"
+                  ? "border-website-brand-600"
+                  : "border-transparent hover:border-website-brand-300"
               }`}
             >
               <Image

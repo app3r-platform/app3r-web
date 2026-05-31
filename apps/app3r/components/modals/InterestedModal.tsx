@@ -57,9 +57,9 @@ export default function InterestedModal({
         </div>
 
         {/* Info */}
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-800">
+        <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-sm text-website-brand-800">
           <p className="font-semibold mb-1">เข้าสู่ระบบ WeeeU เพื่อติดต่อผู้ขาย</p>
-          <p className="text-purple-600">
+          <p className="text-website-brand-600">
             สมาชิก WeeeU สามารถดูข้อมูลผู้ขาย ยื่น Offer และติดตามสถานะผ่านระบบ Escrow ที่ปลอดภัย
           </p>
         </div>
@@ -68,13 +68,13 @@ export default function InterestedModal({
         <div className="space-y-3">
           <a
             href="http://localhost:3002/login"
-            className="block w-full bg-purple-700 text-white text-center py-3 rounded-xl font-semibold hover:bg-purple-800 transition"
+            className="block w-full bg-website-brand-700 text-white text-center py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
           >
             เข้าสู่ระบบ WeeeU
           </a>
           <a
             href="http://localhost:3002/register"
-            className="block w-full bg-white border border-purple-700 text-purple-700 text-center py-3 rounded-xl font-semibold hover:bg-purple-50 transition"
+            className="block w-full bg-white border border-website-brand-700 text-website-brand-700 text-center py-3 rounded-xl font-semibold hover:bg-website-brand-50 transition"
           >
             สมัครสมาชิกฟรี
           </a>

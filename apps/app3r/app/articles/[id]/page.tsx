@@ -25,16 +25,16 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   return (
     <article className="max-w-3xl mx-auto px-4 py-10">
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
-        <Link href="/articles" className="hover:text-purple-700">บทความ</Link>
+        <Link href="/articles" className="hover:text-website-brand-700">บทความ</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium line-clamp-1">{article.title}</span>
       </nav>
 
       <div className="mb-8">
         <div className="text-6xl mb-4 text-center">{article.emoji}</div>
-        <span className="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
+        <span className="text-xs bg-website-brand-100 text-website-brand-700 px-3 py-1 rounded-full font-medium">
           {article.category}
         </span>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-3 mb-2 leading-snug">
@@ -86,7 +86,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           {article.references.map((ref, i) => (
             <li key={i} className="text-sm">
               <a href={ref.url} target="_blank" rel="noopener noreferrer"
-                className="text-purple-700 hover:underline">
+                className="text-website-brand-700 hover:underline">
                 {ref.title}
               </a>
               <span className="text-gray-400 ml-2">— {ref.source}</span>
@@ -103,7 +103,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
       <div className="mt-10">
         <Link href="/articles"
-          className="inline-flex items-center gap-2 text-sm text-purple-700 hover:underline">
+          className="inline-flex items-center gap-2 text-sm text-website-brand-700 hover:underline">
           ← กลับไปหน้าบทความ
         </Link>
       </div>

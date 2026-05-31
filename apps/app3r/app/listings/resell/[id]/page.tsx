@@ -52,11 +52,11 @@ export default async function ResellDetailPage({ params }: PageProps) {
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2 flex-wrap">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
-        <Link href="/listings" className="hover:text-purple-700">ประกาศ</Link>
+        <Link href="/listings" className="hover:text-website-brand-700">ประกาศ</Link>
         <span>/</span>
-        <Link href="/listings/resell" className="hover:text-purple-700">ขายมือสอง</Link>
+        <Link href="/listings/resell" className="hover:text-website-brand-700">ขายมือสอง</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium line-clamp-1">{listing.title}</span>
       </nav>
@@ -84,7 +84,7 @@ export default async function ResellDetailPage({ params }: PageProps) {
               )}
             </div>
             <h1 className="text-2xl font-bold text-gray-900">{listing.title}</h1>
-            <p className="text-3xl font-extrabold text-purple-700">{listing.priceLabel}</p>
+            <p className="text-3xl font-extrabold text-website-brand-700">{listing.priceLabel}</p>
           </div>
 
           {/* Details table */}
@@ -125,7 +125,7 @@ export default async function ResellDetailPage({ params }: PageProps) {
         <div className="space-y-5">
           {/* Price & CTA */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 sticky top-20">
-            <p className="text-2xl font-extrabold text-purple-700">{listing.priceLabel}</p>
+            <p className="text-2xl font-extrabold text-website-brand-700">{listing.priceLabel}</p>
             {/* W-2-D (D6): Tier-based "สนใจสินค้า" button */}
             {canInterest ? (
               <InterestedButton listingTitle={listing.title} />
@@ -150,7 +150,7 @@ export default async function ResellDetailPage({ params }: PageProps) {
             <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
               <h2 className="font-semibold text-gray-900">ข้อมูลผู้ขาย</h2>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-lg">
+                <div className="w-12 h-12 rounded-full bg-website-brand-100 flex items-center justify-center text-website-brand-700 font-bold text-lg">
                   {listing.seller.displayName.charAt(0)}
                 </div>
                 <div>

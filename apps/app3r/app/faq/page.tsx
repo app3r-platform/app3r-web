@@ -34,7 +34,7 @@ export default async function FAQPage() {
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">คำถามที่พบบ่อย</span>
       </nav>
@@ -48,7 +48,7 @@ export default async function FAQPage() {
           <a
             key={cat}
             href={`#${cat}`}
-            className="px-4 py-1.5 rounded-full text-sm font-medium border border-purple-300 text-purple-700 hover:bg-purple-700 hover:text-white transition"
+            className="px-4 py-1.5 rounded-full text-sm font-medium border border-website-brand-300 text-website-brand-700 hover:bg-website-brand-700 hover:text-white transition"
           >
             {categoryLabels[cat]}
           </a>
@@ -62,8 +62,8 @@ export default async function FAQPage() {
           if (!catItems || catItems.length === 0) return null;
           return (
             <section key={cat} id={cat}>
-              <h2 className="text-lg font-bold text-purple-700 mb-4 flex items-center gap-2">
-                <span className="w-2 h-5 bg-purple-700 rounded-full inline-block" />
+              <h2 className="text-lg font-bold text-website-brand-700 mb-4 flex items-center gap-2">
+                <span className="w-2 h-5 bg-website-brand-700 rounded-full inline-block" />
                 {categoryLabels[cat]}
               </h2>
               <div className="space-y-3">
@@ -74,7 +74,7 @@ export default async function FAQPage() {
                   >
                     <summary className="flex items-center justify-between p-5 cursor-pointer font-semibold text-gray-900 hover:bg-gray-50 transition list-none">
                       <span>{item.question}</span>
-                      <span className="text-purple-700 text-lg flex-shrink-0 ml-4 group-open:rotate-180 transition-transform">
+                      <span className="text-website-brand-700 text-lg flex-shrink-0 ml-4 group-open:rotate-180 transition-transform">
                         ▾
                       </span>
                     </summary>
@@ -90,11 +90,11 @@ export default async function FAQPage() {
       </div>
 
       {/* Contact CTA */}
-      <div className="mt-12 bg-purple-50 border border-purple-200 rounded-2xl p-6 text-center space-y-3">
+      <div className="mt-12 bg-website-brand-50 border border-website-brand-200 rounded-2xl p-6 text-center space-y-3">
         <p className="text-gray-700 font-medium">ไม่พบคำตอบที่ต้องการ?</p>
         <Link
           href="/contact"
-          className="inline-block bg-purple-700 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-purple-800 transition"
+          className="inline-block bg-website-brand-700 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-website-brand-800 transition"
         >
           ติดต่อทีมงาน →
         </Link>

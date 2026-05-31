@@ -15,8 +15,8 @@ export default function ArticleCategoryFilter({ categories, selected, onChange }
           onClick={() => onChange(cat)}
           className={`px-4 py-1.5 rounded-full text-sm font-medium border transition ${
             cat === selected
-              ? 'bg-purple-700 text-white border-purple-700'
-              : 'bg-white text-gray-700 border-gray-300 hover:border-purple-500 hover:text-purple-700'
+              ? 'bg-website-brand-700 text-white border-website-brand-700'
+              : 'bg-white text-gray-700 border-gray-300 hover:border-website-brand-500 hover:text-website-brand-700'
           }`}
         >
           {cat}

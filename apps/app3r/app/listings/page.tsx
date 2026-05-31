@@ -47,7 +47,7 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
 
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">ประกาศทั้งหมด</span>
       </nav>
@@ -79,8 +79,8 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
                   href={href}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
                     isActive
-                      ? "bg-purple-700 text-white border-purple-700"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-purple-500"
+                      ? "bg-website-brand-700 text-white border-website-brand-700"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-website-brand-500"
                   }`}
                 >
                   {tf.label}

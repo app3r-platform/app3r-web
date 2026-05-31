@@ -41,9 +41,9 @@ export default async function ScrapListingsPage({ searchParams }: PageProps) {
 
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-purple-700">หน้าหลัก</Link>
+        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>
-        <Link href="/listings" className="hover:text-purple-700">ประกาศ</Link>
+        <Link href="/listings" className="hover:text-website-brand-700">ประกาศ</Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">ซาก</span>
       </nav>

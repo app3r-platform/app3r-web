@@ -10,9 +10,9 @@ interface HeroProps {
 export default function Hero({ content }: HeroProps) {
   const heroContent = content ?? staticHeroContent;
   return (
-    <section className="bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 text-white py-20 px-4">
+    <section className="bg-gradient-to-br from-website-brand-900 via-website-brand-800 to-indigo-900 text-white py-20 px-4">
       <div className="max-w-7xl mx-auto text-center space-y-6">
-        <div className="inline-flex items-center gap-2 bg-purple-700/50 border border-purple-500/50 px-4 py-1.5 rounded-full text-sm">
+        <div className="inline-flex items-center gap-2 bg-website-brand-700/50 border border-website-brand-500/50 px-4 py-1.5 rounded-full text-sm">
           <span className="text-yellow-400">⚡</span>
           <span>แพลตฟอร์มเครื่องใช้ไฟฟ้าครบวงจรแห่งแรกในไทย</span>
         </div>
@@ -25,7 +25,7 @@ export default function Hero({ content }: HeroProps) {
             )
           )}
         </h1>
-        <p className="text-lg sm:text-xl text-purple-200 max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl text-website-brand-200 max-w-2xl mx-auto">
           {heroContent.subheadline}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
