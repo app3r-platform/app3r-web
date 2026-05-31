@@ -10,7 +10,7 @@ interface HeroProps {
 export default function Hero({ content }: HeroProps) {
   const heroContent = content ?? staticHeroContent;
   return (
-    <section className="bg-gradient-to-br from-website-brand-900 via-website-brand-800 to-indigo-900 text-white py-20 px-4">
+    <section className="bg-gradient-to-br from-website-brand-900 via-website-brand-800 to-website-brand-700 text-white py-20 px-4">
       <div className="max-w-7xl mx-auto text-center space-y-6">
         <div className="inline-flex items-center gap-2 bg-website-brand-700/50 border border-website-brand-500/50 px-4 py-1.5 rounded-full text-sm">
           <span className="text-yellow-400">⚡</span>

@@ -65,7 +65,7 @@ export default function SuspendedListingPage() {
         <div className="flex flex-col gap-3 items-center w-full max-w-xs mx-auto">
           <Link
             href="/listings/resell"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
+            className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3.5 rounded-2xl text-sm text-center transition-colors"
           >
             ← ดูประกาศอื่น
           </Link>

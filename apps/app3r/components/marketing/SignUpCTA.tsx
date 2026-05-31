@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function SignUpCTA() {
   return (
-    <section className="bg-gradient-to-r from-website-brand-700 to-indigo-700 text-white py-16 px-4">
+    <section className="bg-gradient-to-r from-website-brand-700 to-website-brand-900 text-white py-16 px-4">
       <div className="max-w-3xl mx-auto text-center space-y-6">
         <h2 className="text-3xl font-extrabold">พร้อมเริ่มต้นแล้วหรือยัง?</h2>
         <p className="text-website-brand-200 text-lg">
