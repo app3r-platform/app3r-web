@@ -1,37 +1,63 @@
 "use client";
-// ─── AdPromoteButton (C12 · Ad System Spec Gen 100) — STUB ────────────────────
-// ปุ่ม "ลงโฆษณา" ในหน้าประกาศของตัวเอง → เลือกตำแหน่ง+วัน → แสดง Gold Point ที่จะตัด → ยืนยัน
-// flow: ยืนยัน → เข้าคิว Admin อนุมัติ → (อนุมัติ) ตัด Gold Point ตาม D75 · (ไม่อนุมัติ) คืน/ไม่ตัด
-// ⚠️ STUB: Backend ads API + ตาราง ads + ตัด Gold Point (D75) ยังไม่พร้อม → ไม่ยิง route จริง (route-back Backend)
+// ─── AdPromoteButton (C12 · Ad System Spec Gen 100) ───────────────────────────
+// ปุ่ม "ลงโฆษณา" ในหน้าประกาศของตัวเอง → เลือกตำแหน่ง+จำนวนวัน → แสดง Gold Point ที่จะตัด (D75)
+// → ยืนยัน → POST /api/v1/ads (Backend debit Gold + status pending) → เข้าคิว Admin อนุมัติ
+// ตัดพอยต์ตอนซื้อ (จ่ายล่วงหน้า) · Admin ไม่อนุมัติ → refund เต็ม · cancel → refund (pending=เต็ม/active=ตามสัดส่วน)
 
 import { useState } from "react";
+import { adsApi, estimateAdCost, type AdPosition } from "@/lib/api/ads";
 
-// อัตราค่าโฆษณา (Gold Point/วัน · ค่า default — Admin แก้ได้ · Ad Spec Gen 100 ข้อ 3)
-const AD_POSITIONS = [
-  { id: "home_first", label: "แถวแรกหน้าแรก", rate: 5, desc: "เด่นสุด — โชว์แถวแรกหน้าหลัก" },
-  { id: "module_first", label: "แถวแรกโมดูลขาย", rate: 3, desc: "ดันขึ้นแถวแรกในหน้าตลาดมือสอง" },
+const AD_POSITIONS: { id: AdPosition; label: string; rate: number; desc: string }[] = [
+  { id: "home_first_row", label: "แถวแรกหน้าแรก", rate: 5, desc: "เด่นสุด — โชว์แถวแรกหน้าหลัก" },
+  { id: "module_first_row", label: "แถวแรกโมดูลขาย", rate: 3, desc: "ดันขึ้นแถวแรกในหน้าตลาดมือสอง" },
   { id: "sidebar", label: "แถบด้านข้าง (Sidebar)", rate: 3, desc: "โชว์ข้างจอหน้ารายละเอียด" },
-] as const;
+];
 
-export function AdPromoteButton({ listingName }: { listingName?: string }) {
+export function AdPromoteButton({ listingId, listingName }: { listingId: string; listingName?: string }) {
   const [open, setOpen] = useState(false);
-  const [positionId, setPositionId] = useState<string>("module_first");
+  const [positionId, setPositionId] = useState<AdPosition>("module_first_row");
   const [days, setDays] = useState("7");
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<{ goldCost: number } | null>(null);
 
   const position = AD_POSITIONS.find((p) => p.id === positionId) ?? AD_POSITIONS[1];
   const dayCount = Math.max(0, parseInt(days || "0", 10) || 0);
-  // D75 — ปัดจำนวนเต็ม
-  const totalPoints = Math.round(position.rate * dayCount);
+  const estimate = estimateAdCost(positionId, dayCount); // D75 round (ประมาณการ)
 
-  if (submitted) {
+  const handleConfirm = async () => {
+    if (dayCount < 1) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await adsApi.buy({ listingId, position: positionId, durationDays: dayCount });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        const code = data?.error?.code;
+        setError(
+          code === "AD_BUY_FAILED"
+            ? "พอยต์ทอง (Gold Point) ไม่พอ หรือสร้างโฆษณาไม่สำเร็จ — กรุณาตรวจยอดพอยต์"
+            : "เกิดข้อผิดพลาด กรุณาลองใหม่",
+        );
+        return;
+      }
+      // 201 → { id, goldCost, status: 'pending' } — Gold ถูกตัดแล้ว (จ่ายล่วงหน้า)
+      setResult({ goldCost: typeof data?.goldCost === "number" ? data.goldCost : estimate });
+    } catch {
+      setError("เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (result) {
     return (
       <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-2xl p-4 text-center space-y-1.5">
         <p className="text-2xl">📢</p>
         <p className="text-sm font-semibold text-weeeu-text">ส่งคำขอลงโฆษณาแล้ว</p>
         <p className="text-xs text-gray-600">
-          เข้าคิว Admin อนุมัติ — จะตัด {totalPoints.toLocaleString()} พอยต์ทอง (Gold Point) เมื่ออนุมัติ
-          (ถ้าไม่อนุมัติ = ไม่ตัดพอยต์)
+          ตัดพอยต์ทอง (Gold Point) {result.goldCost.toLocaleString()} แล้ว — เข้าคิว Admin อนุมัติ
+          (ถ้าไม่อนุมัติจะคืนเต็มจำนวน)
         </p>
       </div>
     );
@@ -113,22 +139,28 @@ export function AdPromoteButton({ listingName }: { listingName?: string }) {
         </div>
       </div>
 
-      {/* สรุป point ที่จะตัด */}
+      {/* สรุป point ที่จะตัด (ประมาณการ — ยอดจริงคำนวณฝั่ง Backend D75) */}
       <div className="bg-weeeu-surface rounded-xl p-3 flex items-center justify-between">
-        <span className="text-sm text-weeeu-text">รวมที่จะตัด ({position.rate} × {dayCount} วัน)</span>
-        <span className="text-base font-bold text-weeeu-primary">{totalPoints.toLocaleString()} พอยต์ทอง</span>
+        <span className="text-sm text-weeeu-text">ประมาณการที่จะตัด ({position.rate} × {dayCount} วัน)</span>
+        <span className="text-base font-bold text-weeeu-primary">{estimate.toLocaleString()} พอยต์ทอง</span>
       </div>
       <p className="text-[11px] text-gray-400 -mt-2">
         จ่ายล่วงหน้า · เข้าคิว Admin อนุมัติก่อนเริ่มแสดง · ไม่อนุมัติ = คืนพอยต์เต็มจำนวน
       </p>
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+          <p className="text-xs text-red-700">{error}</p>
+        </div>
+      )}
+
       <button
         type="button"
-        onClick={() => setSubmitted(true)}
-        disabled={dayCount < 1}
+        onClick={handleConfirm}
+        disabled={dayCount < 1 || submitting}
         className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3 rounded-2xl text-sm transition-colors"
       >
-        ยืนยันลงโฆษณา ({totalPoints.toLocaleString()} พอยต์ทอง)
+        {submitting ? "กำลังดำเนินการ..." : `ยืนยันลงโฆษณา (${estimate.toLocaleString()} พอยต์ทอง)`}
       </button>
     </div>
   );

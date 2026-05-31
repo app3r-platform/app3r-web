@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { NearMeFilter, type NearbyTambonDto } from "@app3r/ui";
 
 const MOCK_ITEMS = [
   { id: "r001", name: "แอร์ Daikin 12000 BTU มือสอง", price: 4500, condition: "ดี", category: "เครื่องปรับอากาศ", shop: "ร้านดีเจริญ", image: "https://picsum.photos/seed/r001/300/200" },
@@ -18,6 +20,9 @@ const CONDITION_COLORS: Record<string, string> = {
 };
 
 export default function MarketplacePage() {
+  // GR-10 near-me — ผลตำบลใกล้เคียงจาก shared NearMeFilter (@app3r/ui)
+  const [nearby, setNearby] = useState<NearbyTambonDto[] | null>(null);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
@@ -35,6 +40,28 @@ export default function MarketplacePage() {
             className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 text-lg">🔍</span>
+        </div>
+
+        {/* GR-10 NearMeFilter (shared @app3r/ui · roleTheme weeeu · proxy /api → backend) */}
+        <div className="space-y-2">
+          <NearMeFilter
+            roleTheme={{ primary: "#0DC36C" }}
+            backendUrl=""
+            defaultRadiusKm={20}
+            onResults={(items) => setNearby(items)}
+          />
+          {nearby && nearby.length > 0 && (
+            <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl px-3 py-2 flex items-center justify-between">
+              <span className="text-xs text-weeeu-text">📍 กรองตามตำบลใกล้คุณ ({nearby.length} ตำบล)</span>
+              <button
+                type="button"
+                onClick={() => setNearby(null)}
+                className="text-xs text-weeeu-primary font-medium hover:underline"
+              >
+                ล้างตัวกรอง
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Grid */}
