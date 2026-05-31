@@ -64,6 +64,22 @@ export default function DashboardPage() {
         </Link>
       </div>
 
+      {/* R6 · G6 role banner — WeeeR ก็ขายมือสองได้ + เข้าโมดูลขายต่อ (C11) */}
+      <div className="bg-gradient-to-r from-[#FFF1ED] to-[#FFE0D6] border border-[#FFD0BF] rounded-2xl p-5 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-bold text-[#D63B12]">🏪 WeeeR ก็ขายมือสองได้!</p>
+          <p className="text-xs text-gray-600 mt-1">
+            ร้าน/บริษัทของคุณลงประกาศขายเครื่องใช้ไฟฟ้ามือสอง อะไหล่ และซากได้โดยตรง
+          </p>
+        </div>
+        <Link
+          href="/resell/listings/new"
+          className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-colors"
+        >
+          ลงประกาศขาย
+        </Link>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3">
         {STATS.map((s) => (
