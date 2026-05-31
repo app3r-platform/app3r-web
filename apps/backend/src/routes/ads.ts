@@ -3,15 +3,18 @@
  *
  * Mounted at: /api/v1/ads
  *
+ *   GET  /api/v1/ads/public           → active ads for display (no auth, ?position= filter)
  *   POST /api/v1/ads                  → buy (own_listing): คำนวณ D75 → debit Gold → status pending
- *   GET  /api/v1/ads                  → my ads (advertiser) / all (admin ?all=1)
+ *   GET  /api/v1/ads                  → my ads (advertiser ?position=) / all (admin ?all=1)
  *   POST /api/v1/ads/{id}/approve     → admin approve → active (+start/end date)
- *   POST /api/v1/ads/{id}/reject      → admin reject → refund Gold (credit)
+ *   POST /api/v1/ads/{id}/reject      → admin reject → refund Gold (full)
+ *   POST /api/v1/ads/{id}/cancel      → advertiser cancel: pending→full refund · active→proportional refund (D75)
  *
- * Flow (Advisor): buy(debit) → approval queue → approve→active / reject→refund
+ * Flow (Advisor): buy(debit) → approval queue → approve→active / reject→refund / cancel→refund
  * เรต default (admin ปรับผ่าน admin_config key 'ad_rates'): home_first_row=5, module_first_row=3, sidebar=3 Gold/วัน
  * D75: goldCost = rate/วัน × วัน → Math.round
- * Decision: C12 (ads + Gold deduct)
+ * Cancel refund policy: pending=goldCost full · active=Math.round(remainingDays/durationDays × goldCost) · others=409
+ * Decision: C12 (ads + Gold deduct) · 0031_ads_cancel (cancelled state)
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
@@ -19,7 +22,7 @@ import { and, eq, desc, lte, gte, sql } from 'drizzle-orm'
 import { db } from '../db/client'
 import { ads, adminConfig, AD_POSITIONS, type AdPosition } from '../db/schema'
 import { verifyAccessToken } from '../lib/jwt'
-import { calcAdCost, debitGold, creditGold } from '../lib/point-service'
+import { calcAdCost, debitGold, creditGold, roundD75 } from '../lib/point-service'
 
 export const adsRouter = new OpenAPIHono()
 
@@ -158,25 +161,38 @@ adsRouter.openapi(buyRoute, async (c) => {
   }
 })
 
-// ── GET / — my ads / all (admin) ──────────────────────────────────────────────
+// ── GET / — my ads / all (admin) · optional ?position= filter ─────────────────
 const listRoute = createRoute({
   method: 'get',
   path: '/',
   tags: ['Ads'],
-  summary: 'List ads (mine, or all with ?all=1 for admin)',
+  summary: 'List ads (mine ?position=, or all with ?all=1 for admin)',
   security: [{ bearerAuth: [] }],
-  request: { query: z.object({ all: z.string().optional() }) },
+  request: {
+    query: z.object({
+      all: z.string().optional(),
+      position: z.enum(AD_POSITIONS).optional(),
+    }),
+  },
   responses: { 200: { description: 'Ads' }, 401: { description: 'Unauthorized' } },
 })
 
 adsRouter.openapi(listRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return unauthorized(c)
-  const { all } = c.req.valid('query')
+  const { all, position } = c.req.valid('query')
   const wantAll = all === '1' && isAdminRole(user.role)
-  const rows = wantAll
-    ? await db.select().from(ads).orderBy(desc(ads.createdAt))
-    : await db.select().from(ads).where(eq(ads.advertiserUserId, user.userId)).orderBy(desc(ads.createdAt))
+
+  // build conditions: owner filter + optional position filter
+  const conds = wantAll ? [] : [eq(ads.advertiserUserId, user.userId)]
+  if (position) conds.push(eq(ads.position, position))
+
+  const rows = await db
+    .select()
+    .from(ads)
+    .where(conds.length > 0 ? and(...conds) : undefined)
+    .orderBy(desc(ads.createdAt))
+
   return c.json(
     {
       items: rows.map((r) => ({
@@ -190,6 +206,7 @@ adsRouter.openapi(listRoute, async (c) => {
         rejectReason: r.rejectReason,
         startDate: r.startDate?.toISOString() ?? null,
         endDate: r.endDate?.toISOString() ?? null,
+        cancelledAt: r.cancelledAt?.toISOString() ?? null,
         createdAt: r.createdAt.toISOString(),
       })),
     },
@@ -284,4 +301,78 @@ adsRouter.openapi(rejectRoute, async (c) => {
     return updated
   })
   return c.json({ id: row.id, status: row.status, refunded: ad.goldCost }, 200)
+})
+
+// ── POST /{id}/cancel (advertiser) → refund Gold ──────────────────────────────
+// pending → full refund · active → proportional (remaining days, D75 round)
+// expired/rejected/cancelled → 409
+const cancelRoute = createRoute({
+  method: 'post',
+  path: '/{id}/cancel',
+  tags: ['Ads'],
+  summary: 'Advertiser cancel ad → refund Gold (pending=full · active=proportional D75)',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Cancelled + refunded' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not your ad' },
+    404: { description: 'Not found' },
+    409: { description: 'Cannot cancel (already expired/rejected/cancelled)' },
+  },
+})
+
+adsRouter.openapi(cancelRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+
+  const { id } = c.req.valid('param')
+  const [ad] = await db.select().from(ads).where(eq(ads.id, id)).limit(1)
+  if (!ad) return c.json({ error: { code: 'NOT_FOUND', message: 'Ad not found' } }, 404)
+
+  // เฉพาะเจ้าของ (advertiser) หรือ admin ยกเลิกได้
+  if (ad.advertiserUserId !== user.userId && !isAdminRole(user.role)) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Not your ad' } }, 403)
+  }
+
+  const cancellable = ['pending', 'active'] as const
+  if (!(cancellable as readonly string[]).includes(ad.status)) {
+    return c.json({ error: { code: 'NOT_CANCELLABLE', message: `Ad is ${ad.status}` } }, 409)
+  }
+
+  /**
+   * คำนวณ refund:
+   *   pending → full (goldCost ทั้งหมด เพราะยังไม่ active)
+   *   active  → proportional: Math.round(remainingDays / durationDays × goldCost)  [D75]
+   *             remainingDays = max(0, ceil((endDate - now) / msPerDay))
+   */
+  const now = new Date()
+  let refundAmount = ad.goldCost
+
+  if (ad.status === 'active' && ad.endDate) {
+    const msRemaining = Math.max(0, ad.endDate.getTime() - now.getTime())
+    const daysRemaining = Math.ceil(msRemaining / (24 * 60 * 60 * 1000))
+    refundAmount = roundD75((daysRemaining / ad.durationDays) * ad.goldCost)
+  }
+
+  const row = await db.transaction(async (tx) => {
+    if (refundAmount > 0) {
+      await creditGold(tx, {
+        userId: ad.advertiserUserId,
+        amount: refundAmount,
+        reference: `ad:${ad.listingId ?? ad.id}`,
+        idempotencyKey: `ad-cancel:${ad.id}`,
+        type: 'refund',
+        metadata: { ad: true, phase: 'cancel-refund', previousStatus: ad.status, refundAmount },
+      })
+    }
+    const [updated] = await tx
+      .update(ads)
+      .set({ status: 'cancelled', cancelledAt: now, updatedAt: now })
+      .where(eq(ads.id, id))
+      .returning()
+    return updated
+  })
+
+  return c.json({ id: row.id, status: row.status, refunded: refundAmount, cancelledAt: row.cancelledAt?.toISOString() ?? null }, 200)
 })

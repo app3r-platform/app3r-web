@@ -5,10 +5,10 @@
  *   2 ประเภท: own_listing (ตัด Gold Point จากผู้ลง) | external_banner (ผ่านฟอร์มติดต่อ)
  *   ตำแหน่ง: home_first_row | module_first_row | sidebar
  *   Flow: buy → admin approval queue → approve (ตัด Gold D75 ปัดเต็ม + audit) → active
- *          / reject → refund
+ *          / reject → refund | cancel → refund (pending=full · active=proportional D75)
  *   เรต default (admin ปรับได้ผ่าน admin_config): home_first_row=5, module_first_row=3, sidebar=3 Gold/วัน
  *
- * Migration: 0029_downstream_listing.sql
+ * Migration: 0029_downstream_listing.sql (table) · 0031_ads_cancel.sql (cancelled state + cancelled_at)
  */
 import { pgTable, uuid, text, integer, timestamp, index } from 'drizzle-orm/pg-core'
 import { users } from './users'
@@ -20,7 +20,7 @@ export type AdType = (typeof AD_TYPES)[number]
 export const AD_POSITIONS = ['home_first_row', 'module_first_row', 'sidebar'] as const
 export type AdPosition = (typeof AD_POSITIONS)[number]
 
-export const AD_STATUSES = ['pending', 'approved', 'active', 'rejected', 'expired'] as const
+export const AD_STATUSES = ['pending', 'approved', 'active', 'rejected', 'expired', 'cancelled'] as const
 export type AdStatus = (typeof AD_STATUSES)[number]
 
 export const ads = pgTable(
@@ -43,6 +43,8 @@ export const ads = pgTable(
     approvedAt: timestamp('approved_at', { withTimezone: true }),
     startDate: timestamp('start_date', { withTimezone: true }),
     endDate: timestamp('end_date', { withTimezone: true }),
+    // cancel-refund (0031): timestamp เมื่อ user/admin ยกเลิก — audit trail
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
