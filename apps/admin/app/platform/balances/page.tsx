@@ -74,7 +74,7 @@ export default function BalancesPage() {
             {/* Gold Buckets */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                🥇 Gold Point Buckets (D17 — 3 Buckets)
+                🥇 พอยต์ทอง (Gold Point) Buckets (D17 — 3 Buckets)
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <BucketCard label="Listing Offer Fee Pool" value={fmtG(data.listing_offer_fee_pool)} accent="yellow" />

@@ -67,9 +67,9 @@ const DISPUTE_TYPE_LABEL: Record<DisputeType, { label: string; icon: string; col
 
 const RESOLUTION_LABEL: Record<Resolution, { label: string; color: string }> = {
   pending: { label: "รอพิจารณา", color: "bg-gray-100 text-gray-600" },
-  buyer_wins: { label: "ผู้ซื้อชนะ — คืน Escrow ทั้งหมด", color: "bg-blue-100 text-blue-700" },
-  seller_wins: { label: "ผู้ขายชนะ — โอน Escrow ให้ผู้ขาย", color: "bg-green-100 text-green-700" },
-  split: { label: "แบ่ง Escrow ตามสัดส่วน", color: "bg-purple-100 text-purple-700" },
+  buyer_wins: { label: "ผู้ซื้อชนะ — คืนเงินพักกลาง (Escrow) ทั้งหมด", color: "bg-blue-100 text-blue-700" },
+  seller_wins: { label: "ผู้ขายชนะ — โอนเงินพักกลาง (Escrow) ให้ผู้ขาย", color: "bg-green-100 text-green-700" },
+  split: { label: "แบ่งเงินพักกลาง (Escrow) ตามสัดส่วน", color: "bg-admin-surface text-admin-primary" },
 };
 
 function TimelineDot({ by }: { by: "system" | "seller" | "buyer" | "admin" }) {
@@ -77,7 +77,7 @@ function TimelineDot({ by }: { by: "system" | "seller" | "buyer" | "admin" }) {
     system: "bg-gray-400",
     seller: "bg-blue-500",
     buyer: "bg-green-500",
-    admin: "bg-indigo-600",
+    admin: "bg-admin-primary",
   };
   return <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-1.5 ${colors[by]}`} />;
 }
@@ -154,8 +154,8 @@ export default function AdminDisputeDetailPage() {
           <p className="text-sm font-semibold text-gray-800 mt-0.5">{c.listing_title}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-400 uppercase tracking-wide">มูลค่า Escrow</p>
-          <p className="text-sm font-bold text-indigo-600 mt-0.5">{c.agreed_price.toLocaleString()} ฿</p>
+          <p className="text-xs text-gray-400 uppercase tracking-wide">มูลค่าเงินพักกลาง (Escrow)</p>
+          <p className="text-sm font-bold text-admin-primary mt-0.5">{c.agreed_price.toLocaleString()} ฿</p>
         </div>
         <div>
           <p className="text-xs text-gray-400 uppercase tracking-wide">ผู้ขาย</p>
@@ -264,8 +264,8 @@ export default function AdminDisputeDetailPage() {
       </div>
 
       {/* ─── Resolution panel ─── */}
-      <div className="bg-white rounded-2xl border-2 border-indigo-100 shadow-sm p-5 space-y-5">
-        <p className="text-sm font-bold text-indigo-800">⚖️ ตัดสิน Dispute (Admin)</p>
+      <div className="bg-white rounded-2xl border-2 border-admin-primary/20 shadow-sm p-5 space-y-5">
+        <p className="text-sm font-bold text-admin-dark">⚖️ ตัดสิน Dispute (Admin)</p>
         <p className="text-xs text-gray-500">
           Offer = SoT (Source of Truth) — พิจารณา: terms ที่ตกลง + หลักฐาน seller + buyer + precedent
         </p>
@@ -280,7 +280,7 @@ export default function AdminDisputeDetailPage() {
               key={r}
               className={`flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
                 resolution === r
-                  ? "border-indigo-400 bg-indigo-50"
+                  ? "border-admin-primary bg-admin-surface"
                   : "border-gray-100 hover:border-gray-300 bg-white"
               }`}
             >
@@ -293,7 +293,7 @@ export default function AdminDisputeDetailPage() {
                 className="accent-indigo-600"
               />
               <div className="flex-1">
-                <p className={`text-sm font-semibold ${RESOLUTION_LABEL[r].color.includes("blue") ? "text-blue-700" : RESOLUTION_LABEL[r].color.includes("green") ? "text-green-700" : "text-purple-700"}`}>
+                <p className={`text-sm font-semibold ${RESOLUTION_LABEL[r].color.includes("blue") ? "text-blue-700" : RESOLUTION_LABEL[r].color.includes("green") ? "text-green-700" : "text-admin-primary"}`}>
                   {RESOLUTION_LABEL[r].label}
                 </p>
                 {r === "buyer_wins" && (
@@ -318,8 +318,8 @@ export default function AdminDisputeDetailPage() {
 
         {/* Split slider */}
         {resolution === "split" && (
-          <div className="space-y-3 bg-purple-50 border border-purple-200 rounded-xl p-4">
-            <p className="text-xs font-semibold text-purple-700">สัดส่วนการคืน Escrow</p>
+          <div className="space-y-3 bg-admin-surface border border-admin-primary/30 rounded-xl p-4">
+            <p className="text-xs font-semibold text-admin-primary">สัดส่วนการคืนเงินพักกลาง (Escrow)</p>
             <div className="flex items-center justify-between text-xs text-gray-600">
               <span>ผู้ซื้อ: <strong className="text-blue-600">{splitBuyer}%</strong> ({buyerAmount.toLocaleString()} ฿)</span>
               <span>ผู้ขาย: <strong className="text-green-600">{100 - splitBuyer}%</strong> ({sellerAmount.toLocaleString()} ฿)</span>
@@ -331,7 +331,7 @@ export default function AdminDisputeDetailPage() {
               step={5}
               value={splitBuyer}
               onChange={(e) => setSplitBuyer(Number(e.target.value))}
-              className="w-full accent-purple-600"
+              className="w-full accent-[#2C5E8C]"
             />
             <div className="flex justify-between text-xs text-gray-400">
               <span>ผู้ซื้อ 100%</span>
@@ -361,7 +361,7 @@ export default function AdminDisputeDetailPage() {
         <button
           onClick={handleSettle}
           disabled={submitting || resolution === "pending" || !adminNote.trim()}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
+          className="w-full bg-admin-primary hover:bg-admin-dark disabled:opacity-40 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
         >
           {submitting ? "กำลังดำเนินการ..." : "⚖️ ยืนยันการตัดสิน — ปิด Dispute"}
         </button>

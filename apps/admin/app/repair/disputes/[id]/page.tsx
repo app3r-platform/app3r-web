@@ -85,7 +85,7 @@ export default function RepairDisputeDetailPage({ params }: { params: Promise<{ 
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 flex items-center gap-3">
         <span className="text-xl">💰</span>
         <div>
-          <p className="text-xs text-amber-600 font-semibold uppercase tracking-wider">Escrow Status</p>
+          <p className="text-xs text-amber-600 font-semibold uppercase tracking-wider">สถานะระบบพักเงินกลาง (Escrow)</p>
           <p className="text-sm font-medium text-gray-800">Gold ที่ล็อก: 1,800 ฿</p>
         </div>
       </div>

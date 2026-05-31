@@ -266,7 +266,7 @@ export default function MaintainJobsPage() {
                           )}
                           {job.cross_module_ref?.type === "repair" && (
                             <Link href={`/repair/jobs/${job.cross_module_ref.job_id}`}
-                              className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors whitespace-nowrap">
+                              className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-admin-surface text-admin-primary hover:bg-admin-surface transition-colors whitespace-nowrap">
                               🔧 →ซ่อม
                             </Link>
                           )}

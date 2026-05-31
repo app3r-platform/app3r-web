@@ -167,7 +167,7 @@ function FeeSettlePanel({ job, superAdmin }: FeeSettlePanelProps) {
           <div className="flex flex-col items-center justify-center">
             <div className="text-gray-300 text-3xl mb-1">→</div>
             <div className="text-center">
-              <p className="text-xs text-gray-500">Escrow</p>
+              <p className="text-xs text-gray-500">ระบบพักเงินกลาง (Escrow)</p>
               <p className="text-sm font-bold text-gray-700">{(finalPrice + partsTotal).toLocaleString()} G</p>
             </div>
             <div className="text-gray-300 text-3xl mt-1">→</div>

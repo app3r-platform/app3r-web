@@ -42,11 +42,11 @@ interface ResellJob {
 const STATUS_META: Record<ResellListingStatus, { label: string; color: string }> = {
   announced:        { label: "ประกาศแล้ว",        color: "bg-gray-100 text-gray-500" },
   receiving_offers: { label: "รับ offer",          color: "bg-blue-50 text-blue-700" },
-  offer_selected:   { label: "เลือก offer แล้ว",  color: "bg-indigo-50 text-indigo-700" },
+  offer_selected:   { label: "เลือก offer แล้ว",  color: "bg-admin-surface text-admin-primary" },
   awaiting_payment: { label: "รอชำระเงิน",        color: "bg-yellow-50 text-yellow-700" },
   buyer_confirmed:  { label: "ผู้ซื้อยืนยัน",    color: "bg-cyan-50 text-cyan-700" },
   in_progress:      { label: "กำลังดำเนินการ",    color: "bg-brand-info/15 text-brand-info" },
-  delivered:        { label: "จัดส่งแล้ว",         color: "bg-purple-50 text-purple-700" },
+  delivered:        { label: "จัดส่งแล้ว",         color: "bg-admin-surface text-admin-primary" },
   inspection_period:{ label: "ตรวจสอบสินค้า",     color: "bg-orange-50 text-orange-700" },
   completed:        { label: "เสร็จสิ้น",          color: "bg-green-50 text-green-700" },
   cancelled:        { label: "ยกเลิก",             color: "bg-red-50 text-red-700" },

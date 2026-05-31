@@ -61,7 +61,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
       { key: "",            label: "ทั้งหมด",     count: 142, color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
       { key: "posted",      label: "ประกาศ",      count: 28,  color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
       { key: "offered",     label: "ข้อเสนอ",     count: 15,  color: "bg-yellow-50 text-yellow-700", activeColor: "bg-yellow-500 text-white" },
-      { key: "assigned",    label: "รับงาน",      count: 22,  color: "bg-indigo-50 text-indigo-700", activeColor: "bg-indigo-600 text-white" },
+      { key: "assigned",    label: "รับงาน",      count: 22,  color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
       { key: "in_progress", label: "กำลังซ่อม",  count: 38,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
       { key: "completed",   label: "เสร็จแล้ว",  count: 36,  color: "bg-green-50 text-green-700",  activeColor: "bg-green-600 text-white" },
       { key: "dispute",     label: "Dispute",     count: 3,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
@@ -91,7 +91,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
       { label: "รอช่างวันนี้",    value: "7",  color: "text-blue-600" },
       { label: "กำลังทำความสะอาด", value: "12", color: "text-orange-600" },
       { label: "เสร็จวันนี้",      value: "5",  color: "text-green-600" },
-      { label: "Recurring active", value: "23", color: "text-purple-600" },
+      { label: "Recurring active", value: "23", color: "text-admin-primary" },
     ],
     tabs: [
       { key: "",           label: "ทั้งหมด",         count: 89,  color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
@@ -99,7 +99,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
       { key: "in_progress",label: "กำลังล้าง",       count: 12,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
       { key: "completed",  label: "เสร็จแล้ว",       count: 47,  color: "bg-green-50 text-green-700",  activeColor: "bg-green-600 text-white" },
       { key: "cancelled",  label: "ยุติ",             count: 9,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
-      { key: "recurring",  label: "Recurring",        count: 23,  color: "bg-purple-50 text-purple-700", activeColor: "bg-purple-600 text-white" },
+      { key: "recurring",  label: "Recurring",        count: 23,  color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
     ],
     columns: [
       { key: "code",   label: "รหัสงาน" },
@@ -133,7 +133,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
       { key: "available", label: "ประกาศ",    count: 91,  color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
       { key: "offered",   label: "มีข้อเสนอ", count: 24,  color: "bg-yellow-50 text-yellow-700", activeColor: "bg-yellow-500 text-white" },
       { key: "ordered",   label: "คำสั่งซื้อ", count: 31,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
-      { key: "escrow",    label: "Escrow",    count: 8,   color: "bg-purple-50 text-purple-700", activeColor: "bg-purple-600 text-white" },
+      { key: "escrow",    label: "ระบบพักเงินกลาง (Escrow)",    count: 8,   color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
       { key: "dispute",   label: "Dispute",   count: 2,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
     ],
     columns: [
@@ -262,18 +262,18 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   // Repair
   in_progress: { label: "กำลังซ่อม",    color: "bg-orange-50 text-orange-700" },
   completed:   { label: "เสร็จแล้ว",    color: "bg-green-50 text-green-700" },
-  assigned:    { label: "รับงานแล้ว",   color: "bg-indigo-50 text-indigo-700" },
+  assigned:    { label: "รับงานแล้ว",   color: "bg-admin-surface text-admin-primary" },
   dispute:     { label: "Dispute",       color: "bg-red-50 text-red-700" },
   offered:     { label: "มีข้อเสนอ",    color: "bg-yellow-50 text-yellow-700" },
   posted:      { label: "ประกาศ",        color: "bg-blue-50 text-blue-700" },
   // Maintain
   pending:     { label: "รอช่าง",       color: "bg-blue-50 text-blue-700" },
   cancelled:   { label: "ยุติ",          color: "bg-gray-100 text-gray-500" },
-  recurring:   { label: "Recurring",     color: "bg-purple-50 text-purple-700" },
+  recurring:   { label: "Recurring",     color: "bg-admin-surface text-admin-primary" },
   // Resell
   available:   { label: "ประกาศอยู่",   color: "bg-blue-50 text-blue-700" },
   ordered:     { label: "คำสั่งซื้อ",   color: "bg-orange-50 text-orange-700" },
-  escrow:      { label: "Escrow",        color: "bg-purple-50 text-purple-700" },
+  escrow:      { label: "ระบบพักเงินกลาง (Escrow)",        color: "bg-admin-surface text-admin-primary" },
   // Scrap
   listing:     { label: "ประกาศขาย",    color: "bg-blue-50 text-blue-700" },
   job:         { label: "งานทิ้ง",      color: "bg-orange-50 text-orange-700" },

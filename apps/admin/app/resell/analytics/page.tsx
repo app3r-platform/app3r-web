@@ -135,11 +135,11 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_COLOR: Record<string, string> = {
   announced:         "bg-gray-400",
   receiving_offers:  "bg-admin-primary",
-  offer_selected:    "bg-indigo-500",
+  offer_selected:    "bg-admin-surface0",
   awaiting_payment:  "bg-yellow-500",
   buyer_confirmed:   "bg-cyan-500",
   in_progress:       "bg-brand-info",
-  delivered:         "bg-purple-500",
+  delivered:         "bg-admin-surface0",
   inspection_period: "bg-orange-500",
   completed:         "bg-green-500",
   cancelled:         "bg-gray-500",
@@ -204,7 +204,7 @@ export default function ResellAnalyticsPage() {
         {/* KPI Row 2 — Escrow + Dispute */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            label="🔒 Escrow Locked"
+            label="🔒 พักเงินกลาง (Escrow)"
             value={d.escrow_locked_count.toLocaleString()}
             sub={`${d.escrow_locked_value.toLocaleString()} G locked`}
             accent="border-blue-200"
@@ -265,7 +265,7 @@ export default function ResellAnalyticsPage() {
               <div className="space-y-2">
                 {Object.entries(d.by_pair).map(([pair, count]) => (
                   <BarRow key={pair} label={pair} value={count} total={d.total_listings}
-                    color={pair === "U→U" ? "bg-sky-400" : pair === "U→R" ? "bg-indigo-400" : pair === "R→U" ? "bg-admin-primary" : "bg-admin-dark"} />
+                    color={pair === "U→U" ? "bg-sky-400" : pair === "U→R" ? "bg-admin-primary/70" : pair === "R→U" ? "bg-admin-primary" : "bg-admin-dark"} />
                 ))}
               </div>
             </div>
@@ -279,7 +279,7 @@ export default function ResellAnalyticsPage() {
             <div className="space-y-2">
               <BarRow label="🛒 ผู้ซื้อชนะ (to_buyer)"   value={d.dispute_resolution["to_buyer"]  ?? 0} total={d.disputed_count} color="bg-blue-500" />
               <BarRow label="🧑‍💼 ผู้ขายชนะ (to_seller)" value={d.dispute_resolution["to_seller"] ?? 0} total={d.disputed_count} color="bg-green-500" />
-              <BarRow label="⚡ แบ่ง (split)"             value={d.dispute_resolution["split"]    ?? 0} total={d.disputed_count} color="bg-purple-500" />
+              <BarRow label="⚡ แบ่ง (split)"             value={d.dispute_resolution["split"]    ?? 0} total={d.disputed_count} color="bg-admin-surface0" />
               <BarRow label="⏳ รอตัดสิน (pending)"       value={d.dispute_resolution["pending"]  ?? 0} total={d.disputed_count} color="bg-gray-400" />
             </div>
             <div className="pt-3 border-t border-gray-100">

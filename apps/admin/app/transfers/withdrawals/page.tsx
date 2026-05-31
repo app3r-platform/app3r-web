@@ -75,7 +75,7 @@ export default function TransferWithdrawalsPage() {
     setConfirmId(null);
     try {
       await api.patch(`/api/v1/transfers/withdraw/${id}/confirm/`, {});
-      showToast("✅ ยืนยันการโอนเงินสำเร็จ — Gold Point ถูกหักแล้ว", "ok");
+      showToast("✅ ยืนยันการโอนเงินสำเร็จ — พอยต์ทอง (Gold Point) ถูกหักแล้ว", "ok");
       fetchData();
     } catch (e) {
       showToast(`❌ ${(e as Error).message}`, "err");
@@ -92,7 +92,7 @@ export default function TransferWithdrawalsPage() {
           <h1 className="text-2xl font-bold">🏦 จัดการคำขอถอนเงิน</h1>
         </div>
         <p className="text-gray-500 text-sm mb-6">
-          อนุมัติและยืนยันการโอนเงินให้ผู้ใช้ที่ขอถอน Gold Point → บาท
+          อนุมัติและยืนยันการโอนเงินให้ผู้ใช้ที่ขอถอนพอยต์ทอง (Gold Point) → บาท
         </p>
 
         {/* Filter tabs */}

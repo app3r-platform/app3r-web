@@ -72,11 +72,11 @@ interface ResellJobDetail {
 const STATUS_META: Record<ResellListingStatus, { label: string; color: string }> = {
   announced:        { label: "ประกาศแล้ว",       color: "bg-gray-100 text-gray-500" },
   receiving_offers: { label: "รับ offer",         color: "bg-blue-50 text-blue-700" },
-  offer_selected:   { label: "เลือก offer แล้ว", color: "bg-indigo-50 text-indigo-700" },
+  offer_selected:   { label: "เลือก offer แล้ว", color: "bg-admin-surface text-admin-primary" },
   awaiting_payment: { label: "รอชำระเงิน",       color: "bg-yellow-50 text-yellow-700" },
   buyer_confirmed:  { label: "ผู้ซื้อยืนยัน",   color: "bg-cyan-50 text-cyan-700" },
   in_progress:      { label: "กำลังดำเนินการ",   color: "bg-brand-info/15 text-brand-info" },
-  delivered:        { label: "จัดส่งแล้ว",        color: "bg-purple-50 text-purple-700" },
+  delivered:        { label: "จัดส่งแล้ว",        color: "bg-admin-surface text-admin-primary" },
   inspection_period:{ label: "ตรวจสอบสินค้า",    color: "bg-orange-50 text-orange-700" },
   completed:        { label: "เสร็จสิ้น",         color: "bg-green-50 text-green-700" },
   cancelled:        { label: "ยกเลิก",            color: "bg-red-50 text-red-700" },
@@ -102,7 +102,7 @@ const MOCK_DETAIL: Record<string, ResellJobDetail> = {
       { status: "receiving_offers",  label: "รับ offer",   actor: "ระบบ",                  note: "เปิดรับข้อเสนอ", timestamp: "2026-01-10T09:05:00Z" },
       { status: "offer_selected",    label: "เลือก offer", actor: "นายสมชาย ใจดี",        note: "เลือก offer ของนางสาวอรุณ", timestamp: "2026-01-11T10:00:00Z" },
       { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",                  note: "รอผู้ซื้อโอนเงิน Escrow", timestamp: "2026-01-11T10:01:00Z" },
-      { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นางสาวอรุณ แสงทอง",   note: "โอน Escrow แล้ว", timestamp: "2026-01-11T11:00:00Z" },
+      { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นางสาวอรุณ แสงทอง",   note: "โอนเงินพักกลาง (Escrow) แล้ว", timestamp: "2026-01-11T11:00:00Z" },
       { status: "in_progress",       label: "ดำเนิน",      actor: "นายสมชาย ใจดี",        note: "จัดส่งสินค้าแล้ว", timestamp: "2026-01-12T08:00:00Z" },
       { status: "delivered",         label: "จัดส่ง",       actor: "ขนส่ง",                note: "ส่งถึงผู้ซื้อ", timestamp: "2026-01-13T14:00:00Z" },
       { status: "inspection_period", label: "ตรวจสอบ",     actor: "นางสาวอรุณ แสงทอง",   note: "รับของแล้ว อยู่ระหว่างตรวจ", timestamp: "2026-01-13T14:30:00Z" },
@@ -126,8 +126,8 @@ const MOCK_DETAIL: Record<string, ResellJobDetail> = {
       { status: "announced",         label: "ประกาศ",      actor: "นายประสิทธิ์ ขยัน",  note: "ลงประกาศขายเครื่องซัก", timestamp: "2026-02-10T11:00:00Z" },
       { status: "receiving_offers",  label: "รับ offer",   actor: "ระบบ",                note: "เปิดรับข้อเสนอ", timestamp: "2026-02-10T11:05:00Z" },
       { status: "offer_selected",    label: "เลือก offer", actor: "นายประสิทธิ์ ขยัน",  note: "เลือก offer ของนายเกียรติ", timestamp: "2026-02-11T09:00:00Z" },
-      { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",                note: "รอ Escrow", timestamp: "2026-02-11T09:01:00Z" },
-      { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นายเกียรติ มีสุข",   note: "โอน Escrow แล้ว", timestamp: "2026-02-11T10:00:00Z" },
+      { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",                note: "รอระบบพักเงินกลาง (Escrow)", timestamp: "2026-02-11T09:01:00Z" },
+      { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นายเกียรติ มีสุข",   note: "โอนเงินพักกลาง (Escrow) แล้ว", timestamp: "2026-02-11T10:00:00Z" },
       { status: "in_progress",       label: "ดำเนิน",      actor: "นายประสิทธิ์ ขยัน",  note: "ส่งสินค้า", timestamp: "2026-02-12T08:00:00Z" },
       { status: "delivered",         label: "จัดส่ง",       actor: "ขนส่ง",              note: "ถึงผู้ซื้อ", timestamp: "2026-02-13T12:00:00Z" },
       { status: "disputed",          label: "พิพาท",        actor: "นายเกียรติ มีสุข",   note: "สินค้าไม่ตรงปก — มีรอยแตกที่ถัง", timestamp: "2026-02-13T14:00:00Z" },
@@ -162,8 +162,8 @@ const MOCK_DETAIL: Record<string, ResellJobDetail> = {
       { status: "announced",         label: "ประกาศ",      actor: "ร้าน ColdAir",       note: "ลงประกาศ AC Hitachi", timestamp: "2026-04-01T09:00:00Z" },
       { status: "receiving_offers",  label: "รับ offer",   actor: "ระบบ",               note: "รับข้อเสนอ", timestamp: "2026-04-01T09:05:00Z" },
       { status: "offer_selected",    label: "เลือก offer", actor: "ร้าน ColdAir",       note: "เลือก offer ของนายวิฑูรย์", timestamp: "2026-04-02T10:00:00Z" },
-      { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",               note: "รอ Escrow 24 ชม.", timestamp: "2026-04-02T10:01:00Z" },
-      { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นายวิฑูรย์ ใจเย็น", note: "โอน Escrow", timestamp: "2026-04-02T11:00:00Z" },
+      { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",               note: "รอระบบพักเงินกลาง (Escrow) 24 ชม.", timestamp: "2026-04-02T10:01:00Z" },
+      { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นายวิฑูรย์ ใจเย็น", note: "โอนเงินพักกลาง (Escrow)", timestamp: "2026-04-02T11:00:00Z" },
       { status: "in_progress",       label: "ดำเนิน",      actor: "ร้าน ColdAir",       note: "ส่งสินค้า", timestamp: "2026-04-03T08:00:00Z" },
       { status: "delivered",         label: "จัดส่ง",       actor: "ขนส่ง",             note: "ถึงผู้ซื้อ", timestamp: "2026-04-04T15:00:00Z" },
       { status: "disputed",          label: "พิพาท",        actor: "นายวิฑูรย์ ใจเย็น", note: "แอร์เย็นไม่ได้ — คอมเพรสเซอร์เสีย", timestamp: "2026-04-04T17:00:00Z" },
@@ -251,7 +251,7 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
                 ? "bg-admin-primary/15 text-admin-primary"
                 : d.offer_terms.shipping_cost === "buyer"
                 ? "bg-gray-100 text-gray-600"
-                : "bg-purple-50 text-purple-700"
+                : "bg-admin-surface text-admin-primary"
             }`}>
               {d.offer_terms.shipping_cost === "seller" ? "ผู้ขายออก"
                : d.offer_terms.shipping_cost === "buyer" ? "ผู้ซื้อออก"
@@ -288,7 +288,7 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
           <span className={`text-xs px-3 py-1 rounded-full font-medium ${
             d.fault_party === "seller" ? "bg-red-100 text-red-700"
             : d.fault_party === "buyer" ? "bg-yellow-100 text-yellow-700"
-            : "bg-purple-100 text-purple-700"
+            : "bg-admin-surface text-admin-primary"
           }`}>
             {d.fault_party === "seller" ? "🧑‍💼 ผู้ขายเหตุ"
              : d.fault_party === "buyer" ? "🛒 ผู้ซื้อเหตุ"
@@ -311,7 +311,7 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
                 activeResolution === r
                   ? r === "to_buyer"  ? "border-blue-400 bg-blue-50 text-blue-700"
                   : r === "to_seller" ? "border-green-400 bg-green-50 text-green-700"
-                  : "border-purple-400 bg-purple-50 text-purple-700"
+                  : "border-admin-primary bg-admin-surface text-admin-primary"
                   : "border-gray-200 bg-white text-gray-500 hover:border-gray-300"
               }`}>
               {r === "to_buyer"  ? "🛒 ผู้ซื้อชนะ\nคืน escrow"
@@ -343,7 +343,7 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
         {/* Escrow summary */}
         <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200 text-xs space-y-1">
           <div className="flex justify-between">
-            <span className="text-gray-500">Escrow ทั้งหมด</span>
+            <span className="text-gray-500">เงินพักกลาง (Escrow) ทั้งหมด</span>
             <span className="font-mono font-semibold text-gray-700">{escrow.toLocaleString()} G</span>
           </div>
           {activeResolution === "to_buyer" && (
