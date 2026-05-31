@@ -1,6 +1,9 @@
 "use client";
 // Screen ID Badge — Phase 3 dev tool (ปิดพร้อม NEXT_PUBLIC_DEV_NAV)
+// D15 wire: maps current WeeeR route → R-xx (SCREEN_MAP source of truth) แล้ว
+// delegate ไป shared @app3r/ui <ScreenIdBadge> branded ส้ม WeeeR (#FF663A).
 import { usePathname } from "next/navigation";
+import { ScreenIdBadge } from "@app3r/ui";
 
 type ScreenInfo = { num: string; code: string };
 
@@ -82,13 +85,11 @@ export function ScreenBadge() {
   const info = matchScreen(pathname);
   if (!info) return null;
 
-  // Desktop: shift right of sidebar (w-60 = 240px → left-64 = 256px)
   return (
-    <div className="fixed top-2 left-64 z-[9997] pointer-events-none select-none">
-      <div className="bg-black/70 backdrop-blur-sm text-white rounded-lg px-2 py-1 text-center shadow-lg">
-        <div className="font-mono text-sm font-bold leading-tight">{info.num}</div>
-        <div className="font-mono text-[10px] opacity-70 leading-tight">{info.code}</div>
-      </div>
-    </div>
+    <ScreenIdBadge
+      screenId={info.num}
+      roleTheme={{ primary: "#FF663A" }}
+      position="top-left"
+    />
   );
 }
