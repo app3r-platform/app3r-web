@@ -82,7 +82,7 @@ const MOCK_JOBS: ScrapPickupJob[] = [
 
 const STATUS_META: Record<ScrapPickupStatus, { label: string; color: string; emoji: string }> = {
   assigned:          { label: "รับงานใหม่",      color: "bg-blue-100 text-blue-700",   emoji: "📋" },
-  traveling:         { label: "กำลังเดินทาง",   color: "bg-indigo-100 text-indigo-700", emoji: "🚗" },
+  traveling:         { label: "กำลังเดินทาง",   color: "bg-amber-100 text-amber-700", emoji: "🚗" },
   arrived:           { label: "ถึงแล้ว",         color: "bg-teal-100 text-teal-700",   emoji: "📍" },
   verifying:         { label: "กำลังตรวจซาก",   color: "bg-yellow-100 text-yellow-700", emoji: "🔍" },
   mismatch_reported: { label: "รายงานไม่ตรง",   color: "bg-orange-100 text-orange-700", emoji: "⚠️" },
