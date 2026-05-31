@@ -539,7 +539,7 @@ export default function RegisterWeeeRPage() {
                   />
                   <span className="text-sm text-gray-700">
                     ฉันยอมรับ{" "}
-                    <Link href="/terms" className="text-website-brand-700 underline">ข้อกำหนดการใช้งาน</Link>{" "}
+                    <Link href="/legal/terms" className="text-website-brand-700 underline">ข้อกำหนดการใช้งาน</Link>{" "}
                     และเข้าใจว่าบัญชี WeeeR ต้องรอการอนุมัติจาก App3R ก่อนเริ่มใช้งานได้
                     <span className="text-red-500 ml-1">*</span>
                   </span>
@@ -553,7 +553,7 @@ export default function RegisterWeeeRPage() {
                   />
                   <span className="text-sm text-gray-700">
                     ฉันยินยอมให้ App3R เก็บและใช้ข้อมูลส่วนตัวตาม{" "}
-                    <Link href="/privacy" className="text-website-brand-700 underline">นโยบายความเป็นส่วนตัว</Link>
+                    <Link href="/legal/privacy" className="text-website-brand-700 underline">นโยบายความเป็นส่วนตัว</Link>
                     <span className="text-red-500 ml-1">*</span>
                   </span>
                 </label>
