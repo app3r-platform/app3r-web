@@ -126,7 +126,7 @@ export default function MaintainJobProgressPage({
         {job.recurring?.enabled && (
           <div className="flex justify-between text-gray-600">
             <span>นัดซ้ำ</span>
-            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">
+            <span className="text-xs bg-[#FFE0D6] text-[#D63B12] px-2 py-0.5 rounded-full font-medium">
               🔁 ทุก {job.recurring.interval.replace("_", " ")}
             </span>
           </div>

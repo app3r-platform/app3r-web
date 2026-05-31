@@ -123,8 +123,8 @@ export const LISTING_STATUS_LABEL: Record<ListingStatus, string> = {
 
 export const LISTING_STATUS_COLOR: Record<ListingStatus, string> = {
   announced:         "bg-blue-100 text-blue-700",
-  receiving_offers:  "bg-indigo-100 text-indigo-700",
-  offer_selected:    "bg-purple-100 text-purple-700",
+  receiving_offers:  "bg-[#FFE0D6] text-[#D63B12]",
+  offer_selected:    "bg-[#FFE0D6] text-[#D63B12]",
   buyer_confirmed:   "bg-cyan-100 text-cyan-700",
   in_progress:       "bg-yellow-100 text-yellow-700",
   delivered:         "bg-orange-100 text-orange-700",

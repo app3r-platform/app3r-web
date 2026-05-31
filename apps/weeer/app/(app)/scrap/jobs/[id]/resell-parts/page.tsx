@@ -90,19 +90,19 @@ export default function ResellPartsPage({ params }: { params: Promise<{ id: stri
               value={row.name}
               onChange={e => updateRow(i, "name", e.target.value)}
               placeholder={`ชื่ออะไหล่ #${i + 1}`}
-              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <input
               type="number" min="1"
               value={row.qty}
               onChange={e => updateRow(i, "qty", e.target.value)}
-              className="w-16 border border-gray-200 rounded-xl px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              className="w-16 border border-gray-200 rounded-xl px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             {rows.length > 1 && (
               <button onClick={() => removeRow(i)} className="text-red-400 hover:text-red-600 text-lg leading-none">×</button>
             )}
           </div>
         ))}
         <button onClick={addRow}
-          className="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+          className="text-xs text-[#F04E20] hover:text-[#D63B12] font-medium">
           + เพิ่มรายการ
         </button>
       </div>
@@ -110,7 +110,7 @@ export default function ResellPartsPage({ params }: { params: Promise<{ id: stri
       <div className="bg-white border border-gray-100 rounded-xl p-4">
         <label className="block text-xs text-gray-500 mb-1">หมายเหตุ (ไม่บังคับ)</label>
         <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3}
-          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none" />
+          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
       </div>
 
       {submitError && (
@@ -121,7 +121,7 @@ export default function ResellPartsPage({ params }: { params: Promise<{ id: stri
         onClick={handleSubmit}
         disabled={submitting}
         className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 text-white"}`}>
+          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
         {submitting ? "กำลังบันทึก…" : "✅ บันทึกและเพิ่มเข้าสต๊อก Parts"}
       </button>
     </div>

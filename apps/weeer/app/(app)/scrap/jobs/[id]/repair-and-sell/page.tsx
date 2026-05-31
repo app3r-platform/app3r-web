@@ -103,13 +103,13 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
 
       {/* ScrapJob source info */}
       {job && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-700 space-y-1">
+        <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 text-xs text-[#D63B12] space-y-1">
           <p className="font-semibold">ซากต้นทาง (purchased_scrap)</p>
           <p>รายละเอียด: {job.scrapItemDescription ?? job.scrapItemId}</p>
           {job.conditionGrade && (
             <p>สภาพ: {CONDITION_GRADE_LABEL[job.conditionGrade]}</p>
           )}
-          <p className="font-mono text-indigo-400">ScrapJob ID: {id}</p>
+          <p className="font-mono text-[#FF663A]">ScrapJob ID: {id}</p>
         </div>
       )}
 
@@ -122,13 +122,13 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
             value={applianceName}
             onChange={e => setApplianceName(e.target.value)}
             placeholder="เช่น เครื่องปรับอากาศ Mitsubishi 1 ตัน"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
 
         <div>
           <label className="block text-xs text-gray-500 mb-1">ช่าง (WeeeT) <span className="text-red-400">*</span></label>
           <select value={weeetId} onChange={e => setWeeetId(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
             <option value="">— เลือกช่าง —</option>
             {staff.map(s => (
               <option key={s.id} value={s.id} disabled={!s.available}>
@@ -147,7 +147,7 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
             type="datetime-local"
             value={scheduledAt}
             onChange={e => setScheduledAt(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
 
         <div>
@@ -157,7 +157,7 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
             value={originalPrice}
             onChange={e => setOriginalPrice(e.target.value)}
             placeholder="0"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           <p className="text-xs text-gray-400 mt-1">ราคาที่คาดว่าจะขายได้หลังซ่อมเสร็จ</p>
         </div>
 
@@ -168,15 +168,15 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
             onChange={e => setNotes(e.target.value)}
             rows={3}
             placeholder="รายละเอียดงานซ่อม, อะไหล่ที่คาดว่าต้องใช้, เงื่อนไขพิเศษ..."
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
       </div>
 
       {/* Source preview */}
       <div className="bg-gray-50 border border-gray-100 rounded-xl p-3 text-xs text-gray-500 space-y-1">
         <p className="font-medium text-gray-700">ข้อมูลที่ระบบบันทึกอัตโนมัติ</p>
-        <p>source.type = <span className="font-mono text-indigo-600">"purchased_scrap"</span></p>
-        <p>source.refId = <span className="font-mono text-indigo-600">{id}</span></p>
+        <p>source.type = <span className="font-mono text-[#F04E20]">"purchased_scrap"</span></p>
+        <p>source.refId = <span className="font-mono text-[#F04E20]">{id}</span></p>
       </div>
 
       {submitError && (
@@ -187,7 +187,7 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
         onClick={handleSubmit}
         disabled={submitting}
         className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 text-white"}`}>
+          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
         {submitting ? "กำลังสร้างใบซ่อม…" : "✅ สร้างใบซ่อม (RepairJob)"}
       </button>
 

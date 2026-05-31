@@ -45,7 +45,7 @@ export default function ParcelQueuePage() {
         <div className="grid grid-cols-4 gap-2">
           {[
             { label: "รอ Shipping",    value: data.awaiting_shipping, color: "text-orange-700", bg: "bg-orange-50" },
-            { label: "กำลังมา",        value: data.in_transit_in,     color: "text-indigo-700", bg: "bg-indigo-50" },
+            { label: "กำลังมา",        value: data.in_transit_in,     color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
             { label: "ที่ร้าน",        value: data.at_shop,           color: "text-yellow-700", bg: "bg-yellow-50" },
             { label: "พร้อมส่งคืน",   value: data.ready_to_ship,     color: "text-teal-700",   bg: "bg-teal-50"   },
           ].map((k) => (

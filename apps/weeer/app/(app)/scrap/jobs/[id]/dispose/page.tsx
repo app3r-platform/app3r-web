@@ -97,7 +97,7 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
               <label className="block text-xs text-gray-500 mb-1">รายละเอียดสิ่งของ <span className="text-red-400">*</span></label>
               <textarea value={itemDescription} onChange={e => setItemDescription(e.target.value)} rows={3}
                 placeholder="เช่น เครื่องปรับอากาศ Mitsubishi 1 ตัน สภาพชำรุด..."
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none" />
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
             </div>
           </div>
 
@@ -145,7 +145,7 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
 
           <button
             onClick={handleDownload}
-            className="w-full py-3 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-colors">
+            className="w-full py-3 rounded-xl text-sm font-semibold bg-[#FF663A] hover:bg-[#F04E20] text-white transition-colors">
             ⬇️ ดาวน์โหลดใบรับรอง (HTML)
           </button>
         </>

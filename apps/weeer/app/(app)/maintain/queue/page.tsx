@@ -151,9 +151,9 @@ export default function MaintainQueuePage() {
                 </div>
 
                 {job.recurring?.enabled && (
-                  <div className="mt-1.5 inline-flex items-center gap-1 bg-purple-50 rounded-lg px-2 py-0.5">
+                  <div className="mt-1.5 inline-flex items-center gap-1 bg-[#FFF1ED] rounded-lg px-2 py-0.5">
                     <span className="text-xs">🔁</span>
-                    <span className="text-xs text-purple-700 font-medium">นัดซ้ำ {RECURRING_LABEL[job.recurring.interval]} (ส่วนลด 10%)</span>
+                    <span className="text-xs text-[#D63B12] font-medium">นัดซ้ำ {RECURRING_LABEL[job.recurring.interval]} (ส่วนลด 10%)</span>
                   </div>
                 )}
               </div>

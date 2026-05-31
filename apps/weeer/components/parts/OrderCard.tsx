@@ -71,7 +71,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
           {canConfirm && (
             <button
               onClick={() => onAction("confirm", order.id)}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium py-2.5 rounded-xl transition-colors"
             >
               ☑️ รับออเดอร์ (P5)
             </button>

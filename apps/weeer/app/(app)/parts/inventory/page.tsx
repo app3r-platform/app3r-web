@@ -57,7 +57,7 @@ const MOVEMENT_LABEL: Record<MovementType, string> = {
 };
 const MOVEMENT_COLOR: Record<MovementType, string> = {
   IN: "text-green-600", OUT: "text-red-500",
-  RESERVE: "text-orange-500", RELEASE: "text-blue-500", ADJUST: "text-purple-600",
+  RESERVE: "text-orange-500", RELEASE: "text-blue-500", ADJUST: "text-[#F04E20]",
 };
 
 // ── Mock data (≥5 items · 3 source_type · 1 low-stock) ────────────────────────

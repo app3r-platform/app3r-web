@@ -79,8 +79,8 @@ export default function WalkInInProgressPage({ params }: { params: Promise<{ id:
 
       {/* Diagnosis */}
       {job.diagnosis_notes && (
-        <div className="bg-purple-50 border border-purple-100 rounded-xl p-4">
-          <p className="text-xs font-semibold text-purple-700 mb-1">ผลตรวจสภาพ</p>
+        <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4">
+          <p className="text-xs font-semibold text-[#D63B12] mb-1">ผลตรวจสภาพ</p>
           <p className="text-sm text-gray-700">{job.diagnosis_notes}</p>
         </div>
       )}

@@ -48,7 +48,7 @@ export default function PickupQueuePage() {
         <div className="grid grid-cols-4 gap-2">
           {[
             { label: "รอมอบหมาย", value: data.pending_dispatch, color: "text-orange-700", bg: "bg-orange-50" },
-            { label: "ระหว่างทาง", value: data.in_transit,      color: "text-indigo-700", bg: "bg-indigo-50" },
+            { label: "ระหว่างทาง", value: data.in_transit,      color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
             { label: "ที่ร้าน",    value: data.at_shop,          color: "text-yellow-700", bg: "bg-yellow-50" },
             { label: "พร้อมส่ง",  value: data.ready,             color: "text-teal-700",   bg: "bg-teal-50"   },
           ].map((k) => (

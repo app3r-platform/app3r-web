@@ -74,7 +74,7 @@ function EscrowCountdown() {
   const s = Math.floor((msLeft % 60000) / 1000);
   const urgent = msLeft < 3600000;
   return (
-    <span className={`text-xs font-medium ${urgent ? "text-red-600" : "text-purple-700"}`}>
+    <span className={`text-xs font-medium ${urgent ? "text-red-600" : "text-[#D63B12]"}`}>
       ⏳ {h}:{String(m).padStart(2,"0")}:{String(s).padStart(2,"0")} เหลือ
     </span>
   );
@@ -94,6 +94,18 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   const [showR5Confirm, setShowR5Confirm] = useState(false);
   const [evidenceUrl, setEvidenceUrl] = useState("");
   const [evidenceSubmitted, setEvidenceSubmitted] = useState(false);
+
+  // ── C12 Ad stub (Backend ads API ยังไม่พร้อม → stub local · ดูสเปก Ad System Gen 100) ──
+  const AD_POSITIONS = [
+    { value: "home-top", label: "แถวแรกหน้าแรก", rate: 5 },
+    { value: "module-top", label: "แถวแรกของโมดูล (หน้า listing)", rate: 3 },
+    { value: "sidebar", label: "ด้านข้างจอ (sidebar)", rate: 3 },
+  ];
+  const [showAd, setShowAd] = useState(false);
+  const [adPos, setAdPos] = useState("module-top");
+  const [adDays, setAdDays] = useState(7);
+  const adRate = AD_POSITIONS.find((p) => p.value === adPos)?.rate ?? 3;
+  const adCost = adRate * (adDays > 0 ? adDays : 0);
 
   useEffect(() => {
     const mock = MOCK_LISTINGS[id];
@@ -170,17 +182,17 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
 
       {/* R4: offer_selected → escrow 24h wait */}
       {effectiveStatus === "offer_selected" && !r5Withdrawn && (
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+        <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-purple-800">⏳ รอผู้ซื้อเติม Gold (Escrow)</p>
-              <p className="text-xs text-purple-600 mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
+              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติม Gold (Escrow)</p>
+              <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
             </div>
             <EscrowCountdown />
           </div>
           {/* R5: ถอนการเลือก */}
           <button onClick={() => setShowR5Confirm(true)}
-            className="mt-3 w-full text-xs text-purple-700 border border-purple-300 hover:bg-purple-100 font-medium py-2 rounded-lg transition-colors">
+            className="mt-3 w-full text-xs text-[#D63B12] border border-[#FF8B66] hover:bg-[#FFE0D6] font-medium py-2 rounded-lg transition-colors">
             ⏪ ถอนการเลือก (R5)
           </button>
         </div>
@@ -299,6 +311,70 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
           <p className="text-xs text-gray-300 mt-1">ผู้ซื้อสามารถถามผู้ขายได้โดยตรง (cross-module · Phase D)</p>
         </div>
       </div>
+
+      {/* C12 · ปุ่มลงโฆษณา (ดันประกาศให้เด่น · ตัดพอยต์ทอง) */}
+      {!isTerminal && (
+        <button
+          onClick={() => setShowAd(true)}
+          className="w-full border border-[#FF663A] text-[#D63B12] hover:bg-[#FFF1ED] rounded-xl py-2.5 text-sm font-medium transition-colors"
+        >
+          📢 ลงโฆษณา — ดันประกาศนี้ให้เด่นขึ้น
+        </button>
+      )}
+
+      {/* C12 Ad modal (stub — ยังไม่ต่อ Backend ads API) */}
+      {showAd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setShowAd(false)}>
+          <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-gray-900">📢 ลงโฆษณาประกาศ</h3>
+              <button onClick={() => setShowAd(false)} className="text-gray-400 hover:text-gray-600 text-lg">✕</button>
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">ตำแหน่งโฆษณา</label>
+              <select
+                value={adPos}
+                onChange={(e) => setAdPos(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
+              >
+                {AD_POSITIONS.map((p) => (
+                  <option key={p.value} value={p.value}>{p.label} — {p.rate} พอยต์ทอง/วัน</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">จำนวนวัน</label>
+              <input
+                type="number"
+                min={1}
+                value={adDays}
+                onChange={(e) => setAdDays(Math.max(1, Number(e.target.value) || 1))}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
+              />
+            </div>
+            <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl px-3 py-2 text-sm flex items-center justify-between">
+              <span className="text-gray-600">รวมที่จะตัด (พอยต์ทอง / Gold Point)</span>
+              <span className="font-bold text-[#D63B12]">{adCost.toLocaleString()} พอยต์ทอง</span>
+            </div>
+            <p className="text-xs text-gray-400">* จ่ายล่วงหน้า · เข้าคิวให้ผู้ดูแล (Admin) อนุมัติก่อนเริ่มแสดง · ไม่อนุมัติคืนพอยต์</p>
+            <div className="flex gap-2 pt-1">
+              <button onClick={() => setShowAd(false)} className="flex-1 border border-gray-200 hover:bg-gray-50 rounded-xl py-2 text-sm font-medium text-gray-700">
+                ยกเลิก
+              </button>
+              <button
+                onClick={() => {
+                  // TODO(C12): ต่อ Backend ads API (ตัดพอยต์ทอง D75 + เข้าคิว admin อนุมัติ) — ยังไม่พร้อม
+                  setShowAd(false);
+                  alert("ส่งคำขอโฆษณาแล้ว — เข้าคิวรอผู้ดูแล (Admin) อนุมัติ (ตัวอย่าง · ยังไม่ตัดพอยต์จริง)");
+                }}
+                className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white rounded-xl py-2 text-sm font-medium"
+              >
+                ยืนยัน ({adCost.toLocaleString()} พอยต์ทอง)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 

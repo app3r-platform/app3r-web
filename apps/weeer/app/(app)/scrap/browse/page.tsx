@@ -87,11 +87,11 @@ export default function ScrapBrowsePage() {
         <div className="flex items-center gap-2">
           <input type="number" value={minPrice} onChange={e => setMinPrice(e.target.value)}
             placeholder="ราคาต่ำสุด"
-            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           <span className="text-gray-400 text-sm">—</span>
           <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
             placeholder="ราคาสูงสุด"
-            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
       </div>
 
@@ -121,7 +121,7 @@ export default function ScrapBrowsePage() {
                 {item.workingParts.length > 0 && (
                   <p className="text-xs text-gray-400 truncate mt-0.5">ชิ้นส่วนใช้ได้: {item.workingParts.join(", ")}</p>
                 )}
-                <p className="text-lg font-bold text-indigo-700 mt-1">{item.price.toLocaleString()} pts</p>
+                <p className="text-lg font-bold text-[#D63B12] mt-1">{item.price.toLocaleString()} pts</p>
               </div>
             </Link>
           ))}

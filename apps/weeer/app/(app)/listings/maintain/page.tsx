@@ -21,7 +21,7 @@ import type { ServiceTypeId } from "../../../../lib/types/listings-jobs";
 
 const SERVICE_TYPE_COLOR: Record<ServiceTypeId, string> = {
   1: "bg-blue-100 text-blue-700",
-  2: "bg-purple-100 text-purple-700",
+  2: "bg-[#FFE0D6] text-[#D63B12]",
   3: "bg-orange-100 text-orange-700",
   4: "bg-gray-100 text-gray-600",
 };

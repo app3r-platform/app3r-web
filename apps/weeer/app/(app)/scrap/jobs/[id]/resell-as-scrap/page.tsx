@@ -84,13 +84,13 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
             type="number" min="1" value={price}
             onChange={e => setPrice(e.target.value)}
             placeholder="0"
-            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
         <div>
           <label className="block text-xs text-gray-500 mb-1">รายละเอียดเพิ่มเติม (ไม่บังคับ)</label>
           <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3}
             placeholder="เช่น สภาพ, ชิ้นส่วนที่รวม, เงื่อนไขการรับ..."
-            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
         onClick={handleSubmit}
         disabled={submitting}
         className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 text-white"}`}>
+          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
         {submitting ? "กำลังสร้างประกาศ…" : "✅ สร้างประกาศขายซาก"}
       </button>
     </div>

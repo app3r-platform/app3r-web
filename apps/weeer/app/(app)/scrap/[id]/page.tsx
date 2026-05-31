@@ -188,10 +188,10 @@ export default function ScrapDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Escrow locked (S3) */}
       {escrowLocked && successJobId && (
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center space-y-2">
+        <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4 text-center space-y-2">
           <span className="text-3xl">🔐</span>
-          <p className="text-sm font-bold text-purple-800">Gold ถูก Lock แล้ว (Escrow)</p>
-          <p className="text-xs text-purple-600">
+          <p className="text-sm font-bold text-[#D63B12]">Gold ถูก Lock แล้ว (Escrow)</p>
+          <p className="text-xs text-[#F04E20]">
             {item.isFree
               ? "รอ WeeeU ยืนยันการรับซาก"
               : `${Number(offerPrice).toLocaleString()} pts ถูก lock ไว้ รอ WeeeU ยืนยัน`}
@@ -243,11 +243,11 @@ export default function ScrapDetailPage({ params }: { params: Promise<{ id: stri
               </div>
 
               {/* Escrow notice */}
-              <div className="bg-purple-50 border border-purple-200 rounded-lg px-3 py-2">
-                <p className="text-xs text-purple-700 font-medium">
+              <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-lg px-3 py-2">
+                <p className="text-xs text-[#D63B12] font-medium">
                   🔐 เมื่อยืนยัน — Gold {item.isFree ? "0" : `${offerPrice || "?"}`} pts จะถูก Lock (Escrow)
                 </p>
-                <p className="text-xs text-purple-500 mt-0.5">
+                <p className="text-xs text-[#F04E20] mt-0.5">
                   Gold จะโอนให้ WeeeU เมื่อรับซากเสร็จ · คืนถ้าถอน (S7)
                 </p>
               </div>

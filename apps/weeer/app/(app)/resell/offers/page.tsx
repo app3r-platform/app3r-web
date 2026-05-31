@@ -62,7 +62,7 @@ function EscrowBadge() {
   const s = Math.floor((msLeft % 60000) / 1000);
   const urgent = msLeft < 3600000;
   return (
-    <span className={`text-xs font-bold ${urgent ? "text-red-600" : "text-purple-700"}`}>
+    <span className={`text-xs font-bold ${urgent ? "text-red-600" : "text-[#D63B12]"}`}>
       ⏳ {h}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
     </span>
   );
@@ -139,17 +139,17 @@ export default function ResellOffersPage() {
 
               {/* R4: selected → escrow wait */}
               {o.status === "selected" && (
-                <div className="mt-2 bg-purple-50 border border-purple-200 rounded-xl px-3 py-2">
+                <div className="mt-2 bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-3 py-2">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-purple-800">⭐ ข้อเสนอถูกเลือก — ต้องเติม Gold</p>
-                      <p className="text-xs text-purple-600 mt-0.5">เติม Gold ≤24ชม. ไม่งั้น offer ถูกปลดอัตโนมัติ</p>
+                      <p className="text-xs font-bold text-[#D63B12]">⭐ ข้อเสนอถูกเลือก — ต้องเติม Gold</p>
+                      <p className="text-xs text-[#F04E20] mt-0.5">เติม Gold ≤24ชม. ไม่งั้น offer ถูกปลดอัตโนมัติ</p>
                     </div>
                     <EscrowBadge />
                   </div>
                   <div className="flex gap-2 mt-2">
                     <Link href="/wallet"
-                      className="flex-1 text-center text-xs bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg transition-colors">
+                      className="flex-1 text-center text-xs bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2 rounded-lg transition-colors">
                       💰 ไป Wallet เติม Gold
                     </Link>
                     <button onClick={() => handleWithdraw(o.id)} disabled={withdrawing === o.id}

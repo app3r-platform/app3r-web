@@ -180,7 +180,7 @@ export const CATEGORY_COLOR: Record<PartCategory, string> = {
   electronic: "bg-blue-100 text-blue-700",
   mechanical:  "bg-orange-100 text-orange-700",
   consumable:  "bg-green-100 text-green-700",
-  tool:        "bg-purple-100 text-purple-700",
+  tool:        "bg-[#FFE0D6] text-[#D63B12]",
 };
 
 export const B2B_CONDITION_LABEL: Record<PartListing["condition"], string> = {
@@ -205,7 +205,7 @@ export const ORDER_STAGE_LABEL: Record<OrderStage, string> = {
 
 export const ORDER_STAGE_COLOR: Record<OrderStage, string> = {
   ordered:   "bg-blue-100 text-blue-700",
-  confirmed: "bg-purple-100 text-purple-700",
+  confirmed: "bg-[#FFE0D6] text-[#D63B12]",
   shipped:   "bg-orange-100 text-orange-700",
   received:  "bg-emerald-100 text-emerald-700",
   cancelled: "bg-red-100 text-red-600",

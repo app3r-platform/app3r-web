@@ -26,7 +26,7 @@ export default function ListingsPage() {
       <div className="space-y-3">
         {LISTINGS.map((l) => (
           <div key={l.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-4">
-            <span className="text-xs bg-purple-100 text-purple-700 px-2.5 py-1 rounded-full font-medium shrink-0">{l.type}</span>
+            <span className="text-xs bg-[#FFE0D6] text-[#D63B12] px-2.5 py-1 rounded-full font-medium shrink-0">{l.type}</span>
             <div className="flex-1 min-w-0">
               <div className="font-medium text-gray-900 truncate">{l.title}</div>
               <div className="text-xs text-gray-500 mt-0.5">

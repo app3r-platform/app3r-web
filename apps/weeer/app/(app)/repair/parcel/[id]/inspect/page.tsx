@@ -113,12 +113,12 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
       </div>
 
       {/* Job summary */}
-      <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 space-y-1">
-        <p className="text-sm font-semibold text-purple-800">{job.appliance_name}</p>
-        <p className="text-xs text-purple-600">{job.problem_description}</p>
-        <p className="text-xs text-purple-500">👤 {job.customer_name}</p>
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4 space-y-1">
+        <p className="text-sm font-semibold text-[#D63B12]">{job.appliance_name}</p>
+        <p className="text-xs text-[#F04E20]">{job.problem_description}</p>
+        <p className="text-xs text-[#F04E20]">👤 {job.customer_name}</p>
         {job.condition_notes && (
-          <p className="text-xs text-purple-400 italic">สภาพตอนรับ: {job.condition_notes}</p>
+          <p className="text-xs text-[#FF663A] italic">สภาพตอนรับ: {job.condition_notes}</p>
         )}
       </div>
 
@@ -132,7 +132,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
                 <input type="checkbox"
                   checked={checkedItems.has(item)}
                   onChange={() => toggleCondition(item)}
-                  className="w-4 h-4 rounded text-purple-600"
+                  className="w-4 h-4 rounded text-[#F04E20]"
                 />
                 <span className="text-sm text-gray-700">{item}</span>
               </label>
@@ -150,7 +150,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
             onChange={(e) => { setConditionNotes(e.target.value); setFormErrors(f => ({ ...f, notes: "" })); }}
             placeholder="บรรยายสภาพเครื่องโดยละเอียด อาการ/ปัญหาที่ตรวจพบ"
             rows={3}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none ${formErrors.notes ? "border-red-400" : "border-gray-200"}`}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formErrors.notes ? "border-red-400" : "border-gray-200"}`}
           />
           {formErrors.notes && <p className="text-xs text-red-500 mt-1">{formErrors.notes}</p>}
         </div>
@@ -179,7 +179,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
             value={estimatedPrice}
             onChange={(e) => { setEstimatedPrice(e.target.value); setFormErrors(f => ({ ...f, price: "" })); }}
             placeholder="0"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 ${formErrors.price ? "border-red-400" : "border-gray-200"}`}
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.price ? "border-red-400" : "border-gray-200"}`}
           />
           {formErrors.price && <p className="text-xs text-red-500 mt-1">{formErrors.price}</p>}
         </div>
@@ -203,21 +203,21 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
           <div className="flex gap-2">
             <input type="text" placeholder="ชื่ออะไหล่" value={newPart.name}
               onChange={(e) => setNewPart(p => ({ ...p, name: e.target.value }))}
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400" />
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <input type="number" min={1} placeholder="จำนวน" value={newPart.qty || ""}
               onChange={(e) => setNewPart(p => ({ ...p, qty: Number(e.target.value) }))}
-              className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-purple-400" />
+              className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <input type="number" min={0} placeholder="ราคา" value={newPart.price || ""}
               onChange={(e) => setNewPart(p => ({ ...p, price: Number(e.target.value) }))}
-              className="w-24 border border-gray-200 rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-purple-400" />
+              className="w-24 border border-gray-200 rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <button type="button" onClick={addPart}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-3 rounded-lg text-sm font-medium transition-colors">+</button>
+              className="bg-[#FF663A] hover:bg-[#F04E20] text-white px-3 rounded-lg text-sm font-medium transition-colors">+</button>
           </div>
         </div>
 
         {/* Total */}
         {grandTotal > 0 && (
-          <div className="bg-purple-50 border border-purple-100 rounded-xl p-3">
+          <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3">
             <div className="flex justify-between text-sm text-gray-700">
               <span>ค่าแรง</span><span>{laborCost.toLocaleString()} pts</span>
             </div>
@@ -226,7 +226,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
                 <span>อะไหล่รวม</span><span>{partsTotal.toLocaleString()} pts</span>
               </div>
             )}
-            <div className="flex justify-between text-sm font-bold text-purple-700 mt-2 pt-2 border-t border-purple-100">
+            <div className="flex justify-between text-sm font-bold text-[#D63B12] mt-2 pt-2 border-t border-[#FFE0D6]">
               <span>รวมทั้งหมด</span><span>{grandTotal.toLocaleString()} pts</span>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "🔍 บันทึกการตรวจสภาพ"}
         </button>
       </form>
