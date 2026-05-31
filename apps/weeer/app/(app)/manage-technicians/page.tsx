@@ -77,14 +77,14 @@ function AddWeeeTModal({ onClose, onAdd }: { onClose: () => void; onAdd: (name: 
                 <label className="block text-sm font-medium text-gray-700 mb-1">ชื่อช่าง <span className="text-red-500">*</span></label>
                 <input type="text" value={form.weeet_full_name} onChange={(e) => setForm((f) => ({ ...f, weeet_full_name: e.target.value }))}
                   placeholder="นายสมศักดิ์ ช่างแอร์" maxLength={200}
-                  className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.name ? "border-red-400" : "border-gray-200"}`} />
+                  className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.name ? "border-red-400" : "border-gray-200"}`} />
                 {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรช่าง <span className="text-red-500">*</span></label>
                 <input type="tel" value={form.weeet_phone} onChange={(e) => setForm((f) => ({ ...f, weeet_phone: e.target.value.replace(/\D/g, "") }))}
                   placeholder="0812345678" maxLength={10}
-                  className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.phone ? "border-red-400" : "border-gray-200"}`} />
+                  className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.phone ? "border-red-400" : "border-gray-200"}`} />
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
               <div>
@@ -92,13 +92,13 @@ function AddWeeeTModal({ onClose, onAdd }: { onClose: () => void; onAdd: (name: 
                 <div className="flex flex-wrap gap-2">
                   {SKILL_OPTIONS.map((s) => (
                     <button key={s} type="button" onClick={() => toggleSkill(s)}
-                      className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${form.weeet_skills.includes(s) ? "bg-green-100 border-green-400 text-green-700" : "border-gray-200 text-gray-600 hover:border-green-300"}`}>
+                      className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${form.weeet_skills.includes(s) ? "bg-[#FFE0D6] border-[#FF8B66] text-[#D63B12]" : "border-gray-200 text-gray-600 hover:border-[#FF8B66]"}`}>
                       {s}
                     </button>
                   ))}
                 </div>
               </div>
-              <button onClick={handleConfirm} className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors">
+              <button onClick={handleConfirm} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors">
                 ดำเนินการต่อ
               </button>
             </>
@@ -120,7 +120,7 @@ function AddWeeeTModal({ onClose, onAdd }: { onClose: () => void; onAdd: (name: 
                   ยกเลิก
                 </button>
                 <button onClick={() => onAdd(form.weeet_full_name, form.weeet_phone, form.weeet_skills)}
-                  className="flex-1 bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                  className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
                   ยืนยัน หัก {GOLD_PER_WEEET} Gold
                 </button>
               </div>
@@ -152,13 +152,13 @@ function CredentialsModal({ username, password, onClose }: { username: string; p
           <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-xs text-red-600">
             ⚠️ บันทึก password ไว้ก่อน — ไม่สามารถดูอีกได้หลังจากปิดหน้าต่างนี้
           </div>
-          <button onClick={handleCopy} className="w-full border border-green-600 text-green-700 font-medium py-2.5 rounded-xl text-sm hover:bg-green-50 transition-colors">
+          <button onClick={handleCopy} className="w-full border border-[#F04E20] text-[#D63B12] font-medium py-2.5 rounded-xl text-sm hover:bg-[#FFF1ED] transition-colors">
             {copied ? "✅ คัดลอกแล้ว" : "📋 คัดลอก username & password"}
           </button>
           <p className="text-xs text-gray-400">
             (D16: ไม่มีระบบ SMS — กรุณาส่งให้ช่างด้วยตนเอง)
           </p>
-          <button onClick={onClose} className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+          <button onClick={onClose} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
             รับทราบ — ปิด
           </button>
         </div>
@@ -193,7 +193,7 @@ function ResetPasswordModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => v
             <p className="text-xs text-gray-400">ระบบจะสุ่ม password ใหม่ 10 หลักให้อัตโนมัติ</p>
             <div className="flex gap-3">
               <button onClick={onClose} className="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm hover:bg-gray-50">ยกเลิก</button>
-              <button onClick={() => setDone(true)} className="flex-1 bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-xl text-sm">ตั้งใหม่</button>
+              <button onClick={() => setDone(true)} className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm">ตั้งใหม่</button>
             </div>
           </>
         ) : (
@@ -205,11 +205,11 @@ function ResetPasswordModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => v
               ⚠️ บันทึก password ไว้ก่อน — ไม่สามารถดูอีกได้
             </div>
             <button onClick={handleCopy}
-              className="w-full border border-green-600 text-green-700 font-medium py-2.5 rounded-xl text-sm hover:bg-green-50 transition-colors">
+              className="w-full border border-[#F04E20] text-[#D63B12] font-medium py-2.5 rounded-xl text-sm hover:bg-[#FFF1ED] transition-colors">
               {copied ? "✅ คัดลอกแล้ว" : "📋 คัดลอก Password ใหม่"}
             </button>
             <p className="text-xs text-gray-400 text-center">(D16: ไม่มีระบบ SMS — ส่งให้ช่างด้วยตนเอง)</p>
-            <button onClick={onClose} className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-xl text-sm">ปิด</button>
+            <button onClick={onClose} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm">ปิด</button>
           </>
         )}
       </div>
@@ -307,7 +307,7 @@ export default function ManageTechniciansPage() {
         <button
           onClick={() => setShowAdd(true)}
           disabled={!canAddMore}
-          className="flex items-center gap-2 bg-green-700 hover:bg-green-800 disabled:bg-gray-200 disabled:text-gray-400 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
+          className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] disabled:bg-gray-200 disabled:text-gray-400 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
         >
           ➕ เพิ่ม WeeeT ({GOLD_PER_WEEET} Gold)
         </button>

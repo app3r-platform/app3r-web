@@ -18,7 +18,7 @@ export default function ListingsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">ประกาศ / Listings</h1>
-        <button className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl">
+        <button className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2.5 rounded-xl">
           ➕ สร้างประกาศใหม่
         </button>
       </div>

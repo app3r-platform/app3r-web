@@ -135,7 +135,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* User info (mock) */}
         <div className="px-4 py-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm">บ</div>
+            <div className="w-10 h-10 bg-[#FFE0D6] rounded-full flex items-center justify-center text-[#D63B12] font-bold text-sm">บ</div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-gray-800 truncate">บริษัท ช่างเย็น จำกัด</p>
               <p className="text-xs text-gray-400">company@example.com</p>
@@ -156,7 +156,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             const isSub = "sub" in item && item.sub;
             return (
               <Link key={item.href} href={item.href as string}
-                className={`flex items-center gap-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-green-50 hover:text-green-800 transition-all duration-150
+                className={`flex items-center gap-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#FFF1ED] hover:text-[#B8300E] transition-all duration-150
                   ${isSub ? "px-3 py-1.5 ml-2 text-xs" : "px-3 py-2.5"}`}>
                 <span className={isSub ? "text-sm" : "text-base"}>{item.icon}</span>
                 <span className="flex-1">{item.label}</span>
@@ -188,9 +188,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="text-xl">🔔</span>
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
           </Link>
-          <Link href="/wallet" className="flex items-center gap-2 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-xl transition-colors">
+          <Link href="/wallet" className="flex items-center gap-2 bg-[#FFF1ED] hover:bg-[#FFE0D6] px-3 py-1.5 rounded-xl transition-colors">
             <span>🪙</span>
-            <span className="text-sm font-semibold text-green-700">4,250 Silver</span>
+            <span className="text-sm font-semibold text-[#D63B12]">4,250 Silver</span>
           </Link>
         </header>
         {/* Page */}
