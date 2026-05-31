@@ -57,11 +57,11 @@ export default function SignupVerifyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
-          <h1 className="text-2xl font-bold text-green-800">ยืนยันตัวตน</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">ยืนยันตัวตน</h1>
           <p className="text-sm text-gray-500 mt-1">กรอก OTP และยืนยันอีเมล</p>
         </div>
 
@@ -71,7 +71,7 @@ export default function SignupVerifyPage() {
           {/* OTP Section */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-green-700 text-white text-xs flex items-center justify-center font-bold">1</span>
+              <span className="w-6 h-6 rounded-full bg-[#FF663A] text-white text-xs flex items-center justify-center font-bold">1</span>
               <span className="font-semibold text-gray-800">ยืนยัน OTP เบอร์โทร</span>
             </div>
             <p className="text-sm text-gray-500 pl-8">
@@ -89,7 +89,7 @@ export default function SignupVerifyPage() {
                   value={digit}
                   onChange={(e) => handleOtp(i, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                  className="w-10 h-12 text-center text-xl font-bold border-2 rounded-xl focus:outline-none focus:border-green-500 border-gray-200"
+                  className="w-10 h-12 text-center text-xl font-bold border-2 rounded-xl focus:outline-none focus:border-[#FF663A] border-gray-200"
                 />
               ))}
             </div>
@@ -98,14 +98,14 @@ export default function SignupVerifyPage() {
               <button
                 onClick={handleVerifyOtp}
                 disabled={otpLoading || otp.join("").length < 6}
-                className="bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50"
+                className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50"
               >
                 {otpLoading ? "กำลังตรวจสอบ…" : "ยืนยัน OTP"}
               </button>
               <button
                 onClick={handleResend}
                 disabled={resendTimer > 0}
-                className="text-sm text-green-700 disabled:text-gray-400"
+                className="text-sm text-[#D63B12] disabled:text-gray-400"
               >
                 {resendTimer > 0 ? `ส่งใหม่ใน ${resendTimer}s` : "ส่ง OTP ใหม่"}
               </button>
@@ -115,7 +115,7 @@ export default function SignupVerifyPage() {
           {/* Email Verify Section */}
           <div className="space-y-3 border-t border-gray-100 pt-5">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-green-700 text-white text-xs flex items-center justify-center font-bold">2</span>
+              <span className="w-6 h-6 rounded-full bg-[#FF663A] text-white text-xs flex items-center justify-center font-bold">2</span>
               <span className="font-semibold text-gray-800">ยืนยันอีเมล</span>
             </div>
             <p className="text-sm text-gray-500 pl-8">
@@ -132,7 +132,7 @@ export default function SignupVerifyPage() {
                 </div>
                 <button
                   onClick={() => setEmailVerified(true)} // Mock
-                  className="text-sm text-green-700 hover:underline"
+                  className="text-sm text-[#D63B12] hover:underline"
                 >
                   ส่งอีเมลยืนยันอีกครั้ง
                 </button>

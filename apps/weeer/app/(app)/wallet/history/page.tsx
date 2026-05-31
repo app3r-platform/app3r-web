@@ -105,7 +105,7 @@ export default function TransferHistoryPage() {
             onClick={() => setFilter(f)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
               filter === f
-                ? "bg-green-600 text-white"
+                ? "bg-[#FF663A] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
@@ -118,7 +118,7 @@ export default function TransferHistoryPage() {
       <div className="flex gap-3">
         <Link
           href="/wallet/deposit"
-          className="flex-1 bg-green-50 border border-green-100 rounded-xl px-4 py-3 text-sm font-medium text-green-700 text-center hover:bg-green-100 transition-colors"
+          className="flex-1 bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl px-4 py-3 text-sm font-medium text-[#D63B12] text-center hover:bg-[#FFE0D6] transition-colors"
         >
           ➕ เติมแต้ม
         </Link>

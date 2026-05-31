@@ -29,10 +29,10 @@ function FileUpload({ label, required, hint }: { label: string; required?: boole
       <label className="block text-sm font-medium text-gray-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <label className={`block w-full border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${file ? "border-green-400 bg-green-50" : "border-gray-200 hover:border-green-400"}`}>
+      <label className={`block w-full border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${file ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-200 hover:border-[#FF8B66]"}`}>
         <input type="file" accept="image/*" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
         {file ? (
-          <div className="text-sm text-green-700">
+          <div className="text-sm text-[#D63B12]">
             <div className="text-lg">✅</div>
             <div className="font-medium truncate">{file.name}</div>
           </div>
@@ -71,11 +71,11 @@ export default function BankAccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-start justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
-          <h1 className="text-2xl font-bold text-green-800">บัญชีธนาคาร</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">บัญชีธนาคาร</h1>
           <p className="text-sm text-gray-500 mt-1">สำหรับรับเงินถอน Gold (ตาม D17)</p>
         </div>
 
@@ -92,7 +92,7 @@ export default function BankAccountPage() {
             <select
               value={form.bank_name}
               onChange={(e) => set("bank_name", e.target.value)}
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 bg-white ${errors.bank_name ? "border-red-400" : "border-gray-200"}`}
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] bg-white ${errors.bank_name ? "border-red-400" : "border-gray-200"}`}
             >
               <option value="">-- เลือกธนาคาร --</option>
               {THAI_BANKS.map((b) => <option key={b} value={b}>{b}</option>)}
@@ -109,7 +109,7 @@ export default function BankAccountPage() {
               onChange={(e) => set("bank_account_number", e.target.value.replace(/\D/g, ""))}
               placeholder="0123456789"
               maxLength={14}
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.bank_account_number ? "border-red-400" : "border-gray-200"}`}
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.bank_account_number ? "border-red-400" : "border-gray-200"}`}
             />
             {errors.bank_account_number && <p className="text-xs text-red-500 mt-1">{errors.bank_account_number}</p>}
           </div>
@@ -123,7 +123,7 @@ export default function BankAccountPage() {
               onChange={(e) => set("bank_account_name", e.target.value)}
               placeholder="นาย สมชาย ใจดี / บริษัท ซ่อมเก่ง จำกัด"
               maxLength={200}
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.bank_account_name ? "border-red-400" : "border-gray-200"}`}
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.bank_account_name ? "border-red-400" : "border-gray-200"}`}
             />
             {errors.bank_account_name && <p className="text-xs text-red-500 mt-1">{errors.bank_account_name}</p>}
           </div>
@@ -131,7 +131,7 @@ export default function BankAccountPage() {
           {/* Bank book image */}
           <FileUpload label="รูปสมุดบัญชีหน้าแรก" required hint="JPG/PNG ขนาดไม่เกิน 5MB" />
 
-          <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors">
+          <button type="submit" className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors">
             ถัดไป → อัปโหลดเอกสาร KYC
           </button>
         </form>

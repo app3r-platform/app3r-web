@@ -67,11 +67,11 @@ export default function ShopLocationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-start justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
-          <h1 className="text-2xl font-bold text-green-800">ที่อยู่ร้าน</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">ที่อยู่ร้าน</h1>
           <p className="text-sm text-gray-500 mt-1">สถานที่ตั้งจริงของร้าน/บริษัท</p>
         </div>
 
@@ -87,7 +87,7 @@ export default function ShopLocationPage() {
               onChange={(e) => set("shop_address_line", e.target.value)}
               placeholder="123/4 ถนนสุขุมวิท ซอย 11"
               maxLength={200}
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${errors.shop_address_line ? "border-red-400" : "border-gray-200"}`}
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${errors.shop_address_line ? "border-red-400" : "border-gray-200"}`}
             />
             {errors.shop_address_line && <p className="text-xs text-red-500 mt-1">{errors.shop_address_line}</p>}
           </div>
@@ -102,7 +102,7 @@ export default function ShopLocationPage() {
                 onChange={(e) => handlePostalCode(e.target.value)}
                 placeholder="10110"
                 maxLength={5}
-                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.shop_postal_code ? "border-red-400" : "border-gray-200"}`}
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.shop_postal_code ? "border-red-400" : "border-gray-200"}`}
               />
               {postalLoading && <span className="absolute right-3 top-2.5 text-xs text-gray-400">ค้นหา…</span>}
             </div>
@@ -135,12 +135,12 @@ export default function ShopLocationPage() {
               พิกัด GPS <span className="text-red-500">*</span>
               <span className="text-xs text-gray-400 ml-1">(ต้องการ Google Maps API key)</span>
             </label>
-            <div className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${mapPinned ? "border-green-400 bg-green-50" : "border-gray-200 hover:border-green-300 bg-gray-50"}`}
+            <div className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors ${mapPinned ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-200 hover:border-[#FF8B66] bg-gray-50"}`}
               onClick={handleMapPin}>
               {mapPinned ? (
                 <div className="text-center">
                   <div className="text-3xl">📍</div>
-                  <div className="text-sm font-medium text-green-700">ปักหมุดแล้ว</div>
+                  <div className="text-sm font-medium text-[#D63B12]">ปักหมุดแล้ว</div>
                   <div className="text-xs text-gray-500">{form.shop_latitude}, {form.shop_longitude}</div>
                 </div>
               ) : (
@@ -154,7 +154,7 @@ export default function ShopLocationPage() {
             {errors.map && <p className="text-xs text-red-500 mt-1">{errors.map}</p>}
           </div>
 
-          <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors">
+          <button type="submit" className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors">
             ถัดไป → บัญชีธนาคาร
           </button>
         </form>

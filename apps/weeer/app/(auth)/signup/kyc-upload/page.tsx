@@ -47,11 +47,11 @@ export default function KycUploadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-start justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
-          <h1 className="text-2xl font-bold text-green-800">อัปโหลดเอกสาร KYC</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">อัปโหลดเอกสาร KYC</h1>
           <p className="text-sm text-gray-500 mt-1">Admin จะตรวจสอบเอกสารภายใน 3-5 วันทำการ</p>
         </div>
 
@@ -67,7 +67,7 @@ export default function KycUploadPage() {
                   key={dt.value}
                   type="button"
                   onClick={() => setSelectedType(dt.value)}
-                  className={`text-left p-3 rounded-xl border-2 transition-all text-sm ${selectedType === dt.value ? "border-green-600 bg-green-50" : "border-gray-200 hover:border-green-300"}`}
+                  className={`text-left p-3 rounded-xl border-2 transition-all text-sm ${selectedType === dt.value ? "border-[#F04E20] bg-[#FFF1ED]" : "border-gray-200 hover:border-[#FF8B66]"}`}
                 >
                   <div className="font-medium text-gray-800">{dt.label}</div>
                   <div className="text-xs text-gray-400 mt-0.5">{dt.desc}</div>
@@ -78,7 +78,7 @@ export default function KycUploadPage() {
 
           {/* Upload area */}
           <div>
-            <label className={`block w-full border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-colors border-gray-200 hover:border-green-400`}>
+            <label className={`block w-full border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-colors border-gray-200 hover:border-[#FF8B66]`}>
               <input type="file" accept="image/*,.pdf" className="hidden" onChange={handleFileAdd} />
               <div className="text-3xl mb-2">📄</div>
               <div className="text-sm font-medium text-gray-600">คลิกเพื่ออัปโหลด</div>
@@ -92,7 +92,7 @@ export default function KycUploadPage() {
             <div className="space-y-2">
               <p className="text-sm font-medium text-gray-700">เอกสารที่อัปโหลด ({docs.length})</p>
               {docs.map((d) => (
-                <div key={d.id} className="flex items-center gap-3 bg-green-50 border border-green-100 rounded-xl px-3 py-2">
+                <div key={d.id} className="flex items-center gap-3 bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl px-3 py-2">
                   <span className="text-lg">📎</span>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium text-gray-700 truncate">{d.file.name}</div>
@@ -111,7 +111,7 @@ export default function KycUploadPage() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
           >
             {loading ? "กำลังส่งข้อมูล…" : "ส่งข้อมูลเพื่อตรวจสอบ"}
           </button>

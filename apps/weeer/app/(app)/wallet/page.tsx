@@ -44,12 +44,12 @@ export default function WalletPage() {
       </div>
 
       {/* Payment Earner Info (D-2) */}
-      <div className="bg-green-50 rounded-2xl border border-green-100 p-4">
+      <div className="bg-[#FFF1ED] rounded-2xl border border-[#FFE0D6] p-4">
         <div className="flex items-start gap-3">
           <span className="text-2xl shrink-0">💰</span>
           <div>
-            <div className="text-sm font-semibold text-green-800 mb-1">วิธีรับเงิน (WeeeR Earner)</div>
-            <ul className="text-xs text-green-700 space-y-1">
+            <div className="text-sm font-semibold text-[#B8300E] mb-1">วิธีรับเงิน (WeeeR Earner)</div>
+            <ul className="text-xs text-[#D63B12] space-y-1">
               <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → escrow release → ได้รับ Silver อัตโนมัติ</li>
               <li>• B2B Parts (D81): ผู้ซื้อกด "รับของ" → escrow release → หักค่าธรรมเนียม 3% → รับ Silver</li>
             </ul>
@@ -61,11 +61,11 @@ export default function WalletPage() {
       <div className="grid grid-cols-3 gap-3">
         <Link
           href="/wallet/deposit"
-          className="bg-green-50 border border-green-100 rounded-2xl p-4 text-center hover:bg-green-100 transition-colors"
+          className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-2xl p-4 text-center hover:bg-[#FFE0D6] transition-colors"
         >
           <div className="text-2xl mb-1">📥</div>
-          <div className="text-xs font-semibold text-green-800">เติมแต้ม</div>
-          <div className="text-xs text-green-600 mt-0.5">โอนเงิน</div>
+          <div className="text-xs font-semibold text-[#B8300E]">เติมแต้ม</div>
+          <div className="text-xs text-[#F04E20] mt-0.5">โอนเงิน</div>
         </Link>
         <Link
           href="/wallet/withdraw"

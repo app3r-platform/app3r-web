@@ -61,12 +61,12 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
-          <h1 className="text-2xl font-bold text-green-800">สมัครใช้งาน WeeeR</h1>
+          <h1 className="text-2xl font-bold text-[#B8300E]">สมัครใช้งาน WeeeR</h1>
           <p className="text-sm text-gray-500 mt-1">สำหรับผู้ประกอบการซ่อม/รับซาก/ขายต่อ</p>
         </div>
 
@@ -82,7 +82,7 @@ export default function SignupPage() {
                 value={form.email}
                 onChange={(e) => set("email", e.target.value)}
                 placeholder="example@email.com"
-                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.email ? "border-red-400" : "border-gray-200"}`}
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.email ? "border-red-400" : "border-gray-200"}`}
               />
               {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
             </div>
@@ -96,7 +96,7 @@ export default function SignupPage() {
                 onChange={(e) => set("phone_number", e.target.value)}
                 placeholder="0812345678"
                 maxLength={10}
-                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.phone_number ? "border-red-400" : "border-gray-200"}`}
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.phone_number ? "border-red-400" : "border-gray-200"}`}
               />
               {errors.phone_number && <p className="text-xs text-red-500 mt-1">{errors.phone_number}</p>}
             </div>
@@ -110,7 +110,7 @@ export default function SignupPage() {
                   value={form.password}
                   onChange={(e) => set("password", e.target.value)}
                   placeholder="รหัสผ่าน"
-                  className={`w-full border rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.password ? "border-red-400" : "border-gray-200"}`}
+                  className={`w-full border rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.password ? "border-red-400" : "border-gray-200"}`}
                 />
                 <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-2.5 text-gray-400 text-sm">
                   {showPw ? "ซ่อน" : "แสดง"}
@@ -128,7 +128,7 @@ export default function SignupPage() {
                 value={form.confirm_password}
                 onChange={(e) => set("confirm_password", e.target.value)}
                 placeholder="รหัสผ่านอีกครั้ง"
-                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${errors.confirm_password ? "border-red-400" : "border-gray-200"}`}
+                className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${errors.confirm_password ? "border-red-400" : "border-gray-200"}`}
               />
               {errors.confirm_password && <p className="text-xs text-red-500 mt-1">{errors.confirm_password}</p>}
             </div>
@@ -143,7 +143,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
             >
               {loading ? "กำลังสมัคร…" : "สมัครใช้งาน"}
             </button>
@@ -151,7 +151,7 @@ export default function SignupPage() {
 
           <p className="text-center text-sm text-gray-500">
             มีบัญชีแล้ว?{" "}
-            <Link href="/login" className="text-green-700 font-medium hover:underline">
+            <Link href="/login" className="text-[#D63B12] font-medium hover:underline">
               เข้าสู่ระบบ
             </Link>
           </p>
