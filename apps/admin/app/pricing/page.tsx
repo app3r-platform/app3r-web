@@ -172,7 +172,7 @@ function ActiveBadge({ active }: { active: boolean }) {
 }
 function KindBadge({ kind }: { kind: DeductionKind }) {
   const m: Record<DeductionKind, string> = {
-    CONDITION: "bg-purple-50 text-purple-700", MISSING_ACCESSORY: "bg-yellow-50 text-yellow-700",
+    CONDITION: "bg-admin-surface text-admin-primary", MISSING_ACCESSORY: "bg-yellow-50 text-yellow-700",
     PROBLEM: "bg-red-50 text-red-700", AGE: "bg-blue-50 text-blue-700", OTHER: "bg-gray-100 text-gray-600",
   };
   const l: Record<DeductionKind, string> = { CONDITION: "สภาพ", MISSING_ACCESSORY: "ขาดอุปกรณ์", PROBLEM: "ปัญหา", AGE: "อายุ", OTHER: "อื่นๆ" };
@@ -830,7 +830,7 @@ function Tab4Deductions({ cats, dims, dimVals, deductions, setDeductions, models
                   <td className="px-4 py-3 font-medium">{d.label_th}</td>
                   <td className="px-4 py-3"><KindBadge kind={d.kind} /></td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${d.deduction_type === "FIXED" ? "bg-blue-50 text-blue-700" : d.deduction_type === "PERCENT" ? "bg-orange-50 text-orange-700" : "bg-purple-50 text-purple-700"}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${d.deduction_type === "FIXED" ? "bg-blue-50 text-blue-700" : d.deduction_type === "PERCENT" ? "bg-orange-50 text-orange-700" : "bg-admin-surface text-admin-primary"}`}>
                       {d.deduction_type}
                     </span>
                   </td>

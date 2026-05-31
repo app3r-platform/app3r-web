@@ -238,7 +238,7 @@ export default function ResellLifecyclePage() {
           <ul className="space-y-1 list-disc list-inside">
             <li>การแก้ไข Lifecycle Config จะมีผลกับ listing ที่สร้างใหม่เท่านั้น — ไม่ retroactive</li>
             <li>Resell Inspection 48 ชม. — ผู้ซื้อต้องยืนยันหรือเปิด Dispute ภายในเวลาที่กำหนด</li>
-            <li>Escrow auto-release เมื่อ inspection_period หมดอายุโดยไม่มีการตอบสนอง</li>
+            <li>ระบบพักเงินกลาง (Escrow) auto-release เมื่อ inspection_period หมดอายุโดยไม่มีการตอบสนอง</li>
           </ul>
         </div>
 

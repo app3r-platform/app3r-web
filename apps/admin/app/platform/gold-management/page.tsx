@@ -83,7 +83,7 @@ export default function GoldManagementPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Gold Management</h1>
-        <p className="text-gray-500 text-sm mb-6">จัดการ Gold Point Reserve Pool และ Fee Pools</p>
+        <p className="text-gray-500 text-sm mb-6">จัดการ พอยต์ทอง (Gold Point) Reserve Pool และ Fee Pools</p>
 
         {/* Super Admin Notice */}
         {!isSuper && (

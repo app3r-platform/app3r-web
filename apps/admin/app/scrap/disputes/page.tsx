@@ -156,7 +156,7 @@ export default function ScrapDisputesPage() {
                   <th className="px-5 py-3">Job / Listing</th>
                   <th className="px-5 py-3">Buyer (WeeeR)</th>
                   <th className="px-5 py-3">Seller (WeeeU)</th>
-                  <th className="px-5 py-3">Escrow</th>
+                  <th className="px-5 py-3">เงินพักกลาง (Escrow)</th>
                   <th className="px-5 py-3">เวลาที่พิพาท</th>
                   <th className="px-5 py-3 text-right">จัดการ</th>
                 </tr>
@@ -248,7 +248,7 @@ export default function ScrapDisputesPage() {
                 <div className="text-green-700 font-medium">{resolveModal.seller_name}</div>
               </div>
               <div className="col-span-2">
-                <div className="text-xs text-gray-500 mb-1">Escrow ที่ค้างอยู่</div>
+                <div className="text-xs text-gray-500 mb-1">ระบบพักเงินกลาง (Escrow) ที่ค้างอยู่</div>
                 <div className="text-yellow-700 font-bold text-lg">
                   {resolveModal.escrow_amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })} Points
                 </div>

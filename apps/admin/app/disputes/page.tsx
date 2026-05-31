@@ -83,8 +83,8 @@ const LAYER_GUIDE = [
   {
     layer: "L4",
     label: "บันทึก Precedent",
-    color: "bg-purple-50 border-l-4 border-purple-400",
-    textColor: "text-purple-700",
+    color: "bg-admin-surface border-l-4 border-admin-primary",
+    textColor: "text-admin-primary",
     desc: "บันทึกผลตัดสินเป็น precedent สำหรับกรณีคล้ายกันในอนาคต",
   },
 ];
@@ -180,7 +180,7 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
           <div className="bg-admin-surface rounded-xl p-4 flex items-center gap-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-admin-primary">{escrow.toLocaleString()} G</p>
-              <p className="text-xs text-gray-500">Escrow รวม</p>
+              <p className="text-xs text-gray-500">ระบบพักเงินกลาง (Escrow) รวม</p>
             </div>
             <div className="flex-1 text-sm text-gray-600">
               <p><strong>บริการ:</strong> {SERVICE_BADGE[dispute.service_type]?.label}</p>
@@ -259,7 +259,7 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
                 { value: "default_refund", label: "คืนเงิน WeeeU เต็ม (Default)", sub: "ใช้เมื่อไม่มีข้อมูลชัดเจน", color: "border-green-400 bg-green-50 text-green-700" },
                 { value: "to_buyer",       label: "คืนเงินผู้ซื้อ / WeeeU เต็ม", sub: "WeeeR/WeeeT ผิด", color: "border-blue-400 bg-blue-50 text-blue-700" },
                 { value: "to_seller",      label: "โอนให้ผู้ขาย / WeeeR เต็ม",  sub: "WeeeU ผิด", color: "border-orange-400 bg-orange-50 text-orange-700" },
-                { value: "split",          label: "แบ่งสัดส่วน",                 sub: "กรณีผิดทั้งสองฝ่าย", color: "border-purple-400 bg-purple-50 text-purple-700" },
+                { value: "split",          label: "แบ่งสัดส่วน",                 sub: "กรณีผิดทั้งสองฝ่าย", color: "border-admin-primary bg-admin-surface text-admin-primary" },
               ].map(opt => (
                 <label key={opt.value} className="flex items-start gap-3 cursor-pointer">
                   <input type="radio" name="resolution" value={opt.value}
@@ -274,14 +274,14 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
               ))}
 
               {resolution === "split" && (
-                <div className="mt-3 px-4 py-3 bg-purple-50 rounded-xl border border-purple-200">
-                  <label className="block text-xs font-medium text-purple-700 mb-2">
+                <div className="mt-3 px-4 py-3 bg-admin-surface rounded-xl border border-admin-primary/30">
+                  <label className="block text-xs font-medium text-admin-primary mb-2">
                     สัดส่วน WeeeU (ผู้ซื้อ/ลูกค้า): {splitPct}%
                   </label>
                   <input type="range" min={0} max={100} step={5}
                     value={splitPct} onChange={e => setSplitPct(+e.target.value)}
-                    className="w-full accent-purple-600" />
-                  <div className="flex justify-between text-xs text-purple-600 mt-2">
+                    className="w-full accent-[#2C5E8C]" />
+                  <div className="flex justify-between text-xs text-admin-primary mt-2">
                     <span>WeeeU: {buyerAmt.toLocaleString()} G</span>
                     <span>WeeeR/ผู้ขาย: {sellerAmt.toLocaleString()} G</span>
                   </div>
@@ -306,7 +306,7 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
             <div className="space-y-3 mb-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={savePrecedent} onChange={e => setSavePrecedent(e.target.checked)}
-                  className="w-4 h-4 accent-purple-600" />
+                  className="w-4 h-4 accent-[#2C5E8C]" />
                 <span className="text-sm text-gray-700">บันทึกเป็น Precedent สำหรับกรณีนี้</span>
               </label>
               {savePrecedent && (
@@ -315,7 +315,7 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
                   className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-admin-primary resize-none" />
               )}
               {dispute.precedent_id && (
-                <p className="text-xs text-purple-600">📌 มี Precedent เดิม: #{dispute.precedent_id}</p>
+                <p className="text-xs text-admin-primary">📌 มี Precedent เดิม: #{dispute.precedent_id}</p>
               )}
             </div>
           )}
@@ -468,7 +468,7 @@ export default function DisputesPage() {
                   <th className="px-5 py-3 font-medium">ข้อพิพาท</th>
                   <th className="px-4 py-3 font-medium">บริการ</th>
                   <th className="px-4 py-3 font-medium">คู่กรณี</th>
-                  <th className="px-4 py-3 font-medium">Escrow</th>
+                  <th className="px-4 py-3 font-medium">เงินพักกลาง (Escrow)</th>
                   <th className="px-4 py-3 font-medium">Layer hint</th>
                   <th className="px-4 py-3 font-medium">สถานะ</th>
                   <th className="px-4 py-3 font-medium">เปิดเมื่อ</th>
@@ -485,7 +485,7 @@ export default function DisputesPage() {
                         <p className="font-medium text-gray-900 line-clamp-1">{d.title}</p>
                         <p className="text-xs text-gray-400 font-mono mt-0.5">{d.id.slice(0, 8)}…</p>
                         {d.precedent_id && (
-                          <span className="text-xs text-purple-600">📌 Precedent</span>
+                          <span className="text-xs text-admin-primary">📌 Precedent</span>
                         )}
                       </td>
                       <td className="px-4 py-3">

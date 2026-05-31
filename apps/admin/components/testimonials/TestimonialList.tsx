@@ -91,15 +91,32 @@ export default function TestimonialList() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">
-          รีวิวลูกค้า (Testimonials)
-        </h1>
-        <Link
-          href="/testimonials/new"
-          className="bg-admin-surface text-admin-primary px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
-        >
-          + เพิ่มรีวิว
-        </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            รีวิวลูกค้า (Testimonials) — D86
+          </h1>
+          <p className="text-sm text-gray-500 mt-0.5">star-sort · website-pick · ลำดับที่แสดงบนเว็บไซต์</p>
+        </div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setItems(prev => {
+                const sorted = [...prev].sort((a, b) => b.starsRating - a.starsRating)
+                return sorted.map((t, i) => ({ ...t, sortOrder: i + 1 }))
+              })
+            }}
+            className="border border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+          >
+            ⭐ Star-sort
+          </button>
+          <Link
+            href="/testimonials/new"
+            className="bg-admin-surface text-admin-primary px-4 py-2 rounded-lg hover:bg-admin-dark hover:text-white text-sm font-medium transition-colors"
+          >
+            + เพิ่มรีวิว
+          </Link>
+        </div>
       </div>
 
       <div className="flex gap-3 flex-wrap">

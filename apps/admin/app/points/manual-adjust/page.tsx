@@ -104,7 +104,7 @@ export default function ManualAdjustPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Manual Adjust Points</h1>
-        <p className="text-gray-500 text-sm mb-6">ปรับยอด Gold/Silver Point ด้วยตนเอง — Super Admin Only (D27)</p>
+        <p className="text-gray-500 text-sm mb-6">ปรับยอด พอยต์ทอง/พอยต์เงิน (Gold/Silver Point) ด้วยตนเอง — Super Admin Only (D27)</p>
 
         {/* D28 Limit Indicator */}
         <div className="mb-6 bg-orange-900/20 border border-orange-800/50 rounded-xl p-4 flex items-center gap-3">

@@ -79,8 +79,8 @@ export default function ScrapDisputeDetailPage({ params }: { params: Promise<{ i
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 flex items-center gap-3">
         <span className="text-xl">💰</span>
         <div>
-          <p className="text-xs text-amber-600 font-semibold uppercase tracking-wider">Escrow</p>
-          <p className="text-sm font-medium text-gray-800">Escrow ค้าง: 850 ฿</p>
+          <p className="text-xs text-amber-600 font-semibold uppercase tracking-wider">ระบบพักเงินกลาง (Escrow)</p>
+          <p className="text-sm font-medium text-gray-800">เงินพักกลาง (Escrow) ค้าง: 850 ฿</p>
         </div>
       </div>
 

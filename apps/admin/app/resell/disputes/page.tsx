@@ -155,8 +155,8 @@ export default function ResellDisputesPage() {
               <div className="font-semibold text-green-700 mb-1">🧑‍💼 Seller ชนะ</div>
               <div className="text-xs text-gray-500">โอน escrow ให้ seller · listing → COMPLETED</div>
             </div>
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-              <div className="font-semibold text-purple-700 mb-1">⚡ แบ่ง (Split)</div>
+            <div className="bg-admin-surface border border-admin-primary/30 rounded-lg p-3">
+              <div className="font-semibold text-admin-primary mb-1">⚡ แบ่ง (Split)</div>
               <div className="text-xs text-gray-500">Admin กำหนด % — buyer N% + seller (100-N)%</div>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function ResellDisputesPage() {
                   <th className="px-5 py-3">Listing</th>
                   <th className="px-5 py-3">Buyer</th>
                   <th className="px-5 py-3">Seller</th>
-                  <th className="px-5 py-3">Escrow</th>
+                  <th className="px-5 py-3">เงินพักกลาง (Escrow)</th>
                   <th className="px-5 py-3">เวลาที่พิพาท</th>
                   <th className="px-5 py-3 text-right">จัดการ</th>
                 </tr>
@@ -210,7 +210,7 @@ export default function ResellDisputesPage() {
                       <div className="text-base font-bold text-admin-primary font-mono">
                         {item.escrow_amount.toLocaleString()} G
                       </div>
-                      <div className="text-xs text-gray-500">Escrow ค้างอยู่</div>
+                      <div className="text-xs text-gray-500">ระบบพักเงินกลาง (Escrow) ค้างอยู่</div>
                     </td>
                     <td className="px-5 py-4 text-gray-500 text-xs">
                       {new Date(item.disputed_at).toLocaleDateString("th-TH", {
@@ -275,7 +275,7 @@ export default function ResellDisputesPage() {
                 <div className="text-green-700 font-medium">{resolveModal.seller_name}</div>
               </div>
               <div className="col-span-2">
-                <div className="text-xs text-gray-500 mb-1">🔒 Escrow</div>
+                <div className="text-xs text-gray-500 mb-1">🔒 เงินพักกลาง (Escrow)</div>
                 <div className="text-admin-primary font-bold text-lg font-mono">
                   {resolveModal.escrow_amount.toLocaleString()} G
                 </div>
@@ -290,7 +290,7 @@ export default function ResellDisputesPage() {
                     resolution === r
                       ? r === "to_buyer"  ? "border-blue-400 bg-blue-50 text-blue-700"
                       : r === "to_seller" ? "border-green-400 bg-green-50 text-green-700"
-                      : "border-purple-400 bg-purple-50 text-purple-700"
+                      : "border-admin-primary bg-admin-surface text-admin-primary"
                       : "border-gray-200 bg-white text-gray-500 hover:border-gray-300"
                   }`}>
                   {r === "to_buyer"  ? "🛒 Buyer\nชนะ"
@@ -302,8 +302,8 @@ export default function ResellDisputesPage() {
 
             {/* Split slider */}
             {resolution === "split" && (
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4 space-y-2">
-                <p className="text-xs font-semibold text-purple-700 mb-2">⚡ กำหนด Split %</p>
+              <div className="bg-admin-surface border border-admin-primary/30 rounded-xl p-4 mb-4 space-y-2">
+                <p className="text-xs font-semibold text-admin-primary mb-2">⚡ กำหนด Split %</p>
                 <p className="text-xs text-gray-600">
                   Buyer ได้ <strong>{splitPct}%</strong> = {buyerSplit.toLocaleString()} G
                   &nbsp;·&nbsp;
@@ -312,7 +312,7 @@ export default function ResellDisputesPage() {
                 <input type="range" min={0} max={100} step={5}
                   value={splitPct}
                   onChange={e => setSplitPct(Number(e.target.value))}
-                  className="w-full accent-purple-500"
+                  className="w-full accent-[#2C5E8C]"
                 />
                 <div className="flex justify-between text-xs text-gray-400">
                   <span>Buyer 100%</span>
@@ -341,7 +341,7 @@ export default function ResellDisputesPage() {
                 className={`flex-1 py-3 text-sm text-white rounded-xl font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-colors ${
                   resolution === "to_buyer"  ? "bg-blue-600 hover:bg-blue-700"
                   : resolution === "to_seller" ? "bg-green-600 hover:bg-green-700"
-                  : resolution === "split"    ? "bg-purple-600 hover:bg-purple-700"
+                  : resolution === "split"    ? "bg-admin-primary hover:bg-admin-dark"
                   : "bg-gray-400"
                 }`}>
                 {actionLoading !== null ? "กำลังดำเนินการ..."

@@ -303,16 +303,16 @@ export default function MaintainJobDetailPage() {
 
         {/* D-Maintain-2: Cross-module trace — งานนี้ผูกกับ Repair Job */}
         {job.cross_module_ref?.type === "repair" && (
-          <section className="bg-purple-50 rounded-xl border border-purple-200 p-5">
-            <h2 className="text-xs font-semibold text-purple-700 uppercase tracking-wider mb-3">
+          <section className="bg-admin-surface rounded-xl border border-admin-primary/30 p-5">
+            <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-3">
               🔧 Cross-Module — งานนี้ถูกส่งต่อเป็นงานซ่อม
             </h2>
-            <p className="text-xs text-purple-600 mb-3">
+            <p className="text-xs text-admin-primary mb-3">
               งาน Maintain นี้พบปัญหาระหว่างการล้าง และถูกเปิดเป็น Repair Job แยกต่างหาก
             </p>
             <Link
               href={`/repair/jobs/${job.cross_module_ref.job_id}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-700 text-xs font-medium rounded-lg transition-colors">
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-admin-surface hover:bg-admin-surface text-admin-primary text-xs font-medium rounded-lg transition-colors">
               🔧 ดู Repair Job →
             </Link>
           </section>
@@ -484,7 +484,7 @@ export default function MaintainJobDetailPage() {
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                     job.dispute.resolution === "refund"  ? "bg-blue-100 text-blue-700" :
                     job.dispute.resolution === "forfeit" ? "bg-red-100 text-red-700" :
-                    job.dispute.resolution === "split"   ? "bg-purple-100 text-purple-700" :
+                    job.dispute.resolution === "split"   ? "bg-admin-surface text-admin-primary" :
                     "bg-gray-100 text-gray-600"
                   }`}>
                     {job.dispute.resolution === "refund"  ? "คืนเงินลูกค้า (Refund)" :
