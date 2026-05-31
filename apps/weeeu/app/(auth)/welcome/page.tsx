@@ -98,11 +98,11 @@ export default function WelcomePage() {
       {/* Terms note */}
       <p className="text-xs text-gray-400 pb-1">
         การสมัครถือว่ายอมรับ{" "}
-        <a href={`${WEBSITE_URL}/terms`} className="text-weeeu-primary hover:underline">
+        <a href={`${WEBSITE_URL}/legal/terms`} className="text-weeeu-primary hover:underline">
           ข้อตกลงการใช้งาน
         </a>{" "}
         และ{" "}
-        <a href={`${WEBSITE_URL}/privacy`} className="text-weeeu-primary hover:underline">
+        <a href={`${WEBSITE_URL}/legal/privacy`} className="text-weeeu-primary hover:underline">
           นโยบายความเป็นส่วนตัว
         </a>
       </p>

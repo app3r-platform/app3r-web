@@ -181,9 +181,9 @@ export default function SignupEmailPage() {
             />
             <span className="text-xs text-gray-600 leading-relaxed">
               ฉันยอมรับ{" "}
-              <a href={`${WEBSITE_URL}/terms`} className="text-weeeu-primary hover:underline font-medium">ข้อตกลงการใช้งาน</a>{" "}
+              <a href={`${WEBSITE_URL}/legal/terms`} className="text-weeeu-primary hover:underline font-medium">ข้อตกลงการใช้งาน</a>{" "}
               และ{" "}
-              <a href={`${WEBSITE_URL}/privacy`} className="text-weeeu-primary hover:underline font-medium">นโยบายความเป็นส่วนตัว</a>{" "}
+              <a href={`${WEBSITE_URL}/legal/privacy`} className="text-weeeu-primary hover:underline font-medium">นโยบายความเป็นส่วนตัว</a>{" "}
               ของ WeeeU
             </span>
           </label>
