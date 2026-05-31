@@ -7,6 +7,8 @@ export const metadata: Metadata = { title: "ยินดีต้อนรับ
 // TODO Phase D: ตั้งค่า NEXT_PUBLIC_WEEER_URL / NEXT_PUBLIC_WEEET_URL สำหรับ production
 const WEEER_URL = process.env.NEXT_PUBLIC_WEEER_URL ?? "http://localhost:3001";
 const WEEET_URL = process.env.NEXT_PUBLIC_WEEET_URL ?? "http://localhost:3003";
+// terms/privacy = canonical ที่ App3R-Website (cross-origin) → ใช้ <a> ไม่ใช่ next/Link
+const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL ?? "http://localhost:3004";
 
 export default function WelcomePage() {
   return (
@@ -96,13 +98,13 @@ export default function WelcomePage() {
       {/* Terms note */}
       <p className="text-xs text-gray-400 pb-1">
         การสมัครถือว่ายอมรับ{" "}
-        <Link href="/terms" className="text-weeeu-primary hover:underline">
+        <a href={`${WEBSITE_URL}/terms`} className="text-weeeu-primary hover:underline">
           ข้อตกลงการใช้งาน
-        </Link>{" "}
+        </a>{" "}
         และ{" "}
-        <Link href="/privacy" className="text-weeeu-primary hover:underline">
+        <a href={`${WEBSITE_URL}/privacy`} className="text-weeeu-primary hover:underline">
           นโยบายความเป็นส่วนตัว
-        </Link>
+        </a>
       </p>
     </div>
   );
