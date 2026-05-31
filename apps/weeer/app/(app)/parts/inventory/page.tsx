@@ -520,7 +520,7 @@ export default function InventoryPage() {
                   <label className="text-xs font-medium text-emerald-700 block mb-1">♻️ มาจากงานซาก (Scrap Job ID)</label>
                   <input value={form.scrapJobId} onChange={(e) => setForm((f) => ({ ...f, scrapJobId: e.target.value }))}
                     placeholder="SJ-2026-XXX"
-                    className="w-full border border-emerald-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+                    className="w-full border border-[#FFD0BF] rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
                 </div>
               )}
               <div>
