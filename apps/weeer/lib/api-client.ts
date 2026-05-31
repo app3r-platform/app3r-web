@@ -8,6 +8,11 @@ import { getDevTestToken } from "./dev-auth";
 /** Base URL ของ backend API — กำหนดผ่าน NEXT_PUBLIC_API_BASE_URL */
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
+/** getApiBase — base URL สำหรับ component ที่ fetch backend ตรง (เช่น shared NearMeFilter) */
+export function getApiBase(): string {
+  return API_BASE;
+}
+
 /**
  * apiFetch — drop-in fetch wrapper ที่แนบ Authorization header อัตโนมัติ
  *
