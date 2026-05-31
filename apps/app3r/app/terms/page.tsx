@@ -1,30 +1,8 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'ข้อกำหนดการใช้งาน — App3R',
-  description: 'ข้อกำหนดและเงื่อนไขการใช้งานแพลตฟอร์ม App3R',
-};
-
-// Placeholder route — เนื้อหาฉบับเต็มจะมาผ่าน CMS (C13)
-// มีไว้เพื่อให้ลิงก์จาก WeeeR (register) และ WeeeU ที่ชี้มา /terms ไม่ 404
-export default function TermsPage() {
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">ข้อกำหนดการใช้งาน</span>
-      </nav>
-
-      <h1 className="text-3xl sm:text-4xl font-extrabold text-website-brand-700 mb-6">
-        ข้อกำหนดการใช้งาน
-      </h1>
-
-      <div className="bg-website-brand-50 border border-website-brand-200 rounded-2xl p-8 text-gray-700 leading-relaxed">
-        <p>เนื้อหาฉบับเต็มจะมาผ่าน CMS (C13)</p>
-      </div>
-    </div>
-  );
+// O2R-A (Advisor RULING B): canonical legal route = /legal/terms (CMS-ready
+// via /legal/[slug]). This stub permanently redirects the old bare /terms path
+// so any lingering external/bookmarked link does not 404.
+export default function TermsRedirect() {
+  redirect('/legal/terms');
 }
