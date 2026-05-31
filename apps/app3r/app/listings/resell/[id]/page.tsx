@@ -118,7 +118,7 @@ export default async function ResellDetailPage({ params }: PageProps) {
           </div>
 
           {/* Ad Banner */}
-          <AdBanner size="leaderboard" />
+          <AdBanner position="module_first_row" size="leaderboard" />
         </div>
 
         {/* Right: Sidebar */}
