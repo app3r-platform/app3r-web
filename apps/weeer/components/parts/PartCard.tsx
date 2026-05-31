@@ -20,7 +20,7 @@ export function PartCard({ listing, currentShopId }: PartCardProps) {
     <Link
       href={`/parts/marketplace/${listing.id}`}
       className={`block bg-white border rounded-xl overflow-hidden hover:shadow-sm transition-all ${
-        isOwn ? "border-green-200 bg-green-50/30" : "border-gray-100 hover:border-green-200"
+        isOwn ? "border-[#FFD0BF] bg-[#FFF1ED]/30" : "border-gray-100 hover:border-[#FFD0BF]"
       }`}
     >
       {/* รูปภาพ */}
@@ -38,7 +38,7 @@ export function PartCard({ listing, currentShopId }: PartCardProps) {
           </div>
         )}
         {isOwn && (
-          <div className="absolute top-1 right-1 bg-green-700 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+          <div className="absolute top-1 right-1 bg-[#FF663A] text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
             ร้านคุณ
           </div>
         )}
@@ -54,7 +54,7 @@ export function PartCard({ listing, currentShopId }: PartCardProps) {
         </div>
         <div className="flex items-center justify-between pt-0.5">
           {listing.pricePoints > 0 ? (
-            <p className="text-sm font-bold text-green-700">{listing.pricePoints.toLocaleString()} pts</p>
+            <p className="text-sm font-bold text-[#D63B12]">{listing.pricePoints.toLocaleString()} pts</p>
           ) : listing.unitPriceThb != null ? (
             <p className="text-sm font-bold text-gray-700">
               ฿{listing.unitPriceThb.toLocaleString()}

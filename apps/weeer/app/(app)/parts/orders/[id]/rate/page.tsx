@@ -146,7 +146,7 @@ export default function RatePage() {
         <p className="text-sm text-gray-700">
           {order.quantity} ชิ้น × {Number(order.unitPriceThb).toLocaleString()} บาท
           {" = "}
-          <span className="font-bold text-green-700">{Number(order.totalThb).toLocaleString()} บาท</span>
+          <span className="font-bold text-[#D63B12]">{Number(order.totalThb).toLocaleString()} บาท</span>
         </p>
         {order.closedAt && (
           <p className="text-xs text-gray-400">ปิด: {new Date(order.closedAt).toLocaleDateString("th-TH")}</p>

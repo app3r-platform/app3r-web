@@ -33,7 +33,7 @@ export default function PartsLayout({ children }: { children: React.ReactNode })
               key={n.href}
               href={n.href}
               className={`flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg transition-colors ${
-                active ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                active ? "bg-white text-[#D63B12] shadow-sm" : "text-gray-500 hover:text-gray-700"
               }`}
             >
               <span>{n.icon}</span>

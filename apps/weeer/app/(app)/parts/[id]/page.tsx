@@ -58,7 +58,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
         </div>
         <div>
           <p className="text-xs text-gray-400">ราคาต่อหน่วย</p>
-          <p className="font-bold text-green-700">{part.unitPrice.toLocaleString()} pts</p>
+          <p className="font-bold text-[#D63B12]">{part.unitPrice.toLocaleString()} pts</p>
         </div>
         <div>
           <p className="text-xs text-gray-400">แหล่งที่มา</p>
@@ -78,8 +78,8 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Stock card */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-green-50 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-green-700">{part.stockQty}</p>
+        <div className="bg-[#FFF1ED] rounded-xl p-3 text-center">
+          <p className="text-2xl font-bold text-[#D63B12]">{part.stockQty}</p>
           <p className="text-xs text-gray-500 mt-0.5">สต๊อกรวม ({part.unit})</p>
         </div>
         <div className="bg-orange-50 rounded-xl p-3 text-center">
@@ -95,7 +95,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
       {/* Action buttons */}
       <div className="flex gap-2 flex-wrap">
         <Link href={`/parts/${id}/stock-in`}
-          className="bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors">
+          className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors">
           📦 รับเข้า
         </Link>
         <Link href={`/parts/${id}/stock-adjust`}

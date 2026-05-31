@@ -17,7 +17,7 @@ export function PartDetailHeader({ listing, isOwn }: PartDetailHeaderProps) {
         <PartCategoryBadge category={listing.category} size="md" />
         <PartConditionBadge condition={listing.condition} size="md" />
         {isOwn && (
-          <span className="text-xs bg-green-100 text-green-700 font-medium px-2.5 py-1 rounded-full">
+          <span className="text-xs bg-[#FFE0D6] text-[#D63B12] font-medium px-2.5 py-1 rounded-full">
             🏪 รายการของร้านคุณ
           </span>
         )}
@@ -30,7 +30,7 @@ export function PartDetailHeader({ listing, isOwn }: PartDetailHeaderProps) {
       </p>
       <div className="flex items-center justify-between">
         {listing.pricePoints > 0 ? (
-          <p className="text-2xl font-bold text-green-700">{listing.pricePoints.toLocaleString()} pts</p>
+          <p className="text-2xl font-bold text-[#D63B12]">{listing.pricePoints.toLocaleString()} pts</p>
         ) : listing.unitPriceThb != null ? (
           <p className="text-2xl font-bold text-gray-800">
             ฿{listing.unitPriceThb.toLocaleString()}

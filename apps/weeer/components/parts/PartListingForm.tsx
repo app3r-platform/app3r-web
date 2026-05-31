@@ -53,20 +53,20 @@ export function PartListingForm({ shopId, shopName, onSubmit, onClose }: PartLis
         ].map(({ label, key, placeholder }) => (
           <div key={key}>
             <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
-            <input value={form[key as "name" | "brand"]} onChange={(e) => set(key as "name" | "brand", e.target.value)} placeholder={placeholder} className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input value={form[key as "name" | "brand"]} onChange={(e) => set(key as "name" | "brand", e.target.value)} placeholder={placeholder} className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           </div>
         ))}
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">หมวด (Category)</label>
-            <select value={form.category} onChange={(e) => set("category", e.target.value as PartCategory)} className="w-full text-sm border border-gray-200 rounded-xl px-2.5 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
+            <select value={form.category} onChange={(e) => set("category", e.target.value as PartCategory)} className="w-full text-sm border border-gray-200 rounded-xl px-2.5 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               {Object.entries(CATEGORY_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">สภาพ</label>
-            <select value={form.condition} onChange={(e) => set("condition", e.target.value as PartListing["condition"])} className="w-full text-sm border border-gray-200 rounded-xl px-2.5 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
+            <select value={form.condition} onChange={(e) => set("condition", e.target.value as PartListing["condition"])} className="w-full text-sm border border-gray-200 rounded-xl px-2.5 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               <option value="new">ใหม่</option>
               <option value="used">มือสอง</option>
               <option value="refurbished">รีเฟอร์บิช</option>
@@ -74,20 +74,20 @@ export function PartListingForm({ shopId, shopName, onSubmit, onClose }: PartLis
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">ราคา (pts) *</label>
-            <input type="number" min="1" value={form.pricePoints} onChange={(e) => set("pricePoints", e.target.value)} placeholder="0" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input type="number" min="1" value={form.pricePoints} onChange={(e) => set("pricePoints", e.target.value)} placeholder="0" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนสต็อก *</label>
-            <input type="number" min="1" value={form.stock} onChange={(e) => set("stock", e.target.value)} placeholder="0" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input type="number" min="1" value={form.stock} onChange={(e) => set("stock", e.target.value)} placeholder="0" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           </div>
         </div>
 
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">คำอธิบาย (ไม่บังคับ)</label>
-          <textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={3} placeholder="รายละเอียดเพิ่มเติม…" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" />
+          <textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={3} placeholder="รายละเอียดเพิ่มเติม…" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
 
-        <button onClick={handleSubmit} disabled={!valid || loading} className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors">
+        <button onClick={handleSubmit} disabled={!valid || loading} className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors">
           {loading ? "กำลังลงขาย…" : "🏷️ ลงขายเลย"}
         </button>
       </div>

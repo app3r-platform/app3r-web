@@ -40,7 +40,7 @@ function DiscountBadge({ tierPricing, qty }: { tierPricing: Parameters<typeof ge
   const discount = getTierDiscount(tierPricing, qty);
   if (discount <= 0) return null;
   return (
-    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+    <span className="text-xs bg-[#FFE0D6] text-[#D63B12] px-2 py-0.5 rounded-full font-medium">
       -{(discount * 100).toFixed(0)}% ส่วนลด
     </span>
   );
@@ -102,7 +102,7 @@ export default function CartPage() {
           <p className="text-sm text-gray-400">เพิ่มสินค้าจากตลาด B2B ก่อน</p>
           <button
             onClick={() => router.push("/parts/marketplace")}
-            className="mt-2 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 transition-colors"
+            className="mt-2 px-4 py-2 bg-[#FF663A] text-white rounded-xl text-sm font-medium hover:bg-[#F04E20] transition-colors"
           >
             ไปตลาด B2B
           </button>
@@ -124,7 +124,7 @@ export default function CartPage() {
             <p className="text-xs text-gray-500">{totalItems} ชิ้น · {groups.length} ร้าน</p>
           </div>
         </div>
-        <span className="text-sm font-bold text-green-700">฿{totalBaht.toLocaleString("th", { minimumFractionDigits: 2 })}</span>
+        <span className="text-sm font-bold text-[#D63B12]">฿{totalBaht.toLocaleString("th", { minimumFractionDigits: 2 })}</span>
       </div>
 
       {/* Groups */}
@@ -182,7 +182,7 @@ export default function CartPage() {
                           {getTierDiscount(item.listing.tierPricing, item.qty) > 0 && (
                             <p className="text-xs text-gray-400 line-through">฿{item.listing.unitPrice.toLocaleString()}</p>
                           )}
-                          <p className="text-sm font-bold text-green-700">฿{lineTotal.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
+                          <p className="text-sm font-bold text-[#D63B12]">฿{lineTotal.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
                           <p className="text-xs text-gray-400">@฿{discounted.toFixed(2)}/ชิ้น</p>
                         </div>
 
@@ -199,7 +199,7 @@ export default function CartPage() {
                           <button
                             onClick={() => updateQty(item.id, 1)}
                             disabled={item.qty >= Math.min(50, item.listing.qtyAvailable)}
-                            className="w-7 h-7 rounded-full bg-green-100 text-green-700 font-bold text-lg flex items-center justify-center disabled:opacity-40 hover:bg-green-200 transition-colors"
+                            className="w-7 h-7 rounded-full bg-[#FFE0D6] text-[#D63B12] font-bold text-lg flex items-center justify-center disabled:opacity-40 hover:bg-[#FFD0BF] transition-colors"
                           >
                             +
                           </button>
@@ -222,7 +222,7 @@ export default function CartPage() {
             <div className="px-4 py-3 bg-gray-50">
               <button
                 onClick={() => router.push(`/parts/checkout?seller=${group.sellerUserId}`)}
-                className="w-full py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 transition-colors"
+                className="w-full py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium hover:bg-[#F04E20] transition-colors"
               >
                 สั่งซื้อจาก {group.sellerName} — ฿{groupTotal.toLocaleString("th", { minimumFractionDigits: 2 })}
               </button>
@@ -235,11 +235,11 @@ export default function CartPage() {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between shadow-lg">
         <div>
           <p className="text-xs text-gray-500">{totalItems} ชิ้น · {groups.length} ร้าน</p>
-          <p className="font-bold text-green-700">฿{totalBaht.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
+          <p className="font-bold text-[#D63B12]">฿{totalBaht.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
         </div>
         <button
           onClick={() => router.push("/parts/checkout")}
-          className="px-6 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 transition-colors"
+          className="px-6 py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium hover:bg-[#F04E20] transition-colors"
         >
           สั่งซื้อทั้งหมด
         </button>

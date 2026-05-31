@@ -38,7 +38,7 @@ export function ShipOrderModal({ order, onConfirm, onClose }: ShipOrderModalProp
               value={tracking}
               onChange={(e) => setTracking(e.target.value)}
               placeholder="เช่น TH123456789"
-              className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
             />
           </div>
         ) : (

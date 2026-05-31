@@ -73,25 +73,25 @@ export default function PartsEditPage({ params }: { params: Promise<{ id: string
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">ชื่ออะไหล่ <span className="text-red-500">*</span></label>
           <input type="text" value={name} onChange={e => setName(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">SKU <span className="text-red-500">*</span></label>
           <input type="text" value={sku} onChange={e => setSku(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">หมวดหมู่</label>
             <select value={category} onChange={e => setCategory(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               {CATEGORIES.map(c => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">หน่วยนับ</label>
             <input type="text" value={unit} onChange={e => setUnit(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           </div>
         </div>
         <div>
@@ -100,7 +100,7 @@ export default function PartsEditPage({ params }: { params: Promise<{ id: string
             {(["new", "used", "refurbished"] as Part["condition"][]).map(c => (
               <label key={c}
                 className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer text-xs font-medium transition-all
-                  ${condition === c ? "border-green-300 bg-green-50 text-green-800" : "border-gray-100 text-gray-600"}`}>
+                  ${condition === c ? "border-[#FF8B66] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="radio" className="sr-only" checked={condition === c} onChange={() => setCondition(c)} />
                 {c === "new" ? "ใหม่" : c === "used" ? "มือสอง" : "Refurb"}
               </label>
@@ -110,17 +110,17 @@ export default function PartsEditPage({ params }: { params: Promise<{ id: string
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">ราคาต่อหน่วย (pts)</label>
           <input type="number" min={0} value={unitPrice} onChange={e => setUnitPrice(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">URL รูปภาพ (ถ้ามี)</label>
           <input type="url" value={imageUrl} onChange={e => setImageUrl(e.target.value)}
             placeholder="https://…"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
         <button type="submit" disabled={submitting || !name.trim() || !sku.trim()}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "💾 บันทึกการแก้ไข"}
         </button>
       </form>

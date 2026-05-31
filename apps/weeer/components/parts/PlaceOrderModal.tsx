@@ -54,7 +54,7 @@ export function PlaceOrderModal({ listing, buyerBalance, onConfirm, onClose }: P
           <label className="block text-xs font-medium text-gray-600 mb-1.5">รูปแบบจัดส่ง</label>
           <div className="flex gap-2">
             {(["courier", "self_pickup"] as DeliveryMethod[]).map((d) => (
-              <button key={d} onClick={() => setDelivery(d)} className={`flex-1 text-sm py-2 rounded-xl border font-medium transition-colors ${delivery === d ? "bg-green-700 text-white border-green-700" : "bg-white border-gray-200 text-gray-600 hover:border-green-300"}`}>
+              <button key={d} onClick={() => setDelivery(d)} className={`flex-1 text-sm py-2 rounded-xl border font-medium transition-colors ${delivery === d ? "bg-[#FF663A] text-white border-[#FF663A]" : "bg-white border-gray-200 text-gray-600 hover:border-[#FF8B66]"}`}>
                 {d === "courier" ? "📦" : "🏪"} {DELIVERY_LABEL[d]}
               </button>
             ))}
@@ -75,7 +75,7 @@ export function PlaceOrderModal({ listing, buyerBalance, onConfirm, onClose }: P
         <button
           onClick={handleConfirm}
           disabled={!enough || qty < 1 || loading}
-          className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
         >
           {loading ? "กำลังสั่งซื้อ…" : `ยืนยันสั่งซื้อ ${total.toLocaleString()} pts`}
         </button>

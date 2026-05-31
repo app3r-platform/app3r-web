@@ -56,14 +56,14 @@ export default function RequestsInboxPage() {
         </div>
         <button
           onClick={() => router.push("/parts/requests/new")}
-          className="text-xs bg-green-600 text-white px-3 py-1.5 rounded-lg font-medium"
+          className="text-xs bg-[#FF663A] text-white px-3 py-1.5 rounded-lg font-medium"
         >
           + ขอซื้อ
         </button>
       </div>
 
       {/* Stats */}
-      <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2 text-sm text-green-700">
+      <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-4 py-2 text-sm text-[#D63B12]">
         📢 {requests.length} คำขอที่รอคำเสนอราคา
       </div>
 
@@ -127,7 +127,7 @@ export default function RequestsInboxPage() {
                       value={quoteForm.price}
                       onChange={(e) => setQuoteForm((p) => ({ ...p, price: e.target.value }))}
                       placeholder="฿0"
-                      className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-green-400"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-[#FF663A]"
                     />
                   </div>
                   <div>
@@ -137,7 +137,7 @@ export default function RequestsInboxPage() {
                       min={1}
                       value={quoteForm.qty}
                       onChange={(e) => setQuoteForm((p) => ({ ...p, qty: e.target.value }))}
-                      className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-green-400"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-[#FF663A]"
                     />
                   </div>
                 </div>
@@ -145,12 +145,12 @@ export default function RequestsInboxPage() {
                   value={quoteForm.notes}
                   onChange={(e) => setQuoteForm((p) => ({ ...p, notes: e.target.value }))}
                   placeholder="หมายเหตุ (ถ้ามี)"
-                  className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-green-400"
+                  className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-[#FF663A]"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleSubmitQuote(req)}
-                    className="flex-1 py-2 bg-green-600 text-white rounded-lg text-xs font-medium"
+                    className="flex-1 py-2 bg-[#FF663A] text-white rounded-lg text-xs font-medium"
                   >
                     ส่งใบเสนอราคา
                   </button>
@@ -166,7 +166,7 @@ export default function RequestsInboxPage() {
               <div className="px-4 py-3 border-t border-gray-100">
                 <button
                   onClick={() => setQuoting(req.id)}
-                  className="w-full py-2 border border-green-500 text-green-600 rounded-xl text-sm font-medium hover:bg-green-50 transition-colors"
+                  className="w-full py-2 border border-[#FF663A] text-[#F04E20] rounded-xl text-sm font-medium hover:bg-[#FFF1ED] transition-colors"
                 >
                   💬 เสนอราคา
                 </button>

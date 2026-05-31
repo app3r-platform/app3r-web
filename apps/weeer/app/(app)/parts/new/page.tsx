@@ -71,7 +71,7 @@ export default function PartsNewPage() {
           </label>
           <input type="text" value={name} onChange={e => { setName(e.target.value); setFormErrors(f => ({ ...f, name: "" })); }}
             placeholder="เช่น คอมเพรสเซอร์ Mitsubishi 9000 BTU"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.name ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.name ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.name && <p className="text-xs text-red-500 mt-1">{formErrors.name}</p>}
         </div>
 
@@ -82,7 +82,7 @@ export default function PartsNewPage() {
           </label>
           <input type="text" value={sku} onChange={e => { setSku(e.target.value); setFormErrors(f => ({ ...f, sku: "" })); }}
             placeholder="เช่น COMP-MTS-9K"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.sku ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.sku ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.sku && <p className="text-xs text-red-500 mt-1">{formErrors.sku}</p>}
         </div>
 
@@ -91,7 +91,7 @@ export default function PartsNewPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">หมวดหมู่</label>
             <select value={category} onChange={e => setCategory(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
               {CATEGORIES.map(c => <option key={c}>{c}</option>)}
             </select>
           </div>
@@ -99,7 +99,7 @@ export default function PartsNewPage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">หน่วยนับ</label>
             <input type="text" value={unit} onChange={e => setUnit(e.target.value)}
               placeholder="ชิ้น / อัน / ม้วน"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           </div>
         </div>
 
@@ -110,7 +110,7 @@ export default function PartsNewPage() {
             {(["new", "used", "refurbished"] as Part["condition"][]).map(c => (
               <label key={c}
                 className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer transition-all text-xs font-medium
-                  ${condition === c ? "border-green-300 bg-green-50 text-green-800" : "border-gray-100 text-gray-600"}`}>
+                  ${condition === c ? "border-[#FF8B66] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="radio" className="sr-only" checked={condition === c} onChange={() => setCondition(c)} />
                 {c === "new" ? "ใหม่" : c === "used" ? "มือสอง" : "Refurb"}
               </label>
@@ -126,7 +126,7 @@ export default function PartsNewPage() {
           <input type="number" min={0} value={unitPrice}
             onChange={e => { setUnitPrice(e.target.value); setFormErrors(f => ({ ...f, price: "" })); }}
             placeholder="0"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.price ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.price ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.price && <p className="text-xs text-red-500 mt-1">{formErrors.price}</p>}
         </div>
 
@@ -135,7 +135,7 @@ export default function PartsNewPage() {
           <p className="text-sm font-medium text-gray-700 mb-2">แหล่งที่มา</p>
           <div className="flex gap-2">
             <label className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer transition-all text-xs font-medium
-              ${sourceType === "purchase" ? "border-green-300 bg-green-50 text-green-800" : "border-gray-100 text-gray-600"}`}>
+              ${sourceType === "purchase" ? "border-[#FF8B66] bg-[#FFF1ED] text-[#D63B12]" : "border-gray-100 text-gray-600"}`}>
               <input type="radio" className="sr-only" checked={sourceType === "purchase"} onChange={() => setSourceType("purchase")} />
               🛒 ซื้อเข้า
             </label>
@@ -152,13 +152,13 @@ export default function PartsNewPage() {
           <label className="block text-sm font-medium text-gray-700 mb-1">URL รูปภาพ (ถ้ามี)</label>
           <input type="url" value={imageUrl} onChange={e => setImageUrl(e.target.value)}
             placeholder="https://…"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "🔩 เพิ่มอะไหล่"}
         </button>
       </form>

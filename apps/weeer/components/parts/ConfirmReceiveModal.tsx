@@ -29,8 +29,8 @@ export function ConfirmReceiveModal({ order, onConfirm, onClose }: ConfirmReceiv
         </div>
         <p className="text-sm text-gray-600 bg-gray-50 rounded-xl px-3 py-2">{order.partName} × {order.quantity}</p>
 
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-2 text-sm">
-          <p className="text-xs font-semibold text-green-700">เมื่อยืนยันรับของ ระบบจะ:</p>
+        <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4 space-y-2 text-sm">
+          <p className="text-xs font-semibold text-[#D63B12]">เมื่อยืนยันรับของ ระบบจะ:</p>
           <ul className="text-xs text-gray-600 space-y-1">
             <li>✅ โอน <strong>{netToSeller.toLocaleString()} pts</strong> ให้ผู้ขาย</li>
             <li>💰 หักค่าธรรมเนียม <strong>{roundedFee.toLocaleString()} pts</strong> (3% ปัด D75)</li>
@@ -41,7 +41,7 @@ export function ConfirmReceiveModal({ order, onConfirm, onClose }: ConfirmReceiv
         <button
           onClick={handleConfirm}
           disabled={loading}
-          className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
         >
           {loading ? "กำลังยืนยัน…" : "✅ ยืนยันรับของ & ปลด escrow"}
         </button>

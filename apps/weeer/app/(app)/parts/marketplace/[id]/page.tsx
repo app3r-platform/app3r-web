@@ -152,7 +152,7 @@ export default function MarketplaceDetailPage({
           <span>✅</span>
           <div>
             <p className="text-sm font-medium text-green-700">สั่งซื้อสำเร็จ!</p>
-            <Link href="/parts/orders" className="text-xs text-green-600 hover:underline">ดูคำสั่งซื้อ B2B →</Link>
+            <Link href="/parts/orders" className="text-xs text-[#F04E20] hover:underline">ดูคำสั่งซื้อ B2B →</Link>
           </div>
         </div>
       )}
@@ -206,7 +206,7 @@ export default function MarketplaceDetailPage({
             disabled={notifySet}
             className={`w-full font-medium py-2.5 rounded-xl text-sm transition-colors ${
               notifySet
-                ? "bg-green-50 border border-green-200 text-green-700 cursor-default"
+                ? "bg-[#FFF1ED] border border-[#FFD0BF] text-[#D63B12] cursor-default"
                 : "bg-white border border-gray-200 hover:bg-gray-50 text-gray-600"
             }`}
           >
@@ -220,7 +220,7 @@ export default function MarketplaceDetailPage({
         <button
           onClick={() => setShowModal(true)}
           disabled={ordering}
-          className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
         >
           {ordering
             ? "กำลังสั่งซื้อ…"

@@ -32,7 +32,7 @@ export default function PartsDashboardPage() {
           <h1 className="text-xl font-bold text-gray-900">Parts Dashboard</h1>
           <p className="text-xs text-gray-500 mt-0.5">ภาพรวมสต๊อกอะไหล่ — ใกล้หมด / ล่าสุด / มูลค่าคงคลัง</p>
         </div>
-        <Link href="/parts" className="bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+        <Link href="/parts" className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
           + เพิ่มอะไหล่
         </Link>
       </div>
@@ -49,8 +49,8 @@ export default function PartsDashboardPage() {
         <>
           {/* KPIs */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-green-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-bold text-green-700">{data.total_skus}</p>
+            <div className="bg-[#FFF1ED] rounded-xl p-4 text-center">
+              <p className="text-2xl font-bold text-[#D63B12]">{data.total_skus}</p>
               <p className="text-xs text-gray-500 mt-0.5">รายการอะไหล่ทั้งหมด</p>
             </div>
             <div className="bg-blue-50 rounded-xl p-4 text-center">
@@ -64,7 +64,7 @@ export default function PartsDashboardPage() {
             <div className="bg-white border border-gray-100 rounded-xl p-4">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold text-red-600 uppercase tracking-wider">⚠️ ใกล้หมด ({data.low_stock.length})</p>
-                <Link href="/parts" className="text-xs text-green-700 hover:underline">ดูทั้งหมด</Link>
+                <Link href="/parts" className="text-xs text-[#D63B12] hover:underline">ดูทั้งหมด</Link>
               </div>
               <div className="space-y-2">
                 {data.low_stock.slice(0, 5).map((p) => (
@@ -88,7 +88,7 @@ export default function PartsDashboardPage() {
           <div className="bg-white border border-gray-100 rounded-xl p-4">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ความเคลื่อนไหวล่าสุด</p>
-              <Link href="/parts/movements" className="text-xs text-green-700 hover:underline">ดูทั้งหมด</Link>
+              <Link href="/parts/movements" className="text-xs text-[#D63B12] hover:underline">ดูทั้งหมด</Link>
             </div>
             {data.recent_movements.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-4">ยังไม่มีรายการ</p>

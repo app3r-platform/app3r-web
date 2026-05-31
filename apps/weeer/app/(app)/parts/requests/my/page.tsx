@@ -45,7 +45,7 @@ export default function MyRequestsPage() {
         </div>
         <button
           onClick={() => router.push("/parts/requests/new")}
-          className="text-xs bg-green-600 text-white px-3 py-1.5 rounded-lg font-medium"
+          className="text-xs bg-[#FF663A] text-white px-3 py-1.5 rounded-lg font-medium"
         >
           + ขอซื้อใหม่
         </button>
@@ -57,7 +57,7 @@ export default function MyRequestsPage() {
           <p className="text-gray-500 text-sm">ยังไม่มีคำขอซื้ออะไหล่</p>
           <button
             onClick={() => router.push("/parts/requests/new")}
-            className="mt-1 px-4 py-2 bg-green-600 text-white rounded-xl text-sm"
+            className="mt-1 px-4 py-2 bg-[#FF663A] text-white rounded-xl text-sm"
           >
             ส่งคำขอแรก
           </button>

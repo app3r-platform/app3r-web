@@ -147,7 +147,7 @@ export default function PartsOrderDetailPage({
       <div className="flex flex-col items-center justify-center h-48 gap-3 text-gray-400">
         <span className="text-4xl">🔍</span>
         <p className="text-sm">ไม่พบคำสั่งซื้อ #{id}</p>
-        <Link href="/parts/orders" className="text-sm text-green-600 hover:underline">
+        <Link href="/parts/orders" className="text-sm text-[#F04E20] hover:underline">
           ← กลับรายการ
         </Link>
       </div>
@@ -263,7 +263,7 @@ export default function PartsOrderDetailPage({
         <div className="p-5 space-y-4">
           {/* Part info */}
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center text-xl shrink-0">🔩</div>
+            <div className="w-10 h-10 bg-[#FFF1ED] rounded-xl flex items-center justify-center text-xl shrink-0">🔩</div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-900 leading-snug">{order.partName}</p>
               <p className="text-xs text-gray-400 mt-0.5">สภาพ: {order.partCondition}</p>
@@ -282,7 +282,7 @@ export default function PartsOrderDetailPage({
             </div>
             <div>
               <p className="text-xs text-gray-400">รวม</p>
-              <p className="text-sm font-bold text-green-700">{order.totalThb.toLocaleString()} pts</p>
+              <p className="text-sm font-bold text-[#D63B12]">{order.totalThb.toLocaleString()} pts</p>
             </div>
           </div>
 
@@ -294,7 +294,7 @@ export default function PartsOrderDetailPage({
             </div>
             <div className="flex justify-between font-medium text-gray-700 border-t border-gray-100 pt-1.5">
               <span>ผู้ขายได้รับ (สุทธิ)</span>
-              <span className="text-green-700">{netToSeller.toLocaleString()} pts</span>
+              <span className="text-[#D63B12]">{netToSeller.toLocaleString()} pts</span>
             </div>
             {order.escrowHeldThb > 0 && (
               <div className="flex justify-between text-blue-600 bg-blue-50 rounded-lg px-2 py-1.5 mt-1">
@@ -332,7 +332,7 @@ export default function PartsOrderDetailPage({
             <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">ไทม์ไลน์</p>
             <div className="space-y-1.5">
               <div className="flex items-center gap-2 text-xs text-gray-500">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF663A] shrink-0" />
                 <span>สั่งซื้อ — {formatDate(order.orderedAt)}</span>
               </div>
               {order.fulfilledAt && (
@@ -343,7 +343,7 @@ export default function PartsOrderDetailPage({
               )}
               {order.closedAt && (
                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-700 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF663A] shrink-0" />
                   <span>รับของเรียบร้อย — {formatDate(order.closedAt)}</span>
                 </div>
               )}
@@ -366,7 +366,7 @@ export default function PartsOrderDetailPage({
             <button
               onClick={handleReceive}
               disabled={acting}
-              className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-2xl transition-colors"
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-2xl transition-colors"
             >
               {acting ? "กำลังดำเนินการ…" : "✅ รับของแล้ว — ยืนยันรับสินค้า"}
             </button>

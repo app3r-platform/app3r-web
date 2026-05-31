@@ -114,17 +114,17 @@ export default function MyListingsPage() {
           <h1 className="text-xl font-bold text-gray-900">ขายของฉัน</h1>
           <p className="text-xs text-gray-500 mt-0.5">{shop?.name} · {listings.length} รายการ</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
+        <button onClick={() => setShowForm(true)} className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
           + ลงขายใหม่
         </button>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
-        <button onClick={() => setTab("listings")} className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${tab === "listings" ? "bg-white text-green-700 shadow-sm" : "text-gray-500"}`}>
+        <button onClick={() => setTab("listings")} className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${tab === "listings" ? "bg-white text-[#D63B12] shadow-sm" : "text-gray-500"}`}>
           📦 รายการของฉัน ({listings.length})
         </button>
-        <button onClick={() => setTab("incoming")} className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${tab === "incoming" ? "bg-white text-green-700 shadow-sm" : "text-gray-500"}`}>
+        <button onClick={() => setTab("incoming")} className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${tab === "incoming" ? "bg-white text-[#D63B12] shadow-sm" : "text-gray-500"}`}>
           📬 คำสั่งซื้อ ({pendingOrders.length > 0 ? <span className="text-orange-500">{pendingOrders.length}</span> : orders.length})
         </button>
       </div>
@@ -136,7 +136,7 @@ export default function MyListingsPage() {
             <div className="flex flex-col items-center justify-center h-48 text-gray-400">
               <span className="text-4xl mb-3">📦</span>
               <p className="text-sm">ยังไม่มีรายการขาย</p>
-              <button onClick={() => setShowForm(true)} className="text-xs text-green-700 mt-2 hover:underline">ลงขายตอนนี้</button>
+              <button onClick={() => setShowForm(true)} className="text-xs text-[#D63B12] mt-2 hover:underline">ลงขายตอนนี้</button>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-3">

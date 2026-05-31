@@ -143,7 +143,7 @@ export default function MyOrdersPage() {
           <button
             key={s}
             onClick={() => { setSideTab(s); setStageFilter("all"); }}
-            className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${sideTab === s ? "bg-white text-green-700 shadow-sm" : "text-gray-500"}`}
+            className={`flex-1 text-xs font-medium py-2 rounded-lg transition-colors ${sideTab === s ? "bg-white text-[#D63B12] shadow-sm" : "text-gray-500"}`}
           >
             {s === "buyer" ? "🛒 ฝั่งผู้ซื้อ" : "📦 ฝั่งผู้ขาย"}
           </button>
@@ -156,7 +156,7 @@ export default function MyOrdersPage() {
           <button
             key={t.value}
             onClick={() => setStageFilter(t.value)}
-            className={`text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${stageFilter === t.value ? "bg-green-700 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+            className={`text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${stageFilter === t.value ? "bg-[#FF663A] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
           >
             {t.label}
           </button>
