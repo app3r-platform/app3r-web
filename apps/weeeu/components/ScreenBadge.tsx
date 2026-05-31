@@ -1,6 +1,12 @@
 "use client";
 // Screen ID Badge — Phase 3 dev tool (ปิดพร้อม NEXT_PUBLIC_DEV_NAV)
+// D15 wire: render ผ่าน shared <ScreenIdBadge> จาก @app3r/ui (roleTheme เขียว WeeeU)
+// — registry (SCREEN_MAP) ด้านล่างเป็น source of truth: pathname → เลข U-xx
 import { usePathname } from "next/navigation";
+import { ScreenIdBadge } from "@app3r/ui";
+
+// WeeeU brand green — ส่งเป็น roleTheme.primary ให้ badge กลาง (#0DC36C)
+const WEEEU_PRIMARY = "#0DC36C";
 
 type ScreenInfo = { num: string; code: string };
 
@@ -83,12 +89,12 @@ export function ScreenBadge() {
   const info = matchScreen(pathname);
   if (!info) return null;
 
+  // shared commons — มุมจอ (top-left) · roleTheme เขียว WeeeU
   return (
-    <div className="fixed top-2 left-2 z-[9997] pointer-events-none select-none">
-      <div className="bg-black/70 backdrop-blur-sm text-white rounded-lg px-2 py-1 text-center shadow-lg">
-        <div className="font-mono text-sm font-bold leading-tight">{info.num}</div>
-        <div className="font-mono text-[10px] opacity-70 leading-tight">{info.code}</div>
-      </div>
-    </div>
+    <ScreenIdBadge
+      screenId={info.num}
+      roleTheme={{ primary: WEEEU_PRIMARY }}
+      position="top-left"
+    />
   );
 }
