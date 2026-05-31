@@ -65,7 +65,7 @@ export default async function CmsStaticPage({ params }: Props) {
         {htmlBody ? (
           /* admin-controlled content จาก internal CMS */
           <div
-            className="prose prose-purple max-w-none"
+            className="prose max-w-none"
             dangerouslySetInnerHTML={{ __html: htmlBody }}
           />
         ) : (

@@ -51,7 +51,7 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Ad Banner */}
-      <AdBanner size="leaderboard" className="mb-6" />
+      <AdBanner position="module_first_row" size="leaderboard" className="mb-6" />
 
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">

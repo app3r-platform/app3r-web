@@ -23,7 +23,7 @@ export default async function AboutPage() {
       </nav>
 
       {/* Header */}
-      <div className="bg-gradient-to-br from-website-brand-900 via-website-brand-800 to-indigo-900 text-white rounded-2xl px-8 py-12 mb-10 text-center">
+      <div className="bg-gradient-to-br from-website-brand-900 via-website-brand-800 to-website-brand-700 text-white rounded-2xl px-8 py-12 mb-10 text-center">
         <div className="text-5xl mb-4">⚡</div>
         <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">{aboutContent.title}</h1>
         <p className="text-website-brand-200 text-lg max-w-2xl mx-auto">{aboutContent.subtitle}</p>

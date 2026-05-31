@@ -38,7 +38,7 @@ export default function RepairJobDetail({ job }: RepairJobDetailProps) {
               <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
                 {job.applianceType}
               </span>
-              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
                 {getServiceTypeLabel(job.serviceType)}
               </span>
             </div>

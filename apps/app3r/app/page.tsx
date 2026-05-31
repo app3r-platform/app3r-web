@@ -5,6 +5,7 @@ import HomeListings from "@/components/marketing/HomeListings";
 import Testimonials from "@/components/marketing/Testimonials";
 import SignUpCTA from "@/components/marketing/SignUpCTA";
 import WeeeRBanner from "@/components/marketing/WeeeRBanner";
+import AdBanner from "@/components/ads/AdBanner";
 import { getHeroContent } from "@/lib/content-api";
 
 export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
@@ -24,6 +25,10 @@ export default async function HomePage() {
       <Hero content={heroContent} />
       {/* W4 — WeeeR can sell second-hand: visible call-out banner */}
       <WeeeRBanner />
+      {/* C12 · home_first_row — top-of-feed ad slot (live via Backend /api/v1/ads/public) */}
+      <div className="max-w-6xl mx-auto px-4 mt-4">
+        <AdBanner position="home_first_row" size="leaderboard" />
+      </div>
       {/* W-2-A: HomeListings 4 groups (Resell/Scrap/Repair/Maintain) — D1 */}
       <HomeListings />
       <PersonasGrid />

@@ -64,7 +64,7 @@ export default async function PreviewPage({ params }: Props) {
         <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8">
           {htmlBody ? (
             <div
-              className="prose prose-purple max-w-none"
+              className="prose max-w-none"
               dangerouslySetInnerHTML={{ __html: htmlBody }}
             />
           ) : (
