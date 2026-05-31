@@ -425,7 +425,7 @@ export default function SellDetailPage() {
 
       {/* C12 — ลงโฆษณา (โชว์เฉพาะประกาศที่ยัง active) */}
       {(listing.status === "announced" || listing.status === "receiving_offers") && (
-        <AdPromoteButton listingName={listing.appliance_name ?? undefined} />
+        <AdPromoteButton listingId={listingId} listingName={listing.appliance_name ?? undefined} />
       )}
 
       {/* Actions */}
