@@ -431,11 +431,11 @@ export default function UsedPricingWizardPage() {
           <p className="text-xs text-green-600 mt-1">ข้อเสนอนี้จะปรากฏใน /resell/offers/new เมื่อ API พร้อม</p>
           <div className="flex gap-3 justify-center mt-4">
             <button onClick={resetWizard}
-              className="border border-green-300 text-green-700 font-medium px-5 py-2 rounded-xl text-sm hover:bg-green-100 transition-colors">
+              className="border border-[#FF8B66] text-[#D63B12] font-medium px-5 py-2 rounded-xl text-sm hover:bg-[#FFE0D6] transition-colors">
               ประเมินชิ้นต่อไป
             </button>
             <Link href="/resell/offers"
-              className="bg-green-700 hover:bg-green-800 text-white font-semibold px-5 py-2 rounded-xl text-sm transition-colors">
+              className="bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold px-5 py-2 rounded-xl text-sm transition-colors">
               ดูข้อเสนอ →
             </Link>
           </div>

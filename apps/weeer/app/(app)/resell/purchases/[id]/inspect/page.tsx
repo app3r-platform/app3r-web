@@ -38,7 +38,7 @@ export default function ResellPurchaseInspectPage({ params }: { params: Promise<
           </div>
           <div>
             <p className="text-xs text-gray-400">ราคาที่ซื้อ</p>
-            <p className="text-sm font-semibold text-green-700">4,200 ฿</p>
+            <p className="text-sm font-semibold text-[#D63B12]">4,200 ฿</p>
           </div>
           <div>
             <p className="text-xs text-gray-400">จากร้าน</p>
@@ -55,15 +55,15 @@ export default function ResellPurchaseInspectPage({ params }: { params: Promise<
             <label
               key={i}
               className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors
-                ${checked[i] ? "border-green-200 bg-green-50" : "border-gray-100 hover:bg-gray-50"}`}
+                ${checked[i] ? "border-[#FFD0BF] bg-[#FFF1ED]" : "border-gray-100 hover:bg-gray-50"}`}
             >
               <input
                 type="checkbox"
                 checked={checked[i]}
                 onChange={() => toggle(i)}
-                className="w-4 h-4 accent-green-600"
+                className="w-4 h-4 accent-[#FF663A]"
               />
-              <span className={`text-sm ${checked[i] ? "text-green-800 font-medium" : "text-gray-700"}`}>
+              <span className={`text-sm ${checked[i] ? "text-[#B8300E] font-medium" : "text-gray-700"}`}>
                 {item}
               </span>
             </label>
@@ -86,7 +86,7 @@ export default function ResellPurchaseInspectPage({ params }: { params: Promise<
           disabled={!allChecked}
           className={`w-full font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors
             ${allChecked
-              ? "bg-green-600 hover:bg-green-700 text-white"
+              ? "bg-[#FF663A] hover:bg-[#F04E20] text-white"
               : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
         >
           ✅ ยืนยันรับ (ตรงปก)

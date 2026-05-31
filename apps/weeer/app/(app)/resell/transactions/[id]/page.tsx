@@ -233,7 +233,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
         <div className="space-y-2">
           <p className="text-sm font-semibold text-gray-700">R8: ตรวจรับสินค้า</p>
           <button onClick={() => setMockStatus("completed")}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-colors">
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors">
             ✅ ยืนยันรับสินค้า — เสร็จสิ้น
           </button>
           <button onClick={() => setShowDisputeModal(true)}

@@ -117,7 +117,7 @@ export default function NewServicePage() {
                 onClick={() => setField("serviceType", opt.value)}
                 className={`text-left p-3 rounded-xl border transition-colors
                   ${form.serviceType === opt.value
-                    ? "border-green-400 bg-green-50"
+                    ? "border-[#FF8B66] bg-[#FFF1ED]"
                     : "border-gray-100 bg-gray-50 hover:border-gray-200"}`}
               >
                 <div className="text-xl mb-0.5">{opt.icon}</div>
@@ -141,7 +141,7 @@ export default function NewServicePage() {
             onChange={(e) => setField("title", e.target.value)}
             maxLength={200}
             placeholder="เช่น ล้างแอร์ทั่วไป 1 เครื่อง, ซ่อมเครื่องซักผ้า"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]
               ${errors.title ? "border-red-400" : "border-gray-200"}`}
           />
           {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
@@ -159,7 +159,7 @@ export default function NewServicePage() {
             maxLength={2000}
             rows={4}
             placeholder="อธิบายรายละเอียดบริการ เงื่อนไข ขอบเขตงาน"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none
               ${errors.description ? "border-red-400" : "border-gray-200"}`}
           />
           {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description}</p>}
@@ -178,7 +178,7 @@ export default function NewServicePage() {
               value={form.pointAmount}
               onChange={(e) => setField("pointAmount", e.target.value)}
               placeholder="เช่น 500"
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]
                 ${errors.pointAmount ? "border-red-400" : "border-gray-200"}`}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400">pts</span>
@@ -198,7 +198,7 @@ export default function NewServicePage() {
             type="datetime-local"
             value={form.deadline}
             onChange={(e) => setField("deadline", e.target.value)}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]
               ${errors.deadline ? "border-red-400" : "border-gray-200"}`}
           />
           {errors.deadline
@@ -232,7 +232,7 @@ export default function NewServicePage() {
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 bg-green-700 hover:bg-green-800 text-white font-semibold rounded-xl py-3 text-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold rounded-xl py-3 text-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {submitting ? "กำลังบันทึก…" : "💾 บันทึก Draft"}
           </button>

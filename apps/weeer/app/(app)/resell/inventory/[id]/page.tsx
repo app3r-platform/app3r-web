@@ -60,7 +60,7 @@ export default function ResellInventoryDetailPage({ params }: { params: Promise<
       <div className="flex gap-2">
         {item.status === "in_stock" && (
           <Link href={`/resell/listings/new?applianceId=${item.id}`}
-            className="flex-1 text-center bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-3 rounded-xl transition-colors">
+            className="flex-1 text-center bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-semibold py-3 rounded-xl transition-colors">
             📢 ประกาศขาย
           </Link>
         )}

@@ -113,7 +113,7 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
             onClick={handleSubmit}
             disabled={submitting}
             className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-              ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 text-white"}`}>
+              ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
             {submitting ? "กำลังออกใบรับรอง…" : "✅ ออกใบรับรองการทำลาย"}
           </button>
         </>
@@ -165,8 +165,8 @@ function generateCertHtml(cert: EWasteCertificate): string {
   <title>ใบรับรองการทำลายซากอิเล็กทรอนิกส์</title>
   <style>
     body { font-family: 'Sarabun', sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; color: #1a1a1a; }
-    .header { text-align: center; border-bottom: 2px solid #16a34a; padding-bottom: 16px; margin-bottom: 24px; }
-    .title { font-size: 20px; font-weight: bold; color: #16a34a; margin: 8px 0; }
+    .header { text-align: center; border-bottom: 2px solid #FF663A; padding-bottom: 16px; margin-bottom: 24px; }
+    .title { font-size: 20px; font-weight: bold; color: #FF663A; margin: 8px 0; }
     .sub { font-size: 13px; color: #666; }
     .cert-no { font-size: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 16px; display: inline-block; font-family: monospace; color: #166534; margin: 12px 0; }
     .row { display: flex; gap: 16px; margin: 12px 0; }

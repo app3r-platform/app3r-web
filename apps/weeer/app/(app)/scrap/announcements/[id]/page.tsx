@@ -84,7 +84,7 @@ export default async function ScrapAnnouncementDetailPage({ params }: { params: 
       <div className="flex gap-3">
         <Link
           href={`/scrap/announcements/${id}/offer`}
-          className="flex-1 block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
+          className="flex-1 block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
           💰 ยื่นราคารับซื้อ
         </Link>
