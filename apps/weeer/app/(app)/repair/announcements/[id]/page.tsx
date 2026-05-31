@@ -73,7 +73,7 @@ export default async function RepairAnnouncementDetailPage({ params }: { params:
           </div>
           <div>
             <p className="text-xs text-gray-400">งบประมาณสูงสุด</p>
-            <p className="text-sm font-semibold text-green-700">ไม่เกิน 2,500 ฿</p>
+            <p className="text-sm font-semibold text-[#D63B12]">ไม่เกิน 2,500 ฿</p>
           </div>
           <div className="col-span-2">
             <p className="text-xs text-gray-400">วันนัดหมาย</p>
@@ -99,7 +99,7 @@ export default async function RepairAnnouncementDetailPage({ params }: { params:
       <div className="flex gap-3">
         <Link
           href={`/repair/announcements/${id}/offer`}
-          className="flex-1 block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
+          className="flex-1 block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
           ยื่นข้อเสนอ →
         </Link>

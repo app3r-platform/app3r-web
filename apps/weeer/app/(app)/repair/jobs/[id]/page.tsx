@@ -77,13 +77,13 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
           {job.original_price > 0 && (
             <div>
               <p className="text-xs text-gray-400">ราคาข้อเสนอ</p>
-              <p className="font-medium text-green-700">{job.original_price.toLocaleString()} pts</p>
+              <p className="font-medium text-[#D63B12]">{job.original_price.toLocaleString()} pts</p>
             </div>
           )}
           {job.final_price && (
             <div>
               <p className="text-xs text-gray-400">ราคาสุดท้าย</p>
-              <p className="font-bold text-green-700">{job.final_price.toLocaleString()} pts</p>
+              <p className="font-bold text-[#D63B12]">{job.final_price.toLocaleString()} pts</p>
             </div>
           )}
         </div>
@@ -178,12 +178,12 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
       {!isTerminal && (
         <div className="flex flex-col gap-2">
           <Link href={`/repair/jobs/${job.id}/progress`}
-            className="w-full bg-white border border-green-200 text-green-700 hover:bg-green-50 font-medium py-2.5 rounded-xl text-center transition-colors text-sm">
+            className="w-full bg-white border border-[#FFD0BF] text-[#D63B12] hover:bg-[#FFF1ED] font-medium py-2.5 rounded-xl text-center transition-colors text-sm">
             📊 ดูความคืบหน้า (Progress)
           </Link>
           {job.status === "awaiting_decision" && (
             <Link href={`/repair/jobs/${job.id}/approve`}
-              className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl text-center transition-colors">
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl text-center transition-colors">
               ✅ อนุมัติผลตรวจ WeeeT
             </Link>
           )}

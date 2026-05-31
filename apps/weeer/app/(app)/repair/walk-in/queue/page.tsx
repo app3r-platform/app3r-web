@@ -47,8 +47,8 @@ export default function WalkInQueuePage() {
             <p className="text-2xl font-bold text-orange-700">{data.waiting}</p>
             <p className="text-xs text-gray-500 mt-0.5">รอรับ / ตรวจ</p>
           </div>
-          <div className="bg-teal-50 rounded-xl p-3 text-center">
-            <p className="text-2xl font-bold text-teal-700">{data.ready_for_pickup}</p>
+          <div className="bg-[#FFF1ED] rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-[#D63B12]">{data.ready_for_pickup}</p>
             <p className="text-xs text-gray-500 mt-0.5">รอรับคืน</p>
           </div>
           <div className="bg-yellow-50 rounded-xl p-3 text-center">
@@ -85,7 +85,7 @@ export default function WalkInQueuePage() {
                   <span className="text-xs text-gray-400">👤 {job.customer_name}</span>
                   <span className="text-xs text-gray-400">📞 {job.customer_phone}</span>
                   {job.estimated_price && (
-                    <span className="text-xs text-green-700 font-medium">{job.estimated_price.toLocaleString()} pts</span>
+                    <span className="text-xs text-[#D63B12] font-medium">{job.estimated_price.toLocaleString()} pts</span>
                   )}
                 </div>
                 {job.status === "ready" && job.storage_fee_accrued && job.storage_fee_accrued > 0 && (
@@ -98,7 +98,7 @@ export default function WalkInQueuePage() {
                 )}
               </div>
               <Link href={getActionHref(job)}
-                className="shrink-0 bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
                 {job.status === "waiting" ? "รับเครื่อง" :
                  job.status === "received" || job.status === "inspecting" ? "ตรวจสภาพ" :
                  job.status === "in_progress" ? "ดูงาน" :

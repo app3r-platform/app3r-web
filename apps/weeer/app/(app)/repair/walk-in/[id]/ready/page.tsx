@@ -103,7 +103,7 @@ export default function WalkInReadyPage({ params }: { params: Promise<{ id: stri
             <span>{storageFee.fee_accrued.toLocaleString()} pts</span>
           </div>
         )}
-        <div className="flex justify-between text-base font-bold text-green-700 pt-2 border-t border-gray-100">
+        <div className="flex justify-between text-base font-bold text-[#D63B12] pt-2 border-t border-gray-100">
           <span>รวมทั้งหมด</span>
           <span>{totalDue.toLocaleString()} pts</span>
         </div>
@@ -133,7 +133,7 @@ export default function WalkInReadyPage({ params }: { params: Promise<{ id: stri
       {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
       <button onClick={handleClose} disabled={closing}
-        className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3.5 rounded-xl transition-colors disabled:opacity-60">
+        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3.5 rounded-xl transition-colors disabled:opacity-60">
         {closing ? "กำลังปิดงาน…" : "🏁 ลูกค้ารับเครื่องแล้ว — ปิดงาน"}
       </button>
     </div>

@@ -111,7 +111,7 @@ export default function PickupReadyToDeliverPage({ params }: { params: Promise<{
           </div>
         ))}
         {totalCost > 0 && (
-          <div className="flex justify-between text-sm font-bold text-green-700 pt-2 border-t border-gray-100">
+          <div className="flex justify-between text-sm font-bold text-[#D63B12] pt-2 border-t border-gray-100">
             <span>รวม</span>
             <span>{totalCost.toLocaleString()} pts</span>
           </div>
@@ -129,12 +129,12 @@ export default function PickupReadyToDeliverPage({ params }: { params: Promise<{
             {staff.map((s) => (
               <label key={s.id}
                 className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
-                  ${selectedTech === s.id ? "border-teal-300 bg-teal-50" : "border-gray-100 hover:border-gray-200"}
+                  ${selectedTech === s.id ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}
                   ${!s.available ? "opacity-60" : ""}`}>
                 <input type="radio" name="tech" value={s.id}
                   checked={selectedTech === s.id}
                   onChange={() => { setSelectedTech(s.id); setFormErrors(f => ({ ...f, tech: "" })); }}
-                  className="text-teal-600" />
+                  className="text-[#F04E20]" />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold text-gray-800">{s.name}</p>
@@ -159,14 +159,14 @@ export default function PickupReadyToDeliverPage({ params }: { params: Promise<{
           </label>
           <input type="datetime-local" value={deliveryTime}
             onChange={(e) => { setDeliveryTime(e.target.value); setFormErrors(f => ({ ...f, time: "" })); }}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 ${formErrors.time ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.time ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.time && <p className="text-xs text-red-500 mt-1">{formErrors.time}</p>}
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting || !selectedTech}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
           {submitting ? "กำลังมอบหมาย…" : "🚚 มอบหมาย WeeeT ส่งคืน"}
         </button>
       </form>

@@ -77,7 +77,7 @@ export default function RepairWalkInDetailPage({ params }: { params: Promise<{ i
           <select
             value={selectedStaff}
             onChange={(e) => setSelectedStaff(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF8B66]"
           >
             {STAFF_OPTIONS.map((s) => (
               <option key={s.value} value={s.value}>
@@ -122,7 +122,7 @@ export default function RepairWalkInDetailPage({ params }: { params: Promise<{ i
       <div className="flex gap-3">
         <Link
           href={`/repair/jobs/c001`}
-          className="flex-1 block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
+          className="flex-1 block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
           📋 ดูรายละเอียดงาน
         </Link>

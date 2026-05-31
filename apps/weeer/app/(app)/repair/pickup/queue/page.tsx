@@ -50,7 +50,7 @@ export default function PickupQueuePage() {
             { label: "รอมอบหมาย", value: data.pending_dispatch, color: "text-orange-700", bg: "bg-orange-50" },
             { label: "ระหว่างทาง", value: data.in_transit,      color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
             { label: "ที่ร้าน",    value: data.at_shop,          color: "text-yellow-700", bg: "bg-yellow-50" },
-            { label: "พร้อมส่ง",  value: data.ready,             color: "text-teal-700",   bg: "bg-teal-50"   },
+            { label: "พร้อมส่ง",  value: data.ready,             color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
           ].map((k) => (
             <div key={k.label} className={`${k.bg} rounded-xl p-3 text-center`}>
               <p className={`text-xl font-bold ${k.color}`}>{k.value}</p>
@@ -102,7 +102,7 @@ export default function PickupQueuePage() {
                   )}
                 </div>
                 <Link href={action.href}
-                  className="shrink-0 bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                  className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
                   {action.label}
                 </Link>
               </div>

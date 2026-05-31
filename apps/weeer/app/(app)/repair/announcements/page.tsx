@@ -55,7 +55,7 @@ export default function RepairAnnouncementsPage() {
                     📅 {new Date(item.preferred_datetime).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                   </span>
                   {item.budget_max && (
-                    <span className="text-xs text-green-600 font-medium">งบ ≤ {item.budget_max.toLocaleString()} pts</span>
+                    <span className="text-xs text-[#F04E20] font-medium">งบ ≤ {item.budget_max.toLocaleString()} pts</span>
                   )}
                 </div>
               </div>
@@ -65,7 +65,7 @@ export default function RepairAnnouncementsPage() {
                 โพสต์: {new Date(item.created_at).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
               </span>
               <Link href={`/repair/announcements/${item.id}/offer`}
-                className="bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors">
+                className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors">
                 ยื่นข้อเสนอ
               </Link>
             </div>

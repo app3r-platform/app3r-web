@@ -135,12 +135,12 @@ export default function RepairJobProgressPage({
         </div>
         <div className="flex justify-between text-gray-600">
           <span>ราคาเริ่มต้น</span>
-          <span className="font-medium text-green-700">{job.original_price.toLocaleString()} pts</span>
+          <span className="font-medium text-[#D63B12]">{job.original_price.toLocaleString()} pts</span>
         </div>
         {job.final_price && (
           <div className="flex justify-between text-gray-600">
             <span>ราคาสุดท้าย</span>
-            <span className="font-bold text-green-700">{job.final_price.toLocaleString()} pts</span>
+            <span className="font-bold text-[#D63B12]">{job.final_price.toLocaleString()} pts</span>
           </div>
         )}
         {job.source?.type === "purchased_scrap" && (

@@ -36,7 +36,7 @@ function RepairJobsContent() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">งานซ่อม (On-site)</h1>
         <Link href="/repair/announcements"
-          className="bg-green-700 hover:bg-green-800 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
+          className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
           + ยื่นข้อเสนอ
         </Link>
       </div>
@@ -46,7 +46,7 @@ function RepairJobsContent() {
           <button key={f.value}
             onClick={() => setStatusFilter(f.value)}
             className={`shrink-0 text-xs px-3 py-1.5 rounded-full font-medium transition-colors
-              ${statusFilter === f.value ? "bg-green-700 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+              ${statusFilter === f.value ? "bg-[#FF663A] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
             {f.label}
           </button>
         ))}
@@ -65,9 +65,9 @@ function RepairJobsContent() {
       <div className="space-y-3">
         {jobs.map((job) => (
           <Link key={job.id} href={`/repair/jobs/${job.id}`}
-            className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all">
+            className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-[#FFD0BF] hover:shadow-sm transition-all">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 bg-[#FFF1ED] rounded-xl flex items-center justify-center shrink-0">
                 <span className="text-lg">🔧</span>
               </div>
               <div className="flex-1 min-w-0">
@@ -84,7 +84,7 @@ function RepairJobsContent() {
                     นัด: {new Date(job.scheduled_at).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                   </span>
                   {job.final_price && (
-                    <span className="text-xs font-medium text-green-700">{job.final_price.toLocaleString()} pts</span>
+                    <span className="text-xs font-medium text-[#D63B12]">{job.final_price.toLocaleString()} pts</span>
                   )}
                 </div>
                 {job.status === "awaiting_decision" && (
@@ -94,7 +94,7 @@ function RepairJobsContent() {
                   </div>
                 )}
                 <div className="mt-1.5">
-                  <span className="text-xs text-green-600 font-medium">📊 ดู Progress</span>
+                  <span className="text-xs text-[#F04E20] font-medium">📊 ดู Progress</span>
                 </div>
               </div>
             </div>

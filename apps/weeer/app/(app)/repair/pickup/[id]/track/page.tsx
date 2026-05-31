@@ -146,13 +146,13 @@ export default function PickupTrackPage({ params }: { params: Promise<{ id: stri
       {/* Next action */}
       {job.status === "appliance_at_shop" && (
         <Link href={`/repair/pickup/${id}/intake`}
-          className="w-full block text-center bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors text-sm">
+          className="w-full block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors text-sm">
           📥 รับเครื่องเข้าร้าน →
         </Link>
       )}
       {job.status === "ready" && (
         <Link href={`/repair/pickup/${id}/ready-to-deliver`}
-          className="w-full block text-center bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition-colors text-sm">
+          className="w-full block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors text-sm">
           🚚 จัดการส่งคืน →
         </Link>
       )}

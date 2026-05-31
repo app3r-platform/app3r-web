@@ -63,7 +63,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
       </div>
       <div className="flex gap-3">
         <Link href={`/repair/walk-in/${id}/inspect`}
-          className="flex-1 bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl text-center transition-colors text-sm">
+          className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl text-center transition-colors text-sm">
           ตรวจสภาพต่อเลย →
         </Link>
         <Link href="/repair/walk-in/queue"
@@ -90,7 +90,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
             <input type="text" value={form.customer_name}
               onChange={(e) => setForm(f => ({ ...f, customer_name: e.target.value }))}
               placeholder="ชื่อ-นามสกุล"
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.customer_name ? "border-red-400" : "border-gray-200"}`} />
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.customer_name ? "border-red-400" : "border-gray-200"}`} />
             {formErrors.customer_name && <p className="text-xs text-red-500 mt-1">{formErrors.customer_name}</p>}
           </div>
           <div>
@@ -100,7 +100,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
             <input type="tel" value={form.customer_phone}
               onChange={(e) => setForm(f => ({ ...f, customer_phone: e.target.value }))}
               placeholder="08x-xxx-xxxx"
-              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.customer_phone ? "border-red-400" : "border-gray-200"}`} />
+              className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.customer_phone ? "border-red-400" : "border-gray-200"}`} />
             {formErrors.customer_phone && <p className="text-xs text-red-500 mt-1">{formErrors.customer_phone}</p>}
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
           <input type="text" value={form.appliance_name}
             onChange={(e) => setForm(f => ({ ...f, appliance_name: e.target.value }))}
             placeholder="เช่น แอร์ Samsung 12000 BTU, ตู้เย็น LG 2 ประตู"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.appliance_name ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.appliance_name ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.appliance_name && <p className="text-xs text-red-500 mt-1">{formErrors.appliance_name}</p>}
         </div>
 
@@ -124,7 +124,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
             onChange={(e) => setForm(f => ({ ...f, problem_description: e.target.value }))}
             placeholder="อธิบายอาการที่ลูกค้าแจ้ง"
             rows={3}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${formErrors.problem_description ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formErrors.problem_description ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.problem_description && <p className="text-xs text-red-500 mt-1">{formErrors.problem_description}</p>}
         </div>
 
@@ -136,7 +136,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "🧾 รับเครื่อง + ออก Receipt Code"}
         </button>
       </form>

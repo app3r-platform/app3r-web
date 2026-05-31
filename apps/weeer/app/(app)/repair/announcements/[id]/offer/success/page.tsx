@@ -59,7 +59,7 @@ export default function RepairBidSuccessPage({
       {/* CTA */}
       <button
         onClick={() => router.push("/repair/announcements")}
-        className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-2xl transition-colors"
+        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
       >
         ดูประกาศทั้งหมด
       </button>

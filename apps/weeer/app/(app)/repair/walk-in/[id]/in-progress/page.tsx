@@ -60,7 +60,7 @@ export default function WalkInInProgressPage({ params }: { params: Promise<{ id:
       <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-xs font-mono text-green-700 font-bold">{job.receipt_code}</span>
+            <span className="text-xs font-mono text-[#D63B12] font-bold">{job.receipt_code}</span>
             <p className="text-sm font-semibold text-gray-800 mt-0.5">{job.appliance_name}</p>
           </div>
           <span className="text-xs bg-green-100 text-green-700 font-medium px-2.5 py-1 rounded-full">กำลังซ่อม 🔧</span>
@@ -101,7 +101,7 @@ export default function WalkInInProgressPage({ params }: { params: Promise<{ id:
           </div>
         ))}
         {(job.estimated_price || totalParts > 0) && (
-          <div className="flex justify-between text-sm font-bold text-green-700 pt-2 border-t border-gray-100">
+          <div className="flex justify-between text-sm font-bold text-[#D63B12] pt-2 border-t border-gray-100">
             <span>รวม</span>
             <span>{((job.estimated_price ?? 0) + totalParts).toLocaleString()} pts</span>
           </div>
@@ -111,7 +111,7 @@ export default function WalkInInProgressPage({ params }: { params: Promise<{ id:
       {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
       <button onClick={handleReady} disabled={submitting}
-        className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3.5 rounded-xl transition-colors disabled:opacity-60 text-sm">
+        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3.5 rounded-xl transition-colors disabled:opacity-60 text-sm">
         {submitting ? "กำลังบันทึก…" : "✅ ซ่อมเสร็จ — พร้อมให้ลูกค้ารับคืน"}
       </button>
     </div>

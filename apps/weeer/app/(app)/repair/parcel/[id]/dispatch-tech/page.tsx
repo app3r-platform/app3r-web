@@ -73,18 +73,18 @@ export default function ParcelDispatchTechPage({ params }: { params: Promise<{ i
       </div>
 
       {/* Job summary */}
-      <div className="bg-green-50 border border-green-100 rounded-xl p-4 space-y-1.5">
-        <p className="text-sm font-semibold text-green-800">{job.appliance_name}</p>
-        <p className="text-xs text-green-600">{job.diagnosis_notes ?? job.problem_description}</p>
-        <p className="text-xs text-green-500">👤 {job.customer_name}</p>
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4 space-y-1.5">
+        <p className="text-sm font-semibold text-[#B8300E]">{job.appliance_name}</p>
+        <p className="text-xs text-[#F04E20]">{job.diagnosis_notes ?? job.problem_description}</p>
+        <p className="text-xs text-[#FF663A]">👤 {job.customer_name}</p>
         {totalCost > 0 && (
           <div className="flex items-center gap-1.5 mt-1">
-            <span className="text-xs text-green-500">💰 ประมาณการ:</span>
-            <span className="text-xs font-bold text-green-700">{totalCost.toLocaleString()} pts</span>
+            <span className="text-xs text-[#FF663A]">💰 ประมาณการ:</span>
+            <span className="text-xs font-bold text-[#D63B12]">{totalCost.toLocaleString()} pts</span>
           </div>
         )}
         {job.condition_notes && (
-          <p className="text-xs text-green-400 italic">สภาพ: {job.condition_notes}</p>
+          <p className="text-xs text-[#FF8B66] italic">สภาพ: {job.condition_notes}</p>
         )}
       </div>
 
@@ -101,11 +101,11 @@ export default function ParcelDispatchTechPage({ params }: { params: Promise<{ i
               {availableStaff.map((s) => (
                 <label key={s.id}
                   className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
-                    ${selectedTech === s.id ? "border-green-300 bg-green-50" : "border-gray-100 hover:border-gray-200"}`}>
+                    ${selectedTech === s.id ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}`}>
                   <input type="radio" name="tech" value={s.id}
                     checked={selectedTech === s.id}
                     onChange={() => { setSelectedTech(s.id); setTechError(""); }}
-                    className="text-green-600" />
+                    className="text-[#F04E20]" />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-gray-800">{s.name}</p>
@@ -150,7 +150,7 @@ export default function ParcelDispatchTechPage({ params }: { params: Promise<{ i
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting || !selectedTech}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50">
           {submitting ? "กำลังมอบหมาย…" : "👷 มอบหมาย WeeeT ซ่อม"}
         </button>
       </form>

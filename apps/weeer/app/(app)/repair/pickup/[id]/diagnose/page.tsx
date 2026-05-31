@@ -111,7 +111,7 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
             onChange={(e) => setDiagnosisNotes(e.target.value)}
             placeholder="สาเหตุปัญหา อุปกรณ์ที่เสีย วิธีซ่อมที่แนะนำ"
             rows={4}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${formErrors.diagnosis ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formErrors.diagnosis ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.diagnosis && <p className="text-xs text-red-500 mt-1">{formErrors.diagnosis}</p>}
         </div>
 
@@ -123,7 +123,7 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
           <input type="number" min="0" value={laborCost}
             onChange={(e) => setLaborCost(e.target.value)}
             placeholder="เช่น 800"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.labor ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.labor ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.labor && <p className="text-xs text-red-500 mt-1">{formErrors.labor}</p>}
         </div>
 
@@ -143,16 +143,16 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
             <input type="text" value={newPart.name}
               onChange={(e) => setNewPart(p => ({ ...p, name: e.target.value }))}
               placeholder="ชื่ออะไหล่"
-              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-green-400" />
+              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <input type="number" min="1" value={newPart.qty}
               onChange={(e) => setNewPart(p => ({ ...p, qty: e.target.value }))}
-              className="w-14 border border-gray-200 rounded-xl px-3 py-2 text-xs text-center focus:outline-none focus:ring-2 focus:ring-green-400" />
+              className="w-14 border border-gray-200 rounded-xl px-3 py-2 text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <input type="number" min="0" value={newPart.price}
               onChange={(e) => setNewPart(p => ({ ...p, price: e.target.value }))}
               placeholder="pts"
-              className="w-20 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-green-400" />
+              className="w-20 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <button onClick={addPart}
-              className="bg-green-100 hover:bg-green-200 text-green-700 text-xs font-medium px-3 py-2 rounded-xl transition-colors">
+              className="bg-[#FFE0D6] hover:bg-[#FFD0BF] text-[#D63B12] text-xs font-medium px-3 py-2 rounded-xl transition-colors">
               + เพิ่ม
             </button>
           </div>
@@ -160,9 +160,9 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
 
         {/* Total */}
         {totalCost > 0 && (
-          <div className="bg-green-50 rounded-xl px-4 py-3 flex justify-between items-center">
+          <div className="bg-[#FFF1ED] rounded-xl px-4 py-3 flex justify-between items-center">
             <span className="text-sm font-semibold text-gray-700">รวมทั้งหมด</span>
-            <span className="text-lg font-bold text-green-700">{totalCost.toLocaleString()} pts</span>
+            <span className="text-lg font-bold text-[#D63B12]">{totalCost.toLocaleString()} pts</span>
           </div>
         )}
 
@@ -175,7 +175,7 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button onClick={handleSubmit} disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังส่ง…" : "📨 บันทึก + ส่งขออนุมัติ WeeeU"}
         </button>
       </div>

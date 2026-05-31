@@ -110,7 +110,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <label className="block text-sm font-medium text-gray-700 mb-1">ราคา (Point) <span className="text-red-500">*</span></label>
           <input type="number" min="1" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
             placeholder="เช่น 850"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.price ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.price ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.price && <p className="text-xs text-red-500 mt-1">{formErrors.price}</p>}
         </div>
 
@@ -119,7 +119,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <textarea value={form.includes} onChange={(e) => setForm((f) => ({ ...f, includes: e.target.value }))}
             placeholder="เช่น ค่าแรง + ค่าน้ำยาล้าง + เติมน้ำยาแอร์ (ถ้าจำเป็น)"
             rows={3}
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none ${formErrors.includes ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none ${formErrors.includes ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.includes && <p className="text-xs text-red-500 mt-1">{formErrors.includes}</p>}
         </div>
 
@@ -127,7 +127,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <label className="block text-sm font-medium text-gray-700 mb-2">ค่าตรวจสภาพ (On-site)</label>
           <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-2.5">
             <span className="text-sm text-gray-600 flex-1">Inspection fee มาตรฐาน</span>
-            <span className="text-sm font-semibold text-green-700">100 pts</span>
+            <span className="text-sm font-semibold text-[#D63B12]">100 pts</span>
           </div>
           <p className="text-xs text-gray-400 mt-1">ไม่คืน แม้ซ่อมไม่ได้ — WeeeU รับทราบเมื่อยืนยันข้อเสนอ</p>
         </div>
@@ -136,7 +136,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <div className="flex items-center gap-3">
             <input type="checkbox" id="has_deposit" checked={form.has_deposit}
               onChange={(e) => setForm((f) => ({ ...f, has_deposit: e.target.checked }))}
-              className="w-4 h-4 text-green-600 rounded" />
+              className="w-4 h-4 text-[#F04E20] rounded" />
             <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">เก็บค่ามัดจำ</label>
           </div>
           {form.has_deposit && (
@@ -146,7 +146,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
                 <input type="number" min="1" value={form.deposit_amount}
                   onChange={(e) => setForm((f) => ({ ...f, deposit_amount: e.target.value }))}
                   placeholder="เช่น 200"
-                  className={`w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.deposit_amount ? "border-red-400" : "border-gray-200"}`} />
+                  className={`w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.deposit_amount ? "border-red-400" : "border-gray-200"}`} />
                 {formErrors.deposit_amount && <p className="text-xs text-red-500 mt-1">{formErrors.deposit_amount}</p>}
               </div>
               <div>
@@ -156,7 +156,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
                     <input type="radio" name="deposit_policy" value={p.value}
                       checked={form.deposit_policy === p.value}
                       onChange={() => setForm((f) => ({ ...f, deposit_policy: p.value as "free" | "forfeit" | "refund" }))}
-                      className="text-green-600" />
+                      className="text-[#F04E20]" />
                     <span className="text-xs text-gray-700">{p.label}</span>
                   </label>
                 ))}
@@ -168,11 +168,11 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
         <div className="border-t border-gray-100 pt-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             WeeeT ที่จะส่ง <span className="text-red-500">*</span>
-            <Link href="/staff" target="_blank" className="ml-2 text-xs text-green-600 hover:underline font-normal">(ดูรายชื่อ WeeeT →)</Link>
+            <Link href="/staff" target="_blank" className="ml-2 text-xs text-[#F04E20] hover:underline font-normal">(ดูรายชื่อ WeeeT →)</Link>
           </label>
           <input type="text" value={form.weeet_id} onChange={(e) => setForm((f) => ({ ...f, weeet_id: e.target.value }))}
             placeholder="WeeeT ID เช่น R001-T01"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${formErrors.weeet_id ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.weeet_id ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.weeet_id && <p className="text-xs text-red-500 mt-1">{formErrors.weeet_id}</p>}
         </div>
 
@@ -181,13 +181,13 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <textarea value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
             placeholder="เงื่อนไขพิเศษ ข้อตกลงอื่นๆ (ถ้ามี)"
             rows={2}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังส่ง…" : "ส่งข้อเสนอ"}
         </button>
       </form>

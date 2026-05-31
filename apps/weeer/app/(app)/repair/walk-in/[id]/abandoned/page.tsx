@@ -124,11 +124,11 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
           <p className="text-sm font-medium text-gray-700 mb-2">หลัง Grace Period — ดำเนินการ</p>
           <div className="grid grid-cols-2 gap-2">
             <label className={`flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all
-              ${action === "scrap" ? "border-lime-300 bg-lime-50" : "border-gray-100 hover:border-gray-200"}`}>
+              ${action === "scrap" ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}`}>
               <input type="radio" name="action" value="scrap"
                 checked={action === "scrap"}
                 onChange={() => setAction("scrap")}
-                className="text-lime-600" />
+                className="text-[#F04E20]" />
               <div>
                 <p className="text-sm font-semibold text-gray-800">♻️ ส่ง Scrap</p>
                 <p className="text-xs text-gray-500">โอนไป Scrap module</p>

@@ -39,7 +39,7 @@ export default function RepairJobAssignPage({ params }: { params: Promise<{ id: 
       </div>
 
       {/* Job summary mini card */}
-      <div className="bg-green-50 border border-green-100 rounded-xl p-4 space-y-1">
+      <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-4 space-y-1">
         <div className="flex items-center gap-2">
           <span className="text-lg">🌀</span>
           <p className="text-sm font-semibold text-gray-800">แอร์ Daikin FTKQ18TV2S</p>
@@ -55,7 +55,7 @@ export default function RepairJobAssignPage({ params }: { params: Promise<{ id: 
             <label
               key={s.id}
               className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
-                ${selectedStaff === s.id ? "border-green-400 bg-green-50" : "border-gray-100 hover:border-gray-200"}`}
+                ${selectedStaff === s.id ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}`}
             >
               <input
                 type="radio"
@@ -63,7 +63,7 @@ export default function RepairJobAssignPage({ params }: { params: Promise<{ id: 
                 value={s.id}
                 checked={selectedStaff === s.id}
                 onChange={() => setSelectedStaff(s.id)}
-                className="accent-green-600"
+                className="accent-[#FF663A]"
               />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export default function RepairJobAssignPage({ params }: { params: Promise<{ id: 
         disabled={!selectedStaff}
         className={`w-full font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors
           ${selectedStaff
-            ? "bg-green-600 hover:bg-green-700 text-white"
+            ? "bg-[#FF663A] hover:bg-[#F04E20] text-white"
             : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
       >
         ✅ มอบหมาย
