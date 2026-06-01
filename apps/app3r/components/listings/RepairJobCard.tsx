@@ -5,12 +5,16 @@
 import Link from 'next/link';
 import type { PublicJobProjection } from '../../lib/types/listings-customer-jobs';
 import { getServiceTypeLabel } from '../../lib/constants/service-types';
+import { getMockEngagement, getMockDistrict } from '../../lib/mock/listing-engagement';
 
 interface RepairJobCardProps {
   job: PublicJobProjection;
 }
 
 export default function RepairJobCard({ job }: RepairJobCardProps) {
+  // MOCKUP-only metadata derive จาก job.id (PublicJobProjection ไม่มี district/counts)
+  const district = getMockDistrict(job.id);
+  const { viewCount, offerCount } = getMockEngagement(job.id);
   return (
     <Link
       href={`/listings/repair/${job.id}`}
@@ -38,9 +42,21 @@ export default function RepairJobCard({ job }: RepairJobCardProps) {
       <div className="flex items-center justify-between text-xs text-gray-500 mt-3">
         <div className="flex items-center gap-1">
           <span>📍</span>
-          <span>{job.area}</span>
+          <span>{`อ.${district}, ${job.area}`}</span>
         </div>
         <span>{job.postedAt}</span>
+      </div>
+
+      {/* Engagement metadata — อำเภอ/ผู้ยื่นข้อเสนอ/ผู้เข้าชม (MOCKUP) */}
+      <div className="flex items-center gap-3 text-xs text-gray-500 mt-2">
+        <span className="flex items-center gap-1">
+          <span aria-hidden>📨</span>
+          {offerCount} ข้อเสนอ
+        </span>
+        <span className="flex items-center gap-1">
+          <span aria-hidden>👁️</span>
+          {viewCount} เข้าชม
+        </span>
       </div>
 
       {/* Lock hint */}

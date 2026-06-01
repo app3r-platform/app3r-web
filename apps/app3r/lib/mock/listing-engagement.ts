@@ -36,3 +36,24 @@ export function getMockEngagement(id: string, baseViews?: number): ListingEngage
   const remainingDays = 1 + (seed % 14); // 1..14 วัน
   return { viewCount, offerCount, remainingDays };
 }
+
+/** อำเภอ stub pool (MOCKUP-only) — ใช้ derive อำเภอแบบ deterministic จาก id. */
+const MOCK_DISTRICTS = [
+  'เมือง',
+  'วารินชำราบ',
+  'พิบูลมังสาหาร',
+  'เดชอุดม',
+  'ตระการพืชผล',
+  'ม่วงสามสิบ',
+  'เขมราฐ',
+  'นาจะหลวย',
+] as const;
+
+/**
+ * Deterministic mock อำเภอ (district) สำหรับการ์ด — MOCKUP-only.
+ * เลือกจาก pool คงที่ตาม id เพื่อให้แต่ละประกาศแสดงอำเภอเดิมเสมอ.
+ * @param id listing/job id
+ */
+export function getMockDistrict(id: string): string {
+  return MOCK_DISTRICTS[seedFromId(id) % MOCK_DISTRICTS.length];
+}
