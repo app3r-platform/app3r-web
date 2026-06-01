@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
+import { productToResellPath } from "@/lib/content/product-resell-map";
+import { AdSlot } from "@/components/common";
 
 export const metadata: Metadata = {
   title: "สินค้าแนะนำ",
@@ -120,10 +123,16 @@ export default function ProductsPage() {
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {products.map((product, i) => (
+          <Fragment key={product.id}>
+            {/* C5 Ad inline between product cards (after 3rd card) */}
+            {i === 3 && (
+              <div className="sm:col-span-2 lg:col-span-3">
+                <AdSlot size="inline" label="โฆษณา" />
+              </div>
+            )}
           <Link
-            key={product.id}
-            href={`/products/${product.id}`}
+            href={productToResellPath(product.id)}
             className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition group"
           >
             {/* Product image */}
@@ -161,6 +170,7 @@ export default function ProductsPage() {
               </div>
             </div>
           </Link>
+          </Fragment>
         ))}
       </div>
     </div>

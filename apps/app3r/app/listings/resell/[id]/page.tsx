@@ -9,7 +9,12 @@ import { getMockRoleFromCookie } from "../../../../lib/auth/mock-auth";
 import PhotoGallery from "../../../../components/listings/PhotoGallery";
 import TypeBadge from "../../../../components/listings/TypeBadge";
 import AdBanner from "../../../../components/ads/AdBanner";
-import InterestedButton from "./InterestedButton";
+import LocationMapMock from "../../../../components/listings/LocationMapMock";
+import QnASection from "../../../../components/listings/QnASection";
+import EngagementCounters from "../../../../components/listings/EngagementCounters";
+import { AdSlot, RoleAwareCTA, TermTooltip } from "../../../../components/common";
+import { getMockEngagement } from "../../../../lib/mock/listing-engagement";
+import { getMockQnA } from "../../../../lib/mock/listing-qna";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -39,7 +44,11 @@ export default async function ResellDetailPage({ params }: PageProps) {
   // W-2-D (D6): Tier-based privacy
   const role = await getMockRoleFromCookie();
   const canSeeSeller = role !== "anonymous";  // Anonymous: ซ่อนชื่อ/เบอร์
-  const canInterest = role === "weeeu" || role === "weeer" || role === "weeeu-owner"; // WeeeT: disabled
+  const isOwnerView = role === "weeeu-owner" || role === "admin";
+
+  // Engagement counters + Q&A (mock)
+  const engagement = getMockEngagement(listing.id, listing.viewCount);
+  const qna = getMockQnA(listing.id);
 
   const conditionColor: Record<string, string> = {
     "มือสอง-ดีมาก": "text-green-700 bg-green-100",
@@ -119,6 +128,12 @@ export default async function ResellDetailPage({ params }: PageProps) {
 
           {/* Ad Banner */}
           <AdBanner position="module_first_row" size="leaderboard" />
+
+          {/* Location map (MOCK) */}
+          <LocationMapMock area={listing.province} detail={listing.location} />
+
+          {/* Q&A thread — role-based visibility (mock) */}
+          <QnASection questions={qna} forceOwnerView={isOwnerView} />
         </div>
 
         {/* Right: Sidebar */}
@@ -126,22 +141,23 @@ export default async function ResellDetailPage({ params }: PageProps) {
           {/* Price & CTA */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 sticky top-20">
             <p className="text-2xl font-extrabold text-website-brand-700">{listing.priceLabel}</p>
-            {/* W-2-D (D6): Tier-based "สนใจสินค้า" button */}
-            {canInterest ? (
-              <InterestedButton listingTitle={listing.title} />
-            ) : role === "weeet" ? (
-              <button
-                disabled
-                title="WeeeT (ช่าง) ไม่สามารถยื่นข้อเสนอซื้อสินค้าได้ — เฉพาะ WeeeU/WeeeR"
-                className="w-full bg-gray-200 text-gray-400 py-3 rounded-xl font-semibold cursor-not-allowed"
-              >
-                สนใจสินค้า (เฉพาะ WeeeU/WeeeR)
-              </button>
-            ) : (
-              <InterestedButton listingTitle={listing.title} />
-            )}
-            <p className="text-xs text-gray-400 text-center">
-              การติดต่อผ่านระบบ WeeeU — มีระบบ Escrow คุ้มครอง
+
+            {/* Engagement counters: view / offer / remaining days */}
+            <EngagementCounters engagement={engagement} />
+
+            {/* W-2-D (D6): role-aware "สนใจสินค้า" CTA */}
+            <RoleAwareCTA
+              intent="interest"
+              label="สนใจสินค้า"
+              className="w-full"
+              overrides={{
+                weeet: { message: "ช่าง (WeeeT) ซื้อสินค้าไม่ได้ — เฉพาะ WeeeU/WeeeR" },
+              }}
+            />
+            <p className="text-xs text-gray-400 text-center inline-flex flex-wrap items-center justify-center gap-1">
+              การติดต่อผ่านระบบ WeeeU หรือ WeeeR — มีระบบ
+              <TermTooltip term="escrow" label="พักเงินกลาง (Escrow)" />
+              คุ้มครอง
             </p>
           </div>
 
@@ -190,6 +206,9 @@ export default async function ResellDetailPage({ params }: PageProps) {
               </Link>
             </div>
           )}
+
+          {/* Ad slot (mock) */}
+          <AdSlot size="sidebar" label="ตำแหน่งข้างประกาศมือสอง" />
         </div>
       </div>
     </div>

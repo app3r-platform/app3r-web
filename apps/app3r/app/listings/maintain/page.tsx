@@ -7,12 +7,16 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { getMaintainJobs } from '../../../lib/api/customer-jobs';
 import MaintainJobCard from '../../../components/listings/MaintainJobCard';
-import ServiceTypeFilter from '../../../components/listings/ServiceTypeFilter';
 import AreaSelect from '../../../components/listings/AreaSelect';
+import MyProvincePrefill from '../../../components/listings/MyProvincePrefill';
 import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel';
-import { MAINTAIN_ALLOWED_TYPES } from '../../../lib/constants/service-types';
+import RoleSplitSections from '../../../components/listings/RoleSplitSections';
+import { RoleAwareCTA, TermTooltip } from '@/components/common';
 
 const MAINTAIN_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
+
+// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
+const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? 'http://localhost:3002';
 
 export const metadata: Metadata = {
   title: 'ประกาศบำรุงรักษาเครื่องใช้ไฟฟ้า — App3R',
@@ -46,8 +50,8 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
         <span className="text-gray-900 font-medium">ประกาศบำรุงรักษา</span>
       </nav>
 
-      {/* Header Banner */}
-      <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6 mb-8">
+      {/* Header Banner — on-brand (เขียว) chrome แทนส้มล้วน (W-09) */}
+      <div className="bg-website-brand-50 border border-website-brand-200 rounded-2xl p-6 mb-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">🧹 บำรุงรักษาเครื่องใช้ไฟฟ้า</h1>
@@ -55,12 +59,17 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
               ล้างแอร์ ล้างเครื่องซักผ้า และบำรุงรักษาอื่นๆ จากช่างมืออาชีพพร้อมหลักฐานภาพ
             </p>
           </div>
-          <Link
-            href="http://localhost:3002/register"
-            className="bg-orange-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-orange-600 transition whitespace-nowrap"
-          >
-            จองบริการ →
-          </Link>
+          {/* จองบริการ/ลงประกาศ — role-aware (C1). WeeeU เท่านั้น */}
+          <RoleAwareCTA
+            label="จองบริการ"
+            intent="generic"
+            className="whitespace-nowrap"
+            overrides={{
+              weeeu: { label: 'จองบริการ', target: `${WEEEU_URL}/maintain/new` },
+              weeer: { label: 'สำหรับ WeeeU เท่านั้น', target: '#', message: 'สำหรับ WeeeU เท่านั้น' },
+              weeet: { message: 'สำหรับ WeeeU เท่านั้น' },
+            }}
+          />
         </div>
 
         {/* Service categories */}
@@ -73,6 +82,18 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
             </div>
           ))}
         </div>
+
+        {/* ค่าลงประกาศ + พักเงินกลาง (W-09 ตาม W-07) — ไม่มีคำว่า "ฟรี"/ตัวเลข escrow */}
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="bg-white rounded-lg p-3 text-xs text-gray-600">
+            <span className="font-semibold text-gray-900">ค่าลงประกาศ</span> X พอยต์
+            (อัตราตามประเภท กำหนดโดยผู้ดูแลระบบ) · เลือกพอยต์เงิน/ทอง
+          </div>
+          <div className="bg-white rounded-lg p-3 text-xs text-gray-600 flex flex-wrap items-center gap-1">
+            <TermTooltip term="escrow" />
+            — เงินพักไว้กับระบบกลางจนงานเสร็จและคุณยืนยันรับ หากมีปัญหาได้เงินคืน
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
@@ -82,24 +103,21 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
             <h3 className="font-semibold text-gray-900">กรองประกาศ</h3>
 
             {/* Area filter — QF4: ใช้ AreaSelect (Client Component) แทน inline onChange */}
-            <div>
-              <label className="block text-sm text-gray-700 font-medium mb-2">จังหวัด</label>
+            <div className="space-y-2">
+              <label className="block text-sm text-gray-700 font-medium">จังหวัด</label>
               <Suspense fallback={<div className="h-9 bg-gray-100 animate-pulse rounded-lg" />}>
-                <AreaSelect areas={MAINTAIN_AREAS} current={areaParam} accentColor="orange" />
+                <AreaSelect areas={MAINTAIN_AREAS} current={areaParam} accentColor="blue" />
+              </Suspense>
+              {/* prefill จังหวัดจาก mock profile (ยังดูทุกจังหวัดได้) */}
+              <Suspense>
+                <MyProvincePrefill paramKey="area" />
               </Suspense>
             </div>
 
-            {/* Service type filter — maintain only allows type 1 */}
-            <Suspense>
-              <ServiceTypeFilter
-                allowedTypes={MAINTAIN_ALLOWED_TYPES}
-                accentColor="orange"
-              />
-            </Suspense>
-
-            <div className="text-xs text-gray-400 bg-orange-50 rounded-lg p-2">
+            {/* W-09: ลบตัวกรอง "ประเภทบริการ" — งานบำรุงรักษาเป็น on-site อย่างเดียว */}
+            <div className="text-xs text-gray-500 bg-website-brand-50 border border-website-brand-100 rounded-lg p-2">
               งานบำรุงรักษารองรับเฉพาะ<br />
-              <strong>ซ่อมนอกสถานที่</strong> (ช่างมาหาลูกค้า)
+              <strong>ซ่อมนอกสถานที่</strong> (ช่างมาหาลูกค้า) — ไม่ต้องเลือกประเภทบริการ
             </div>
 
             {/* W2 · GR-10 NearMeFilter — geolocation-based nearby tambons */}
@@ -127,6 +145,21 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
               </Link>
             </div>
           </div>
+
+          {/* Role-split sections (W-09) */}
+          <RoleSplitSections
+            context="บำรุงรักษา"
+            myListings={jobs.slice(0, 2).map((j) => ({
+              id: j.id,
+              title: j.title,
+              meta: `${j.area} · 0 ข้อเสนอ`,
+            }))}
+            myOffers={jobs.slice(0, 2).map((j) => ({
+              id: j.id,
+              title: j.title,
+              meta: `${j.area} · รอตอบรับ`,
+            }))}
+          />
 
           {jobs.length === 0 ? (
             <div className="text-center py-16 text-gray-400">

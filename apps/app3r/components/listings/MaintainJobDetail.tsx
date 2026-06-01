@@ -5,14 +5,25 @@
 import Link from 'next/link';
 import PhotoGallery from './PhotoGallery';
 import TypeBadge from './TypeBadge';
+import LocationMapMock from './LocationMapMock';
+import QnASection from './QnASection';
+import EngagementCounters from './EngagementCounters';
+import { AdSlot } from '../common';
 import type { AuthenticatedJobProjection } from '../../lib/types/listings-customer-jobs';
 import { getServiceTypeLabel } from '../../lib/constants/service-types';
+import { getMockEngagement } from '../../lib/mock/listing-engagement';
+import { getMockQnA } from '../../lib/mock/listing-qna';
 
 interface MaintainJobDetailProps {
   job: AuthenticatedJobProjection;
+  /** admin เห็นทุกคำถามใน Q&A (owner-equivalent view) */
+  isAdmin?: boolean;
 }
 
-export default function MaintainJobDetail({ job }: MaintainJobDetailProps) {
+export default function MaintainJobDetail({ job, isAdmin = false }: MaintainJobDetailProps) {
+  const engagement = getMockEngagement(job.id);
+  const qna = getMockQnA(job.id);
+  const locationDetail = [job.subDistrict, job.district].filter(Boolean).join(' · ') || undefined;
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
@@ -91,6 +102,12 @@ export default function MaintainJobDetail({ job }: MaintainJobDetailProps) {
               </div>
             </div>
           </div>
+
+          {/* Location map (MOCK) */}
+          <LocationMapMock area={job.area} detail={locationDetail} />
+
+          {/* Q&A thread — role-based visibility (mock) */}
+          <QnASection questions={qna} forceOwnerView={isAdmin} />
         </div>
 
         {/* Right: Sidebar — maintain has no offer button */}
@@ -105,6 +122,10 @@ export default function MaintainJobDetail({ job }: MaintainJobDetailProps) {
                 ค่าธรรมเนียมประมาณ {job.feePreview.toLocaleString()} บาท
               </p>
             </div>
+
+            {/* Engagement counters: view / offer / remaining days */}
+            <EngagementCounters engagement={engagement} />
+
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-sm text-orange-800">
               <strong>บำรุงรักษา</strong> — ช่างรับงานผ่านระบบ WeeeR<br />
               <span className="text-xs text-orange-600">ระบบจับคู่ช่าง เปิดใช้งาน Phase D</span>
@@ -113,6 +134,9 @@ export default function MaintainJobDetail({ job }: MaintainJobDetailProps) {
               บริการนอกสถานที่เท่านั้น (ช่างมาหาลูกค้า)
             </p>
           </div>
+
+          {/* Ad slot (mock) */}
+          <AdSlot size="sidebar" label="ตำแหน่งข้างประกาศบำรุงรักษา" />
         </div>
       </div>
     </div>

@@ -11,6 +11,10 @@ export interface ListingCardProps {
   postedAt: string;
   imageEmoji?: string;
   limited?: boolean; // public = limited info
+  // --- C3 additive props (optional, backward-compatible; stub values, real counts = phase 2) ---
+  district?: string; // อำเภอ
+  offerCount?: number; // จำนวนผู้ยื่นข้อเสนอ
+  viewCount?: number; // จำนวนผู้เข้าชม
 }
 
 const typeConfig: Record<ListingType, { label: string; color: string; bg: string }> = {
@@ -29,6 +33,9 @@ export default function ListingCard({
   postedAt,
   imageEmoji = "🔌",
   limited = true,
+  district,
+  offerCount,
+  viewCount,
 }: ListingCardProps) {
   const cfg = typeConfig[type];
   const detailHref = `/${type === "resell" ? "listings/resell" : type === "repair" ? "listings/repair" : "listings/maintain"}/${id}`;
@@ -67,10 +74,28 @@ export default function ListingCard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {location}
+            {district ? `${district}, ${location}` : location}
           </span>
           <span>{postedAt}</span>
         </div>
+
+        {/* C3 stub counts — render only when provided */}
+        {(offerCount != null || viewCount != null) && (
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            {offerCount != null && (
+              <span className="flex items-center gap-1">
+                <span aria-hidden>📨</span>
+                {offerCount} ข้อเสนอ
+              </span>
+            )}
+            {viewCount != null && (
+              <span className="flex items-center gap-1">
+                <span aria-hidden>👁️</span>
+                {viewCount} เข้าชม
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
           <span className="font-bold text-website-brand-700 text-sm">{priceLabel}</span>

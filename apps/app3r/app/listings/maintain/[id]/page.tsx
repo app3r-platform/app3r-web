@@ -43,7 +43,7 @@ export default async function MaintainDetailPage({ params }: PageProps) {
 
   // WeeeR or admin — full detail
   if (role === 'weeer' || role === 'admin') {
-    return <MaintainJobDetail job={job} />;
+    return <MaintainJobDetail job={job} isAdmin={role === 'admin'} />;
   }
 
   // All others → login gate

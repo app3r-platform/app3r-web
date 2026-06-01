@@ -5,14 +5,25 @@
 import Link from 'next/link';
 import PhotoGallery from './PhotoGallery';
 import TypeBadge from './TypeBadge';
+import LocationMapMock from './LocationMapMock';
+import QnASection from './QnASection';
+import EngagementCounters from './EngagementCounters';
+import { AdSlot } from '../common';
 import type { AuthenticatedJobProjection } from '../../lib/types/listings-customer-jobs';
 import { getServiceTypeLabel } from '../../lib/constants/service-types';
+import { getMockEngagement } from '../../lib/mock/listing-engagement';
+import { getMockQnA } from '../../lib/mock/listing-qna';
 
 interface RepairJobDetailProps {
   job: AuthenticatedJobProjection;
+  /** admin เห็นทุกคำถามใน Q&A (owner-equivalent view) */
+  isAdmin?: boolean;
 }
 
-export default function RepairJobDetail({ job }: RepairJobDetailProps) {
+export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetailProps) {
+  const engagement = getMockEngagement(job.id);
+  const qna = getMockQnA(job.id);
+  const locationDetail = [job.subDistrict, job.district].filter(Boolean).join(' · ') || undefined;
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
@@ -91,6 +102,12 @@ export default function RepairJobDetail({ job }: RepairJobDetailProps) {
               </div>
             </div>
           </div>
+
+          {/* Location map (MOCK) */}
+          <LocationMapMock area={job.area} detail={locationDetail} />
+
+          {/* Q&A thread — role-based visibility (mock) */}
+          <QnASection questions={qna} forceOwnerView={isAdmin} />
         </div>
 
         {/* Right: Sidebar CTA */}
@@ -105,6 +122,10 @@ export default function RepairJobDetail({ job }: RepairJobDetailProps) {
                 ค่าธรรมเนียมประมาณ {job.feePreview.toLocaleString()} บาท
               </p>
             </div>
+
+            {/* Engagement counters: view / offer / remaining days */}
+            <EngagementCounters engagement={engagement} />
+
             {/* Phase D: real offer button */}
             <button
               disabled
@@ -116,6 +137,9 @@ export default function RepairJobDetail({ job }: RepairJobDetailProps) {
               ระบบยื่น offer และ Escrow เปิดใช้งาน Phase D
             </p>
           </div>
+
+          {/* Ad slot (mock) */}
+          <AdSlot size="sidebar" label="ตำแหน่งข้างประกาศซ่อม" />
         </div>
       </div>
     </div>
