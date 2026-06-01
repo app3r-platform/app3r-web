@@ -43,7 +43,7 @@ export default async function RepairDetailPage({ params }: PageProps) {
 
   // WeeeR or admin — full detail
   if (role === 'weeer' || role === 'admin') {
-    return <RepairJobDetail job={job} />;
+    return <RepairJobDetail job={job} isAdmin={role === 'admin'} />;
   }
 
   // All others (anonymous, weeeu, weeet, weeeu-owner for non-own jobs) → login gate

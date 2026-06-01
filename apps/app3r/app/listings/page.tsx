@@ -7,7 +7,9 @@ import { Suspense } from "react";
 import { getAllListings } from "../../lib/api/listings";
 import ListingGrid from "../../components/listings/ListingGrid";
 import FilterSidebar from "../../components/listings/FilterSidebar";
+import ScrapModeChips from "../../components/listings/ScrapModeChips";
 import AdBanner from "../../components/ads/AdBanner";
+import { NearMeToggle } from "@/components/common";
 import type { UnifiedFilter } from "../../lib/types";
 
 export const metadata: Metadata = {
@@ -62,12 +64,14 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
 
         {/* Main */}
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
             <h1 className="text-xl font-bold text-gray-900">ประกาศทั้งหมด</h1>
+            {/* C4 — NearMeToggle (mock geo, no GPS) */}
+            <NearMeToggle hideMockNote />
           </div>
 
           {/* Type filter tabs */}
-          <div className="flex gap-2 flex-wrap mb-6">
+          <div className="flex gap-2 flex-wrap mb-4">
             {typeFilters.map((tf) => {
               const isActive = (type ?? "all") === tf.value;
               const href = tf.value === "all"
@@ -88,6 +92,16 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
               );
             })}
           </div>
+
+          {/* ซาก: ขาย / ทิ้ง sub-filter (UI-only mock) — แสดงเมื่อเลือกประเภท "ซาก" */}
+          {type === "scrap" && (
+            <div className="mb-6">
+              <p className="text-xs font-medium text-gray-500 mb-2">ประเภทซาก</p>
+              <Suspense fallback={<div className="h-9 w-64 bg-gray-100 animate-pulse rounded-full" />}>
+                <ScrapModeChips />
+              </Suspense>
+            </div>
+          )}
 
           <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse rounded-xl" />}>
             <ListingGrid

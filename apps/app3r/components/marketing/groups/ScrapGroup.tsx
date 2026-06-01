@@ -7,7 +7,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { mockScrapListings } from "@/lib/mock/scrap";
 import ListingCard from "@/components/listings/ListingCard";
-import ApplianceTypeRow from "./ApplianceTypeRow";
+import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { ScrapListing } from "@/lib/types";
@@ -36,6 +36,19 @@ export default async function ScrapGroup() {
 
   const grouped = groupByMaterial(activeListings);
   const materials = Object.keys(grouped);
+
+  // Pre-render nodes (server-side) สำหรับ client dropdown
+  const renderedGrouped: Record<string, RenderedItem[]> = {};
+  for (const mat of materials) {
+    renderedGrouped[mat] = grouped[mat].map((item) => ({
+      id: item.id,
+      node: (
+        <RoleAwareCard href={`/listings/scrap/${item.id}`}>
+          <ListingCard listing={item} />
+        </RoleAwareCard>
+      ),
+    }));
+  }
 
   if (materials.length === 0) {
     return (
@@ -67,19 +80,11 @@ export default async function ScrapGroup() {
         </Link>
       </div>
 
-      {materials.map((material) => (
-        <ApplianceTypeRow
-          key={material}
-          applianceType={material}
-          items={grouped[material]}
-          rowsPerType={1}
-          renderItem={(item) => (
-            <RoleAwareCard href={`/listings/scrap/${item.id}`}>
-              <ListingCard listing={item} />
-            </RoleAwareCard>
-          )}
-        />
-      ))}
+      <CategoryFilterRows
+        grouped={renderedGrouped}
+        rowsPerType={1}
+        filterLabel="วัสดุ"
+      />
     </section>
   );
 }

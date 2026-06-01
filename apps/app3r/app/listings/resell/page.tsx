@@ -8,8 +8,11 @@ import { getResellListings } from "../../../lib/api/listings";
 import { mockResellListings } from "../../../lib/mock/resell";
 import ListingGrid from "../../../components/listings/ListingGrid";
 import FilterSidebar from "../../../components/listings/FilterSidebar";
+import CategoryChips from "../../../components/listings/CategoryChips";
+import RoleSplitSections from "../../../components/listings/RoleSplitSections";
 import AdBanner from "../../../components/ads/AdBanner";
 import SponsoredListing from "../../../components/ads/SponsoredListing";
+import { NearMeToggle, TermTooltip } from "@/components/common";
 import type { ResellFilter, ConditionType } from "../../../lib/types";
 
 export const metadata: Metadata = {
@@ -25,6 +28,9 @@ const categories = [
   "เครื่องซักผ้า", "ตู้เย็น", "แอร์", "ทีวี", "เครื่องดูดฝุ่น",
   "ไมโครเวฟ", "เตาอบ", "พัดลม", "เครื่องฟอกอากาศ",
 ];
+
+// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
+const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? "http://localhost:3002";
 
 // Get sponsored listings (static — from mock data)
 const sponsoredListings = mockResellListings.filter((l) => l.sponsored).slice(0, 2);
@@ -72,50 +78,70 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
 
         {/* Main content */}
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
             <h1 className="text-xl font-bold text-gray-900">
               ประกาศขายเครื่องใช้ไฟฟ้ามือสอง
             </h1>
+            {/* C4 — NearMeToggle (mock geo, no GPS) */}
+            <NearMeToggle hideMockNote />
           </div>
 
-          {/* Category filter */}
-          <div className="flex gap-2 flex-wrap mb-6">
-            <Link
-              href="/listings/resell?page=1"
-              className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                !category
-                  ? "bg-website-brand-700 text-white border-website-brand-700"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-website-brand-500"
-              }`}
-            >
-              ทั้งหมด
+          {/* ทั้ง WeeeU และ WeeeR ซื้อ-ขายได้ — ลิงก์สำหรับร้าน/บริษัท */}
+          <p className="text-sm text-gray-500 mb-5">
+            ทั้งผู้ใช้ทั่วไปและร้าน/บริษัทสามารถซื้อและขายได้ ·{" "}
+            <Link href="/register/weeer" className="text-website-brand-700 font-medium hover:underline">
+              สำหรับร้าน/บริษัท WeeeR →
             </Link>
-            {categories.map((cat) => (
-              <Link
-                key={cat}
-                href={`/listings/resell?category=${encodeURIComponent(cat)}&page=1`}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                  category === cat
-                    ? "bg-website-brand-700 text-white border-website-brand-700"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-website-brand-500"
-                }`}
-              >
-                {cat}
-              </Link>
-            ))}
+          </p>
+
+          {/* Category filter — W-11 fix: client chips (preserve params, no binding bug) */}
+          <Suspense fallback={<div className="h-9 w-full bg-gray-100 animate-pulse rounded-full mb-6" />}>
+            <CategoryChips categories={categories} />
+          </Suspense>
+
+          {/* รูปแบบการรับสินค้า (3 แบบ) — ห้ามใช้คำว่า "นัดรับ" */}
+          <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-600">
+              <div className="font-semibold text-gray-900 mb-0.5">🚚 ผู้ขายส่งเอง</div>
+              ราคารวมค่าจัดส่งแล้ว
+            </div>
+            <div className="rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-600">
+              <div className="font-semibold text-gray-900 mb-0.5">🏠 ผู้ซื้อมารับเอง</div>
+              ไม่มีค่าจัดส่ง (ฟรี)
+            </div>
+            <div className="rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-600">
+              <div className="font-semibold text-gray-900 mb-0.5">📦 ส่งไปรษณีย์/ขนส่ง</div>
+              ตกลงค่าส่ง + มีเลขติดตามพัสดุ
+            </div>
           </div>
 
           {/* Limited info notice */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-start gap-3">
             <span className="text-amber-500 text-lg shrink-0">ℹ️</span>
-            <div className="text-sm text-amber-800">
-              <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดเพิ่มเติม เช่น ชื่อผู้ขาย เบอร์โทร และ
-              ยื่น offer ได้หลังจาก{" "}
-              <Link href="http://localhost:3002/register" className="underline font-semibold text-amber-900">
+            <div className="text-sm text-amber-800 flex flex-wrap items-center gap-1">
+              <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดเพิ่มเติม เช่น ชื่อผู้ขาย เบอร์โทร และยื่น
+              <TermTooltip term="offer" />
+              ได้หลังจาก{" "}
+              <Link href={WEEEU_URL + "/register"} className="underline font-semibold text-amber-900">
                 สมัครสมาชิก WeeeU
               </Link>
             </div>
           </div>
+
+          {/* Role-split sections (W-11) */}
+          <RoleSplitSections
+            context="มือสอง"
+            myListings={result.items.slice(0, 2).map((l) => ({
+              id: l.id,
+              title: l.title,
+              meta: `${l.viewCount} เข้าชม · 0 ข้อเสนอ`,
+            }))}
+            myOffers={result.items.slice(0, 2).map((l) => ({
+              id: l.id,
+              title: l.title,
+              meta: `${l.location} · รอตอบรับ`,
+            }))}
+          />
 
           {/* Sponsored listings */}
           {sponsoredListings.length > 0 && (

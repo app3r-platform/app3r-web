@@ -6,7 +6,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { repairJobs } from "@/lib/mock/repair-jobs";
-import ApplianceTypeRow from "./ApplianceTypeRow";
+import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { AuthenticatedJobProjection } from "@/lib/types/listings-customer-jobs";
@@ -76,6 +76,19 @@ export default async function RepairRequestGroup() {
   const grouped = groupByApplianceType(active);
   const types = Object.keys(grouped);
 
+  // Pre-render nodes (server-side) สำหรับ client dropdown
+  const renderedGrouped: Record<string, RenderedItem[]> = {};
+  for (const type of types) {
+    renderedGrouped[type] = grouped[type].map((job) => ({
+      id: job.id,
+      node: (
+        <RoleAwareCard href={`/listings/repair/${job.id}`}>
+          <JobCardNoImage job={job} kind="repair" />
+        </RoleAwareCard>
+      ),
+    }));
+  }
+
   if (types.length === 0) {
     return (
       <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
@@ -106,19 +119,11 @@ export default async function RepairRequestGroup() {
         </Link>
       </div>
 
-      {types.map((type) => (
-        <ApplianceTypeRow
-          key={type}
-          applianceType={type}
-          items={grouped[type]}
-          rowsPerType={2}
-          renderItem={(job) => (
-            <RoleAwareCard href={`/listings/repair/${job.id}`}>
-              <JobCardNoImage job={job} kind="repair" />
-            </RoleAwareCard>
-          )}
-        />
-      ))}
+      <CategoryFilterRows
+        grouped={renderedGrouped}
+        rowsPerType={2}
+        filterLabel="ประเภทเครื่อง"
+      />
     </section>
   );
 }

@@ -1,61 +1,79 @@
-"use client";
 // ============================================================
 // components/marketing/HomeActionCTA.tsx
-// W-2-B (D2): 2 CTA buttons เหนือ HomeListings
-// - ลงประกาศขายเครื่องใช้ไฟฟ้ามือสอง → WeeeU app /sell/new
-// - แจ้งความต้องการซ่อม/บำรุงรักษา → WeeeU app /repair/new
-// behavior: ถ้า logged in → direct · ถ้าไม่ → login?return=...
-// ใช้ useMockRole เพื่อตรวจ login (Phase 3 mockup)
+// W-01 (D2): CTA block เหนือ HomeListings
+// - "ลงประกาศขาย" แยกเป็น 2 ทาง: WeeeU (ลูกค้า) / WeeeR (ร้าน) ผ่าน RoleAwareCTA
+// - "แจ้งความต้องการซ่อม/บำรุงรักษา" ผ่าน RoleAwareCTA (role-aware)
+// RoleAwareCTA จัดการ login/role/ปลายทาง cross-app (ENV stub) ให้เอง — ไม่มี dead link
 // ============================================================
-import Link from "next/link";
-import { useMockRole } from "@/lib/auth/useMockRole";
-
-const WEEEU_APP_URL = process.env.NEXT_PUBLIC_WEEEU_APP_URL ?? "http://localhost:3002";
+import { RoleAwareCTA } from "@/components/common";
 
 export default function HomeActionCTA() {
-  const { role, mounted } = useMockRole();
-  const isLoggedIn = mounted && role !== "anonymous";
-
-  const sellHref = isLoggedIn
-    ? `${WEEEU_APP_URL}/sell/new`
-    : `${WEEEU_APP_URL}/login?return=/sell/new`;
-
-  const repairHref = isLoggedIn
-    ? `${WEEEU_APP_URL}/repair/new`
-    : `${WEEEU_APP_URL}/login?return=/repair/new`;
-
   return (
     <section className="max-w-7xl mx-auto px-4 -mt-6 mb-2 relative z-10">
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-        <Link
-          href={sellHref}
-          className="group flex items-center gap-4 p-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-400 transition"
-        >
-          <span className="text-3xl shrink-0">📦</span>
-          <div className="flex-1">
-            <p className="font-bold text-emerald-900 group-hover:text-emerald-700 transition text-sm sm:text-base">
-              ลงประกาศขายเครื่องใช้ไฟฟ้ามือสอง
-            </p>
-            <p className="text-xs text-emerald-700 mt-0.5">
-              {isLoggedIn ? "เริ่มต้นลงประกาศได้ทันที →" : "ล็อกอินแล้วลงประกาศได้เลย →"}
-            </p>
+      <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* ลงประกาศขาย — แยก WeeeU / WeeeR */}
+        <div className="rounded-xl bg-website-brand-50 border border-website-brand-200 p-4">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-3xl shrink-0">📦</span>
+            <div>
+              <p className="font-bold text-website-brand-900 text-sm sm:text-base">
+                ลงประกาศขายเครื่องใช้ไฟฟ้ามือสอง
+              </p>
+              <p className="text-xs text-website-brand-700 mt-0.5">
+                เลือกช่องทางที่ตรงกับคุณ — ลูกค้าทั่วไป หรือร้านค้า
+              </p>
+            </div>
           </div>
-        </Link>
+          <div className="flex flex-col sm:flex-row gap-2">
+            {/* WeeeU — ลูกค้าทั่วไปลงขาย */}
+            <RoleAwareCTA
+              intent="sell"
+              variant="primary"
+              className="flex-1"
+              overrides={{
+                anonymous: { label: "🛒 ลงขาย (ลูกค้า WeeeU)" },
+                weeeu: { label: "🛒 ลงขายมือสอง" },
+                weeer: { label: "🛒 ลงขายในนามร้าน" },
+              }}
+            />
+            {/* WeeeR — ร้านลงขาย/รับซื้อ */}
+            <RoleAwareCTA
+              intent="post-resell"
+              variant="outline"
+              className="flex-1"
+              overrides={{
+                anonymous: { label: "🏪 สมัครเป็นร้าน (WeeeR)", target: "/register/weeer" },
+                weeeu: { label: "🏪 เปิดร้าน WeeeR", target: "/register/weeer" },
+                weeer: { label: "🏪 ลงขายในร้าน" },
+              }}
+            />
+          </div>
+        </div>
 
-        <Link
-          href={repairHref}
-          className="group flex items-center gap-4 p-4 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-400 transition"
-        >
-          <span className="text-3xl shrink-0">🔧</span>
-          <div className="flex-1">
-            <p className="font-bold text-blue-900 group-hover:text-blue-700 transition text-sm sm:text-base">
-              แจ้งความต้องการซ่อม / บำรุงรักษา
-            </p>
-            <p className="text-xs text-blue-700 mt-0.5">
-              {isLoggedIn ? "เริ่มแจ้งงานช่างได้ทันที →" : "ล็อกอินแล้วเริ่มแจ้งงานได้เลย →"}
-            </p>
+        {/* แจ้งความต้องการซ่อม / บำรุงรักษา */}
+        <div className="rounded-xl bg-blue-50 border border-blue-200 p-4">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-3xl shrink-0">🔧</span>
+            <div>
+              <p className="font-bold text-blue-900 text-sm sm:text-base">
+                แจ้งความต้องการซ่อม / บำรุงรักษา
+              </p>
+              <p className="text-xs text-blue-700 mt-0.5">
+                แจ้งงานช่าง รับข้อเสนอจากร้านที่ผ่านการรับรอง
+              </p>
+            </div>
           </div>
-        </Link>
+          <RoleAwareCTA
+            intent="post-repair"
+            variant="primary"
+            className="w-full sm:w-auto"
+            overrides={{
+              anonymous: { label: "🔧 แจ้งงานช่าง (เริ่มที่นี่)" },
+              weeeu: { label: "🔧 แจ้งงานซ่อม/บำรุงรักษา" },
+              weeer: { label: "🔧 ดูงานซ่อมที่ประกาศ" },
+            }}
+          />
+        </div>
       </div>
     </section>
   );

@@ -8,16 +8,23 @@ import { Suspense } from 'react';
 import { getRepairJobs } from '../../../lib/api/customer-jobs';
 import RepairJobCard from '../../../components/listings/RepairJobCard';
 import ServiceTypeFilter from '../../../components/listings/ServiceTypeFilter';
+import ServiceTypeHelp from '../../../components/listings/ServiceTypeHelp';
 import AreaSelect from '../../../components/listings/AreaSelect';
+import MyProvincePrefill from '../../../components/listings/MyProvincePrefill';
 import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel';
+import RoleSplitSections from '../../../components/listings/RoleSplitSections';
 import { ALL_SERVICE_TYPES } from '../../../lib/constants/service-types';
+import { RoleAwareCTA, TermTooltip } from '@/components/common';
 
 const REPAIR_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
+
+// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
+const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? 'http://localhost:3002';
 
 export const metadata: Metadata = {
   title: 'ประกาศซ่อมเครื่องใช้ไฟฟ้า — App3R',
   description:
-    'หาช่างซ่อมเครื่องใช้ไฟฟ้าคุณภาพดี ราคาโปร่งใส ผ่านระบบ Escrow ที่ปลอดภัยบน App3R',
+    'หาช่างซ่อมเครื่องใช้ไฟฟ้าคุณภาพดี ราคาโปร่งใส ปลอดภัยด้วยระบบพักเงินกลางบน App3R',
 };
 
 interface PageProps {
@@ -48,33 +55,53 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">🔧 ซ่อมเครื่องใช้ไฟฟ้า</h1>
-            <p className="text-gray-600 mt-1 text-sm">
-              ลงประกาศ รับ offer จากร้านซ่อมที่ผ่านการรับรอง ปลอดภัยด้วยระบบ Escrow
+            <p className="text-gray-600 mt-1 text-sm flex flex-wrap items-center gap-1">
+              ลงประกาศ รับ
+              <TermTooltip term="offer" />
+              จากร้านซ่อมที่ผ่านการรับรอง ปลอดภัยด้วย
+              <TermTooltip term="escrow" />
             </p>
           </div>
-          <Link
-            href="http://localhost:3002/register"
-            className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition whitespace-nowrap"
-          >
-            ลงประกาศซ่อม →
-          </Link>
+          {/* ลงประกาศซ่อม — role-aware (C1). WeeeU เท่านั้นที่ลงประกาศซ่อมได้ */}
+          <RoleAwareCTA
+            label="ลงประกาศซ่อม"
+            intent="post-repair"
+            className="whitespace-nowrap"
+            overrides={{
+              weeeu: { label: 'ลงประกาศซ่อม', target: `${WEEEU_URL}/repair/new` },
+              weeer: { label: 'สำหรับ WeeeU เท่านั้น', target: '#', message: 'สำหรับ WeeeU เท่านั้น' },
+              weeet: { message: 'สำหรับ WeeeU เท่านั้น' },
+            }}
+          />
         </div>
 
-        {/* How escrow works */}
+        {/* ค่าลงประกาศ + วิธีพักเงินกลาง (Escrow) — ไม่มีตัวเลข 30/70, ไม่มีคำว่า "ฟรี" */}
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {[
-            { icon: '📝', label: '1. ลงประกาศฟรี', desc: 'ระบุปัญหา รับ offer' },
-            { icon: '💰', label: '2. จ่าย Escrow 30%', desc: 'ล็อคเงินก่อน งานไม่เสร็จ-คืนเงิน' },
-            { icon: '✅', label: '3. งานเสร็จ จ่าย 70%', desc: 'ยืนยัน → โอนเงินให้ร้าน' },
-          ].map((step) => (
-            <div key={step.label} className="bg-white rounded-lg p-3 flex items-center gap-3">
-              <span className="text-2xl">{step.icon}</span>
-              <div>
-                <div className="font-semibold text-sm text-gray-900">{step.label}</div>
-                <div className="text-xs text-gray-500">{step.desc}</div>
+          <div className="bg-white rounded-lg p-3 flex items-center gap-3">
+            <span className="text-2xl">📝</span>
+            <div>
+              <div className="font-semibold text-sm text-gray-900">1. ลงประกาศ</div>
+              <div className="text-xs text-gray-500">
+                ค่าลงประกาศ X พอยต์ (อัตราตามประเภท กำหนดโดยผู้ดูแลระบบ) · เลือกพอยต์เงิน/ทอง
               </div>
             </div>
-          ))}
+          </div>
+          <div className="bg-white rounded-lg p-3 flex items-center gap-3">
+            <span className="text-2xl">💰</span>
+            <div>
+              <div className="font-semibold text-sm text-gray-900">2. พักเงินกลาง</div>
+              <div className="text-xs text-gray-500">
+                เงินพักไว้กับระบบกลางจนงานเสร็จและคุณยืนยันรับ — หากมีปัญหาได้เงินคืน
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-lg p-3 flex items-center gap-3">
+            <span className="text-2xl">✅</span>
+            <div>
+              <div className="font-semibold text-sm text-gray-900">3. งานเสร็จ</div>
+              <div className="text-xs text-gray-500">ยืนยันรับงาน → ระบบโอนเงินให้ร้าน</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -85,10 +112,14 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
             <h3 className="font-semibold text-gray-900">กรองประกาศ</h3>
 
             {/* Area filter — QF4: ใช้ AreaSelect (Client Component) แทน inline onChange */}
-            <div>
-              <label className="block text-sm text-gray-700 font-medium mb-2">จังหวัด</label>
+            <div className="space-y-2">
+              <label className="block text-sm text-gray-700 font-medium">จังหวัด</label>
               <Suspense fallback={<div className="h-9 bg-gray-100 animate-pulse rounded-lg" />}>
                 <AreaSelect areas={REPAIR_AREAS} current={areaParam} accentColor="blue" />
+              </Suspense>
+              {/* W-07: prefill จังหวัดจาก mock profile (ยังดูทุกจังหวัดได้) */}
+              <Suspense>
+                <MyProvincePrefill paramKey="area" />
               </Suspense>
             </div>
 
@@ -103,10 +134,15 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
               </select>
             </div>
 
-            {/* Service type filter */}
-            <Suspense>
-              <ServiceTypeFilter allowedTypes={ALL_SERVICE_TYPES} accentColor="blue" />
-            </Suspense>
+            {/* Service type filter + "?" help (W-07) — help icon เสริม ไม่ซ้ำ label */}
+            <div className="relative">
+              <div className="absolute right-0 top-0 z-10">
+                <ServiceTypeHelp />
+              </div>
+              <Suspense>
+                <ServiceTypeFilter allowedTypes={ALL_SERVICE_TYPES} accentColor="blue" />
+              </Suspense>
+            </div>
 
             {/* W2 · GR-10 NearMeFilter — geolocation-based nearby tambons */}
             <div className="border-t pt-4">
@@ -126,13 +162,30 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
           {/* Auth notice */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-start gap-3">
             <span className="text-amber-500 text-lg">ℹ️</span>
-            <div className="text-sm text-amber-800">
-              <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดและยื่น offer ได้หลังจาก{' '}
+            <div className="text-sm text-amber-800 flex flex-wrap items-center gap-1">
+              <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดและยื่น
+              <TermTooltip term="offer" />
+              ได้หลังจาก{' '}
               <Link href="/register/weeer" className="underline font-semibold text-amber-900">
                 สมัคร WeeeR
               </Link>
             </div>
           </div>
+
+          {/* Role-split sections (W-07) — WeeeU: ที่ฉันประกาศ · WeeeR: ที่ฉันยื่นข้อเสนอ */}
+          <RoleSplitSections
+            context="ซ่อม"
+            myListings={jobs.slice(0, 2).map((j) => ({
+              id: j.id,
+              title: j.title,
+              meta: `${j.area} · 0 ข้อเสนอ`,
+            }))}
+            myOffers={jobs.slice(0, 2).map((j) => ({
+              id: j.id,
+              title: j.title,
+              meta: `${j.area} · รอตอบรับ`,
+            }))}
+          />
 
           {jobs.length === 0 ? (
             <div className="text-center py-16 text-gray-400">

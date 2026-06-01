@@ -16,6 +16,13 @@ const TOPICS: ContactTopic[] = [
   'press', 'feedback', 'careers', 'other',
 ];
 
+// Q5 (Two-eyes C3): "ลงโฆษณา" = frontend-only option — ไม่อยู่ใน Backend ContactTopic enum
+// (จังหวะ 2 ค่อยเพิ่ม enum ADVERTISING + route ad/sales inbox). ไม่แตะ schema.
+type FormTopic = ContactTopic | 'advertising';
+function toContactTopic(t: FormTopic): ContactTopic {
+  return t === 'advertising' ? 'sales' : t;
+}
+
 interface FormErrors {
   topic?: string;
   name?: string;
@@ -24,7 +31,7 @@ interface FormErrors {
 }
 
 export default function ContactForm() {
-  const [topic, setTopic] = useState<ContactTopic | ''>('');
+  const [topic, setTopic] = useState<FormTopic | ''>('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -61,6 +68,14 @@ export default function ContactForm() {
       return;
     }
     setErrors({});
+
+    // Q5: "ลงโฆษณา" = mockup frontend-only — ไม่ submit จริง (ยังไม่มี Backend category)
+    if (topic === 'advertising') {
+      setApiError(null);
+      setSubmitted(true);
+      return;
+    }
+
     setApiError(null);
     setLoading(true);
 
@@ -104,13 +119,13 @@ export default function ContactForm() {
 
   /** อีเมลสำรองตาม topic ที่เลือก (ถ้ายังไม่เลือก → fallback กลาง) */
   const fallbackEmail =
-    topic ? getPrimaryEmail(topic as ContactTopic) : FALLBACK_CONTACT.email;
+    topic ? getPrimaryEmail(toContactTopic(topic as FormTopic)) : FALLBACK_CONTACT.email;
 
   return (
     <>
       {submitted && topic && (
         <ContactSubmittedModal
-          topic={topic as ContactTopic}
+          topic={toContactTopic(topic as FormTopic)}
           name={name}
           onClose={handleClose}
         />
@@ -150,7 +165,7 @@ export default function ContactForm() {
             </label>
             <select
               value={topic}
-              onChange={(e) => setTopic(e.target.value as ContactTopic | '')}
+              onChange={(e) => setTopic(e.target.value as FormTopic | '')}
               className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 ${
                 errors.topic ? 'border-red-400' : 'border-gray-300'
               }`}
@@ -159,6 +174,8 @@ export default function ContactForm() {
               {TOPICS.map((t) => (
                 <option key={t} value={t}>{topicLabels[t]}</option>
               ))}
+              {/* Q5: frontend-only option (mockup — จังหวะ 2 ค่อยเพิ่ม enum) */}
+              <option value="advertising">ลงโฆษณา</option>
             </select>
             {errors.topic && <p className="text-red-500 text-xs mt-1">{errors.topic}</p>}
           </div>

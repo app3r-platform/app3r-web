@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import TypeBadge from "./TypeBadge";
 import type { ResellListing, ScrapListing } from "../../lib/types";
+import { getMockEngagement, getMockDistrict } from "../../lib/mock/listing-engagement";
 
 type Props = {
   listing: ResellListing | ScrapListing;
@@ -15,6 +16,10 @@ export default function ListingCard({ listing, sponsored }: Props) {
   const isResell = listing.type === "resell";
   const resell = isResell ? (listing as ResellListing) : null;
   const scrap = !isResell ? (listing as ScrapListing) : null;
+
+  // MOCKUP-only metadata: อำเภอ derive จาก id, offers derive, views = real mock field
+  const district = getMockDistrict(listing.id);
+  const { viewCount, offerCount } = getMockEngagement(listing.id, listing.viewCount);
 
   const href = `/listings/${listing.type}/${listing.id}`;
   const imageUrl = listing.images[0];
@@ -64,9 +69,21 @@ export default function ListingCard({ listing, sponsored }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {listing.location}
+            {`อ.${district}, ${listing.location}`}
           </span>
           <span>{listing.postedAt}</span>
+        </div>
+
+        {/* Engagement metadata — อำเภอ/ผู้ยื่นข้อเสนอ/ผู้เข้าชม (MOCKUP) */}
+        <div className="flex items-center gap-3 text-xs text-gray-500">
+          <span className="flex items-center gap-1">
+            <span aria-hidden>📨</span>
+            {offerCount} ข้อเสนอ
+          </span>
+          <span className="flex items-center gap-1">
+            <span aria-hidden>👁️</span>
+            {viewCount} เข้าชม
+          </span>
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">

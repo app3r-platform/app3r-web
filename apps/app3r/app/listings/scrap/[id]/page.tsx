@@ -9,7 +9,12 @@ import { getMockRoleFromCookie } from "../../../../lib/auth/mock-auth";
 import PhotoGallery from "../../../../components/listings/PhotoGallery";
 import TypeBadge from "../../../../components/listings/TypeBadge";
 import AdBanner from "../../../../components/ads/AdBanner";
-import InterestedButton from "./InterestedButton";
+import LocationMapMock from "../../../../components/listings/LocationMapMock";
+import QnASection from "../../../../components/listings/QnASection";
+import EngagementCounters from "../../../../components/listings/EngagementCounters";
+import { AdSlot, RoleAwareCTA, TermTooltip } from "../../../../components/common";
+import { getMockEngagement } from "../../../../lib/mock/listing-engagement";
+import { getMockQnA } from "../../../../lib/mock/listing-qna";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -39,7 +44,11 @@ export default async function ScrapDetailPage({ params }: PageProps) {
   // W-2-D (D6): Tier-based privacy (เหมือน resell)
   const role = await getMockRoleFromCookie();
   const canSeeSeller = role !== "anonymous";
-  const canInterest = role === "weeeu" || role === "weeer" || role === "weeeu-owner";
+  const isOwnerView = role === "weeeu-owner" || role === "admin";
+
+  // Engagement counters + Q&A (mock)
+  const engagement = getMockEngagement(listing.id, listing.viewCount);
+  const qna = getMockQnA(listing.id);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -122,6 +131,12 @@ export default async function ScrapDetailPage({ params }: PageProps) {
 
           {/* Ad Banner */}
           <AdBanner position="module_first_row" size="leaderboard" />
+
+          {/* Location map (MOCK) */}
+          <LocationMapMock area={listing.province} detail={listing.location} />
+
+          {/* Q&A thread — role-based visibility (mock) */}
+          <QnASection questions={qna} forceOwnerView={isOwnerView} />
         </div>
 
         {/* Right: Sidebar */}
@@ -142,22 +157,29 @@ export default async function ScrapDetailPage({ params }: PageProps) {
                 <span className="font-extrabold text-website-brand-700">{listing.estimatedValueLabel}</span>
               </div>
             </div>
-            {/* W-2-D (D6): Tier-based "สนใจ" button */}
-            {canInterest ? (
-              <InterestedButton listingTitle={listing.title} />
-            ) : role === "weeet" ? (
-              <button
-                disabled
-                title="WeeeT (ช่าง) ไม่สามารถยื่นข้อเสนอซื้อซากได้ — เฉพาะ WeeeU/WeeeR"
-                className="w-full bg-gray-200 text-gray-400 py-3 rounded-xl font-semibold cursor-not-allowed"
-              >
-                สนใจซาก (เฉพาะ WeeeU/WeeeR)
-              </button>
-            ) : (
-              <InterestedButton listingTitle={listing.title} />
-            )}
+            {/* Engagement counters: view / offer / remaining days */}
+            <EngagementCounters engagement={engagement} />
+
+            {/* W-2-D (D6): role-aware "สนใจซื้อซาก" CTA */}
+            <RoleAwareCTA
+              intent="interest"
+              label="สนใจซื้อซาก"
+              className="w-full"
+              overrides={{
+                weeet: { message: "ช่าง (WeeeT) ซื้อซากไม่ได้ — เฉพาะ WeeeU/WeeeR" },
+              }}
+            />
+
+            {/* Scrap context: escrow direction WeeeR → WeeeU · ทิ้ง = ฟรี */}
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600 leading-relaxed">
+              ขายซาก: ผู้รับซื้อ (WeeeR) ชำระให้ผู้ขาย (WeeeU) — เงินผ่านระบบ
+              <TermTooltip term="escrow" label="พักเงินกลาง (Escrow)" /> ก่อนปล่อยให้ผู้ขาย
+              <br />
+              หากเลือก <strong>ทิ้งซาก</strong> (ไม่ขาย) — ไม่มีค่าใช้จ่าย (ฟรี)
+            </div>
+
             <p className="text-xs text-gray-400 text-center">
-              การติดต่อผ่านระบบ WeeeU — มีระบบ Escrow คุ้มครอง
+              การติดต่อผ่านระบบ WeeeU หรือ WeeeR
             </p>
           </div>
 
@@ -206,6 +228,9 @@ export default async function ScrapDetailPage({ params }: PageProps) {
               </Link>
             </div>
           )}
+
+          {/* Ad slot (mock) */}
+          <AdSlot size="sidebar" label="ตำแหน่งข้างประกาศซาก" />
         </div>
       </div>
     </div>

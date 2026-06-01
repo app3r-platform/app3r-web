@@ -150,38 +150,8 @@ export async function getCmsPage(slug: string): Promise<ContentPageDetailDto | n
 // Preview token (GET /api/content/preview/:token)
 // ============================================================
 
-/**
- * ดึง ContentPageDetailDto ผ่าน preview token — ไม่ cache (revalidate:0)
- * ใช้สำหรับ app/preview/[token]/page.tsx
- */
-export async function getPreviewPage(
-  token: string,
-): Promise<ContentPageDetailDto | null> {
-  try {
-    // W-3-E-1 fix: เรียก Hono CMS API (:8787) ไม่ใช่ Python backend (:8000)
-    const res = await fetch(
-      `${CMS_BACKEND_URL}/api/content/preview/${token}`,
-      { cache: 'no-store' }, // ห้าม cache — preview ต้องสดทุกครั้ง
-    );
-    if (!res.ok) return null;
-    // API คืน { token, contentPageId, expiresAt } พร้อม page embedded
-    // หรือ redirect → ContentPageDetailDto โดยตรง — รองรับทั้งสองรูปแบบ
-    const data: unknown = await res.json();
-    if (data && typeof data === 'object') {
-      // ถ้า API คืน { page: ContentPageDetailDto }
-      if ('page' in data) {
-        return (data as { page: ContentPageDetailDto }).page;
-      }
-      // ถ้า API คืน ContentPageDetailDto โดยตรง (มี slug + type)
-      if ('slug' in data && 'type' in data) {
-        return data as ContentPageDetailDto;
-      }
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
+// Q9 (Two-eyes C3): getPreviewPage() removed — preview/[token] render mock listing
+// แบบ read-only แล้ว (จังหวะ 2 ค่อยทำ CMS content-preview ผ่าน token จริง)
 
 /** ตรวจสอบว่า preview token ยัง valid หรือหมดอายุแล้ว */
 export function isPreviewTokenExpired(expiresAt: string): boolean {

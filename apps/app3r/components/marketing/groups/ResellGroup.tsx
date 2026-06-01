@@ -8,7 +8,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { mockResellListings } from "@/lib/mock/resell";
 import ListingCard from "@/components/listings/ListingCard";
-import ApplianceTypeRow from "./ApplianceTypeRow";
+import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { ResellListing } from "@/lib/types";
@@ -44,6 +44,19 @@ export default async function ResellGroup() {
   const grouped = groupByCategory(activeListings);
   const categories = Object.keys(grouped);
 
+  // Pre-render nodes (server-side) เพื่อส่งให้ client dropdown (CategoryFilterRows)
+  const renderedGrouped: Record<string, RenderedItem[]> = {};
+  for (const cat of categories) {
+    renderedGrouped[cat] = grouped[cat].map((item) => ({
+      id: item.id,
+      node: (
+        <RoleAwareCard href={`/listings/resell/${item.id}`}>
+          <ListingCard listing={item} />
+        </RoleAwareCard>
+      ),
+    }));
+  }
+
   if (categories.length === 0) {
     return (
       <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
@@ -76,19 +89,11 @@ export default async function ResellGroup() {
         </Link>
       </div>
 
-      {categories.map((category) => (
-        <ApplianceTypeRow
-          key={category}
-          applianceType={category}
-          items={grouped[category]}
-          rowsPerType={2}
-          renderItem={(item) => (
-            <RoleAwareCard href={`/listings/resell/${item.id}`}>
-              <ListingCard listing={item} />
-            </RoleAwareCard>
-          )}
-        />
-      ))}
+      <CategoryFilterRows
+        grouped={renderedGrouped}
+        rowsPerType={2}
+        filterLabel="ประเภทเครื่อง"
+      />
     </section>
   );
 }
