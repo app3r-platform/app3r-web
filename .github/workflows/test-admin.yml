@@ -1,6 +1,7 @@
 name: Test Admin (jest)
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, 'sub-*-wave*/**', 'worktree-*/**']
     paths:

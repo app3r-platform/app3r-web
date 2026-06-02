@@ -1,15 +1,18 @@
 name: WeeeU — Jest Tests (Sub-CMD-2 Wave 1)
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, "sub-*", "fix/*", "feat/*"]
     paths:
       - "apps/weeeu/**"
+      - "e2e/weeeu/**"
       - ".github/workflows/test-weeeu.yml"
   pull_request:
     branches: [main]
     paths:
       - "apps/weeeu/**"
+      - "e2e/weeeu/**"
 
 jobs:
   test-weeeu:

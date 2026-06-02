@@ -5,6 +5,7 @@
 name: WeeeR Tests
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "apps/weeer/**"
