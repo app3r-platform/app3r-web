@@ -29,7 +29,10 @@ const DEFAULT_SEED: QAEntry[] = [
   },
 ];
 
-export function PublicQAThread({ seed = DEFAULT_SEED }: { seed?: QAEntry[] }) {
+export function PublicQAThread({
+  seed = DEFAULT_SEED,
+  isPrivate = false, // A5: true = ซ่อนผู้ไม่เกี่ยว (repair/[id] job detail, scrap/[id] accepted job)
+}: { seed?: QAEntry[]; isPrivate?: boolean }) {
   const [items, setItems] = useState<QAEntry[]>(seed);
   const [question, setQuestion] = useState("");
   const [open, setOpen] = useState(false);
@@ -49,15 +52,20 @@ export function PublicQAThread({ seed = DEFAULT_SEED }: { seed?: QAEntry[] }) {
         className="w-full flex items-center justify-between text-left"
       >
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          💬 ถาม-ตอบสาธารณะ <span className="text-gray-400">({items.length} คำถาม)</span>
+          {isPrivate ? "🔒 ถาม-ตอบ (ไม่สาธารณะ)" : "💬 ถาม-ตอบสาธารณะ"}{" "}
+          <span className="text-gray-400">({items.length} คำถาม)</span>
         </p>
         <span className="text-gray-400 text-sm">{open ? "▲" : "▼"}</span>
       </button>
 
       {open && (
         <div className="space-y-3">
-          <div className="bg-weeeu-surface rounded-xl p-3">
-            <p className="text-xs text-weeeu-text">📢 ถาม-ตอบนี้เป็นสาธารณะ — ทุกคนเห็นคำถามและคำตอบทั้งหมด</p>
+          <div className={`rounded-xl p-3 ${isPrivate ? "bg-gray-50 border border-gray-200" : "bg-weeeu-surface"}`}>
+            <p className="text-xs text-weeeu-text">
+              {isPrivate
+                ? "🔒 ข้อความเฉพาะผู้เกี่ยวข้อง — มองเห็นเฉพาะคุณและผู้ให้บริการที่รับงาน"
+                : "📢 ถาม-ตอบนี้เป็นสาธารณะ — ทุกคนเห็นคำถามและคำตอบทั้งหมด"}
+            </p>
           </div>
 
           {items.map(qa => (

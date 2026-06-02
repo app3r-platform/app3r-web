@@ -640,7 +640,8 @@ export default function RepairJobDetailPage() {
           <p className="text-xs text-amber-600">เตรียมรับพัสดุ — ตรวจสอบสภาพเครื่องเมื่อได้รับ</p>
         </div>
       )}
-      <PublicQAThread />
+      {/* A5: repair job detail = private Q&A (มองเห็นเฉพาะผู้เกี่ยวข้อง) */}
+      <PublicQAThread isPrivate={true} />
     </div>
   );
 }

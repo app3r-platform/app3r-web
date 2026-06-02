@@ -474,7 +474,8 @@ function ScrapListingDetailContent({
           </div>
         </div>
       )}
-      <PublicQAThread />
+      {/* A5: scrap job detail = private Q&A (มองเห็นเฉพาะผู้เกี่ยวข้อง) */}
+      <PublicQAThread isPrivate={true} />
     </div>
   );
 }

@@ -44,9 +44,8 @@ type FeeSettleData = {
   weeer_name: string;
   settle_mode: SettleMode;
   axes: AxisItem[];
-  subtotal: number;      // ก่อนหักมัดจำ
-  deposit_credit: number; // มัดจำที่นับเป็น credit (ลบออกจาก total)
-  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง)
+  subtotal: number;      // รวมค่าบริการทั้งหมด
+  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง) — ตัดมัดจำออก (A5)
   customer_point_balance: number;
   can_confirm: boolean;  // false = ยอดไม่พอ / ยังไม่ lock ครบ
   status: "pending_confirm" | "confirmed" | "cancelled";
@@ -60,15 +59,13 @@ const MOCK_FEE_SETTLE: FeeSettleData = {
   weeer_name: "ร้านซ่อมแอร์สมศักดิ์",
   settle_mode: "normal",
   axes: [
-    { axis: 2, label: "ค่าตรวจสอบ",      amount: 150,  note: null,                          locked: true  },
-    { axis: 3, label: "ค่าแรงซ่อม",       amount: 800,  note: "ซ่อมคอมเพรสเซอร์ + ล้างแผง", locked: true  },
-    { axis: 5, label: "ค่าอะไหล่",        amount: 400,  note: "น้ำยาแอร์ R32 + ฟิลเตอร์",   locked: true  },
-    { axis: 6, label: "รับประกัน",        amount: 0,    note: "รับประกัน 30 วัน",             locked: true  },
-    { axis: 1, label: "หักมัดจำ",         amount: -300, note: "มัดจำที่ชำระแล้วตอนจอง",       locked: true  },
+    { axis: 2, label: "ค่าตรวจสอบ",  amount: 150,  note: null,                          locked: true  },
+    { axis: 3, label: "ค่าแรงซ่อม",  amount: 800,  note: "ซ่อมคอมเพรสเซอร์ + ล้างแผง", locked: true  },
+    { axis: 5, label: "ค่าอะไหล่",   amount: 400,  note: "น้ำยาแอร์ R32 + ฟิลเตอร์",   locked: true  },
+    { axis: 6, label: "รับประกัน",   amount: 0,    note: "รับประกัน 30 วัน",             locked: true  },
   ],
   subtotal: 1350,
-  deposit_credit: 300,
-  total_due: 1050,
+  total_due: 1350,
   customer_point_balance: 1500,
   can_confirm: true,
   status: "pending_confirm",
@@ -218,16 +215,9 @@ export default function FeeSettlePage() {
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">สรุปยอด (พอยต์ทอง / Gold Point)</p>
 
             <div className="flex justify-between text-sm">
-              <p className="text-gray-500">รวมก่อนหักมัดจำ</p>
+              <p className="text-gray-500">รวมค่าบริการ</p>
               <p className="text-gray-700 font-medium">{data.subtotal.toLocaleString()} พอยต์ทอง</p>
             </div>
-
-            {data.deposit_credit > 0 && (
-              <div className="flex justify-between text-sm">
-                <p className="text-gray-500">หักมัดจำที่ชำระแล้ว</p>
-                <p className="text-green-600 font-medium">−{data.deposit_credit.toLocaleString()} พอยต์ทอง</p>
-              </div>
-            )}
 
             <div className="border-t border-gray-100 pt-3 flex justify-between items-center">
               <p className="text-base font-bold text-gray-900">ยอดสุทธิ</p>
