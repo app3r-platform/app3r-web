@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { offersApi } from "@/lib/api/offers";
+import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import type { Offer } from "@/lib/types";
 
 type OfferWithListing = Offer & {
@@ -189,7 +190,7 @@ function AwaitingPaymentCard({
     <div className="bg-orange-50 border-2 border-orange-300 rounded-2xl p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold — ล็อกระบบพักเงินกลาง (Escrow)</p>
+          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold — ล็อกระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /></p>
           <p className="text-xs text-orange-700 mt-0.5">{offer.listing_title}</p>
           <p className="text-xs text-orange-600">ผู้ขาย: {offer.seller_name}</p>
         </div>

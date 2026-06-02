@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { ScreenIdBadge } from "@app3r/ui";
 
 // ─── Local Types ──────────────────────────────────────────────────────────────
 type Appliance = { id: string; name: string; brand: string; model: string };
@@ -275,8 +276,24 @@ export default function RepairNewPage() {
     ? NOTE_CHIPS
     : NOTE_CHIPS.filter(c => c.group === "repair");
 
+  // B: U-03 variant badge — แสดง "U-03 · <flow>" ทับ layout badge (dev only · same position)
+  const BADGE_VARIANT: Record<string, string> = {
+    on_site: "On-site",
+    walk_in: "Walk-in",
+    pickup:  "Pickup",
+    parcel:  "Parcel",
+  };
+
   return (
     <div className="max-w-xl space-y-6">
+      {/* U-03 variant badge — render after layout badge → overlays at same position */}
+      {process.env.NEXT_PUBLIC_DEV_NAV === "true" && (
+        <ScreenIdBadge
+          screenId={`U-03 · ${BADGE_VARIANT[serviceType] ?? serviceType}`}
+          roleTheme={{ primary: "#0DC36C" }}
+          position="top-left"
+        />
+      )}
       <div className="flex items-center gap-3">
         <Link href="/repair" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">แจ้งซ่อมใหม่</h1>

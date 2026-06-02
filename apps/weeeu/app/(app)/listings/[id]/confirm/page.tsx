@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 
 const MOCK_OFFER = {
   buyer: "ร้านอิเล็กทรอ",
@@ -36,7 +37,7 @@ export default async function ListingConfirmPage({ params }: { params: Promise<{
         {/* Note */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
           <p className="text-sm text-amber-700">
-            หลังยืนยัน ระบบจะล็อกระบบพักเงินกลาง (Escrow) และแจ้งผู้ซื้อเตรียมชำระเงิน
+            หลังยืนยัน ระบบจะล็อกระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> และแจ้งผู้ซื้อเตรียมชำระเงิน
           </p>
         </div>
 
