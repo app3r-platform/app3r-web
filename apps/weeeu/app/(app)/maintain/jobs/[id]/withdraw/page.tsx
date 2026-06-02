@@ -132,7 +132,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
               <p className="text-xs font-semibold text-gray-500">ข้อเสนอที่ lock ไว้ (อ้างอิง settle)</p>
               {notify.depositAmount > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">พอยต์ทองที่ล็อก (WeeeR รับไว้)</span>
+                  <span className="text-gray-600">พอยต์ทองที่ล็อก (พักไว้ในระบบพักเงินกลาง)</span>
                   <span className="font-medium text-gray-800">{notify.depositAmount} พอยต์ทอง</span>
                 </div>
               )}
