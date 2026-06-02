@@ -14,7 +14,7 @@ import type { PartsOrderDto, PartsOrderStatus } from "@/lib/types";
 const PAGE_SIZE = 20;
 
 const STATUS_LABELS: Record<PartsOrderStatus, string> = {
-  pending: "รอ Escrow",
+  pending: "รอพักเงินกลาง (Escrow)",
   held: "ถือเงินแล้ว",
   fulfilled: "ส่งของแล้ว",
   closed: "ปิดออเดอร์",

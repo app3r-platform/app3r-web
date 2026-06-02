@@ -30,12 +30,12 @@ const STATUS_COLORS: Record<PartsOrderStatus, string> = {
 
 const EVENT_LABELS: Record<string, string> = {
   created:         "🆕 สร้างออเดอร์",
-  held:            "🔒 ล็อกเงิน escrow",
-  fulfilled:       "📦 seller ส่งของแล้ว",
-  closed:          "✅ buyer ยืนยันรับของ",
+  held:            "🔒 ล็อกเงินในระบบพักเงินกลาง (Escrow)",
+  fulfilled:       "📦 ผู้ขาย (seller) ส่งของแล้ว",
+  closed:          "✅ ผู้ซื้อ (buyer) ยืนยันรับของ",
   disputed:        "⚠️ แจ้งข้อพิพาท",
-  resolved_buyer:  "🔓 แก้ไขเพื่อ buyer",
-  resolved_seller: "🔓 แก้ไขเพื่อ seller",
+  resolved_buyer:  "🔓 แก้ไขเพื่อผู้ซื้อ (buyer)",
+  resolved_seller: "🔓 แก้ไขเพื่อผู้ขาย (seller)",
   refunded:        "💸 คืนเงิน",
   rated:           "⭐ ให้คะแนน",
   cancelled:       "❌ ยกเลิก",
@@ -258,7 +258,7 @@ export default function PartsOrderDetailPage({
               <div className="bg-gray-800 border border-green-800/40 rounded-xl p-4 space-y-3">
                 <p className="text-sm font-semibold text-white">✅ ยืนยันรับของ</p>
                 <p className="text-xs text-gray-400">
-                  กดเมื่อได้รับอะไหล่แล้ว — escrow จะปล่อยเงินให้ seller
+                  กดเมื่อได้รับอะไหล่แล้ว — ระบบพักเงินกลาง (Escrow) จะปล่อยเงินให้ผู้ขาย (seller)
                 </p>
                 {closeError && (
                   <p className="text-xs text-red-400 bg-red-950/30 border border-red-800/50 rounded-lg px-3 py-2">
@@ -278,7 +278,7 @@ export default function PartsOrderDetailPage({
             {/* Rate seller (ให้คะแนน) */}
             {order.status === "closed" && !order.rating && (
               <div className="bg-gray-800 border border-yellow-800/40 rounded-xl p-4 space-y-3">
-                <p className="text-sm font-semibold text-white">⭐ ให้คะแนน seller</p>
+                <p className="text-sm font-semibold text-white">⭐ ให้คะแนนผู้ขาย (seller)</p>
                 {!showRate ? (
                   <button
                     onClick={() => setShowRate(true)}
