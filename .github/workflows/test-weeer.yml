@@ -35,9 +35,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Jest Tests
+      - name: Run Jest Tests (blocking — tests must pass)
+        working-directory: apps/weeer
+        run: pnpm test:ci -- --coverage=false
+        env:
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_WS_URL: ws://localhost:8000
+
+      # POLICY (Advisor Ruling Gen 108 · 2026-06-02): ช่วง mockup → coverage = report-only (ไม่ block CI).
+      # guard จริง (build/typecheck/เทสต์ผ่าน) ยัง block ที่ step ด้านบน. เปิด coverage blocking คืนตอน Phase 4.
+      - name: Coverage report (report-only)
         working-directory: apps/weeer
         run: pnpm test:ci
+        continue-on-error: true
         env:
           NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
           NEXT_PUBLIC_API_URL: http://localhost:8000
