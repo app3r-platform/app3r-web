@@ -44,7 +44,8 @@ test.describe('Profile management', () => {
   });
 
   test('shows repair count stat', async ({ page }) => {
-    await expect(page.locator('text=งานซ่อม').first()).toBeVisible();
+    // Batch5 rename: "งานซ่อม" → "รายการซ่อม" (profile stats grid)
+    await expect(page.locator('text=รายการซ่อม').first()).toBeVisible();
   });
 
   test('shows appliance count stat', async ({ page }) => {
@@ -98,19 +99,26 @@ test.describe('Dashboard (happy path)', () => {
     await expect(page.locator('text=Silver Point').first()).toBeVisible();
   });
 
-  test('shows quick action buttons (repair, resell, scrap, maintain)', async ({ page }) => {
-    await expect(page.locator('text=แจ้งซ่อม').first()).toBeVisible();
-    await expect(page.locator('text=ขาย/ซื้อ').first()).toBeVisible();
-    await expect(page.locator('text=ทิ้งซาก').first()).toBeVisible();
+  test('shows service navigation (feed cards + bottom nav tabs)', async ({ page }) => {
+    // Batch1 redesign: ตัด "บริการด่วน" (quickActions) ออก → แสดง feedGroups hasActivity + bottom nav
+    // feedGroups with hasActivity=true: "ซื้อ-ขายมือสอง", "งานซ่อม" (horizontal cards)
+    // "ขาย/ซื้อ" และ "ทิ้งซาก" ไม่มีในหน้าหลักแล้ว — ใช้ bottom nav tab แทน
+    await expect(page.locator('text=ซื้อ-ขายมือสอง').first()).toBeVisible();
+    await expect(page.locator('text=งานซ่อม').first()).toBeVisible();
+    // Bottom nav tabs (layout-level, always present)
     await expect(page.locator('text=บำรุงรักษา').first()).toBeVisible();
+    await expect(page.locator('text=ซากเครื่อง').first()).toBeVisible();
   });
 
-  test('sidebar shows profile link', async ({ page }) => {
-    await expect(page.locator('a[href="/profile"]').first()).toBeVisible();
+  test('shows account navigation tab (bottom nav — บัญชีของฉัน)', async ({ page }) => {
+    // Batch1 redesign: sidebar removed → bottom nav with 5 tabs
+    // First tab "บัญชีของฉัน" links to /dashboard (covers profile/wallet/appliances area)
+    await expect(page.locator('a[href="/dashboard"]:has-text("บัญชีของฉัน")').first()).toBeVisible();
   });
 
-  test('can navigate from dashboard to profile via sidebar', async ({ page }) => {
-    await page.locator('a[href="/profile"]').first().click();
+  test('can navigate to profile page via direct URL', async ({ page }) => {
+    // Batch1: no direct /profile link in nav — profile accessible via URL
+    await page.goto('/profile');
     await expect(page).toHaveURL(/\/profile/);
     await expect(page.locator('text=สมชาย').first()).toBeVisible({ timeout: 8_000 });
   });

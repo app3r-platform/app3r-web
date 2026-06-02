@@ -39,14 +39,16 @@ export class RepairNewPage {
   constructor(page: Page) {
     this.page = page;
 
-    // Service type = button/div containing the label text
-    this.onSiteButton  = page.locator('button:has-text("เรียกช่าง"), [role="button"]:has-text("เรียกช่าง")').first();
-    this.walkInButton  = page.locator('button:has-text("นำเข้าร้าน"), [role="button"]:has-text("นำเข้าร้าน")').first();
-    this.pickupButton  = page.locator('button:has-text("รับ-ส่ง"), [role="button"]:has-text("รับ-ส่ง")').first();
-    this.parcelButton  = page.locator('button:has-text("ส่งพัสดุ"), [role="button"]:has-text("ส่งพัสดุ")').first();
+    // Service type buttons — labels: "On-site\nช่างมาบ้าน", "Walk-in\nไปร้านเอง", "Pickup\nช่างมารับ-ส่ง", "Parcel\nส่งพัสดุ"
+    // Batch5: ชื่อ label เปลี่ยน (เรียกช่าง→ช่างมาบ้าน, นำเข้าร้าน→ไปร้านเอง)
+    this.onSiteButton  = page.locator('button:has-text("ช่างมาบ้าน"), button:has-text("On-site")').first();
+    this.walkInButton  = page.locator('button:has-text("ไปร้านเอง"), button:has-text("Walk-in")').first();
+    this.pickupButton  = page.locator('button:has-text("ช่างมารับ-ส่ง"), button:has-text("Pickup")').first();
+    this.parcelButton  = page.locator('button:has-text("ส่งพัสดุ"), button:has-text("Parcel")').first();
 
-    // Form fields by placeholder or name
-    this.issueSummaryInput = page.locator('input[name="issue_summary"], input[placeholder*="ปัญหา"], input[placeholder*="สรุป"]').first();
+    // Form fields — issue summary is now a <select> dropdown (disabled until appliance chosen)
+    // Batch5: symptom changed from text input to select dropdown
+    this.issueSummaryInput = page.locator('select').nth(1); // nth(0)=appliance, nth(1)=symptom
     this.issueDetailInput  = page.locator('textarea[name="issue_detail"], textarea[placeholder*="รายละเอียด"]').first();
     this.customerNoteInput = page.locator('textarea[name="customer_note"], textarea[placeholder*="หมายเหตุ"]').first();
     this.scheduledAtInput  = page.locator('input[name="scheduled_at"], input[type="datetime-local"]').first();
