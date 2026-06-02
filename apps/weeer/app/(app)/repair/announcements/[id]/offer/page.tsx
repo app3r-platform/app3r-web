@@ -8,8 +8,8 @@ import type { RepairAnnouncement } from "../../../_lib/types";
 
 const DEPOSIT_POLICIES = [
   { value: "free", label: "ฟรี — ไม่มีค่าใช้จ่ายถ้าซ่อมไม่ได้" },
-  { value: "forfeit", label: "ยึดมัดจำ — ถ้าซ่อมไม่ได้" },
-  { value: "refund", label: "คืนมัดจำ — ถ้าซ่อมไม่ได้" },
+  { value: "forfeit", label: "ยึดพอยต์ทองที่ล็อก — ถ้าซ่อมไม่ได้" },
+  { value: "refund", label: "คืนพอยต์ทองที่ล็อก — ถ้าซ่อมไม่ได้" },
 ];
 
 export default function OfferPage({ params }: { params: Promise<{ id: string }> }) {
@@ -44,7 +44,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
     const e: Record<string, string> = {};
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = "กรุณาระบุราคา";
     if (!form.includes.trim()) e.includes = "กรุณาระบุสิ่งที่รวมในราคา";
-    if (form.has_deposit && (!form.deposit_amount || Number(form.deposit_amount) <= 0)) e.deposit_amount = "กรุณาระบุจำนวนมัดจำ";
+    if (form.has_deposit && (!form.deposit_amount || Number(form.deposit_amount) <= 0)) e.deposit_amount = "กรุณาระบุจำนวนพอยต์ทองที่ล็อก";
     if (!form.weeet_id.trim()) e.weeet_id = "กรุณาระบุ WeeeT ที่จะส่ง";
     return e;
   }
@@ -126,7 +126,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
         <div className="border-t border-gray-100 pt-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">ค่าตรวจสภาพ (On-site)</label>
           <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-2.5">
-            <span className="text-sm text-gray-600 flex-1">Inspection fee มาตรฐาน</span>
+            <span className="text-sm text-gray-600 flex-1">ค่าธรรมเนียม (Fee) ตรวจสภาพมาตรฐาน</span>
             <span className="text-sm font-semibold text-[#D63B12]">100 pts</span>
           </div>
           <p className="text-xs text-gray-400 mt-1">ไม่คืน แม้ซ่อมไม่ได้ — WeeeU รับทราบเมื่อยืนยันข้อเสนอ</p>
@@ -137,12 +137,12 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
             <input type="checkbox" id="has_deposit" checked={form.has_deposit}
               onChange={(e) => setForm((f) => ({ ...f, has_deposit: e.target.checked }))}
               className="w-4 h-4 text-[#F04E20] rounded" />
-            <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">เก็บค่ามัดจำ</label>
+            <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">ล็อกพอยต์ทอง (ระบบพักเงินกลาง / Escrow)</label>
           </div>
           {form.has_deposit && (
             <div className="space-y-3 pl-7">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">จำนวนมัดจำ (Point) <span className="text-red-500">*</span></label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">จำนวนพอยต์ทองที่ล็อก (Point) <span className="text-red-500">*</span></label>
                 <input type="number" min="1" value={form.deposit_amount}
                   onChange={(e) => setForm((f) => ({ ...f, deposit_amount: e.target.value }))}
                   placeholder="เช่น 200"
@@ -150,7 +150,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
                 {formErrors.deposit_amount && <p className="text-xs text-red-500 mt-1">{formErrors.deposit_amount}</p>}
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">นโยบายมัดจำ (ถ้าซ่อมไม่ได้)</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">นโยบายพอยต์ทองที่ล็อก (ถ้าซ่อมไม่ได้)</label>
                 {DEPOSIT_POLICIES.map((p) => (
                   <label key={p.value} className="flex items-center gap-2 py-1.5 cursor-pointer">
                     <input type="radio" name="deposit_policy" value={p.value}

@@ -8,7 +8,7 @@
  *  1. ปุ่ม "ถอนรับงาน" ปรากฏเมื่อ status === "assigned" (หลังยืนยันรับแล้ว)
  *  2. Withdraw modal: แสดงผลกระทบ (WeeeR ผิดสัญญา → ไม่ได้ค่าเดินทาง + penalty policy)
  *  3. Reason textarea บังคับ (≥ 10 ตัวอักษร) ก่อน submit
- *  4. หลัง confirm → สถานะเปลี่ยนเป็น "withdrawn" + แจ้งคืนมัดจำให้ WeeeU
+ *  4. หลัง confirm → สถานะเปลี่ยนเป็น "withdrawn" + แจ้งคืนพอยต์ทองที่ล็อกให้ WeeeU
  *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M6 WeeeR
  */
@@ -26,7 +26,7 @@ const JOB = {
   address: { address: "88/2 ถ.ศรีนครินทร์ สาทร กรุงเทพ 10120" },
   customerName: "คุณสมหมาย ใจดี",
   offerLock: {
-    depositAmount: 200,   // มัดจำที่ได้รับแล้ว
+    depositAmount: 200,   // พอยต์ทองที่ล็อก (รับแล้ว)
     travelFee:     50,    // ค่าเดินทาง (จะไม่ได้รับ ถ้าถอน)
     penalty:       100,   // ค่าปรับ ถ้าถอนเกิน 2 ชม. ก่อนงาน
   },
@@ -93,7 +93,7 @@ export default function M6WithdrawWeeeRMockupPage() {
             <div>
               <p className="font-semibold text-gray-700">ถอนรับงานเรียบร้อย</p>
               <p className="text-sm text-gray-500">
-                แจ้ง WeeeU แล้ว · มัดจำ {JOB.offerLock.depositAmount} Point จะคืนลูกค้าภายใน 1-3 วัน
+                แจ้ง WeeeU แล้ว · พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) {JOB.offerLock.depositAmount} Point จะคืนลูกค้าภายใน 1-3 วัน
               </p>
               <p className="text-xs text-[#FF663A] mt-1">
                 ⚠️ ค่าเดินทาง {JOB.offerLock.travelFee} Point — ไม่ได้รับ (WeeeR เป็นผู้ถอน)
@@ -119,7 +119,7 @@ export default function M6WithdrawWeeeRMockupPage() {
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ข้อเสนอที่ lock ไว้</p>
         <div className="space-y-2.5">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">มัดจำที่รับไว้</span>
+            <span className="text-gray-600">พอยต์ทองที่ล็อก (รับไว้)</span>
             <span className="font-semibold text-gray-800">{JOB.offerLock.depositAmount} Point</span>
           </div>
           <div className="flex justify-between text-sm">
@@ -151,7 +151,7 @@ export default function M6WithdrawWeeeRMockupPage() {
             <div>
               <p className="font-semibold text-gray-800">ยืนยันถอนรับงาน?</p>
               <p className="text-sm text-gray-500 mt-1">
-                การถอนหลังยืนยัน: WeeeR เป็นผู้ผิดนัด — ไม่ได้ค่าเดินทาง และ WeeeU จะได้คืนมัดจำเต็มจำนวน
+                การถอนหลังยืนยัน: WeeeR เป็นผู้ผิดนัด — ไม่ได้ค่าเดินทาง และ WeeeU จะได้คืนพอยต์ทองที่ล็อกเต็มจำนวน
               </p>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function M6WithdrawWeeeRMockupPage() {
             <p className="text-xs font-semibold text-gray-600">ผลกระทบ (Policy ถอนหลังยืนยัน)</p>
             <div className="space-y-1 text-xs text-gray-600">
               <div className="flex justify-between">
-                <span>มัดจำ — คืนให้ WeeeU</span>
+                <span>พอยต์ทองที่ล็อก — คืนให้ WeeeU</span>
                 <span className="font-medium text-[#FF663A]">−{JOB.offerLock.depositAmount} Point</span>
               </div>
               <div className="flex justify-between">
