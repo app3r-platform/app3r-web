@@ -19,8 +19,11 @@ on:
       - 'playwright.config.ts'
 
 jobs:
+  # POLICY (Advisor Gen 108 · mockup phase): skip/report-only ช่วง mockup · เปิดคืน Backend phase พร้อมแก้ contract (5 bug + teardown hang)
+  # phase-guard: ตั้ง repo var RUN_BACKEND_E2E=true เพื่อเปิด job · ไม่ตั้ง = skip (เขียว) · ไม่ block merge ช่วง mockup
   e2e:
     name: Playwright E2E (API smoke tests)
+    if: ${{ vars.RUN_BACKEND_E2E == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
