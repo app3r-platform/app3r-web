@@ -185,7 +185,7 @@ export default function RepairListPage() {
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            {tab === "active" ? "งานที่ใช้งานอยู่" : "งานที่สำเร็จ/ยกเลิก"}
+            {tab === "active" ? "ประกาศ/ข้อเสนอ ที่กำลังดำเนินงาน" : "งานที่สำเร็จ/ยกเลิก"}
           </button>
         ))}
       </div>
@@ -275,7 +275,7 @@ export default function RepairListPage() {
             <div className="text-center py-16">
               <p className="text-4xl mb-3">🔧</p>
               <p className="text-gray-500 font-medium">
-                {filter === "active" ? "ยังไม่มีงานซ่อมที่ใช้งานอยู่" : "ยังไม่มีงานที่สำเร็จ/ยกเลิก"}
+                {filter === "active" ? "ยังไม่มีประกาศ/ข้อเสนอที่กำลังดำเนินงาน" : "ยังไม่มีงานที่สำเร็จ/ยกเลิก"}
               </p>
               {filter === "active" && (
                 <Link href="/repair/new" className="mt-3 inline-block text-weeeu-primary text-sm font-medium hover:underline">

@@ -13,11 +13,11 @@ type ListingDetail = Listing & {
   description?: string;
 };
 
-// Mock: terms 3 แกน (local type — Mockup เท่านั้น)
+// Mock: terms 3 เงื่อนไข (local type — Mockup เท่านั้น)
 type MockSellerTerms = {
-  shipping_policy: string;   // แกน 1: ค่าส่ง
-  used_warranty_days: number; // แกน 2: รับประกันมือสอง (วัน)
-  liability_policy: string;  // แกน 3: รับผิดไม่ตรงปก
+  shipping_policy: string;   // เงื่อนไข 1: ค่าส่ง
+  used_warranty_days: number; // เงื่อนไข 2: รับประกันมือสอง (วัน)
+  liability_policy: string;  // เงื่อนไข 3: รับผิดไม่ตรงปก
 };
 
 // Mock: Q&A local type
@@ -212,7 +212,7 @@ export default function ListingDetailPage() {
         )}
       </div>
 
-      {/* Terms 3 แกน (Mock — Mockup Resell 2.2) */}
+      {/* Terms 3 เงื่อนไข (Mock — Mockup Resell 2.2) */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">📋 เงื่อนไขผู้ขาย</p>
         <div className="space-y-2.5">

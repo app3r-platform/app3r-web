@@ -38,13 +38,26 @@ export default function MarketplacePage() {
   const [conditionFilter, setConditionFilter] = useState<string>("");
   const [priceRange, setPriceRange] = useState(0); // index into PRICE_RANGES
   const [searchText, setSearchText] = useState("");
+  const [pageSize, setPageSize] = useState<number | "all">(20); // (c) pagination
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
         {/* Header */}
         <div>
-          <h1 className="text-xl font-bold text-weeeu-dark">🛒 ตลาดสินค้ามือสอง</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-weeeu-dark">🛒 ตลาดสินค้ามือสอง</h1>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-400">แสดง:</span>
+              {([20, 50, "ทั้งหมด"] as const).map(s => (
+                <button key={String(s)} type="button"
+                  onClick={() => setPageSize(s === "ทั้งหมด" ? "all" : s)}
+                  className={`px-2 py-0.5 rounded-lg text-xs border transition-colors ${(s === "ทั้งหมด" ? pageSize === "all" : pageSize === s) ? "bg-weeeu-primary text-white border-weeeu-primary" : "border-gray-200 text-gray-400 hover:border-weeeu-primary"}`}>
+                  {String(s)}
+                </button>
+              ))}
+            </div>
+          </div>
           <p className="text-sm text-gray-400 mt-0.5">สินค้าจากร้านที่ผ่านการรับรอง</p>
         </div>
 
@@ -134,7 +147,7 @@ export default function MarketplacePage() {
             (!categoryFilter || item.category === categoryFilter) &&
             (!conditionFilter || item.condition === conditionFilter) &&
             (item.price >= PRICE_RANGES[priceRange].min && item.price < PRICE_RANGES[priceRange].max)
-          ).map((item) => (
+          ).slice(0, pageSize === "all" ? undefined : pageSize).map((item) => (
             <Link key={item.id} href={`/marketplace/${item.id}`}>
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                 <img

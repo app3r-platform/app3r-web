@@ -82,6 +82,7 @@ export default function OffersPage() {
   const [loading, setLoading] = useState(true);
   const [withdrawing, setWithdrawing] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [pageSize, setPageSize] = useState<number | "all">(20); // (c) pagination
 
   // Mock: แสดง R4 awaiting_payment demo (Mockup)
   const [showMockR4, setShowMockR4] = useState(true);
@@ -116,7 +117,19 @@ export default function OffersPage() {
 
   return (
     <div className="max-w-xl space-y-5">
-      <h1 className="text-xl font-bold text-gray-900">ข้อเสนอของฉัน</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold text-gray-900">ข้อเสนอของฉัน</h1>
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs text-gray-400">แสดง:</span>
+          {([20, 50, "ทั้งหมด"] as const).map(s => (
+            <button key={String(s)} type="button"
+              onClick={() => setPageSize(s === "ทั้งหมด" ? "all" : s)}
+              className={`px-2 py-0.5 rounded-lg text-xs border transition-colors ${(s === "ทั้งหมด" ? pageSize === "all" : pageSize === s) ? "bg-weeeu-primary text-white border-weeeu-primary" : "border-gray-200 text-gray-400 hover:border-weeeu-primary"}`}>
+              {String(s)}
+            </button>
+          ))}
+        </div>
+      </div>
       <p className="text-xs text-gray-400">ข้อเสนอที่คุณยื่นซื้อสินค้า (ฐานะผู้ซื้อ)</p>
 
       {error && (
@@ -151,7 +164,7 @@ export default function OffersPage() {
           {activeOffers.length > 0 && (
             <div className="space-y-3">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ข้อเสนอที่ใช้งานอยู่</p>
-              {activeOffers.map(offer => (
+              {activeOffers.slice(0, pageSize === "all" ? undefined : pageSize).map(offer => (
                 <OfferCard
                   key={offer.id}
                   offer={offer}
@@ -165,7 +178,7 @@ export default function OffersPage() {
           {pastOffers.length > 0 && (
             <div className="space-y-3">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ประวัติข้อเสนอ</p>
-              {pastOffers.map(offer => (
+              {pastOffers.slice(0, pageSize === "all" ? undefined : pageSize).map(offer => (
                 <OfferCard key={offer.id} offer={offer} />
               ))}
             </div>
