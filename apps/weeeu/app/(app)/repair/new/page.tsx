@@ -79,8 +79,13 @@ export default function RepairNewPage() {
     appliance_id: "",
     issue_detail: "",
     scheduled_at: "",
+    scheduled_at_2: "",   // A3: วันเวลาสะดวก slot สำรอง (2 ช่วง)
     priority: "normal" as ServicePriority,
   });
+  // A3: ที่อยู่บริการ — pre-fill จากที่ลงทะเบียน (mock · พิกัดจริง=BE จังหวะ2)
+  const REGISTERED_ADDRESS = "123/45 ถ.สุขุมวิท ซ.21 บางรัก กรุงเทพ 10110"; // Mockup
+  const [serviceAddress, setServiceAddress] = useState(REGISTERED_ADDRESS);
+  const [useRegisteredAddress, setUseRegisteredAddress] = useState(true);
 
   // R2-1: อาการ dropdown
   const [selectedSymptom, setSelectedSymptom] = useState("");
@@ -566,19 +571,71 @@ export default function RepairNewPage() {
               {serviceType === "on_site" ? "นัดหมาย + งบประมาณ" : "งบประมาณ"}
             </p>
             {serviceType === "on_site" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  วันที่สะดวก <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="datetime-local"
-                  value={form.scheduled_at}
-                  min={minDate.toISOString().slice(0, 16)}
-                  onChange={e => { setForm(f => ({ ...f, scheduled_at: e.target.value })); clearErr("scheduled_at"); }}
-                  className={inputCls("scheduled_at")}
-                />
-                {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
-              </div>
+              <>
+                {/* A3: วันเวลาสะดวก 2 ช่วง */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    วันเวลาสะดวก ช่วงที่ 1 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={form.scheduled_at}
+                    min={minDate.toISOString().slice(0, 16)}
+                    onChange={e => { setForm(f => ({ ...f, scheduled_at: e.target.value })); clearErr("scheduled_at"); }}
+                    className={inputCls("scheduled_at")}
+                  />
+                  {errors.scheduled_at && <p className="text-red-500 text-xs mt-1">{errors.scheduled_at}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    วันเวลาสะดวก ช่วงที่ 2 <span className="text-gray-400 text-xs font-normal">(สำรอง — ถ้าช่วงแรกไม่ว่าง)</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={form.scheduled_at_2}
+                    min={minDate.toISOString().slice(0, 16)}
+                    onChange={e => setForm(f => ({ ...f, scheduled_at_2: e.target.value }))}
+                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+                  />
+                </div>
+
+                {/* A3: ที่อยู่รับบริการ — ดึงที่ลงทะเบียน + Google map UI (พิกัดจริง=BE จังหวะ2) */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ที่อยู่รับบริการ <span className="text-red-500">*</span>
+                  </label>
+                  <label className="flex items-center gap-2 mb-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={useRegisteredAddress}
+                      onChange={e => {
+                        setUseRegisteredAddress(e.target.checked);
+                        if (e.target.checked) setServiceAddress(REGISTERED_ADDRESS);
+                      }}
+                      className="w-4 h-4 rounded border-gray-300 text-weeeu-primary focus:ring-weeeu-primary/40"
+                    />
+                    <span className="text-xs text-gray-600">ใช้ที่อยู่ที่ลงทะเบียน</span>
+                  </label>
+                  {useRegisteredAddress ? (
+                    <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl px-3 py-2.5 text-sm text-weeeu-dark">
+                      📍 {REGISTERED_ADDRESS}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      value={serviceAddress}
+                      onChange={e => setServiceAddress(e.target.value)}
+                      placeholder="ระบุที่อยู่รับบริการ..."
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+                    />
+                  )}
+                  {/* Map UI placeholder — พิกัดจริง = BE จังหวะ2 */}
+                  <div className="mt-2 bg-gray-100 rounded-xl h-24 flex flex-col items-center justify-center border border-gray-200 border-dashed">
+                    <span className="text-gray-400 text-lg">🗺️</span>
+                    <p className="text-xs text-gray-400 mt-1">แผนที่ยืนยันที่ตั้ง (จังหวะ 2 — รอพิกัดจาก BE)</p>
+                  </div>
+                </div>
+              </>
             )}
 
             {/* R2-4: Budget slider */}

@@ -67,6 +67,40 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/scrap/new/success",                     info: { num: "U-41", code: "SCRAP-CREATE-SUCCESS" } },
   { pattern: "/marketplace/[id]/offer/success",        info: { num: "U-42", code: "MARKET-OFFER-SUCCESS" } },
   { pattern: "/purchases/[id]/dispute/success",        info: { num: "U-43", code: "DISPUTE-SUCCESS" } },
+  // ── Batch 3 — เติม U-44+ (Advisor ruling HUB Gen44) ──────────────────────────
+  // หมายเหตุ: U-03a/b/c/d (4 flow ซ่อม) ใช้ path /repair/new เดียวกัน → คง U-03 · log กลับ
+  { pattern: "/wallet/deposit",                        info: { num: "U-44", code: "WALLET-DEPOSIT" } },
+  { pattern: "/wallet/withdraw",                       info: { num: "U-45", code: "WALLET-WITHDRAW" } },
+  { pattern: "/transactions/[id]",                     info: { num: "U-46", code: "TRANSACTION-DETAIL" } },
+  { pattern: "/sell/new",                              info: { num: "U-47a", code: "SELL-NEW" } },
+  { pattern: "/sell/[listingId]/edit",                 info: { num: "U-47b", code: "SELL-EDIT" } },
+  { pattern: "/sell/[listingId]",                      info: { num: "U-47c", code: "SELL-MY-DETAIL" } },
+  { pattern: "/sell",                                  info: { num: "U-47", code: "SELL-HOME" } },
+  // signup: U-48 = entry (method picker) · sub-steps login, otp, personal, address ไม่มี badge (auth flow)
+  { pattern: "/signup/method",                         info: { num: "U-48", code: "SIGNUP-ENTRY" } },
+  // ── Settings ──────────────────────────────────────────────────────────────────
+  { pattern: "/settings/security",                     info: { num: "U-49", code: "SETTINGS-SECURITY" } },
+  // ── Jobs (WeeeU's separate jobs list — ต่างจาก /repair home) ──────────────────
+  { pattern: "/jobs/[id]/progress",                    info: { num: "U-50b", code: "JOB-PROGRESS" } },
+  { pattern: "/jobs/[id]",                             info: { num: "U-50a", code: "JOB-DETAIL" } },
+  { pattern: "/jobs",                                  info: { num: "U-50", code: "JOBS-LIST" } },
+  // ── Modules ───────────────────────────────────────────────────────────────────
+  { pattern: "/modules/[module]",                      info: { num: "U-51", code: "MODULE-GUIDE" } },
+  // ── Repair sub-routes (ไม่อยู่ใน registry เดิม) ──────────────────────────────
+  { pattern: "/repair/[id]/decision/b1-2",             info: { num: "U-52a", code: "REPAIR-B1-DECISION" } },
+  { pattern: "/repair/[id]/decision/b2-2",             info: { num: "U-52b", code: "REPAIR-B2-DECISION" } },
+  { pattern: "/repair/[id]/parcel-receipt",            info: { num: "U-53a", code: "REPAIR-PARCEL-RCPT" } },
+  { pattern: "/repair/[id]/pickup-receipt",            info: { num: "U-53b", code: "REPAIR-PICKUP-RCPT" } },
+  { pattern: "/repair/[id]/ship-out",                  info: { num: "U-53c", code: "REPAIR-SHIP-OUT" } },
+  { pattern: "/repair/[id]/shipping-details",          info: { num: "U-53d", code: "REPAIR-SHIPPING" } },
+  { pattern: "/repair/[id]/walk-in-receipt",           info: { num: "U-53e", code: "REPAIR-WALKIN-RCPT" } },
+  // ── Maintain mockup pages ─────────────────────────────────────────────────────
+  { pattern: "/maintain/jobs/[id]/mockup/m2-expired",       info: { num: "U-54a", code: "MAINTAIN-M2-EXPIRED" } },
+  { pattern: "/maintain/jobs/[id]/mockup/m6-weeer-withdrew", info: { num: "U-54b", code: "MAINTAIN-M6-WITHDREW" } },
+  { pattern: "/maintain/jobs/[id]/mockup/m7-noshow",        info: { num: "U-54c", code: "MAINTAIN-M7-NOSHOW" } },
+  { pattern: "/maintain/jobs/[id]/mockup/m9-cancel-inprogress", info: { num: "U-54d", code: "MAINTAIN-M9-CANCEL" } },
+  // ── Scrap home ────────────────────────────────────────────────────────────────
+  { pattern: "/scrap",                                 info: { num: "U-55", code: "SCRAP-HOME" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
