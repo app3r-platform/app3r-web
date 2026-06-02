@@ -104,7 +104,16 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   // ── Gen 109 — เติมหน้าหลักที่ยังไม่มีรหัส (เดินเลขต่อ U-56+) ──────────────────
   { pattern: "/wallet/history",                        info: { num: "U-56", code: "WALLET-HISTORY" } },
   { pattern: "/wallet",                                info: { num: "U-57", code: "WALLET-HOME" } },
-  { pattern: "/maintain/jobs/[id]/withdraw",           info: { num: "U-58", code: "MAINTAIN-WITHDRAW" } },
+  // Gen109 ruling: withdraw = state ของ maintain-job ไม่ใช่จอใหม่ → ฐาน U-16 + ป้ายสถานะ "ถอนตัว" (U-58 retired)
+  { pattern: "/maintain/jobs/[id]/withdraw",           info: { num: "U-16 · ถอนตัว", code: "MAINTAIN-WITHDRAW" } },
+  // ── Gen 109 ruling — auth pages จอจริง (เดินเลขต่อ U-59+ · U-58 เว้นว่าง retired) ──
+  // หมายเหตุ: /signup/method=U-48 เดิมคงไว้ · redirect/loading ไม่ใส่
+  { pattern: "/login",                                 info: { num: "U-59", code: "LOGIN" } },
+  { pattern: "/signup/email",                          info: { num: "U-60", code: "SIGNUP-EMAIL" } },
+  { pattern: "/signup/personal",                       info: { num: "U-61", code: "SIGNUP-PERSONAL" } },
+  { pattern: "/signup/address",                        info: { num: "U-62", code: "SIGNUP-ADDRESS" } },
+  { pattern: "/signup/otp",                            info: { num: "U-63", code: "SIGNUP-OTP" } },
+  { pattern: "/signup/verify-email",                   info: { num: "U-64", code: "SIGNUP-VERIFY-EMAIL" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
