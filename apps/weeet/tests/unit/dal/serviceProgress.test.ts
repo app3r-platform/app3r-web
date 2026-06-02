@@ -99,7 +99,7 @@ describe("serviceProgressApi — createProgress (POST)", () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data.status).toBe("in_progress"); // mock returns in_progress
+      expect(result.data.status).toBe("accepted"); // DAL pass-through: mock raw status = "accepted"
       expect(result.data.serviceId).toBe("svc-001");
     }
     // ต้องเรียก POST ครั้งเดียว (ไม่มี photo upload)
