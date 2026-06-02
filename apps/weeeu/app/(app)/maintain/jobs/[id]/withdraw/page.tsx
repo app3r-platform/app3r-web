@@ -132,7 +132,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
               <p className="text-xs font-semibold text-gray-500">ข้อเสนอที่ lock ไว้ (อ้างอิง settle)</p>
               {notify.depositAmount > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">เงินค้ำประกัน (WeeeR รับไว้)</span>
+                  <span className="text-gray-600">พอยต์ทองที่ล็อก (WeeeR รับไว้)</span>
                   <span className="font-medium text-gray-800">{notify.depositAmount} พอยต์ทอง</span>
                 </div>
               )}
@@ -143,7 +143,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
                 </div>
               )}
               <p className="text-xs text-gray-400 pt-1">
-                * WeeeR ถอนเป็นผู้ผิด → คืนเงินค้ำประกัน + WeeeR ไม่ได้ค่าเดินทาง (policy นโยบาย)
+                * WeeeR ถอนเป็นผู้ผิด → คืนพอยต์ทองที่ล็อก + WeeeR ไม่ได้ค่าเดินทาง (policy นโยบาย)
               </p>
             </div>
           )}
@@ -171,7 +171,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
             <div className="bg-white border border-red-200 rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-gray-800">ยืนยันยกเลิกงาน?</p>
               <p className="text-xs text-gray-500">
-                ระบบจะ settle เงินค้ำประกัน {notify.depositAmount} พอยต์ทอง คืนให้คุณ
+                ระบบจะ settle พอยต์ทองที่ล็อก {notify.depositAmount} พอยต์ทอง คืนให้คุณ
                 เนื่องจาก WeeeR เป็นผู้ถอน
               </p>
               <div className="flex gap-2">
@@ -209,7 +209,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
           <p className="text-2xl">✅</p>
           <p className="font-semibold text-gray-700">ยกเลิกงานเรียบร้อย</p>
           <p className="text-sm text-gray-500">
-            เงินค้ำประกัน {notify.depositAmount} พอยต์ทอง จะคืนภายใน 1-3 วันทำการ
+            พอยต์ทองที่ล็อก {notify.depositAmount} พอยต์ทอง จะคืนภายใน 1-3 วันทำการ
           </p>
         </div>
       )}

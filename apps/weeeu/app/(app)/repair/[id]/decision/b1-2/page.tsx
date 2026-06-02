@@ -41,8 +41,8 @@ const MAX_ROUNDS = 2;
 
 const DEPOSIT_REJECT_LABEL: Record<string, string> = {
   free: "ปฏิเสธได้ฟรี (ไม่มีค่าใช้จ่าย)",
-  forfeit: "ยึดเงินค้ำประกัน",
-  refund: "คืนเงินค้ำประกัน",
+  forfeit: "ยึดพอยต์ทองที่ล็อก",
+  refund: "คืนพอยต์ทองที่ล็อก",
   refund_partial: "หักค่าเดินทาง แล้วคืนส่วนที่เหลือ",
 };
 
@@ -183,7 +183,7 @@ export default function DecisionB12Page() {
           <div className="bg-gray-50 rounded-xl p-3">
             <p className="text-xs text-gray-500">
               หากปฏิเสธ: <strong>{DEPOSIT_REJECT_LABEL[data.deposit_policy_when_user_rejects_change]}</strong>
-              {data.deposit_amount && ` (เงินค้ำประกัน ${data.deposit_amount.toLocaleString()} พอยต์ทอง)`}
+              {data.deposit_amount && ` (พอยต์ทองที่ล็อก ${data.deposit_amount.toLocaleString()} พอยต์ทอง)`}
             </p>
           </div>
 

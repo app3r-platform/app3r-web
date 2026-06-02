@@ -11,7 +11,7 @@
  * C10: ค่าอะไหล่ (parts_fee)     — lock หลังช่างแจ้งอะไหล่ที่ใช้จริง
  *
  * 9-axis settle axes:
- *  เงื่อนไข 1: เงินค้ำประกัน (หักจาก total / คืน / ยึด)
+ *  เงื่อนไข 1: พอยต์ทองที่ล็อก (หักจาก total / คืน / ยึด)
  *  เงื่อนไข 2: ค่าตรวจ
  *  เงื่อนไข 3: ค่าเดินทาง
  *  เงื่อนไข 4: ค่าแรงยุติ (เฉพาะ C7)
@@ -45,7 +45,7 @@ type FeeSettleData = {
   settle_mode: SettleMode;
   axes: AxisItem[];
   subtotal: number;      // รวมค่าบริการทั้งหมด
-  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง) — ตัดมัดจำออก (A5)
+  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง) — ไม่มีการกันพอยต์ซ้ำ (A5)
   customer_point_balance: number;
   can_confirm: boolean;  // false = ยอดไม่พอ / ยังไม่ lock ครบ
   status: "pending_confirm" | "confirmed" | "cancelled";

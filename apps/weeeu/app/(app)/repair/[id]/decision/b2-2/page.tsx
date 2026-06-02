@@ -191,7 +191,7 @@ export default function DecisionB22Page() {
             </div>
             {data.deposit_amount && (
               <div className="flex justify-between text-sm">
-                <p className="text-gray-500">เงินค้ำประกัน (หักลบ)</p>
+                <p className="text-gray-500">พอยต์ทองที่ล็อก (หักลบ)</p>
                 <p className="font-medium text-red-600">-{data.deposit_amount.toLocaleString()} พอยต์ทอง</p>
               </div>
             )}
@@ -275,7 +275,7 @@ export default function DecisionB22Page() {
               <p className="text-sm font-semibold text-red-700">ยืนยันการปฏิเสธ?</p>
               <p className="text-xs text-red-600">
                 งานจะถูกยกเลิก — ค่าตรวจ {data.inspection_fee.toLocaleString()} พอยต์ทอง จะถูกยึด
-                {data.deposit_amount && ` + เงินค้ำประกันตามเงื่อนไขข้อเสนอเดิม`}
+                {data.deposit_amount && ` + พอยต์ทองที่ล็อกตามเงื่อนไขข้อเสนอเดิม`}
               </p>
               <div className="flex gap-2">
                 <button onClick={() => setAction(null)} className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm">

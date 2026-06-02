@@ -7,7 +7,7 @@ import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { apiFetch } from "@/lib/api-client";
 
 // ── 9 เงื่อนไข (Blueprint B2.5) ────────────────────────────────────────────
-// เงื่อนไข 1: เงินค้ำประกัน (deposit)
+// เงื่อนไข 1: พอยต์ทองที่ล็อก (deposit)
 // เงื่อนไข 2: ค่าตรวจ (inspection_fee)
 // เงื่อนไข 3: ค่าเดินทาง (travel_fee)
 // เงื่อนไข 4: ค่าแรงยุติ (labor_cancel_fee)
@@ -67,9 +67,9 @@ type ListingDetail = {
 // ── เงื่อนไข 1: deposit policy labels ──────────────────────────────────────────────
 const DEPOSIT_POLICY_LABEL: Record<string, string> = {
   free:            "ฟรี (ไม่ยึดถ้าซ่อมไม่ได้)",
-  forfeit:         "ยึดเงินค้ำประกัน (ถ้าซ่อมไม่ได้)",
-  refund:          "คืนเงินค้ำประกันเต็ม (ถ้าซ่อมไม่ได้)",
-  refund_partial:  "คืนเงินค้ำประกันบางส่วน (ถ้าซ่อมไม่ได้)",
+  forfeit:         "ยึดพอยต์ทองที่ล็อก (ถ้าซ่อมไม่ได้)",
+  refund:          "คืนพอยต์ทองที่ล็อกเต็ม (ถ้าซ่อมไม่ได้)",
+  refund_partial:  "คืนพอยต์ทองที่ล็อกบางส่วน (ถ้าซ่อมไม่ได้)",
 };
 
 // ── เงื่อนไข 5: parts policy labels ────────────────────────────────────────────────
@@ -319,11 +319,11 @@ function OfferCard({
         {/* เงื่อนไข 2: ค่าตรวจ */}
         <OfferRow label="เงื่อนไข 2 · ค่าตรวจ" value={`${offer.inspection_fee.toLocaleString()} พอยต์ทอง (ไม่คืน)`} />
 
-        {/* เงื่อนไข 1: เงินค้ำประกัน */}
+        {/* เงื่อนไข 1: พอยต์ทองที่ล็อก */}
         {offer.deposit_amount != null && (
           <div className="space-y-0.5">
             <OfferRow
-              label="เงื่อนไข 1 · เงินค้ำประกัน"
+              label="เงื่อนไข 1 · พอยต์ทองที่ล็อก"
               value={`${offer.deposit_amount.toLocaleString()} พอยต์ทอง`}
             />
             <div className="flex justify-end">
