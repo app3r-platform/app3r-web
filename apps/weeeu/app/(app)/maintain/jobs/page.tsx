@@ -120,6 +120,7 @@ export default function MaintainJobsPage() {
   const [jobs, setJobs] = useState<MaintainJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [pageSize, setPageSize] = useState<number | "all">(20); // (c) pagination
 
   useEffect(() => {
     apiFetch("/api/v1/maintain/jobs/customer/")
@@ -143,6 +144,18 @@ export default function MaintainJobsPage() {
         >
           + จองล้าง
         </Link>
+      </div>
+
+      {/* PageSize selector (c) */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-500">แสดง:</span>
+        {([20, 50, "ทั้งหมด"] as const).map(s => (
+          <button key={String(s)} type="button"
+            onClick={() => setPageSize(s === "ทั้งหมด" ? "all" : s)}
+            className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${(s === "ทั้งหมด" ? pageSize === "all" : pageSize === s) ? "bg-weeeu-primary text-white border-weeeu-primary" : "border-gray-200 text-gray-500 hover:border-weeeu-primary"}`}>
+            {String(s)}
+          </button>
+        ))}
       </div>
 
       {/* Filter tabs */}
@@ -178,7 +191,7 @@ export default function MaintainJobsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(job => {
+          {filtered.slice(0, pageSize === "all" ? undefined : pageSize).map(job => {
             const isExpired = job.status === "offer_expired";
 
             // M2 — offer_expired: render เป็น div + ปุ่มจองใหม่ (ไม่ navigate)

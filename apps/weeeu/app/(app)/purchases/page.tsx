@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+"use client"; // เพิ่ม pageSize state (c) — metadata ย้ายไป layout ถ้าต้องการ
 
-export const metadata: Metadata = { title: "รายการที่ซื้อ" };
+import { useState } from "react";
+import Link from "next/link";
 
 // Mock buyer purchases (Mockup — Phase D-2 ดึงจาก orders API จริง)
 type Purchase = {
@@ -21,6 +21,9 @@ const MOCK_PURCHASES: Purchase[] = [
 ];
 
 export default function PurchasesPage() {
+  const [pageSize, setPageSize] = useState<number | "all">(20); // (c) pagination
+  const displayed = pageSize === "all" ? MOCK_PURCHASES : MOCK_PURCHASES.slice(0, pageSize);
+
   return (
     <div className="max-w-xl space-y-5">
       <div className="flex items-center justify-between">
@@ -28,6 +31,18 @@ export default function PurchasesPage() {
         <Link href="/marketplace" className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">
           ตลาดมือสอง →
         </Link>
+      </div>
+
+      {/* PageSize selector (c) */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-500">แสดง:</span>
+        {([20, 50, "ทั้งหมด"] as const).map(s => (
+          <button key={String(s)} type="button"
+            onClick={() => setPageSize(s === "ทั้งหมด" ? "all" : s)}
+            className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${(s === "ทั้งหมด" ? pageSize === "all" : pageSize === s) ? "bg-weeeu-primary text-white border-weeeu-primary" : "border-gray-200 text-gray-500 hover:border-weeeu-primary"}`}>
+            {String(s)}
+          </button>
+        ))}
       </div>
 
       {MOCK_PURCHASES.length === 0 ? (
@@ -41,7 +56,7 @@ export default function PurchasesPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {MOCK_PURCHASES.map((p) => (
+          {displayed.map((p) => (
             <Link
               key={p.id}
               href={`/purchases/${p.id}`}

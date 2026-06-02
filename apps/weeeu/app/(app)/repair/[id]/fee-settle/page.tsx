@@ -11,15 +11,15 @@
  * C10: ค่าอะไหล่ (parts_fee)     — lock หลังช่างแจ้งอะไหล่ที่ใช้จริง
  *
  * 9-axis settle axes:
- *  แกน 1: มัดจำ (หักจาก total / คืน / ยึด)
- *  แกน 2: ค่าตรวจ
- *  แกน 3: ค่าเดินทาง
- *  แกน 4: ค่าแรงยุติ (เฉพาะ C7)
- *  แกน 5: ค่าอะไหล่ (ตามจริง ± markup)
- *  แกน 6: รับประกัน (ไม่มี fee แต่แสดงเพื่อยืนยัน)
- *  แกน 7: ค่าปรับ no-show / ฝาก (ถ้ามี)
- *  แกน 8: งานบานปลาย (adjust ถ้า scope เกิน threshold)
- *  แกน 9: ความรับผิด (cap ถ้า damage เกิด)
+ *  เงื่อนไข 1: พอยต์ทองที่ล็อก (หักจาก total / คืน / ยึด)
+ *  เงื่อนไข 2: ค่าตรวจ
+ *  เงื่อนไข 3: ค่าเดินทาง
+ *  เงื่อนไข 4: ค่าแรงยุติ (เฉพาะ C7)
+ *  เงื่อนไข 5: ค่าอะไหล่ (ตามจริง ± markup)
+ *  เงื่อนไข 6: รับประกัน (ไม่มี fee แต่แสดงเพื่อยืนยัน)
+ *  เงื่อนไข 7: ค่าปรับ no-show / ฝาก (ถ้ามี)
+ *  เงื่อนไข 8: งานบานปลาย (adjust ถ้า scope เกิน threshold)
+ *  เงื่อนไข 9: ความรับผิด (cap ถ้า damage เกิด)
  */
 
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ type FeeSettleData = {
   settle_mode: SettleMode;
   axes: AxisItem[];
   subtotal: number;      // รวมค่าบริการทั้งหมด
-  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง) — ตัดมัดจำออก (A5)
+  total_due: number;     // ยอดสุทธิที่ต้องชำระ (พอยต์ทอง) — ไม่มีการกันพอยต์ซ้ำ (A5)
   customer_point_balance: number;
   can_confirm: boolean;  // false = ยอดไม่พอ / ยังไม่ lock ครบ
   status: "pending_confirm" | "confirmed" | "cancelled";

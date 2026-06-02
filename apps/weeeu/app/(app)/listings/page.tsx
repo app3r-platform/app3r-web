@@ -85,6 +85,7 @@ export default function ListingsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [typeTab, setTypeTab] = useState("");
+  const [pageSize, setPageSize] = useState<number | "all">(20);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [page, setPage] = useState(1);
@@ -96,6 +97,7 @@ export default function ListingsPage() {
       minPrice: minPrice ? Number(minPrice) : undefined,
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
       page: p,
+      ...(pageSize !== "all" && { pageSize }),
     })
       .then(r => {
         const items = r.results ?? r as unknown as Listing[];
@@ -127,6 +129,18 @@ export default function ListingsPage() {
         >
           + ขายของ
         </Link>
+      </div>
+
+      {/* PageSize selector (c) */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-500">แสดง:</span>
+        {([20, 50, "ทั้งหมด"] as const).map(s => (
+          <button key={String(s)} type="button"
+            onClick={() => { setPageSize(s === "ทั้งหมด" ? "all" : s); setPage(1); load(1); }}
+            className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${(s === "ทั้งหมด" ? pageSize === "all" : pageSize === s) ? "bg-weeeu-primary text-white border-weeeu-primary" : "border-gray-200 text-gray-500 hover:border-weeeu-primary"}`}>
+            {String(s)}
+          </button>
+        ))}
       </div>
 
       {/* Type tabs */}

@@ -445,7 +445,7 @@ export default function RepairJobDetailPage() {
               }
               value={`${job.inspection_fee.toLocaleString()} พอยต์ทอง`}
             />
-            {job.deposit_amount && <Row label="มัดจำ" value={`${job.deposit_amount.toLocaleString()} พอยต์ทอง`} />}
+            {job.deposit_amount && <Row label="พอยต์ทองที่ล็อก" value={`${job.deposit_amount.toLocaleString()} พอยต์ทอง`} />}
             {/* Sub-4: labor/parts breakdown */}
             {job.labor_cost != null && <Row label="ค่าแรง" value={`${job.labor_cost.toLocaleString()} พอยต์ทอง`} />}
             {job.parts_cost != null && <Row label="ค่าอะไหล่" value={`${job.parts_cost.toLocaleString()} พอยต์ทอง`} />}

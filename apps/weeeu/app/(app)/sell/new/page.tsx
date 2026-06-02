@@ -26,7 +26,7 @@ const SCRAP_GRADE_OPTIONS = [
 
 const COMMON_PARTS = ["คอมเพรสเซอร์", "มอเตอร์", "แผงวงจร PCB", "หน้าจอ", "ปั๊มน้ำ", "ฮีตเตอร์", "ถัง", "ฝาครอบ", "สายไฟ", "รีโมท"];
 
-// Terms 3 แกน options (Mockup)
+// Terms 3 เงื่อนไข options (Mockup)
 const SHIPPING_POLICY_OPTIONS = [
   { value: "seller_pays", label: "ผู้ขายออกค่าส่งให้ทั้งหมด" },
   { value: "buyer_pays", label: "ผู้ซื้อออกค่าส่ง" },
@@ -60,7 +60,7 @@ export default function SellNewPage() {
   const [workingParts, setWorkingParts] = useState<string[]>([]);
   const [partInput, setPartInput] = useState("");
 
-  // Terms 3 แกน (Mockup — Resell 2.2)
+  // Terms 3 เงื่อนไข (Mockup — Resell 2.2)
   const [shippingPolicy, setShippingPolicy] = useState("seller_pays");
   const [usedWarrantyDays, setUsedWarrantyDays] = useState("30");
   const [liabilityPolicy, setLiabilityPolicy] = useState("full_refund");
@@ -390,7 +390,7 @@ export default function SellNewPage() {
         </div>
       )}
 
-      {/* Terms 3 แกน (Mockup — Resell 2.2 Blueprint) */}
+      {/* Terms 3 เงื่อนไข (Mockup — Resell 2.2 Blueprint) */}
       <div className="bg-white rounded-2xl border border-weeeu-primary/20 shadow-sm p-5 space-y-4">
         <div className="flex items-center gap-2">
           <span className="text-base">📋</span>
@@ -400,7 +400,7 @@ export default function SellNewPage() {
           <p className="text-xs text-weeeu-text">เงื่อนไขนี้จะแสดงให้ผู้ซื้อเห็นก่อนยื่นข้อเสนอ — เป็น Source of Truth ในกรณีข้อพิพาท</p>
         </div>
 
-        {/* แกน 1: ค่าส่ง */}
+        {/* เงื่อนไข 1: ค่าส่ง */}
         <div className="space-y-2">
           <label className="block text-xs font-semibold text-gray-600">🚚 ค่าส่ง <span className="text-red-500">*</span></label>
           <div className="space-y-1.5">
@@ -422,7 +422,7 @@ export default function SellNewPage() {
           </div>
         </div>
 
-        {/* แกน 2: รับประกันมือสอง */}
+        {/* เงื่อนไข 2: รับประกันมือสอง */}
         <div className="space-y-2">
           <label className="block text-xs font-semibold text-gray-600">🔒 รับประกันมือสอง (วัน หลังรับสินค้า)</label>
           <div className="flex gap-2 items-center">
@@ -454,7 +454,7 @@ export default function SellNewPage() {
           </div>
         </div>
 
-        {/* แกน 3: ความรับผิดสินค้าไม่ตรงปก */}
+        {/* เงื่อนไข 3: ความรับผิดสินค้าไม่ตรงปก */}
         <div className="space-y-2">
           <label className="block text-xs font-semibold text-gray-600">⚖️ ความรับผิดกรณีสินค้าไม่ตรงปก <span className="text-red-500">*</span></label>
           <div className="space-y-1.5">

@@ -183,7 +183,7 @@ function OfferCard({
         {expanded && (
           <div className="px-4 pb-4 space-y-0.5">
             <TermsRow
-              label="มัดจำ"
+              label="พอยต์ทองที่ล็อก"
               value={offer.terms.deposit ? `${offer.terms.deposit.toLocaleString()} ฿${offer.terms.deposit_refundable ? " (คืนเมื่อเสร็จ)" : " (ไม่คืน)"}` : "ไม่มี"}
               highlight={!!offer.terms.deposit}
             />
@@ -384,7 +384,7 @@ export default function MaintainOffersPage() {
               <div className="mt-3 space-y-0.5">
                 <TermsRow label="ค่าบริการรวม" value={`${selectedOffer.price.toLocaleString()} ฿`} highlight />
                 <TermsRow
-                  label="มัดจำ"
+                  label="พอยต์ทองที่ล็อก"
                   value={selectedOffer.terms.deposit
                     ? `${selectedOffer.terms.deposit.toLocaleString()} ฿${selectedOffer.terms.deposit_refundable ? " (คืน)" : " (ไม่คืน)"}`
                     : "ไม่มี"}

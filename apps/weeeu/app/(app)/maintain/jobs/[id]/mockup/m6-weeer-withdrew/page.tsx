@@ -7,7 +7,7 @@
  * สิ่งที่เพิ่ม (delta):
  *  1. Alert banner "WeeeR แจ้งถอนรับงาน" + เหตุผลที่ร้านระบุ
  *  2. 2 ตัวเลือก: "หา WeeeR ใหม่" (reroute) / "ยกเลิกงาน"
- *  3. ถ้ายกเลิก: แสดง settle ตาม offer lock (มัดจำ/ค่าเดินทางที่ WeeeR เคยระบุ)
+ *  3. ถ้ายกเลิก: แสดง settle ตาม offer lock (พอยต์ทองที่ล็อก/ค่าเดินทางที่ WeeeR เคยระบุ)
  *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M6 WeeeU
  */
@@ -79,7 +79,7 @@ export default function M6WeeeRWithdrewMockupPage() {
               <p className="text-xs font-semibold text-gray-500">ข้อเสนอที่ lock ไว้ (อ้างอิง settle)</p>
               {JOB.offerLock.depositAmount > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">มัดจำ (WeeeR รับไว้)</span>
+                  <span className="text-gray-600">พอยต์ทองที่ล็อก (พักไว้ในระบบพักเงินกลาง)</span>
                   <span className="font-medium text-gray-800">{JOB.offerLock.depositAmount} พอยต์ทอง</span>
                 </div>
               )}
@@ -90,7 +90,7 @@ export default function M6WeeeRWithdrewMockupPage() {
                 </div>
               )}
               <p className="text-xs text-gray-400 pt-1">
-                * WeeeR ถอนเป็นผู้ผิด → คืนมัดจำ + WeeeR ไม่ได้ค่าเดินทาง (policy นโยบาย)
+                * WeeeR ถอนเป็นผู้ผิด → คืนพอยต์ทองที่ล็อก + WeeeR ไม่ได้ค่าเดินทาง (policy นโยบาย)
               </p>
             </div>
           )}
@@ -118,7 +118,7 @@ export default function M6WeeeRWithdrewMockupPage() {
             <div className="bg-white border border-red-200 rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-gray-800">ยืนยันยกเลิกงาน?</p>
               <p className="text-xs text-gray-500">
-                ระบบจะ settle มัดจำ {JOB.offerLock.depositAmount} พอยต์ทอง คืนให้คุณ
+                ระบบจะ settle พอยต์ทองที่ล็อก {JOB.offerLock.depositAmount} พอยต์ทอง คืนให้คุณ
                 เนื่องจาก WeeeR เป็นผู้ถอน
               </p>
               <div className="flex gap-2">
@@ -155,7 +155,7 @@ export default function M6WeeeRWithdrewMockupPage() {
         <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-center space-y-2">
           <p className="text-2xl">✅</p>
           <p className="font-semibold text-gray-700">ยกเลิกงานเรียบร้อย</p>
-          <p className="text-sm text-gray-500">มัดจำ {JOB.offerLock.depositAmount} พอยต์ทอง จะคืนภายใน 1-3 วันทำการ</p>
+          <p className="text-sm text-gray-500">พอยต์ทองที่ล็อก {JOB.offerLock.depositAmount} พอยต์ทอง จะคืนภายใน 1-3 วันทำการ</p>
         </div>
       )}
 

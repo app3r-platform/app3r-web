@@ -6,16 +6,16 @@ import { useParams, useRouter } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { apiFetch } from "@/lib/api-client";
 
-// ── 9 แกนเงื่อนไข (Blueprint B2.5) ────────────────────────────────────────────
-// แกน 1: มัดจำ (deposit)
-// แกน 2: ค่าตรวจ (inspection_fee)
-// แกน 3: ค่าเดินทาง (travel_fee)
-// แกน 4: ค่าแรงยุติ (labor_cancel_fee)
-// แกน 5: ค่าอะไหล่ (parts_markup_policy)
-// แกน 6: รับประกัน (warranty_days)
-// แกน 7: no-show / ฝาก (no_show_policy)
-// แกน 8: งานบานปลาย (scope_creep_policy)
-// แกน 9: ความรับผิด (liability_cap)
+// ── 9 เงื่อนไข (Blueprint B2.5) ────────────────────────────────────────────
+// เงื่อนไข 1: พอยต์ทองที่ล็อก (deposit)
+// เงื่อนไข 2: ค่าตรวจ (inspection_fee)
+// เงื่อนไข 3: ค่าเดินทาง (travel_fee)
+// เงื่อนไข 4: ค่าแรงยุติ (labor_cancel_fee)
+// เงื่อนไข 5: ค่าอะไหล่ (parts_markup_policy)
+// เงื่อนไข 6: รับประกัน (warranty_days)
+// เงื่อนไข 7: no-show / ฝาก (no_show_policy)
+// เงื่อนไข 8: งานบานปลาย (scope_creep_policy)
+// เงื่อนไข 9: ความรับผิด (liability_cap)
 
 type RepairOffer = {
   id: string;
@@ -24,31 +24,31 @@ type RepairOffer = {
   weeer_rating: number;
   weeer_review_count: number;
   quoted_price: number;
-  // แกน 2
+  // เงื่อนไข 2
   inspection_fee: number;
-  // แกน 1
+  // เงื่อนไข 1
   deposit_amount: number | null;
   deposit_policy_when_unrepairable: "free" | "forfeit" | "refund" | "refund_partial";
   deposit_partial_refund_pct: number | null; // % คืนเมื่อ refund_partial
-  // แกน 3
+  // เงื่อนไข 3
   travel_fee: number | null;
   travel_fee_policy: string | null; // e.g. "included" | "extra" | "waived_if_repair"
-  // แกน 4
+  // เงื่อนไข 4
   labor_cancel_fee: number | null; // ค่าแรงยุติงาน (เมื่อลูกค้าเลิกกลางคัน)
   labor_cancel_fee_policy: string | null;
-  // แกน 5
+  // เงื่อนไข 5
   parts_markup_pct: number | null; // % markup อะไหล่
   parts_policy: string | null; // e.g. "at_cost" | "market" | "markup"
-  // แกน 6
+  // เงื่อนไข 6
   warranty_days: number | null;
   warranty_scope: string | null; // e.g. "labor" | "parts" | "both"
-  // แกน 7
+  // เงื่อนไข 7
   no_show_fee: number | null; // ค่าปรับ no-show / ฝาก
   no_show_policy: string | null;
-  // แกน 8
+  // เงื่อนไข 8
   scope_creep_policy: string | null; // นโยบายงานบานปลาย
   scope_creep_threshold_pct: number | null; // % เกินงานเดิมที่ต้องแจ้งก่อน
-  // แกน 9
+  // เงื่อนไข 9
   liability_cap: number | null; // วงเงินสูงสุดความรับผิด (พอยต์ทอง)
   liability_policy: string | null;
   // ทั่วไป
@@ -64,22 +64,22 @@ type ListingDetail = {
   status: string;
 };
 
-// ── แกน 1: deposit policy labels ──────────────────────────────────────────────
+// ── เงื่อนไข 1: deposit policy labels ──────────────────────────────────────────────
 const DEPOSIT_POLICY_LABEL: Record<string, string> = {
   free:            "ฟรี (ไม่ยึดถ้าซ่อมไม่ได้)",
-  forfeit:         "ยึดมัดจำ (ถ้าซ่อมไม่ได้)",
-  refund:          "คืนมัดจำเต็ม (ถ้าซ่อมไม่ได้)",
-  refund_partial:  "คืนมัดจำบางส่วน (ถ้าซ่อมไม่ได้)",
+  forfeit:         "ยึดพอยต์ทองที่ล็อก (ถ้าซ่อมไม่ได้)",
+  refund:          "คืนพอยต์ทองที่ล็อกเต็ม (ถ้าซ่อมไม่ได้)",
+  refund_partial:  "คืนพอยต์ทองที่ล็อกบางส่วน (ถ้าซ่อมไม่ได้)",
 };
 
-// ── แกน 5: parts policy labels ────────────────────────────────────────────────
+// ── เงื่อนไข 5: parts policy labels ────────────────────────────────────────────────
 const PARTS_POLICY_LABEL: Record<string, string> = {
   at_cost: "ราคาต้นทุน",
   market:  "ราคาตลาด",
   markup:  "ราคาตลาด + markup",
 };
 
-// ── แกน 6: warranty scope labels ──────────────────────────────────────────────
+// ── เงื่อนไข 6: warranty scope labels ──────────────────────────────────────────────
 const WARRANTY_SCOPE_LABEL: Record<string, string> = {
   labor: "ค่าแรงเท่านั้น",
   parts: "อะไหล่เท่านั้น",
@@ -281,7 +281,7 @@ export default function RepairOffersPage() {
   );
 }
 
-// ── Offer card (9 แกนเงื่อนไข) ────────────────────────────────────────────────
+// ── Offer card (9 เงื่อนไข) ────────────────────────────────────────────────
 function OfferCard({
   offer,
   selecting,
@@ -316,14 +316,14 @@ function OfferCard({
 
       {/* ── เงื่อนไขหลัก (always visible) ─────────────────────────────────── */}
       <div className="px-5 py-4 space-y-2">
-        {/* แกน 2: ค่าตรวจ */}
+        {/* เงื่อนไข 2: ค่าตรวจ */}
         <OfferRow label="เงื่อนไข 2 · ค่าตรวจ" value={`${offer.inspection_fee.toLocaleString()} พอยต์ทอง (ไม่คืน)`} />
 
-        {/* แกน 1: มัดจำ */}
+        {/* เงื่อนไข 1: พอยต์ทองที่ล็อก */}
         {offer.deposit_amount != null && (
           <div className="space-y-0.5">
             <OfferRow
-              label="เงื่อนไข 1 · มัดจำ"
+              label="เงื่อนไข 1 · พอยต์ทองที่ล็อก"
               value={`${offer.deposit_amount.toLocaleString()} พอยต์ทอง`}
             />
             <div className="flex justify-end">
@@ -337,7 +337,7 @@ function OfferCard({
           </div>
         )}
 
-        {/* แกน 3: ค่าเดินทาง */}
+        {/* เงื่อนไข 3: ค่าเดินทาง */}
         {(offer.travel_fee != null || offer.travel_fee_policy) && (
           <OfferRow
             label="เงื่อนไข 3 · ค่าเดินทาง"
@@ -349,7 +349,7 @@ function OfferCard({
           />
         )}
 
-        {/* แกน 6: รับประกัน */}
+        {/* เงื่อนไข 6: รับประกัน */}
         {offer.warranty_days != null && (
           <OfferRow
             label="เงื่อนไข 6 · รับประกัน"
@@ -374,7 +374,7 @@ function OfferCard({
 
         {expanded && (
           <div className="px-5 pb-4 space-y-2 border-t border-gray-50 pt-3">
-            {/* แกน 4: ค่าแรงยุติ */}
+            {/* เงื่อนไข 4: ค่าแรงยุติ */}
             {(offer.labor_cancel_fee != null || offer.labor_cancel_fee_policy) && (
               <OfferRow
                 label="เงื่อนไข 4 · ค่าแรงยุติ"
@@ -386,7 +386,7 @@ function OfferCard({
               />
             )}
 
-            {/* แกน 5: ค่าอะไหล่ */}
+            {/* เงื่อนไข 5: ค่าอะไหล่ */}
             {(offer.parts_markup_pct != null || offer.parts_policy) && (
               <OfferRow
                 label="เงื่อนไข 5 · ค่าอะไหล่"
@@ -398,7 +398,7 @@ function OfferCard({
               />
             )}
 
-            {/* แกน 7: no-show / ฝาก */}
+            {/* เงื่อนไข 7: no-show / ฝาก */}
             {(offer.no_show_fee != null || offer.no_show_policy) && (
               <OfferRow
                 label="เงื่อนไข 7 · No-show / ฝาก"
@@ -410,7 +410,7 @@ function OfferCard({
               />
             )}
 
-            {/* แกน 8: งานบานปลาย */}
+            {/* เงื่อนไข 8: งานบานปลาย */}
             {(offer.scope_creep_policy || offer.scope_creep_threshold_pct != null) && (
               <OfferRow
                 label="เงื่อนไข 8 · งานบานปลาย"
@@ -422,7 +422,7 @@ function OfferCard({
               />
             )}
 
-            {/* แกน 9: ความรับผิด */}
+            {/* เงื่อนไข 9: ความรับผิด */}
             {(offer.liability_cap != null || offer.liability_policy) && (
               <OfferRow
                 label="เงื่อนไข 9 · วงเงินความรับผิด"
