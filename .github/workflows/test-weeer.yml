@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Jest Tests (blocking — tests must pass)
         working-directory: apps/weeer
-        run: pnpm test:ci -- --coverage=false
+        run: pnpm exec jest --ci --forceExit
         env:
           NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
           NEXT_PUBLIC_API_URL: http://localhost:8000
