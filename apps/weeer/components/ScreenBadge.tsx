@@ -139,7 +139,7 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/resell/transactions",                info: { num: "R-69", code: "RESELL-TRANSACTIONS" } },
   { pattern: "/resell",                             info: { num: "R-66", code: "RESELL-HUB" } },
   // Scrap hub / item / browse
-  { pattern: "/scrap/browse/[id]",                  info: { num: "R-72b", code: "SCRAP-BROWSE-DETAIL" } },
+  { pattern: "/scrap/browse/[id]",                  info: { num: "R-78", code: "SCRAP-BROWSE-DETAIL" } },
   { pattern: "/scrap/browse",                       info: { num: "R-72", code: "SCRAP-BROWSE" } },
   { pattern: "/scrap/[id]",                         info: { num: "R-71", code: "SCRAP-ITEM-DETAIL" } },
   { pattern: "/scrap",                              info: { num: "R-70", code: "SCRAP-HUB" } },
@@ -147,11 +147,23 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/services/[id]/edit",                 info: { num: "R-73c", code: "SERVICES-EDIT" } },
   { pattern: "/services/new",                       info: { num: "R-73b", code: "SERVICES-NEW" } },
   { pattern: "/services",                           info: { num: "R-73", code: "SERVICES" } },
-  // Wallet sub-screens (ฐาน R-36)
-  { pattern: "/wallet/deposit",                     info: { num: "R-36", code: "WALLET-DEPOSIT" } },
-  { pattern: "/wallet/history",                     info: { num: "R-36", code: "WALLET-HISTORY" } },
-  { pattern: "/wallet/settlements",                 info: { num: "R-36", code: "WALLET-SETTLEMENTS" } },
-  { pattern: "/wallet/withdraw",                    info: { num: "R-36", code: "WALLET-WITHDRAW" } },
+  // Wallet sub-screens — Gen109 ruling: 4 รหัสหลัก unique (เลิกยุบ R-36 variant)
+  { pattern: "/wallet/deposit",                     info: { num: "R-74", code: "WALLET-DEPOSIT" } },
+  { pattern: "/wallet/history",                     info: { num: "R-75", code: "WALLET-HISTORY" } },
+  { pattern: "/wallet/settlements",                 info: { num: "R-76", code: "WALLET-SETTLEMENTS" } },
+  { pattern: "/wallet/withdraw",                    info: { num: "R-77", code: "WALLET-WITHDRAW" } },
+
+  // ── Gen 109 ruling: (auth) routes (R-79+) — badge mount เพิ่มใน (auth)/layout.tsx ──
+  // เฉพาะ 9 จอ: login + signup steps · redirect/loading ล้วน = ไม่ใส่
+  { pattern: "/login",                              info: { num: "R-79", code: "AUTH-LOGIN" } },
+  { pattern: "/signup/business-type",               info: { num: "R-81", code: "SIGNUP-BIZ-TYPE" } },
+  { pattern: "/signup/business-info",               info: { num: "R-82", code: "SIGNUP-BIZ-INFO" } },
+  { pattern: "/signup/shop-location",               info: { num: "R-83", code: "SIGNUP-SHOP-LOCATION" } },
+  { pattern: "/signup/bank-account",                info: { num: "R-84", code: "SIGNUP-BANK-ACCOUNT" } },
+  { pattern: "/signup/kyc-upload",                  info: { num: "R-85", code: "SIGNUP-KYC-UPLOAD" } },
+  { pattern: "/signup/verify",                      info: { num: "R-86", code: "SIGNUP-VERIFY" } },
+  { pattern: "/signup/pending-review",              info: { num: "R-87", code: "SIGNUP-PENDING-REVIEW" } },
+  { pattern: "/signup",                             info: { num: "R-80", code: "SIGNUP" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
