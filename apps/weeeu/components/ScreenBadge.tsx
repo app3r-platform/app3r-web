@@ -101,6 +101,10 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/maintain/jobs/[id]/mockup/m9-cancel-inprogress", info: { num: "U-54d", code: "MAINTAIN-M9-CANCEL" } },
   // ── Scrap home ────────────────────────────────────────────────────────────────
   { pattern: "/scrap",                                 info: { num: "U-55", code: "SCRAP-HOME" } },
+  // ── Gen 109 — เติมหน้าหลักที่ยังไม่มีรหัส (เดินเลขต่อ U-56+) ──────────────────
+  { pattern: "/wallet/history",                        info: { num: "U-56", code: "WALLET-HISTORY" } },
+  { pattern: "/wallet",                                info: { num: "U-57", code: "WALLET-HOME" } },
+  { pattern: "/maintain/jobs/[id]/withdraw",           info: { num: "U-58", code: "MAINTAIN-WITHDRAW" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {
