@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ScreenBadge } from "@/components/ScreenBadge";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,6 +26,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           {children}
         </div>
       </div>
+
+      {/* ── Screen ID Badge (dev only) ─────────────────────────────────────── */}
+      <ScreenBadge />
     </div>
   );
 }
