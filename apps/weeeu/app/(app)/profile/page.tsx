@@ -22,8 +22,10 @@ const MOCK_USER = {
   } as AddressData,
   member_since: "เม.ย. 69",
   silver_points: 1250,
+  gold_points: 350,       // Gold Point (พอยต์ทอง) — Mockup
   repair_count: 12,
   appliance_count: 4,
+  tier: "silver" as "bronze" | "silver" | "gold", // Placeholder — เกณฑ์จริงรอ Decision D-tier
 };
 
 const GENDER_MAP: Record<string, string> = {
@@ -181,24 +183,47 @@ export default function ProfilePage() {
             <h2 className="text-xl font-bold text-gray-900">{user.first_name} {user.last_name}</h2>
             <p className="text-gray-500 text-sm">{user.phone_number.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}</p>
             <div className="flex items-center gap-3 mt-2">
-              <span className="inline-flex items-center gap-1 text-xs bg-weeeu-surface text-weeeu-primary px-2.5 py-1 rounded-full font-medium">💎 Silver Member</span>
+              {/* ป้ายระดับสมาชิก — Placeholder (A5) · เกณฑ์จริงรอ Decision D-tier */}
+              <span className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium ${
+                user.tier === "gold"   ? "bg-amber-50 text-amber-600 border border-amber-200" :
+                user.tier === "silver" ? "bg-weeeu-surface text-weeeu-primary" :
+                                         "bg-gray-100 text-gray-600"
+              }`}>
+                {user.tier === "gold" ? "🥇" : user.tier === "silver" ? "💎" : "🔰"}{" "}
+                {user.tier === "gold" ? "Gold Member" : user.tier === "silver" ? "Silver Member" : "Bronze Member"}
+              </span>
               <span className="text-xs text-gray-400">สมาชิกตั้งแต่ {user.member_since}</span>
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-gray-100">
-          {[
-            { label: "เครื่องใช้ไฟฟ้า", value: String(user.appliance_count), icon: "🔌" },
-            { label: "รายการซ่อม", value: String(user.repair_count), icon: "🔧" },
-            { label: "Silver Point", value: user.silver_points.toLocaleString(), icon: "💎" },
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-xl">{s.icon}</p>
-              <p className="text-lg font-bold text-gray-900 mt-1">{s.value}</p>
-              <p className="text-xs text-gray-400">{s.label}</p>
-            </div>
-          ))}
+        {/* Silver + Gold Point คู่ + ลิงก์จัดการพอยต์ (A5) */}
+        <div className="grid grid-cols-2 gap-3 mt-5 pt-5 border-t border-gray-100">
+          <Link href="/wallet?tab=silver" className="text-center p-3 rounded-xl bg-gray-50 hover:bg-weeeu-surface/50 transition-colors">
+            <p className="text-xl">💎</p>
+            <p className="text-lg font-bold text-gray-900 mt-1">{user.silver_points.toLocaleString()}</p>
+            <p className="text-xs text-gray-400">พอยต์เงิน (Silver)</p>
+          </Link>
+          <Link href="/wallet?tab=gold" className="text-center p-3 rounded-xl bg-gray-50 hover:bg-amber-50/50 transition-colors">
+            <p className="text-xl">🥇</p>
+            <p className="text-lg font-bold text-gray-900 mt-1">{user.gold_points.toLocaleString()}</p>
+            <p className="text-xs text-gray-400">พอยต์ทอง (Gold)</p>
+          </Link>
         </div>
+        <div className="grid grid-cols-2 gap-3 mt-3">
+          <div className="text-center p-3 rounded-xl bg-gray-50">
+            <p className="text-xl">🔌</p>
+            <p className="text-lg font-bold text-gray-900 mt-1">{user.appliance_count}</p>
+            <p className="text-xs text-gray-400">เครื่องใช้ไฟฟ้า</p>
+          </div>
+          <div className="text-center p-3 rounded-xl bg-gray-50">
+            <p className="text-xl">🔧</p>
+            <p className="text-lg font-bold text-gray-900 mt-1">{user.repair_count}</p>
+            <p className="text-xs text-gray-400">รายการซ่อม</p>
+          </div>
+        </div>
+        <Link href="/wallet" className="mt-3 flex items-center justify-center gap-2 text-xs text-weeeu-primary hover:text-weeeu-dark font-medium py-2 border border-weeeu-primary/30 rounded-xl hover:bg-weeeu-surface/50 transition-colors">
+          👛 จัดการพอยต์และกระเป๋าเงิน →
+        </Link>
       </div>
 
       {/* Personal info */}

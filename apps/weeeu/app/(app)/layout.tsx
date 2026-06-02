@@ -66,8 +66,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-20 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-lg mx-auto h-14 flex items-center px-4 gap-3">
 
-          {/* Logo + brand name */}
-          <div className="flex items-center gap-2 flex-1">
+          {/* Logo + brand name — เมนูกลับหน้าหลัก (dashboard) ทุกหน้า (A1) */}
+          <Link
+            href="/dashboard"
+            aria-label="กลับหน้าหลัก (Home)"
+            className="flex items-center gap-2 flex-1 hover:opacity-80 transition-opacity"
+          >
             <Image
               src="/logo/WeeeU.png"
               alt="WeeeU"
@@ -76,7 +80,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               className="rounded-lg"
             />
             <span className="text-base font-bold text-weeeu-primary">WeeeU</span>
-          </div>
+            <span className="text-base leading-none" aria-hidden="true">🏠</span>
+          </Link>
 
           {/* 🔔 Notification bell — ไอคอนมุมขวาบน (A2 ข้อ 4) */}
           <Link

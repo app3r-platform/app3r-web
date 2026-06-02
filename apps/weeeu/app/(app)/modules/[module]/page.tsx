@@ -11,12 +11,12 @@ const moduleConfig: Record<string, {
 }> = {
   repair: {
     icon: "🔧", title: "แจ้งซ่อม", comingSoon: false,
-    description: "แจ้งซ่อมเครื่องใช้ไฟฟ้าในบ้าน เลือกร้าน รับ offer ราคา ติดตามช่าง",
+    description: "แจ้งซ่อมเครื่องใช้ไฟฟ้าในบ้าน เลือกร้าน รับข้อเสนอ (Offer) ราคา ติดตามช่าง",
     color: "from-orange-500 to-amber-400",
   },
   resell: {
     icon: "💰", title: "ซื้อ/ขาย มือสอง", comingSoon: false,
-    description: "ลงประกาศขาย รับ offer จากร้าน หรือค้นหาซื้อเครื่องใช้ไฟฟ้ามือสอง",
+    description: "ลงประกาศขาย รับข้อเสนอ จากร้าน หรือค้นหาซื้อเครื่องใช้ไฟฟ้ามือสอง",
     color: "from-green-500 to-emerald-400",
   },
   scrap: {
@@ -92,21 +92,21 @@ export default async function ModulePage({ params }: Props) {
             "📍 เลือกเครื่องใช้ไฟฟ้าที่ต้องการซ่อม",
             "📋 อธิบายอาการ + แนบรูปภาพ",
             "🏪 เลือกร้านซ่อมใกล้บ้าน",
-            "💬 รับ offer ราคาจากร้าน",
+            "💬 รับข้อเสนอ ราคาจากร้าน",
             "📍 ติดตามช่าง Real-time",
             "⭐ รีวิวหลังซ่อมเสร็จ",
           ].map((item, i) => <li key={i} className="flex items-start gap-2"><span>•</span>{item}</li>)}
 
           {module === "resell" && [
             "📸 ถ่ายรูป + ลงประกาศขาย",
-            "💰 รับ offer จากร้าน WeeeR",
-            "🤝 ยืนยัน offer + นัดรับสินค้า",
+            "💰 รับข้อเสนอ จากร้าน WeeeR",
+            "🤝 ยืนยันข้อเสนอ + นัดรับสินค้า",
             "💎 รับ Silver Point หลังขายสำเร็จ",
           ].map((item, i) => <li key={i} className="flex items-start gap-2"><span>•</span>{item}</li>)}
 
           {module === "scrap" && [
             "♻️ ลงประกาศซากเครื่องใช้ไฟฟ้า",
-            "💵 รับ offer ราคาซาก (ถ้ามีมูลค่า)",
+            "💵 รับข้อเสนอ ราคาซาก (ถ้ามีมูลค่า)",
             "🆓 ขอทิ้งฟรีตามมาตรฐาน WEEE",
             "🚚 ติดตามรถมารับซาก Real-time",
           ].map((item, i) => <li key={i} className="flex items-start gap-2"><span>•</span>{item}</li>)}

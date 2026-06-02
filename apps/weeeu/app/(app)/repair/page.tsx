@@ -45,7 +45,7 @@ type RepairJob = {
 
 const STATUS_LABEL: Record<RepairStatus, string> = {
   draft: "ร่าง",
-  open: "รอ Offer",
+  open: "รอข้อเสนอ (Offer)",
   matching: "กำลังจับคู่",
   assigned: "มอบหมายแล้ว",
   traveling: "ช่างกำลังเดินทาง",
@@ -206,11 +206,11 @@ export default function RepairListPage() {
                   <p className="text-sm text-gray-500 truncate mt-0.5">{listing.issue_summary}</p>
                 </div>
                 <span className="bg-weeeu-surface text-weeeu-primary text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
-                  {listing.offer_count > 0 ? `${listing.offer_count} Offer` : "รอ Offer"}
+                  {listing.offer_count > 0 ? `${listing.offer_count} ข้อเสนอ` : "รอข้อเสนอ"}
                 </span>
               </div>
               {listing.offer_count > 0 && (
-                <p className="text-xs text-weeeu-primary font-medium mt-2">→ กดเพื่อดูและเลือก Offer</p>
+                <p className="text-xs text-weeeu-primary font-medium mt-2">→ กดเพื่อดูและเลือกข้อเสนอ</p>
               )}
             </Link>
           ))}
