@@ -415,7 +415,7 @@ export default function MaintainJobDetailPage() {
                         : "bg-gray-50 border border-gray-200"
                     }`}>
                       <span className="font-medium text-red-700 shrink-0">ร้านผิด:</span>
-                      <span className="text-gray-600">WeeeU ได้ reroute (จับคู่ร้านใหม่) ฟรี + คืนมัดจำเต็ม</span>
+                      <span className="text-gray-600">WeeeU ได้ reroute (จับคู่ร้านใหม่) ฟรี + คืนพอยต์ทองที่ล็อกเต็ม</span>
                       {job.dispute.reroute_granted && (
                         <span className="ml-auto text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">✅ Rerouted</span>
                       )}
@@ -426,7 +426,7 @@ export default function MaintainJobDetailPage() {
                         : "bg-gray-50 border border-gray-200"
                     }`}>
                       <span className="font-medium text-orange-700 shrink-0">ลูกค้าผิด:</span>
-                      <span className="text-gray-600">WeeeR ได้รับค่าเสียเวลาตาม offer — WeeeU ไม่ได้คืนมัดจำ</span>
+                      <span className="text-gray-600">WeeeR ได้รับค่าเสียเวลาตามข้อเสนอ — WeeeU ไม่ได้คืนพอยต์ทองที่ล็อก</span>
                     </div>
                     <div className={`flex items-start gap-2 p-2 rounded-lg text-xs ${
                       job.dispute.weeer_withdraw_reason === "force_majeure"
@@ -434,7 +434,7 @@ export default function MaintainJobDetailPage() {
                         : "bg-gray-50 border border-gray-200"
                     }`}>
                       <span className="font-medium text-blue-700 shrink-0">สุดวิสัย:</span>
-                      <span className="text-gray-600">ไม่มีฝ่ายผิด — คืนมัดจำ WeeeU บางส่วน ตาม offer policy</span>
+                      <span className="text-gray-600">ไม่มีฝ่ายผิด — คืนพอยต์ทองที่ล็อก WeeeU บางส่วน ตามนโยบายข้อเสนอ</span>
                     </div>
                   </div>
                   {job.dispute.weeer_withdraw_reason && (

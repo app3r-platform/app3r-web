@@ -52,7 +52,7 @@ const NINE_AXES = [
   { key: "timeline",      label: "ระยะเวลา",          icon: "⏱️" },
   { key: "parts",         label: "อะไหล่",            icon: "🔩" },
   { key: "quality",       label: "คุณภาพงาน",         icon: "⭐" },
-  { key: "deposit",       label: "มัดจำ",             icon: "💳" },
+  { key: "deposit",       label: "พอยต์ทองที่ล็อก",   icon: "💳" },
   { key: "cancellation",  label: "การยกเลิก",         icon: "❌" },
   { key: "evidence",      label: "หลักฐาน",           icon: "📸" },
   { key: "conduct",       label: "พฤติกรรม",          icon: "🤝" },

@@ -189,7 +189,7 @@ export default function M9CancelledAdminMockupPage() {
                   <p className="text-xs font-semibold text-gray-600 uppercase">WeeeU คืน</p>
                   <div className="space-y-1.5 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">มัดจำ</span>
+                      <span className="text-gray-600">พอยต์ทองที่ล็อก</span>
                       <span className="font-medium">{JOB.offerLock.depositAmount} Point</span>
                     </div>
                     <div className="flex justify-between">

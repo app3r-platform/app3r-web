@@ -96,7 +96,7 @@ const SETTLE_AXES = [
   { key: "timeline",     label: "ระยะเวลา",      icon: "⏱️" },
   { key: "parts",        label: "อะไหล่",        icon: "🔩" },
   { key: "quality",      label: "คุณภาพ",        icon: "⭐" },
-  { key: "deposit",      label: "มัดจำ",         icon: "💳" },
+  { key: "deposit",      label: "พอยต์ทองที่ล็อก", icon: "💳" },
   { key: "cancellation", label: "ยกเลิก",         icon: "❌" },
   { key: "evidence",     label: "หลักฐาน",       icon: "📸" },
   { key: "conduct",      label: "พฤติกรรม",      icon: "🤝" },
@@ -149,7 +149,7 @@ function FeeSettlePanel({ job, superAdmin }: FeeSettlePanelProps) {
             <p className="text-xs text-blue-500 mt-0.5">G (ราคาสุดท้าย)</p>
             <div className="mt-2 pt-2 border-t border-blue-200 text-xs space-y-1">
               <div className="flex justify-between text-blue-600">
-                <span>มัดจำ</span>
+                <span>พอยต์ทองที่ล็อก</span>
                 <span className={`px-1.5 py-0.5 rounded border text-xs ${depositBadge}`}>
                   {deposit.toLocaleString()} G — {depositNote}
                 </span>
@@ -216,7 +216,7 @@ function FeeSettlePanel({ job, superAdmin }: FeeSettlePanelProps) {
                   note = finalPrice > 0 ? `${finalPrice.toLocaleString()} G` : "ยังไม่ตกลง";
                 }
               } else if (ax.key === "deposit") {
-                note = deposit > 0 ? `${deposit.toLocaleString()} G — ${depositNote}` : "ไม่มีมัดจำ";
+                note = deposit > 0 ? `${deposit.toLocaleString()} G — ${depositNote}` : "ไม่มีพอยต์ทองที่ล็อก";
                 if (depositNote === "forfeit") status = "disputed";
               } else if (ax.key === "parts") {
                 note = partsTotal > 0 ? `+${partsTotal.toLocaleString()} G` : "ไม่มีอะไหล่";
