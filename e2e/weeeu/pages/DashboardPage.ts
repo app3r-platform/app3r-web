@@ -25,13 +25,14 @@ export class DashboardPage {
     this.greeting           = page.locator('text=สวัสดี');
     // Silver Point wallet card
     this.walletSilver       = page.locator('text=Silver Point');
-    // Quick action links
-    this.repairQuickAction  = page.locator('a[href="/modules/repair"], a:has-text("แจ้งซ่อม")').first();
-    this.resellQuickAction  = page.locator('a[href="/modules/resell"], a:has-text("ขาย/ซื้อ")').first();
-    this.scrапQuickAction   = page.locator('a[href="/modules/scrap"], a:has-text("ทิ้งซาก")').first();
-    this.maintainQuickAction = page.locator('a[href="/modules/maintain"], a:has-text("บำรุงรักษา")').first();
-    // Profile link in sidebar
-    this.profileLink        = page.locator('a[href="/profile"]');
+    // Batch1 redesign: quickActions removed → service feed cards (hasActivity) + bottom nav tabs
+    // feed cards: "ซื้อ-ขายมือสอง" (href=/listings), "งานซ่อม" (href=/repair)
+    this.repairQuickAction  = page.locator('a[href="/repair"], a:has-text("งานซ่อม"), text=งานซ่อม').first();
+    this.resellQuickAction  = page.locator('a[href="/listings"], a:has-text("ซื้อ-ขายมือสอง"), text=ซื้อ-ขายมือสอง').first();
+    this.scrапQuickAction   = page.locator('text=ซากเครื่อง').first(); // bottom nav tab
+    this.maintainQuickAction = page.locator('text=บำรุงรักษา').first(); // bottom nav tab
+    // Profile: accessible via URL (no direct link in bottom nav — nav goes /dashboard as account hub)
+    this.profileLink        = page.locator('a[href="/dashboard"]:has-text("บัญชีของฉัน")').first();
   }
 
   async goto() {

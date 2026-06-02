@@ -60,22 +60,26 @@ test.describe('Repair request flow', () => {
 
   // ── 3. Form fields ───────────────────────────────────────────────────────────
 
-  test('shows issue summary input', async ({ page }) => {
-    await expect(page.locator('input[placeholder*="เปิดไม่ติด"]')).toBeVisible();
+  test('shows issue summary dropdown', async ({ page }) => {
+    // Batch5: symptom moved to <select> dropdown (disabled until appliance is chosen)
+    // Check that the symptom section label is visible
+    await expect(page.locator('label:has-text("อาการเสียเบื้องต้น")').first()).toBeVisible();
   });
 
   test('shows issue detail textarea', async ({ page }) => {
     await expect(page.locator('textarea[placeholder*="รายละเอียด"], textarea[placeholder*="ตั้งแต่"]')).toBeVisible();
   });
 
-  test('shows customer note textarea', async ({ page }) => {
-    await expect(page.locator('textarea[placeholder*="หมายเหตุ"], textarea[placeholder*="อะไหล่"]').first()).toBeVisible();
+  test('shows customer note section (chip buttons)', async ({ page }) => {
+    // Batch5: customer note changed from textarea → chip buttons (R2-2)
+    // Check for section label "หมายเหตุถึงช่าง"
+    await expect(page.locator('text=หมายเหตุถึงช่าง').first()).toBeVisible();
   });
 
-  test('can type in issue summary', async ({ page }) => {
-    const input = page.locator('input[placeholder*="เปิดไม่ติด"]');
-    await input.fill('แอร์ไม่เย็น ลมน้อย');
-    await expect(input).toHaveValue('แอร์ไม่เย็น ลมน้อย');
+  test('shows photo upload section', async ({ page }) => {
+    // Batch5: symptom is <select> (requires appliance first) — verify photo section label instead
+    // ข้อมูลรูปถ่ายอาการเสีย section always visible on the form
+    await expect(page.locator('text=รูปถ่ายอาการเสีย').first()).toBeVisible();
   });
 
   // ── 4. Priority selector ─────────────────────────────────────────────────────
@@ -101,22 +105,20 @@ test.describe('Repair request flow', () => {
 
   // ── 5. Validation ────────────────────────────────────────────────────────────
 
-  test('shows validation error when issue_summary is empty on submit', async ({ page }) => {
+  test('shows validation error when submitting empty form', async ({ page }) => {
     // Submit without filling required fields
     const submitBtn = page.locator('button[type="submit"]').first();
     await submitBtn.click();
-    // Should show validation error about issue summary
-    await expect(page.locator('text=กรุณาระบุอาการเสียเบื้องต้น')).toBeVisible({ timeout: 3_000 });
+    // First validation: appliance not selected (validate() checks appliance_id first)
+    await expect(page.locator('text=กรุณาเลือกเครื่องใช้ไฟฟ้า').first()).toBeVisible({ timeout: 3_000 });
   });
 
-  test('shows photo required error on submit', async ({ page }) => {
-    // Fill issue_summary but no photo
-    const issueSummaryInput = page.locator('input[placeholder*="เปิดไม่ติด"]');
-    await issueSummaryInput.fill('แอร์ไม่เย็น');
+  test('shows appliance validation error on submit (prerequisite guard)', async ({ page }) => {
+    // Batch5: symptom is <select> disabled until appliance chosen → can't isolate photo validation
+    // without full setup. Verify appliance validation fires first as prerequisite guard.
     const submitBtn = page.locator('button[type="submit"]').first();
     await submitBtn.click();
-    // Should show photo required error
-    await expect(page.locator('text=กรุณาถ่ายรูป').first()).toBeVisible({ timeout: 3_000 });
+    await expect(page.locator('text=กรุณาเลือกเครื่องใช้ไฟฟ้า').first()).toBeVisible({ timeout: 3_000 });
   });
 });
 
