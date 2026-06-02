@@ -26,7 +26,7 @@ const ACTION_CONFIG: Record<OverrideAction, {
     btnColor: "bg-orange-600 hover:bg-orange-700 text-white",
     axes: [
       { key: "price",        icon: "💰", implication: "ไม่มีการจ่ายเงินค่าซ่อม (Final price = 0)" },
-      { key: "deposit",      icon: "💳", implication: "มัดจำคืนตาม policy (อิง cancellation point)" },
+      { key: "deposit",      icon: "💳", implication: "พอยต์ทองที่ล็อกคืนตาม policy (อิง cancellation point)" },
       { key: "cancellation", icon: "❌", implication: "เปิดใช้ cancellation policy ทันที" },
       { key: "timeline",     icon: "⏱️", implication: "งานสิ้นสุดก่อนกำหนด — ช่วงยกเลิกมีผลต่อ deposit" },
     ],
@@ -38,21 +38,21 @@ const ACTION_CONFIG: Record<OverrideAction, {
     btnColor: "bg-admin-primary hover:bg-admin-dark text-white",
     axes: [
       { key: "price",    icon: "💰", implication: "คืน escrow ทั้งหมดให้ WeeeU (override ราคาตกลง)" },
-      { key: "deposit",  icon: "💳", implication: "override deposit policy — คืนมัดจำ 100%" },
+      { key: "deposit",  icon: "💳", implication: "override deposit policy — คืนพอยต์ทองที่ล็อก 100%" },
       { key: "quality",  icon: "⭐", implication: "บ่งชี้ว่างานไม่ผ่านมาตรฐาน (เหตุผล Refund)" },
       { key: "evidence", icon: "📸", implication: "หลักฐานต้องสนับสนุนการ Refund ใน Audit Log" },
     ],
   },
   forfeit: {
     label:    "Forfeit Deposit",
-    desc:     "ยึดมัดจำให้ WeeeR ทั้งหมด (override policy)",
+    desc:     "ยึดพอยต์ทองที่ล็อกให้ WeeeR ทั้งหมด (override policy)",
     color:    "border-red-300 bg-red-50 text-red-700",
     btnColor: "bg-red-600 hover:bg-red-700 text-white",
     axes: [
-      { key: "deposit",      icon: "💳", implication: "ยึดมัดจำ 100% ให้ WeeeR (override คืนลูกค้า)" },
-      { key: "cancellation", icon: "❌", implication: "WeeeU ยกเลิกผิดเงื่อนไข → WeeeR รับมัดจำ" },
+      { key: "deposit",      icon: "💳", implication: "ยึดพอยต์ทองที่ล็อก 100% ให้ WeeeR (override คืนลูกค้า)" },
+      { key: "cancellation", icon: "❌", implication: "WeeeU ยกเลิกผิดเงื่อนไข → WeeeR รับพอยต์ทองที่ล็อก" },
       { key: "conduct",      icon: "🤝", implication: "พฤติกรรม WeeeU ละเมิดข้อตกลง" },
-      { key: "price",        icon: "💰", implication: "มัดจำคือส่วนหนึ่งของค่าบริการ — ไม่คืน" },
+      { key: "price",        icon: "💰", implication: "พอยต์ทองที่ล็อกคือส่วนหนึ่งของค่าบริการ — ไม่คืน" },
     ],
   },
 };
