@@ -255,7 +255,7 @@ export default function ServiceListingDetailPage({
                 disabled={acting}
                 className="w-full py-3.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-semibold text-sm transition-colors disabled:opacity-50"
               >
-                {acting ? "กำลังดำเนินการ..." : "✅ ยืนยันส่งมอบงาน (ปล่อยเงิน Escrow)"}
+                {acting ? "กำลังดำเนินการ..." : "✅ ยืนยันส่งมอบงาน (ปล่อยเงินจากระบบพักเงินกลาง)"}
               </button>
             )}
 

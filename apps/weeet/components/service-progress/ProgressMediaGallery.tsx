@@ -19,7 +19,16 @@ export function ProgressMediaGallery({ media }: { media: ProgressStepMedia }) {
               type="button"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.url} alt={img.caption ?? "รูปประกอบ"} className="w-full h-full object-cover" />
+              <img
+                src={img.url}
+                alt={img.caption ?? "รูปประกอบ"}
+                className="w-full h-full object-cover"
+                // D1 — รูปดึงไม่ได้ → ซ่อนทั้งปุ่ม (ไม่โชว์ไอคอนรูปเสีย)
+                onError={(e) => {
+                  const btn = e.currentTarget.closest("button");
+                  if (btn) btn.style.display = "none";
+                }}
+              />
             </button>
           ))}
         </div>
@@ -50,7 +59,13 @@ export function ProgressMediaGallery({ media }: { media: ProgressStepMedia }) {
           onClick={() => setLightbox(null)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={lightbox} alt="ขยาย" className="max-w-full max-h-full rounded-lg" />
+          <img
+            src={lightbox}
+            alt="ขยาย"
+            className="max-w-full max-h-full rounded-lg"
+            // D1 — รูปดึงไม่ได้ → ปิด lightbox
+            onError={() => setLightbox(null)}
+          />
         </div>
       )}
     </div>

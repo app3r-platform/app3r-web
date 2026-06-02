@@ -42,7 +42,7 @@ export default function ServiceListingsPage() {
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 z-10 space-y-3">
         <div>
           <h1 className="font-bold text-white">ประกาศบริการของฉัน</h1>
-          <p className="text-xs text-gray-500 mt-0.5">งานที่จับคู่แล้ว — ยืนยันส่งมอบเพื่อปล่อยเงิน Escrow</p>
+          <p className="text-xs text-gray-500 mt-0.5">งานที่จับคู่แล้ว — ยืนยันส่งมอบเพื่อปล่อยเงินจากระบบพักเงินกลาง (Escrow)</p>
         </div>
         {/* GR-10 — กรองงานใกล้ฉัน (NearMeFilter จาก @app3r/ui · roleTheme weeet) */}
         <div className="flex items-center gap-3 flex-wrap">

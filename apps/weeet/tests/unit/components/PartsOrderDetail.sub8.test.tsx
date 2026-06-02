@@ -160,7 +160,7 @@ test("shows audit trail events in reverse chronological order", async () => {
   render(<PartsOrderDetailPage params={makeParams()} />);
   await screen.findByText("ประวัติออเดอร์");
   // Both events should appear
-  expect(screen.getByText(/ล็อกเงิน escrow/)).toBeInTheDocument(); // held
+  expect(screen.getByText(/ล็อกเงินในระบบพักเงินกลาง/)).toBeInTheDocument(); // held (canon: ระบบพักเงินกลาง (Escrow))
   expect(screen.getByText(/สร้างออเดอร์/)).toBeInTheDocument(); // created
 });
 
