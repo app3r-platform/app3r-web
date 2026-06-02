@@ -260,7 +260,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
           <div className="space-y-1.5 text-sm">
             {job.offerData.deposit.required && (
               <div className="flex justify-between">
-                <span className="text-gray-600">มัดจำ</span>
+                <span className="text-gray-600">พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow)</span>
                 <span className="font-medium text-gray-800">{job.offerData.deposit.amount?.toLocaleString()} pts</span>
               </div>
             )}

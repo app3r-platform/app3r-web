@@ -18,7 +18,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
   const [loadingJob, setLoadingJob] = useState(true);
   const [jobError, setJobError] = useState("");
 
-  // ── แกน 1: มัดจำ ─────────────────────────────────────────────────────────
+  // ── แกน 1: พอยต์ทองที่ล็อก (Escrow) ─────────────────────────────────────────────────────────
   const [depositRequired, setDepositRequired] = useState(false);
   const [depositAmount, setDepositAmount] = useState("");
   const [depositRefund, setDepositRefund] = useState("");
@@ -125,12 +125,12 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
 
       <div className="space-y-4">
 
-        {/* ── แกน 1: มัดจำ ── */}
+        {/* ── แกน 1: พอยต์ทองที่ล็อก (Escrow) ── */}
         <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-gray-800">💰 แกน 1 — มัดจำ</p>
+            <p className="text-sm font-semibold text-gray-800">💰 แกน 1 — พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow)</p>
             <label className="flex items-center gap-2 cursor-pointer">
-              <span className="text-xs text-gray-500">เรียกมัดจำ</span>
+              <span className="text-xs text-gray-500">เรียกล็อกพอยต์ทอง</span>
               <div
                 onClick={() => setDepositRequired(v => !v)}
                 className={`w-10 h-5 rounded-full transition-colors cursor-pointer ${depositRequired ? "bg-[#FF663A]" : "bg-gray-200"} relative`}>
@@ -147,7 +147,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">เงื่อนไขคืนมัดจำ</label>
+                <label className="block text-xs text-gray-500 mb-1">เงื่อนไขคืนพอยต์ทองที่ล็อก</label>
                 <input type="text" value={depositRefund} onChange={e => setDepositRefund(e.target.value)}
                   placeholder="เช่น คืนเต็มหากยกเลิก 24 ชม.ล่วงหน้า"
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
@@ -155,7 +155,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
             </div>
           )}
           {!depositRequired && (
-            <p className="text-xs text-gray-400">⚠️ ไม่ระบุมัดจำ = ไม่มีสิทธิเรียกมัดจำภายหลัง</p>
+            <p className="text-xs text-gray-400">⚠️ ไม่ระบุพอยต์ทองที่ล็อก = ไม่มีสิทธิเรียกภายหลัง</p>
           )}
         </div>
 
@@ -268,7 +268,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
               <p className="text-xs text-yellow-800 font-medium">⚠️ ตรวจสอบก่อนส่ง</p>
               <ul className="text-xs text-yellow-700 mt-1.5 space-y-0.5 list-disc pl-4">
-                <li>มัดจำ: {depositRequired ? `${depositAmount || "0"} pts` : "ไม่เรียก"}</li>
+                <li>พอยต์ทองที่ล็อก: {depositRequired ? `${depositAmount || "0"} pts` : "ไม่เรียก"}</li>
                 <li>ค่าเดินทาง: {travelRequired ? `${travelAmount || "0"} pts` : "ไม่เรียก"}</li>
                 <li>ไม่ระบุ = ไม่มีสิทธิเรียกภายหลัง</li>
               </ul>

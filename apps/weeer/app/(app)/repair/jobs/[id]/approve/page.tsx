@@ -41,7 +41,7 @@ const BRANCH_CONFIG: Record<ApproveAction, {
   },
   "B2.1": {
     label: "ยืนยัน — ซ่อมไม่ได้ ยกเลิกงาน",
-    description: "งานจะถูกยกเลิก นโยบายมัดจำตามที่ตกลงไว้",
+    description: "งานจะถูกยกเลิก นโยบายพอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) ตามที่ตกลงไว้",
     color: "text-red-700",
     bg: "bg-red-50",
     border: "border-red-200",
@@ -259,10 +259,10 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
       {/* Deposit notice for B2.1 */}
       {selectedBranch === "B2.1" && job.deposit_amount && (
         <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
-          <p className="text-xs font-semibold text-orange-700 mb-1">นโยบายมัดจำ</p>
-          <p className="text-sm text-orange-800">มัดจำ {job.deposit_amount.toLocaleString()} pts —{" "}
-            {job.deposit_policy_unrepairable === "forfeit" ? "ยึดมัดจำ (ตามเงื่อนไขที่ตกลง)" :
-             job.deposit_policy_unrepairable === "refund" ? "คืนมัดจำให้ WeeeU" : "ฟรี (ไม่มีค่าใช้จ่าย)"}
+          <p className="text-xs font-semibold text-orange-700 mb-1">นโยบายพอยต์ทองที่ล็อก</p>
+          <p className="text-sm text-orange-800">พอยต์ทองที่ล็อก {job.deposit_amount.toLocaleString()} pts —{" "}
+            {job.deposit_policy_unrepairable === "forfeit" ? "ยึดพอยต์ทองที่ล็อก (ตามเงื่อนไขที่ตกลง)" :
+             job.deposit_policy_unrepairable === "refund" ? "คืนพอยต์ทองที่ล็อกให้ WeeeU" : "ฟรี (ไม่มีค่าใช้จ่าย)"}
           </p>
         </div>
       )}

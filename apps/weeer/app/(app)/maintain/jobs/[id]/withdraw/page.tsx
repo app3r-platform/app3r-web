@@ -36,7 +36,7 @@ const WITHDRAW_REASON_LABEL: Record<WithdrawReason, string> = {
 };
 
 const WITHDRAW_REASON_DESC: Record<WithdrawReason, string> = {
-  shop_fault:     "ร้านเป็นผู้ยกเลิก — มัดจำคืน WeeeU เต็มจำนวน ไม่ได้ค่าเดินทาง",
+  shop_fault:     "ร้านเป็นผู้ยกเลิก — พอยต์ทองที่ล็อกคืน WeeeU เต็มจำนวน ไม่ได้ค่าเดินทาง",
   customer_fault: "ลูกค้าเป็นผู้ยกเลิก — WeeeR ได้รับค่าเดินทาง",
   force_majeure:  "เหตุสุดวิสัย — ไม่มีค่าปรับ settle ตาม policy",
 };
@@ -209,7 +209,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
           <div className="space-y-1.5 text-sm">
             <div className="flex items-start gap-2 text-gray-600">
               <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
-              <span>มัดจำที่รับไว้ — คืนให้ WeeeU เต็มจำนวน</span>
+              <span>พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) ที่รับไว้ — คืนให้ WeeeU เต็มจำนวน</span>
             </div>
             <div className="flex items-start gap-2 text-gray-600">
               <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
@@ -244,7 +244,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
             <div>
               <p className="font-semibold text-gray-800">ยืนยันถอนรับงาน?</p>
               <p className="text-sm text-gray-500 mt-1">
-                การถอนหลังยืนยัน: WeeeR เป็นผู้ผิดนัด — มัดจำคืน WeeeU เต็มจำนวน
+                การถอนหลังยืนยัน: WeeeR เป็นผู้ผิดนัด — พอยต์ทองที่ล็อกคืน WeeeU เต็มจำนวน
                 และ WeeeR ไม่ได้ค่าเดินทาง
               </p>
             </div>
@@ -293,7 +293,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
                 ผลกระทบ ({WITHDRAW_REASON_LABEL[reason as WithdrawReason]})
               </p>
               <div className="flex justify-between">
-                <span>มัดจำ — คืน WeeeU</span>
+                <span>พอยต์ทองที่ล็อก — คืน WeeeU</span>
                 <span className="text-[#FF663A] font-medium">ไม่ได้รับ</span>
               </div>
               <div className="flex justify-between">
