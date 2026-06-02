@@ -30,7 +30,7 @@ export default function WelcomePage() {
       {/* Feature bullets */}
       <div className="grid grid-cols-2 gap-3 text-left">
         {[
-          { icon: "🔧", label: "แจ้งซ่อมออนไลน์", desc: "รับ offer ราคาทันที" },
+          { icon: "🔧", label: "แจ้งซ่อมออนไลน์", desc: "รับข้อเสนอ (Offer) ราคาทันที" },
           { icon: "💰", label: "ซื้อ/ขายมือสอง", desc: "ได้ Silver Point" },
           { icon: "♻️", label: "ทิ้งซากถูกวิธี", desc: "ตามมาตรฐาน WEEE" },
           { icon: "🛠️", label: "ล้างแอร์/ซักผ้า", desc: "จองออนไลน์ได้เลย" },

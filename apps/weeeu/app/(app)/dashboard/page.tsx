@@ -1,14 +1,8 @@
 ﻿import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "หน้าหลัก" };
-
-const quickActions = [
-  { href: "/repair/new", icon: "🔧", label: "แจ้งซ่อม", color: "bg-orange-50 text-orange-600 border-orange-100" },
-  { href: "/sell/new", icon: "💰", label: "ขาย/ซื้อ", color: "bg-green-50 text-green-600 border-green-100" },
-  { href: "/scrap/new", icon: "♻️", label: "ทิ้งซาก", color: "bg-teal-50 text-teal-600 border-teal-100" },
-  { href: "/maintain/book", icon: "🛠️", label: "บำรุงรักษา", color: "bg-weeeu-surface text-weeeu-dark border-weeeu-primary/20" },
-];
 
 const recentActivities = [
   { icon: "🔧", title: "แจ้งซ่อมแอร์", status: "กำลังดำเนินการ", date: "2 พ.ค. 69", statusColor: "text-orange-600 bg-orange-50" },
@@ -16,11 +10,12 @@ const recentActivities = [
   { icon: "✅", title: "ซ่อมเครื่องซักผ้า", status: "เสร็จแล้ว", date: "28 เม.ย. 69", statusColor: "text-green-600 bg-green-50" },
 ];
 
-// Home feed 4 หมวด — role-agnostic (Mockup — Phase D-2 ดึงจาก feed API จริง)
+// Home feed — การ์ดเดี่ยวแนวนอน เรียง ซื้อขาย→ซาก→ซ่อม→บำรุง (A1)
+// hasActivity = แสดงเฉพาะหมวดที่ผู้ใช้มีธุรกรรม (Mockup — Phase D-2 ดึงจาก feed API จริง)
 type FeedItem = { icon: string; name: string; meta: string };
-const feedGroups: { key: string; title: string; href: string; items: FeedItem[] }[] = [
+const feedGroups: { key: string; title: string; href: string; hasActivity: boolean; items: FeedItem[] }[] = [
   {
-    key: "used", title: "🛒 มือสอง", href: "/listings",
+    key: "used", title: "🛒 ซื้อ-ขายมือสอง", href: "/listings", hasActivity: true,
     items: [
       { icon: "🧊", name: "ตู้เย็น Sharp", meta: "3,500 ฿" },
       { icon: "❄️", name: "แอร์ Daikin", meta: "5,900 ฿" },
@@ -29,7 +24,7 @@ const feedGroups: { key: string; title: string; href: string; items: FeedItem[] 
     ],
   },
   {
-    key: "scrap", title: "♻️ ซาก / ชิ้นส่วน", href: "/listings?type=scrap",
+    key: "scrap", title: "♻️ ซาก / ชิ้นส่วน", href: "/scrap", hasActivity: false,
     items: [
       { icon: "🔩", name: "คอมเพรสเซอร์", meta: "800 ฿" },
       { icon: "⚙️", name: "มอเตอร์พัดลม", meta: "350 ฿" },
@@ -38,7 +33,7 @@ const feedGroups: { key: string; title: string; href: string; items: FeedItem[] 
     ],
   },
   {
-    key: "repair", title: "🔧 งานซ่อม", href: "/repair",
+    key: "repair", title: "🔧 งานซ่อม", href: "/repair", hasActivity: true,
     items: [
       { icon: "❄️", name: "ซ่อมแอร์ไม่เย็น", meta: "ประเมินฟรี" },
       { icon: "🫧", name: "เครื่องซักผ้าไม่ปั่น", meta: "ประเมินฟรี" },
@@ -47,7 +42,7 @@ const feedGroups: { key: string; title: string; href: string; items: FeedItem[] 
     ],
   },
   {
-    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain",
+    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain", hasActivity: false,
     items: [
       { icon: "❄️", name: "ล้างแอร์", meta: "เริ่ม 500 ฿" },
       { icon: "🌀", name: "ล้างเครื่องซักผ้า", meta: "เริ่ม 400 ฿" },
@@ -60,10 +55,19 @@ const feedGroups: { key: string; title: string; href: string; items: FeedItem[] 
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      {/* Greeting */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">สวัสดี, สมชาย 👋</h1>
-        <p className="text-gray-500 text-sm mt-1">2 พฤษภาคม 2569</p>
+      {/* Greeting — logo ×2 (56px = 2× ของแถบบน 28px) ข้างคำทักทาย (A1) */}
+      <div className="flex items-center gap-3">
+        <Image
+          src="/logo/WeeeU.png"
+          alt="WeeeU"
+          width={56}
+          height={56}
+          className="rounded-2xl shadow-sm"
+        />
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">สวัสดี, สมชาย 👋</h1>
+          <p className="text-gray-500 text-sm mt-1">2 พฤษภาคม 2569</p>
+        </div>
       </div>
 
       {/* Wallet summary cards */}
@@ -89,47 +93,28 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {/* Quick actions */}
-      <div>
-        <h2 className="text-base font-semibold text-gray-800 mb-3">บริการด่วน</h2>
-        <div className="grid grid-cols-4 gap-3">
-          {quickActions.map((action) => (
-            <Link
-              key={action.href}
-              href={action.href}
-              className={`flex flex-col items-center gap-2 p-4 rounded-2xl border ${action.color} hover:scale-105 transition-transform`}
-            >
-              <span className="text-2xl">{action.icon}</span>
-              <span className="text-xs font-medium text-center">{action.label}</span>
-            </Link>
-          ))}
-        </div>
+      {/* บริการของฉัน — การ์ดเดี่ยวแนวนอน · แสดงเฉพาะหมวดที่มีธุรกรรม (A1) */}
+      <div className="space-y-3">
+        {feedGroups.filter((group) => group.hasActivity).map((group) => (
+          <Link
+            key={group.key}
+            href={group.href}
+            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:border-weeeu-primary/40 transition-colors"
+          >
+            {/* icon ใหญ่ซ้าย */}
+            <span className="text-3xl flex-shrink-0">{group.items[0]?.icon ?? "📦"}</span>
+            {/* ชื่อหมวด + teaser */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-800 truncate">{group.title}</p>
+              <p className="text-xs text-gray-500 truncate">
+                {group.items[0]?.name} · {group.items[0]?.meta}
+                {group.items.length > 1 ? ` · +${group.items.length - 1} รายการ` : ""}
+              </p>
+            </div>
+            <span className="text-sm text-weeeu-primary font-medium flex-shrink-0">ดูทั้งหมด →</span>
+          </Link>
+        ))}
       </div>
-
-      {/* Home feed 4 หมวด — แถวละ 4 (role-agnostic) */}
-      {feedGroups.map((group) => (
-        <div key={group.key}>
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="text-base font-semibold text-gray-800">{group.title}</h2>
-            <Link href={group.href} className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">
-              ดูทั้งหมด →
-            </Link>
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            {group.items.map((item, i) => (
-              <Link
-                key={i}
-                href={group.href}
-                className="flex flex-col items-center gap-1 p-2.5 rounded-2xl border border-gray-100 bg-white shadow-sm hover:border-weeeu-primary/40 transition-colors"
-              >
-                <span className="text-2xl">{item.icon}</span>
-                <span className="text-[11px] font-medium text-gray-700 text-center leading-tight line-clamp-2">{item.name}</span>
-                <span className="text-[10px] text-weeeu-primary font-semibold">{item.meta}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      ))}
 
       {/* My appliances summary */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

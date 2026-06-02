@@ -388,7 +388,7 @@ export default function SellNewPage() {
       <div className="bg-white rounded-2xl border border-weeeu-primary/20 shadow-sm p-5 space-y-4">
         <div className="flex items-center gap-2">
           <span className="text-base">📋</span>
-          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider">เงื่อนไขการขาย (Terms 3 แกน)</p>
+          <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider">เงื่อนไขการขาย (3 ข้อ)</p>
         </div>
         <div className="bg-weeeu-surface rounded-xl p-3">
           <p className="text-xs text-weeeu-text">เงื่อนไขนี้จะแสดงให้ผู้ซื้อเห็นก่อนยื่นข้อเสนอ — เป็น Source of Truth ในกรณีข้อพิพาท</p>

@@ -228,7 +228,7 @@ export default function RepairOffersPage() {
         // Mock mode: navigate to job detail (accept state เปลี่ยน)
         router.push(`/repair/${id}`);
       } else {
-        setError("เกิดข้อผิดพลาดในการเลือก Offer กรุณาลองใหม่");
+        setError("เกิดข้อผิดพลาดในการเลือกข้อเสนอ กรุณาลองใหม่");
       }
     } finally {
       setSelecting(null);
@@ -241,7 +241,7 @@ export default function RepairOffersPage() {
     <div className="max-w-xl space-y-5">
       <div className="flex items-center gap-3">
         <Link href="/repair" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
-        <h1 className="text-xl font-bold text-gray-900">Offer จากร้านซ่อม</h1>
+        <h1 className="text-xl font-bold text-gray-900">ข้อเสนอ (Offer) จากร้านซ่อม</h1>
       </div>
 
       {listing && (
@@ -260,12 +260,12 @@ export default function RepairOffersPage() {
       {offers.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-4xl mb-3">⏳</p>
-          <p className="text-gray-500 font-medium">ยังไม่มี Offer</p>
-          <p className="text-xs text-gray-400 mt-1">ร้านซ่อมจะส่ง Offer มาให้เร็วๆ นี้</p>
+          <p className="text-gray-500 font-medium">ยังไม่มีข้อเสนอ</p>
+          <p className="text-xs text-gray-400 mt-1">ร้านซ่อมจะส่งข้อเสนอ มาให้เร็วๆ นี้</p>
         </div>
       ) : (
         <div className="space-y-4">
-          <p className="text-sm text-gray-500">{offers.length} Offer จากร้านซ่อม — เลือกร้านที่ต้องการ</p>
+          <p className="text-sm text-gray-500">{offers.length} ข้อเสนอ จากร้านซ่อม — เลือกร้านที่ต้องการ</p>
           {offers.map(offer => (
             <OfferCard
               key={offer.id}
@@ -313,13 +313,13 @@ function OfferCard({
       {/* ── เงื่อนไขหลัก (always visible) ─────────────────────────────────── */}
       <div className="px-5 py-4 space-y-2">
         {/* แกน 2: ค่าตรวจ */}
-        <OfferRow label="แกน 2 · ค่าตรวจ" value={`${offer.inspection_fee.toLocaleString()} พอยต์ทอง (ไม่คืน)`} />
+        <OfferRow label="เงื่อนไข 2 · ค่าตรวจ" value={`${offer.inspection_fee.toLocaleString()} พอยต์ทอง (ไม่คืน)`} />
 
         {/* แกน 1: มัดจำ */}
         {offer.deposit_amount != null && (
           <div className="space-y-0.5">
             <OfferRow
-              label="แกน 1 · มัดจำ"
+              label="เงื่อนไข 1 · มัดจำ"
               value={`${offer.deposit_amount.toLocaleString()} พอยต์ทอง`}
             />
             <div className="flex justify-end">
@@ -336,7 +336,7 @@ function OfferCard({
         {/* แกน 3: ค่าเดินทาง */}
         {(offer.travel_fee != null || offer.travel_fee_policy) && (
           <OfferRow
-            label="แกน 3 · ค่าเดินทาง"
+            label="เงื่อนไข 3 · ค่าเดินทาง"
             value={
               offer.travel_fee != null
                 ? `${offer.travel_fee.toLocaleString()} พอยต์ทอง${offer.travel_fee_policy ? ` (${offer.travel_fee_policy})` : ""}`
@@ -348,7 +348,7 @@ function OfferCard({
         {/* แกน 6: รับประกัน */}
         {offer.warranty_days != null && (
           <OfferRow
-            label="แกน 6 · รับประกัน"
+            label="เงื่อนไข 6 · รับประกัน"
             value={`${offer.warranty_days} วัน${offer.warranty_scope ? ` · ${WARRANTY_SCOPE_LABEL[offer.warranty_scope] ?? offer.warranty_scope}` : ""}`}
           />
         )}
@@ -373,7 +373,7 @@ function OfferCard({
             {/* แกน 4: ค่าแรงยุติ */}
             {(offer.labor_cancel_fee != null || offer.labor_cancel_fee_policy) && (
               <OfferRow
-                label="แกน 4 · ค่าแรงยุติ"
+                label="เงื่อนไข 4 · ค่าแรงยุติ"
                 value={
                   offer.labor_cancel_fee != null
                     ? `${offer.labor_cancel_fee.toLocaleString()} พอยต์ทอง${offer.labor_cancel_fee_policy ? ` — ${offer.labor_cancel_fee_policy}` : ""}`
@@ -385,7 +385,7 @@ function OfferCard({
             {/* แกน 5: ค่าอะไหล่ */}
             {(offer.parts_markup_pct != null || offer.parts_policy) && (
               <OfferRow
-                label="แกน 5 · ค่าอะไหล่"
+                label="เงื่อนไข 5 · ค่าอะไหล่"
                 value={
                   offer.parts_policy
                     ? `${PARTS_POLICY_LABEL[offer.parts_policy] ?? offer.parts_policy}${offer.parts_markup_pct != null ? ` (+${offer.parts_markup_pct}%)` : ""}`
@@ -397,7 +397,7 @@ function OfferCard({
             {/* แกน 7: no-show / ฝาก */}
             {(offer.no_show_fee != null || offer.no_show_policy) && (
               <OfferRow
-                label="แกน 7 · No-show / ฝาก"
+                label="เงื่อนไข 7 · No-show / ฝาก"
                 value={
                   offer.no_show_fee != null
                     ? `${offer.no_show_fee.toLocaleString()} พอยต์ทอง${offer.no_show_policy ? ` — ${offer.no_show_policy}` : ""}`
@@ -409,7 +409,7 @@ function OfferCard({
             {/* แกน 8: งานบานปลาย */}
             {(offer.scope_creep_policy || offer.scope_creep_threshold_pct != null) && (
               <OfferRow
-                label="แกน 8 · งานบานปลาย"
+                label="เงื่อนไข 8 · งานบานปลาย"
                 value={
                   offer.scope_creep_threshold_pct != null
                     ? `แจ้งลูกค้าเมื่อเกิน ${offer.scope_creep_threshold_pct}%${offer.scope_creep_policy ? ` — ${offer.scope_creep_policy}` : ""}`
@@ -421,7 +421,7 @@ function OfferCard({
             {/* แกน 9: ความรับผิด */}
             {(offer.liability_cap != null || offer.liability_policy) && (
               <OfferRow
-                label="แกน 9 · วงเงินความรับผิด"
+                label="เงื่อนไข 9 · วงเงินความรับผิด"
                 value={
                   offer.liability_cap != null
                     ? `ไม่เกิน ${offer.liability_cap.toLocaleString()} พอยต์ทอง${offer.liability_policy ? ` — ${offer.liability_policy}` : ""}`

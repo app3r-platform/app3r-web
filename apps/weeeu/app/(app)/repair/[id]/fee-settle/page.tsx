@@ -105,7 +105,7 @@ function AxisRow({ ax }: { ax: AxisItem }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold text-weeeu-dark bg-weeeu-surface px-1.5 py-0.5 rounded flex-shrink-0">
-            แกน {ax.axis}
+            เงื่อนไข {ax.axis}
           </span>
           <p className="text-sm text-gray-700 font-medium">{ax.label}</p>
           {!ax.locked && (
@@ -203,7 +203,7 @@ export default function FeeSettlePage() {
           {/* 9-axis breakdown */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
-              รายละเอียด 9 แกนเงื่อนไข
+              รายละเอียด 9 เงื่อนไข
             </p>
             <p className="text-xs text-gray-400 mb-4">
               ✓ = ล็อกแล้ว · ประมาณการ = ยังรอยืนยัน
@@ -251,7 +251,7 @@ export default function FeeSettlePage() {
           {/* Unlock axes notice */}
           {data.axes.some(a => !a.locked) && (
             <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-              <p className="text-xs font-semibold text-amber-700">⏳ ยังมี {data.axes.filter(a => !a.locked).length} แกนที่ยังไม่ล็อก</p>
+              <p className="text-xs font-semibold text-amber-700">⏳ ยังมี {data.axes.filter(a => !a.locked).length} เงื่อนไขที่ยังไม่ล็อก</p>
               <p className="text-xs text-gray-500 mt-1">รอช่างยืนยันรายละเอียดก่อนยืนยันการชำระ</p>
             </div>
           )}
@@ -279,7 +279,7 @@ export default function FeeSettlePage() {
                 <p className="text-xs text-center text-gray-400">
                   {data.customer_point_balance < data.total_due
                     ? "พอยต์ทองไม่เพียงพอ — กรุณาเติมพอยต์ทองก่อน"
-                    : "ยังมีแกนที่รอยืนยัน — รอช่างล็อกก่อน"}
+                    : "ยังมีเงื่อนไขที่รอยืนยัน — รอช่างล็อกก่อน"}
                 </p>
               )}
               <Link

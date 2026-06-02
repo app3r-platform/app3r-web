@@ -140,9 +140,6 @@ function ScrapListingDetailContent({
   const [declineOfferId, setDeclineOfferId] = useState<string | null>(null);
   const [declineReason, setDeclineReason] = useState("");
 
-  // S8 — Mismatch response
-  const [mismatchAction, setMismatchAction] = useState<"accept" | "dispute" | null>(null);
-
   // S9 — No-show response
   const [noShowAction, setNoShowAction] = useState<"reschedule" | "cancel" | null>(null);
 
@@ -183,19 +180,6 @@ function ScrapListingDetailContent({
         })),
       }));
       setSubmitting(false);
-    }, 700);
-  }
-
-  // S8 — ยินยอมปรับราคา
-  function handleMismatchAccept() {
-    setSubmitting(true);
-    setTimeout(() => {
-      if (listing.mismatchReport) {
-        setListing(prev => ({ ...prev, price: prev.mismatchReport!.proposedPrice }));
-      }
-      setMismatchAction(null);
-      setSubmitting(false);
-      alert("✅ ยืนยันราคาใหม่แล้ว — ดำเนินการต่อ");
     }, 700);
   }
 
@@ -245,96 +229,7 @@ function ScrapListingDetailContent({
         </div>
       </div>
 
-      {/* S12 — Repair source banner */}
-      {listing.sourceRepairJobId && (
-        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-orange-800">
-                🔧 ซากจากงานซ่อม #{listing.sourceRepairJobId}
-              </p>
-              <p className="text-xs text-orange-600 mt-1">
-                ช่างวินิจฉัย "ซ่อมไม่คุ้ม" → ซากถูกโอนเข้าระบบซาก (B2.2 path)
-              </p>
-            </div>
-            <Link href={`/jobs/${listing.sourceRepairJobId}`}
-              className="text-xs text-orange-600 bg-white border border-orange-200 px-3 py-1.5 rounded-xl hover:bg-orange-100 whitespace-nowrap">
-              ดูงานซ่อม ↗
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {/* S8 — Mismatch notification */}
-      {listing.mismatchReport && (
-        <div className="bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-4 space-y-3">
-          <div className="flex items-start gap-2">
-            <span className="text-yellow-500 text-xl">⚠️</span>
-            <div>
-              <p className="text-sm font-bold text-yellow-800">ช่างรายงาน: ซากไม่ตรงประกาศ</p>
-              <p className="text-xs text-yellow-700 mt-0.5">
-                {listing.mismatchReport.weeeTName} · {new Date(listing.mismatchReport.reportedAt).toLocaleString("th-TH")}
-              </p>
-            </div>
-          </div>
-          <p className="text-sm text-yellow-800 bg-yellow-100 rounded-xl px-3 py-2">
-            {listing.mismatchReport.reason}
-          </p>
-          <div className="flex items-center gap-2 text-xs text-yellow-700">
-            <span>ราคาเดิม:</span>
-            <span className="font-mono line-through">{listing.mismatchReport.originalPrice} พอยต์ทอง (Gold Point)</span>
-            <span>→ ราคาใหม่ที่เสนอ:</span>
-            <span className="font-mono font-bold text-yellow-800">{listing.mismatchReport.proposedPrice} พอยต์ทอง</span>
-          </div>
-          {!mismatchAction && (
-            <div className="flex gap-3">
-              <button
-                onClick={() => setMismatchAction("accept")}
-                className="flex-1 py-2.5 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium rounded-xl transition-colors"
-              >
-                ✅ ยินยอมราคาใหม่
-              </button>
-              <button
-                onClick={() => setMismatchAction("dispute")}
-                className="flex-1 py-2.5 bg-white hover:bg-red-50 text-red-600 border-2 border-red-200 text-sm font-medium rounded-xl transition-colors"
-              >
-                🚫 โต้แย้ง (เปิด Dispute)
-              </button>
-            </div>
-          )}
-          {mismatchAction === "accept" && (
-            <div className="space-y-2">
-              <p className="text-xs text-yellow-700">ยืนยันรับราคาใหม่ {listing.mismatchReport.proposedPrice} พอยต์ทอง?</p>
-              <div className="flex gap-2">
-                <button onClick={handleMismatchAccept} disabled={submitting}
-                  className="flex-1 py-2 bg-green-500 text-white text-sm rounded-xl disabled:opacity-50">
-                  {submitting ? "กำลังยืนยัน..." : "ยืนยัน"}
-                </button>
-                <button onClick={() => setMismatchAction(null)}
-                  className="flex-1 py-2 bg-gray-100 text-gray-600 text-sm rounded-xl">
-                  ยกเลิก
-                </button>
-              </div>
-            </div>
-          )}
-          {mismatchAction === "dispute" && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-xs text-red-700">
-              🔔 Dispute จะถูกส่งไปยัง Admin เพื่อตรวจสอบ — กด "ยืนยันโต้แย้ง" เพื่อเปิดเคส
-              <div className="flex gap-2 mt-2">
-                <button
-                  onClick={() => alert("🔔 Dispute เปิดแล้ว — Admin จะตรวจสอบภายใน 24 ชม.")}
-                  className="px-3 py-1.5 bg-red-500 text-white rounded-xl text-xs"
-                >
-                  ยืนยันโต้แย้ง
-                </button>
-                <button onClick={() => setMismatchAction(null)} className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-xs">
-                  ยกเลิก
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      {/* A5 — ตัดบล็อก "ซากจากงานซ่อม #REP" (S12) + "ช่างรายงานซากไม่ตรง" (S8) ออกจาก scrap/[id] (HUB Gen44) */}
 
       {/* S9 — No-show notification */}
       {listing.noShowEvent && (
