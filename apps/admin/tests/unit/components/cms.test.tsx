@@ -101,7 +101,7 @@ describe('ContentEditor', () => {
     mockIsActive.mockReturnValue(true)
     render(<ContentEditor />)
     const boldBtn = screen.getByTitle('Bold')
-    expect(boldBtn.className).toContain('bg-blue-600')
+    expect(boldBtn.className).toContain('bg-admin-surface')
   })
 
   it('calls onChange when editor content updates', async () => {

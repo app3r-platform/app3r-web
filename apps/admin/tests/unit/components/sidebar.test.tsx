@@ -59,27 +59,27 @@ describe('Sidebar — active state (สถานะ active)', () => {
     mockUsePathname.mockReturnValue('/')
     render(<Sidebar />)
     const dashboardLink = screen.getByRole('link', { name: /dashboard/i })
-    expect(dashboardLink).toHaveClass('bg-blue-600')
+    expect(dashboardLink).toHaveClass('bg-admin-surface')
   })
 
   it('Dashboard ไม่มี active class เมื่อ pathname ≠ "/"', () => {
     mockUsePathname.mockReturnValue('/users')
     render(<Sidebar />)
     const dashboardLink = screen.getByRole('link', { name: /dashboard/i })
-    expect(dashboardLink).not.toHaveClass('bg-blue-600')
+    expect(dashboardLink).not.toHaveClass('bg-admin-surface')
   })
 
   it('Repair Jobs มี active class เมื่ออยู่หน้า repair/jobs', () => {
     mockUsePathname.mockReturnValue('/repair/jobs')
     render(<Sidebar />)
     const repairLink = screen.getByRole('link', { name: /repair jobs/i })
-    expect(repairLink).toHaveClass('bg-blue-600')
+    expect(repairLink).toHaveClass('bg-admin-surface')
   })
 
   it('Repair Jobs มี active class เมื่ออยู่หน้า repair/jobs/{id} (startsWith)', () => {
     mockUsePathname.mockReturnValue('/repair/jobs/abc-123')
     render(<Sidebar />)
     const repairLink = screen.getByRole('link', { name: /repair jobs/i })
-    expect(repairLink).toHaveClass('bg-blue-600')
+    expect(repairLink).toHaveClass('bg-admin-surface')
   })
 })
