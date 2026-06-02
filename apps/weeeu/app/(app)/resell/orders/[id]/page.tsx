@@ -17,6 +17,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type OrderState =
@@ -453,7 +454,7 @@ export default function ResellOrderPage() {
                 ยกเลิกร่วมกัน
               </p>
               <p className="text-sm text-gray-500">
-                หากทั้งสองฝ่ายตกลงยกเลิก Escrow จะคืนเต็มจำนวน — ไม่มีค่าธรรมเนียม
+                หากทั้งสองฝ่ายตกลงยกเลิก Escrow <EscrowInfoIcon /> จะคืนเต็มจำนวน — ไม่มีค่าธรรมเนียม
               </p>
               <button
                 onClick={() => setShowMutualConfirm(true)}
@@ -503,7 +504,7 @@ export default function ResellOrderPage() {
           </div>
           <p className="text-sm text-weeeu-dark">
             ผู้ซื้อ (<strong>{order.buyer_name}</strong>) ส่งคำขอยกเลิกธุรกรรม
-            — Escrow จะคืนเต็มจำนวน ไม่มีการลงโทษทั้งสองฝ่าย
+            — Escrow <EscrowInfoIcon /> จะคืนเต็มจำนวน ไม่มีการลงโทษทั้งสองฝ่าย
           </p>
           <div className="flex gap-2">
             <button
@@ -551,7 +552,7 @@ export default function ResellOrderPage() {
         <div className="bg-gray-100 border border-gray-200 rounded-2xl p-8 text-center space-y-2">
           <p className="text-5xl">🤝</p>
           <p className="font-bold text-gray-700 text-lg">ยกเลิกร่วมกันเรียบร้อย</p>
-          <p className="text-sm text-gray-500">Escrow คืนเต็มจำนวน — ไม่มีค่าธรรมเนียม</p>
+          <p className="text-sm text-gray-500">Escrow <EscrowInfoIcon /> คืนเต็มจำนวน — ไม่มีค่าธรรมเนียม</p>
         </div>
       )}
 

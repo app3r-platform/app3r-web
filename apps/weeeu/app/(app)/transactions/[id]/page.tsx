@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 
 // Local type — Mockup เท่านั้น (ไม่แตะ shared types.ts)
 type TxStatus =
@@ -224,7 +225,7 @@ export default function TransactionPage() {
       {tx.status === "disputed" && (
         <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-4 space-y-2">
           <p className="text-sm font-bold text-red-800">⚖️ มีข้อพิพาท — รอ Admin ตัดสิน (R10)</p>
-          <p className="text-xs text-red-600">Gold ในระบบพักเงินกลาง (Escrow) ถูกล็อกไว้จนกว่า Admin จะตัดสิน</p>
+          <p className="text-xs text-red-600">Gold ในระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> ถูกล็อกไว้จนกว่า Admin จะตัดสิน</p>
           <p className="text-xs text-gray-500">เหตุผล: {disputeReason === "not_as_described" ? "สินค้าไม่ตรงปก" : "อื่นๆ"}</p>
         </div>
       )}
@@ -240,7 +241,7 @@ export default function TransactionPage() {
       {/* R4: awaiting_payment banner */}
       {tx.status === "awaiting_payment" && (
         <div className="bg-orange-50 border-2 border-orange-300 rounded-2xl p-4 space-y-3">
-          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold Escrow (R4)</p>
+          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold Escrow <EscrowInfoIcon /> (R4)</p>
           <p className="text-xs text-orange-700">
             {isBuyer
               ? `Gold ของคุณขาดอีก ${mockR4Shortfall.toLocaleString()} — เติมให้ครบใน 24 ชม.`
@@ -288,7 +289,7 @@ export default function TransactionPage() {
         {isAfterEscrow && (
           <div className="flex items-center gap-1.5 pt-1 border-t border-gray-50">
             <span className="text-sm">🔒</span>
-            <p className="text-xs text-weeeu-primary font-medium">Gold {tx.agreed_price.toLocaleString()} ล็อกใน Escrow แล้ว</p>
+            <p className="text-xs text-weeeu-primary font-medium">Gold {tx.agreed_price.toLocaleString()} ล็อกใน Escrow <EscrowInfoIcon /> แล้ว</p>
           </div>
         )}
       </div>
@@ -459,7 +460,7 @@ export default function TransactionPage() {
       {parcelClaimSent && (
         <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
           <p className="text-sm font-semibold text-orange-800">📬 แจ้งเรื่องพัสดุเสียหายแล้ว (R11)</p>
-          <p className="text-xs text-orange-700 mt-1">Admin กำลังตรวจสอบ — Gold ใน Escrow ถูกล็อกไว้</p>
+          <p className="text-xs text-orange-700 mt-1">Admin กำลังตรวจสอบ — Gold ใน Escrow <EscrowInfoIcon /> ถูกล็อกไว้</p>
         </div>
       )}
 
@@ -510,7 +511,7 @@ export default function TransactionPage() {
         <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4">
             <p className="text-base font-bold text-gray-900">⚖️ เปิดข้อพิพาท</p>
-            <p className="text-xs text-gray-500">Admin จะตรวจสอบหลักฐานและตัดสิน — Gold ใน Escrow ถูกล็อกระหว่างรอ</p>
+            <p className="text-xs text-gray-500">Admin จะตรวจสอบหลักฐานและตัดสิน — Gold ใน Escrow <EscrowInfoIcon /> ถูกล็อกระหว่างรอ</p>
 
             <div className="space-y-1.5">
               {[
