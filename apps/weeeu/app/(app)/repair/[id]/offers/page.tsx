@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { apiFetch } from "@/lib/api-client";
 
 // ── 9 แกนเงื่อนไข (Blueprint B2.5) ────────────────────────────────────────────
@@ -291,6 +292,9 @@ function OfferCard({
   onSelect: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  // A5 Gold-lock: ต้อง acknowledge Escrow amount ก่อนกดเลือกร้าน
+  const [goldAcknowledged, setGoldAcknowledged] = useState(false);
+  const goldAmount = offer.quoted_price + (offer.deposit_amount ?? 0);
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -441,32 +445,47 @@ function OfferCard({
         )}
       </div>
 
-      {/* ── Escrow info card — พอยต์ทองที่จะถูกล็อก (CMD A3) ──────────── */}
+      {/* ── A5 Gold-lock: Escrow acknowledge ก่อนกดเลือกร้าน ────────────── */}
       <div className="px-5 pb-3">
-        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-3">
-          <div className="flex items-center justify-between mb-1">
+        <div className={`border rounded-xl p-3 space-y-2 transition-colors ${goldAcknowledged ? "bg-weeeu-surface border-weeeu-primary/40" : "bg-amber-50 border-amber-300"}`}>
+          <div className="flex items-center justify-between">
             <p className="text-xs font-semibold text-weeeu-dark">🔒 พอยต์ทอง (Gold Point) ที่จะถูกล็อก</p>
             <p className="text-sm font-bold text-weeeu-primary">
-              {(offer.quoted_price + (offer.deposit_amount ?? 0)).toLocaleString()} พอยต์ทอง
+              {goldAmount.toLocaleString()} พอยต์ทอง
             </p>
           </div>
           <p className="text-[10px] text-gray-500 leading-relaxed">
-            ระบบจะล็อกพอยต์ทองชั่วคราวเมื่อเลือกร้าน — ปลดล็อกอัตโนมัติหากงานไม่สำเร็จ
+            ระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> จะล็อกพอยต์ทองชั่วคราวเมื่อเลือกร้าน — ปลดล็อกอัตโนมัติหากงานไม่สำเร็จ
           </p>
+          {/* Acknowledge checkbox */}
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={goldAcknowledged}
+              onChange={e => setGoldAcknowledged(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-weeeu-primary focus:ring-weeeu-primary/40"
+            />
+            <span className="text-xs text-gray-700 font-medium">
+              รับทราบว่า <span className="text-weeeu-primary font-semibold">{goldAmount.toLocaleString()} Gold</span> จะถูกล็อกเมื่อยืนยัน
+            </span>
+          </label>
         </div>
       </div>
 
-      {/* Select button */}
+      {/* Select button — disabled จนกว่าจะ acknowledge Gold lock (A5) */}
       <div className="px-5 pb-5 pt-2">
         <button
-          disabled={!!selecting}
+          disabled={!!selecting || !goldAcknowledged}
           onClick={() => onSelect(offer.id)}
-          className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+          title={!goldAcknowledged ? "กรุณารับทราบการล็อก Gold ก่อน" : undefined}
         >
           {selecting === offer.id ? (
             <><span className="animate-spin">⟳</span> กำลังเลือก...</>
+          ) : !goldAcknowledged ? (
+            "🔒 รับทราบการล็อก Gold ก่อนเลือกร้าน"
           ) : (
-            "เลือกร้านนี้"
+            "✅ เลือกร้านนี้"
           )}
         </button>
       </div>

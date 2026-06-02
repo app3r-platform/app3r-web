@@ -50,8 +50,11 @@ export default function SellNewPage() {
   const [conditionGrade, setConditionGrade] = useState("");
   const [price, setPrice] = useState("");
   const [deliveryMethods, setDeliveryMethods] = useState<string[]>([]);
-  const [sourceWarranty, setSourceWarranty] = useState("");
-  const [additionalWarranty, setAdditionalWarranty] = useState("");
+  // A3: เช็คลิสต์ อุปกรณ์ที่แถมมา (ประกัน/คู่มือ/กล่อง) แทน warranty-months แยก
+  const [accessories, setAccessories] = useState<Set<string>>(new Set());
+  const toggleAccessory = (key: string) =>
+    setAccessories(prev => { const s = new Set(prev); s.has(key) ? s.delete(key) : s.add(key); return s; });
+  // ตัด sourceWarranty/additionalWarranty ออก (A3 ★ซ้ำ★ — ข้อมูลนี้อยู่ใน Terms เงื่อนไข 2 แล้ว)
   const [description, setDescription] = useState("");
   // Scrap-specific
   const [workingParts, setWorkingParts] = useState<string[]>([]);
@@ -155,8 +158,7 @@ export default function SellNewPage() {
       };
       if (listingType === "used_appliance") {
         body.applianceId = applianceId;
-        if (sourceWarranty) body.sourceWarranty = Number(sourceWarranty);
-        if (additionalWarranty) body.additionalWarranty = Number(additionalWarranty);
+        // accessories = local UI only (ประกัน/คู่มือ/กล่อง checklist) — BE จังหวะ2
       } else {
         body.workingParts = workingParts;
       }
@@ -357,30 +359,34 @@ export default function SellNewPage() {
         </div>
       </div>
 
-      {/* Warranty — used_appliance only */}
+      {/* เช็คลิสต์ อุปกรณ์ที่แถมมา — used_appliance only (A3 แทน warranty-months ซ้ำ) */}
       {listingType === "used_appliance" && (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">การรับประกัน (เดือน)</p>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">ประกันจากผู้ผลิต</label>
-              <input
-                type="number" min="0" value={sourceWarranty}
-                onChange={e => setSourceWarranty(e.target.value)}
-                placeholder="0"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">ประกันเพิ่มเติม</label>
-              <input
-                type="number" min="0" value={additionalWarranty}
-                onChange={e => setAdditionalWarranty(e.target.value)}
-                placeholder="0"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
-              />
-            </div>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">อุปกรณ์ที่แถมมาพร้อมสินค้า</p>
+          <div className="space-y-2">
+            {[
+              { key: "warranty_card", label: "📋 บัตรรับประกัน (Warranty Card)" },
+              { key: "manual",        label: "📖 คู่มือการใช้งาน (Manual)" },
+              { key: "original_box",  label: "📦 กล่องบรรจุภัณฑ์เดิม (Original Box)" },
+            ].map(item => (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => toggleAccessory(item.key)}
+                className={`w-full text-left px-4 py-2.5 rounded-xl border text-sm transition-colors flex items-center gap-3 ${
+                  accessories.has(item.key)
+                    ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
+                    : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
+                }`}
+              >
+                <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center text-[10px] ${accessories.has(item.key) ? "bg-weeeu-primary border-weeeu-primary text-white" : "border-gray-300"}`}>
+                  {accessories.has(item.key) && "✓"}
+                </span>
+                {item.label}
+              </button>
+            ))}
           </div>
+          <p className="text-[10px] text-gray-400">ไม่ได้เลือก = ไม่มีอุปกรณ์นั้น ↗ รายละเอียดเพิ่มเติมระบุในเงื่อนไขการขาย</p>
         </div>
       )}
 
