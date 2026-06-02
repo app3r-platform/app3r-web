@@ -51,13 +51,17 @@ const intentLabel: Record<CTAIntent, string> = {
   generic: "เริ่มใช้งาน",
 };
 
-// ปลายทาง default ตาม role (mockup stub)
-function defaultTarget(role: MockRole): string {
+// ปลายทาง default ตาม role + intent (mockup stub)
+// intent="interest" (สนใจ/ยื่นข้อเสนอซื้อ) → ส่งไปหน้าซื้อของแต่ละบริการ:
+//   weeeu → ${WEEEU_URL}/listings (ดู/ซื้อมือสองฝั่ง WeeeU)
+//   weeer → ${WEEER_URL}/buy-offers/new (ยื่นข้อเสนอซื้อฝั่ง WeeeR — หน้านี้ WeeeR สร้างจริง phase ถัดไป)
+// intent อื่น ๆ คง behavior เดิม (bare WEEEU_URL / WEEER_URL) เพื่อ backward-compat.
+function defaultTarget(role: MockRole, intent: CTAIntent): string {
   switch (role) {
     case "weeeu":
-      return WEEEU_URL;
+      return intent === "interest" ? `${WEEEU_URL}/listings` : WEEEU_URL;
     case "weeer":
-      return WEEER_URL;
+      return intent === "interest" ? `${WEEER_URL}/buy-offers/new` : WEEER_URL;
     default:
       return "#";
   }
@@ -115,7 +119,7 @@ export default function RoleAwareCTA({
   }
 
   // weeeu / weeer — link to cross-app (ENV stub) หรือ override target
-  const target = ov?.target ?? defaultTarget(effectiveRole);
+  const target = ov?.target ?? defaultTarget(effectiveRole, intent);
   const isInternal = target.startsWith("/");
 
   if (isInternal) {

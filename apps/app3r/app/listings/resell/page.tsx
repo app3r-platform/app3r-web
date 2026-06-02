@@ -87,11 +87,18 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
           </div>
 
           {/* ทั้ง WeeeU และ WeeeR ซื้อ-ขายได้ — ลิงก์สำหรับร้าน/บริษัท */}
-          <p className="text-sm text-gray-500 mb-5">
+          <p className="text-sm text-gray-500 mb-1">
             ทั้งผู้ใช้ทั่วไปและร้าน/บริษัทสามารถซื้อและขายได้ ·{" "}
             <Link href="/register/weeer" className="text-website-brand-700 font-medium hover:underline">
               สำหรับร้าน/บริษัท WeeeR →
             </Link>
+          </p>
+          {/* TEMP mock-login — remove for production */}
+          <p className="text-[10px] text-gray-300 mb-5">
+            <Link href="/?devnav=1" className="hover:text-website-brand-700 underline">
+              สลับ role (ทดสอบ flow)
+            </Link>{" "}
+            · ใช้กล่อง 🧪 DEV มุมขวาล่าง
           </p>
 
           {/* Category filter — W-11 fix: client chips (preserve params, no binding bug) */}
@@ -122,8 +129,13 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
               <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดเพิ่มเติม เช่น ชื่อผู้ขาย เบอร์โทร และยื่น
               <TermTooltip term="offer" />
               ได้หลังจาก{" "}
+              {/* W-11: เสนอทั้ง 2 ทาง — ไม่ปล่อยให้เป็น dead-end เฉพาะ WeeeU */}
               <Link href={WEEEU_URL + "/register"} className="underline font-semibold text-amber-900">
                 สมัครสมาชิก WeeeU
+              </Link>{" "}
+              หรือ{" "}
+              <Link href="/register/weeer" className="underline font-semibold text-amber-900">
+                สมัครเป็นร้าน WeeeR
               </Link>
             </div>
           </div>

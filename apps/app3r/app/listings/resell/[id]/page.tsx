@@ -145,19 +145,32 @@ export default async function ResellDetailPage({ params }: PageProps) {
             {/* Engagement counters: view / offer / remaining days */}
             <EngagementCounters engagement={engagement} />
 
-            {/* W-2-D (D6): role-aware "สนใจสินค้า" CTA */}
+            {/* W-12 (D6): role-aware "สนใจสินค้า" CTA — เสนอทั้ง WeeeU และ WeeeR
+                - anonymous → ปุ่มคู่ สมัคร WeeeR (internal) + WeeeU (env stub) [C1 default]
+                - weeeu → ${WEEEU_URL}/listings (ซื้อมือสองฝั่ง WeeeU) [intent default]
+                - weeer → ${WEEER_URL}/buy-offers/new (ยื่นข้อเสนอซื้อฝั่ง WeeeR) [intent default]
+                - weeet → ดูได้ แต่ยื่นข้อเสนอไม่ได้ (เป็นผู้ปฏิบัติ) */}
             <RoleAwareCTA
               intent="interest"
               label="สนใจสินค้า"
               className="w-full"
               overrides={{
-                weeet: { message: "ช่าง (WeeeT) ซื้อสินค้าไม่ได้ — เฉพาะ WeeeU/WeeeR" },
+                weeeu: { label: "🛒 สนใจสินค้า (WeeeU)" },
+                weeer: { label: "🔧 ยื่นข้อเสนอซื้อ (WeeeR)" },
+                weeet: { message: "ดูได้ แต่ยื่นข้อเสนอไม่ได้ (เป็นผู้ปฏิบัติ)" },
               }}
             />
             <p className="text-xs text-gray-400 text-center inline-flex flex-wrap items-center justify-center gap-1">
               การติดต่อผ่านระบบ WeeeU หรือ WeeeR — มีระบบ
               <TermTooltip term="escrow" label="พักเงินกลาง (Escrow)" />
               คุ้มครอง
+            </p>
+            {/* TEMP mock-login — remove for production */}
+            <p className="text-[10px] text-gray-300 text-center">
+              <Link href="/?devnav=1" className="hover:text-website-brand-700 underline">
+                สลับ role (ทดสอบ flow)
+              </Link>{" "}
+              · ใช้กล่อง 🧪 DEV มุมขวาล่าง
             </p>
           </div>
 
