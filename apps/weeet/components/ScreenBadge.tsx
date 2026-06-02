@@ -36,6 +36,13 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/jobs/[id]/parts",             num: "T-36" },
   { pattern: "/jobs/[id]/progress",          num: "T-37" },
   { pattern: "/jobs/[id]/post-repair",       num: "T-38" },
+  // delivery sub-flow (Gen 109 ruling: ฐานใหม่ T-44 + ป้ายสถานะ · ไม่มี base route)
+  { pattern: "/jobs/[id]/delivery/en-route", num: "T-44", label: "กำลังส่ง" },
+  { pattern: "/jobs/[id]/delivery/completed",num: "T-44", label: "ส่งสำเร็จ" },
+  { pattern: "/jobs/[id]/delivery/receipt",  num: "T-44", label: "ใบส่งของ" },
+  // parcel sub-flow (Gen 109 ruling: ฐานใหม่ T-45 + ป้ายสถานะ · ไม่มี base route)
+  { pattern: "/jobs/[id]/parcel/in-progress",num: "T-45", label: "กำลังดำเนินการ" },
+  { pattern: "/jobs/[id]/parcel/tested",     num: "T-45", label: "ทดสอบ" },
   { pattern: "/jobs/[id]",                   num: "T-11" },
   { pattern: "/jobs",                        num: "T-01" },
   // ── Maintain flow ──────────────────────────────────────────────────────────
@@ -44,6 +51,9 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/maintain/[id]/checklist",     num: "T-41" },
   { pattern: "/maintain/[id]/complete",      num: "T-42" },
   { pattern: "/maintain/[id]/depart",        num: "T-43" },
+  // maintain detail base T-46 (Gen 109 ruling · ยังไม่มี /maintain/[id] route → ฐานใหม่ 1 ตัว)
+  // หมายเหตุ: path มี segment "mockup" = dev artifact → LOG normalize เฟส 4 (ไม่แก้ route รอบนี้)
+  { pattern: "/maintain/[id]/mockup/m7-noshow", num: "T-46", label: "ไม่มาตามนัด" },
   // ── Service listings ─────────────────────────────────────────────────────────
   { pattern: "/listings/[id]",               num: "T-16" },
   { pattern: "/listings",                    num: "T-17" },
@@ -66,6 +76,9 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/reports",                     num: "T-20" },
   { pattern: "/settings",                    num: "T-21" },
   { pattern: "/profile",                     num: "T-12" },
+  // ── Auth (Gen 109 ruling · นอก group (app) · root layout mount badge ครอบให้แล้ว) ──
+  { pattern: "/login",                       num: "T-47" },
+  { pattern: "/change-password-first",       num: "T-48" },
   // ── Reserved (เลขเดิม · ยังไม่มี route จริง) ────────────────────────────────────
   { pattern: "/notifications",               num: "T-13" },
   { pattern: "/wallet",                      num: "T-14" },
