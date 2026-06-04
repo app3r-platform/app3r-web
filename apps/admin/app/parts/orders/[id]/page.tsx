@@ -54,7 +54,7 @@ export default async function PartsOrderDetailPage({ params }: { params: Promise
           ลิงก์เชื่อมโยง
         </p>
         <a
-          href="http://localhost:3001/parts/orders/p001"
+          href={`${process.env.NEXT_PUBLIC_WEEER_URL ?? 'http://localhost:3001'}/parts/orders/p001`}
           target="_blank"
           rel="noreferrer"
           className="text-sm text-admin-primary hover:underline font-medium"

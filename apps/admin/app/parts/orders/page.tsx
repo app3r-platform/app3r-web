@@ -34,8 +34,19 @@ const STATUS_META: Record<PartsOrder["status"], { label: string; color: string }
   cancelled: { label: "ยกเลิก",      color: "bg-gray-100 text-gray-500" },
 };
 
+type PageSize = 20 | 50 | "all";
+
 export default function PartsOrdersPage() {
   const [items] = useState<PartsOrder[]>(MOCK_PARTS_ORDERS);
+  // pagination UI mock — logic จริง (cursor/total จาก API) = BE จังหวะ 2
+  const [pageSize, setPageSize] = useState<PageSize>(20);
+  const [page, setPage] = useState(1);
+
+  const perPage = pageSize === "all" ? items.length || 1 : pageSize;
+  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+  const pageItems = pageSize === "all"
+    ? items
+    : items.slice((page - 1) * perPage, page * perPage);
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -58,8 +69,24 @@ export default function PartsOrdersPage() {
 
         {/* Table */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-200 text-sm text-gray-500">
-            {items.length} รายการ
+          <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
+            <span>{items.length} รายการ</span>
+            {/* pagination size selector (UI mock) */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-400">แสดง</span>
+              {([20, 50, "all"] as PageSize[]).map(sz => (
+                <button
+                  key={String(sz)}
+                  onClick={() => { setPageSize(sz); setPage(1); }}
+                  className={`px-2 py-0.5 text-xs rounded border transition-colors ${
+                    pageSize === sz
+                      ? "bg-admin-surface text-admin-primary border-admin-primary/40"
+                      : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                  }`}>
+                  {sz === "all" ? "ทั้งหมด" : sz}
+                </button>
+              ))}
+            </div>
           </div>
           <table className="w-full text-sm">
             <thead>
@@ -78,7 +105,7 @@ export default function PartsOrdersPage() {
                 <tr>
                   <td colSpan={7} className="px-6 py-10 text-center text-gray-500">ไม่มีรายการ</td>
                 </tr>
-              ) : items.map(order => {
+              ) : pageItems.map(order => {
                 const sm = STATUS_META[order.status];
                 return (
                   <tr key={order.id} className="hover:bg-gray-100/40">
@@ -103,6 +130,22 @@ export default function PartsOrdersPage() {
               })}
             </tbody>
           </table>
+          {/* pagination footer (UI mock · ซ่อนเมื่อ "ทั้งหมด" หรือหน้าเดียว) */}
+          {pageSize !== "all" && totalPages > 1 && (
+            <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200 text-sm text-gray-500">
+              <span className="text-xs">หน้า {page} / {totalPages}</span>
+              <div className="flex gap-2">
+                <button disabled={page === 1} onClick={() => setPage(p => p - 1)}
+                  className="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:border-gray-500 transition-colors">
+                  ← ก่อนหน้า
+                </button>
+                <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}
+                  className="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:border-gray-500 transition-colors">
+                  ถัดไป →
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
       </main>
