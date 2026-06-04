@@ -149,7 +149,9 @@ function matchScreen(pathname: string): ScreenInfo | null {
 
 export function ScreenBadge() {
   const pathname = usePathname();
-  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+  // dev-gate align ข้ามแอป: รับทั้ง "true" และ "1" (เหมือน app3r/website) — กัน badge ไม่ขึ้นเมื่อ อ.PP ตั้ง DEV_NAV=1
+  const flag = process.env.NEXT_PUBLIC_DEV_NAV;
+  if (flag !== "true" && flag !== "1") return null;
   const info = matchScreen(pathname);
   if (!info) return null;
 
