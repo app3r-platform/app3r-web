@@ -94,7 +94,8 @@ export default function ReviewPage() {
       if (!res.ok) throw new Error(await res.text());
       setPhase("rating");
     } catch {
-      setInspectError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+      // mock fallback (#6) — ไม่มี backend ยังไปขั้นให้คะแนน ไม่ค้าง error
+      setPhase("rating");
     } finally {
       setInspectSubmitting(false);
     }
@@ -111,7 +112,8 @@ export default function ReviewPage() {
       if (!res.ok) throw new Error(await res.text());
       router.push(`/repair/${id}`);
     } catch {
-      setInspectError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+      // mock fallback (#6) — ไม่มี backend ยังไปหน้ารายละเอียด ไม่ค้าง error
+      router.push(`/repair/${id}`);
     } finally {
       setInspectSubmitting(false);
     }

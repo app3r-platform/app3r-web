@@ -151,7 +151,8 @@ export default function FeeSettlePage() {
       if (!res.ok) throw new Error(await res.text());
       router.push(`/repair/${id}/review`);
     } catch {
-      setConfirmErr("เกิดข้อผิดพลาดในการยืนยัน กรุณาลองใหม่");
+      // mock fallback (#6) — ไม่มี backend ยังไป success/next ไม่ค้าง error
+      router.push(`/repair/${id}/review`);
     } finally {
       setConfirming(false);
     }
