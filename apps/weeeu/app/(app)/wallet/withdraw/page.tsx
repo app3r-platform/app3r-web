@@ -4,50 +4,64 @@
 // 1 Gold = 1 บาท · Admin อนุมัติ → โอนเงินจริงเข้าบัญชี user
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-const BANKS = [
-  "ธนาคารกสิกรไทย (KBank)",
-  "ธนาคารไทยพาณิชย์ (SCB)",
-  "ธนาคารกรุงไทย (KTB)",
-  "ธนาคารกรุงเทพ (BBL)",
-  "ธนาคารกรุงศรีอยุธยา (BAY)",
-  "ธนาคารทหารไทยธนชาต (TTB)",
-];
+import OtpInput from "@/components/shared/OtpInput";
 
 const QUICK_AMOUNTS = [100, 200, 500, 1000];
 
 // Mock Gold balance
 const MOCK_GOLD_BALANCE = 350;
 
-type FlowState = "form" | "submitting" | "pending" | "settled";
+// บัญชีธนาคารดึงจากฐานข้อมูล (ที่ผู้ใช้บันทึกตอนสมัคร) — mock · ไม่ให้เลือกเอง · แก้ที่หน้าจัดการข้อมูลผู้ใช้ (U-45#2)
+const MOCK_USER_BANK = {
+  bankName: "ธนาคารกสิกรไทย (KBank)",
+  bankAccount: "123-4-56789-0",
+  accountHolder: "สมชาย ใจดี",
+};
+
+const MOCK_OTP = "123456"; // mockup — provider จริง = BE
+const MAX_OTP_ATTEMPTS = 3;
+
+type FlowState = "form" | "otp" | "submitting" | "pending" | "settled";
 
 export default function WithdrawPage() {
+  const router = useRouter();
   const [amount, setAmount] = useState("");
-  const [bankName, setBankName] = useState("");
-  const [bankAccount, setBankAccount] = useState("");
-  const [accountHolder, setAccountHolder] = useState("");
+  const { bankName, bankAccount, accountHolder } = MOCK_USER_BANK;
   const [flowState, setFlowState] = useState<FlowState>("form");
   const [fieldError, setFieldError] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpAttempts, setOtpAttempts] = useState(0);
+  const [otpError, setOtpError] = useState("");
 
   const parsedAmount = parseInt(amount, 10) || 0;
-  const canSubmit =
-    parsedAmount > 0 &&
-    parsedAmount <= MOCK_GOLD_BALANCE &&
-    !!bankName &&
-    bankAccount.trim().length > 0 &&
-    accountHolder.trim().length > 0;
+  const canSubmit = parsedAmount > 0 && parsedAmount <= MOCK_GOLD_BALANCE;
 
+  // form → OTP gate (ยืนยันตัวตนเจ้าของบัญชีก่อนถอน · U-45#1)
   const handleSubmit = () => {
     setFieldError("");
     if (parsedAmount <= 0) { setFieldError("กรุณาระบุจำนวนพอยต์ทองที่ต้องการถอน"); return; }
     if (parsedAmount > MOCK_GOLD_BALANCE) { setFieldError(`พอยต์ทองไม่พอ — คงเหลือ ${MOCK_GOLD_BALANCE} พอยต์ทอง`); return; }
-    if (!bankName) { setFieldError("กรุณาเลือกธนาคาร"); return; }
-    if (!bankAccount.trim()) { setFieldError("กรุณาระบุเลขบัญชีธนาคาร"); return; }
-    if (!accountHolder.trim()) { setFieldError("กรุณาระบุชื่อเจ้าของบัญชี"); return; }
+    setFlowState("otp");
+  };
 
-    setFlowState("submitting");
-    setTimeout(() => setFlowState("pending"), 1200);
+  // OTP verify — mock 123456 · ผิดครบ 3 ครั้ง → ระงับ + แจ้ง admin + ลิงก์ปลดล็อก (U-45#1)
+  const handleVerifyOtp = () => {
+    setOtpError("");
+    if (otp === MOCK_OTP) {
+      setFlowState("submitting");
+      setTimeout(() => setFlowState("pending"), 1200);
+      return;
+    }
+    const n = otpAttempts + 1;
+    setOtpAttempts(n);
+    setOtp("");
+    if (n >= MAX_OTP_ATTEMPTS) {
+      router.push("/suspended?reason=otp&from=ถอนพอยต์ทอง");
+    } else {
+      setOtpError(`รหัส OTP ไม่ถูกต้อง — เหลือโอกาสอีก ${MAX_OTP_ATTEMPTS - n} ครั้ง`);
+    }
   };
 
   // ─── Pending state (รอ Admin อนุมัติ) ─────────────────────────────────────
@@ -137,6 +151,42 @@ export default function WithdrawPage() {
     );
   }
 
+  // ─── OTP gate (ยืนยันตัวตนก่อนถอน · mock 123456 · U-45#1) ────────────────────
+  if (flowState === "otp") {
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center gap-3">
+          <button onClick={() => { setFlowState("form"); setOtp(""); setOtpError(""); }} className="text-gray-400 hover:text-gray-600 text-xl leading-none">←</button>
+          <h1 className="text-xl font-bold text-gray-900">ยืนยันด้วยรหัส OTP</h1>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4 shadow-sm text-center">
+          <p className="text-3xl">🔐</p>
+          <p className="text-sm text-gray-600">
+            เพื่อความปลอดภัย กรุณากรอกรหัส OTP 6 หลักที่ส่งไปยังเบอร์โทรศัพท์ที่ลงทะเบียนไว้
+          </p>
+          <p className="text-xs text-gray-400">(Mockup — ใช้รหัส <span className="font-bold text-weeeu-primary">123456</span> · ผู้ให้บริการ OTP จริง = BE)</p>
+
+          <OtpInput value={otp} onChange={setOtp} />
+
+          {otpError && (
+            <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">{otpError}</p>
+          )}
+          <p className="text-xs text-gray-400">กรอกได้ {MAX_OTP_ATTEMPTS} ครั้ง — หากผิดครบจะถูกระงับและต้องติดต่อผู้ดูแลระบบ</p>
+
+          <button
+            onClick={handleVerifyOtp}
+            disabled={otp.length < 6}
+            className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
+          >
+            ยืนยัน OTP
+          </button>
+        </div>
+        <p className="text-xs text-center text-gray-400">* Mockup — ไม่บันทึกข้อมูลจริง</p>
+      </div>
+    );
+  }
+
   // ─── Form state ────────────────────────────────────────────────────────────
   return (
     <div className="space-y-5">
@@ -215,50 +265,35 @@ export default function WithdrawPage() {
           </div>
         </div>
 
-        {/* Bank selection */}
+        {/* บัญชีปลายทาง — ดึงจากฐานข้อมูล (ไม่ให้เลือกเอง · U-45#2) */}
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1.5">
-            ธนาคาร <span className="text-red-400">*</span>
+            บัญชีรับเงิน (ดึงจากข้อมูลที่ลงทะเบียนไว้)
           </label>
-          <select
-            value={bankName}
-            onChange={e => setBankName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
-          >
-            <option value="">-- เลือกธนาคาร --</option>
-            {BANKS.map(bank => (
-              <option key={bank} value={bank}>{bank}</option>
-            ))}
-          </select>
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-1">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500">ธนาคาร</span>
+              <span className="font-medium text-gray-800">{bankName}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500">เลขบัญชี</span>
+              <span className="font-medium text-gray-800">{bankAccount}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500">ชื่อบัญชี</span>
+              <span className="font-medium text-gray-800">{accountHolder}</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400 mt-1">
+            ต้องการแก้ไขบัญชี? ไปที่{" "}
+            <Link href="/settings/account" className="text-weeeu-primary underline">หน้าจัดการข้อมูลผู้ใช้</Link>
+          </p>
         </div>
 
-        {/* Bank account */}
-        <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1.5">
-            เลขบัญชีธนาคาร <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="text"
-            value={bankAccount}
-            onChange={e => setBankAccount(e.target.value)}
-            placeholder="เช่น 123-4-56789-0"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
-          />
-        </div>
-
-        {/* Account holder */}
-        <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1.5">
-            ชื่อเจ้าของบัญชี <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="text"
-            value={accountHolder}
-            onChange={e => setAccountHolder(e.target.value)}
-            placeholder="ชื่อ-นามสกุล ตามสมุดบัญชี"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
-          />
-        </div>
+        {/* ล็อกจำนวนเมื่อยืนยัน (U-45#3) */}
+        <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2">
+          ⚠️ เมื่อยืนยันถอน ระบบจะล็อกจำนวนพอยต์ทองที่แจ้งถอนทันที เพื่อกันยอดไม่พอระหว่างรอ Admin อนุมัติ
+        </p>
       </div>
 
       {/* Confirm summary */}
@@ -294,7 +329,7 @@ export default function WithdrawPage() {
         disabled={!canSubmit || flowState === "submitting"}
         className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl transition-colors"
       >
-        {flowState === "submitting" ? "⟳ กำลังส่งคำขอ..." : "🥇 ยืนยันถอนพอยต์ทอง (Mockup)"}
+        {flowState === "submitting" ? "⟳ กำลังส่งคำขอ..." : "🥇 ถัดไป — ยืนยันด้วย OTP"}
       </button>
 
       <p className="text-xs text-center text-gray-400">* Mockup — ไม่บันทึกข้อมูลจริง · Backend CMD-B2 parallel</p>

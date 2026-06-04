@@ -114,6 +114,9 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/signup/address",                        info: { num: "U-62", code: "SIGNUP-ADDRESS" } },
   { pattern: "/signup/otp",                            info: { num: "U-63", code: "SIGNUP-OTP" } },
   { pattern: "/signup/verify-email",                   info: { num: "U-64", code: "SIGNUP-VERIFY-EMAIL" } },
+  // ── Round 2 (WP-0/WP-2) — หน้าใหม่ ──────────────────────────────────────────
+  { pattern: "/suspended",                             info: { num: "U-65", code: "USER-SUSPENDED" } },
+  { pattern: "/settings/account",                      info: { num: "U-66", code: "USER-DATA-MANAGE" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {

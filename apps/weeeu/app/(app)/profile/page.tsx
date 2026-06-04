@@ -287,6 +287,10 @@ export default function ProfilePage() {
         <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ความปลอดภัย</p>
         </div>
+        <Link href="/settings/account" className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors border-b border-gray-50">
+          <div className="flex items-center gap-3"><span>👤</span><span className="text-sm font-medium text-gray-700">จัดการข้อมูลผู้ใช้ (ที่อยู่ · อีเมล · บัญชี)</span></div>
+          <span className="text-gray-400">›</span>
+        </Link>
         <Link href="/settings/security" className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors">
           <div className="flex items-center gap-3"><span>🔒</span><span className="text-sm font-medium text-gray-700">เปลี่ยนรหัสผ่าน</span></div>
           <span className="text-gray-400">›</span>
