@@ -273,7 +273,8 @@ export default function ProfilePage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-100">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ที่อยู่</p>
-          <button onClick={() => setSection("address")} className="text-xs text-weeeu-primary hover:text-weeeu-dark font-medium">แก้ไข</button>
+          {/* U-35 ruling: ที่อยู่ read-only · แก้ไขที่เดียว → /settings/account (U-66 cascade) กัน 2 จุดขัดกัน */}
+          <Link href="/settings/account" className="text-xs text-weeeu-primary hover:text-weeeu-dark font-medium">แก้ไข →</Link>
         </div>
         <div className="px-5 py-4 space-y-1">
           <p className="text-sm text-gray-700">{user.address.address_line}</p>
