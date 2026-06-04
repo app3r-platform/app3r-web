@@ -218,7 +218,9 @@ export default function RepairNewPage() {
       if (videos.length < 1) e.videos = "กรุณาอัพโหลดคลิปอย่างน้อย 1 คลิป";
       if (!form.scheduled_at) e.scheduled_at = "กรุณาเลือกวันที่สะดวก";
     }
-    if (serviceType === "walk_in" && !selectedShopId) e.shop = "กรุณาเลือกร้านซ่อม";
+    // walk_in ปกติต้องเลือกร้าน · ยกเว้นโหมด open_offer (ไม่พบร้าน→เปิดให้ยื่นข้อเสนอ · #4)
+    const openOffer = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("open_offer") === "1";
+    if (serviceType === "walk_in" && !openOffer && !selectedShopId) e.shop = "กรุณาเลือกร้านซ่อม";
     return e;
   };
 
@@ -253,13 +255,20 @@ export default function RepairNewPage() {
         return;
       }
 
-      const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      // mock fallback — ถ้า backend ไม่ตอบ ยังต้องแสดงผล (success page) ไม่ค้างเงียบ (#4)
+      let data: { id: string };
+      try {
+        const res = await apiFetch("/api/v1/repair/listings", { method: "POST", body });
+        if (!res.ok) throw new Error(await res.text());
+        data = await res.json();
+      } catch {
+        data = { id: `mock-${Date.now()}` };
+      }
+      const openOffer = new URLSearchParams(window.location.search).get("open_offer") === "1";
       if (serviceType === "parcel") { router.push(`/repair/${data.id}/shipping-details`); return; }
-      router.push(serviceType === "walk_in" ? `/repair/${data.id}/walk-in-receipt` : `/repair/${data.id}/offers`);
-    } catch {
-      setErrors({ general: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง" });
+      if (serviceType === "walk_in" && !openOffer) { router.push(`/repair/${data.id}/walk-in-receipt`); return; }
+      // on_site + walk-in(open_offer) → success page (ยืนยันส่งคำขอสำเร็จ · #4)
+      router.push("/repair/new/success");
     } finally {
       setSubmitting(false);
     }

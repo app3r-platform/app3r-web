@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 import { listingsApi } from "@/lib/api/listings";
 import type { Appliance } from "@/lib/types";
+import OtpInput from "@/components/shared/OtpInput";
+
+// ค่าลงประกาศ (mock · admin rate-by-type จริง = BE) — used_appliance ตัด Point · scrap = ฟรี
+const LISTING_FEE_POINTS = 50; // mock อัตราคงที่
+const MOCK_OTP = "123456"; // mockup — provider จริง = BE
+const MAX_OTP_ATTEMPTS = 3;
+// ราคากลางอ้างอิง (reference price · mock · source จริง = BE/DB)
+const MOCK_REFERENCE_PRICE = { min: 2800, max: 4200 };
 
 const DELIVERY_OPTIONS = [
   { value: "on_site", label: "ส่งเอง / นัดรับ" },
@@ -75,6 +83,14 @@ export default function SellNewPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  // #2 ค่าลงประกาศ — เลือกชนิดพอยต์จ่าย (used_appliance) · scrap = ฟรี
+  const [feePointType, setFeePointType] = useState<"gold" | "silver">("silver");
+  // #5 OTP ประกาศ
+  const [showOtp, setShowOtp] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpAttempts, setOtpAttempts] = useState(0);
+  const [otpError, setOtpError] = useState("");
+
   useEffect(() => {
     apiFetch("/api/v1/appliances/mine/")
       .then(r => r.ok ? r.json() : [])
@@ -132,7 +148,8 @@ export default function SellNewPage() {
     }
   };
 
-  const handleSubmit = async () => {
+  // validate → OTP gate (#5) ก่อนสร้างประกาศจริง
+  const handleSubmit = () => {
     if (!price || isNaN(Number(price)) || Number(price) <= 0) {
       setError("กรุณาระบุราคา"); return;
     }
@@ -147,6 +164,25 @@ export default function SellNewPage() {
     if (images.length < MAX_IMAGES) { setError(`กรุณาเพิ่มรูปสินค้าให้ครบ ${MAX_IMAGES} รูป`); return; }
     if (!clip) { setError("กรุณาเพิ่มคลิปวิดีโอสินค้า 1 คลิป"); return; }
     setError("");
+    setOtp(""); setOtpError(""); setOtpAttempts(0);
+    setShowOtp(true);
+  };
+
+  // OTP ยืนยันตัวตนก่อนประกาศ (mock 123456 · ผิด 3→ระงับ)
+  const handleVerifyOtp = () => {
+    setOtpError("");
+    if (otp === MOCK_OTP) { setShowOtp(false); doCreate(); return; }
+    const n = otpAttempts + 1;
+    setOtpAttempts(n);
+    setOtp("");
+    if (n >= MAX_OTP_ATTEMPTS) {
+      router.push("/suspended?reason=otp&from=ลงประกาศขาย");
+    } else {
+      setOtpError(`รหัส OTP ไม่ถูกต้อง — เหลือโอกาสอีก ${MAX_OTP_ATTEMPTS - n} ครั้ง`);
+    }
+  };
+
+  const doCreate = async () => {
     setSubmitting(true);
     try {
       // contract Backend Part1 (488cae4): create ไม่รับ description — ส่งเฉพาะ field ที่ schema จริงมี
@@ -176,6 +212,33 @@ export default function SellNewPage() {
   const gradeOptions = listingType === "scrap" ? SCRAP_GRADE_OPTIONS : GRADE_OPTIONS;
   const primaryColor = listingType === "scrap" ? "bg-green-600 hover:bg-green-700" : "bg-weeeu-primary hover:bg-weeeu-dark";
   const ringColor = listingType === "scrap" ? "focus:ring-green-400" : "focus:ring-weeeu-primary/40";
+
+  // #5 OTP gate ก่อนประกาศ (mock 123456 · OtpInput pattern WP-0)
+  if (showOtp) {
+    return (
+      <div className="max-w-xl space-y-5">
+        <div className="flex items-center gap-3">
+          <button onClick={() => { setShowOtp(false); setOtp(""); setOtpError(""); }} className="text-gray-500 hover:text-gray-800 text-xl">‹</button>
+          <h1 className="text-xl font-bold text-gray-900">ยืนยันการประกาศด้วย OTP</h1>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4 text-center">
+          <p className="text-3xl">🔐</p>
+          <p className="text-sm text-gray-600">เพื่อความปลอดภัย กรุณากรอกรหัส OTP 6 หลักที่ส่งไปยังเบอร์โทรศัพท์ที่ลงทะเบียนไว้</p>
+          <p className="text-xs text-gray-400">(Mockup — ใช้รหัส <span className="font-bold text-weeeu-primary">123456</span> · ผู้ให้บริการ OTP จริง = BE)</p>
+          <OtpInput value={otp} onChange={setOtp} />
+          {otpError && <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">{otpError}</p>}
+          <p className="text-xs text-gray-400">กรอกได้ {MAX_OTP_ATTEMPTS} ครั้ง — หากผิดครบจะถูกระงับและต้องติดต่อผู้ดูแลระบบ</p>
+          <button
+            onClick={handleVerifyOtp}
+            disabled={otp.length < 6 || submitting}
+            className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
+          >
+            {submitting ? "⟳ กำลังประกาศ..." : "ยืนยัน OTP และประกาศ"}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-xl space-y-5">
@@ -333,6 +396,49 @@ export default function SellNewPage() {
           placeholder={listingType === "scrap" ? "เช่น 500" : "เช่น 3500"}
           className={`w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 ${ringColor}`}
         />
+        {/* #8 ราคากลางอ้างอิง (reference price · mock) */}
+        <div className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2">
+          <p className="text-xs text-blue-700">
+            📊 ราคากลางอ้างอิง: ฿{MOCK_REFERENCE_PRICE.min.toLocaleString()}–฿{MOCK_REFERENCE_PRICE.max.toLocaleString()}
+            <span className="text-blue-400"> (จากสินค้าประเภทเดียวกัน · ประมาณการ)</span>
+          </p>
+        </div>
+      </div>
+
+      {/* #2 ค่าลงประกาศ — used_appliance ตัด Point · scrap = ฟรี */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ค่าลงประกาศ</p>
+        {listingType === "scrap" ? (
+          <div className="bg-green-50 border border-green-100 rounded-xl px-3 py-2.5">
+            <p className="text-sm font-medium text-green-700">♻️ ฟรี — ประกาศขายซากไม่มีค่าลงประกาศ</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">
+              ค่าลงประกาศ <span className="font-semibold text-weeeu-primary">{LISTING_FEE_POINTS} พอยต์</span> — ตัดเมื่อประกาศสำเร็จ · เลือกชนิดพอยต์ที่จะใช้จ่าย
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {([
+                { key: "silver" as const, icon: "💎", label: "พอยต์เงิน (Silver Point)" },
+                { key: "gold" as const, icon: "🥇", label: "พอยต์ทอง (Gold Point)" },
+              ]).map(opt => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setFeePointType(opt.key)}
+                  className={`py-2.5 rounded-xl border text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
+                    feePointType === opt.key
+                      ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text"
+                      : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
+                  }`}
+                >
+                  <span>{opt.icon}</span>{opt.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-400">อัตราจริงกำหนดโดย Admin แยกตามประเภทโมดูล/เครื่องใช้ไฟฟ้า (BE)</p>
+          </div>
+        )}
       </div>
 
       {/* Delivery methods */}

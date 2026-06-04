@@ -84,7 +84,7 @@ export default function SelectShopPage() {
   return (
     <div className="max-w-xl space-y-5">
       <div className="flex items-center gap-3">
-        <Link href="/repair/new" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
+        <Link href="/repair/new?service_type=walk_in" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">เลือกร้านซ่อม (Walk-in)</h1>
       </div>
 
@@ -112,10 +112,24 @@ export default function SelectShopPage() {
       )}
 
       {filtered.length === 0 && !error && (
-        <div className="text-center py-12">
-          <p className="text-4xl mb-3">🏪</p>
-          <p className="text-gray-500 font-medium">ไม่พบร้านที่ตรงกัน</p>
-          {search && <p className="text-xs text-gray-400 mt-1">ลองเปลี่ยนคำค้นหา</p>}
+        <div className="text-center py-10 space-y-3">
+          <p className="text-4xl">🏪</p>
+          <p className="text-gray-500 font-medium">ไม่พบร้านซ่อมที่ตรงกัน</p>
+          {search && <p className="text-xs text-gray-400">ลองเปลี่ยนคำค้นหา</p>}
+          {/* #4: ไม่พบร้าน → เปิดให้ร้านยื่นข้อเสนอแทน */}
+          <div className="bg-green-50 border border-green-100 rounded-2xl p-4 mt-2 text-left">
+            <p className="text-sm font-semibold text-green-800">ไม่เจอร้านที่ต้องการ?</p>
+            <p className="text-xs text-green-600 mt-1 mb-3">
+              เปิดประกาศคำขอซ่อมให้ร้านซ่อม (WeeeR) ในพื้นที่ยื่นข้อเสนอเข้ามาแทน แล้วคุณเลือกที่ถูกใจ
+            </p>
+            <button
+              type="button"
+              onClick={() => router.push("/repair/new?service_type=walk_in&open_offer=1")}
+              className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-semibold py-3 rounded-xl transition-colors"
+            >
+              📣 เปิดให้ร้านซ่อมยื่นข้อเสนอ
+            </button>
+          </div>
         </div>
       )}
 

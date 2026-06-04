@@ -211,6 +211,10 @@ export default function AwaitingPaymentPage() {
               ? "⚠️ เวลาใกล้หมด! หากไม่ชำระ ข้อเสนอจะถูกยกเลิกอัตโนมัติ"
               : "กรุณาชำระเงินภายในเวลาที่กำหนด"}
           </p>
+          {/* #3 gold-lock: เตือนทุก 6 ชม. (mock UI · logic BE) */}
+          <p className="text-[11px] text-gray-500 border-t border-black/5 pt-1.5">
+            🔔 ระบบจะแจ้งเตือนทุก 6 ชม. ภายในกรอบ 24 ชม. — หากเกินกำหนด พอยต์ทองที่ล็อกจะถูกปลดและข้อเสนอถูกยกเลิกอัตโนมัติ
+          </p>
         </div>
       ) : (
         /* ─── Expired state ─── */
