@@ -31,6 +31,16 @@ const SYMPTOMS_BY_TYPE: Record<string, string[]> = {
 };
 const DEFAULT_SYMPTOMS = ["ไม่เปิดติด", "มีเสียงดัง", "มีน้ำรั่ว", "ไฟไม่ติด", "ทำงานผิดปกติ", "อื่นๆ"];
 
+// #8 ราคากลางค่าซ่อมอ้างอิง (reference price · mock · source จริง = BE/DB) — by appliance type
+const REFERENCE_REPAIR_PRICE: Record<string, { min: number; max: number }> = {
+  "แอร์":          { min: 800, max: 3500 },
+  "ตู้เย็น":       { min: 600, max: 2800 },
+  "เครื่องซักผ้า": { min: 500, max: 2500 },
+  "ทีวี":          { min: 700, max: 4000 },
+  "คอม/โน้ตบุ๊ก":  { min: 500, max: 6000 },
+};
+const DEFAULT_REFERENCE_PRICE = { min: 500, max: 3500 };
+
 // ─── R2-2: chip หมายเหตุถึงช่าง 6 อัน ───────────────────────────────────────
 const NOTE_CHIPS = [
   { id: "notify_parts",    label: "🔧 แจ้งก่อนเปลี่ยนอะไหล่",  group: "repair" },
@@ -160,6 +170,8 @@ export default function RepairNewPage() {
   const applianceType = selectedAppliance ? getApplianceType(selectedAppliance.name) : "";
   const symptomOptions = SYMPTOMS_BY_TYPE[applianceType] ?? DEFAULT_SYMPTOMS;
   const conditionOptions = CONDITION_CHECKLIST[applianceType] ?? [];
+  // #8 ราคากลางค่าซ่อมอ้างอิง — ตามประเภทเครื่อง (mock)
+  const refPrice = REFERENCE_REPAIR_PRICE[applianceType] ?? DEFAULT_REFERENCE_PRICE;
 
   // R2-7: update waitDays when priority changes
   const handlePriorityChange = (p: ServicePriority) => {
@@ -667,6 +679,13 @@ export default function RepairNewPage() {
             {/* R2-4: Budget slider */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">งบประมาณสูงสุด พอยต์ทอง (Gold Point)</label>
+              {/* #8 ราคากลางค่าซ่อมอ้างอิง (reference price · mock) */}
+              <div className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 mb-2">
+                <p className="text-xs text-blue-700">
+                  📊 ค่าซ่อมกลางอ้างอิง{applianceType && applianceType !== "อื่นๆ" ? ` (${applianceType})` : ""}: {refPrice.min.toLocaleString()}–{refPrice.max.toLocaleString()} พอยต์ทอง
+                  <span className="text-blue-400"> (ประมาณการจากงานประเภทเดียวกัน · ราคาจริงตามข้อเสนอร้าน)</span>
+                </p>
+              </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <button type="button"

@@ -85,6 +85,10 @@ export default function M2ExpiredMockupPage() {
             <p className="text-xs text-gray-400 mt-1">
               หมดอายุ: {fmt(JOB.expiredAt)}
             </p>
+            {/* [gold-lock] M2: auto-close 24 ชม. + เตือนทุก 6 ชม. (mock UI · logic BE) */}
+            <p className="text-[11px] text-gray-400 mt-2 leading-relaxed border-t border-gray-200 pt-2">
+              🔔 ระบบนับถอยหลังกรอบ 24 ชม. และแจ้งเตือนทุก 6 ชม. — เมื่อครบกำหนดไม่มีร้านรับงาน พอยต์ทองที่ล็อก (ถ้ามี) ถูกปลดคืนและปิดประกาศอัตโนมัติ
+            </p>
           </div>
         </div>
 

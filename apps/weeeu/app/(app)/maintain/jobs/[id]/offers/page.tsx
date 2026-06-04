@@ -417,6 +417,12 @@ export default function MaintainOffersPage() {
                 </li>
               ))}
             </ul>
+            {/* [gold-lock] เตือนทุก 6 ชม. ภายในกรอบ 24 ชม. (mock UI · logic BE) */}
+            {!!selectedOffer.terms.deposit && (
+              <p className="text-[11px] text-gray-500 border-t border-weeeu-primary/10 pt-2 mt-1 leading-relaxed">
+                🔔 พอยต์ทองที่ล็อก {selectedOffer.terms.deposit.toLocaleString()} ฿ มีกรอบเวลา 24 ชม. ให้ยืนยัน — ระบบจะแจ้งเตือนทุก 6 ชม. หากเกินกำหนด พอยต์ทองที่ล็อกจะถูกปลดและข้อเสนอถูกยกเลิกอัตโนมัติ
+              </p>
+            )}
           </div>
 
           <div className="flex gap-3">

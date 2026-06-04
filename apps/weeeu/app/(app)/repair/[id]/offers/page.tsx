@@ -457,6 +457,10 @@ function OfferCard({
           <p className="text-[10px] text-gray-500 leading-relaxed">
             ระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> จะล็อกพอยต์ทองชั่วคราวเมื่อเลือกร้าน — ปลดล็อกอัตโนมัติหากงานไม่สำเร็จ
           </p>
+          {/* [gold-lock] เตือนทุก 6 ชม. ภายในกรอบ 24 ชม. (mock UI · logic BE) */}
+          <p className="text-[10px] text-gray-400 border-t border-black/5 pt-1.5 leading-relaxed">
+            🔔 หลังเลือกร้าน พอยต์ทองที่ล็อกมีกรอบเวลา 24 ชม. ให้อนุมัติ/ชำระ — ระบบจะแจ้งเตือนทุก 6 ชม. หากเกินกำหนด พอยต์ทองที่ล็อกจะถูกปลดและการเลือกถูกยกเลิกอัตโนมัติ
+          </p>
           {/* Acknowledge checkbox */}
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <input

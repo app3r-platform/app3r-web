@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GoldLockCountdown } from "@/components/shared/GoldLockCountdown";
 
 const MOCK_SCRAP_ITEM = {
   name: "เครื่องซักผ้าเก่า Samsung",
@@ -12,6 +13,8 @@ const MOCK_OFFERS = [
 
 export default async function ScrapOffersPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  // [gold-lock] S5: กรอบเวลารับข้อเสนอ 24 ชม. (mock UI · auto-close logic = BE)
+  const deadline = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -28,10 +31,14 @@ export default async function ScrapOffersPage({ params }: { params: Promise<{ id
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-weeeu-dark">ข้อเสนอรับซาก ({MOCK_OFFERS.length})</h1>
-          <p className="text-xs text-amber-600">⏱️ หมดอายุใน 48 ชั่วโมง</p>
-        </div>
+        <h1 className="text-xl font-bold text-weeeu-dark">ข้อเสนอรับซาก ({MOCK_OFFERS.length})</h1>
+
+        {/* [gold-lock] S5: countdown 24 ชม. + เตือนทุก 6 ชม. (ผู้ขายซากไม่ได้ล็อกพอยต์ทอง → note เฉพาะกรอบเวลารับข้อเสนอ) */}
+        <GoldLockCountdown
+          deadline={deadline}
+          title="ข้อเสนอรับซาก — เหลือเวลา"
+          note="ข้อเสนอรับซากมีกรอบเวลา 24 ชม. — ระบบจะแจ้งเตือนทุก 6 ชม. หากไม่เลือกข้อเสนอใดภายในกำหนด ประกาศจะปิดอัตโนมัติและต้องแจ้งซากใหม่"
+        />
 
         {/* Offers list */}
         <div className="space-y-3">
@@ -71,7 +78,7 @@ export default async function ScrapOffersPage({ params }: { params: Promise<{ id
         </div>
 
         <p className="text-xs text-gray-400 text-center pb-4">
-          ข้อเสนอหมดอายุใน 48 ชั่วโมง หลังจากนั้นต้องแจ้งซากใหม่
+          ข้อเสนอหมดอายุใน 24 ชั่วโมง หลังจากนั้นต้องแจ้งซากใหม่
         </p>
       </div>
     </div>
