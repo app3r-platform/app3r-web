@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { TermTooltip } from '@/components/common';
+import { crossAppUrls } from '@/lib/config/urls';
 
 export default function SignUpCTA() {
   return (
@@ -12,12 +13,12 @@ export default function SignUpCTA() {
           จากร้านค้าที่ผ่านการรับรอง
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="http://localhost:3002/register"
+          <a
+            href={crossAppUrls.weeeu.signup}
             className="bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded-xl hover:bg-yellow-300 transition text-base"
           >
             สมัครเป็นลูกค้า (WeeeU)
-          </Link>
+          </a>
           <Link
             href="/register/weeer"
             className="bg-white text-website-brand-700 font-bold px-8 py-3 rounded-xl hover:bg-website-brand-50 transition text-base"

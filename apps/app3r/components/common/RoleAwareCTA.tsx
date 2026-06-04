@@ -8,10 +8,11 @@
 import Link from "next/link";
 import { useMockRole } from "@/lib/auth/useMockRole";
 import type { MockRole } from "@/lib/auth/mock-role";
+import { crossAppUrls } from "@/lib/config/urls";
 
-// Cross-app URL stubs — ENV with localhost fallback (NEVER a real domain).
-const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? "http://localhost:3002";
-const WEEER_URL = process.env.NEXT_PUBLIC_WEEER_URL ?? "http://localhost:3001";
+// Cross-app URL stubs — resolved via crossAppUrls (no hardcoded localhost).
+const WEEEU_URL = crossAppUrls.weeeu.base;
+const WEEER_URL = crossAppUrls.weeer.base;
 
 /** Intent ของปุ่ม CTA — ใช้เลือกข้อความ default ต่อบริบท */
 export type CTAIntent =
@@ -51,17 +52,17 @@ const intentLabel: Record<CTAIntent, string> = {
   generic: "เริ่มใช้งาน",
 };
 
-// ปลายทาง default ตาม role + intent (mockup stub)
+// ปลายทาง default ตาม role + intent (mockup · deep-link navigate-only — ลิงก์จริง ไม่ dead)
 // intent="interest" (สนใจ/ยื่นข้อเสนอซื้อ) → ส่งไปหน้าซื้อของแต่ละบริการ:
-//   weeeu → ${WEEEU_URL}/listings (ดู/ซื้อมือสองฝั่ง WeeeU)
-//   weeer → ${WEEER_URL}/buy-offers/new (ยื่นข้อเสนอซื้อฝั่ง WeeeR — หน้านี้ WeeeR สร้างจริง phase ถัดไป)
-// intent อื่น ๆ คง behavior เดิม (bare WEEEU_URL / WEEER_URL) เพื่อ backward-compat.
+//   weeeu → /listings (ดู/ซื้อมือสองฝั่ง WeeeU)
+//   weeer → /resell (ตลาดมือสองฝั่ง WeeeR เพื่อยื่นข้อเสนอซื้อ — หน้าจริง · เดิมชี้
+//           /buy-offers/new ที่ยังไม่มี → 404; เปลี่ยนปลายทางจริงเมื่อ BE สร้าง phase ถัดไป)
 function defaultTarget(role: MockRole, intent: CTAIntent): string {
   switch (role) {
     case "weeeu":
-      return intent === "interest" ? `${WEEEU_URL}/listings` : WEEEU_URL;
+      return intent === "interest" ? crossAppUrls.weeeu.listings : WEEEU_URL;
     case "weeer":
-      return intent === "interest" ? `${WEEER_URL}/buy-offers/new` : WEEER_URL;
+      return intent === "interest" ? crossAppUrls.weeer.resell : WEEER_URL;
     default:
       return "#";
   }
@@ -104,7 +105,8 @@ export default function RoleAwareCTA({
 
   // anonymous — เสนอทางเลือกสมัคร/เข้าสู่ระบบ (WeeeU vs WeeeR)
   if (effectiveRole === "anonymous") {
-    const weeeuTarget = ov?.target ?? `${WEEEU_URL}/register`; // ENV stub
+    // WeeeU สมัคร → /signup/email (canonical · เดิมชี้ /register = 404)
+    const weeeuTarget = ov?.target ?? crossAppUrls.weeeu.signup;
     const weeerTarget = "/register/weeer"; // internal
     return (
       <div className={`flex flex-col sm:flex-row gap-2 ${className}`}>

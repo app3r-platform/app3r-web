@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { crossAppUrls } from "@/lib/config/urls";
 
 export const metadata: Metadata = {
   title: "ดาวน์โหลดแอป App3R",
@@ -47,7 +48,7 @@ const webApps = [
   {
     name: "WeeeU Web",
     desc: "เวอร์ชัน Web สำหรับผู้ใช้ทั่วไป",
-    href: "http://localhost:3002",
+    href: crossAppUrls.weeeu.base,
     emoji: "🌐",
     color: "border-blue-300 bg-blue-50",
     badge: "พร้อมใช้งาน",
@@ -56,7 +57,7 @@ const webApps = [
   {
     name: "WeeeR Web",
     desc: "เวอร์ชัน Web สำหรับร้านค้า/บริษัท",
-    href: "http://localhost:3001",
+    href: crossAppUrls.weeer.base,
     emoji: "🏪",
     color: "border-green-300 bg-green-50",
     badge: "พร้อมใช้งาน",

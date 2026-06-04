@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { crossAppUrls } from '@/lib/config/urls';
 
 const personas = [
   {
@@ -7,7 +8,9 @@ const personas = [
     title: 'ลูกค้า',
     desc: 'ลงประกาศ ซื้อ-ขาย ว่าจ้างซ่อม และจัดบำรุงรักษาเครื่องใช้ไฟฟ้าในบ้าน',
     cta: 'สมัครเป็นลูกค้า',
-    href: 'http://localhost:3002/register',
+    // Round 2: WeeeU สมัคร → /signup/email (เดิม /register = 404)
+    href: crossAppUrls.weeeu.signup,
+    external: true,
     color: 'bg-blue-50 border-blue-200',
     badgeColor: 'bg-blue-100 text-blue-700',
     btnColor: 'bg-blue-600 hover:bg-blue-700 text-white',
@@ -19,6 +22,7 @@ const personas = [
     desc: 'รับงาน ส่งข้อเสนอ บริหารช่าง และขยายธุรกิจผ่านแพลตฟอร์มดิจิทัล',
     cta: 'สมัครร้านซ่อม',
     href: '/register/weeer',
+    external: false,
     color: 'bg-green-50 border-green-200',
     badgeColor: 'bg-green-100 text-green-700',
     btnColor: 'bg-green-600 hover:bg-green-700 text-white',
@@ -27,9 +31,10 @@ const personas = [
     icon: '🔧',
     name: 'WeeeT',
     title: 'ช่าง',
-    desc: 'รับงานจากร้าน ออกไปบ้านลูกค้า บันทึกผล และสร้างประวัติการทำงาน',
-    cta: 'เป็นช่าง WeeeT',
+    desc: 'ช่างสมัครผ่านร้าน WeeeR ที่อนุมัติแล้ว — ดาวน์โหลดแอป WeeeT เพื่อรับงาน',
+    cta: 'ดาวน์โหลดแอป WeeeT',
     href: '/download',
+    external: false,
     color: 'bg-orange-50 border-orange-200',
     badgeColor: 'bg-orange-100 text-orange-700',
     btnColor: 'bg-orange-600 hover:bg-orange-700 text-white',
@@ -57,12 +62,21 @@ export default function PersonasGrid() {
               <h3 className="text-xl font-bold text-gray-900 mt-2">{p.title}</h3>
               <p className="text-gray-600 text-sm mt-2">{p.desc}</p>
             </div>
-            <Link
-              href={p.href}
-              className={`inline-block px-5 py-2.5 rounded-lg text-sm font-semibold transition ${p.btnColor}`}
-            >
-              {p.cta}
-            </Link>
+            {p.external ? (
+              <a
+                href={p.href}
+                className={`inline-block px-5 py-2.5 rounded-lg text-sm font-semibold transition ${p.btnColor}`}
+              >
+                {p.cta}
+              </a>
+            ) : (
+              <Link
+                href={p.href}
+                className={`inline-block px-5 py-2.5 rounded-lg text-sm font-semibold transition ${p.btnColor}`}
+              >
+                {p.cta}
+              </Link>
+            )}
           </div>
         ))}
       </div>

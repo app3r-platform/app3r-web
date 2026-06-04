@@ -4,6 +4,7 @@
 // components/modals/InterestedModal.tsx — "สนใจ" CTA modal
 // ============================================================
 import { useEffect } from "react";
+import { crossAppUrls } from "@/lib/config/urls";
 
 interface InterestedModalProps {
   isOpen: boolean;
@@ -67,13 +68,13 @@ export default function InterestedModal({
         {/* Buttons */}
         <div className="space-y-3">
           <a
-            href="http://localhost:3002/login"
+            href={crossAppUrls.weeeu.login}
             className="block w-full bg-website-brand-700 text-white text-center py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
           >
             เข้าสู่ระบบ WeeeU
           </a>
           <a
-            href="http://localhost:3002/register"
+            href={crossAppUrls.weeeu.signup}
             className="block w-full bg-white border border-website-brand-700 text-website-brand-700 text-center py-3 rounded-xl font-semibold hover:bg-website-brand-50 transition"
           >
             สมัครสมาชิกฟรี

@@ -9,6 +9,7 @@ import { mockScrapListings } from "@/lib/mock/scrap";
 import ListingCard from "@/components/listings/ListingCard";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import EmptyGroupState from "./EmptyGroupState";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { ScrapListing } from "@/lib/types";
 
@@ -52,13 +53,15 @@ export default async function ScrapGroup() {
 
   if (materials.length === 0) {
     return (
-      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-500 text-sm">
-            {role === "weeeu" ? "📭 คุณยังไม่มีประกาศซาก" : "📭 ยังไม่มีประกาศซาก"}
-          </p>
-        </div>
-      </section>
+      <EmptyGroupState
+        icon="♻️"
+        title="ขาย/ทิ้งซากเครื่องใช้ไฟฟ้า"
+        browseHref="/listings/scrap"
+        isOwner={role === "weeeu"}
+        ownerMessage="คุณยังไม่มีประกาศซาก"
+        guestMessage="ยังไม่มีประกาศซากในตอนนี้"
+        postLabel="ลงประกาศขาย/ทิ้งซาก"
+      />
     );
   }
 

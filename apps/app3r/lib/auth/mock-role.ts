@@ -18,12 +18,45 @@ export const MOCK_ROLES: { value: MockRole; label: string; color: string; emoji:
 ];
 
 /**
- * Mock user identities ต่อ role — ใช้ filter listings (เช่น WeeeU เห็นเฉพาะของตัวเอง)
+ * Mock user identities ต่อ role — primary persona (ใช้ filter listings: WeeeU เห็นเฉพาะของตัวเอง)
+ * ⚠️ id ต้องคงเดิม — group components กรอง "ของฉัน" จาก MOCK_USERS.weeeu.id
  */
 export const MOCK_USERS: Record<Exclude<MockRole, "anonymous">, { id: string; name: string }> = {
   weeeu: { id: "user-001", name: "คุณ WeeeU Mock" },
   weeer: { id: "weeer-001", name: "ร้านมือสองมั่นใจ Mock" },
   weeet: { id: "weeet-001", name: "ช่างสมชาย Mock" },
+};
+
+/**
+ * Round 2 WP-0.4 — Dev Mock Role multi-user (กฎธุรกิจ §11 · เลนส์ #6)
+ * user จำลอง >1 ราย ต่อ role หลายสถานการณ์ เพื่อทดสอบ role-aware view ให้ครบเคส
+ * (ประกาศครบทุกโมดูล / ขายหลายประกาศ / ร้านรออนุมัติ ฯลฯ). persona แรกของแต่ละ
+ * role = primary (ตรงกับ MOCK_USERS). ใช้แสดงใน MockAuthSwitcher เป็นทางเลือก
+ * สถานการณ์ — ไม่กระทบ logic กรองเดิม.
+ */
+export interface MockUserScenario {
+  id: string;
+  name: string;
+  /** สถานการณ์จำลอง (mock scenario) สำหรับเลือกทดสอบ */
+  scenario: string;
+  /** ป้ายสถานะ (mockup) */
+  status: string;
+}
+
+export const MOCK_USER_SCENARIOS: Record<Exclude<MockRole, "anonymous">, MockUserScenario[]> = {
+  weeeu: [
+    { id: "user-001", name: "คุณ WeeeU Mock", scenario: "ประกาศครบทุกโมดูล (ซ่อม/บำรุง/ขาย/ซาก)", status: "ใช้งานปกติ" },
+    { id: "user-002", name: "คุณมานี ขายเยอะ", scenario: "ขายมือสอง 4 ประกาศพร้อมกัน", status: "ผู้ขายตัวยง" },
+    { id: "user-003", name: "คุณใหม่ มือใหม่", scenario: "ยังไม่มีประกาศ (empty-state)", status: "สมาชิกใหม่" },
+  ],
+  weeer: [
+    { id: "weeer-001", name: "ร้านมือสองมั่นใจ Mock", scenario: "ร้านอนุมัติแล้ว — ยื่นข้อเสนอได้", status: "อนุมัติแล้ว" },
+    { id: "weeer-002", name: "ร้านซ่อมรออนุมัติ", scenario: "สมัครแล้วรอ admin อนุมัติ", status: "รออนุมัติ" },
+  ],
+  weeet: [
+    { id: "weeet-001", name: "ช่างสมชาย Mock", scenario: "ช่างว่าง — รับงานได้", status: "ว่าง" },
+    { id: "weeet-002", name: "ช่างสมหญิง", scenario: "กำลังทำงานอยู่ 1 งาน", status: "มีงาน" },
+  ],
 };
 
 /**

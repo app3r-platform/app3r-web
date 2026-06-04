@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { maintainJobs } from "@/lib/mock/maintain-jobs";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import EmptyGroupState from "./EmptyGroupState";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { AuthenticatedJobProjection } from "@/lib/types/listings-customer-jobs";
 
@@ -82,13 +83,15 @@ export default async function MaintainRequestGroup() {
 
   if (types.length === 0) {
     return (
-      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-500 text-sm">
-            {role === "weeeu" ? "📭 คุณยังไม่มีงานบำรุงรักษาที่แจ้ง" : "📭 ยังไม่มีงานบำรุงรักษา"}
-          </p>
-        </div>
-      </section>
+      <EmptyGroupState
+        icon="🛡️"
+        title="แจ้งความต้องการบำรุงรักษา"
+        browseHref="/listings/maintain"
+        isOwner={role === "weeeu"}
+        ownerMessage="คุณยังไม่มีงานบำรุงรักษาที่แจ้ง"
+        guestMessage="ยังไม่มีงานบำรุงรักษาที่ประกาศในตอนนี้"
+        postLabel="แจ้งงานบำรุงรักษา"
+      />
     );
   }
 

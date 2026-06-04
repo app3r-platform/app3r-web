@@ -9,7 +9,7 @@
 //   - ห้าม build production ถ้า env นี้เปิด
 // ============================================================
 import { useEffect, useState } from "react";
-import { MOCK_ROLES, MOCK_ROLE_STORAGE, MOCK_ROLE_COOKIE, isDevNavEnabled } from "@/lib/auth/mock-role";
+import { MOCK_ROLES, MOCK_ROLE_STORAGE, MOCK_ROLE_COOKIE, MOCK_USER_SCENARIOS, isDevNavEnabled } from "@/lib/auth/mock-role";
 import type { MockRole } from "@/lib/auth/mock-role";
 
 export default function MockAuthSwitcher() {
@@ -93,6 +93,31 @@ export default function MockAuthSwitcher() {
           </button>
         ))}
       </div>
+      {/* WP-0.4 — multi-user scenarios ของ role ปัจจุบัน (ทดสอบ role-aware view ครบเคส) */}
+      {currentRole !== "anonymous" && MOCK_USER_SCENARIOS[currentRole] && (
+        <div className="border-t pt-2 mb-2">
+          <p className="text-[10px] font-semibold text-gray-500 mb-1">
+            👥 ผู้ใช้จำลอง ({MOCK_USER_SCENARIOS[currentRole].length} ราย)
+          </p>
+          <ul className="space-y-1">
+            {MOCK_USER_SCENARIOS[currentRole].map((u, i) => (
+              <li
+                key={u.id}
+                className={`text-[10px] leading-snug px-1.5 py-1 rounded ${
+                  i === 0 ? "bg-orange-50 text-orange-800" : "bg-gray-50 text-gray-600"
+                }`}
+              >
+                <span className="font-medium">{u.name}</span>
+                {i === 0 && <span className="ml-1">★</span>}
+                <br />
+                <span className="text-gray-400">
+                  {u.scenario} · {u.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="border-t pt-2 text-[10px] text-orange-700 leading-snug">
         ⚠️ DEV-only — แสดงเมื่อ <code className="bg-orange-50 px-1 rounded">NEXT_PUBLIC_DEV_NAV=true</code> เท่านั้น
       </div>

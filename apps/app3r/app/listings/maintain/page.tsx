@@ -12,11 +12,12 @@ import MyProvincePrefill from '../../../components/listings/MyProvincePrefill';
 import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel';
 import RoleSplitSections from '../../../components/listings/RoleSplitSections';
 import { RoleAwareCTA, TermTooltip } from '@/components/common';
+import { crossAppUrls } from '@/lib/config/urls';
 
 const MAINTAIN_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
 
-// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
-const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? 'http://localhost:3002';
+// Cross-app URL (resolved via crossAppUrls — no hardcoded localhost)
+const WEEEU_URL = crossAppUrls.weeeu.base;
 
 export const metadata: Metadata = {
   title: 'ประกาศบำรุงรักษาเครื่องใช้ไฟฟ้า — App3R',

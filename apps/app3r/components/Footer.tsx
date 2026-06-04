@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { footerContent } from "@/lib/content/footer";
 import { getSocialLinks } from "@/lib/content-api";
+import { crossAppUrls } from "@/lib/config/urls";
 
 const footerLinks = {
   ประกาศ: [
@@ -14,12 +15,14 @@ const footerLinks = {
     { href: "/articles", label: "บทความ" },
     { href: "/contact", label: "ติดต่อเรา" },
   ],
+  // Round 2: cross-app links ผ่าน crossAppUrls (เลิก hardcode localhost)
+  // WeeeU สมัคร → /signup/email (canonical · เดิมชี้ /register = 404)
   สมาชิก: [
-    { href: "http://localhost:3002/register", label: "สมัคร WeeeU (ผู้ใช้ทั่วไป)" },
-    { href: "/register/weeer", label: "สมัคร WeeeR (ร้านค้า/บริษัท)" },
-    { href: "http://localhost:3002/login", label: "เข้าสู่ระบบ WeeeU" },
-    { href: "http://localhost:3001/login", label: "เข้าสู่ระบบ WeeeR" },
-    { href: "http://localhost:3003/login", label: "เข้าสู่ระบบ WeeeT" },
+    { href: crossAppUrls.weeeu.signup, label: "สมัคร WeeeU (ผู้ใช้ทั่วไป)", external: true },
+    { href: "/register/weeer", label: "สมัคร WeeeR (ร้านค้า/บริษัท)", external: false },
+    { href: crossAppUrls.weeeu.login, label: "เข้าสู่ระบบ WeeeU", external: true },
+    { href: crossAppUrls.weeer.login, label: "เข้าสู่ระบบ WeeeR", external: true },
+    { href: crossAppUrls.weeet.login, label: "เข้าสู่ระบบ WeeeT", external: true },
   ],
 };
 
@@ -93,12 +96,21 @@ export default async function Footer() {
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-400 hover:text-white text-sm transition"
-                    >
-                      {link.label}
-                    </Link>
+                    {"external" in link && link.external ? (
+                      <a
+                        href={link.href}
+                        className="text-gray-400 hover:text-white text-sm transition"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-gray-400 hover:text-white text-sm transition"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

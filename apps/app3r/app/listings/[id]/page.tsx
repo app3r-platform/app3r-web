@@ -22,6 +22,7 @@ import {
 import { ListingMetaHeader } from "@/components/listings/ListingMetaHeader";
 import { ReviewsList } from "@/components/listings/ReviewsList";
 import { QuestionsList } from "@/components/listings/QuestionsList";
+import { CopyShareButton } from "@/components/common";
 
 export const revalidate = 60;
 
@@ -89,6 +90,10 @@ export default async function ListingByIdPage({ params }: { params: Params }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <main className="lg:col-span-2 space-y-6">
+          <div className="flex justify-end">
+            {/* คัดลอก/แชร์ลิงก์ประกาศ (เลนส์ #4) */}
+            <CopyShareButton title={`ประกาศ #${meta.listingId.slice(0, 8)}`} variant="icon" />
+          </div>
           <ListingMetaHeader meta={meta} tambon={tambon} />
 
           {domainSegment && (
