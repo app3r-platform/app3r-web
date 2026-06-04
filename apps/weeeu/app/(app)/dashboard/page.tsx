@@ -70,28 +70,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Wallet summary cards */}
-      <div className="grid grid-cols-2 gap-4">
-        {/* Silver */}
-        <Link href="/wallet?tab=silver" className="wallet-silver rounded-2xl p-5 text-white hover:opacity-90 transition-opacity">
-          <p className="text-xs font-medium opacity-80 mb-1">พอยต์เงิน (Silver Point)</p>
-          <p className="text-2xl font-bold">1,250</p>
-          <p className="text-xs opacity-70 mt-1">≈ ฿125.00</p>
-          <div className="mt-3 flex items-center gap-1 opacity-80">
-            <span className="text-xs">💎 พอยต์เงิน</span>
-          </div>
-        </Link>
-
-        {/* Gold */}
-        <Link href="/wallet?tab=gold" className="wallet-gold rounded-2xl p-5 text-white hover:opacity-90 transition-opacity">
-          <p className="text-xs font-medium opacity-80 mb-1">พอยต์ทอง (Gold Point)</p>
-          <p className="text-2xl font-bold">350</p>
-          <p className="text-xs opacity-70 mt-1">≈ ฿35.00</p>
-          <div className="mt-3 flex items-center gap-1 opacity-80">
-            <span className="text-xs">🥇 พอยต์ทอง</span>
-          </div>
-        </Link>
-      </div>
+      {/* U-01: การ์ดพอยต์ Silver+Gold ย้ายไป top-bar (layout) — ไม่ใช่กิจกรรมหลักของ dashboard */}
 
       {/* บริการของฉัน — การ์ดเดี่ยวแนวนอน · แสดงเฉพาะหมวดที่มีธุรกรรม (A1) */}
       <div className="space-y-3">
@@ -170,6 +149,37 @@ export default function DashboardPage() {
                 {act.status}
               </span>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* สินค้าน่าสนใจ — ใต้กิจกรรมล่าสุด (U-01#3 · เหมือน website · คลิก→รายละเอียดสินค้ามือสอง) */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-base font-semibold text-gray-800">สินค้าน่าสนใจ</h2>
+          <Link href="/marketplace" className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">
+            ดูทั้งหมด →
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { id: "1", icon: "❄️", name: "แอร์ Mitsubishi 12000 BTU", price: "4,500", area: "อ.เมือง" },
+            { id: "2", icon: "🫧", name: "เครื่องซักผ้า LG 8kg", price: "3,200", area: "อ.วารินชำราบ" },
+            { id: "3", icon: "🧊", name: "ตู้เย็น Sharp 6.5 คิว", price: "2,800", area: "อ.เมือง" },
+            { id: "4", icon: "📺", name: "ทีวี Samsung 43 นิ้ว", price: "3,900", area: "อ.เดชอุดม" },
+          ].map((item) => (
+            <Link
+              key={item.id}
+              href={`/marketplace/${item.id}`}
+              className="rounded-xl border border-gray-100 overflow-hidden hover:border-weeeu-primary/40 transition-colors"
+            >
+              <div className="h-20 bg-gray-50 flex items-center justify-center text-3xl">{item.icon}</div>
+              <div className="p-2.5">
+                <p className="text-xs font-medium text-gray-800 truncate">{item.name}</p>
+                <p className="text-sm font-bold text-weeeu-primary mt-0.5">฿{item.price}</p>
+                <p className="text-xs text-gray-400 truncate">{item.area}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -51,7 +51,7 @@ export default function WalletPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">กระเป๋าตังค์</h1>
+      <h1 className="text-2xl font-bold text-gray-900">พอยต์ของฉัน</h1>
 
       {/* R4 notice — ถ้ามี offer awaiting_payment */}
       <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 flex items-start gap-3">

@@ -70,7 +70,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link
             href="/dashboard"
             aria-label="กลับหน้าหลัก (Home)"
-            className="flex items-center gap-2 flex-1 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
           >
             <Image
               src="/logo/WeeeU.png"
@@ -83,23 +83,44 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="text-base leading-none" aria-hidden="true">🏠</span>
           </Link>
 
+          <div className="flex-1" />
+
+          {/* 💎🥇 Point summary chips — ย้ายจากการ์ดใหญ่ใน dashboard มา top-bar (U-01 · แยกประเภท แสดงเฉพาะคงเหลือ) */}
+          <Link
+            href="/wallet?tab=silver"
+            aria-label="พอยต์เงิน (Silver Point)"
+            className="flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded-lg transition-colors"
+          >
+            <span className="text-sm">💎</span>
+            <span className="text-xs font-semibold text-gray-700">1,250</span>
+          </Link>
+          <Link
+            href="/wallet?tab=gold"
+            aria-label="พอยต์ทอง (Gold Point)"
+            className="flex items-center gap-1 bg-weeeu-surface hover:bg-green-100 px-2 py-1 rounded-lg transition-colors"
+          >
+            <span className="text-sm">🥇</span>
+            <span className="text-xs font-semibold text-weeeu-primary">350</span>
+          </Link>
+
           {/* 🔔 Notification bell — ไอคอนมุมขวาบน (A2 ข้อ 4) */}
           <Link
             href="/notifications"
-            className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors"
+            className="relative p-1.5 hover:bg-gray-100 rounded-xl transition-colors"
           >
             <span className="text-xl">🔔</span>
             {/* Red dot badge — mock unread */}
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
           </Link>
 
-          {/* 👛 Wallet shortcut */}
+          {/* 👤 Username → โปรไฟล์ (U-35หัว · ลิงก์ไป profile) */}
           <Link
-            href="/wallet"
-            className="flex items-center gap-1.5 bg-weeeu-surface hover:bg-green-100 px-3 py-1.5 rounded-xl transition-colors"
+            href="/profile"
+            aria-label="โปรไฟล์ของฉัน"
+            className="flex items-center gap-1 hover:bg-gray-100 px-1.5 py-1 rounded-xl transition-colors"
           >
-            <span className="text-sm">👛</span>
-            <span className="text-sm font-semibold text-weeeu-primary">฿ 1,250</span>
+            <span className="text-lg">👤</span>
+            <span className="text-xs font-medium text-gray-700 max-w-[64px] truncate hidden sm:inline">สมชาย</span>
           </Link>
 
         </div>

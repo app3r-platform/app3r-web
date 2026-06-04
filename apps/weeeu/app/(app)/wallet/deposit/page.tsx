@@ -22,6 +22,7 @@ export default function DepositPage() {
   const [loadingInfo, setLoadingInfo] = useState(true);
 
   const [amount, setAmount] = useState("");
+  const [transferAt, setTransferAt] = useState(""); // วันเวลาที่โอน (U-01#4)
   const [slipFileId, setSlipFileId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -46,6 +47,10 @@ export default function DepositPage() {
     const parsedAmount = parseInt(amount, 10);
     if (!parsedAmount || parsedAmount <= 0) {
       setSubmitError("กรุณาระบุจำนวนเงินที่ถูกต้อง");
+      return;
+    }
+    if (!transferAt) {
+      setSubmitError("กรุณาระบุวันเดือนปีและเวลาที่โอนเงิน — หากไม่มีถือว่ายังโอนเงินไม่สำเร็จ");
       return;
     }
     if (!slipFileId) {
@@ -151,6 +156,23 @@ export default function DepositPage() {
             <label className="block text-xs font-medium text-gray-500 mb-1.5">
               จำนวนเงินที่โอน (บาท) <span className="text-red-400">*</span>
             </label>
+            {/* Preset amounts (U-01#3 · 04:47) */}
+            <div className="flex gap-2 mb-2">
+              {[3000, 4000, 5000].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setAmount(String(preset))}
+                  className={`flex-1 py-2 rounded-xl border text-sm font-semibold transition-colors ${
+                    amount === String(preset)
+                      ? "bg-weeeu-primary text-white border-weeeu-primary"
+                      : "bg-white text-weeeu-text border-gray-200 hover:border-weeeu-primary"
+                  }`}
+                >
+                  {preset.toLocaleString()}
+                </button>
+              ))}
+            </div>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">฿</span>
               <input
@@ -171,6 +193,21 @@ export default function DepositPage() {
             )}
           </div>
 
+          {/* วันเวลาที่โอน (U-01#4 · 04:46) */}
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1.5">
+              วันเดือนปีและเวลาที่โอนเงิน <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="datetime-local"
+              value={transferAt}
+              onChange={(e) => setTransferAt(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+            />
+            <p className="text-xs text-gray-400 mt-1">ระบุเวลาที่โอนจริงตามสลิป — จำเป็นต่อการตรวจสอบ</p>
+          </div>
+
           {/* Slip upload */}
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1.5">
@@ -187,7 +224,7 @@ export default function DepositPage() {
 
         <button
           type="submit"
-          disabled={submitting || !slipFileId || !amount}
+          disabled={submitting || !slipFileId || !amount || !transferAt}
           className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
         >
           {submitting ? "⟳ กำลังส่งคำขอ..." : "💰 ยืนยันการเติมพอยต์ทอง (Mockup)"}

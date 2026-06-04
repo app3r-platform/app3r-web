@@ -146,8 +146,8 @@ export interface MaintainJob {
 // ─── MaintainOffer (Blueprint 2.1 — Offer=SoT, Decision กลาง) ────────────────
 
 export interface MaintainOfferTerms {
-  deposit?: number;                // มัดจำ (บาท)
-  deposit_refundable?: boolean;    // คืนมัดจำเมื่องานเสร็จ
+  deposit?: number;                // เงินวางตามเงื่อนไขข้อเสนอ (offer terms · บาท)
+  deposit_refundable?: boolean;    // คืนเงินวางเมื่องานเสร็จ (offer terms)
   travel_fee?: number;             // ค่าเดินทาง (บาท)
   inspection_fee?: number;         // ค่าตรวจ (ถ้ามี)
   warranty_days?: number;          // รับประกัน (วัน)
