@@ -18,6 +18,9 @@ export type { NearMeToggleProps } from "./NearMeToggle";
 export { default as AdSlot } from "./AdSlot";
 export type { AdSlotProps, AdSlotSize } from "./AdSlot";
 
+// Round 2 — CopyShareButton (ปุ่มคัดลอก/แชร์ลิงก์ประกาศ · เลนส์ #4)
+export { default as CopyShareButton } from "./CopyShareButton";
+
 // C7 — ConditionalSection
 export { default as ConditionalSection } from "./ConditionalSection";
 export type { ConditionalSectionProps } from "./ConditionalSection";

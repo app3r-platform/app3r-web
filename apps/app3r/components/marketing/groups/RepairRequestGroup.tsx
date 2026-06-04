@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { repairJobs } from "@/lib/mock/repair-jobs";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import EmptyGroupState from "./EmptyGroupState";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { AuthenticatedJobProjection } from "@/lib/types/listings-customer-jobs";
 
@@ -91,13 +92,15 @@ export default async function RepairRequestGroup() {
 
   if (types.length === 0) {
     return (
-      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-500 text-sm">
-            {role === "weeeu" ? "📭 คุณยังไม่มีงานซ่อมที่แจ้ง" : "📭 ยังไม่มีงานซ่อม"}
-          </p>
-        </div>
-      </section>
+      <EmptyGroupState
+        icon="🔧"
+        title="แจ้งความต้องการซ่อม"
+        browseHref="/listings/repair"
+        isOwner={role === "weeeu"}
+        ownerMessage="คุณยังไม่มีงานซ่อมที่แจ้ง"
+        guestMessage="ยังไม่มีงานซ่อมที่ประกาศในตอนนี้"
+        postLabel="แจ้งซ่อมเครื่องใช้ไฟฟ้า"
+      />
     );
   }
 

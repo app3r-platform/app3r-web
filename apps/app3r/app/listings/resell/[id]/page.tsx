@@ -12,7 +12,7 @@ import AdBanner from "../../../../components/ads/AdBanner";
 import LocationMapMock from "../../../../components/listings/LocationMapMock";
 import QnASection from "../../../../components/listings/QnASection";
 import EngagementCounters from "../../../../components/listings/EngagementCounters";
-import { AdSlot, RoleAwareCTA, TermTooltip } from "../../../../components/common";
+import { AdSlot, RoleAwareCTA, TermTooltip, CopyShareButton } from "../../../../components/common";
 import { getMockEngagement } from "../../../../lib/mock/listing-engagement";
 import { getMockQnA } from "../../../../lib/mock/listing-qna";
 
@@ -93,7 +93,11 @@ export default async function ResellDetailPage({ params }: PageProps) {
               )}
             </div>
             <h1 className="text-2xl font-bold text-gray-900">{listing.title}</h1>
-            <p className="text-3xl font-extrabold text-website-brand-700">{listing.priceLabel}</p>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <p className="text-3xl font-extrabold text-website-brand-700">{listing.priceLabel}</p>
+              {/* คัดลอก/แชร์ลิงก์ประกาศ (เลนส์ #4 · W-08) */}
+              <CopyShareButton title={listing.title} />
+            </div>
           </div>
 
           {/* Details table */}
@@ -202,6 +206,13 @@ export default async function ResellDetailPage({ params }: PageProps) {
                   <span>✓</span> ผ่านการยืนยันตัวตน
                 </div>
               )}
+              {/* W-08: ลิงก์ดูประวัติผู้ประกาศ (เลนส์ #9) */}
+              <Link
+                href={`/owners/${listing.seller.id}`}
+                className="block text-center text-sm font-semibold text-website-brand-700 border border-website-brand-200 rounded-lg py-2 hover:bg-website-brand-50 transition"
+              >
+                ดูประวัติผู้ประกาศ →
+              </Link>
             </div>
           ) : (
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-2">

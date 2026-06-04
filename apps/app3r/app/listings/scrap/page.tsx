@@ -11,10 +11,11 @@ import ScrapModeChips from "../../../components/listings/ScrapModeChips";
 import RoleSplitSections from "../../../components/listings/RoleSplitSections";
 import AdBanner from "../../../components/ads/AdBanner";
 import { RoleAwareCTA, TermTooltip } from "@/components/common";
+import { crossAppUrls } from "@/lib/config/urls";
 import type { ScrapFilter, ScrapMaterial } from "../../../lib/types";
 
-// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
-const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? "http://localhost:3002";
+// Cross-app URL (resolved via crossAppUrls — no hardcoded localhost)
+const WEEEU_URL = crossAppUrls.weeeu.base;
 
 export const metadata: Metadata = {
   title: "ซากเครื่องใช้ไฟฟ้า — ขายซาก อลูมิเนียม ทองแดง เหล็ก",
@@ -105,7 +106,7 @@ export default async function ScrapListingsPage({ searchParams }: PageProps) {
               <strong>ข้อมูลจำกัดสำหรับผู้เยี่ยมชม</strong> — ดูรายละเอียดเพิ่มเติม เช่น ชื่อผู้ขาย เบอร์โทร และยื่น
               <TermTooltip term="offer" />
               ได้หลังจาก{" "}
-              <Link href={WEEEU_URL + "/register"} className="underline font-semibold text-amber-900">
+              <Link href={crossAppUrls.weeeu.signup} className="underline font-semibold text-amber-900">
                 สมัครสมาชิก WeeeU
               </Link>
             </div>

@@ -3,6 +3,8 @@
 // Phase C-4.1b — Server Component (no "use client")
 // ============================================================
 import Link from 'next/link';
+import { crossAppUrls } from '@/lib/config/urls';
+import { CopyShareButton } from '@/components/common';
 import type { ApplianceType } from '../../lib/types/listings-customer-jobs';
 
 interface WeeeRLoginGateProps {
@@ -48,9 +50,13 @@ export default function WeeeRLoginGate({
           </span>
         </div>
         <h1 className="text-xl font-bold text-gray-900 mb-1">{headline}</h1>
-        <div className="flex items-center gap-1 text-sm text-gray-500">
-          <span>📍</span>
-          <span>{area}</span>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-1 text-sm text-gray-500">
+            <span>📍</span>
+            <span>{area}</span>
+          </div>
+          {/* คัดลอก/แชร์ลิงก์ประกาศ (เลนส์ #4 · W-08/W-10) */}
+          <CopyShareButton title={headline} variant="icon" />
         </div>
       </div>
 
@@ -67,12 +73,12 @@ export default function WeeeRLoginGate({
 
         {/* CTA */}
         <div className="space-y-3">
-          <Link
-            href="http://localhost:3001/login"
+          <a
+            href={crossAppUrls.weeer.login}
             className={`block w-full bg-${accentColor === 'blue' ? 'blue' : 'orange'}-600 text-white py-3 rounded-xl font-semibold hover:bg-${accentColor === 'blue' ? 'blue' : 'orange'}-700 transition`}
           >
             เข้าสู่ระบบ WeeeR
-          </Link>
+          </a>
           <Link
             href="/register/weeer"
             className="block w-full border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50 transition text-sm"

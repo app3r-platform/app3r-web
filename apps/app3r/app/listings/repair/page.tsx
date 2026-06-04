@@ -15,11 +15,12 @@ import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel'
 import RoleSplitSections from '../../../components/listings/RoleSplitSections';
 import { ALL_SERVICE_TYPES } from '../../../lib/constants/service-types';
 import { RoleAwareCTA, TermTooltip } from '@/components/common';
+import { crossAppUrls } from '@/lib/config/urls';
 
 const REPAIR_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
 
-// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
-const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? 'http://localhost:3002';
+// Cross-app URL (resolved via crossAppUrls — no hardcoded localhost)
+const WEEEU_URL = crossAppUrls.weeeu.base;
 
 export const metadata: Metadata = {
   title: 'ประกาศซ่อมเครื่องใช้ไฟฟ้า — App3R',

@@ -1,6 +1,19 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useMockRole } from "@/lib/auth/useMockRole";
+import { MOCK_USERS } from "@/lib/auth/mock-role";
+import { crossAppUrls } from "@/lib/config/urls";
+
+// Round 2 W-01: role-aware identity + per-role CTA (กฎ#9 · เลนส์ #1)
+const roleMeta: Record<
+  Exclude<ReturnType<typeof useMockRole>["role"], "anonymous">,
+  { emoji: string; label: string; appUrl: string }
+> = {
+  weeeu: { emoji: "🛒", label: "WeeeU", appUrl: crossAppUrls.weeeu.base },
+  weeer: { emoji: "🔧", label: "WeeeR", appUrl: crossAppUrls.weeer.base },
+  weeet: { emoji: "👨‍🔧", label: "WeeeT", appUrl: crossAppUrls.weeet.base },
+};
 
 const navLinks = [
   { href: "/", label: "หน้าหลัก" },
@@ -20,6 +33,16 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { role, mounted } = useMockRole();
+
+  // ก่อน mount = anonymous view (กัน hydration mismatch)
+  const effectiveRole = mounted ? role : "anonymous";
+  // เช็คตรง (ไม่ผ่านตัวแปร boolean) เพื่อให้ TS narrow type ใน branch ไม่ใช่ anonymous
+  const identity =
+    effectiveRole === "anonymous"
+      ? null
+      : { ...roleMeta[effectiveRole], name: MOCK_USERS[effectiveRole].name };
+  const isAnon = identity === null;
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -76,20 +99,34 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons — role-aware (W-01 · กฎ#9) */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="http://localhost:3002/login"
-              className="text-website-brand-700 border border-website-brand-700 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-50 transition"
-            >
-              เข้าสู่ระบบ WeeeU
-            </Link>
-            <Link
-              href="/register/weeer"
-              className="bg-website-brand-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-800 transition"
-            >
-              สมัคร WeeeR
-            </Link>
+            {isAnon ? (
+              <>
+                <a
+                  href={crossAppUrls.weeeu.login}
+                  className="text-website-brand-700 border border-website-brand-700 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-50 transition"
+                >
+                  เข้าสู่ระบบ WeeeU
+                </a>
+                <Link
+                  href="/register/weeer"
+                  className="bg-website-brand-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-800 transition"
+                >
+                  สมัคร WeeeR
+                </Link>
+              </>
+            ) : (
+              // logged-in (mock): แสดงชื่อ user/ร้าน + ลิงก์ไปแอปของตน · ซ่อนปุ่มสมัคร/เข้าระบบ
+              <a
+                href={identity!.appUrl}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-website-brand-200 bg-website-brand-50 text-sm font-medium text-website-brand-800 hover:bg-website-brand-100 transition"
+                title={`ไปยังแอป ${identity!.label}`}
+              >
+                <span>{identity!.emoji}</span>
+                <span className="max-w-[160px] truncate">{identity!.name}</span>
+              </a>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -142,20 +179,33 @@ export default function Navbar() {
               )
             )}
             <div className="pt-2 border-t border-gray-100 flex flex-col gap-2">
-              <Link
-                href="http://localhost:3002/login"
-                onClick={() => setMobileOpen(false)}
-                className="text-center text-website-brand-700 border border-website-brand-700 px-4 py-2 rounded-lg text-sm font-medium"
-              >
-                เข้าสู่ระบบ WeeeU
-              </Link>
-              <Link
-                href="/register/weeer"
-                onClick={() => setMobileOpen(false)}
-                className="text-center bg-website-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
-              >
-                สมัคร WeeeR
-              </Link>
+              {isAnon ? (
+                <>
+                  <a
+                    href={crossAppUrls.weeeu.login}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-center text-website-brand-700 border border-website-brand-700 px-4 py-2 rounded-lg text-sm font-medium"
+                  >
+                    เข้าสู่ระบบ WeeeU
+                  </a>
+                  <Link
+                    href="/register/weeer"
+                    onClick={() => setMobileOpen(false)}
+                    className="text-center bg-website-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+                  >
+                    สมัคร WeeeR
+                  </Link>
+                </>
+              ) : (
+                <a
+                  href={identity!.appUrl}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-center flex items-center justify-center gap-2 border border-website-brand-200 bg-website-brand-50 text-website-brand-800 px-4 py-2 rounded-lg text-sm font-medium"
+                >
+                  <span>{identity!.emoji}</span>
+                  <span className="truncate">{identity!.name}</span>
+                </a>
+              )}
             </div>
           </div>
         )}

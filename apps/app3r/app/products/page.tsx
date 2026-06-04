@@ -103,7 +103,13 @@ export default function ProductsPage() {
       </nav>
 
       <h1 className="text-3xl font-bold text-gray-900 mb-2">สินค้าแนะนำ</h1>
-      <p className="text-gray-500 mb-8">เครื่องใช้ไฟฟ้าคุณภาพดีที่ผ่านการคัดเลือกโดย App3R</p>
+      <p className="text-gray-500 mb-4">เครื่องใช้ไฟฟ้าคุณภาพดีที่ผ่านการคัดเลือกโดย App3R</p>
+
+      {/* W-17: หน้าจำลอง — รายการสินค้าแสดงอัตโนมัติ (auto) · เกณฑ์คัดเลือก + การควบคุม
+          โดย admin = ระบบหลังบ้าน (Admin Wave5 + Backend) · Website แสดงผลอย่างเดียว */}
+      <div className="mb-8 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-xs text-amber-800">
+        🧪 หน้าจำลอง (mockup) — รายการสินค้าแสดงอัตโนมัติจากระบบ · เกณฑ์การคัดเลือกและการจัดการสินค้าควบคุมโดยผู้ดูแล (Admin) + ระบบหลังบ้านในจังหวะถัดไป
+      </div>
 
       {/* Category filter */}
       <div className="flex gap-2 flex-wrap mb-8">

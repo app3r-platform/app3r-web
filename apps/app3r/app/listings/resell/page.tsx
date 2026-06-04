@@ -13,6 +13,7 @@ import RoleSplitSections from "../../../components/listings/RoleSplitSections";
 import AdBanner from "../../../components/ads/AdBanner";
 import SponsoredListing from "../../../components/ads/SponsoredListing";
 import { NearMeToggle, TermTooltip } from "@/components/common";
+import { crossAppUrls } from "@/lib/config/urls";
 import type { ResellFilter, ConditionType } from "../../../lib/types";
 
 export const metadata: Metadata = {
@@ -29,8 +30,8 @@ const categories = [
   "ไมโครเวฟ", "เตาอบ", "พัดลม", "เครื่องฟอกอากาศ",
 ];
 
-// Cross-app URL stub (ENV + localhost fallback — NEVER a real domain)
-const WEEEU_URL = process.env.NEXT_PUBLIC_WEEEU_URL ?? "http://localhost:3002";
+// Cross-app URL (resolved via crossAppUrls — no hardcoded localhost)
+const WEEEU_URL = crossAppUrls.weeeu.base;
 
 // Get sponsored listings (static — from mock data)
 const sponsoredListings = mockResellListings.filter((l) => l.sponsored).slice(0, 2);
@@ -130,7 +131,7 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
               <TermTooltip term="offer" />
               ได้หลังจาก{" "}
               {/* W-11: เสนอทั้ง 2 ทาง — ไม่ปล่อยให้เป็น dead-end เฉพาะ WeeeU */}
-              <Link href={WEEEU_URL + "/register"} className="underline font-semibold text-amber-900">
+              <Link href={crossAppUrls.weeeu.signup} className="underline font-semibold text-amber-900">
                 สมัครสมาชิก WeeeU
               </Link>{" "}
               หรือ{" "}

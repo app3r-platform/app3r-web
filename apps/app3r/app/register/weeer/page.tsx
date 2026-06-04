@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useMockRole } from "@/lib/auth/useMockRole";
+import { crossAppUrls } from "@/lib/config/urls";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -54,7 +56,8 @@ const serviceTypeOptions = [
   "รับซื้อซากเครื่องใช้ไฟฟ้า",
 ];
 
-const WEEER_APP_URL = process.env.NEXT_PUBLIC_WEEER_APP_URL ?? "http://localhost:3001";
+// Round 2: ใช้ crossAppUrls (เดิมใช้ env var ผิดชื่อ NEXT_PUBLIC_WEEER_APP_URL)
+const WEEER_APP_URL = crossAppUrls.weeer.base;
 
 export default function RegisterWeeeRPage() {
   // W-2-C (D4): default = landing page → CTA redirect ไป WeeeR app
@@ -67,6 +70,15 @@ export default function RegisterWeeeRPage() {
     agreeTerms: false,
     agreePrivacy: false,
   });
+
+  // Round 2 — role enforcement สมัคร WeeeR (กฎธุรกิจ §9)
+  const { role, mounted } = useMockRole();
+  if (mounted && role === "weeet") {
+    return <RoleBlockedScreen variant="weeet" />;
+  }
+  if (mounted && role === "weeer") {
+    return <RoleBlockedScreen variant="weeer" />;
+  }
 
   // W-2-C: Landing page (default view)
   if (!showLocalForm && !submitted) {
@@ -111,10 +123,10 @@ export default function RegisterWeeeRPage() {
 
           {/* Benefits */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+            <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">📊</div>
-              <p className="font-semibold text-emerald-900 text-sm">รายงานยอดขาย</p>
-              <p className="text-xs text-emerald-700 mt-0.5">Dashboard real-time</p>
+              <p className="font-semibold text-website-brand-900 text-sm">รายงานยอดขาย</p>
+              <p className="text-xs text-website-brand-700 mt-0.5">Dashboard real-time</p>
             </div>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">🛡️</div>
@@ -584,9 +596,57 @@ export default function RegisterWeeeRPage() {
 
         <p className="text-center text-gray-500 text-xs mt-5">
           มีบัญชีแล้ว?{" "}
-          <Link href={`${WEEER_APP_URL}/login`} className="text-website-brand-700 hover:underline font-medium">
+          <a href={crossAppUrls.weeer.login} className="text-website-brand-700 hover:underline font-medium">
             เข้าสู่ระบบ WeeeR
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Round 2 — role enforcement screens (กฎธุรกิจ §9)
+//   weeet: ช่างสมัครเองไม่ได้ — ต้องผ่านร้าน WeeeR ที่อนุมัติแล้ว
+//   weeer: เข้าสู่ระบบ WeeeR อยู่แล้ว — สมัครซ้ำไม่ได้ (ปลดล็อกอินก่อน)
+function RoleBlockedScreen({ variant }: { variant: "weeet" | "weeer" }) {
+  const isWeeet = variant === "weeet";
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+      <div className="bg-white border border-gray-200 rounded-2xl p-8 max-w-md w-full text-center space-y-5">
+        <div className="text-5xl">{isWeeet ? "👨‍🔧" : "🔧"}</div>
+        <h1 className="text-xl font-bold text-gray-900">
+          {isWeeet ? "ช่าง (WeeeT) สมัครร้านไม่ได้" : "คุณเข้าสู่ระบบ WeeeR อยู่แล้ว"}
+        </h1>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          {isWeeet
+            ? "บัญชีช่าง (WeeeT) สมัครเป็นร้าน WeeeR เองไม่ได้ — ช่างจะถูกเพิ่มเข้าระบบโดยร้าน WeeeR ที่ผ่านการอนุมัติแล้วเท่านั้น"
+            : "บัญชีของคุณเป็นร้าน WeeeR อยู่แล้ว สมัครซ้ำไม่ได้ — หากต้องการสมัครบัญชีใหม่ กรุณาออกจากระบบก่อน"}
+        </p>
+        <div className="space-y-3">
+          {isWeeet ? (
+            <Link
+              href="/download"
+              className="block w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
+            >
+              ดาวน์โหลดแอป WeeeT
+            </Link>
+          ) : (
+            <a
+              href={crossAppUrls.weeer.base}
+              className="block w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
+            >
+              ไปยังแอป WeeeR ของคุณ
+            </a>
+          )}
+          <Link
+            href="/"
+            className="block w-full border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50 transition text-sm"
+          >
+            กลับหน้าหลัก
           </Link>
+        </div>
+        <p className="text-[10px] text-gray-300">
+          ทดสอบ flow: สลับ role ได้ที่กล่อง 🧪 DEV มุมขวาล่าง
         </p>
       </div>
     </div>

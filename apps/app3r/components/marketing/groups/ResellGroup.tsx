@@ -10,6 +10,7 @@ import { mockResellListings } from "@/lib/mock/resell";
 import ListingCard from "@/components/listings/ListingCard";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
+import EmptyGroupState from "./EmptyGroupState";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
 import type { ResellListing } from "@/lib/types";
 
@@ -59,15 +60,15 @@ export default async function ResellGroup() {
 
   if (categories.length === 0) {
     return (
-      <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-500 text-sm">
-            {role === "weeeu"
-              ? "📭 คุณยังไม่มีประกาศขายมือสอง"
-              : "📭 ยังไม่มีประกาศขายมือสอง"}
-          </p>
-        </div>
-      </section>
+      <EmptyGroupState
+        icon="📦"
+        title="ขายเครื่องใช้ไฟฟ้ามือสอง"
+        browseHref="/listings/resell"
+        isOwner={role === "weeeu"}
+        ownerMessage="คุณยังไม่มีประกาศขายมือสอง"
+        guestMessage="ยังไม่มีประกาศขายมือสองในตอนนี้"
+        postLabel="ลงขายมือสองชิ้นแรก"
+      />
     );
   }
 

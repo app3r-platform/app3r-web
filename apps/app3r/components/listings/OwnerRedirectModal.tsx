@@ -5,6 +5,7 @@
 // Phase C-4.1b — Client Component
 // ============================================================
 import Link from 'next/link';
+import { crossAppUrls } from '@/lib/config/urls';
 
 interface OwnerRedirectModalProps {
   jobId: string;
@@ -34,12 +35,12 @@ export default function OwnerRedirectModal({ jobId, type, title }: OwnerRedirect
         </p>
 
         <div className="space-y-3">
-          <Link
-            href={`http://localhost:3002/jobs/${jobId}`}
+          <a
+            href={crossAppUrls.weeeu.job(jobId)}
             className="block w-full bg-website-brand-600 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-700 transition"
           >
             ไปจัดการประกาศ (WeeeU)
-          </Link>
+          </a>
           <Link
             href={`/listings/${type}`}
             className="block w-full border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50 transition text-sm"

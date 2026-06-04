@@ -31,7 +31,8 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/products/[id]",            info: { num: "W-21", code: "PRODUCT-DETAIL" } },
   { pattern: "/products",                 info: { num: "W-17", code: "PRODUCTS" } },
   { pattern: "/register/weeer",           info: { num: "W-18", code: "REGISTER-WEEER" } },
-  { pattern: "/preview/[id]",             info: { num: "W-19", code: "PREVIEW" } },
+  { pattern: "/preview/[token]",          info: { num: "W-19", code: "PREVIEW" } },
+  { pattern: "/owners/[id]",              info: { num: "W-23", code: "OWNER-HISTORY" } },
   { pattern: "/[id]",                     info: { num: "W-20", code: "SLUG-PAGE" } },
   { pattern: "/",                         info: { num: "W-01", code: "HOME" } },
 ];
@@ -49,7 +50,8 @@ function matchScreen(pathname: string): ScreenInfo | null {
     const regexStr =
       "^" +
       pattern
-        .replace(/\[id\]/g, "[^/]+")
+        // รองรับ dynamic segment ทุกชื่อ ([id]/[token]/[slug]) แบบ generic
+        .replace(/\[[^\]]+\]/g, "[^/]+")
         .replace(/\//g, "\\/") +
       "$";
     if (new RegExp(regexStr).test(pathname)) return info;
