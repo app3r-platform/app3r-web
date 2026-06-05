@@ -27,7 +27,7 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ [ปฏิเสธ]",                       href: "/maintain/jobs",                            type: "branch",    forPath: "/maintain/jobs/m001" },
   { label: "→ [ถอนงานหลังยืนยัน-M6]",          href: "/maintain/jobs",                            type: "branch",    forPath: "/maintain/jobs/m001" },
   { label: "🔗 WeeeU ดูสถานะ",                 href: "http://localhost:3002/maintain/jobs/m001",   type: "cross-app", forPath: "/maintain/jobs/m001" },
-  { label: "→ มอบหมายช่าง",                    href: "/maintain/jobs/m001/assign/weeet",           type: "next-step", forPath: "/maintain/jobs/m001/assign" },
+  { label: "→ มอบหมายช่าง",                    href: "/maintain/jobs/m001/assign",                 type: "next-step", forPath: "/maintain/jobs/m001/assign" },
   { label: "→ [C8-success] รับงาน Maintain",   href: "/maintain/queue/m001/offer/success",         type: "next-step", forPath: "/maintain/queue/m001/offer" },
   { label: "→ ดูคิวงาน",                       href: "/maintain/queue",                            type: "next-step", forPath: "/maintain/queue/m001/offer/success" },
 
@@ -64,7 +64,8 @@ const devNavLinks: DevNavLink[] = [
   // ── Parts — ผู้ขาย (ShopIdSwitcher: WeeeR seller) ────────────────────────────
   { label: "[C9-success] ลงขายอะไหล่สำเร็จ",   href: "/parts/new/success",                        type: "next-step", forPath: "/parts/new" },
   { label: "→ ดูรายการขายของฉัน",              href: "/parts/my-listings",                        type: "next-step", forPath: "/parts/new/success" },
-  { label: "[ผู้ขาย] → สร้าง listing ใหม่",    href: "/parts/my-listings/new",                    type: "next-step", forPath: "/parts/my-listings" },
+  // Fix-Wave E: /parts/my-listings/new ไม่มีหน้า → repoint ไปหน้า create-listing จริง /parts/new (mockup มีอยู่)
+  { label: "[ผู้ขาย] → สร้าง listing ใหม่",    href: "/parts/new",                                type: "next-step", forPath: "/parts/my-listings" },
   { label: "[ผู้ขาย] → ดู orders ที่เข้ามา",   href: "/parts/orders",                             type: "next-step", forPath: "/parts/my-listings/p001" },
   { label: "[ผู้ขาย] → ดูรายละเอียด order",    href: "/parts/orders/p001",                        type: "next-step", forPath: "/parts/orders" },
   { label: "[ผู้ขาย] → [ยืนยัน order]",        href: "/parts/orders",                             type: "branch",    forPath: "/parts/orders/p001" },
@@ -73,8 +74,10 @@ const devNavLinks: DevNavLink[] = [
 
   // ── Parts — ผู้ซื้อ (ShopIdSwitcher: WeeeR buyer) ────────────────────────────
   { label: "[ผู้ซื้อ] → ดูรายละเอียดชิ้นส่วน",  href: "/parts/marketplace/p001",                  type: "next-step", forPath: "/parts/marketplace" },
-  { label: "[ผู้ซื้อ] → [สั่งซื้อ]",            href: "/parts/my-orders/new",                      type: "branch",    forPath: "/parts/marketplace/p001" },
-  { label: "[ผู้ซื้อ] → [ใช้ SmartPicker]",     href: "/parts/marketplace/p001/smart-pick",        type: "branch",    forPath: "/parts/marketplace/p001" },
+  // Fix-Wave E: dead-link ลบ (ฟีเจอร์ยังไม่สร้างเป็นหน้า) —
+  //   /parts/my-orders/new = สั่งซื้อทำผ่าน modal (PlaceOrderModal) ไม่ใช่หน้า · /parts/marketplace/[id]/smart-pick = SmartPicker (R-30b) ยังไม่ wire เป็นหน้า
+  // { label: "[ผู้ซื้อ] → [สั่งซื้อ]",            href: "/parts/my-orders/new",                      type: "branch",    forPath: "/parts/marketplace/p001" },
+  // { label: "[ผู้ซื้อ] → [ใช้ SmartPicker]",     href: "/parts/marketplace/p001/smart-pick",        type: "branch",    forPath: "/parts/marketplace/p001" },
   { label: "[ผู้ซื้อ] → ดูรายละเอียด order",    href: "/parts/my-orders/p001",                     type: "next-step", forPath: "/parts/my-orders" },
   { label: "[ผู้ซื้อ] → [รับของแล้ว]",          href: "/parts/my-orders",                          type: "branch",    forPath: "/parts/my-orders/p001" },
   { label: "[ผู้ซื้อ] → [ยกเลิก]",             href: "/parts/my-orders",                          type: "branch",    forPath: "/parts/my-orders/p001" },
