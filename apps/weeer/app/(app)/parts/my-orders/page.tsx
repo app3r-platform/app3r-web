@@ -2,6 +2,8 @@
 
 // ── My Orders — Phase C-6 ─────────────────────────────────────────────────────
 // มุมผู้ซื้อ + ผู้ขาย: tabs ฝั่งผู้ซื้อ / ฝั่งผู้ขาย
+// Screen: R-33 / PARTS-MY-ORDERS
+// §5 มาจาก: R-30c (สั่งซื้อสำเร็จ) / R-51 (Parts Hub nav) · §6 → R-34 · เคส P4,P5,P6,P7,P8,P9
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -19,6 +21,7 @@ import {
 } from "../../../../lib/utils/parts-sync";
 import { escrowRelease, escrowRefund, getEscrowHeldByShop } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
+import { FlowOrigin, CrossAppPanel } from "../../../../components/parts/MockFlowAnno";
 
 type SideTab = "buyer" | "seller";
 type StageFilter = PartOrder["stage"] | "all";
@@ -126,6 +129,35 @@ export default function MyOrdersPage() {
 
   return (
     <div className="space-y-4">
+      {/* §5 Flow Origin */}
+      <FlowOrigin
+        sources={[
+          { id: "R-30c", label: "Item Detail (สั่งซื้อสำเร็จ)" },
+          { id: "R-51", label: "Parts Hub (nav)" },
+        ]}
+        cases="P4, P5, P6, P7, P8, P9"
+      />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR ณ ขณะต่างๆ ของ flow */}
+      <CrossAppPanel
+        moment="ผู้ซื้อดูออเดอร์ / ดำเนินการ"
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screenId: "R-29",
+            screenLabel: "My Listings (tab: คำสั่งซื้อ)",
+            description: "[P5] เมื่อผู้ซื้อรอ confirm → ผู้ขายเห็น order ใหม่ใน incoming · [P6] กดส่ง → tracking ปรากฏ",
+          },
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screenId: "R-33",
+            screenLabel: "My Orders (seller tab)",
+            description: "[P7] เมื่อผู้ซื้อรับของ → escrow release → ยอด pts เข้าร้านผู้ขาย",
+          },
+        ]}
+        cases="P5, P6, P7"
+      />
+
       <h1 className="text-xl font-bold text-gray-900">คำสั่งซื้อของฉัน</h1>
 
       {/* คะแนนยอดเงิน */}
@@ -171,8 +203,9 @@ export default function MyOrdersPage() {
         </div>
       ) : (
         <div className="space-y-3">
+          {/* §6 FlowNav: click order card → R-34 (Buyer Order Detail) */}
           {filtered.map((o) => (
-            <div key={o.id} onClick={() => router.push(`/parts/my-orders/${o.id}`)} className="cursor-pointer">
+            <div key={o.id} onClick={() => router.push(`/parts/my-orders/${o.id}`)} className="cursor-pointer" title="§6 → R-34 Buyer Order Detail">
               <OrderCard order={o} role={sideTab} onAction={handleAction} />
             </div>
           ))}

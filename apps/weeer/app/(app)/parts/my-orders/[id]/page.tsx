@@ -1,11 +1,14 @@
 "use client";
 
 // ── My Order Detail — Phase D-4 (P7 Receive · P8 Buyer Cancel · P9 Seller Cancel) ──
+// Screen: R-34 / PARTS-BUYER-ORDER
+// §5 มาจาก: R-33 (My Orders, buyer tab) · เคส P7, P8
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import type { PartOrder } from "../../_lib/types";
 import { PART_ORDERS_MOCK } from "../../_lib/mock-data";
+import { FlowOrigin, CrossAppPanel } from "../../../../../components/parts/MockFlowAnno";
 import { OrderStageStepper } from "../../../../../components/parts/OrderStageStepper";
 import { ORDER_STAGE_LABEL, ORDER_STAGE_COLOR, DELIVERY_LABEL } from "../../_lib/types";
 import {
@@ -194,9 +197,35 @@ export default function MyOrderDetailPage({
   // ── UI ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-4">
+      {/* §5 Flow Origin */}
+      <FlowOrigin
+        sources={[{ id: "R-33", label: "My Orders (buyer tab)" }]}
+        cases="P7, P8"
+      />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR เห็นอะไรขณะผู้ซื้อดูรายละเอียด */}
+      <CrossAppPanel
+        moment="ผู้ซื้อดู/ดำเนินการออเดอร์"
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screenId: "R-29",
+            screenLabel: "My Listings (incoming tab)",
+            description: "[P8] เมื่อผู้ซื้อยกเลิก → stock คืน + escrow refund ทันที",
+          },
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screenId: "R-33",
+            screenLabel: "My Orders (seller tab)",
+            description: "[P7] เมื่อผู้ซื้อยืนยันรับ → escrow release → pts เข้าร้านผู้ขาย",
+          },
+        ]}
+        cases="P7, P8"
+      />
+
       {/* Back */}
       <Link href="/parts/my-orders" className="text-sm text-gray-400 hover:text-gray-600">
-        ‹ กลับรายการคำสั่งซื้อ
+        ‹ กลับรายการคำสั่งซื้อ {/* §6 → R-33 */}
       </Link>
 
       {/* Header */}

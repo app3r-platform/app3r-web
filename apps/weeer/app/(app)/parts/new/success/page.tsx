@@ -1,9 +1,11 @@
 "use client";
 // C9 — ลงขายอะไหล่สำเร็จ (WeeeR)
 // Screen: R-40 / PARTS-NEW-SUCCESS · Phase 3 Sign-off
+// §5 มาจาก: R-29 (My Listings — "+ ลงขายใหม่") · §6 ไปต่อ: R-29 · เคส P1
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { FlowOrigin, FlowNav } from "../../../../../components/parts/MockFlowAnno";
 
 export default function PartsNewSuccessPage() {
   const router = useRouter();
@@ -17,6 +19,12 @@ export default function PartsNewSuccessPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 px-4 max-w-sm mx-auto text-center">
+      {/* §5 P1 Flow Origin */}
+      <FlowOrigin
+        sources={[{ id: "R-29", label: "My Listings (+ ลงขายใหม่)" }]}
+        cases="P1"
+      />
+
       {/* ✅ Icon */}
       <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
         <span className="text-4xl">✅</span>
@@ -48,11 +56,13 @@ export default function PartsNewSuccessPage() {
       </div>
 
       {/* CTA */}
+      {/* §6 FlowNav: ปุ่ม CTA → R-29 */}
       <button
         onClick={() => router.push("/parts/my-listings")}
         className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
       >
         ดูรายการขายของฉัน
+        <FlowNav targetId="R-29" targetLabel="My Listings" />
       </button>
     </div>
   );

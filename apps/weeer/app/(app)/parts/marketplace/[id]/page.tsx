@@ -4,6 +4,8 @@
 // หน้ารายละเอียดอะไหล่ + ปุ่มสั่งซื้อ
 // Sub-CMD-8: handleOrder ส่ง POST /api/v1/parts/orders/ (real Backend B2B escrow)
 //            fallback → localStorage mock เมื่อ API ไม่พร้อม
+// Screen: R-30c / PARTS-ITEM-DETAIL
+// §5 มาจาก: R-30 (Marketplace) · §6 → R-30 (back) / R-33 (order placed) · เคส P3,P4,P10,P11
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
@@ -21,6 +23,7 @@ import { createPartsOrder } from "../../../../../lib/parts-api";
 import { FEATURE_FLAGS } from "../../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../../_lib/catalog-api";
 import { ListingEngagement } from "../../../../../components/parts/ListingEngagement";
+import { FlowOrigin, FlowNav, CrossAppPanel } from "../../../../../components/parts/MockFlowAnno";
 
 export default function MarketplaceDetailPage({
   params,
@@ -131,8 +134,36 @@ export default function MarketplaceDetailPage({
 
   return (
     <div className="space-y-5">
+      {/* §5 Flow Origin */}
+      <FlowOrigin
+        sources={[{ id: "R-30", label: "ตลาดอะไหล่ B2B" }]}
+        cases="P3, P4, P10, P11"
+      />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR เห็นอะไรขณะผู้ซื้อดูรายละเอียด */}
+      <CrossAppPanel
+        moment="ผู้ซื้อดูรายละเอียด + กำลังสั่งซื้อ"
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screenId: "R-29",
+            screenLabel: "My Listings (tab: คำสั่งซื้อ)",
+            description: "[P4] เมื่อสั่งซื้อสำเร็จ → order ใหม่ขึ้นใน incoming tab ทันที (partsSync)",
+          },
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screenId: "R-33",
+            screenLabel: "My Orders (seller tab)",
+            description: "[P5] หลังผู้ขาย confirm → status เปลี่ยนเป็น 'ผู้ขายรับแล้ว'",
+          },
+        ]}
+        cases="P4, P5"
+      />
+
       {/* Back */}
-      <Link href="/parts/marketplace" className="text-sm text-gray-400 hover:text-gray-600">‹ กลับตลาด</Link>
+      <Link href="/parts/marketplace" className="text-sm text-gray-400 hover:text-gray-600">
+        ‹ กลับตลาด <FlowNav targetId="R-30" targetLabel="Marketplace" />
+      </Link>
 
       {/* Gallery (คลังรูปภาพ) */}
       <PartImageGallery images={listing.images} name={listing.name} />
@@ -146,13 +177,17 @@ export default function MarketplaceDetailPage({
         <span className="font-medium text-gray-700">{balance.toLocaleString()} pts</span>
       </div>
 
-      {/* แจ้งเตือนสั่งซื้อสำเร็จ */}
+      {/* P4 แจ้งเตือนสั่งซื้อสำเร็จ */}
       {ordered && (
         <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 flex items-center gap-2">
           <span>✅</span>
           <div>
-            <p className="text-sm font-medium text-green-700">สั่งซื้อสำเร็จ!</p>
-            <Link href="/parts/orders" className="text-xs text-[#F04E20] hover:underline">ดูคำสั่งซื้อ B2B →</Link>
+            <p className="text-sm font-medium text-green-700">สั่งซื้อสำเร็จ! (P4)</p>
+            {/* §6 FlowNav: ลิงก์ดูออเดอร์ → R-33 (My Orders, buyer) */}
+            <Link href="/parts/my-orders" className="text-xs text-[#F04E20] hover:underline">
+              ดูคำสั่งซื้อของฉัน →
+              <FlowNav targetId="R-33" targetLabel="My Orders (buyer)" />
+            </Link>
           </div>
         </div>
       )}
@@ -217,19 +252,41 @@ export default function MarketplaceDetailPage({
 
       {/* ปุ่มซื้อ (เฉพาะ stock > 0) */}
       {!isOwn && !ordered && listing.stock > 0 && (
-        <button
-          onClick={() => setShowModal(true)}
-          disabled={ordering}
-          className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
-        >
-          {ordering
-            ? "กำลังสั่งซื้อ…"
-            : listing.pricePoints > 0
-              ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
-              : listing.unitPriceThb != null
-                ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง)`
-                : "🛒 สั่งซื้อ"}
-        </button>
+        <div className="space-y-2">
+          {/* P11: แสดง balance check — A7 sample data */}
+          {listing.pricePoints > 0 && (
+            <div className={`flex items-center justify-between text-xs rounded-lg px-3 py-2 border ${
+              balance >= listing.pricePoints
+                ? "bg-green-50 border-green-100 text-green-700"
+                : "bg-red-50 border-red-100 text-red-700"
+            }`}>
+              <span>
+                {balance >= listing.pricePoints
+                  ? "✅ Gold เพียงพอ"
+                  : "⚠️ P11: Gold ไม่เพียงพอ (ต้องการ " + listing.pricePoints.toLocaleString() + " pts)"}
+              </span>
+              <span className="font-medium">คงเหลือ {balance.toLocaleString()} pts</span>
+            </div>
+          )}
+
+          <button
+            onClick={() => setShowModal(true)}
+            disabled={ordering}
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            <span>
+              {ordering
+                ? "กำลังสั่งซื้อ…"
+                : listing.pricePoints > 0
+                  ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
+                  : listing.unitPriceThb != null
+                    ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
+                    : "🛒 สั่งซื้อ"}
+            </span>
+            {/* §6 FlowNav: คลิกสั่งซื้อ → PlaceOrderModal → R-33 (My Orders) */}
+            <FlowNav targetId="R-33" targetLabel="My Orders" condition="เมื่อสำเร็จ (P4)" />
+          </button>
+        </div>
       )}
 
       {isOwn && (
