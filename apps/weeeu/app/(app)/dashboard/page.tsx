@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { FallbackImg } from "@/components/shared/FallbackImg";
 
 export const metadata: Metadata = { title: "หน้าหลัก" };
 
@@ -174,8 +175,12 @@ export default function DashboardPage() {
               className="rounded-xl border border-gray-100 overflow-hidden hover:border-weeeu-primary/40 transition-colors"
             >
               {/* U-01#3 — รูปจริง (mockup placeholder · pattern เดียวกับ marketplace) */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.image} alt={item.name} className="h-20 w-full bg-gray-50 object-cover" />
+              {/* D1 media fallback: FallbackImg (Client Component รองรับ onError ใน Server page) */}
+              <FallbackImg
+                src={item.image}
+                alt={item.name}
+                className="h-20 w-full bg-gray-100 object-cover"
+              />
               <div className="p-2.5">
                 <p className="text-xs font-medium text-gray-800 truncate">{item.name}</p>
                 <p className="text-sm font-bold text-weeeu-primary mt-0.5">฿{item.price}</p>
