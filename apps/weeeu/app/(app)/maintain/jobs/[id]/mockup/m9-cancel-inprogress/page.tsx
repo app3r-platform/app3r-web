@@ -9,6 +9,13 @@
  *  - confirm dialog + textarea กรอกเหตุผล (บังคับก่อน submit)
  *  - แสดง settle preview (ตาม offer lock)
  *
+ *
+ * mock-anno §5: มาจาก U-16 MAINTAIN-JOB-DETAIL (status = "in_progress") — ปุ่ม "ยกเลิกงาน"
+ * mock-anno §6: success → U-12 MAINTAIN-JOBS (/maintain/jobs)
+ * mock-anno §8: WeeeR (R-14): ได้รับแจ้ง "งานถูกยกเลิก" · ได้รับ settle (ค่าเดินทาง+ค่าแรงส่วน)
+ *               WeeeT (T-08): ได้รับแจ้ง "หยุดงาน" · ออกจากหน้างาน
+ *               Admin (A-07/m9-cancelled): เห็น audit log + settle breakdown
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M9 WeeeU
  */
 

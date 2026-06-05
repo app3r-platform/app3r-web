@@ -9,6 +9,13 @@
  *  2. Banner แจ้งหมดอายุ + timestamp
  *  3. ปุ่ม "ลงประกาศใหม่" → redirect ไป maintain/book (pre-fill ข้อมูล)
  *
+ *
+ * mock-anno §5: มาจาก U-16 MAINTAIN-JOB-DETAIL (status = "expired") — redirect เมื่อหมดอายุ
+ * mock-anno §6: ปุ่ม "ลงประกาศใหม่" → U-11 MAINTAIN-BOOK (/maintain/book?rebook={id})
+ *               ปุ่ม "ดูรายการงานทั้งหมด" → U-12 MAINTAIN-JOBS (/maintain/jobs)
+ * mock-anno §8: WeeeR: ไม่เห็น job (expired ไม่แสดงใน queue)
+ *               Admin (A-07): เห็น job status "expired"
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M2
  */
 

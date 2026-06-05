@@ -11,6 +11,15 @@
  *  2. No-show confirm dialog (พร้อม countdown รอ 15 นาที)
  *  3. หลัง confirm → state "no_show" + แจ้ง WeeeU ทันที
  *
+ *
+ * mock-anno §5: มาจาก T-08a arrive/page.tsx — WeeeT กด "ถึงที่" upload รูป → เข้าหน้า "รอลูกค้า"
+ * mock-anno §6: ปุ่ม "เริ่มล้าง" → T-08c checklist (/maintain/[id]/checklist) [normal path]
+ *               ปุ่ม "ลูกค้าไม่อยู่" → stage noshow_confirm → noshow_done
+ *               หลัง noshow_done: ไม่มี navigate — แสดง "รอ WeeeU ตัดสินใจ"
+ * mock-anno §8: WeeeU (U-16/mockup m7-noshow): รับ notification → เห็น "no_show" banner
+ *               WeeeR (R-14): เห็น job status "no_show" · no action required
+ *               Admin (A-07): เห็น no-show event ใน audit log
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M7 WeeeT
  */
 

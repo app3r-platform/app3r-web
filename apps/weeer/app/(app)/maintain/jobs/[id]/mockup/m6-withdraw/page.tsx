@@ -10,6 +10,13 @@
  *  3. Reason textarea บังคับ (≥ 10 ตัวอักษร) ก่อน submit
  *  4. หลัง confirm → สถานะเปลี่ยนเป็น "withdrawn" + แจ้งคืนพอยต์ทองที่ล็อกให้ WeeeU
  *
+ *
+ * mock-anno §5: มาจาก R-14 MAINTAIN-JOB-DETAIL (status = "assigned") — WeeeR กด "ถอนรับงาน"
+ * mock-anno §6: success → R-12 MAINTAIN-JOBS (/maintain/jobs)
+ * mock-anno §8: WeeeU (U-16/m6-weeer-withdrew): ได้รับ notification → เห็น banner M6
+ *               WeeeU ตัดสิน: หาร้านใหม่ → queue เปิดใหม่ / ยกเลิก → U-15 cancel
+ *               Admin (A-07): เห็น audit log WeeeR withdraw + penalty
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M6 WeeeR
  */
 
