@@ -112,7 +112,7 @@ export default function MaintainInspectPage({
       // TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/convert-to-repair/
       // auto-lock WeeeR เดิม per D-Maintain-2
       await new Promise((r) => setTimeout(r, 1000)); // mock — remove after backend ready
-      router.replace(`/maintain/${id}`);
+      router.replace(`/jobs/${id}`);
     } catch {
       setRepairSubmitting(false);
       setShowRepairConfirm(false);
@@ -349,7 +349,7 @@ export default function MaintainInspectPage({
               <p>• ถ้าลูกค้าโต้แย้ง → Admin Dispute (M8)</p>
             </div>
             <button
-              onClick={() => router.replace("/maintain")}
+              onClick={() => router.replace("/jobs")}
               className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3.5 rounded-xl transition-colors"
             >
               ✅ กลับหน้าหลัก
@@ -460,7 +460,7 @@ export default function MaintainInspectPage({
 
             {/* Outcome 2: wait / cancel */}
             <button
-              onClick={() => router.replace(`/maintain/${id}`)}
+              onClick={() => router.replace(`/jobs/${id}`)}
               className="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-medium py-3 rounded-xl transition-colors text-sm"
             >
               ⏸ รอการตัดสิน — กลับหน้างาน
