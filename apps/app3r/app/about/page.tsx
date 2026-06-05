@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAboutContent } from '@/lib/content-api';
+import AboutCTA from '@/components/marketing/AboutCTA';
 
 export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
 
@@ -44,25 +45,8 @@ export default async function AboutPage() {
         ))}
       </div>
 
-      {/* CTA */}
-      <div className="mt-10 bg-website-brand-50 border border-website-brand-200 rounded-2xl p-8 text-center space-y-4">
-        <h2 className="text-2xl font-bold text-gray-900">พร้อมเริ่มต้นแล้วหรือยัง?</h2>
-        <p className="text-gray-600">สมัครฟรี เริ่มใช้งานได้ทันที</p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/register/weeer"
-            className="bg-website-brand-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
-          >
-            สมัคร WeeeR (ร้านซ่อม)
-          </Link>
-          <Link
-            href="/contact"
-            className="border border-website-brand-700 text-website-brand-700 px-6 py-3 rounded-xl font-semibold hover:bg-website-brand-50 transition"
-          >
-            ติดต่อเรา
-          </Link>
-        </div>
-      </div>
+      {/* CTA — role-conditional (W-02): visitor=สมัคร WeeeU+ติดต่อ · logged-in=ปิด */}
+      <AboutCTA />
 
       <p className="text-xs text-gray-400 text-right mt-4">อัปเดตล่าสุด: {aboutContent.updatedAt}</p>
     </div>

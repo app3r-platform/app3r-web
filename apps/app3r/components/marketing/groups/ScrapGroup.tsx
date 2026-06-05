@@ -52,6 +52,8 @@ export default async function ScrapGroup() {
   }
 
   if (materials.length === 0) {
+    // WeeeR central view: ซ่อนกลุ่มที่ว่าง (WeeeR #6)
+    if (role === "weeer") return null;
     return (
       <EmptyGroupState
         icon="♻️"
