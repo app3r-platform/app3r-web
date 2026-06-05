@@ -165,14 +165,19 @@ export default function ProductsPage() {
                 <span className="text-gray-400">({product.reviewCount} รีวิว)</span>
               </div>
 
+              {/* W-17#2: จำนวนเข้าดู / ยื่นข้อเสนอ (mock · เลนส์ #3) */}
+              <div className="flex items-center gap-3 text-xs text-gray-400">
+                <span className="flex items-center gap-1">
+                  👁 {(product.reviewCount * 7).toLocaleString()} เข้าดู
+                </span>
+                <span className="flex items-center gap-1">
+                  📨 {Math.max(1, Math.round(product.reviewCount / 5))} ข้อเสนอ
+                </span>
+              </div>
+
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                 <span className="font-bold text-website-brand-700 text-sm">{product.priceRange}</span>
                 <span className="text-xs text-website-brand-700 hover:underline font-medium">ดูรายละเอียด →</span>
-              </div>
-
-              {/* Find on App3R CTA */}
-              <div className="bg-website-brand-50 rounded-lg px-3 py-2 text-center text-xs text-website-brand-700 font-medium">
-                ค้นหาร้านซ่อม/ขายมือสองบน App3R →
               </div>
             </div>
           </Link>

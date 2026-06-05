@@ -25,54 +25,64 @@ export default function HomeActionCTA() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
-            {/* WeeeU — ลูกค้าทั่วไปลงขาย */}
+            {/* ขายมือสอง — WeeeU ลูกค้า / WeeeR ร้าน (anonymous = signup) */}
             <RoleAwareCTA
               intent="sell"
               variant="primary"
               className="flex-1"
               overrides={{
-                anonymous: { label: "🛒 ลงขาย (ลูกค้า WeeeU)" },
                 weeeu: { label: "🛒 ลงขายมือสอง" },
                 weeer: { label: "🛒 ลงขายในนามร้าน" },
               }}
             />
-            {/* WeeeR — ร้านลงขาย/รับซื้อ */}
+            {/* ปุ่มที่ 2: anonymous=สมัครร้าน · weeeu=ลงขาย/ทิ้งซาก · weeer=ลงขายอะไหล่ */}
             <RoleAwareCTA
               intent="post-resell"
               variant="outline"
               className="flex-1"
               overrides={{
-                anonymous: { label: "🏪 สมัครเป็นร้าน (WeeeR)", target: "/register/weeer" },
-                weeeu: { label: "🏪 เปิดร้าน WeeeR", target: "/register/weeer" },
-                weeer: { label: "🏪 ลงขายในร้าน" },
+                anonymous: { label: "🏪 สมัครในนามร้าน/บริษัท (WeeeR)", target: "/register/weeer" },
+                weeeu: { label: "♻️ ลงขาย/ทิ้งซาก" },
+                weeer: { label: "🏪 ลงขายอะไหล่ในร้าน" },
               }}
             />
           </div>
         </div>
 
-        {/* แจ้งความต้องการซ่อม / บำรุงรักษา */}
+        {/* แจ้งความต้องการซ่อม / บำรุงรักษาเครื่องใช้ไฟฟ้า */}
         <div className="rounded-xl bg-blue-50 border border-blue-200 p-4">
           <div className="flex items-center gap-3 mb-3">
             <span className="text-3xl shrink-0">🔧</span>
             <div>
               <p className="font-bold text-blue-900 text-sm sm:text-base">
-                แจ้งความต้องการซ่อม / บำรุงรักษา
+                แจ้งความต้องการซ่อม / บำรุงรักษาเครื่องใช้ไฟฟ้า
               </p>
               <p className="text-xs text-blue-700 mt-0.5">
                 แจ้งงานช่าง รับข้อเสนอจากร้านที่ผ่านการรับรอง
               </p>
             </div>
           </div>
-          <RoleAwareCTA
-            intent="post-repair"
-            variant="primary"
-            className="w-full sm:w-auto"
-            overrides={{
-              anonymous: { label: "🔧 แจ้งงานช่าง (เริ่มที่นี่)" },
-              weeeu: { label: "🔧 แจ้งงานซ่อม/บำรุงรักษา" },
-              weeer: { label: "🔧 ดูงานซ่อมที่ประกาศ" },
-            }}
-          />
+          {/* 2 ปุ่มแยกหน้า: ซ่อม / บำรุงรักษา (WeeeR #5) */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <RoleAwareCTA
+              intent="post-repair"
+              variant="primary"
+              className="flex-1"
+              overrides={{
+                weeeu: { label: "🔧 แจ้งงานซ่อม" },
+                weeer: { label: "🔧 ดูงานที่ยื่นข้อเสนอให้บริการซ่อม" },
+              }}
+            />
+            <RoleAwareCTA
+              intent="post-repair"
+              variant="outline"
+              className="flex-1"
+              overrides={{
+                weeeu: { label: "🛡️ แจ้งงานบำรุงรักษา" },
+                weeer: { label: "🛡️ ดูงานบำรุงรักษาที่ประกาศ" },
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>

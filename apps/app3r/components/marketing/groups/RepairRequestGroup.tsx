@@ -10,6 +10,7 @@ import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import EmptyGroupState from "./EmptyGroupState";
 import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
+import { getMockEngagement } from "@/lib/mock/listing-engagement";
 import type { AuthenticatedJobProjection } from "@/lib/types/listings-customer-jobs";
 
 function groupByApplianceType(
@@ -32,6 +33,9 @@ function groupByApplianceType(
 function JobCardNoImage({ job, kind }: { job: AuthenticatedJobProjection; kind: "repair" | "maintain" }) {
   const badgeColor = kind === "repair" ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700";
   const badgeLabel = kind === "repair" ? "ซ่อม" : "บำรุงรักษา";
+  // ตำบล/เขต ก่อนจังหวัด (เลนส์ #3) + engagement counts (mock · WeeeR #6 / WeeeU #8)
+  const localArea = [job.subDistrict, job.district].filter(Boolean).join(" · ");
+  const eng = getMockEngagement(job.id);
 
   return (
     <Link
@@ -47,9 +51,14 @@ function JobCardNoImage({ job, kind }: { job: AuthenticatedJobProjection; kind: 
       <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-website-brand-600 transition mb-2 min-h-[2.5rem]">
         {job.title}
       </h3>
-      <div className="text-xs text-gray-500 flex items-center gap-1 mb-2">
+      <div className="text-xs text-gray-500 flex items-center gap-1 mb-1">
         <span>📍</span>
-        <span className="truncate">{job.area}</span>
+        <span className="truncate">{localArea ? `${localArea} · ${job.area}` : job.area}</span>
+      </div>
+      {/* engagement: เข้าดู / ยื่นข้อเสนอ */}
+      <div className="text-[11px] text-gray-400 flex items-center gap-3 mb-2">
+        <span>👁 {eng.viewCount.toLocaleString()}</span>
+        <span>📨 {eng.offerCount} ข้อเสนอ</span>
       </div>
       <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
         <span className="text-xs text-gray-400">งบประมาณ</span>
@@ -91,6 +100,8 @@ export default async function RepairRequestGroup() {
   }
 
   if (types.length === 0) {
+    // WeeeR central view: ซ่อนกลุ่มที่ว่าง (WeeeR #6)
+    if (role === "weeer") return null;
     return (
       <EmptyGroupState
         icon="🔧"
