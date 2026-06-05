@@ -1,5 +1,27 @@
 import Link from "next/link";
 
+// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
+const AnnoOriginCert = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: U-33 · /scrap/[id] (S4: เลือก dispose → E-Waste cert ออกแล้ว) หรือ push notification
+  </div>
+);
+const AnnoXAppCert = () => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (S4: E-Waste cert)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>Admin :3000</strong> [A-11] ออกใบรับรอง E-Waste ก่อน WeeeU เห็นหน้านี้
+        <a href="http://localhost:3000/scrap/certificates/EW-2026-001234" className="underline ml-1">/scrap/certificates/[id]</a>
+      </p>
+      <p>• <strong>WeeeR :3001</strong> [R-28e] R-28e ตัดสินใจ dispose → ส่ง Admin ออก cert
+        <a href="http://localhost:3001/scrap/jobs/SJ001/dispose" className="underline ml-1">/scrap/jobs/[id]/dispose</a>
+      </p>
+    </div>
+  </details>
+);
+
 const MOCK_CERT = {
   number: "EW-2026-001234",
   date: "25 พ.ค. 2569",
@@ -13,6 +35,10 @@ export default async function ScrapCertificatePage({ params }: { params: Promise
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
+        {/* §5 Origin + §8 Cross-app annotations */}
+        <AnnoOriginCert />
+        <AnnoXAppCert />
+
         {/* Back link */}
         <Link href={`/scrap/${id}`} className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1">
           ← กลับรายละเอียดซาก

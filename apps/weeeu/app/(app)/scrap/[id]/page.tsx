@@ -15,6 +15,31 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { PublicQAThread } from "@/components/listing/PublicQAThread";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 
+// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
+const AnnoOriginDetail = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: U-55 · /scrap (รายการของฉัน) หรือ push notification
+  </div>
+);
+const AnnoXAppDetail = ({ id }: { id: string }) => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (S6/S8/S10)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>WeeeR :3001</strong> [R-28] S6: ร้านที่ยื่น offer เห็นสถานะรอพิจารณา
+        <a href={`http://localhost:3001/scrap/jobs/SJ001`} className="underline ml-1">/scrap/jobs/SJ001</a>
+      </p>
+      <p>• <strong>WeeeT :3003</strong> [T-04] S10: ช่างเห็นสถานะ in_progress กำลังเดินทาง
+        <a href={`http://localhost:3003/jobs/J001/pickup`} className="underline ml-1">/jobs/[id]/pickup</a>
+      </p>
+      <p>• <strong>WeeeT :3003</strong> [T-10] S8: ช่างรายงานของไม่ตรง → WeeeU เห็นแจ้งเตือนที่หน้านี้
+        <a href={`http://localhost:3003/jobs/J001/mismatch`} className="underline ml-1">/jobs/[id]/mismatch</a>
+      </p>
+    </div>
+  </details>
+);
+
 // ── Mock types ────────────────────────────────────────────────────────────────
 interface ScrapOffer {
   id: string;
@@ -212,6 +237,10 @@ function ScrapListingDetailContent({
   return (
     <div className="max-w-xl space-y-5">
 
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <AnnoOriginDetail />
+      <AnnoXAppDetail id={id} />
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/scrap" className="text-gray-400 hover:text-gray-700 text-xl">‹</Link>
@@ -348,13 +377,17 @@ function ScrapListingDetailContent({
               {/* S6 — Actions (เฉพาะ pending offer) */}
               {offer.status === "pending" && listing.status === "pending_offer" && (
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleAcceptOffer(offer.id)}
-                    disabled={submitting}
-                    className="flex-1 py-2 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
-                  >
-                    ✅ รับข้อเสนอนี้
-                  </button>
+                  <div className="flex-1">
+                    <button
+                      onClick={() => handleAcceptOffer(offer.id)}
+                      disabled={submitting}
+                      className="w-full py-2 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
+                    >
+                      ✅ รับข้อเสนอนี้
+                    </button>
+                    {/* §6 Nav annotation */}
+                    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">→ U-31 /scrap/[id]/confirm (S6 accept)</p>
+                  </div>
                   <button
                     onClick={() => setDeclineOfferId(offer.id)}
                     className="px-4 py-2 bg-white hover:bg-red-50 text-red-600 border border-red-200 text-sm rounded-xl transition-colors"

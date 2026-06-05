@@ -1,6 +1,6 @@
 "use client";
 
-// ── WeeeR Scrap Feed — 2.3 Mockup (S1-S12 public feed) ───────────────────
+// ── WeeeR Scrap Hub — R-70 (S1-S12 public feed + ซื้อซาก) ─────────────────
 
 import { useState } from "react";
 import Link from "next/link";
@@ -9,6 +9,28 @@ import {
   CONDITION_GRADE_LABEL,
   CONDITION_GRADE_COLOR,
 } from "./_lib/types";
+
+// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
+const AnnoOriginHub = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: sidebar WeeeR (Dashboard) หรือ push notification มีซากใหม่
+  </div>
+);
+const AnnoXAppHub = () => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (WeeeR Hub)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>WeeeU :3002</strong> [U-55] เจ้าของซากดูรายการที่ประกาศ
+        <a href="http://localhost:3002/scrap" className="underline ml-1">/scrap</a>
+      </p>
+      <p>• <strong>WeeeU :3002</strong> [U-29] บางรายใหม่กำลังสร้างประกาศ
+        <a href="http://localhost:3002/scrap/new" className="underline ml-1">/scrap/new</a>
+      </p>
+    </div>
+  </details>
+);
 
 // ── Mock ScrapItems (public feed) ─────────────────────────────────────────
 const MOCK_ITEMS: ScrapItem[] = [
@@ -92,6 +114,10 @@ export default function ScrapFeedPage() {
 
   return (
     <div className="space-y-5">
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <AnnoOriginHub />
+      <AnnoXAppHub />
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">🔩 ตลาดซาก</h1>
@@ -106,10 +132,13 @@ export default function ScrapFeedPage() {
           className="text-xs bg-[#FF663A] text-white font-semibold px-3 py-1.5 rounded-full">
           ดูซากทั้งหมด
         </Link>
-        <Link href="/scrap/jobs"
-          className="text-xs bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium px-3 py-1.5 rounded-full">
-          งานของฉัน
-        </Link>
+        <div>
+          <Link href="/scrap/jobs"
+            className="text-xs bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium px-3 py-1.5 rounded-full">
+            งานของฉัน
+          </Link>
+          <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono">→ R-27 /scrap/jobs</p>
+        </div>
       </div>
 
       {/* Grade filter tabs */}
@@ -144,8 +173,9 @@ export default function ScrapFeedPage() {
         <div className="text-center py-12 text-gray-400 text-sm">ไม่พบซากที่ตรงตามเงื่อนไข</div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(item => (
-            <Link key={item.id} href={`/scrap/${item.id}`}
+          {filtered.map((item, idx) => (
+            <div key={item.id}>
+              <Link href={`/scrap/${item.id}`}
               className="bg-white border border-gray-100 rounded-xl p-4 hover:shadow-sm transition-shadow block">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
@@ -185,6 +215,11 @@ export default function ScrapFeedPage() {
                 </div>
               </div>
             </Link>
+            {/* §6 Nav annotation (แสดงเฉพาะ card แรก) */}
+            {idx === 0 && (
+              <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">→ R-71 /scrap/[id] (รายละเอียดซาก)</p>
+            )}
+            </div>
           ))}
         </div>
       )}

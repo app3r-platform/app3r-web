@@ -1,7 +1,7 @@
 ﻿"use client";
 
 /**
- * WeeeU — รายการซากของฉัน
+ * WeeeU — รายการซากของฉัน  [U-55]
  * S5: listing หมดอายุ — badge EXPIRED + ปุ่ม "ลงใหม่"
  * S6: WeeeU เห็น offer list → ปฏิเสธแต่ละข้อเสนอ (ไปที่ [id] page)
  * S10: ยกเลิกระหว่าง in_progress (ไปที่ [id] page)
@@ -11,6 +11,30 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
+const AnnoOrigin = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: U-01 · /dashboard หรือ U-41 · /scrap/new/success (S12) หรือ U-07 · /repair/[id]/scrap-offer (C4)
+  </div>
+);
+const AnnoXApp = () => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>WeeeR :3001</strong> [R-70]
+        <a href="http://localhost:3001/scrap" className="underline ml-1">/scrap</a>
+        — WeeeR เห็น feed ซากที่ WeeeU ประกาศ (S1/S2: ยื่นข้อเสนอ)
+      </p>
+      <p>• <strong>WeeeR :3001</strong> [R-72]
+        <a href="http://localhost:3001/scrap/browse" className="underline ml-1">/scrap/browse</a>
+        — WeeeR เลือกซื้อซากจาก feed
+      </p>
+    </div>
+  </details>
+);
 
 // ── Mock types (เฟส 2 = mock state local — ไม่แตะ backend) ──────────────────
 type ListingStatus =
@@ -121,18 +145,27 @@ export default function MyScrapListingsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
 
+      {/* §5 Origin annotation */}
+      <AnnoOrigin />
+      {/* §8 Cross-app annotation */}
+      <AnnoXApp />
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">♻️ ซากของฉัน</h1>
           <p className="text-sm text-gray-500 mt-1">รายการประกาศซาก — ขาย/ทิ้ง</p>
         </div>
-        <Link
-          href="/scrap/new"
-          className="flex items-center gap-2 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors shadow-sm"
-        >
-          ➕ ประกาศซากใหม่
-        </Link>
+        <div>
+          <Link
+            href="/scrap/new"
+            className="flex items-center gap-2 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors shadow-sm"
+          >
+            ➕ ประกาศซากใหม่
+          </Link>
+          {/* §6 Nav annotation */}
+          <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">→ U-29 /scrap/new</p>
+        </div>
       </div>
 
       {/* Summary banners */}
@@ -231,10 +264,13 @@ export default function MyScrapListingsPage() {
                 <div className="flex items-center gap-2 text-xs bg-blue-50 rounded-xl px-3 py-2">
                   <span className="text-blue-500">🤝</span>
                   <span className="text-blue-700">{item.offerCount} ข้อเสนอรอการพิจารณา</span>
-                  <Link href={`/scrap/${item.id}`}
-                    className="ml-auto text-xs text-blue-600 font-medium hover:underline">
-                    ดูและเลือก →
-                  </Link>
+                  <div className="ml-auto">
+                    <Link href={`/scrap/${item.id}`}
+                      className="text-xs text-blue-600 font-medium hover:underline">
+                      ดูและเลือก →
+                    </Link>
+                    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono">→ U-33 /scrap/[id]</p>
+                  </div>
                 </div>
               )}
 
@@ -268,12 +304,15 @@ export default function MyScrapListingsPage() {
                       <span className="ml-2 text-orange-500">(จากงานซ่อม #{item.sourceRepairJobId})</span>
                     )}
                   </div>
-                  <Link
-                    href={`/scrap/${item.id}?action=cancel`}
-                    className="ml-3 px-3 py-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 text-xs rounded-xl transition-colors whitespace-nowrap"
-                  >
-                    ยกเลิก
-                  </Link>
+                  <div>
+                    <Link
+                      href={`/scrap/${item.id}?action=cancel`}
+                      className="ml-3 px-3 py-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 text-xs rounded-xl transition-colors whitespace-nowrap"
+                    >
+                      ยกเลิก
+                    </Link>
+                    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">→ U-33 /scrap/[id]?action=cancel (S10)</p>
+                  </div>
                 </div>
               )}
 

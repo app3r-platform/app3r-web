@@ -1,11 +1,32 @@
 "use client";
 
+// ── WeeeR Scrap Browse Detail — R-78 ────────────────────────────────────────
+
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { scrapApi } from "../../_lib/api";
 import type { ScrapItem } from "../../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../../_lib/types";
+
+// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
+const AnnoOriginBrowseDetail = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: R-72 · /scrap/browse (เลือกรายการจาก grid)
+  </div>
+);
+const AnnoXAppBrowseDetail = ({ id }: { id: string }) => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (R-78)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ available รอข้อเสนอ
+        <a href={`http://localhost:3002/scrap/${id}`} className="underline ml-1">/scrap/[id]</a>
+      </p>
+    </div>
+  </details>
+);
 
 // ── MOCK_ITEM — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
 const MOCK_ITEM: ScrapItem = {
@@ -66,6 +87,10 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <AnnoOriginBrowseDetail />
+      <AnnoXAppBrowseDetail id={id} />
+
       <div className="flex items-center gap-3">
         <Link href="/scrap/browse" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">รายละเอียดซาก</h1>
@@ -119,17 +144,21 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
         <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-red-600 text-sm">{buyError}</div>
       )}
 
-      <button
-        onClick={handleBuy}
-        disabled={!canBuy || buying}
-        className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-          ${canBuy && !buying
-            ? "bg-[#FF663A] hover:bg-[#F04E20] text-white"
-            : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}>
-        {buying ? "กำลังซื้อ…"
-          : !canBuy ? `ไม่สามารถซื้อได้ (${SCRAP_ITEM_STATUS_LABEL[item.status]})`
-          : "🛒 ซื้อซากนี้"}
-      </button>
+      <div>
+        <button
+          onClick={handleBuy}
+          disabled={!canBuy || buying}
+          className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
+            ${canBuy && !buying
+              ? "bg-[#FF663A] hover:bg-[#F04E20] text-white"
+              : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}>
+          {buying ? "กำลังซื้อ…"
+            : !canBuy ? `ไม่สามารถซื้อได้ (${SCRAP_ITEM_STATUS_LABEL[item.status]})`
+            : "🛒 ซื้อซากนี้"}
+        </button>
+        {/* §6 Nav annotation */}
+        {canBuy && <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5 text-center">→ R-28 /scrap/jobs/[id] (เลือกวิธีจัดการซาก)</p>}
+      </div>
 
       <p className="text-center text-xs text-gray-400">
         เมื่อยืนยันซื้อ ระบบจะสร้าง ScrapJob ให้เลือกวิธีจัดการซาก
