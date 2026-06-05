@@ -2,6 +2,7 @@
 // ─── ประวัติ & รายงาน (/history) — FIX-3: use client + filter tabs interactive
 
 import { useState } from "react";
+import Link from "next/link";
 
 const historyItems = [
   {
@@ -107,9 +108,10 @@ export default function HistoryPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map((item) => (
-            <div
+            <Link
               key={item.id}
-              className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-weeeu-primary/20 transition-colors cursor-pointer"
+              href={`/transactions/${item.id}`}
+              className="block bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-weeeu-primary/20 transition-colors cursor-pointer"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
@@ -135,7 +137,7 @@ export default function HistoryPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

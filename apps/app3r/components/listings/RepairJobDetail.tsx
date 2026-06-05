@@ -8,7 +8,7 @@ import TypeBadge from './TypeBadge';
 import LocationMapMock from './LocationMapMock';
 import QnASection from './QnASection';
 import EngagementCounters from './EngagementCounters';
-import { AdSlot } from '../common';
+import { AdSlot, CopyShareButton } from '../common';
 import type { AuthenticatedJobProjection } from '../../lib/types/listings-customer-jobs';
 import { getServiceTypeLabel } from '../../lib/constants/service-types';
 import { getMockEngagement } from '../../lib/mock/listing-engagement';
@@ -53,7 +53,11 @@ export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetai
                 {getServiceTypeLabel(job.serviceType)}
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+              {/* คัดลอก/แชร์ลิงก์ประกาศ (เลนส์ #4 · W-08) */}
+              <CopyShareButton title={job.title} variant="icon" />
+            </div>
           </div>
 
           {/* Detail table */}

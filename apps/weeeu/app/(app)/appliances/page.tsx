@@ -5,24 +5,25 @@
 import { useState } from "react";
 import Link from "next/link";
 
+// U-34 — รูปจริง (mockup placeholder photo · pattern เดียวกับ marketplace · รูปสินค้าจริง = BE/upload)
 const appliances = [
   {
-    id: "1", icon: "❄️", name: "แอร์ห้องนอน", brand: "Mitsubishi Electric",
+    id: "1", icon: "❄️", image: "https://picsum.photos/seed/weeeu-air-bedroom/200/200", name: "แอร์ห้องนอน", brand: "Mitsubishi Electric",
     model: "MSY-GN13VF", capacity: "13,000 BTU", installDate: "ม.ค. 65",
     status: "ปกติ", statusColor: "text-green-600 bg-green-50",
   },
   {
-    id: "2", icon: "❄️", name: "แอร์ห้องแขก", brand: "Daikin",
+    id: "2", icon: "❄️", image: "https://picsum.photos/seed/weeeu-air-guest/200/200", name: "แอร์ห้องแขก", brand: "Daikin",
     model: "FTKQ25SV2S", capacity: "9,000 BTU", installDate: "มี.ค. 66",
     status: "แจ้งซ่อมแล้ว", statusColor: "text-orange-600 bg-orange-50",
   },
   {
-    id: "3", icon: "🫧", name: "เครื่องซักผ้า", brand: "LG",
+    id: "3", icon: "🫧", image: "https://picsum.photos/seed/weeeu-washer-lg/200/200", name: "เครื่องซักผ้า", brand: "LG",
     model: "T2108VSAM", capacity: "8 KG", installDate: "ก.พ. 64",
     status: "ปกติ", statusColor: "text-green-600 bg-green-50",
   },
   {
-    id: "4", icon: "🧊", name: "ตู้เย็น Sharp", brand: "Sharp",
+    id: "4", icon: "🧊", image: "https://picsum.photos/seed/weeeu-fridge-sharp/200/200", name: "ตู้เย็น Sharp", brand: "Sharp",
     model: "SJ-X420TP-SL", capacity: "420 ลิตร", installDate: "ธ.ค. 63",
     status: "ประกาศขาย", statusColor: "text-weeeu-primary bg-weeeu-surface",
   },
@@ -107,9 +108,12 @@ export default function AppliancesPage() {
             key={app.id}
             className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-start gap-4 hover:border-weeeu-primary/20 transition-colors"
           >
-            <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
-              {app.icon}
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={app.image}
+              alt={app.name}
+              className="w-14 h-14 bg-gray-50 rounded-2xl object-cover flex-shrink-0"
+            />
 
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-3">

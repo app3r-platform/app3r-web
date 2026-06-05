@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { FileUpload } from "@/components/upload/FileUpload";
 
 type WalletTab = "all" | "gold" | "silver";
 
@@ -20,27 +21,47 @@ const MOCK_TRANSACTIONS = [
   { type: "credit",  icon: "💎", label: "โบนัสสมัคร พอยต์เงิน",               amount: "+100",   date: "25 เม.ย. 69", wallet: "silver" },
 ];
 
-// Mock top-up amounts for Gold (R4 scenario)
-const GOLD_TOPUP_PRESETS = [100, 500, 1000, 2000];
+// Mock top-up amounts for Gold (U-57#3 — sync wallet/deposit:161 = [3000,4000,5000])
+const GOLD_TOPUP_PRESETS = [3000, 4000, 5000];
+// Guardrail ขั้นต่ำ/ขั้นสูง (mock · admin config จริง = BE)
+const MIN_TOPUP = 100;
+const MAX_TOPUP = 100000;
+// Bank info แพลตฟอร์ม (mock — sync wallet/deposit MOCK_DEPOSIT_INFO · source จริง = BE)
+const PLATFORM_BANK_INFO = {
+  promptPayId: "0XX-XXX-XXXX (Admin)",
+  accountName: "บริษัท App3R จำกัด",
+  accountNumber: "XXX-X-XXXXX-X",
+  bankName: "ธนาคารกสิกรไทย (KBank)",
+};
 
 export default function WalletPage() {
   const [tab, setTab] = useState<WalletTab>("all");
-  const [goldBalance, setGoldBalance] = useState(MOCK_GOLD_BALANCE);
+  const [goldBalance] = useState(MOCK_GOLD_BALANCE);
   const [silverBalance] = useState(MOCK_SILVER_BALANCE);
 
   // Mock top-up Gold state (R4 scenario)
   const [goldTopUpAmount, setGoldTopUpAmount] = useState("");
+  const [transferAt, setTransferAt] = useState("");   // U-57#4 วันเวลาที่โอน
+  const [slipFileId, setSlipFileId] = useState("");    // U-57#4 สลิป
+  const [topUpError, setTopUpError] = useState("");
   const [topUpSubmitting, setTopUpSubmitting] = useState(false);
   const [topUpSuccess, setTopUpSuccess] = useState(false);
+  const [silverInfoOpen, setSilverInfoOpen] = useState(false); // U-57#5b ย่อเป็น icon
 
   const handleGoldTopUp = () => {
     const amount = Number(goldTopUpAmount);
-    if (!amount || amount <= 0) return;
+    setTopUpError("");
+    // U-57#3 guardrail validate amount min/max
+    if (!amount || amount < MIN_TOPUP) { setTopUpError(`จำนวนขั้นต่ำ ${MIN_TOPUP.toLocaleString()} พอยต์ทอง`); return; }
+    if (amount > MAX_TOPUP) { setTopUpError(`จำนวนสูงสุด ${MAX_TOPUP.toLocaleString()} พอยต์ทองต่อครั้ง`); return; }
+    // U-57#4 ต้องมีวันเวลาโอน + สลิป
+    if (!transferAt) { setTopUpError("กรุณาระบุวันเวลาที่โอนเงิน — หากไม่มีถือว่ายังโอนไม่สำเร็จ"); return; }
+    if (!slipFileId) { setTopUpError("กรุณาแนบสลิปการโอนเงินก่อน"); return; }
     setTopUpSubmitting(true);
     setTimeout(() => {
-      setGoldBalance(prev => prev + amount);
+      // mock — ยอดจริงเครดิตเมื่อ Admin อนุมัติ (BE) · ที่นี่แสดง success ส่งคำขอ
       setTopUpSuccess(true);
-      setGoldTopUpAmount("");
+      setGoldTopUpAmount(""); setTransferAt(""); setSlipFileId("");
       setTopUpSubmitting(false);
     }, 1000); // Mock delay
   };
@@ -134,15 +155,35 @@ export default function WalletPage() {
 
         <div className="bg-yellow-50 rounded-xl p-3 space-y-1">
           <p className="text-xs text-yellow-800 font-medium">📋 ขั้นตอนเติมพอยต์ทอง</p>
-          <p className="text-xs text-yellow-700">1. เลือกจำนวน → 2. โอนเงินเข้าบัญชีแพลตฟอร์ม → 3. ส่งสลิป → 4. Admin อนุมัติ (1-3 วัน)</p>
+          <p className="text-xs text-yellow-700">1. เลือกจำนวน → 2. โอนเงินเข้าบัญชีแพลตฟอร์ม → 3. แนบสลิป + ระบุวันเวลาโอน → 4. Admin อนุมัติ (1-3 วัน)</p>
         </div>
 
-        {/* Preset amounts */}
-        <div className="grid grid-cols-4 gap-2">
+        {/* U-57#4 — บัญชีแพลตฟอร์ม + QR สำหรับโอนเงิน */}
+        <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-4 space-y-3">
+          <div className="text-center">
+            <p className="text-xs text-weeeu-primary mb-1">PromptPay / โอนผ่านบัญชี</p>
+            <p className="text-lg font-bold text-weeeu-text tracking-wider">{PLATFORM_BANK_INFO.promptPayId}</p>
+            {/* QR placeholder — Phase D-2 */}
+            <div className="mt-2 mx-auto w-28 h-28 bg-white border-2 border-weeeu-primary/20 rounded-xl flex flex-col items-center justify-center text-weeeu-primary/40">
+              <p className="text-2xl">📱</p>
+              <p className="text-[10px] mt-0.5">QR Code</p>
+              <p className="text-[10px]">(Phase D-2)</p>
+            </div>
+          </div>
+          <div className="border-t border-weeeu-primary/10 pt-2.5 space-y-1 text-xs">
+            <div className="flex justify-between"><span className="text-weeeu-primary/70">ชื่อบัญชี</span><span className="font-medium text-weeeu-text">{PLATFORM_BANK_INFO.accountName}</span></div>
+            <div className="flex justify-between"><span className="text-weeeu-primary/70">เลขบัญชี</span><span className="font-medium text-weeeu-text">{PLATFORM_BANK_INFO.accountNumber}</span></div>
+            <div className="flex justify-between"><span className="text-weeeu-primary/70">ธนาคาร</span><span className="font-medium text-weeeu-text">{PLATFORM_BANK_INFO.bankName}</span></div>
+            <div className="flex justify-between"><span className="text-weeeu-primary/70">อัตราแลก</span><span className="font-medium text-weeeu-primary">1 บาท = 1 พอยต์ทอง</span></div>
+          </div>
+        </div>
+
+        {/* Preset amounts (U-57#3 — 3,000/4,000/5,000) */}
+        <div className="grid grid-cols-3 gap-2">
           {GOLD_TOPUP_PRESETS.map(amt => (
             <button
               key={amt}
-              onClick={() => setGoldTopUpAmount(String(amt))}
+              onClick={() => { setGoldTopUpAmount(String(amt)); setTopUpError(""); }}
               className={`border text-sm font-medium py-2 rounded-xl transition-colors ${
                 goldTopUpAmount === String(amt)
                   ? "bg-yellow-400 border-yellow-400 text-white"
@@ -154,46 +195,85 @@ export default function WalletPage() {
           ))}
         </div>
 
-        <div className="flex gap-2">
+        {/* Amount input */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">จำนวนพอยต์ทอง <span className="text-red-400">*</span></label>
           <input
             type="number"
+            min={MIN_TOPUP}
+            max={MAX_TOPUP}
             value={goldTopUpAmount}
-            onChange={e => setGoldTopUpAmount(e.target.value)}
-            placeholder="จำนวนพอยต์ทองที่ต้องการ"
-            className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-300"
+            onChange={e => { setGoldTopUpAmount(e.target.value); setTopUpError(""); }}
+            placeholder={`ขั้นต่ำ ${MIN_TOPUP.toLocaleString()} — สูงสุด ${MAX_TOPUP.toLocaleString()}`}
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-300"
           />
-          <button
-            onClick={handleGoldTopUp}
-            disabled={topUpSubmitting || !goldTopUpAmount}
-            className="bg-yellow-400 hover:bg-yellow-500 disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
-          >
-            {topUpSubmitting ? "⟳" : "เติม"}
-          </button>
         </div>
-        <p className="text-xs text-gray-400">* Mockup — กดเติมเพื่อดู flow (ไม่โอนเงินจริง)</p>
+
+        {/* U-57#4 — วันเวลาที่โอน */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">วันเดือนปีและเวลาที่โอนเงิน <span className="text-red-400">*</span></label>
+          <input
+            type="datetime-local"
+            value={transferAt}
+            onChange={e => { setTransferAt(e.target.value); setTopUpError(""); }}
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-300"
+          />
+        </div>
+
+        {/* U-57#4 — แนบสลิป (file input) */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1.5">สลิปการโอนเงิน <span className="text-red-400">*</span></label>
+          <FileUpload context="slip" accept="image/*" maxSizeMB={5} onUploaded={(file) => { setSlipFileId(file.fileId); setTopUpError(""); }} />
+          {slipFileId && <p className="text-xs text-green-600 mt-1">✅ แนบสลิปแล้ว</p>}
+        </div>
+
+        {topUpError && (
+          <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2.5">{topUpError}</p>
+        )}
+
+        <button
+          onClick={handleGoldTopUp}
+          disabled={topUpSubmitting}
+          className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:opacity-50 text-white text-sm font-semibold px-4 py-3 rounded-xl transition-colors"
+        >
+          {topUpSubmitting ? "⟳ กำลังส่งคำขอ..." : "💰 ยืนยันเติมพอยต์ทอง (Mockup)"}
+        </button>
+        <p className="text-xs text-gray-400">* Mockup — ส่งคำขอเพื่อดู flow · ยอดเครดิตเมื่อ Admin อนุมัติ (BE)</p>
       </div>
 
-      {/* R1: Silver info section — เติมเองไม่ได้ ถอนไม่ได้ */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-        <h2 className="text-base font-semibold text-gray-800 mb-3">💎 พอยต์เงิน — รับอย่างไร?</h2>
-        <div className="space-y-2">
-          {[
-            { icon: "👤", label: "Signup Bonus", desc: "รับเมื่อสมัครครั้งแรก" },
-            { icon: "🔧", label: "Engagement", desc: "รับเมื่อทำธุรกรรม (ซ่อม/ขาย/บำรุง)" },
-            { icon: "🎁", label: "Admin แจก", desc: "โปรโมชั่นพิเศษจากระบบ" },
-          ].map(item => (
-            <div key={item.label} className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5">
-              <span className="text-lg">{item.icon}</span>
-              <div>
-                <p className="text-sm font-medium text-gray-800">{item.label}</p>
-                <p className="text-xs text-gray-500">{item.desc}</p>
+      {/* R1: Silver info — U-57#5b ย่อเป็น icon เล็ก (expand เมื่อกด) */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+        <button
+          onClick={() => setSilverInfoOpen(v => !v)}
+          className="w-full flex items-center justify-between px-5 py-3 text-left"
+          aria-expanded={silverInfoOpen}
+        >
+          <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <span className="text-base">💎</span> พอยต์เงิน — รับอย่างไร?
+            <span className="text-gray-300">ⓘ</span>
+          </span>
+          <span className="text-gray-400 text-sm">{silverInfoOpen ? "▲" : "▼"}</span>
+        </button>
+        {silverInfoOpen && (
+          <div className="px-5 pb-5 space-y-2">
+            {[
+              { icon: "👤", label: "Signup Bonus", desc: "รับเมื่อสมัครครั้งแรก" },
+              { icon: "🔧", label: "Engagement", desc: "รับเมื่อทำธุรกรรม (ซ่อม/ขาย/บำรุง)" },
+              { icon: "🎁", label: "Admin แจก", desc: "โปรโมชั่นพิเศษจากระบบ" },
+            ].map(item => (
+              <div key={item.label} className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5">
+                <span className="text-lg">{item.icon}</span>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                  <p className="text-xs text-gray-500">{item.desc}</p>
+                </div>
               </div>
+            ))}
+            <div className="bg-red-50 rounded-xl px-3 py-2.5">
+              <p className="text-xs text-red-600 font-medium">❌ พอยต์เงินถอนเป็นเงินไม่ได้ · ใช้ได้แค่ชำระค่าบริการ · หมดอายุ 90 วัน</p>
             </div>
-          ))}
-        </div>
-        <div className="mt-3 bg-red-50 rounded-xl px-3 py-2.5">
-          <p className="text-xs text-red-600 font-medium">❌ พอยต์เงินถอนเป็นเงินไม่ได้ · ใช้ได้แค่ชำระค่าบริการ · หมดอายุ 90 วัน</p>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Transaction history */}

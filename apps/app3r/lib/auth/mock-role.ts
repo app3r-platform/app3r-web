@@ -28,6 +28,12 @@ export const MOCK_USERS: Record<Exclude<MockRole, "anonymous">, { id: string; na
 };
 
 /**
+ * Fix-Wave A — ร้าน WeeeR ที่ช่าง WeeeT สังกัด (mock · แสดงในมุมขวาบน Navbar)
+ * ช่างทำงานในนามร้าน WeeeR เสมอ (กฎธุรกิจ §9)
+ */
+export const WEEET_AFFILIATION = "ร้านมือสองมั่นใจ Mock";
+
+/**
  * Round 2 WP-0.4 — Dev Mock Role multi-user (กฎธุรกิจ §11 · เลนส์ #6)
  * user จำลอง >1 ราย ต่อ role หลายสถานการณ์ เพื่อทดสอบ role-aware view ให้ครบเคส
  * (ประกาศครบทุกโมดูล / ขายหลายประกาศ / ร้านรออนุมัติ ฯลฯ). persona แรกของแต่ละ

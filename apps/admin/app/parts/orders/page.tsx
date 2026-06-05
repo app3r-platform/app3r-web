@@ -19,11 +19,33 @@ interface PartsOrder {
   created_at: string;
 }
 
-// MOCK_PARTS_ORDERS — fallback เมื่อ API ไม่พร้อม (dev/staging)
+// MOCK_PARTS_ORDERS — display mock ครบทุกสถานะ + หลายเคส (logic จริง=BE จังหวะ 2)
+// ครอบ 5 สถานะ (pending/confirmed/shipped/delivered/cancelled) + จำนวนแถว >20 ให้ pagination ทำงานจริง
 const MOCK_PARTS_ORDERS: PartsOrder[] = [
-  { id: "p001", part_name: "คอมเพรสเซอร์แอร์",  buyer: "ร้านซ่อม A+", quantity: 2, status: "pending",   created_at: "2026-05-26T09:00:00Z" },
-  { id: "p002", part_name: "มอเตอร์เครื่องซัก", buyer: "ร้านซ่อม B+", quantity: 1, status: "confirmed", created_at: "2026-05-25T11:00:00Z" },
-  { id: "p003", part_name: "บอร์ดควบคุม",        buyer: "ร้านซ่อม C+", quantity: 3, status: "shipped",   created_at: "2026-05-24T14:00:00Z" },
+  { id: "p001", part_name: "คอมเพรสเซอร์แอร์",        buyer: "ร้านซ่อม A+",       quantity: 2,  status: "pending",   created_at: "2026-05-26T09:00:00Z" },
+  { id: "p002", part_name: "มอเตอร์เครื่องซักผ้า",     buyer: "ร้านซ่อม B+",       quantity: 1,  status: "confirmed", created_at: "2026-05-25T11:00:00Z" },
+  { id: "p003", part_name: "บอร์ดควบคุมแอร์",          buyer: "ร้านซ่อม C+",       quantity: 3,  status: "shipped",   created_at: "2026-05-24T14:00:00Z" },
+  { id: "p004", part_name: "พัดลมคอยล์ร้อน",           buyer: "ช่างเอก อิเล็คทริค", quantity: 1,  status: "delivered", created_at: "2026-05-23T08:30:00Z" },
+  { id: "p005", part_name: "เทอร์โมสตัทตู้เย็น",        buyer: "ร้านซ่อม A+",       quantity: 5,  status: "cancelled", created_at: "2026-05-22T16:45:00Z" },
+  { id: "p006", part_name: "ปั๊มน้ำเครื่องซักผ้า",      buyer: "ร้านซ่อม D+",       quantity: 2,  status: "pending",   created_at: "2026-05-22T10:15:00Z" },
+  { id: "p007", part_name: "แผงวงจรไมโครเวฟ",          buyer: "ช่างหนึ่ง บริการ",   quantity: 1,  status: "confirmed", created_at: "2026-05-21T13:20:00Z" },
+  { id: "p008", part_name: "คาปาซิเตอร์พัดลม",         buyer: "ร้านซ่อม B+",       quantity: 10, status: "shipped",   created_at: "2026-05-21T09:00:00Z" },
+  { id: "p009", part_name: "ฮีตเตอร์เครื่องอบผ้า",      buyer: "ร้านซ่อม E+",       quantity: 1,  status: "delivered", created_at: "2026-05-20T15:30:00Z" },
+  { id: "p010", part_name: "วาล์วน้ำเข้าเครื่องซัก",    buyer: "ช่างสมชาย แอร์",     quantity: 4,  status: "pending",   created_at: "2026-05-20T11:00:00Z" },
+  { id: "p011", part_name: "รีโมทแอร์อินเวอร์เตอร์",     buyer: "ร้านซ่อม C+",       quantity: 6,  status: "confirmed", created_at: "2026-05-19T14:10:00Z" },
+  { id: "p012", part_name: "ใบพัดคอมเพรสเซอร์",        buyer: "ร้านซ่อม A+",       quantity: 2,  status: "shipped",   created_at: "2026-05-19T08:45:00Z" },
+  { id: "p013", part_name: "เซ็นเซอร์อุณหภูมิตู้เย็น",   buyer: "ช่างเอก อิเล็คทริค", quantity: 3,  status: "delivered", created_at: "2026-05-18T16:00:00Z" },
+  { id: "p014", part_name: "สายพานเครื่องอบผ้า",        buyer: "ร้านซ่อม D+",       quantity: 1,  status: "cancelled", created_at: "2026-05-18T10:30:00Z" },
+  { id: "p015", part_name: "ปุ่มกดเครื่องซักผ้า",       buyer: "ร้านซ่อม B+",       quantity: 8,  status: "pending",   created_at: "2026-05-17T13:15:00Z" },
+  { id: "p016", part_name: "หลอด LED ตู้เย็น",          buyer: "ช่างหนึ่ง บริการ",   quantity: 12, status: "confirmed", created_at: "2026-05-17T09:20:00Z" },
+  { id: "p017", part_name: "มอเตอร์พัดลมแอร์",          buyer: "ร้านซ่อม E+",       quantity: 2,  status: "shipped",   created_at: "2026-05-16T15:00:00Z" },
+  { id: "p018", part_name: "ถังน้ำเครื่องทำน้ำอุ่น",    buyer: "ร้านซ่อม A+",       quantity: 1,  status: "delivered", created_at: "2026-05-16T11:40:00Z" },
+  { id: "p019", part_name: "แม็กเนตรอนไมโครเวฟ",       buyer: "ช่างสมชาย แอร์",     quantity: 2,  status: "pending",   created_at: "2026-05-15T14:30:00Z" },
+  { id: "p020", part_name: "ลูกลอยเครื่องซักผ้า",       buyer: "ร้านซ่อม C+",       quantity: 5,  status: "confirmed", created_at: "2026-05-15T08:00:00Z" },
+  { id: "p021", part_name: "คอยล์เย็นแอร์ติดผนัง",      buyer: "ร้านซ่อม D+",       quantity: 1,  status: "shipped",   created_at: "2026-05-14T16:20:00Z" },
+  { id: "p022", part_name: "ฝาถังเครื่องซักผ้า",        buyer: "ช่างเอก อิเล็คทริค", quantity: 3,  status: "delivered", created_at: "2026-05-14T10:10:00Z" },
+  { id: "p023", part_name: "รีเลย์คอมเพรสเซอร์",        buyer: "ร้านซ่อม B+",       quantity: 7,  status: "cancelled", created_at: "2026-05-13T13:50:00Z" },
+  { id: "p024", part_name: "จานหมุนไมโครเวฟ",          buyer: "ร้านซ่อม E+",       quantity: 2,  status: "pending",   created_at: "2026-05-13T09:30:00Z" },
 ];
 
 const STATUS_META: Record<PartsOrder["status"], { label: string; color: string }> = {
@@ -48,6 +70,10 @@ export default function PartsOrdersPage() {
     ? items
     : items.slice((page - 1) * perPage, page * perPage);
 
+  // สรุปจำนวนตามสถานะ (display mock · BE จังหวะ 2 = count จาก API)
+  const statusCounts = (Object.keys(STATUS_META) as PartsOrder["status"][])
+    .map(s => ({ status: s, count: items.filter(o => o.status === s).length }));
+
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
@@ -65,6 +91,20 @@ export default function PartsOrdersPage() {
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
             ← Inventory
           </Link>
+        </div>
+
+        {/* Status summary (display mock · count จริง=BE จังหวะ 2) */}
+        <div className="flex flex-wrap gap-2">
+          {statusCounts.map(({ status, count }) => {
+            const sm = STATUS_META[status];
+            return (
+              <div key={status}
+                className="flex items-center gap-2 bg-white rounded-lg border border-gray-200 px-3 py-2">
+                <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
+                <span className="text-sm font-semibold text-gray-700">{count}</span>
+              </div>
+            );
+          })}
         </div>
 
         {/* Table */}

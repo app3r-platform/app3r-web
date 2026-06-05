@@ -57,3 +57,24 @@ const MOCK_DISTRICTS = [
 export function getMockDistrict(id: string): string {
   return MOCK_DISTRICTS[seedFromId(id) % MOCK_DISTRICTS.length];
 }
+
+/** ตำบล/แขวง stub pool (MOCKUP-only) — Advisor: การ์ดต้องลงลึกระดับตำบล ไม่ใช่อำเภอ. */
+const MOCK_TAMBONS = [
+  'ในเมือง',
+  'แสนสุข',
+  'หนองกอมเกาะ',
+  'ขามใหญ่',
+  'ปทุม',
+  'ไร่น้อย',
+  'หัวเรือ',
+  'กุดลาด',
+] as const;
+
+/**
+ * Deterministic mock ตำบล/แขวง (sub-district) สำหรับการ์ด — MOCKUP-only.
+ * ใช้ seed ต่าง (id + '#t') กัน collide กับ getMockDistrict เพื่อให้ตำบล/อำเภอไม่ซ้ำ pattern.
+ * @param id listing/job id
+ */
+export function getMockTambon(id: string): string {
+  return MOCK_TAMBONS[seedFromId(id + '#t') % MOCK_TAMBONS.length];
+}
