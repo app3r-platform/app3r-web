@@ -222,7 +222,7 @@ export default function WeeeTScrapJobDetailPage({
               <div className="flex items-center gap-2">
                 <span className="text-gray-400 w-16 shrink-0">โทร</span>
                 <a href={`tel:${job.weeeUPhone}`}
-                  className="text-[#1696F9] font-medium">{job.weeeUPhone}</a>
+                  className="text-weeet-primary font-medium">{job.weeeUPhone}</a>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 w-16 shrink-0 pt-0.5">ที่อยู่</span>
@@ -232,7 +232,7 @@ export default function WeeeTScrapJobDetailPage({
                 href={job.weeeUMapLink}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-[#1696F9] text-sm font-medium px-3 py-2 rounded-xl transition-colors"
+                className="flex items-center gap-2 bg-weeet-primary/10 hover:bg-weeet-primary/20 text-weeet-primary text-sm font-medium px-3 py-2 rounded-xl transition-colors"
               >
                 🗺️ เปิด Maps
               </a>
@@ -281,7 +281,7 @@ export default function WeeeTScrapJobDetailPage({
           {!gpsCheckedIn && job.status === "traveling" && (
             <button
               onClick={handleGpsCheckIn}
-              className="w-full py-4 bg-[#1696F9] hover:bg-blue-600 text-white font-bold rounded-2xl text-base transition-colors shadow-sm"
+              className="w-full py-4 bg-weeet-primary hover:bg-weeet-dark text-white font-bold rounded-2xl text-base transition-colors shadow-sm"
             >
               📍 GPS Check-in — ถึงแล้ว
             </button>
@@ -291,7 +291,7 @@ export default function WeeeTScrapJobDetailPage({
           {job.status === "arrived" && (
             <button
               onClick={handleStartVerify}
-              className="w-full py-4 bg-[#1696F9] hover:bg-blue-600 text-white font-bold rounded-2xl text-base transition-colors shadow-sm"
+              className="w-full py-4 bg-weeet-primary hover:bg-weeet-dark text-white font-bold rounded-2xl text-base transition-colors shadow-sm"
             >
               🔍 เริ่มตรวจซาก
             </button>

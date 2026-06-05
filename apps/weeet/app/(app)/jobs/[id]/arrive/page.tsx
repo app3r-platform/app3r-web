@@ -2,6 +2,7 @@
 import { use, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
+import { MockAnno } from "@/components/MockAnno";
 
 const MAX_PHOTOS = 3;
 const MIN_PHOTOS = 2;
@@ -59,10 +60,15 @@ export default function ArrivePage({ params }: { params: Promise<{ id: string }>
 
   return (
     <div className="pb-6">
+      <MockAnno
+        origin="T-11 รายละเอียดงาน /jobs/[id] · T-34 ออกเดินทาง"
+        nav="T-11 /jobs/[id] (ยืนยันถึงที่สำเร็จ)"
+        xapp="→ WeeeR (รับ GPS arrive) · → WeeeU (แจ้งช่างถึงแล้ว)"
+      />
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">T2 — บันทึกถึงที่</h1>
+          <h1 className="font-bold text-white">T-33 — บันทึกถึงที่</h1>
           <p className="text-xs text-gray-400">ถ่ายรูป {MIN_PHOTOS}-{MAX_PHOTOS} ใบ (จุดสังเกต + กับลูกค้า)</p>
         </div>
       </div>

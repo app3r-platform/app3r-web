@@ -2,6 +2,7 @@
 import { use, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
+import { MockAnno } from "@/components/MockAnno";
 
 const MIN_PHOTOS = 3;
 const MAX_PHOTOS = 5;
@@ -82,10 +83,15 @@ export default function InspectPage({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="pb-6">
+      <MockAnno
+        origin="T-11 รายละเอียดงาน /jobs/[id]"
+        nav="T-11 /jobs/[id] (ส่งรายงานตรวจสอบสำเร็จ)"
+        xapp="→ WeeeR (รับรูปก่อนซ่อม) · → WeeeU (รับทราบตรวจสอบ)"
+      />
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">T3 — รายงานตรวจสอบ</h1>
+          <h1 className="font-bold text-white">T-08 — รายงานตรวจสอบ</h1>
           <p className="text-xs text-gray-400">รูป {MIN_PHOTOS}-{MAX_PHOTOS} ใบ + คลิป 0-{MAX_CLIPS} (ก่อนซ่อม)</p>
         </div>
       </div>
