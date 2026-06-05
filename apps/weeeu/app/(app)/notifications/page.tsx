@@ -4,7 +4,8 @@
 import { useState } from "react";
 import Link from "next/link";
 
-// U-36 — ครอบทุกเคสแจ้งเตือน (repair/maintain/resell/scrap/wallet/system · ทุก state) · link target ตรวจแล้วมีจริงทุกอัน
+// U-36 — ครอบทุกเคสแจ้งเตือน (repair/maintain/resell/scrap/wallet/system · ทุก state)
+// link targets: sweep-verified resolve ตาม route จริง (manifest sweep Fix-Wave C รอบแก้ · 2026-06-05)
 const notifications = [
   // ── Repair ──
   {
@@ -31,7 +32,7 @@ const notifications = [
   {
     id: "5", icon: "🔔", title: "ถึงเวลาล้างแอร์ประจำรอบ",
     body: "ถึงเวลาล้างแอร์ห้องนอนแล้ว (ครบ 6 เดือน)",
-    time: "2 วันที่แล้ว", isNew: false, category: "maintain", link: "/maintain",
+    time: "2 วันที่แล้ว", isNew: false, category: "maintain", link: "/maintain/jobs",
   },
   // ── Resell ──
   {

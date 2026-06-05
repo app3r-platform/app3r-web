@@ -42,7 +42,7 @@ const feedGroups: { key: string; title: string; href: string; hasActivity: boole
     ],
   },
   {
-    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain", hasActivity: false,
+    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain/book", hasActivity: false,
     items: [
       { icon: "❄️", name: "ล้างแอร์", meta: "เริ่ม 500 ฿" },
       { icon: "🌀", name: "ล้างเครื่องซักผ้า", meta: "เริ่ม 400 ฿" },
