@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getFaqItems } from '@/lib/content-api';
 import type { FAQItem } from '@/lib/content/types';
+import { MockAnnoOrigin, MockAnnoNav } from '@/components/common';
 
 export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
 
@@ -32,6 +33,8 @@ export default async function FAQPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 Footer */}
+      <MockAnnoOrigin from="W-01" />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
@@ -98,6 +101,8 @@ export default async function FAQPage() {
         >
           ติดต่อทีมงาน →
         </Link>
+        {/* §6 mock-anno-nav: → W-03 */}
+        <MockAnnoNav to="W-03" />
       </div>
     </div>
   );

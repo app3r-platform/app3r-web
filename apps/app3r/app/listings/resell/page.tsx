@@ -12,7 +12,7 @@ import CategoryChips from "../../../components/listings/CategoryChips";
 import RoleSplitSections from "../../../components/listings/RoleSplitSections";
 import AdBanner from "../../../components/ads/AdBanner";
 import SponsoredListing from "../../../components/ads/SponsoredListing";
-import { NearMeToggle, TermTooltip } from "@/components/common";
+import { NearMeToggle, TermTooltip, MockAnnoOrigin } from "@/components/common";
 import { crossAppUrls } from "@/lib/config/urls";
 import type { ResellFilter, ConditionType } from "../../../lib/types";
 
@@ -57,6 +57,8 @@ export default async function ResellListingsPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME หรือ W-06 LISTINGS-HUB */}
+      <MockAnnoOrigin from={["W-01", "W-06"]} />
       {/* Ad Banner */}
       <AdBanner position="module_first_row" size="leaderboard" className="mb-6" />
 

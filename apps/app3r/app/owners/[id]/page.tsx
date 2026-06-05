@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getOwnerProfile } from "@/lib/mock/owner-history";
+import { MockAnnoOrigin, MockAnnoXapp } from "@/components/common";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -33,6 +34,16 @@ export default async function OwnerHistoryPage({ params }: PageProps) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-08/W-10/W-12/W-14 (ลิงก์ "ดูประวัติผู้ประกาศ") */}
+      <MockAnnoOrigin from={["W-08", "W-10", "W-12", "W-14"]} />
+      {/* §8 mock-anno-xapp: WeeeU เจ้าของดูประวัติตัวเอง / WeeeR ตรวจสอบ seller */}
+      <MockAnnoXapp
+        context="ดูประวัติผู้ประกาศ"
+        apps={[
+          { app: "WeeeU", screen: "U-owner-profile", href: "http://localhost:3002/profile", label: "โปรไฟล์ WeeeU" },
+          { app: "WeeeR", screen: "R-seller-check", href: "http://localhost:3001/sellers", label: "ตรวจสอบ seller" },
+        ]}
+      />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2 flex-wrap">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
@@ -103,9 +114,16 @@ export default async function OwnerHistoryPage({ params }: PageProps) {
               href={l.href}
               className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition group"
             >
-              <div className="h-40 bg-gray-100 overflow-hidden">
+              {/* D1 fallback: bg-gray-100 แสดงเมื่อโหลดรูปไม่ได้ · text fallback ใน aria-label */}
+              <div className="h-40 bg-gray-100 overflow-hidden relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.image} alt={l.title} className="w-full h-full object-cover" />
+                <img
+                  src={l.image}
+                  alt={l.title}
+                  aria-label={`รูปประกาศ: ${l.title}`}
+                  className="w-full h-full object-cover"
+                  style={{ color: "transparent" }}
+                />
               </div>
               <div className="p-4 space-y-1.5">
                 <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-website-brand-50 text-website-brand-700">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getContactPage } from "@/lib/content-api";
 import ContactInfoCard from "@/components/contact/ContactInfoCard";
 import ContactForm from "@/components/contact/ContactForm";
+import { MockAnnoOrigin } from '@/components/common';
 
 // W-3-C Sub-C.3: ISR revalidate 300s (CMS public read)
 export const revalidate = 300;
@@ -18,6 +19,8 @@ export default async function ContactPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก Navbar, Footer, หรือ W-02 AboutCTA */}
+      <MockAnnoOrigin from={["W-01", "W-02"]} />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getCmsPage } from '@/lib/content-api';
+import { MockAnnoOrigin } from '@/components/common';
 
 export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
 
@@ -37,6 +38,8 @@ export default async function CmsStaticPage({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME (header/footer CMS link) */}
+      <MockAnnoOrigin from="W-01" />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

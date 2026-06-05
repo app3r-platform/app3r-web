@@ -11,6 +11,7 @@ import ScrapModeChips from "../../components/listings/ScrapModeChips";
 import AdBanner from "../../components/ads/AdBanner";
 import { NearMeToggle } from "@/components/common";
 import type { UnifiedFilter } from "../../lib/types";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/common";
 
 export const metadata: Metadata = {
   title: "ประกาศทั้งหมด — ซื้อขาย & ซาก",
@@ -44,6 +45,9 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 Navbar "ประกาศ" */}
+      <MockAnnoOrigin from="W-01" />
+      {/* §6 mock-anno-nav: card clicks → W-12 (resell) | W-14 (scrap) */}
       {/* Ad Banner */}
       <AdBanner position="module_first_row" size="leaderboard" className="mb-6" />
 

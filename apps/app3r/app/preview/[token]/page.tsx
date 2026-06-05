@@ -7,7 +7,7 @@
 // ============================================================
 import type { Metadata } from "next";
 import Link from "next/link";
-import { TermTooltip } from "@/components/common";
+import { TermTooltip, MockAnnoOrigin, MockAnnoXapp } from "@/components/common";
 import { mockResellListings } from "@/lib/mock/resell";
 import type { ResellListing } from "@/lib/types";
 
@@ -87,6 +87,15 @@ export default async function PreviewPage({ params }: Props) {
 
   return (
     <div>
+      {/* §5 mock-anno-origin: WeeeU เจ้าของประกาศ preview ก่อน publish (cross-app entry) */}
+      <MockAnnoOrigin from="WeeeU-owner-preview" />
+      {/* §8 mock-anno-xapp: เจ้าของ (WeeeU) กำลังดูตัวอย่างก่อนเผยแพร่ */}
+      <MockAnnoXapp
+        context="WeeeU เจ้าของดูพรีวิวก่อน publish"
+        apps={[
+          { app: "WeeeU", screen: "U-listing-draft", href: "http://localhost:3002/listings/draft", label: "ร่างประกาศของฉัน" },
+        ]}
+      />
       {/* โหมดพรีวิว — banner ต้องเห็นชัดเสมอ */}
       <div className="sticky top-0 z-50 bg-amber-400 text-gray-900 text-center py-2 px-4 font-bold text-sm flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
         <span>👁️ โหมดพรีวิว — ยังไม่เผยแพร่</span>

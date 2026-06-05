@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { articles } from "@/lib/mock/articles";
-import { AdSlot } from "@/components/common";
+import { AdSlot, MockAnnoOrigin } from "@/components/common";
 import ArticlesClient from "./ArticlesClient";
 
 export const metadata: Metadata = {
@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 export default function ArticlesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME (header nav / footer) */}
+      <MockAnnoOrigin from="W-01" />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

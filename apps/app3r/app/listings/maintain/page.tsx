@@ -11,7 +11,7 @@ import AreaSelect from '../../../components/listings/AreaSelect';
 import MyProvincePrefill from '../../../components/listings/MyProvincePrefill';
 import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel';
 import RoleSplitSections from '../../../components/listings/RoleSplitSections';
-import { RoleAwareCTA, TermTooltip } from '@/components/common';
+import { RoleAwareCTA, TermTooltip, MockAnnoOrigin, MockAnnoXapp } from '@/components/common';
 import { crossAppUrls } from '@/lib/config/urls';
 
 const MAINTAIN_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
@@ -44,6 +44,8 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME hero section หรือ W-06 LISTINGS-HUB */}
+      <MockAnnoOrigin from={["W-01", "W-06"]} />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
@@ -147,6 +149,14 @@ export default async function MaintainListingsPage({ searchParams }: PageProps) 
             </div>
           </div>
 
+          {/* §8 mock-anno-xapp: WeeeU เห็น "จองของฉัน" · WeeeR เห็น "งานรอดำเนินการ" */}
+          <MockAnnoXapp
+            context="WeeeU จองบำรุงรักษา → WeeeR เห็นงานใหม่"
+            apps={[
+              { app: "WeeeU", screen: "U-maintain-list", href: "http://localhost:3002/maintains", label: "จองของฉัน" },
+              { app: "WeeeR", screen: "R-maintain-market", href: "http://localhost:3001/maintains", label: "งานบำรุงรักษา" },
+            ]}
+          />
           {/* Role-split sections (W-09) */}
           <RoleSplitSections
             context="บำรุงรักษา"

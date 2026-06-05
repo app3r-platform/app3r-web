@@ -10,6 +10,7 @@ import WeeeRLoginGate from '../../../../components/listings/WeeeRLoginGate';
 import OwnerRedirectModal from '../../../../components/listings/OwnerRedirectModal';
 import { getJob } from '../../../../lib/api/customer-jobs';
 import { repairJobs } from '../../../../lib/mock/repair-jobs';
+import { MockAnnoOrigin, MockAnnoXapp } from '@/components/common';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -43,17 +44,35 @@ export default async function RepairDetailPage({ params }: PageProps) {
 
   // WeeeR or admin — full detail
   if (role === 'weeer' || role === 'admin') {
-    return <RepairJobDetail job={job} isAdmin={role === 'admin'} />;
+    return (
+      <>
+        {/* §5 mock-anno-origin: มาจาก W-07 LISTINGS-REPAIR (card click) */}
+        <MockAnnoOrigin from="W-07" />
+        {/* §8 mock-anno-xapp: WeeeU เห็นหน้าประกาศซ่อม · WeeeR เห็นหน้ารับงาน */}
+        <MockAnnoXapp
+          context="WeeeR รับงาน / WeeeU ยื่นข้อเสนอ"
+          apps={[
+            { app: "WeeeU", screen: "U-repair-request-detail", href: "http://localhost:3002/repairs/req001", label: "ประกาศของฉัน" },
+            { app: "WeeeR", screen: "R-repair-offer-form", href: "http://localhost:3001/repairs/req001/offer", label: "ฟอร์มยื่นข้อเสนอ" },
+          ]}
+        />
+        <RepairJobDetail job={job} isAdmin={role === 'admin'} />
+      </>
+    );
   }
 
   // All others (anonymous, weeeu, weeet, weeeu-owner for non-own jobs) → login gate
   return (
-    <WeeeRLoginGate
-      jobId={id}
-      type="repair"
-      headline={job.title}
-      applianceType={job.applianceType}
-      area={job.area}
-    />
+    <>
+      {/* §5 mock-anno-origin: มาจาก W-07 LISTINGS-REPAIR */}
+      <MockAnnoOrigin from="W-07" />
+      <WeeeRLoginGate
+        jobId={id}
+        type="repair"
+        headline={job.title}
+        applianceType={job.applianceType}
+        area={job.area}
+      />
+    </>
   );
 }

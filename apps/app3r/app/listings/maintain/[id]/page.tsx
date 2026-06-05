@@ -10,6 +10,7 @@ import WeeeRLoginGate from '../../../../components/listings/WeeeRLoginGate';
 import OwnerRedirectModal from '../../../../components/listings/OwnerRedirectModal';
 import { getJob } from '../../../../lib/api/customer-jobs';
 import { maintainJobs } from '../../../../lib/mock/maintain-jobs';
+import { MockAnnoOrigin, MockAnnoXapp } from '@/components/common';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -43,17 +44,35 @@ export default async function MaintainDetailPage({ params }: PageProps) {
 
   // WeeeR or admin — full detail
   if (role === 'weeer' || role === 'admin') {
-    return <MaintainJobDetail job={job} isAdmin={role === 'admin'} />;
+    return (
+      <>
+        {/* §5 mock-anno-origin: มาจาก W-09 LISTINGS-MAINTAIN (card click) */}
+        <MockAnnoOrigin from="W-09" />
+        {/* §8 mock-anno-xapp: WeeeU เห็น "จองบำรุงรักษา" · WeeeR เห็น "รับงาน" */}
+        <MockAnnoXapp
+          context="WeeeR รับงานบำรุงรักษา"
+          apps={[
+            { app: "WeeeU", screen: "U-maintain-detail", href: "http://localhost:3002/maintains/m001", label: "รายละเอียดการจอง" },
+            { app: "WeeeR", screen: "R-maintain-offer", href: "http://localhost:3001/maintains/m001/offer", label: "ยื่นข้อเสนอ" },
+          ]}
+        />
+        <MaintainJobDetail job={job} isAdmin={role === 'admin'} />
+      </>
+    );
   }
 
   // All others → login gate
   return (
-    <WeeeRLoginGate
-      jobId={id}
-      type="maintain"
-      headline={job.title}
-      applianceType={job.applianceType}
-      area={job.area}
-    />
+    <>
+      {/* §5 mock-anno-origin: มาจาก W-09 LISTINGS-MAINTAIN */}
+      <MockAnnoOrigin from="W-09" />
+      <WeeeRLoginGate
+        jobId={id}
+        type="maintain"
+        headline={job.title}
+        applianceType={job.applianceType}
+        area={job.area}
+      />
+    </>
   );
 }

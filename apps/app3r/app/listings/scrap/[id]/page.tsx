@@ -12,7 +12,7 @@ import AdBanner from "../../../../components/ads/AdBanner";
 import LocationMapMock from "../../../../components/listings/LocationMapMock";
 import QnASection from "../../../../components/listings/QnASection";
 import EngagementCounters from "../../../../components/listings/EngagementCounters";
-import { AdSlot, RoleAwareCTA, TermTooltip, CopyShareButton } from "../../../../components/common";
+import { AdSlot, RoleAwareCTA, TermTooltip, CopyShareButton, MockAnnoOrigin, MockAnnoNav, MockAnnoXapp } from "../../../../components/common";
 import { getMockEngagement } from "../../../../lib/mock/listing-engagement";
 import { getMockQnA } from "../../../../lib/mock/listing-qna";
 
@@ -52,6 +52,15 @@ export default async function ScrapDetailPage({ params }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-13 LISTINGS-SCRAP */}
+      <MockAnnoOrigin from="W-13" />
+      {/* §8 mock-anno-xapp: WeeeR สนใจรับซาก → ยื่นข้อเสนอใน WeeeR */}
+      <MockAnnoXapp
+        context="WeeeR รับซื้อซาก"
+        apps={[
+          { app: "WeeeR", screen: "R-scrap-offer", href: "http://localhost:3001/scrap/s001/offer", label: "ยื่นข้อเสนอรับซาก" },
+        ]}
+      />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2 flex-wrap">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

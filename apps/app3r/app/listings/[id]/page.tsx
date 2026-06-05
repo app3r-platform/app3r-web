@@ -22,7 +22,7 @@ import {
 import { ListingMetaHeader } from "@/components/listings/ListingMetaHeader";
 import { ReviewsList } from "@/components/listings/ReviewsList";
 import { QuestionsList } from "@/components/listings/QuestionsList";
-import { CopyShareButton } from "@/components/common";
+import { CopyShareButton, MockAnnoOrigin, MockAnnoXapp } from "@/components/common";
 
 export const revalidate = 60;
 
@@ -74,6 +74,16 @@ export default async function ListingByIdPage({ params }: { params: Params }) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
+      {/* §5 mock-anno-origin: UUID entry point จาก cross-app links / ads / WeeeU หรือ WeeeR */}
+      <MockAnnoOrigin from={["WeeeU-link", "WeeeR-link", "ads"]} />
+      {/* §8 mock-anno-xapp: ดูรีวิว/Q&A ข้าม app — WeeeU/WeeeR มี link มาหน้านี้ */}
+      <MockAnnoXapp
+        context="Cross-app listing UUID entry point"
+        apps={[
+          { app: "WeeeU", screen: "U-listing-share", href: "http://localhost:3002/listings", label: "listing detail (WeeeU)" },
+          { app: "WeeeR", screen: "R-listing-ref", href: "http://localhost:3001/listings", label: "listing ref (WeeeR)" },
+        ]}
+      />
       <nav className="text-sm text-gray-500 mb-4 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-600">
           หน้าหลัก

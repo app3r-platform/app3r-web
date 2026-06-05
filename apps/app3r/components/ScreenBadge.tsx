@@ -33,6 +33,8 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/register/weeer",           info: { num: "W-18", code: "REGISTER-WEEER" } },
   { pattern: "/preview/[token]",          info: { num: "W-19", code: "PREVIEW" } },
   { pattern: "/owners/[id]",              info: { num: "W-23", code: "OWNER-HISTORY" } },
+  // R4 NEW: /legal/[slug] = distinct layout (sidebar nav) → W-24 (mint · P2 report)
+  { pattern: "/legal/[slug]",             info: { num: "W-24", code: "LEGAL-CONTENT" } },
   { pattern: "/[id]",                     info: { num: "W-20", code: "SLUG-PAGE" } },
   { pattern: "/",                         info: { num: "W-01", code: "HOME" } },
 ];
