@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import TypeBadge from "./TypeBadge";
 import type { ResellListing, ScrapListing } from "../../lib/types";
-import { getMockEngagement, getMockDistrict } from "../../lib/mock/listing-engagement";
+import { getMockEngagement, getMockDistrict, getMockTambon } from "../../lib/mock/listing-engagement";
 
 type Props = {
   listing: ResellListing | ScrapListing;
@@ -17,7 +17,9 @@ export default function ListingCard({ listing, sponsored }: Props) {
   const resell = isResell ? (listing as ResellListing) : null;
   const scrap = !isResell ? (listing as ScrapListing) : null;
 
-  // MOCKUP-only metadata: อำเภอ derive จาก id, offers derive, views = real mock field
+  // MOCKUP-only metadata: ตำบล/อำเภอ derive จาก id, offers derive, views = real mock field
+  // Advisor: การ์ดต้องลงลึกระดับตำบล/แขวง ก่อนอำเภอ ก่อนจังหวัด
+  const tambon = getMockTambon(listing.id);
   const district = getMockDistrict(listing.id);
   const { viewCount, offerCount } = getMockEngagement(listing.id, listing.viewCount);
 
@@ -69,7 +71,7 @@ export default function ListingCard({ listing, sponsored }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {`อ.${district}, ${listing.location}`}
+            {`ต.${tambon} · อ.${district} · ${listing.location}`}
           </span>
           <span>{listing.postedAt}</span>
         </div>

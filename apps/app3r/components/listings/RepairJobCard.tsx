@@ -5,14 +5,16 @@
 import Link from 'next/link';
 import type { PublicJobProjection } from '../../lib/types/listings-customer-jobs';
 import { getServiceTypeLabel } from '../../lib/constants/service-types';
-import { getMockEngagement, getMockDistrict } from '../../lib/mock/listing-engagement';
+import { getMockEngagement, getMockDistrict, getMockTambon } from '../../lib/mock/listing-engagement';
 
 interface RepairJobCardProps {
   job: PublicJobProjection;
 }
 
 export default function RepairJobCard({ job }: RepairJobCardProps) {
-  // MOCKUP-only metadata derive จาก job.id (PublicJobProjection ไม่มี district/counts)
+  // MOCKUP-only metadata derive จาก job.id (PublicJobProjection ไม่มี tambon/district/counts)
+  // Advisor: การ์ดต้องลงลึกระดับตำบล/แขวง ก่อนอำเภอ ก่อนจังหวัด
+  const tambon = getMockTambon(job.id);
   const district = getMockDistrict(job.id);
   const { viewCount, offerCount } = getMockEngagement(job.id);
   return (
@@ -42,7 +44,7 @@ export default function RepairJobCard({ job }: RepairJobCardProps) {
       <div className="flex items-center justify-between text-xs text-gray-500 mt-3">
         <div className="flex items-center gap-1">
           <span>📍</span>
-          <span>{`อ.${district}, ${job.area}`}</span>
+          <span>{`ต.${tambon} · อ.${district} · ${job.area}`}</span>
         </div>
         <span>{job.postedAt}</span>
       </div>

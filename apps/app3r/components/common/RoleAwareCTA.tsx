@@ -111,10 +111,10 @@ export default function RoleAwareCTA({
     return (
       <div className={`flex flex-col sm:flex-row gap-2 ${className}`}>
         <Link href={weeerTarget} className={primaryBtn}>
-          🔧 สมัครเป็นร้าน (WeeeR)
+          🏪 สมัครในนามร้าน/บริษัท (WeeeR)
         </Link>
         <a href={weeeuTarget} className={outlineBtn}>
-          🛒 สมัคร/เข้าสู่ระบบ (WeeeU)
+          🛒 สมัครในนามบุคคลทั่วไป
         </a>
       </div>
     );

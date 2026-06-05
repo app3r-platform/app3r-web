@@ -79,6 +79,10 @@ export default function RegisterWeeeRPage() {
   if (mounted && role === "weeer") {
     return <RoleBlockedScreen variant="weeer" />;
   }
+  // W-18: WeeeU ต้องออกจากระบบก่อนจึงสมัครเป็น WeeeR ได้ (1 บัญชี 1 บทบาท)
+  if (mounted && role === "weeeu") {
+    return <RoleBlockedScreen variant="weeeu" />;
+  }
 
   // W-2-C: Landing page (default view)
   if (!showLocalForm && !submitted) {
@@ -605,38 +609,53 @@ export default function RegisterWeeeRPage() {
   );
 }
 
-// Round 2 — role enforcement screens (กฎธุรกิจ §9)
+// Round 2 + Fix-Wave A — role enforcement screens (กฎธุรกิจ §9 · W-18)
 //   weeet: ช่างสมัครเองไม่ได้ — ต้องผ่านร้าน WeeeR ที่อนุมัติแล้ว
 //   weeer: เข้าสู่ระบบ WeeeR อยู่แล้ว — สมัครซ้ำไม่ได้ (ปลดล็อกอินก่อน)
-function RoleBlockedScreen({ variant }: { variant: "weeet" | "weeer" }) {
-  const isWeeet = variant === "weeet";
+//   weeeu: เข้าสู่ระบบ WeeeU อยู่ — ต้องออกจากระบบก่อนจึงสมัครเป็น WeeeR ได้
+function RoleBlockedScreen({ variant }: { variant: "weeet" | "weeer" | "weeeu" }) {
+  const config = {
+    weeet: {
+      emoji: "👨‍🔧",
+      title: "ช่าง (WeeeT) สมัครร้านไม่ได้",
+      desc: "บัญชีช่าง (WeeeT) สมัครเป็นร้าน WeeeR เองไม่ได้ — ช่างจะถูกเพิ่มเข้าระบบโดยร้าน WeeeR ที่ผ่านการอนุมัติแล้วเท่านั้น",
+      primary: { label: "ดาวน์โหลดแอป WeeeT", href: "/download", external: false },
+    },
+    weeer: {
+      emoji: "🔧",
+      title: "คุณเข้าสู่ระบบ WeeeR อยู่แล้ว",
+      desc: "บัญชีของคุณเป็นร้าน WeeeR อยู่แล้ว สมัครซ้ำไม่ได้ — หากต้องการสมัครบัญชีใหม่ กรุณาออกจากระบบก่อน",
+      primary: { label: "ไปยังแอป WeeeR ของคุณ", href: crossAppUrls.weeer.base, external: true },
+    },
+    weeeu: {
+      emoji: "🛒",
+      title: "ต้องออกจากระบบ WeeeU ก่อน",
+      desc: "คุณเข้าสู่ระบบในนามผู้ใช้ทั่วไป (WeeeU) อยู่ — 1 บัญชีใช้ได้ 1 บทบาท หากต้องการสมัครเป็นร้าน/บริษัท (WeeeR) กรุณาออกจากระบบ WeeeU ก่อน แล้วสมัครใหม่",
+      primary: { label: "ออกจากระบบ WeeeU", href: crossAppUrls.weeeu.login, external: true },
+    },
+  }[variant];
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
       <div className="bg-white border border-gray-200 rounded-2xl p-8 max-w-md w-full text-center space-y-5">
-        <div className="text-5xl">{isWeeet ? "👨‍🔧" : "🔧"}</div>
-        <h1 className="text-xl font-bold text-gray-900">
-          {isWeeet ? "ช่าง (WeeeT) สมัครร้านไม่ได้" : "คุณเข้าสู่ระบบ WeeeR อยู่แล้ว"}
-        </h1>
-        <p className="text-sm text-gray-600 leading-relaxed">
-          {isWeeet
-            ? "บัญชีช่าง (WeeeT) สมัครเป็นร้าน WeeeR เองไม่ได้ — ช่างจะถูกเพิ่มเข้าระบบโดยร้าน WeeeR ที่ผ่านการอนุมัติแล้วเท่านั้น"
-            : "บัญชีของคุณเป็นร้าน WeeeR อยู่แล้ว สมัครซ้ำไม่ได้ — หากต้องการสมัครบัญชีใหม่ กรุณาออกจากระบบก่อน"}
-        </p>
+        <div className="text-5xl">{config.emoji}</div>
+        <h1 className="text-xl font-bold text-gray-900">{config.title}</h1>
+        <p className="text-sm text-gray-600 leading-relaxed">{config.desc}</p>
         <div className="space-y-3">
-          {isWeeet ? (
-            <Link
-              href="/download"
-              className="block w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
-            >
-              ดาวน์โหลดแอป WeeeT
-            </Link>
-          ) : (
+          {config.primary.external ? (
             <a
-              href={crossAppUrls.weeer.base}
+              href={config.primary.href}
               className="block w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
             >
-              ไปยังแอป WeeeR ของคุณ
+              {config.primary.label}
             </a>
+          ) : (
+            <Link
+              href={config.primary.href}
+              className="block w-full bg-website-brand-700 text-white py-3 rounded-xl font-semibold hover:bg-website-brand-800 transition"
+            >
+              {config.primary.label}
+            </Link>
           )}
           <Link
             href="/"
