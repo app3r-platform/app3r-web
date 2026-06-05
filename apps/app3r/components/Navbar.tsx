@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useMockRole } from "@/lib/auth/useMockRole";
-import { MOCK_USERS } from "@/lib/auth/mock-role";
+import { MOCK_USERS, WEEET_AFFILIATION } from "@/lib/auth/mock-role";
 import { crossAppUrls } from "@/lib/config/urls";
 
 // Round 2 W-01: role-aware identity + per-role CTA (กฎ#9 · เลนส์ #1)
@@ -41,7 +41,12 @@ export default function Navbar() {
   const identity =
     effectiveRole === "anonymous"
       ? null
-      : { ...roleMeta[effectiveRole], name: MOCK_USERS[effectiveRole].name };
+      : {
+          ...roleMeta[effectiveRole],
+          name: MOCK_USERS[effectiveRole].name,
+          // WeeeT = ช่าง ทำงานในนามร้าน WeeeR ที่สังกัด (Fix-Wave A · W-01 WeeeT view)
+          affiliation: effectiveRole === "weeet" ? WEEET_AFFILIATION : null,
+        };
   const isAnon = identity === null;
 
   return (
@@ -113,18 +118,26 @@ export default function Navbar() {
                   href="/register/weeer"
                   className="bg-website-brand-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-website-brand-800 transition"
                 >
-                  สมัคร WeeeR
+                  สมัครเป็นร้าน/บริษัท (WeeeR)
                 </Link>
               </>
             ) : (
               // logged-in (mock): แสดงชื่อ user/ร้าน + ลิงก์ไปแอปของตน · ซ่อนปุ่มสมัคร/เข้าระบบ
+              // WeeeT: แสดงชื่อช่าง + ร้าน WeeeR ที่สังกัด (W-01 WeeeT view)
               <a
                 href={identity!.appUrl}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-website-brand-200 bg-website-brand-50 text-sm font-medium text-website-brand-800 hover:bg-website-brand-100 transition"
                 title={`ไปยังแอป ${identity!.label}`}
               >
                 <span>{identity!.emoji}</span>
-                <span className="max-w-[160px] truncate">{identity!.name}</span>
+                <span className="flex flex-col leading-tight">
+                  <span className="max-w-[180px] truncate">{identity!.name}</span>
+                  {identity!.affiliation && (
+                    <span className="text-[10px] text-website-brand-600 truncate max-w-[180px]">
+                      สังกัด: {identity!.affiliation}
+                    </span>
+                  )}
+                </span>
               </a>
             )}
           </div>
@@ -193,7 +206,7 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className="text-center bg-website-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
                   >
-                    สมัคร WeeeR
+                    สมัครเป็นร้าน/บริษัท (WeeeR)
                   </Link>
                 </>
               ) : (
@@ -203,7 +216,12 @@ export default function Navbar() {
                   className="text-center flex items-center justify-center gap-2 border border-website-brand-200 bg-website-brand-50 text-website-brand-800 px-4 py-2 rounded-lg text-sm font-medium"
                 >
                   <span>{identity!.emoji}</span>
-                  <span className="truncate">{identity!.name}</span>
+                  <span className="truncate">
+                    {identity!.name}
+                    {identity!.affiliation && (
+                      <span className="text-[10px] text-website-brand-600"> · สังกัด {identity!.affiliation}</span>
+                    )}
+                  </span>
                 </a>
               )}
             </div>

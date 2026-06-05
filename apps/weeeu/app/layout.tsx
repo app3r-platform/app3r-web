@@ -57,16 +57,16 @@ const devNavLinks: DevNavLink[] = [
 
   // ── Resell — ผู้ขาย (WeeeU seller) ──────────────────────────────────────────
   { label: "→ ✅ ลงประกาศสำเร็จ",              href: "/sell/new/success",                          type: "next-step", forPath: "/sell/new" },
-  { label: "→ ดูประกาศของฉัน",               href: "/sell/listings",                            type: "next-step", forPath: "/sell/new/success" },
+  { label: "→ ดูประกาศของฉัน",               href: "/listings",                                 type: "next-step", forPath: "/sell/new/success" },
   { label: "→ ดูประกาศที่สร้าง",              href: "/listings/r001",                            type: "next-step", forPath: "/sell/new" },
   { label: "→ ดูข้อเสนอที่ได้รับ",             href: "/listings/r001/offers",                     type: "next-step", forPath: "/listings/r001" },
   { label: "→ [A] ยืนยันข้อเสนอ",             href: "/listings/r001/confirm",                    type: "branch",    forPath: "/listings/r001/offers" },
   { label: "→ [B] ปฏิเสธทุกข้อเสนอ",           href: "/listings/r001",                            type: "branch",    forPath: "/listings/r001/offers" },
   { label: "🔗 WeeeR ดูสถานะ",                href: "http://localhost:3001/resell/purchases/r001", type: "cross-app", forPath: "/listings/r001/confirm" },
-  { label: "→ [A] ส่งมอบแล้ว (R7)",           href: "/listings/r001/complete",                   type: "branch",    forPath: "/listings/r001/confirm" },
+  { label: "→ [A] ส่งมอบแล้ว (R7)",           href: "/resell/orders/r001",                       type: "branch",    forPath: "/listings/r001/confirm" },
   { label: "→ [B] seller ถอนการเลือก-R5",      href: "/listings/r001/offers",                     type: "branch",    forPath: "/listings/r001/confirm" },
   { label: "→ [C] ยกเลิกร่วมกัน-R12",          href: "/listings",                                 type: "branch",    forPath: "/listings/r001/confirm" },
-  { label: "→ ดูประวัติ",                      href: "/listings",                                 type: "next-step", forPath: "/listings/r001/complete" },
+  { label: "→ ดูประวัติ",                      href: "/listings",                                 type: "next-step", forPath: "/resell/orders/r001" },
 
   // ── Resell — ผู้ซื้อ C2C (Pair 3: WeeeU buyer) ───────────────────────────────
   { label: "→ ดูสินค้ามือสอง (C2C)",           href: "/marketplace/r001",                         type: "next-step", forPath: "/marketplace" },

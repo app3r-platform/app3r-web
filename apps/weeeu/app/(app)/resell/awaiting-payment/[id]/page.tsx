@@ -275,7 +275,7 @@ export default function AwaitingPaymentPage() {
         <div className="space-y-2.5">
           {shortfall > 0 ? (
             <Link
-              href="/wallet/top-up"
+              href="/wallet/deposit"
               className="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
             >
               🪙 เติม Gold ก่อนชำระ (ขาด {shortfall.toLocaleString()})

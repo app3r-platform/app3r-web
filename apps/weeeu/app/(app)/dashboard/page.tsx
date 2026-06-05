@@ -42,7 +42,7 @@ const feedGroups: { key: string; title: string; href: string; hasActivity: boole
     ],
   },
   {
-    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain", hasActivity: false,
+    key: "maintain", title: "🛠️ บำรุงรักษา", href: "/maintain/book", hasActivity: false,
     items: [
       { icon: "❄️", name: "ล้างแอร์", meta: "เริ่ม 500 ฿" },
       { icon: "🌀", name: "ล้างเครื่องซักผ้า", meta: "เริ่ม 400 ฿" },
@@ -163,17 +163,19 @@ export default function DashboardPage() {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { id: "1", icon: "❄️", name: "แอร์ Mitsubishi 12000 BTU", price: "4,500", area: "อ.เมือง" },
-            { id: "2", icon: "🫧", name: "เครื่องซักผ้า LG 8kg", price: "3,200", area: "อ.วารินชำราบ" },
-            { id: "3", icon: "🧊", name: "ตู้เย็น Sharp 6.5 คิว", price: "2,800", area: "อ.เมือง" },
-            { id: "4", icon: "📺", name: "ทีวี Samsung 43 นิ้ว", price: "3,900", area: "อ.เดชอุดม" },
+            { id: "1", image: "https://picsum.photos/seed/weeeu-mkt-air/300/200", name: "แอร์ Mitsubishi 12000 BTU", price: "4,500", area: "อ.เมือง" },
+            { id: "2", image: "https://picsum.photos/seed/weeeu-mkt-washer/300/200", name: "เครื่องซักผ้า LG 8kg", price: "3,200", area: "อ.วารินชำราบ" },
+            { id: "3", image: "https://picsum.photos/seed/weeeu-mkt-fridge/300/200", name: "ตู้เย็น Sharp 6.5 คิว", price: "2,800", area: "อ.เมือง" },
+            { id: "4", image: "https://picsum.photos/seed/weeeu-mkt-tv/300/200", name: "ทีวี Samsung 43 นิ้ว", price: "3,900", area: "อ.เดชอุดม" },
           ].map((item) => (
             <Link
               key={item.id}
               href={`/marketplace/${item.id}`}
               className="rounded-xl border border-gray-100 overflow-hidden hover:border-weeeu-primary/40 transition-colors"
             >
-              <div className="h-20 bg-gray-50 flex items-center justify-center text-3xl">{item.icon}</div>
+              {/* U-01#3 — รูปจริง (mockup placeholder · pattern เดียวกับ marketplace) */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.image} alt={item.name} className="h-20 w-full bg-gray-50 object-cover" />
               <div className="p-2.5">
                 <p className="text-xs font-medium text-gray-800 truncate">{item.name}</p>
                 <p className="text-sm font-bold text-weeeu-primary mt-0.5">฿{item.price}</p>

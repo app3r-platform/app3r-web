@@ -53,7 +53,7 @@ export default function M7NoShowWeeeTMockupPage() {
     <div className="pb-6 bg-gray-950 min-h-screen text-white">
       {/* Header */}
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
-        <Link href="/maintain/jobs" className="text-gray-400 hover:text-white text-lg">←</Link>
+        <Link href="/jobs" className="text-gray-400 hover:text-white text-lg">←</Link>
         <div className="flex-1">
           <h1 className="font-bold text-white">ถึงหน้างานแล้ว</h1>
           <p className="text-xs text-gray-400">{JOB.serviceCode}</p>
@@ -179,7 +179,7 @@ export default function M7NoShowWeeeTMockupPage() {
               <p className="mt-1 text-gray-400">WeeeU มีเวลา 2 ชั่วโมงเพื่อตัดสินใจ</p>
             </div>
             <Link
-              href="/maintain/jobs"
+              href="/jobs"
               className="block w-full text-center border border-gray-700 text-gray-300 hover:bg-gray-800 font-medium py-2.5 rounded-xl text-sm transition-colors"
             >
               ← กลับรายการงาน

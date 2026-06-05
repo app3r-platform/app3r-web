@@ -34,7 +34,7 @@ export default function MaintainDepartPage({ params }: { params: Promise<{ id: s
     setError(null);
     try {
       await maintainApi.depart(id, { departure_location: location });
-      router.replace(`/maintain/${id}`);
+      router.replace(`/jobs/${id}`);
     } catch (e) {
       setError((e as Error).message);
       setSubmitting(false);

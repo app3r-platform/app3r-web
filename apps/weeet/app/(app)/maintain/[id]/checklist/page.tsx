@@ -117,7 +117,7 @@ export default function MaintainChecklistPage({
       // if (terminateNotes.trim()) fd.append("notes", terminateNotes.trim());
       // await maintainApi.terminate(id, fd);
       await new Promise((r) => setTimeout(r, 1000)); // mock — remove after backend ready
-      router.replace(`/maintain/${id}`);
+      router.replace(`/jobs/${id}`);
     } catch (e) {
       setTerminateError((e as Error).message);
       setTerminateSubmitting(false);

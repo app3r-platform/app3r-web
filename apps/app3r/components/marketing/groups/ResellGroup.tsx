@@ -59,6 +59,8 @@ export default async function ResellGroup() {
   }
 
   if (categories.length === 0) {
+    // WeeeR central view: ซ่อนกลุ่มที่ว่าง (WeeeR #6)
+    if (role === "weeer") return null;
     return (
       <EmptyGroupState
         icon="📦"

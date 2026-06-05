@@ -14,6 +14,14 @@ const SERVICE_TYPE_LABEL: Record<string, string> = {
   parcel: "📦 ส่งพัสดุ",
 };
 
+// U-50a — งานขาย/ซากติดตามคนละ flow (ServiceProgress type = Backend-mirror · ห้ามเพิ่ม serviceType นอก spec/F1)
+// → cross-link เข้า flow จริง (display-only mockup) ให้ jobs ครอบทุกบริการ
+const OTHER_FLOWS = [
+  { id: "tx-001", icon: "💰", label: "ขายตู้เย็น Sharp", status: "รอผู้ซื้อชำระ", statusColor: "bg-yellow-50 text-yellow-700", href: "/resell/awaiting-payment/tx-001" },
+  { id: "p-001", icon: "📦", label: "ซื้อแอร์ Daikin มือสอง", status: "รอยืนยันรับของ", statusColor: "bg-green-50 text-green-700", href: "/purchases/p-001" },
+  { id: "sc-001", icon: "♻️", label: "ทิ้งซากเครื่องซักผ้า", status: "รอร้านรับซาก", statusColor: "bg-weeeu-surface text-weeeu-primary", href: "/scrap/sc-001/offers" },
+];
+
 export default function JobsPage() {
   const [jobs, setJobs] = useState<ServiceProgress[]>([]);
   const [filter, setFilter] = useState<MainStage | "">("");
@@ -42,7 +50,7 @@ export default function JobsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">งานของฉัน</h1>
-        <p className="text-sm text-gray-500 mt-1">ติดตามความคืบหน้าการซ่อม</p>
+        <p className="text-sm text-gray-500 mt-1">ติดตามความคืบหน้าทุกบริการ (ซ่อม/บำรุง/ขาย/ซาก)</p>
       </div>
 
       {/* Filter tabs */}
@@ -116,6 +124,34 @@ export default function JobsPage() {
           ))}
         </div>
       )}
+
+      {/* U-50a — งานขาย/ซาก (คนละ flow · cross-link เข้าหน้าติดตามจริง) */}
+      <div className="pt-2 space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-gray-700">งานขาย / ซาก</h2>
+          <span className="text-xs text-gray-400">ติดตามแยกตามประเภท</span>
+        </div>
+        {OTHER_FLOWS.map((f) => (
+          <Link
+            key={f.id}
+            href={f.href}
+            className="block bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:border-weeeu-primary/20 transition-colors"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-xl flex-shrink-0">{f.icon}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-800 truncate">{f.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">#{f.id}</p>
+                </div>
+              </div>
+              <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${f.statusColor}`}>
+                {f.status}
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

@@ -54,7 +54,7 @@ export default function MaintainCompletePage({ params }: { params: Promise<{ id:
     fd.append("customer_signature", custSig!);
     try {
       await maintainApi.complete(id, fd);
-      router.replace("/maintain");
+      router.replace("/jobs");
     } catch (e) {
       setError((e as Error).message);
       setSubmitting(false);

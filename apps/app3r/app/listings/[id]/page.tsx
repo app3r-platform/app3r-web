@@ -44,12 +44,12 @@ export async function generateMetadata({ params }: { params: Params }) {
   };
 }
 
+// เฉพาะ segment ที่มี route จริงใน app3r (parts ไม่มีหน้า /listings/parts → ถอดออกกัน 404)
 const DOMAIN_PATH: Record<string, string> = {
   repair: "repair",
   maintain: "maintain",
   resell: "resell",
   scrap: "scrap",
-  parts: "parts",
 };
 
 export default async function ListingByIdPage({ params }: { params: Params }) {
