@@ -2,22 +2,56 @@
 
 /**
  * Resell Order Detail — WeeeU (Extended transaction page)
+ * Screen ID: U-RES-ORD  ·  Path: /resell/orders/[id]
  * Covers:
- *   R6  — seller ไม่ส่ง/หายตัว (timeout) → buyer แจ้ง Admin
- *   R8  — buyer ปฏิเสธ inspection (สินค้าไม่ตรงปก) → dispute
- *         seller รับ notification → ยอมรับ (คืนเงิน) / เปิด dispute
- *   R11 — พัสดุเสียหายระหว่างส่ง → form แนบหลักฐาน → แจ้ง Admin
- *   R12 — buyer ขอยกเลิกร่วมกัน / seller ยืนยัน → mutually_cancelled
+ *   R6  — seller timeout → buyer แจ้ง Admin
+ *   R7  — §8 cross-app: WeeeR buyer tracking (resell/purchases/[id] :3001)
+ *   R8  — buyer ปฏิเสธ inspection → dispute · seller รับ → ยอมรับ / dispute
+ *   R10 — happy path: inspection_period → completed → Escrow ปลด → review
+ *   R11 — พัสดุเสียหาย → form → Admin
+ *   R12 — mutual cancel request
  *
- * Path: /resell/orders/[id]
- *
- * วิธีทดสอบ state ต่างๆ: เปลี่ยน MOCK_TX.state ด้านล่าง
+ * วิธีทดสอบ: เปลี่ยน MOCK_ORDER.state + is_buyer
+ * mock-anno: ลบ class mock-anno* ก่อน production (grep mock-anno)
  */
 
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+
+// ─── mock-anno helpers — ลบก่อน production (grep mock-anno) ─────────────────
+function AnnoOrigin({ screenId, path }: { screenId: string; path: string }) {
+  return (
+    <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+      ◀ มาจาก: {screenId} · {path}
+    </div>
+  );
+}
+function AnnoNav({ screenId, path }: { screenId: string; path: string }) {
+  return (
+    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">
+      → {screenId} {path}
+    </p>
+  );
+}
+function AnnoXApp({ items }: { items: { app: string; port: number; screenId: string; path: string; note: string }[] }) {
+  return (
+    <details className="mock-anno mock-anno-xapp">
+      <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium select-none">
+        👁 แอพฯอื่น ณ จังหวะนี้
+      </summary>
+      <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+        {items.map((it, i) => (
+          <p key={i}>• <strong>{it.app} :{it.port}</strong> [{it.screenId}]
+            <a href={`http://localhost:${it.port}${it.path}`} className="underline ml-1 text-purple-600">{it.path}</a>
+            {it.note ? ` — ${it.note}` : ""}
+          </p>
+        ))}
+      </div>
+    </details>
+  );
+}
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type OrderState =
@@ -157,6 +191,16 @@ export default function ResellOrderPage() {
 
   return (
     <div className="max-w-xl space-y-4">
+      {/* §5 mock-anno-origin — มาจาก U-RES-PAY /resell/awaiting-payment/[id] หลังชำระเงิน */}
+      <AnnoOrigin screenId="U-RES-PAY" path="/resell/awaiting-payment/[id]" />
+
+      {/* §8 mock-anno-xapp — R7: WeeeR buyer · R6/R8/R11: WeeeR seller · Admin */}
+      <AnnoXApp items={[
+        { app: "WeeeR (ผู้ขาย)", port: 3001, screenId: "R-RES-TX", path: "/resell/transactions/ord-001", note: "เห็น state ปัจจุบันของธุรกรรม" },
+        { app: "WeeeR (ผู้ซื้อ)", port: 3001, screenId: "R-RES-PUR", path: "/resell/purchases/ord-001", note: "R7: WeeeR ซื้อมือสอง — ติดตามสั่งซื้อ" },
+        { app: "Admin", port: 3003, screenId: "A-RES-DSP", path: "/resell/disputes/ord-001", note: "เห็นเมื่อ state=disputed" },
+      ]} />
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
@@ -540,11 +584,35 @@ export default function ResellOrderPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           Terminal states
           ════════════════════════════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════════
+          R10 — Happy path completed (buyer ยืนยันรับ → Escrow ปลด → review)
+          ════════════════════════════════════════════════════════════════ */}
       {state === "completed" && (
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center space-y-2">
-          <p className="text-5xl">🎉</p>
-          <p className="font-bold text-green-800 text-lg">ธุรกรรมเสร็จสมบูรณ์!</p>
-          <p className="text-sm text-green-600">ขอบคุณที่ใช้บริการ WeeeU</p>
+        <div className="space-y-3">
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center space-y-3">
+            <p className="text-5xl">🎉</p>
+            <p className="font-bold text-green-800 text-lg">ธุรกรรมเสร็จสมบูรณ์!</p>
+            {/* B3: Escrow ตัวเลขชัดเจน */}
+            <p className="text-sm text-green-700 font-medium">
+              💰 ระบบพักเงินกลาง (Escrow) ปลดล็อก
+              <br />
+              <span className="text-green-800 font-bold">{order.agreed_price.toLocaleString()} Gold</span> โอนให้ผู้ขายแล้ว
+            </p>
+            <p className="text-sm text-green-600">ขอบคุณที่ใช้บริการ WeeeU</p>
+          </div>
+          {/* §8 cross-app: R10 — WeeeR seller เห็น Gold เข้า wallet */}
+          <AnnoXApp items={[
+            { app: "WeeeR (ผู้ขาย)", port: 3001, screenId: "R-WALLET", path: "/wallet", note: `Gold ${order.agreed_price.toLocaleString()} เข้า wallet แล้ว` },
+            { app: "WeeeR (ผู้ขาย)", port: 3001, screenId: "R-RES-TX", path: "/resell/transactions/ord-001", note: "สถานะ: completed" },
+          ]} />
+          {/* A1: หน้า review หลัง completed (F1: รีวิวหลังธุรกรรมเสร็จ) */}
+          <Link
+            href={`/resell/orders/${order.id}/review`}
+            className="block w-full text-center bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
+          >
+            ⭐ รีวิวธุรกรรมนี้
+          </Link>
+          <AnnoNav screenId="U-RES-REV" path="/resell/orders/[id]/review" />
         </div>
       )}
 
@@ -587,6 +655,7 @@ export default function ResellOrderPage() {
       >
         ← กลับไปข้อเสนอ
       </Link>
+      <AnnoNav screenId="U-OFFERS" path="/offers" />
     </div>
   );
 }

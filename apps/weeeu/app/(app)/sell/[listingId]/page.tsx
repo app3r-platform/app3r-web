@@ -79,6 +79,49 @@ const GRADE_LABEL: Record<string, string> = {
   grade_C: "เกรด C",
 };
 
+// mock-anno helpers — ลบก่อน production
+const AnnoOriginSellDet = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: U-04 /sell · U-SLL-NEW /sell/new · หรือ U-RES-ORD /resell/orders/[id] (completed)
+  </div>
+);
+const AnnoNavSellDet = ({ listingId }: { listingId: string }) => (
+  <div className="space-y-0.5">
+    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono">
+      → U-RES-PAY /resell/awaiting-payment/[id] (R5: เลือกข้อเสนอ)
+    </p>
+    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono">
+      → (R2: ส่งอุทธรณ์ — อยู่หน้าเดิม + success toast)
+    </p>
+  </div>
+);
+const AnnoXAppSellDet = ({ status, listingId }: { status: string; listingId: string }) => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (R2/R5)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      {status === "suspended" && (
+        <p>• <strong>Admin :3003</strong> [A-LST-SUS] — เห็นประกาศถูก suspend + เหตุผล + รอ appeal</p>
+      )}
+      {status === "offer_selected" && (
+        <p>• <strong>WeeeU :3002</strong> (ผู้ซื้อ) [U-RES-PAY]
+          <a href={`http://localhost:3002/resell/awaiting-payment/${listingId}`} className="underline ml-1">
+            /resell/awaiting-payment/[id]
+          </a>
+          — รอชำระเงิน
+        </p>
+      )}
+      <p>• <strong>WeeeU :3002</strong> [U-MKT-DET]
+        <a href={`http://localhost:3002/marketplace/${listingId}`} className="underline ml-1">
+          /marketplace/[id]
+        </a>
+        — ผู้ซื้อเห็นประกาศนี้ใน marketplace
+      </p>
+    </div>
+  </details>
+);
+
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function SellDetailPage() {
   const { listingId } = useParams<{ listingId: string }>();
@@ -218,6 +261,10 @@ export default function SellDetailPage() {
   // ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="max-w-xl space-y-5">
+      {/* mock-anno §5 §8 */}
+      <AnnoOriginSellDet />
+      <AnnoXAppSellDet status={listing.status} listingId={listingId ?? ""} />
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/sell" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
@@ -534,6 +581,9 @@ export default function SellDetailPage() {
           </div>
         </div>
       )}
+
+      {/* mock-anno §6 nav */}
+      <AnnoNavSellDet listingId={listingId ?? ""} />
     </div>
   );
 }

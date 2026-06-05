@@ -16,6 +16,30 @@ import { useParams, useRouter } from "next/navigation";
 import OtpInput from "@/components/shared/OtpInput";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 
+// mock-anno helpers — ลบก่อน production
+const AnnoOriginOffer = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: U-MKT-DET · /marketplace/[id] (กดยื่นข้อเสนอซื้อ)
+  </div>
+);
+const AnnoNavOfferSuccess = ({ id }: { id: string }) => (
+  <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">
+    → U-42 /marketplace/{id}/offer/success
+  </p>
+);
+const AnnoXAppOffer = () => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (R9)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>WeeeR :3001</strong> (ผู้ขาย) [R-RES-LST-DET] — เห็น offer count +1 หลัง OTP ผ่าน</p>
+      <p>• <strong>WeeeU :3002</strong> (ผู้ขาย WeeeU ถ้า seller = WeeeU) [U-SLL-DET] — inbox ข้อเสนอใหม่</p>
+      <p>• B3: Gold <strong>ล็อกใน Escrow</strong> ทันทีที่ส่งข้อเสนอสำเร็จ — ยังไม่โอนให้ seller</p>
+    </div>
+  </details>
+);
+
 const MOCK_OTP = "123456";
 const MAX_OTP_ATTEMPTS = 3;
 
@@ -108,6 +132,8 @@ export default function MarketplaceOfferPage() {
           >
             {submitting ? "⟳ กำลังส่งข้อเสนอ..." : "ยืนยัน OTP และส่งข้อเสนอ"}
           </button>
+          {/* mock-anno §6 nav */}
+          <AnnoNavOfferSuccess id={id ?? ""} />
         </div>
       </div>
     );
@@ -116,6 +142,11 @@ export default function MarketplaceOfferPage() {
   // ─── Offer form ──────────────────────────────────────────────────────────
   return (
     <div className="max-w-xl mx-auto px-4 py-6 space-y-5">
+      {/* mock-anno §5 origin */}
+      <AnnoOriginOffer />
+      {/* mock-anno §8 cross-app */}
+      <AnnoXAppOffer />
+
       <div className="flex items-center gap-3">
         <Link href={`/marketplace/${id}`} className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">ยื่นข้อเสนอซื้อ</h1>
