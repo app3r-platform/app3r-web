@@ -74,9 +74,9 @@ const devNavLinks: DevNavLink[] = [
 
   // ── Parts — ผู้ซื้อ (ShopIdSwitcher: WeeeR buyer) ────────────────────────────
   { label: "[ผู้ซื้อ] → ดูรายละเอียดชิ้นส่วน",  href: "/parts/marketplace/p001",                  type: "next-step", forPath: "/parts/marketplace" },
-  // Fix-Wave E: dead-link ลบ (ฟีเจอร์ยังไม่สร้างเป็นหน้า) —
-  //   /parts/my-orders/new = สั่งซื้อทำผ่าน modal (PlaceOrderModal) ไม่ใช่หน้า · /parts/marketplace/[id]/smart-pick = SmartPicker (R-30b) ยังไม่ wire เป็นหน้า
-  // { label: "[ผู้ซื้อ] → [สั่งซื้อ]",            href: "/parts/my-orders/new",                      type: "branch",    forPath: "/parts/marketplace/p001" },
+  // Fix-Wave E: /parts/my-orders/new ไม่มีหน้า → repoint ไป /parts/requests/new (ฝั่งผู้ซื้อ B2B request · exists)
+  { label: "[ผู้ซื้อ] → [สั่งซื้อ]",            href: "/parts/requests/new",                       type: "branch",    forPath: "/parts/marketplace/p001" },
+  // Fix-Wave E: ลบ — SmartPicker (R-30b) ยังไม่ wire เป็นหน้า (ไม่อยู่ใน checklist 35 จอ)
   // { label: "[ผู้ซื้อ] → [ใช้ SmartPicker]",     href: "/parts/marketplace/p001/smart-pick",        type: "branch",    forPath: "/parts/marketplace/p001" },
   { label: "[ผู้ซื้อ] → ดูรายละเอียด order",    href: "/parts/my-orders/p001",                     type: "next-step", forPath: "/parts/my-orders" },
   { label: "[ผู้ซื้อ] → [รับของแล้ว]",          href: "/parts/my-orders",                          type: "branch",    forPath: "/parts/my-orders/p001" },
