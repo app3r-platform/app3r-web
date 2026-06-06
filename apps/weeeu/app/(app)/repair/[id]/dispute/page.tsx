@@ -346,6 +346,21 @@ export default function DisputePage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      {/* ── mock-anno §5 origin (U-09b REPAIR-DISPUTE) ──────────────────────── */}
+      <div className="mock-anno mock-anno-origin">
+        ◀ §5 มาจาก: <code>U-04</code> REPAIR-DETAIL · <code>U-09</code> REPAIR-REVIEW (กด &apos;เปิดข้อพิพาท&apos;)
+      </div>
+      {/* ── mock-anno §8 cross-app ───────────────────────────────────────────── */}
+      <div className="mock-anno mock-anno-xapp">
+        §8 👁 แอพฯอื่น ณ จังหวะนี้:{" "}
+        <a href="http://localhost:3000/repair/disputes" target="_blank" rel="noopener noreferrer">
+          <code>A-04</code> Admin: REPAIR-DISPUTES (new case)
+        </a>
+        {" · "}
+        <a href="http://localhost:3001/repair/jobs" target="_blank" rel="noopener noreferrer">
+          <code>R-11</code> WeeeR: REPAIR-JOB-DETAIL (DISPUTED flag)
+        </a>
+      </div>
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href={`/repair/${id}`} className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>

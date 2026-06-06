@@ -111,6 +111,24 @@ export default function DecisionB22Page() {
 
   return (
     <div className="max-w-xl space-y-5">
+      {/* ── mock-anno §5 origin (U-52b REPAIR-B2-DECISION) ──────────────────── */}
+      <div className="mock-anno mock-anno-origin">
+        ◀ §5 มาจาก: <code>U-04</code> REPAIR-DETAIL (state: awaiting_user, decision_branch=B2.2)
+      </div>
+      {/* ── mock-anno §8 cross-app ───────────────────────────────────────────── */}
+      <div className="mock-anno mock-anno-xapp">
+        §8 👁 ณ จังหวะนี้:{" "}
+        <a href="http://localhost:3001/listings/repair" target="_blank" rel="noopener noreferrer">
+          <code>R-46</code> WeeeR: LISTINGS-REPAIR (scrap offer pending)
+        </a>
+        {" · "}
+        <a href="http://localhost:3001/repair/jobs" target="_blank" rel="noopener noreferrer">
+          <code>R-11</code> WeeeR: REPAIR-JOB-DETAIL (awaiting_user · B2.2)
+        </a>
+      </div>
+      {/* ── mock-anno §6 nav ─────────────────────────────────────────────────── */}
+      {/* §6: ✅ ตกลงขายซาก → U-07 REPAIR-C4-SCRAP (scrap buyer selection) */}
+      {/* §6: ❌ ปฏิเสธ → U-04 REPAIR-DETAIL (cancelled) */}
       <div className="flex items-center gap-3">
         <Link href={`/repair/${id}`} className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">ข้อเสนอรับซื้อซาก (B2.2)</h1>
