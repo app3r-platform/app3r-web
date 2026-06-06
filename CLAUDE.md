@@ -159,3 +159,32 @@ NEXT_PUBLIC_USE_API_RESELL=false
 NEXT_PUBLIC_USE_API_POINTS=false
 NEXT_PUBLIC_USE_API_OFFER=false
 ```
+
+---
+
+# App3R Baseline — ข้อตกลงทุกแชท implementer กับ HUB
+
+> Canonical SoT: Notion `377813ec-7277-8159-ac65-dd2b499ef2c4` (แก้ที่นั่นก่อน → sync ไฟล์นี้) · อ่านก่อนลงมือทุกครั้ง · ขัดกับ Sub-CMD → ยึด Sub-CMD แล้ว flag
+
+## 1 · ถามก่อนเดา (แต่รวบให้ครบจังหวะเดียว)
+- เจอความกำกวมใน Sub-CMD (flow/schema/naming/UX) → escalate HUB ก่อนเขียน ห้ามเดา
+- รวบทุกข้อสงสัยถามครั้งเดียว ไม่ทยอยถาม (drip) · เรื่องที่ระบุ scope เองได้ = ตัดสินเอง
+- เกณฑ์: เปลี่ยนผลลัพธ์/เป็น fork → ถาม · scope-resolvable → ตัดสิน
+
+## 2 · ง่ายไว้ก่อน (Simplicity First)
+- mockup = ขั้นต่ำที่ตรวจ flow ได้ ห้ามทำเกินโจทย์
+- ของจริง (persistence / API / real coords / escrow logic) → defer + mark // PHASE-4
+- ห้ามสร้าง abstraction / config / refactor ที่ Sub-CMD ไม่ได้ขอ
+
+## 3 · แก้แบบศัลยกรรม (Surgical)
+- แตะเฉพาะไฟล์ใน ownership ตน · ไฟล์นอก scope = escalate ไม่แตะเอง
+- canonical component / index.ts = owner แก้คนเดียว · แชทอื่นเรียก API เท่านั้น (+ @ts-expect-error + TODO Sub-N)
+- ทุก diff โยงกลับ clause ใน Sub-CMD ได้ · ห้าม format/rename ไฟล์ที่ไม่เกี่ยว
+
+## 4 · ไม่ชัวร์ให้ flag (ก่อนลงมือ ไม่ใช่หลัง)
+- ไม่แน่ใจ → พูดออกมา + ขอ confirm ก่อนเขียน ห้ามทำเหมือนรู้
+- report แยกชัด: verified (มี log/build/test จริง) vs assumed
+- "done" = ทำครบจริงทุก item · ห้าม claim จาก 1/N หรือ 1 จอ · ตัวเลข test = ตัวจริง
+
+## Guardrails (เดิม · ย้ำ)
+Notion = SoT · Two-eyes ก่อน escalate (ต้องมี evidence) · auto-allow tool ยกเว้น push / merge→main
