@@ -5,6 +5,7 @@ import Link from "next/link";
 import { partsApi } from "../_lib/api";
 import type { Part, StockMovement } from "../_lib/types";
 import { CONDITION_LABEL, CONDITION_COLOR, MOVEMENT_TYPE_LABEL, MOVEMENT_TYPE_COLOR, REASON_LABEL } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function PartDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -35,6 +36,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-63" />
       <div className="flex items-center gap-3">
         <Link href="/parts" className="text-gray-400 hover:text-gray-600">←</Link>
         <div className="flex-1 min-w-0">

@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default async function ScrapAnnouncementDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-72" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/scrap/announcements" className="text-gray-400 hover:text-gray-600">←</Link>

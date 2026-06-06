@@ -6,6 +6,7 @@ import Link from "next/link";
 import { partsApi } from "../_lib/api";
 import { scrapApi } from "../../scrap/_lib/api";
 import type { ScrapJob } from "../../scrap/_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function PartsDisassemblePage() {
   const router = useRouter();
@@ -96,6 +97,7 @@ export default function PartsDisassemblePage() {
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-52" />
       <div className="flex items-center gap-3">
         <Link href="/parts" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">เพิ่มอะไหล่จากซาก</h1>

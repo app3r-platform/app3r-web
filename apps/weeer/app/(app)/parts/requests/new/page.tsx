@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { D6PartsRequest } from "../../_lib/d6-types";
 import { URGENCY_LABEL } from "../../_lib/d6-types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 type UrgencyType = D6PartsRequest["urgency"];
 
@@ -117,6 +118,7 @@ export default function NewPartsRequestPage() {
 
   return (
     <div className="px-4 pt-5 pb-4 space-y-5">
+      <MockAnnoOrigin from="R-51" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => router.back()} className="text-gray-500">← กลับ</button>

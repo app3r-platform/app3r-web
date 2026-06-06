@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../_lib/api";
 import type { RepairDashboard } from "../_lib/types";
 import { STATUS_LABEL, STATUS_COLOR } from "../_lib/types";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 export default function RepairDashboardPage() {
   const [data, setData] = useState<RepairDashboard | null>(null);
@@ -33,6 +34,8 @@ export default function RepairDashboardPage() {
 
   return (
     <div className="space-y-6">
+      <MockAnnoOrigin from="R-64" />
+      <MockAnnoXApp entries={[{ app: "WeeeU", screen: "Dashboard", url: "http://localhost:3000/dashboard" }]} />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">ซ่อม — Dashboard</h1>
         <Link href="/repair/jobs" className="text-sm text-[#D63B12] hover:underline font-medium">ดูงานทั้งหมด →</Link>

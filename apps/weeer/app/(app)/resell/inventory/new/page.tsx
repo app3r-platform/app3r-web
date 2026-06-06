@@ -6,6 +6,7 @@ import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import type { ApplianceCondition } from "../../_lib/types";
 import { useBarcodeScanner } from "../../_hooks/useBarcodeScanner";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const CATEGORIES = ["เครื่องปรับอากาศ", "ตู้เย็น", "เครื่องซักผ้า", "ทีวี", "อื่นๆ"];
 
@@ -85,6 +86,7 @@ export default function ResellInventoryNewPage() {
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-67" />
       <div className="flex items-center gap-3">
         <Link href="/resell/inventory" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">เพิ่มสินค้ามือสอง</h1>

@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 // ── Notifications — WeeeR (D-2 Push Subscribe) ────────────────────────────────
 // เพิ่ม Push Notification subscribe UI + แสดงการแจ้งเตือนจริง
 
 import PushSubscribeButton from "../../../components/push/PushSubscribeButton";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const NOTIFS = [
   { icon: "🔓", title: "รับ Silver จากงานซ่อม", body: "รับ 500 Silver จาก WeeeU escrow release — JOB-0421 เสร็จสมบูรณ์", time: "09:00", unread: true, tag: "payment" },
@@ -17,6 +18,7 @@ const unreadCount = NOTIFS.filter((n) => n.unread).length;
 export default function NotificationsPage() {
   return (
     <div className="space-y-6 max-w-2xl">
+      <MockAnnoOrigin from="R-50" />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">
           แจ้งเตือน{" "}

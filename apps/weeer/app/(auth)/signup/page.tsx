@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "./_components/SignupSteps";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
@@ -62,6 +63,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-center justify-center px-4 py-10">
+      <MockAnnoOrigin from="R-79" />
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-6">

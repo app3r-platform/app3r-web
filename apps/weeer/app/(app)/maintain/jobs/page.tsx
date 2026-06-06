@@ -10,6 +10,7 @@ import {
   APPLIANCE_LABEL,
   CLEANING_LABEL,
 } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const FILTER_TABS: { label: string; value: MaintainStatus | "all" }[] = [
   { label: "ทั้งหมด",      value: "all" },
@@ -41,6 +42,7 @@ export default function MaintainJobsPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">งาน Maintain</h1>

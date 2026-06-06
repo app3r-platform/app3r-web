@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MultiJobDashboard } from "../../../components/service-progress/MultiJobDashboard";
+import { MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 export const metadata: Metadata = { title: "Dashboard — WeeeR" };
 
@@ -53,15 +54,19 @@ const ACTIVE_MAINTAIN_JOBS = [
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
+      {/* §5 Origin: R-01 = entry screen, no origin banner */}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">{SHOP.name}</h1>
           <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">เปิดใช้งาน</span>
         </div>
-        <Link href="/manage-technicians" className="flex items-center gap-1.5 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm px-4 py-2 rounded-xl transition-colors">
-          👷 จัดการ WeeeT
-        </Link>
+        <MockAnnoNav to="R-49">
+          <Link href="/manage-technicians" className="flex items-center gap-1.5 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm px-4 py-2 rounded-xl transition-colors">
+            👷 จัดการ WeeeT
+          </Link>
+        </MockAnnoNav>
       </div>
 
       {/* R6 · G6 role banner — WeeeR ก็ขายมือสองได้ + เข้าโมดูลขายต่อ (C11) */}
@@ -72,12 +77,14 @@ export default function DashboardPage() {
             ร้าน/บริษัทของคุณลงประกาศขายเครื่องใช้ไฟฟ้ามือสอง อะไหล่ และซากได้โดยตรง
           </p>
         </div>
-        <Link
-          href="/resell/listings/new"
-          className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-colors"
-        >
-          ลงประกาศขาย
-        </Link>
+        <MockAnnoNav to="R-67b">
+          <Link
+            href="/resell/listings/new"
+            className="shrink-0 bg-[#FF663A] hover:bg-[#F04E20] text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition-colors"
+          >
+            ลงประกาศขาย
+          </Link>
+        </MockAnnoNav>
       </div>
 
       {/* Stats */}
@@ -163,17 +170,28 @@ export default function DashboardPage() {
       {/* Settings shortcut */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50">
         {[
-          { href: "/profile",       icon: "🏪", label: "ข้อมูลร้าน" },
-          { href: "/wallet",        icon: "💳", label: "บัญชีธนาคาร & กระเป๋า" },
-          { href: "/notifications", icon: "🔔", label: "แจ้งเตือน" },
+          { href: "/profile",       icon: "🏪", label: "ข้อมูลร้าน",              to: "R-37" },
+          { href: "/wallet",        icon: "💳", label: "บัญชีธนาคาร & กระเป๋า",   to: "R-36" },
+          { href: "/notifications", icon: "🔔", label: "แจ้งเตือน",               to: "R-50" },
         ].map((item) => (
-          <Link key={item.href} href={item.href} className="flex items-center gap-3 px-4 py-3 hover:bg-[#FFF1ED] transition-colors">
-            <span className="text-xl">{item.icon}</span>
-            <span className="text-sm text-gray-700">{item.label}</span>
-            <span className="ml-auto text-gray-300 text-sm">›</span>
-          </Link>
+          <MockAnnoNav key={item.href} to={item.to}>
+            <Link href={item.href} className="flex items-center gap-3 px-4 py-3 hover:bg-[#FFF1ED] transition-colors">
+              <span className="text-xl">{item.icon}</span>
+              <span className="text-sm text-gray-700">{item.label}</span>
+              <span className="ml-auto text-gray-300 text-sm">›</span>
+            </Link>
+          </MockAnnoNav>
         ))}
       </div>
+
+      {/* §8 Cross-app panel */}
+      <MockAnnoXApp
+        entries={[
+          { app: "WeeeU",  screen: "U-01 แดชบอร์ดผู้ใช้",      url: "http://localhost:3000/dashboard" },
+          { app: "WeeeT",  screen: "T-01 แดชบอร์ดช่าง",         url: "http://localhost:3002/dashboard" },
+          { app: "Admin",  screen: "A-01 Admin Dashboard",       url: "http://localhost:3003/dashboard" },
+        ]}
+      />
     </div>
   );
 }

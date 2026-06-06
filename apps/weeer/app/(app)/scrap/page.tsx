@@ -9,6 +9,7 @@ import {
   CONDITION_GRADE_LABEL,
   CONDITION_GRADE_COLOR,
 } from "./_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ── Mock ScrapItems (public feed) ─────────────────────────────────────────
 const MOCK_ITEMS: ScrapItem[] = [
@@ -92,6 +93,7 @@ export default function ScrapFeedPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-01" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">🔩 ตลาดซาก</h1>

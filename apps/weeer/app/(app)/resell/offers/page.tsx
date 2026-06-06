@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../_lib/api";
 import type { Offer, OfferStatus } from "../_lib/types";
 import { OFFER_STATUS_LABEL, OFFER_STATUS_COLOR } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const TABS: { value: OfferStatus | ""; label: string }[] = [
   { value: "", label: "ทั้งหมด" },
@@ -97,6 +98,7 @@ export default function ResellOffersPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-66" />
       <div className="flex items-center gap-3">
         <Link href="/resell" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">ข้อเสนอของฉัน</h1>

@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { Metadata } from "next";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ===== Types =====
 interface WeeeT {
@@ -298,6 +299,7 @@ export default function ManageTechniciansPage() {
 
   return (
     <div className="space-y-6 max-w-2xl">
+      <MockAnnoOrigin from="R-49" />
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>

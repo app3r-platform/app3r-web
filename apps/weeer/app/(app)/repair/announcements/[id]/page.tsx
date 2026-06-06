@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export default async function RepairAnnouncementDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-02" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/repair/announcements" className="text-gray-400 hover:text-gray-600">←</Link>
@@ -97,12 +99,14 @@ export default async function RepairAnnouncementDetailPage({ params }: { params:
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Link
-          href={`/repair/announcements/${id}/offer`}
-          className="flex-1 block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
-        >
-          ยื่นข้อเสนอ →
-        </Link>
+        <MockAnnoNav to="R-03" label="ยื่นข้อเสนอ" style={{ display: "contents" }}>
+          <Link
+            href={`/repair/announcements/${id}/offer`}
+            className="flex-1 block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
+          >
+            ยื่นข้อเสนอ →
+          </Link>
+        </MockAnnoNav>
         <button className="border border-gray-200 text-gray-600 hover:bg-gray-50 py-2.5 px-4 rounded-xl text-sm">
           ไม่สนใจ
         </button>

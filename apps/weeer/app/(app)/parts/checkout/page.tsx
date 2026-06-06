@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 // ── D-6 Parts Checkout (WeeeR) ─────────────────────────────────────────────────
 // Multi-item checkout — สร้าง parts_order (is_multi_item=true) + parts_order_items
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 import type { D6CartGroup } from "../_lib/d6-types";
 import {
   getCartItems, saveCartItems, groupCartByShop,
@@ -103,6 +104,7 @@ function CheckoutContent() {
 
   return (
     <div className="px-4 pt-5 pb-4 space-y-5">
+      <MockAnnoOrigin from="R-55" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => router.back()} className="text-gray-500 hover:text-gray-700">← กลับ</button>
@@ -178,13 +180,15 @@ function CheckoutContent() {
           <p className="text-xs text-gray-500">{totalItems} ชิ้น · {groups.length} ร้าน</p>
           <p className="text-xl font-bold text-[#D63B12]">฿{totalThb.toLocaleString("th", { minimumFractionDigits: 2 })}</p>
         </div>
-        <button
-          onClick={handleConfirm}
-          disabled={confirming}
-          className="px-6 py-3 bg-[#FF663A] text-white rounded-xl font-medium text-sm hover:bg-[#F04E20] disabled:opacity-60 transition-colors"
-        >
-          {confirming ? "กำลังสั่งซื้อ..." : "ยืนยันสั่งซื้อ"}
-        </button>
+        <MockAnnoNav to="R-33" label="ยืนยันสั่งซื้อ" style={{ display: "contents" }}>
+          <button
+            onClick={handleConfirm}
+            disabled={confirming}
+            className="px-6 py-3 bg-[#FF663A] text-white rounded-xl font-medium text-sm hover:bg-[#F04E20] disabled:opacity-60 transition-colors"
+          >
+            {confirming ? "กำลังสั่งซื้อ..." : "ยืนยันสั่งซื้อ"}
+          </button>
+        </MockAnnoNav>
       </div>
     </div>
   );

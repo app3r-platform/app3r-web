@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../_lib/api";
 import type { ResellTransaction, ListingStatus } from "../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const ACTIVE_STATUSES: ListingStatus[] = ["in_progress", "delivered", "inspection_period"];
 
@@ -69,6 +70,7 @@ export default function ResellTransactionsPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-66" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/resell" className="text-gray-400 hover:text-gray-600">←</Link>

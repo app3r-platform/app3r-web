@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { partsApi } from "../_lib/api";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 type ReservationItem = {
   partId: string;
@@ -50,6 +51,7 @@ export default function PartsReservationsPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-58" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/parts" className="text-gray-400 hover:text-gray-600">←</Link>

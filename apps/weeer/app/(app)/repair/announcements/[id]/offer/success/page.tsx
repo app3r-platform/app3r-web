@@ -4,6 +4,7 @@
 
 import { use, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export default function RepairBidSuccessPage({
   params,
@@ -22,6 +23,7 @@ export default function RepairBidSuccessPage({
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 px-4 max-w-sm mx-auto text-center">
+      <MockAnnoOrigin from="R-38" />
       {/* ✅ Icon */}
       <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
         <span className="text-4xl">✅</span>
@@ -57,12 +59,14 @@ export default function RepairBidSuccessPage({
       </div>
 
       {/* CTA */}
-      <button
-        onClick={() => router.push("/repair/announcements")}
-        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
-      >
-        ดูประกาศทั้งหมด
-      </button>
+      <MockAnnoNav to="R-01" label="ดูประกาศทั้งหมด" style={{ display: "contents" }}>
+        <button
+          onClick={() => router.push("/repair/announcements")}
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
+        >
+          ดูประกาศทั้งหมด
+        </button>
+      </MockAnnoNav>
     </div>
   );
 }

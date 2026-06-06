@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 // ── listings/maintain/page.tsx — WeeeR Maintain Listings (Sub-1 D5) ──────────
 // D5: แสดง maintain job listings พร้อม default filter = ลงทะเบียนรับ
 // Toggle "ดูทั้งหมด" เพื่อ clear filter
@@ -8,6 +8,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 import {
   WEEER_MAINTAIN_JOBS_SORTED,
 } from "../../../../lib/mock-data/maintain-jobs";
@@ -43,6 +44,7 @@ export default function MaintainListingsPage() {
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-45" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -112,8 +114,8 @@ export default function MaintainListingsPage() {
       ) : (
         <div className="space-y-3">
           {displayed.map((job) => (
+            <MockAnnoNav key={job.id} to="R-45b" label={job.title} style={{ display: "contents" }}>
             <Link
-              key={job.id}
               href={`/listings/maintain/${job.id}`}
               className="block bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:border-[#FFD0BF] hover:shadow transition-all"
             >
@@ -151,6 +153,7 @@ export default function MaintainListingsPage() {
                 </div>
               </div>
             </Link>
+            </MockAnnoNav>
           ))}
         </div>
       )}

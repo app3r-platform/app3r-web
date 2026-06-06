@@ -4,6 +4,7 @@
 // Decision Record C: 360813ec-7277-8143-9011-ca6cd91b621d
 import Link from "next/link";
 import type { Metadata } from "next";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export const metadata: Metadata = { title: "กระเป๋าเงิน — WeeeR" };
 
@@ -25,6 +26,8 @@ const sourceIcon: Record<string, string> = {
 export default function WalletPage() {
   return (
     <div className="space-y-6 max-w-2xl">
+      {/* §5 Origin */}
+      <MockAnnoOrigin from="R-01" />
       <h1 className="text-xl font-bold text-gray-900">กระเป๋าเงิน</h1>
 
       {/* ยอดคงเหลือ */}
@@ -59,30 +62,36 @@ export default function WalletPage() {
 
       {/* Quick actions — Sub-6: เพิ่ม Settlements (Settlement API) */}
       <div className="grid grid-cols-3 gap-3">
-        <Link
-          href="/wallet/deposit"
-          className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-2xl p-4 text-center hover:bg-[#FFE0D6] transition-colors"
-        >
-          <div className="text-2xl mb-1">📥</div>
-          <div className="text-xs font-semibold text-[#B8300E]">เติมแต้ม</div>
-          <div className="text-xs text-[#F04E20] mt-0.5">โอนเงิน</div>
-        </Link>
-        <Link
-          href="/wallet/withdraw"
-          className="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center hover:bg-gray-100 transition-colors"
-        >
-          <div className="text-2xl mb-1">📤</div>
-          <div className="text-xs font-semibold text-gray-800">ถอนแต้ม</div>
-          <div className="text-xs text-gray-500 mt-0.5">Settlement</div>
-        </Link>
-        <Link
-          href="/wallet/settlements"
-          className="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center hover:bg-gray-100 transition-colors"
-        >
-          <div className="text-2xl mb-1">💸</div>
-          <div className="text-xs font-semibold text-gray-800">ประวัติถอน</div>
-          <div className="text-xs text-gray-500 mt-0.5">Settlements</div>
-        </Link>
+        <MockAnnoNav to="R-74">
+          <Link
+            href="/wallet/deposit"
+            className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-2xl p-4 text-center hover:bg-[#FFE0D6] transition-colors block"
+          >
+            <div className="text-2xl mb-1">📥</div>
+            <div className="text-xs font-semibold text-[#B8300E]">เติมแต้ม</div>
+            <div className="text-xs text-[#F04E20] mt-0.5">โอนเงิน</div>
+          </Link>
+        </MockAnnoNav>
+        <MockAnnoNav to="R-77">
+          <Link
+            href="/wallet/withdraw"
+            className="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center hover:bg-gray-100 transition-colors block"
+          >
+            <div className="text-2xl mb-1">📤</div>
+            <div className="text-xs font-semibold text-gray-800">ถอนแต้ม</div>
+            <div className="text-xs text-gray-500 mt-0.5">Settlement</div>
+          </Link>
+        </MockAnnoNav>
+        <MockAnnoNav to="R-76">
+          <Link
+            href="/wallet/settlements"
+            className="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center hover:bg-gray-100 transition-colors block"
+          >
+            <div className="text-2xl mb-1">💸</div>
+            <div className="text-xs font-semibold text-gray-800">ประวัติถอน</div>
+            <div className="text-xs text-gray-500 mt-0.5">Settlements</div>
+          </Link>
+        </MockAnnoNav>
       </div>
 
       {/* ประวัติธุรกรรม */}

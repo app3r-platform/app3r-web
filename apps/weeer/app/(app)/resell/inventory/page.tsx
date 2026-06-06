@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../_lib/api";
 import type { UsedAppliance, ApplianceStatus } from "../_lib/types";
 import { CONDITION_LABEL, CONDITION_COLOR, APPLIANCE_STATUS_LABEL, APPLIANCE_STATUS_COLOR } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const STATUS_TABS: { value: ApplianceStatus | ""; label: string }[] = [
   { value: "", label: "ทั้งหมด" },
@@ -69,6 +70,7 @@ export default function ResellInventoryPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-66" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/resell" className="text-gray-400 hover:text-gray-600">←</Link>

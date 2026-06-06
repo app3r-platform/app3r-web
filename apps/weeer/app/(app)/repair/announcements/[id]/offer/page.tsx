@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
 import type { RepairAnnouncement } from "../../../_lib/types";
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 const DEPOSIT_POLICIES = [
   { value: "free", label: "ฟรี — ไม่มีค่าใช้จ่ายถ้าซ่อมไม่ได้" },
@@ -87,8 +88,13 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* §5 Origin */}
+      <MockAnnoOrigin from="R-04" />
+
       <div className="flex items-center gap-3">
-        <Link href="/repair/announcements" className="text-gray-400 hover:text-gray-600">←</Link>
+        <MockAnnoNav to="R-04">
+          <Link href="/repair/announcements" className="text-gray-400 hover:text-gray-600">←</Link>
+        </MockAnnoNav>
         <h1 className="text-xl font-bold text-gray-900">ยื่นข้อเสนอ</h1>
       </div>
 
@@ -186,11 +192,21 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
-        <button type="submit" disabled={submitting}
-          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
-          {submitting ? "กำลังส่ง…" : "ส่งข้อเสนอ"}
-        </button>
+        <MockAnnoNav to="R-38">
+          <button type="submit" disabled={submitting}
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+            {submitting ? "กำลังส่ง…" : "ส่งข้อเสนอ"}
+          </button>
+        </MockAnnoNav>
       </form>
+
+      {/* §8 Cross-app */}
+      <MockAnnoXApp
+        entries={[
+          { app: "WeeeU", screen: "U-04 ดูข้อเสนอซ่อม", url: "http://localhost:3000/repair/c001/offers" },
+          { app: "WeeeT", screen: "T-03 รอรับมอบหมาย",  url: "http://localhost:3002/jobs/pending" },
+        ]}
+      />
     </div>
   );
 }

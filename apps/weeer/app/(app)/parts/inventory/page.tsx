@@ -8,6 +8,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type SourceType = "NEW" | "USED" | "DISASSEMBLED";
@@ -254,6 +255,7 @@ export default function InventoryPage() {
   // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-51" />
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-3">

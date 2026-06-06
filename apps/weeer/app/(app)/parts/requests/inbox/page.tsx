@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 // ── D-6 Parts Request Inbox (WeeeR) ────────────────────────────────────────────
 // ดู broadcast requests จากร้านอื่น — GET /api/v1/parts/requests/inbox
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 import type { D6PartsRequest } from "../../_lib/d6-types";
 import { D6_REQUESTS_MOCK, URGENCY_LABEL, URGENCY_COLOR } from "../../_lib/d6-types";
 
@@ -45,6 +46,7 @@ export default function RequestsInboxPage() {
 
   return (
     <div className="px-4 pt-5 pb-4 space-y-4">
+      <MockAnnoOrigin from="R-60" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

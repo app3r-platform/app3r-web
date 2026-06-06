@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createService } from "../../../../lib/services-api";
 import type { ServiceType } from "../../../../lib/services-api";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const SERVICE_TYPE_OPTIONS: { value: ServiceType; label: string; icon: string; description: string }[] = [
   { value: "repair",   label: "ซ่อมอุปกรณ์",    icon: "🔧", description: "ซ่อมเครื่องใช้ไฟฟ้า, อุปกรณ์ต่างๆ" },
@@ -93,6 +94,7 @@ export default function NewServicePage() {
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-73" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/services" className="text-gray-400 hover:text-gray-600">←</Link>

@@ -6,6 +6,7 @@
 
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 import { getRepairJobById } from "../../../../../lib/mock-data/repair-jobs";
 import {
   getMockWeeeRSession,
@@ -44,6 +45,7 @@ export default async function RepairDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-46b" />
       {/* Back nav */}
       <Link href="/listings/repair" className="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600">
         ← กลับรายการงานซ่อม

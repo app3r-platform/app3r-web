@@ -9,6 +9,7 @@ import Link from "next/link";
 import { maintainApi } from "../../../_lib/api";
 import type { MaintainJob, MaintainOfferPayload } from "../../../_lib/types";
 import { APPLIANCE_LABEL, CLEANING_LABEL } from "../../../_lib/types";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export default function MaintainOfferPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -96,6 +97,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-48" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/maintain/queue" className="text-gray-400 hover:text-gray-600">←</Link>
@@ -252,13 +254,15 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
 
       {submitError && <p className="text-sm text-red-500 text-center">{submitError}</p>}
 
-      <button
-        type="button"
-        onClick={() => setShowConfirm(true)}
-        disabled={submitting}
-        className="w-full bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
-        📝 ยื่นข้อเสนอ →
-      </button>
+      <MockAnnoNav to="R-39" label="ยื่นข้อเสนอ" style={{ display: "contents" }}>
+        <button
+          type="button"
+          onClick={() => setShowConfirm(true)}
+          disabled={submitting}
+          className="w-full bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          📝 ยื่นข้อเสนอ →
+        </button>
+      </MockAnnoNav>
 
       {/* Confirm modal */}
       {showConfirm && (

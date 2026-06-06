@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "./_lib/api";
 import type { Listing } from "./_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "./_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 interface Dashboard {
   total_inventory: number;
@@ -59,6 +60,7 @@ export default function ResellDashboardPage() {
 
   return (
     <div className="space-y-6">
+      <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">💸 ขายมือสอง (Resell)</h1>
         <div className="flex gap-2">

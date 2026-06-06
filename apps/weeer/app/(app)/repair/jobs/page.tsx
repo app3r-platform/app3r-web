@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { repairApi } from "../_lib/api";
 import type { RepairJob, RepairJobStatus } from "../_lib/types";
 import { STATUS_LABEL, STATUS_COLOR } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const FILTER_STATUSES: { value: string; label: string }[] = [
   { value: "", label: "ทั้งหมด" },
@@ -33,6 +34,7 @@ function RepairJobsContent() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">งานซ่อม (On-site)</h1>
         <Link href="/repair/announcements"

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { scrapApi } from "../../_lib/api";
 import type { ScrapItem } from "../../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ── MOCK_ITEM — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
 const MOCK_ITEM: ScrapItem = {
@@ -66,6 +67,7 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-72" />
       <div className="flex items-center gap-3">
         <Link href="/scrap/browse" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">รายละเอียดซาก</h1>

@@ -15,6 +15,7 @@ import {
   SETTLEMENT_STATUS_COLOR,
 } from "../../../../lib/settlement-api";
 import type { SettlementDetailDto } from "../../../../lib/settlement-api";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const BANK_OPTIONS = [
   "ธนาคารกสิกรไทย (KBank)",
@@ -202,6 +203,7 @@ export default function WithdrawPage() {
   // ── Form state ───────────────────────────────────────────────────────────────
   return (
     <div className="space-y-6 max-w-xl">
+      <MockAnnoOrigin from="R-36" />
       <div className="flex items-center gap-3">
         <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-sm">← กลับ</Link>
         <h1 className="text-xl font-bold text-gray-900">ถอนเงิน (Settlement)</h1>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "../_components/SignupSteps";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const THAI_BANKS = [
   "ธนาคารกรุงเทพ (BBL)",
@@ -72,6 +73,7 @@ export default function BankAccountPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
+      <MockAnnoOrigin from="R-83" />
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>

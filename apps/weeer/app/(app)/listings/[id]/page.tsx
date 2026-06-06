@@ -13,6 +13,7 @@
  */
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 import {
   getListingMeta,
   getListingReviews,
@@ -134,6 +135,7 @@ export default function ListingByIdPage({
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
+      <MockAnnoOrigin from="R-42" />
       <nav className="text-sm text-gray-500 mb-4 flex items-center gap-2">
         <Link href="/dashboard" className="hover:text-[#D63B12]">
           หน้าหลัก

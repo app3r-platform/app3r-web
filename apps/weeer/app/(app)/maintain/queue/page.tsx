@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import {
   CLEANING_LABEL,
   RECURRING_LABEL,
 } from "../_lib/types";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 // ── M2: Offer countdown helper ─────────────────────────────────────────────────
 // deadline = offerDeadlineAt ?? createdAt + 24h
@@ -74,6 +75,7 @@ export default function MaintainQueuePage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-47" />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">คิวงาน Maintain</h1>
@@ -157,11 +159,13 @@ export default function MaintainQueuePage() {
                   </div>
                 )}
               </div>
-              <Link
-                href={`/maintain/queue/${job.id}/offer`}
-                className="shrink-0 bg-[#FF663A] hover:bg-[#D8491F] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
-                📝 ยื่นข้อเสนอ
-              </Link>
+              <MockAnnoNav to="R-48" label="ยื่นข้อเสนอ" style={{ display: "contents" }}>
+                <Link
+                  href={`/maintain/queue/${job.id}/offer`}
+                  className="shrink-0 bg-[#FF663A] hover:bg-[#D8491F] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+                  📝 ยื่นข้อเสนอ
+                </Link>
+              </MockAnnoNav>
             </div>
           </div>
         ))}

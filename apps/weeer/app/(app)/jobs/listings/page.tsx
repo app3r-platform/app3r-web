@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export const metadata: Metadata = { title: "ประกาศ / Listings — WeeeR" };
 
@@ -16,6 +17,7 @@ const STATUS_LABEL: Record<string, string> = { ACTIVE: "เผยแพร่", 
 export default function ListingsPage() {
   return (
     <div className="space-y-6">
+      <MockAnnoOrigin from="R-43" />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">ประกาศ / Listings</h1>
         <button className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2.5 rounded-xl">

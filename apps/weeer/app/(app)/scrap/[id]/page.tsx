@@ -6,6 +6,7 @@ import { use, useState } from "react";
 import Link from "next/link";
 import type { ScrapItem, ConditionGrade } from "../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ── Mock ScrapItems (same dataset as feed, keyed by id) ───────────────────
 const MOCK_ITEMS: Record<string, ScrapItem> = {
@@ -115,6 +116,7 @@ export default function ScrapDetailPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-70" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/scrap" className="text-gray-400 hover:text-gray-600">←</Link>

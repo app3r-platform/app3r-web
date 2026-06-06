@@ -5,6 +5,7 @@ import Link from "next/link";
 import { scrapApi } from "../_lib/api";
 import type { ScrapItem } from "../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ── MOCK_ITEMS — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
 const MOCK_ITEMS: ScrapItem[] = [
@@ -64,6 +65,7 @@ export default function ScrapBrowsePage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-70" />
       <div className="flex items-center gap-3">
         <Link href="/scrap" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">🔍 เลือกซื้อซาก</h1>

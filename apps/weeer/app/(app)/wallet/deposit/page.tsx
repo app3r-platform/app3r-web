@@ -7,6 +7,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { apiFetch } from "../../../../lib/api-client";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 // ── Bank account ข้อมูลจริง — อัปเดตจาก Admin ────────────────────────────────
 const BANK_INFO = {
@@ -126,6 +127,7 @@ export default function DepositPage() {
 
   return (
     <div className="space-y-6 max-w-xl">
+      <MockAnnoOrigin from="R-36" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-sm">← กลับ</Link>

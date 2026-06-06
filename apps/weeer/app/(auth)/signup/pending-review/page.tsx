@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export const metadata: Metadata = { title: "รอการอนุมัติ — WeeeR" };
 
@@ -45,6 +46,7 @@ export default function PendingReviewPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFE0D6] flex items-center justify-center px-4 py-12">
+      <MockAnnoOrigin from="R-86" />
       <div className="w-full max-w-md space-y-6">
         {/* Main status card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center space-y-4">

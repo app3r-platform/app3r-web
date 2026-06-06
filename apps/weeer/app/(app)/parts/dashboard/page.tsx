@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { partsApi } from "../_lib/api";
 import type { Part, StockMovement } from "../_lib/types";
 import { MOVEMENT_TYPE_LABEL, MOVEMENT_TYPE_COLOR } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 interface DashboardData {
   total_skus: number;
@@ -27,6 +28,7 @@ export default function PartsDashboardPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-52" />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Parts Dashboard</h1>

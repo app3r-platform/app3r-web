@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { partsApi } from "../_lib/api";
 import type { Part } from "../_lib/types";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 const CATEGORIES = ["คอมเพรสเซอร์", "มอเตอร์", "แผงวงจร", "ท่อ/วาล์ว", "อื่นๆ"];
 
@@ -58,6 +59,7 @@ export default function PartsNewPage() {
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-57" />
       <div className="flex items-center gap-3">
         <Link href="/parts" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">เพิ่มอะไหล่ใหม่</h1>
@@ -157,10 +159,12 @@ export default function PartsNewPage() {
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
-        <button type="submit" disabled={submitting}
-          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
-          {submitting ? "กำลังบันทึก…" : "🔩 เพิ่มอะไหล่"}
-        </button>
+        <MockAnnoNav to="R-40" label="เพิ่มอะไหล่" style={{ display: "contents" }}>
+          <button type="submit" disabled={submitting}
+            className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+            {submitting ? "กำลังบันทึก…" : "🔩 เพิ่มอะไหล่"}
+          </button>
+        </MockAnnoNav>
       </form>
     </div>
   );

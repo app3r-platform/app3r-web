@@ -6,6 +6,7 @@
 
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 import { getMaintainJobById } from "../../../../../lib/mock-data/maintain-jobs";
 import {
   getMockWeeeRSession,
@@ -44,6 +45,7 @@ export default async function MaintainDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-45b" />
       {/* Back nav */}
       <Link href="/listings/maintain" className="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600">
         ← กลับรายการงานบำรุง

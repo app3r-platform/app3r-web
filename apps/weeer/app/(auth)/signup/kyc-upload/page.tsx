@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "../_components/SignupSteps";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 type DocType = "id_card" | "business_registration" | "tax_certificate" | "other";
 
@@ -48,6 +49,7 @@ export default function KycUploadPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
+      <MockAnnoOrigin from="R-84" />
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>

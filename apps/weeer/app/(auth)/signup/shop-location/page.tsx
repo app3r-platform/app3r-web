@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "../_components/SignupSteps";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const MOCK_POSTAL: Record<string, { subdistrict: string; district: string; province: string }> = {
   "10110": { subdistrict: "คลองเตย", district: "คลองเตย", province: "กรุงเทพมหานคร" },
@@ -68,6 +69,7 @@ export default function ShopLocationPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
+      <MockAnnoOrigin from="R-82" />
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>

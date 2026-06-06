@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { apiFetch } from "../../../../lib/api-client";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 type TransferType   = "deposit" | "withdraw";
 type TransferStatus = "pending" | "approved" | "rejected" | "processing";
@@ -90,6 +91,7 @@ export default function TransferHistoryPage() {
 
   return (
     <div className="space-y-6 max-w-2xl">
+      <MockAnnoOrigin from="R-36" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-sm">← กลับ</Link>

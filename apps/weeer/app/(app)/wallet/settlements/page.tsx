@@ -11,6 +11,7 @@ import {
   SETTLEMENT_STATUS_COLOR,
 } from "../../../../lib/settlement-api";
 import type { SettlementDto, SettlementStatus } from "../../../../lib/settlement-api";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const STATUS_FILTERS: { label: string; value: SettlementStatus | "all" }[] = [
   { label: "ทั้งหมด",    value: "all" },
@@ -89,6 +90,7 @@ export default function SettlementsPage() {
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-36" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

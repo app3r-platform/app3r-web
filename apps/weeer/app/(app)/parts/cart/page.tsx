@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 // ── D-6 Parts Cart (WeeeR) ────────────────────────────────────────────────────
 // ตะกร้าสินค้า B2B — จัดกลุ่มตาม seller, tier discount, expire 24h
@@ -6,6 +6,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 import type { D6CartItem, D6CartGroup } from "../_lib/d6-types";
 import {
   getCartItems, saveCartItems, groupCartByShop,
@@ -113,6 +114,7 @@ export default function CartPage() {
 
   return (
     <div className="px-4 pt-5 pb-24 space-y-4">
+      <MockAnnoOrigin from="R-54" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -220,12 +222,14 @@ export default function CartPage() {
 
             {/* Checkout button per group */}
             <div className="px-4 py-3 bg-gray-50">
-              <button
-                onClick={() => router.push(`/parts/checkout?seller=${group.sellerUserId}`)}
-                className="w-full py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium hover:bg-[#F04E20] transition-colors"
-              >
-                สั่งซื้อจาก {group.sellerName} — ฿{groupTotal.toLocaleString("th", { minimumFractionDigits: 2 })}
-              </button>
+              <MockAnnoNav to="R-55" label={`สั่งซื้อจาก ${group.sellerName}`} style={{ display: "contents" }}>
+                <button
+                  onClick={() => router.push(`/parts/checkout?seller=${group.sellerUserId}`)}
+                  className="w-full py-2.5 bg-[#FF663A] text-white rounded-xl text-sm font-medium hover:bg-[#F04E20] transition-colors"
+                >
+                  สั่งซื้อจาก {group.sellerName} — ฿{groupTotal.toLocaleString("th", { minimumFractionDigits: 2 })}
+                </button>
+              </MockAnnoNav>
             </div>
           </div>
         );

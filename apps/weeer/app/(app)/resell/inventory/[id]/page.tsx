@@ -5,6 +5,7 @@ import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import type { UsedAppliance } from "../../_lib/types";
 import { CONDITION_LABEL, CONDITION_COLOR, APPLIANCE_STATUS_LABEL, APPLIANCE_STATUS_COLOR } from "../../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function ResellInventoryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -25,6 +26,7 @@ export default function ResellInventoryDetailPage({ params }: { params: Promise<
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-67" />
       <div className="flex items-center gap-3">
         <Link href="/resell/inventory" className="text-gray-400 hover:text-gray-600">←</Link>
         <div className="flex-1 min-w-0">

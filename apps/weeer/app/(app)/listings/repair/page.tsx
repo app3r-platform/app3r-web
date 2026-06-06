@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 // ── listings/repair/page.tsx — WeeeR Repair Listings (Sub-1 D5) ───────────────
 // D5: แสดง repair job listings พร้อม default filter = ลงทะเบียนรับ
 // Toggle "ดูทั้งหมด" เพื่อ clear filter
@@ -7,6 +7,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 import {
   WEEER_REPAIR_JOBS_SORTED,
 } from "../../../../lib/mock-data/repair-jobs";
@@ -42,6 +43,7 @@ export default function RepairListingsPage() {
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-46" />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -104,8 +106,8 @@ export default function RepairListingsPage() {
       ) : (
         <div className="space-y-3">
           {displayed.map((job) => (
+            <MockAnnoNav key={job.id} to="R-46b" label={job.title} style={{ display: "contents" }}>
             <Link
-              key={job.id}
               href={`/listings/repair/${job.id}`}
               className="block bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:border-[#FFD0BF] hover:shadow transition-all"
             >
@@ -143,6 +145,7 @@ export default function RepairListingsPage() {
                 </div>
               </div>
             </Link>
+            </MockAnnoNav>
           ))}
         </div>
       )}

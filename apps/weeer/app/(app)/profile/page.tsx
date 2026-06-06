@@ -3,10 +3,13 @@
 // เพิ่ม Location picker + Service area สำหรับ WeeeR shop
 
 import LocationPicker from "../../../components/location/LocationPicker";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function ProfilePage() {
   return (
     <div className="space-y-6 max-w-2xl">
+      {/* §5 Origin */}
+      <MockAnnoOrigin from="R-01" />
       <h1 className="text-xl font-bold text-gray-900">โปรไฟล์บริษัท</h1>
 
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

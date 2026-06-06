@@ -14,6 +14,7 @@ import {
   SERVICE_STATUS_COLOR,
 } from "../../../../../lib/services-api";
 import type { ServiceRecord } from "../../../../../lib/services-api";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 interface FormState {
   title: string;
@@ -111,6 +112,7 @@ export default function EditServicePage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-73" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/services" className="text-gray-400 hover:text-gray-600">←</Link>

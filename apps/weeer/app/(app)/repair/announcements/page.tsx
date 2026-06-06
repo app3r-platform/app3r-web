@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../_lib/api";
 import type { RepairAnnouncement } from "../_lib/types";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export default function RepairAnnouncementsPage() {
   const [items, setItems] = useState<RepairAnnouncement[]>([]);
@@ -19,6 +20,7 @@ export default function RepairAnnouncementsPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">ประกาศรับงาน (On-site)</h1>
@@ -64,10 +66,12 @@ export default function RepairAnnouncementsPage() {
               <span className="text-xs text-gray-400">
                 โพสต์: {new Date(item.created_at).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
               </span>
-              <Link href={`/repair/announcements/${item.id}/offer`}
-                className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors">
-                ยื่นข้อเสนอ
-              </Link>
+              <MockAnnoNav to="R-04" label="ยื่นข้อเสนอ" style={{ display: "contents" }}>
+                <Link href={`/repair/announcements/${item.id}/offer`}
+                  className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors">
+                  ยื่นข้อเสนอ
+                </Link>
+              </MockAnnoNav>
             </div>
           </div>
         ))}

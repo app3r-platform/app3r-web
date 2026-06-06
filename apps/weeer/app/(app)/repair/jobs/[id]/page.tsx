@@ -5,6 +5,7 @@ import Link from "next/link";
 import { repairApi } from "../../_lib/api";
 import type { RepairJob } from "../../_lib/types";
 import { STATUS_LABEL, STATUS_COLOR, BRANCH_LABEL } from "../../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const TIMELINE_STATES = [
   { key: "assigned",         label: "มอบหมาย WeeeT",         icon: "👷" },
@@ -45,6 +46,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
   return (
     <div className="space-y-5 max-w-2xl">
+      <MockAnnoOrigin from="R-09" />
       <div className="flex items-center gap-3">
         <Link href="/repair/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900 truncate">{job.appliance_name}</h1>

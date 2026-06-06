@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { partsApi } from "../_lib/api";
 import type { StockMovement } from "../_lib/types";
 import { MOVEMENT_TYPE_LABEL, MOVEMENT_TYPE_COLOR, REASON_LABEL } from "../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const TYPE_FILTERS = [
   { value: "", label: "ทั้งหมด" },
@@ -37,6 +38,7 @@ export default function PartsMovementsPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-59" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/parts" className="text-gray-400 hover:text-gray-600">←</Link>

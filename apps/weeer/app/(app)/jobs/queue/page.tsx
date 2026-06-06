@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export const metadata: Metadata = { title: "คิวงาน — WeeeR" };
 
@@ -24,6 +25,7 @@ const STATUS_LABEL: Record<string, string> = {
 export default function JobQueuePage() {
   return (
     <div className="space-y-6">
+      <MockAnnoOrigin from="R-44" />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">คิวงาน</h1>
         <div className="flex gap-2 flex-wrap">

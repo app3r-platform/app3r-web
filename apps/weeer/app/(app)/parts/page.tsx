@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { partsApi } from "./_lib/api";
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 import type { Part } from "./_lib/types";
 import { CONDITION_LABEL, CONDITION_COLOR } from "./_lib/types";
 
@@ -37,6 +38,8 @@ export default function PartsListPage() {
 
   return (
     <div className="space-y-5">
+      <MockAnnoOrigin from="R-51" />
+      <MockAnnoXApp entries={[{ app: "WeeeU", screen: "Parts Browse", url: "http://localhost:3000/parts" }]} />
       {/* B2B Marketplace shortcut (C-6) */}
       <Link href="/parts/marketplace"
         className="flex items-center justify-between bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-4 py-3 hover:bg-[#FFE0D6] transition-colors">
@@ -53,11 +56,15 @@ export default function PartsListPage() {
           <p className="text-xs text-gray-500 mt-0.5">{parts.length} รายการ · สต๊อกพร้อมใช้ {availQty} ชิ้น</p>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/parts/dashboard" className="text-xs text-gray-500 hover:text-gray-700">📊 Dashboard</Link>
-          <Link href="/parts/new"
-            className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
-            + เพิ่มอะไหล่
-          </Link>
+          <MockAnnoNav to="R-52" label="Dashboard" style={{ display: "contents" }}>
+            <Link href="/parts/dashboard" className="text-xs text-gray-500 hover:text-gray-700">📊 Dashboard</Link>
+          </MockAnnoNav>
+          <MockAnnoNav to="R-57" label="+ เพิ่มอะไหล่" style={{ display: "contents" }}>
+            <Link href="/parts/new"
+              className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+              + เพิ่มอะไหล่
+            </Link>
+          </MockAnnoNav>
         </div>
       </div>
 

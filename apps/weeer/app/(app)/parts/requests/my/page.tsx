@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 import type { D6PartsRequest } from "../../_lib/d6-types";
 import { URGENCY_LABEL, URGENCY_COLOR } from "../../_lib/d6-types";
 

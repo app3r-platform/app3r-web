@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "../_components/SignupSteps";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 type BizType = "individual" | "company";
 
@@ -88,6 +89,7 @@ export default function BusinessInfoPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-start justify-center px-4 py-10">
+      <MockAnnoOrigin from="R-81" />
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "../_components/SignupSteps";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function SignupVerifyPage() {
   const router = useRouter();
@@ -58,6 +59,7 @@ export default function SignupVerifyPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF1ED] to-[#FFF1ED] flex items-center justify-center px-4 py-10">
+      <MockAnnoOrigin from="R-85" />
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
