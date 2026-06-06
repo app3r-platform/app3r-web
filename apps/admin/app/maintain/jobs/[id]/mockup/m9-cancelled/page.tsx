@@ -25,6 +25,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Sidebar } from "@/components/sidebar";
+import { MockAnno } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m9-admin-001",
@@ -297,6 +298,21 @@ export default function M9CancelledAdminMockupPage() {
           </div>
         </div>
       </main>
+
+      <MockAnno
+        caseId="M9"
+        screenId="A-07/m9"
+        origin="A-06 MAINTAIN-JOBS (status=cancelled) — Admin เลือก job"
+        nav={[
+          { label: "อนุมัติ settle", dest: "A-07 updated" },
+          { label: "กลับรายการ", dest: "A-06 /maintain/jobs" },
+        ]}
+        crossApp={[
+          { app: "WeeeU", desc: "ยอด settle คืน (U-16)" },
+          { app: "WeeeR", desc: "settle เข้า wallet + penalty" },
+          { app: "WeeeT", desc: "notification หยุดงาน" },
+        ]}
+      />
     </div>
   );
 }

@@ -20,6 +20,7 @@
  */
 
 import Link from "next/link";
+import { MockAnnoBar } from "@/components/MockAnnoBar";
 
 /* ─── mock data ─── */
 const JOB = {
@@ -143,6 +144,19 @@ export default function M2ExpiredMockupPage() {
       >
         ← ดูรายการงานทั้งหมด
       </button>
+
+      <MockAnnoBar
+        caseId="M2"
+        screenId="U-16/m2"
+        origin="U-16 MAINTAIN-JOB-DETAIL (status=expired)"
+        nav={[
+          { label: "ลงประกาศใหม่", dest: "U-11 /maintain/book?rebook={id}" },
+          { label: "ดูรายการงานทั้งหมด", dest: "U-12 /maintain/jobs" },
+        ]}
+        crossApp={[
+          { app: "Admin", desc: "เห็น status expired (A-07)" },
+        ]}
+      />
     </div>
   );
 }

@@ -22,6 +22,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { MockAnno } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m6-weeer-001",
@@ -214,6 +215,19 @@ export default function M6WithdrawWeeeRMockupPage() {
           </div>
         </div>
       )}
+
+      <MockAnno
+        caseId="M6"
+        screenId="R-14/m6"
+        origin="R-14 MAINTAIN-JOB-DETAIL (status=assigned) — ปุ่ม ถอนรับงาน"
+        nav={[
+          { label: "ยืนยันถอน", dest: "R-12 /maintain/jobs" },
+        ]}
+        crossApp={[
+          { app: "WeeeU", desc: "ได้รับ notification · เห็น m6-weeer-withdrew (U-16c)" },
+          { app: "Admin", desc: "audit log WeeeR withdraw + penalty (A-07)" },
+        ]}
+      />
     </div>
   );
 }

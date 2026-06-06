@@ -23,6 +23,7 @@
 
 import Link from "next/link";
 import { use } from "react";
+import { MockAnno } from "@/components/MockAnno";
 
 const MOCK_JOB = {
   id: "mock-m3-weeer-001",
@@ -181,6 +182,20 @@ export default function M3RiskNotifyWeeRMockupPage({
           ← กลับรายการงาน
         </Link>
       </div>
+
+      <MockAnno
+        caseId="M3"
+        screenId="R-14/m3"
+        origin="R-14 MAINTAIN-JOB-DETAIL (notification badge) — risk_reported"
+        nav={[
+          { label: "กลับรายการ", dest: "R-12 /maintain/jobs" },
+        ]}
+        crossApp={[
+          { app: "WeeeU", desc: "กำลังเห็น m3-risk-inspect รอตัดสิน" },
+          { app: "WeeeT", desc: "รออยู่หน้างาน (T-08)" },
+          { app: "Admin", desc: "status risk_reported (A-07)" },
+        ]}
+      />
     </div>
   );
 }

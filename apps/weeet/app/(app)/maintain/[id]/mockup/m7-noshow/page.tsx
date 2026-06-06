@@ -25,6 +25,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { MockAnno } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m7-weeet-001",
@@ -196,6 +197,21 @@ export default function M7NoShowWeeeTMockupPage() {
           </div>
         )}
       </div>
+
+      <MockAnno
+        caseId="M7"
+        screenId="T-08/m7"
+        origin="T-08b MAINTAIN-ARRIVE — WeeeT กด ลูกค้าไม่อยู่"
+        nav={[
+          { label: "เริ่มล้าง", dest: "T-08c checklist (normal path)" },
+          { label: "ลูกค้าไม่อยู่", dest: "noshow_confirm → noshow_done" },
+        ]}
+        crossApp={[
+          { app: "WeeeU", desc: "รับ notification no_show (U-16)" },
+          { app: "WeeeR", desc: "status no_show (R-14)" },
+          { app: "Admin", desc: "no-show event audit log (A-07)" },
+        ]}
+      />
     </div>
   );
 }
