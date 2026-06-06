@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FlowCard } from "../_lib/flow-card";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ── C9 Dispute (Admin Intervene) ──────────────────────────────────────────────
 // WeeeU ไม่พอใจงาน → เปิด Dispute (U-09b) → Admin ตรวจสอบ (A-04→A-05) → ตัดสิน
@@ -22,15 +23,14 @@ export default function C9DisputePage() {
         <p className="text-xs text-gray-500">WeeeU เปิด Dispute → state: DISPUTED → Admin: A-04 → A-05 → A-03c → ตัดสิน</p>
       </div>
 
-      <div className="bg-purple-50 border border-purple-300 rounded-xl p-4">
-        <p className="text-sm font-bold text-purple-800 mb-1">⚖️ Dispute Flow</p>
-        <p className="text-xs text-purple-700">
+      <MockAnnoBar variant="dispute" label="⚖️ Dispute Flow">
+        <p>
           WeeeU เปิด Dispute ที่ <strong>U-09b</strong> (ไม่พอใจคุณภาพ/ซ่อมไม่สำเร็จ)<br/>
           Admin รับเรื่องที่ <strong>A-04</strong> → สอบสวน <strong>A-05</strong> (disputes/[id])<br/>
           Admin ตัดสิน → <strong>A-03c</strong> (manual-override) → ผล: COMPLETED หรือ REFUND<br/>
           Escrow ถูก freeze ตลอด dispute period
         </p>
-      </div>
+      </MockAnnoBar>
 
       <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 text-sm space-y-1">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">📋 Sample Data</p>
