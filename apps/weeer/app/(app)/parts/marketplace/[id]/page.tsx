@@ -4,6 +4,8 @@
 // หน้ารายละเอียดอะไหล่ + ปุ่มสั่งซื้อ
 // Sub-CMD-8: handleOrder ส่ง POST /api/v1/parts/orders/ (real Backend B2B escrow)
 //            fallback → localStorage mock เมื่อ API ไม่พร้อม
+// Screen: R-30c / PARTS-ITEM-DETAIL
+// §5 มาจาก: R-30 (Marketplace) · §6 → R-30 (back) / R-33 (order placed) · เคส P3,P4,P10,P11
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
@@ -21,6 +23,7 @@ import { createPartsOrder } from "../../../../../lib/parts-api";
 import { FEATURE_FLAGS } from "../../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../../_lib/catalog-api";
 import { ListingEngagement } from "../../../../../components/parts/ListingEngagement";
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 export default function MarketplaceDetailPage({
   params,
@@ -131,8 +134,31 @@ export default function MarketplaceDetailPage({
 
   return (
     <div className="space-y-5">
-      {/* Back */}
-      <Link href="/parts/marketplace" className="text-sm text-gray-400 hover:text-gray-600">‹ กลับตลาด</Link>
+      {/* §5 Flow Origin — เคส P3, P4, P10, P11 */}
+      <MockAnnoOrigin from={["R-30"]} />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR เห็นอะไรขณะผู้ซื้อดูรายละเอียด (เคส P4, P5) */}
+      <MockAnnoXApp
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screen: "R-29 My Listings (tab: คำสั่งซื้อ)",
+            url: "http://localhost:3001/parts/my-listings",
+          },
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screen: "R-33 My Orders (seller tab)",
+            url: "http://localhost:3001/parts/my-orders",
+          },
+        ]}
+      />
+
+      {/* Back §6 → R-30 */}
+      <MockAnnoNav to="R-30">
+        <Link href="/parts/marketplace" className="text-sm text-gray-400 hover:text-gray-600">
+          ‹ กลับตลาด
+        </Link>
+      </MockAnnoNav>
 
       {/* Gallery (คลังรูปภาพ) */}
       <PartImageGallery images={listing.images} name={listing.name} />
@@ -146,13 +172,18 @@ export default function MarketplaceDetailPage({
         <span className="font-medium text-gray-700">{balance.toLocaleString()} pts</span>
       </div>
 
-      {/* แจ้งเตือนสั่งซื้อสำเร็จ */}
+      {/* P4 แจ้งเตือนสั่งซื้อสำเร็จ */}
       {ordered && (
         <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 flex items-center gap-2">
           <span>✅</span>
           <div>
-            <p className="text-sm font-medium text-green-700">สั่งซื้อสำเร็จ!</p>
-            <Link href="/parts/orders" className="text-xs text-[#F04E20] hover:underline">ดูคำสั่งซื้อ B2B →</Link>
+            <p className="text-sm font-medium text-green-700">สั่งซื้อสำเร็จ! (P4)</p>
+            {/* §6 → R-33 */}
+            <MockAnnoNav to="R-33">
+              <Link href="/parts/my-orders" className="text-xs text-[#F04E20] hover:underline">
+                ดูคำสั่งซื้อของฉัน →
+              </Link>
+            </MockAnnoNav>
           </div>
         </div>
       )}
@@ -217,19 +248,40 @@ export default function MarketplaceDetailPage({
 
       {/* ปุ่มซื้อ (เฉพาะ stock > 0) */}
       {!isOwn && !ordered && listing.stock > 0 && (
-        <button
-          onClick={() => setShowModal(true)}
-          disabled={ordering}
-          className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
-        >
-          {ordering
-            ? "กำลังสั่งซื้อ…"
-            : listing.pricePoints > 0
-              ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
-              : listing.unitPriceThb != null
-                ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง)`
-                : "🛒 สั่งซื้อ"}
-        </button>
+        <div className="space-y-2">
+          {/* P11: แสดง balance check — A7 sample data */}
+          {listing.pricePoints > 0 && (
+            <div className={`flex items-center justify-between text-xs rounded-lg px-3 py-2 border ${
+              balance >= listing.pricePoints
+                ? "bg-green-50 border-green-100 text-green-700"
+                : "bg-red-50 border-red-100 text-red-700"
+            }`}>
+              <span>
+                {balance >= listing.pricePoints
+                  ? "✅ Gold เพียงพอ"
+                  : "⚠️ P11: Gold ไม่เพียงพอ (ต้องการ " + listing.pricePoints.toLocaleString() + " pts)"}
+              </span>
+              <span className="font-medium">คงเหลือ {balance.toLocaleString()} pts</span>
+            </div>
+          )}
+
+          {/* §6 → R-33 เมื่อสำเร็จ (P4) */}
+          <MockAnnoNav to="R-33" style={{ display: "block" }}>
+            <button
+              onClick={() => setShowModal(true)}
+              disabled={ordering}
+              className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
+            >
+              {ordering
+                ? "กำลังสั่งซื้อ…"
+                : listing.pricePoints > 0
+                  ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
+                  : listing.unitPriceThb != null
+                    ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
+                    : "🛒 สั่งซื้อ"}
+            </button>
+          </MockAnnoNav>
+        </div>
       )}
 
       {isOwn && (

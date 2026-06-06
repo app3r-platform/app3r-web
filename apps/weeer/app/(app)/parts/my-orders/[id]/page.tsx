@@ -1,11 +1,14 @@
 "use client";
 
 // ── My Order Detail — Phase D-4 (P7 Receive · P8 Buyer Cancel · P9 Seller Cancel) ──
+// Screen: R-34 / PARTS-BUYER-ORDER
+// §5 มาจาก: R-33 (My Orders, buyer tab) · เคส P7, P8
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import type { PartOrder } from "../../_lib/types";
 import { PART_ORDERS_MOCK } from "../../_lib/mock-data";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 import { OrderStageStepper } from "../../../../../components/parts/OrderStageStepper";
 import { ORDER_STAGE_LABEL, ORDER_STAGE_COLOR, DELIVERY_LABEL } from "../../_lib/types";
 import {
@@ -194,9 +197,28 @@ export default function MyOrderDetailPage({
   // ── UI ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-4">
+      {/* §5 Flow Origin — เคส P7, P8 */}
+      <MockAnnoOrigin from={["R-33"]} />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR เห็นอะไรขณะผู้ซื้อดูรายละเอียด (เคส P7, P8) */}
+      <MockAnnoXApp
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screen: "R-29 My Listings (incoming tab)",
+            url: "http://localhost:3001/parts/my-listings",
+          },
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screen: "R-33 My Orders (seller tab)",
+            url: "http://localhost:3001/parts/my-orders",
+          },
+        ]}
+      />
+
       {/* Back */}
       <Link href="/parts/my-orders" className="text-sm text-gray-400 hover:text-gray-600">
-        ‹ กลับรายการคำสั่งซื้อ
+        ‹ กลับรายการคำสั่งซื้อ {/* §6 → R-33 */}
       </Link>
 
       {/* Header */}

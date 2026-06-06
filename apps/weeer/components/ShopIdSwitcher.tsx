@@ -3,6 +3,11 @@
 // ── ShopIdSwitcher — Phase C-6 ────────────────────────────────────────────────
 // dropdown สลับร้าน (เฉพาะ demo) — วางไว้ใน parts/layout.tsx เท่านั้น
 // persist ใน localStorage key: app3r-parts-shop-id
+//
+// P12: สลับร้าน (Shop Switcher)
+// §6 เมื่อเปลี่ยนร้าน → partsSync.emit("shop_switched") →
+//     R-29 (My Listings) / R-30 (Marketplace) / R-33 (My Orders) reload ด้วย shopId ใหม่
+// ตัวอย่าง (A7 sample data): S001=ร้านเอ · S002=ร้านบี · S003=ร้านซี
 
 import { useEffect, useState } from "react";
 import { SHOPS_MOCK } from "../lib/mock-data/shops";

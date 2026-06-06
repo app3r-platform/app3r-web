@@ -2,6 +2,8 @@
 
 // ── My Orders — Phase C-6 ─────────────────────────────────────────────────────
 // มุมผู้ซื้อ + ผู้ขาย: tabs ฝั่งผู้ซื้อ / ฝั่งผู้ขาย
+// Screen: R-33 / PARTS-MY-ORDERS
+// §5 มาจาก: R-30c (สั่งซื้อสำเร็จ) / R-51 (Parts Hub nav) · §6 → R-34 · เคส P4,P5,P6,P7,P8,P9
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -19,6 +21,7 @@ import {
 } from "../../../../lib/utils/parts-sync";
 import { escrowRelease, escrowRefund, getEscrowHeldByShop } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 type SideTab = "buyer" | "seller";
 type StageFilter = PartOrder["stage"] | "all";
@@ -126,6 +129,25 @@ export default function MyOrdersPage() {
 
   return (
     <div className="space-y-4">
+      {/* §5 Flow Origin — เคส P4, P5, P6, P7, P8, P9 */}
+      <MockAnnoOrigin from={["R-30c", "R-51"]} />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR ณ ขณะต่างๆ ของ flow (เคส P5, P6, P7) */}
+      <MockAnnoXApp
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screen: "R-29 My Listings (tab: คำสั่งซื้อ)",
+            url: "http://localhost:3001/parts/my-listings",
+          },
+          {
+            app: "WeeeR (ร้านผู้ขาย)",
+            screen: "R-33 My Orders (seller tab)",
+            url: "http://localhost:3001/parts/my-orders",
+          },
+        ]}
+      />
+
       <h1 className="text-xl font-bold text-gray-900">คำสั่งซื้อของฉัน</h1>
 
       {/* คะแนนยอดเงิน */}
@@ -171,8 +193,9 @@ export default function MyOrdersPage() {
         </div>
       ) : (
         <div className="space-y-3">
+          {/* §6 mock-anno: click order card → R-34 (Buyer Order Detail) */}
           {filtered.map((o) => (
-            <div key={o.id} onClick={() => router.push(`/parts/my-orders/${o.id}`)} className="cursor-pointer">
+            <div key={o.id} onClick={() => router.push(`/parts/my-orders/${o.id}`)} className="cursor-pointer" title="§6 → R-34 Buyer Order Detail">
               <OrderCard order={o} role={sideTab} onAction={handleAction} />
             </div>
           ))}

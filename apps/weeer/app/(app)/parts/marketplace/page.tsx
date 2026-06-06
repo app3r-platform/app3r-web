@@ -2,6 +2,8 @@
 
 // ── Parts Marketplace — Phase C-6 ─────────────────────────────────────────────
 // หน้าตลาดซื้อ-ขายอะไหล่ B2B (Business-to-Business ร้านถึงร้าน)
+// Screen: R-30 / PARTS-MARKETPLACE
+// §5 มาจาก: R-51 (Parts Hub — shortcut ตลาด B2B) · §6 → R-30c · เคส P3,P4,P10,P11
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,6 +16,7 @@ import { MarketplaceStatsCard } from "../../../../components/parts/MarketplaceSt
 import { getCurrentShopId, getListings, saveListings, usePartsSync } from "../../../../lib/utils/parts-sync";
 import { FEATURE_FLAGS } from "../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../_lib/catalog-api";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 export default function MarketplacePage() {
   const router = useRouter();
@@ -71,6 +74,18 @@ export default function MarketplacePage() {
 
   return (
     <div className="space-y-4">
+      {/* §5 Flow Origin — เคส P3, P4, P10, P11 */}
+      <MockAnnoOrigin from={["R-51"]} />
+
+      {/* §8 Cross-App — ผู้ขาย WeeeR เห็น R-29 ขณะผู้ซื้อกำลัง browse (เคส P3) */}
+      <MockAnnoXApp
+        entries={[{
+          app: "WeeeR (ร้านผู้ขาย)",
+          screen: "R-29 My Listings",
+          url: "http://localhost:3001/parts/my-listings",
+        }]}
+      />
+
       {apiError && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
           ⚠️ ไม่สามารถโหลดข้อมูลตลาดจากระบบได้ขณะนี้ — กรุณาลองใหม่ภายหลัง
@@ -113,6 +128,13 @@ export default function MarketplacePage() {
           onChange={setFilters}
           onReset={() => setFilters(defaultFilters)}
         />
+      )}
+
+      {/* §6 mock-anno: แต่ละ card → R-30c (Item Detail) */}
+      {filtered.length > 0 && (
+        <p className="mock-anno text-xs text-orange-600 bg-orange-50 border border-orange-100 rounded-lg px-2 py-1">
+          §6 คลิก card → <span className="font-mono font-semibold">R-30c</span> รายละเอียดอะไหล่ (P3, P4, P10, P11)
+        </p>
       )}
 
       {/* Grid */}

@@ -2,6 +2,8 @@
 
 // ── My Listings — Phase C-6 ───────────────────────────────────────────────────
 // มุมผู้ขาย: คลังของฉัน + คำสั่งซื้อที่เข้ามา
+// Screen: R-29 / PARTS-MY-LISTINGS
+// §5 มาจาก: R-51 (Parts Hub) / R-40 (success CTA) · §6 → R-29c / R-40 · เคส P1,P2,P5,P6,P9
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -18,6 +20,7 @@ import {
 } from "../../../../lib/utils/parts-sync";
 import { escrowRefund } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 type TabType = "listings" | "incoming";
 
@@ -109,14 +112,36 @@ export default function MyListingsPage() {
 
   return (
     <div className="space-y-4">
+      {/* §5 Flow Origin — เคส P1, P2, P5, P6, P9 */}
+      <MockAnnoOrigin from={["R-51", "R-40"]} />
+
+      {/* §8 Cross-App — ผู้ซื้อ WeeeR เห็นอะไรขณะผู้ขายจัดการ (เคส P1, P5, P6, P9) */}
+      <MockAnnoXApp
+        entries={[
+          {
+            app: "WeeeR (ร้านผู้ซื้อ)",
+            screen: "R-30 Marketplace",
+            url: "http://localhost:3001/parts/marketplace",
+          },
+          {
+            app: "WeeeR (ร้านผู้ซื้อ)",
+            screen: "R-34 Buyer Order Detail",
+            url: "http://localhost:3001/parts/my-orders",
+          },
+        ]}
+      />
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">ขายของฉัน</h1>
           <p className="text-xs text-gray-500 mt-0.5">{shop?.name} · {listings.length} รายการ</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
-          + ลงขายใหม่
-        </button>
+        {/* §6 → R-40 ลงขายสำเร็จ (P1) */}
+        <MockAnnoNav to="R-40">
+          <button onClick={() => setShowForm(true)} className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
+            + ลงขายใหม่
+          </button>
+        </MockAnnoNav>
       </div>
 
       {/* Tabs */}
@@ -139,13 +164,19 @@ export default function MyListingsPage() {
               <button onClick={() => setShowForm(true)} className="text-xs text-[#D63B12] mt-2 hover:underline">ลงขายตอนนี้</button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {listings.map((l) => (
-                <div key={l.id} onClick={() => router.push(`/parts/my-listings/${l.id}`)} className="cursor-pointer">
-                  <PartCard listing={l} currentShopId={shopId} />
-                </div>
-              ))}
-            </div>
+            <>
+              {/* §6 mock-anno: listing card → R-29c (Listing Detail) — P2 */}
+              <p className="mock-anno text-xs text-orange-600 bg-orange-50 border border-orange-100 rounded-lg px-2 py-1 mb-2">
+                §6 คลิก card → <span className="font-mono font-semibold">R-29c</span> รายละเอียด listing (P2)
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {listings.map((l) => (
+                  <div key={l.id} onClick={() => router.push(`/parts/my-listings/${l.id}`)} className="cursor-pointer">
+                    <PartCard listing={l} currentShopId={shopId} />
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </>
       )}
