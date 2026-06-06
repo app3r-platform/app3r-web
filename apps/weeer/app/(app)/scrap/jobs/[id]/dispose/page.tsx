@@ -1,5 +1,30 @@
 "use client";
 
+// ── WeeeR Scrap R-28e — dispose (S4 รีไซเคิล/E-Waste cert) ───────────────────
+
+// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
+const AnnoOriginDispose = () => (
+  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
+    ◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "รีไซเคิล")
+  </div>
+);
+const AnnoXAppDispose = () => (
+  <details className="mock-anno mock-anno-xapp">
+    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+      👁 แอพฯอื่น ณ จังหวะนี้ (R-28e: รีไซเคิล/E-Waste cert)
+    </summary>
+    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+      <p>• <strong>Admin :3000</strong> [A-11] Admin เห็น cert ใหม่ใน Scrap Certificates list
+        <a href="http://localhost:3000/scrap/certificates" className="underline ml-1">/scrap/certificates</a>
+      </p>
+      <p>• <strong>WeeeU :3002</strong> [U-32] เจ้าของซากเห็น cert จาก WeeeR (E-Waste ที่เคยทิ้ง)
+        <a href="http://localhost:3002/scrap/SC003/certificate" className="underline ml-1">/scrap/[id]/certificate</a>
+      </p>
+      <p>• หลัง submit → cert แสดงในหน้าเดิม (ไม่ navigate ออก) + ปุ่มดาวน์โหลด HTML</p>
+    </div>
+  </details>
+);
+
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { scrapApi } from "../../../_lib/api";
@@ -78,6 +103,10 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <AnnoOriginDispose />
+      <AnnoXAppDispose />
+
       <div className="flex items-center gap-3">
         <Link href={`/scrap/jobs/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">♻️ รีไซเคิล / ทำลาย</h1>
@@ -109,13 +138,17 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
             <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-red-600 text-sm">{submitError}</div>
           )}
 
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-              ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
-            {submitting ? "กำลังออกใบรับรอง…" : "✅ ออกใบรับรองการทำลาย"}
-          </button>
+          <div>
+            <button
+              onClick={handleSubmit}
+              disabled={submitting}
+              className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
+                ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
+              {submitting ? "กำลังออกใบรับรอง…" : "✅ ออกใบรับรองการทำลาย"}
+            </button>
+            {/* §6 Nav annotation */}
+            <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-1">→ cert แสดงในหน้าเดิม (ไม่ navigate) + ดาวน์โหลด HTML | Admin A-11 รับ cert</p>
+          </div>
         </>
       ) : (
         <>
