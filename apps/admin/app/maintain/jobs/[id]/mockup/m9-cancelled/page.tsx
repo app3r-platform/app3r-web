@@ -299,20 +299,8 @@ export default function M9CancelledAdminMockupPage() {
         </div>
       </main>
 
-      <MockAnno
-        caseId="M9"
-        screenId="A-07/m9"
-        origin="A-06 MAINTAIN-JOBS (status=cancelled) — Admin เลือก job"
-        nav={[
-          { label: "อนุมัติ settle", dest: "A-07 updated" },
-          { label: "กลับรายการ", dest: "A-06 /maintain/jobs" },
-        ]}
-        crossApp={[
-          { app: "WeeeU", desc: "ยอด settle คืน (U-16)" },
-          { app: "WeeeR", desc: "settle เข้า wallet + penalty" },
-          { app: "WeeeT", desc: "notification หยุดงาน" },
-        ]}
-      />
+      {/* M9 case · A-07c · admin canonical = data-driven (ดู ADMIN_ANNO_MAP) — case-flow owner: maintain */}
+      <MockAnno />
     </div>
   );
 }

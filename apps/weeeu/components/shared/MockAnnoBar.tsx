@@ -1,42 +1,127 @@
+"use client";
 /**
- * MockAnnoBar — shared mock annotation components for WeeeU (ลบก่อน production)
- * §5 Origin (yellow) · §6 Nav (blue) · §8 Cross-app (purple details)
- * Usage: import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/shared/MockAnnoBar"
+ * MockAnnoBar — P2 mockup annotation bar (dev only)
+ * ─────────────────────────────────────────────────
+ * §5 origin   : ◀ มาจาก: <Screen IDs>
+ * §6 nav      : → ไปต่อ: <destination IDs + labels>
+ * §8 cross-app: 👁 แอพฯอื่น ณ จังหวะนี้ → ลิงก์
+ *
+ * ลบทั้งหมดด้วย: grep -r "mock-anno" apps/weeeu --include="*.tsx" -l
+ * ทุก element ใช้ className ที่ขึ้นต้น "mock-anno" เพื่อ grep-delete ง่าย
+ *
+ * อ้างอิง: P0 Advisor Specs §3 + §5 + §6 + §8 · Gen 113
  */
-import type { ReactNode } from "react";
 
-// §5 — Origin bar (yellow) — "มาจากที่ไหน"
-export function MockAnnoOrigin({ text }: { text: string }) {
+import { usePathname } from "next/navigation";
+import { getMockAnnoEntry, type NavTarget, type XAppLink } from "@/lib/mock-anno-data";
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+function OriginBadge({ from }: { from: string[] }) {
+  if (!from.length) return null;
   return (
-    <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-      {text}
+    <span className="mock-anno mock-anno-origin inline-flex items-center gap-1 text-[10px] text-gray-500">
+      <span className="opacity-60">◀ มาจาก:</span>
+      {from.map((f, i) => (
+        <span key={i} className="mock-anno mock-anno-origin-item bg-gray-100 rounded px-1 py-0.5">
+          {f}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function NavBadge({ to }: { to: NavTarget[] }) {
+  if (!to.length) return null;
+  return (
+    <span className="mock-anno mock-anno-nav inline-flex items-center gap-1 flex-wrap text-[10px] text-blue-600">
+      <span className="opacity-60">→ ไปต่อ:</span>
+      {to.map((t, i) => (
+        <span key={i} className="mock-anno mock-anno-nav-item bg-blue-50 rounded px-1 py-0.5">
+          {t.branch && <span className="font-bold text-blue-400">[{t.branch}] </span>}
+          <span className="font-semibold">{t.id}</span>
+          <span className="text-blue-400 ml-0.5">{t.label}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function XAppBadge({ xapp }: { xapp: XAppLink[] }) {
+  if (!xapp.length) return null;
+  return (
+    <span className="mock-anno mock-anno-xapp inline-flex items-center gap-1 text-[10px] text-purple-600">
+      <span className="opacity-60">👁 แอพฯอื่น:</span>
+      {xapp.map((x, i) => (
+        <a
+          key={i}
+          href={`http://localhost:${x.port}${x.path}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mock-anno mock-anno-xapp-link bg-purple-50 rounded px-1 py-0.5 hover:bg-purple-100 transition-colors"
+          title={`${x.app} — ${x.screenId} : ${x.label}`}
+        >
+          <span className="font-semibold">{x.app}</span>
+          <span className="text-purple-400 ml-0.5">{x.screenId}</span>
+        </a>
+      ))}
+    </span>
+  );
+}
+
+// ── Main component ─────────────────────────────────────────────────────────────
+
+export function MockAnnoBar() {
+  const pathname = usePathname();
+
+  // Dev-only: ปิดถ้าไม่ได้เปิด NEXT_PUBLIC_DEV_NAV
+  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+
+  const entry = getMockAnnoEntry(pathname);
+  if (!entry) return null;
+
+  const hasContent =
+    entry.from.length > 0 ||
+    entry.to.length > 0 ||
+    (entry.xapp?.length ?? 0) > 0;
+
+  if (!hasContent) return null;
+
+  return (
+    <div
+      className="mock-anno mock-anno-bar sticky top-14 z-10 w-full bg-amber-50 border-b border-amber-200 px-4 py-1.5"
+      role="complementary"
+      aria-label="mockup-annotation"
+    >
+      {/* Screen ID label */}
+      <div className="mock-anno flex items-start gap-2 flex-wrap max-w-lg mx-auto">
+        <span className="mock-anno mock-anno-screen-id inline-flex items-center bg-amber-100 text-amber-700 text-[10px] font-bold rounded px-1.5 py-0.5 shrink-0">
+          🏷 {entry.screenId}
+        </span>
+        <OriginBadge from={entry.from} />
+        <NavBadge to={entry.to} />
+        {entry.xapp && <XAppBadge xapp={entry.xapp} />}
+      </div>
     </div>
   );
 }
 
-// §6 — Nav label (blue inline) — "ไปต่อที่ไหน"
-export function MockAnnoNav({ text }: { text: string }) {
-  return (
-    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-1">{text}</p>
-  );
+// ── Scrap extensions (union from feature/scrap-p2p3) ─────────────────────────
+export function MockAnnoOrigin({ text }: { text: string }) {
+  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+  return <span className="mock-anno mock-anno-origin text-[10px] text-gray-500">◀ {text}</span>;
 }
 
-// §8 — Cross-app expandable (purple) — "แอพฯอื่นเห็นอะไร"
-export function MockAnnoXApp({
-  screenLabel,
-  children,
-}: {
-  screenLabel: string;
-  children: ReactNode;
-}) {
+export function MockAnnoNav({ text }: { text: string }) {
+  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+  return <span className="mock-anno mock-anno-nav text-[10px] text-blue-600">→ {text}</span>;
+}
+
+export function MockAnnoXApp({ entries }: { entries: { app: string; screen: string; url?: string }[] }) {
+  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
   return (
-    <details className="mock-anno mock-anno-xapp">
-      <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-        👁 แอพฯอื่น ณ จังหวะนี้ ({screenLabel})
-      </summary>
-      <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-        {children}
-      </div>
-    </details>
+    <div className="mock-anno mock-anno-xapp text-[10px] text-purple-600">
+      👁 แอพฯอื่น: {entries.map((e, i) => <span key={i}>{e.app}/{e.screen}{i < entries.length - 1 ? " · " : ""}</span>)}
+    </div>
   );
 }
