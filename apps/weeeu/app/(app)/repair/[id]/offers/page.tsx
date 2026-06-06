@@ -240,6 +240,22 @@ export default function RepairOffersPage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      {/* ── mock-anno §5 origin (U-05 REPAIR-OFFERS) ────────────────────────── */}
+      <div className="mock-anno mock-anno-origin">
+        ◀ §5 มาจาก: <code>U-02</code> REPAIR-HOME (listing card &apos;ดูข้อเสนอ&apos;)
+      </div>
+      {/* ── mock-anno §8 cross-app ───────────────────────────────────────────── */}
+      <div className="mock-anno mock-anno-xapp">
+        §8 👁 WeeeR เห็น:{" "}
+        <a href="http://localhost:3001/repair/announcements" target="_blank" rel="noopener noreferrer">
+          <code>R-02/R-04</code> REPAIR-ANNOUNCE (offer submitted)
+        </a>
+        {" "}— หลังเลือกร้าน:{" "}
+        <a href="http://localhost:3001/repair/jobs" target="_blank" rel="noopener noreferrer">
+          <code>R-09</code> REPAIR-JOBS (new entry)
+        </a>
+      </div>
+      {/* §6 nav: เลือกร้าน → U-04 REPAIR-DETAIL (state: assigned) */}
       <div className="flex items-center gap-3">
         <Link href="/repair" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">ข้อเสนอ (Offer) จากร้านซ่อม</h1>

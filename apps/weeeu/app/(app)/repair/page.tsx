@@ -164,6 +164,21 @@ export default function RepairListPage() {
 
   return (
     <div className="space-y-6">
+      {/* ── mock-anno §5 origin (U-02 REPAIR-HOME) ──────────────────────────── */}
+      <div className="mock-anno mock-anno-origin">
+        ◀ §5 มาจาก: <code>U-01</code> Dashboard (sidebar &apos;งานซ่อม&apos;)
+      </div>
+      {/* ── mock-anno §8 cross-app ────────────────────────────────────────────── */}
+      <div className="mock-anno mock-anno-xapp">
+        §8 👁 เมื่อมีประกาศ open:{" "}
+        <a href="http://localhost:3001/repair/announcements" target="_blank" rel="noopener noreferrer" className="underline font-semibold">
+          <code>R-02</code> WeeeR: REPAIR-ANNOUNCE-LIST
+        </a>
+      </div>
+      {/* ── mock-anno §6 nav ─────────────────────────────────────────────────── */}
+      {/* §6: + แจ้งซ่อมใหม่ → U-02b (walk-in) | U-02c (pickup) | U-03 (ONSITE/SHIPPING) */}
+      {/* §6: listing card (offer_count>0) → U-05 REPAIR-OFFERS */}
+      {/* §6: job card → U-04 REPAIR-DETAIL (getActionLink ตาม status) */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">งานซ่อม</h1>
         <Link

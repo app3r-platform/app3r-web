@@ -298,6 +298,29 @@ export default function RepairJobDetailPage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      {/* ── mock-anno §5 origin (U-04 REPAIR-DETAIL) ────────────────────────── */}
+      <div className="mock-anno mock-anno-origin">
+        ◀ §5 มาจาก: <code>U-02</code> REPAIR-HOME · <code>U-05</code> REPAIR-OFFERS (หลังเลือกร้าน) · <code>U-38</code> CREATE-SUCCESS
+      </div>
+      {/* ── mock-anno §8 cross-app (ขึ้นกับ state ปัจจุบัน) ─────────────────── */}
+      <div className="mock-anno mock-anno-xapp">
+        §8 👁 แอพฯอื่น ณ จังหวะนี้:{" "}
+        <a href="http://localhost:3001/repair/jobs" target="_blank" rel="noopener noreferrer" className="mr-2">
+          <code>R-11</code> WeeeR: REPAIR-JOB-DETAIL
+        </a>
+        <a href="http://localhost:3003/jobs" target="_blank" rel="noopener noreferrer" className="mr-2">
+          <code>T-03</code> WeeeT: Job in-progress
+        </a>
+        <a href="http://localhost:3000/repair/jobs" target="_blank" rel="noopener noreferrer">
+          <code>A-03</code> Admin: REPAIR-JOB-DETAIL
+        </a>
+      </div>
+      {/* ── mock-anno §6 nav (depends on status) ────────────────────────────── */}
+      {/* awaiting_entry → U-09c REPAIR-APPROVE-ENTRY */}
+      {/* awaiting_user B1.2 → U-52a REPAIR-B1-DECISION */}
+      {/* awaiting_user B2.2 → U-52b REPAIR-B2-DECISION */}
+      {/* awaiting_review → U-09 REPAIR-REVIEW */}
+      {/* in_progress → U-06 REPAIR-PROGRESS */}
       <div className="flex items-center gap-3">
         <Link href="/repair" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">รายละเอียดงานซ่อม</h1>

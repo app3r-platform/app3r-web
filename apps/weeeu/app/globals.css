@@ -46,6 +46,37 @@ html, body {
   color: #1E293B;
 }
 
+/* ── mock-anno (P2/P3 Mockup Annotation System · HUB Gen 52) ──────────────────
+ * §5 mock-anno-origin  : ◀ มาจากจอใด (source screen label)
+ * §6 mock-anno-nav     : → ไปจอใด   (destination nav label, ใส่ใน comment ข้าง Link)
+ * §8 mock-anno-xapp    : 👁 แอพฯอื่น ณ จังหวะนี้ (cross-app per-step view)
+ * Usage: className="mock-anno mock-anno-origin"  etc.
+ * ──────────────────────────────────────────────────────────────────────────── */
+.mock-anno {
+  font-size: 0.7rem;
+  line-height: 1.5;
+  border-radius: 0.375rem;
+  padding: 0.3rem 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.mock-anno-origin {
+  background: #FFF8E1;
+  border: 1px solid #F59E0B;
+  color: #78350F;
+}
+.mock-anno-nav {
+  background: #EFF6FF;
+  border: 1px dashed #3B82F6;
+  color: #1D4ED8;
+}
+.mock-anno-xapp {
+  background: #F0FDF4;
+  border: 1px solid #10B981;
+  color: #065F46;
+}
+.mock-anno a { color: inherit; text-decoration: underline; font-weight: 600; }
+.mock-anno code { font-family: monospace; font-weight: 700; font-size: 0.65rem; }
+
 @layer utilities {
   .wallet-silver {
     background: linear-gradient(135deg, #64748B 0%, #94A3B8 50%, #CBD5E1 100%);

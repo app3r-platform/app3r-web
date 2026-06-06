@@ -178,6 +178,21 @@ export default function ReviewPage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      {/* ── mock-anno §5 origin (U-09 REPAIR-REVIEW) ─────────────────────────── */}
+      <div className="mock-anno mock-anno-origin">
+        ◀ §5 มาจาก: <code>U-04</code> REPAIR-DETAIL (state: awaiting_review) · หรือ <code>U-09d</code> REPAIR-DELIVERY
+      </div>
+      {/* ── mock-anno §8 cross-app ───────────────────────────────────────────── */}
+      <div className="mock-anno mock-anno-xapp">
+        §8 👁 แอพฯอื่น ณ จังหวะนี้:{" "}
+        <a href="http://localhost:3001/repair/jobs" target="_blank" rel="noopener noreferrer">
+          <code>R-11</code> WeeeR: REPAIR-JOB-DETAIL (awaiting approval)
+        </a>
+        {" · "}
+        <a href="http://localhost:3000/repair/analytics" target="_blank" rel="noopener noreferrer">
+          <code>A-21</code> Admin: REPAIR-ANALYTICS
+        </a>
+      </div>
       <div className="flex items-center gap-3">
         <Link href={`/repair/${id}`} className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">
