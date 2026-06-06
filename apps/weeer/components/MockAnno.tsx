@@ -47,17 +47,25 @@ export function MockAnnoOrigin({ from }: OriginProps) {
 // §6 — Destination label (wrap ปุ่ม/ลิงก์)
 // ────────────────────────────────────────────────────────────
 interface NavProps {
-  /** รหัสจอปลายทาง เช่น "R-09" */
-  to: string;
-  children: React.ReactNode;
+  /** รหัสจอปลายทาง เช่น "R-09" — canonical pattern (with children) */
+  to?: string;
+  children?: React.ReactNode;
   /** optional label (ignored, สำหรับ docs เท่านั้น) */
   label?: string;
   /** optional wrapper style เช่น { display: "contents" } */
   style?: React.CSSProperties;
+  /** PHASE-4-REMOVE shim (Advisor Gen 113 α · backward-compat for scrap-in-weeer legacy {text} pattern) */
+  text?: string;
 }
 
-export function MockAnnoNav({ to, children, style }: NavProps) {
+export function MockAnnoNav({ to, children, style, text }: NavProps) {
   if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return <>{children}</>;
+  // PHASE-4-REMOVE: shim path — legacy {text} pattern from scrap-in-weeer
+  if (text !== undefined && to === undefined) {
+    return (
+      <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-1">{text}</p>
+    );
+  }
   return (
     <span
       className="mock-anno mock-anno-nav"
