@@ -63,7 +63,7 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     destinations: [
       { buttonLabel: "กลับ", targetId: "A-02", targetLabel: "Repair Jobs" },
       { buttonLabel: "ดูข้อพิพาท (C9)", targetId: "A-05", targetLabel: "Repair Dispute Detail" },
-      { buttonLabel: "Manual Override", targetId: "A-03c", targetLabel: "Override งาน" },
+      { buttonLabel: "Manual Override", targetId: "A-03c", targetLabel: "A-03 state-c — Override งาน" },
     ],
     xapp: [
       { app: "WeeeU", port: 3002, screenId: "U-06", label: "ลูกค้าดูความคืบหน้า" },
@@ -133,7 +133,7 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-06", label: "Maintain Jobs list" }],
     destinations: [
       { buttonLabel: "กลับ", targetId: "A-06", targetLabel: "Maintain Jobs" },
-      { buttonLabel: "M9 Cancel mockup", targetId: "A-07c", targetLabel: "M9 Cancelled state" },
+      { buttonLabel: "M9 Cancel mockup", targetId: "A-07c", targetLabel: "A-07 state-c — M9-ยกเลิก" },
     ],
     xapp: [
       { app: "WeeeU", port: 3002, screenId: "U-16", label: "ลูกค้าดูงานบำรุง" },
@@ -148,17 +148,21 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     destinations: [
       { buttonLabel: "กลับ", targetId: "A-07", targetLabel: "Maintain Job Detail" },
     ],
-    xapp: [],
+    xapp: [
+      { app: "WeeeU", port: 3002, screenId: "U-16", label: "ลูกค้าเห็นงานบำรุง M9-ยกเลิก" },
+      { app: "WeeeR", port: 3001, screenId: "R-14", label: "ร้านเห็นงานบำรุง M9-ยกเลิก" },
+      { app: "WeeeT", port: 3003, screenId: "T-11", label: "ช่างเห็นงาน M9-ยกเลิก" },
+    ],
   },
 
   // ── A-08 Scrap Jobs ── ──────────────────────────────────────────────────────
   "A-08": {
     origins: [
       { id: "A-01", label: "Dashboard (sidebar)" },
-      { id: "A-08b", label: "กลับจาก Job Detail" },
+      { id: "A-08b", label: "A-08 state-b — กลับจาก Job Detail" },
     ],
     destinations: [
-      { buttonLabel: "คลิกรายการ", targetId: "A-08b", targetLabel: "Scrap Job Detail" },
+      { buttonLabel: "คลิกรายการ", targetId: "A-08b", targetLabel: "A-08 state-b — Scrap Job Detail" },
       { buttonLabel: "Disputes", targetId: "A-09", targetLabel: "Scrap Disputes" },
     ],
     xapp: [
