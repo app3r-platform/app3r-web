@@ -12,6 +12,43 @@ import {
 } from "../_lib/types";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
+// ── Mock fallback — fresh-session seed (D-T4-01 fix) ──────────────────────────
+function freshMockShopJobs(): MaintainJob[] {
+  const now = Date.now();
+  const iso = (ms: number) => new Date(now + ms).toISOString();
+  return [
+    {
+      id: "mock-mj-001", serviceCode: "M-2026-001", customerId: "C001",
+      shopId: "S001", technicianId: "T001",
+      status: "in_progress",
+      applianceType: "AC", cleaningType: "deep", serviceMethod: "on_site",
+      scheduledAt: iso(-1 * 3600000), estimatedDuration: 3,
+      address: { lat: 13.756, lng: 100.502, address: "123 ถนนสุขุมวิท แขวงคลองเตย กรุงเทพฯ" },
+      totalPrice: 1500, createdAt: iso(-6 * 3600000), updatedAt: iso(-1 * 3600000),
+    },
+    {
+      id: "mock-mj-002", serviceCode: "M-2026-002", customerId: "C002",
+      shopId: "S001", technicianId: "T002",
+      status: "assigned",
+      applianceType: "WashingMachine", cleaningType: "general", serviceMethod: "on_site",
+      scheduledAt: iso(2 * 3600000), estimatedDuration: 2,
+      address: { lat: 13.770, lng: 100.530, address: "456 ถนนลาดพร้าว แขวงลาดพร้าว กรุงเทพฯ" },
+      totalPrice: 800, createdAt: iso(-12 * 3600000), updatedAt: iso(-3 * 3600000),
+    },
+    {
+      id: "mock-mj-003", serviceCode: "M-2026-003", customerId: "C003",
+      shopId: "S001",
+      status: "awaiting_offer",
+      applianceType: "AC", cleaningType: "sanitize", serviceMethod: "on_site",
+      scheduledAt: iso(24 * 3600000), estimatedDuration: 4,
+      address: { lat: 13.785, lng: 100.518, address: "789 ถนนพหลโยธิน แขวงอนุสาวรีย์ กรุงเทพฯ" },
+      totalPrice: 2000,
+      recurring: { enabled: true, interval: "3_months", nextScheduledAt: iso(90 * 24 * 3600000) },
+      createdAt: iso(-24 * 3600000), updatedAt: iso(-24 * 3600000),
+    },
+  ];
+}
+
 const FILTER_TABS: { label: string; value: MaintainStatus | "all" }[] = [
   { label: "ทั้งหมด",      value: "all" },
   { label: "รอตอบรับ",     value: "awaiting_offer" },
@@ -34,7 +71,7 @@ export default function MaintainJobsPage() {
   useEffect(() => {
     maintainApi.getShopJobs()
       .then(setJobs)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => setJobs(freshMockShopJobs()))  // D-T4-01: seed sample data on API unavailable
       .finally(() => setLoading(false));
   }, []);
 
