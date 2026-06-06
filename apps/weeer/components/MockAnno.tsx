@@ -100,11 +100,30 @@ interface XAppEntry {
 }
 
 interface XAppProps {
-  entries: XAppEntry[];
+  /** canonical pattern — array of cross-app entries */
+  entries?: XAppEntry[];
+  /** PHASE-4-REMOVE shim (Advisor Gen 113 α · backward-compat for scrap-in-weeer 6 จอ) */
+  screenLabel?: string;
+  /** PHASE-4-REMOVE shim (Advisor Gen 113 α) — legacy JSX children pattern */
+  children?: React.ReactNode;
 }
 
-export function MockAnnoXApp({ entries }: XAppProps) {
+export function MockAnnoXApp({ entries, screenLabel, children }: XAppProps) {
   if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+  // PHASE-4-REMOVE: shim path — legacy {screenLabel, children} pattern from scrap-in-weeer
+  if (children !== undefined) {
+    return (
+      <details className="mock-anno mock-anno-xapp">
+        <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
+          👁 แอพฯอื่น ณ จังหวะนี้{screenLabel ? ` (${screenLabel})` : ""}
+        </summary>
+        <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
+          {children}
+        </div>
+      </details>
+    );
+  }
+  if (!entries || entries.length === 0) return null;
   return (
     <div
       className="mock-anno mock-anno-xapp"
