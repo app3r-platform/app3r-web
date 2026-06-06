@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAboutContent } from '@/lib/content-api';
 import AboutCTA from '@/components/marketing/AboutCTA';
+import { MockAnnoOrigin, MockAnnoNav } from '@/components/common';
 
 export const revalidate = 60; // ISR — อัปเดตทุก 60 วินาที
 
@@ -16,6 +17,8 @@ export default async function AboutPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจากหน้าหลักผ่าน Navbar/Footer */}
+      <MockAnnoOrigin from="W-01" />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
@@ -46,6 +49,7 @@ export default async function AboutPage() {
       </div>
 
       {/* CTA — role-conditional (W-02): visitor=สมัคร WeeeU+ติดต่อ · logged-in=ปิด */}
+      {/* §6 mock-anno-nav: AboutCTA → WeeeU signup / W-03 contact */}
       <AboutCTA />
 
       <p className="text-xs text-gray-400 text-right mt-4">อัปเดตล่าสุด: {aboutContent.updatedAt}</p>

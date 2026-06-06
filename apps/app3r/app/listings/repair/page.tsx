@@ -14,7 +14,7 @@ import MyProvincePrefill from '../../../components/listings/MyProvincePrefill';
 import NearbyTambonsPanel from '../../../components/listings/NearbyTambonsPanel';
 import RoleSplitSections from '../../../components/listings/RoleSplitSections';
 import { ALL_SERVICE_TYPES } from '../../../lib/constants/service-types';
-import { RoleAwareCTA, TermTooltip } from '@/components/common';
+import { RoleAwareCTA, TermTooltip, MockAnnoOrigin, MockAnnoXapp } from '@/components/common';
 import { crossAppUrls } from '@/lib/config/urls';
 
 const REPAIR_AREAS = ['กรุงเทพมหานคร', 'นนทบุรี', 'เชียงใหม่', 'ขอนแก่น', 'สงขลา', 'ชลบุรี'];
@@ -44,6 +44,8 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME hero section หรือ W-06 LISTINGS-HUB */}
+      <MockAnnoOrigin from={["W-01", "W-06"]} />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
@@ -51,8 +53,8 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
         <span className="text-gray-900 font-medium">ประกาศซ่อมเครื่องใช้ไฟฟ้า</span>
       </nav>
 
-      {/* Header */}
-      <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-8">
+      {/* Header — A4 fix: bg-blue-50→bg-website-brand-50, border-blue-200→border-website-brand-200 */}
+      <div className="bg-website-brand-50 border border-website-brand-200 rounded-2xl p-6 mb-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">🔧 ซ่อมเครื่องใช้ไฟฟ้า</h1>
@@ -173,6 +175,14 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
             </div>
           </div>
 
+          {/* §8 mock-anno-xapp: WeeeU เห็น "ประกาศของฉัน" · WeeeR เห็น "ที่ฉันยื่นข้อเสนอ" */}
+          <MockAnnoXapp
+            context="WeeeU ลงประกาศซ่อม → WeeeR เห็นประกาศใหม่"
+            apps={[
+              { app: "WeeeU", screen: "U-repair-list", href: "http://localhost:3002/repairs", label: "ประกาศของฉัน" },
+              { app: "WeeeR", screen: "R-repair-market", href: "http://localhost:3001/repairs", label: "ตลาดงานซ่อม" },
+            ]}
+          />
           {/* Role-split sections (W-07) — WeeeU: ที่ฉันประกาศ · WeeeR: ที่ฉันยื่นข้อเสนอ */}
           <RoleSplitSections
             context="ซ่อม"

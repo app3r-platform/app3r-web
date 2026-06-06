@@ -27,3 +27,7 @@ export type { ConditionalSectionProps } from "./ConditionalSection";
 
 // NOTE: C6 QnAThread lives in components/listings/QnAThread.tsx (near related comps),
 // import it directly: `@/components/listings/QnAThread`.
+
+// P2 Mockup Completeness — mock-anno annotation components (grep `mock-anno` ลบตอนโค้ดจริง)
+export { MockAnnoOrigin, MockAnnoNav, MockAnnoXapp } from "./MockAnno";
+export type { } from "./MockAnno";

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getArticleById, articles } from '@/lib/mock/articles'
 import RelatedArticles from '@/components/articles/RelatedArticles'
+import { MockAnnoOrigin } from '@/components/common'
 
 export async function generateStaticParams() {
   return articles.map((a) => ({ id: a.id }))
@@ -24,6 +25,8 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
   return (
     <article className="max-w-3xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-15 ARTICLES-LIST (article card click) */}
+      <MockAnnoOrigin from="W-15" />
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
         <span>/</span>

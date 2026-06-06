@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fragment } from "react";
 import Link from "next/link";
 import { productToResellPath } from "@/lib/content/product-resell-map";
-import { AdSlot } from "@/components/common";
+import { AdSlot, MockAnnoOrigin } from "@/components/common";
 
 export const metadata: Metadata = {
   title: "สินค้าแนะนำ",
@@ -95,6 +95,8 @@ const categories = ["ทั้งหมด", "แอร์", "เครื่อ
 export default function ProductsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME (header nav / footer) */}
+      <MockAnnoOrigin from="W-01" />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

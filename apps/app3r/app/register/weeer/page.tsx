@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useMockRole } from "@/lib/auth/useMockRole";
 import { crossAppUrls } from "@/lib/config/urls";
+import { MockAnnoOrigin, MockAnnoXapp } from "@/components/common";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -89,6 +90,15 @@ export default function RegisterWeeeRPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-10 px-4">
         <div className="max-w-3xl mx-auto">
+          {/* §5 mock-anno-origin: มาจากหลายจุด — home CTA + listing detail pages */}
+          <MockAnnoOrigin from={["W-01", "W-07", "W-08", "W-09", "W-10", "W-11", "W-12", "W-13", "W-14"]} />
+          {/* §8 mock-anno-xapp: WeeeR เริ่มสมัครที่ Website → ถูก redirect ไป WeeeR app จริง */}
+          <MockAnnoXapp
+            context="สมัคร WeeeR → redirect ไป WeeeR app"
+            apps={[
+              { app: "WeeeR", screen: "R-register", href: "http://localhost:3001/register", label: "ฟอร์มสมัคร WeeeR" },
+            ]}
+          />
           {/* Breadcrumb */}
           <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
             <Link href="/" className="hover:text-website-brand-500">หน้าหลัก</Link>
@@ -132,10 +142,10 @@ export default function RegisterWeeeRPage() {
               <p className="font-semibold text-website-brand-900 text-sm">รายงานยอดขาย</p>
               <p className="text-xs text-website-brand-700 mt-0.5">Dashboard real-time</p>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+            <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">🛡️</div>
-              <p className="font-semibold text-blue-900 text-sm">Escrow คุ้มครอง</p>
-              <p className="text-xs text-blue-700 mt-0.5">รับเงินตรงเวลา</p>
+              <p className="font-semibold text-website-brand-900 text-sm">Escrow คุ้มครอง</p>
+              <p className="text-xs text-website-brand-700 mt-0.5">รับเงินตรงเวลา</p>
             </div>
             <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">👥</div>
@@ -520,7 +530,7 @@ export default function RegisterWeeeRPage() {
             <div className="space-y-5">
               <h2 className="text-lg font-bold text-gray-900">เอกสารประกอบการสมัคร</h2>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
+              <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-sm text-website-brand-800">
                 <strong>เอกสารจำเป็น:</strong> App3R จะตรวจสอบเอกสารเพื่อยืนยันตัวตนและความน่าเชื่อถือ
                 กระบวนการใช้เวลา 3-5 วันทำการ
               </div>

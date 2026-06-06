@@ -10,7 +10,7 @@ import FilterSidebar from "../../../components/listings/FilterSidebar";
 import ScrapModeChips from "../../../components/listings/ScrapModeChips";
 import RoleSplitSections from "../../../components/listings/RoleSplitSections";
 import AdBanner from "../../../components/ads/AdBanner";
-import { RoleAwareCTA, TermTooltip } from "@/components/common";
+import { RoleAwareCTA, TermTooltip, MockAnnoOrigin } from "@/components/common";
 import { crossAppUrls } from "@/lib/config/urls";
 import type { ScrapFilter, ScrapMaterial } from "../../../lib/types";
 
@@ -43,6 +43,8 @@ export default async function ScrapListingsPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 HOME หรือ W-06 LISTINGS-HUB */}
+      <MockAnnoOrigin from={["W-01", "W-06"]} />
       {/* Ad Banner */}
       <AdBanner position="module_first_row" size="leaderboard" className="mb-6" />
 

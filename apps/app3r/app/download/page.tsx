@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { crossAppUrls } from "@/lib/config/urls";
+import { MockAnnoOrigin, MockAnnoXapp } from '@/components/common';
 
 export const metadata: Metadata = {
   title: "ดาวน์โหลดแอป App3R",
@@ -68,6 +69,8 @@ const webApps = [
 export default function DownloadPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-01 Footer "ดาวน์โหลดแอป" */}
+      <MockAnnoOrigin from="W-01" />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
@@ -126,6 +129,14 @@ export default function DownloadPage() {
       </div>
 
       {/* Web apps — Available now */}
+      {/* §8 mock-anno-xapp: ลิงก์ไป WeeeU Web (cross-app) + WeeeR Web (cross-app) */}
+      <MockAnnoXapp
+        context="เปิดเว็บแอปสำหรับผู้ใช้งาน"
+        apps={[
+          { app: "WeeeU", screen: "HOME", href: "http://localhost:3002", label: "WeeeU Web" },
+          { app: "WeeeR", screen: "HOME", href: "http://localhost:3001", label: "WeeeR Web" },
+        ]}
+      />
       <div className="mb-10">
         <h2 className="text-xl font-bold text-gray-900 mb-2">ใช้งานผ่าน Web ได้ทันที</h2>
         <p className="text-gray-500 text-sm mb-5">ระหว่างรอแอปมือถือ ใช้เวอร์ชัน Web ได้เลย (responsive รองรับมือถือ)</p>

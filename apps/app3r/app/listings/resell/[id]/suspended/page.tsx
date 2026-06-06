@@ -10,6 +10,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { MockAnnoOrigin } from "@/components/common";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 const MOCK_SUSPENDED = {
@@ -23,6 +24,8 @@ export default function SuspendedListingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* §5 mock-anno-origin: มาจาก W-12 LISTING-RESELL-DETAIL (listing.status===suspended → redirect) */}
+      <MockAnnoOrigin from="W-12" />
       <div className="max-w-lg mx-auto py-16 px-4 text-center space-y-6">
         {/* Icon */}
         <div className="text-7xl select-none">🚫</div>

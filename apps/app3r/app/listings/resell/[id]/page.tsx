@@ -12,7 +12,7 @@ import AdBanner from "../../../../components/ads/AdBanner";
 import LocationMapMock from "../../../../components/listings/LocationMapMock";
 import QnASection from "../../../../components/listings/QnASection";
 import EngagementCounters from "../../../../components/listings/EngagementCounters";
-import { AdSlot, RoleAwareCTA, TermTooltip, CopyShareButton } from "../../../../components/common";
+import { AdSlot, RoleAwareCTA, TermTooltip, CopyShareButton, MockAnnoOrigin, MockAnnoXapp } from "../../../../components/common";
 import { getMockEngagement } from "../../../../lib/mock/listing-engagement";
 import { getMockQnA } from "../../../../lib/mock/listing-qna";
 
@@ -59,6 +59,16 @@ export default async function ResellDetailPage({ params }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* §5 mock-anno-origin: มาจาก W-11 LISTINGS-RESELL (card click) */}
+      <MockAnnoOrigin from="W-11" />
+      {/* §8 mock-anno-xapp: WeeeU ซื้อมือสอง / WeeeR รับซื้อมือสอง */}
+      <MockAnnoXapp
+        context="WeeeU ซื้อสินค้ามือสอง / WeeeR รับซื้อ"
+        apps={[
+          { app: "WeeeU", screen: "U-resell-detail", href: "http://localhost:3002/listings/r001", label: "รายละเอียด (WeeeU)" },
+          { app: "WeeeR", screen: "R-resell-buy", href: "http://localhost:3001/buy-offers/new", label: "ยื่นข้อเสนอซื้อ (WeeeR)" },
+        ]}
+      />
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2 flex-wrap">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>
