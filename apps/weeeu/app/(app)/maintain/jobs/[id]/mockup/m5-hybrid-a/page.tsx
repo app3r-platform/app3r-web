@@ -29,7 +29,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { use } from "react";
-import { MockAnnoBar } from "@/components/MockAnnoBar";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Sample data ───────────────────────────────────────────────────────────────
 const MOCK_JOB = {
@@ -215,20 +215,8 @@ export default function M5HybridAMockupPage({
         ถ้าเปิดงานซ่อมใหม่ — Repair case ใหม่แยกอิสระ · พอยต์ทองใหม่ · ร้านซ่อมอาจเป็นคนละร้านกับช่างล้าง
       </p>
 
-      <MockAnnoBar
-        caseId="M5-HA"
-        screenId="U-16/m5"
-        origin="T-08 MAINTAIN-INSPECT (WeeeT กด convert to repair, D-Maintain-2)"
-        nav={[
-          { label: "เปิดงานซ่อมใหม่", dest: "/repair/new?from=maintain&jobId={id}" },
-          { label: "ไม่ซ่อม", dest: "U-12 /maintain/jobs" },
-        ]}
-        crossApp={[
-          { app: "WeeeR", desc: "closed_for_repair (R-14)" },
-          { app: "WeeeT", desc: "รอ WeeeU ดำเนินการ" },
-          { app: "Admin", desc: "maintain+repair jobs (A-07)" },
-        ]}
-      />
+      {/* M5-HA case · U-16/m5 · data-driven canonical (ADMIN_ANNO_MAP equiv) — case-flow owner: maintain */}
+      <MockAnnoBar />
     </div>
   );
 }

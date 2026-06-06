@@ -21,7 +21,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MockAnnoBar } from "@/components/MockAnnoBar";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 const JOB = {
   id: "mock-m9-001",
@@ -203,20 +203,8 @@ export default function M9CancelInProgressMockupPage() {
         </div>
       )}
 
-      <MockAnnoBar
-        caseId="M9"
-        screenId="U-16/m9"
-        origin="U-16 MAINTAIN-JOB-DETAIL (status=in_progress) — ปุ่ม ยกเลิกงาน"
-        nav={[
-          { label: "ยืนยันยุติ", dest: "U-12 /maintain/jobs (success)" },
-          { label: "ย้อนกลับ", dest: "U-16 /maintain/jobs/{id}" },
-        ]}
-        crossApp={[
-          { app: "WeeeR", desc: "ได้รับแจ้ง terminate · settle เข้า wallet (R-14)" },
-          { app: "WeeeT", desc: "รับแจ้งหยุดงาน" },
-          { app: "Admin", desc: "audit log M9 cancel (A-07/m9-cancelled)" },
-        ]}
-      />
+      {/* M9 case · U-16/m9 · data-driven canonical (ADMIN_ANNO_MAP equiv) — case-flow owner: maintain */}
+      <MockAnnoBar />
     </div>
   );
 }

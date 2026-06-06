@@ -22,7 +22,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { use } from "react";
-import { MockAnnoBar } from "@/components/MockAnnoBar";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Sample data ───────────────────────────────────────────────────────────────
 const MOCK_JOB = {
@@ -297,20 +297,8 @@ export default function M3RiskInspectMockupPage({
         </div>
       )}
 
-      <MockAnnoBar
-        caseId="M3"
-        screenId="U-16/m3"
-        origin="T-08 MAINTAIN-INSPECT (WeeeT บันทึก risk report)"
-        nav={[
-          { label: "ดำเนินต่อ", dest: "U-16 job detail (in_progress)" },
-          { label: "ยุติงาน", dest: "U-15 /maintain/jobs/{id}/cancel" },
-        ]}
-        crossApp={[
-          { app: "WeeeR", desc: "read-only risk_reported (R-14)" },
-          { app: "WeeeT", desc: "รอ WeeeU ตัดสินใจ (T-08)" },
-          { app: "Admin", desc: "เห็น risk_reported (A-07)" },
-        ]}
-      />
+      {/* M3 case · U-16/m3 · data-driven canonical (ADMIN_ANNO_MAP equiv) — case-flow owner: maintain */}
+      <MockAnnoBar />
     </div>
   );
 }
