@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import OtpInput from "@/components/shared/OtpInput";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 const MOCK_OTP = "123456";
 const MAX_OTP_ATTEMPTS = 3;
@@ -116,6 +117,8 @@ export default function MarketplaceOfferPage() {
   // ─── Offer form ──────────────────────────────────────────────────────────
   return (
     <div className="max-w-xl mx-auto px-4 py-6 space-y-5">
+      <MockAnnoBar />
+
       <div className="flex items-center gap-3">
         <Link href={`/marketplace/${id}`} className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">ยื่นข้อเสนอซื้อ</h1>

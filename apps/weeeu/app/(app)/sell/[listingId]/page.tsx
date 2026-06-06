@@ -16,6 +16,7 @@ import { listingsApi } from "@/lib/api/listings";
 import { offersApi } from "@/lib/api/offers";
 import { AdPromoteButton } from "@/components/listing/AdPromoteButton";
 import type { Listing, Offer } from "@/lib/types";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Demo mock overlay (toggle USE_MOCK = true เพื่อทดสอบ R2/R5) ──────────────
 const USE_MOCK = false;
@@ -218,6 +219,8 @@ export default function SellDetailPage() {
   // ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="max-w-xl space-y-5">
+      <MockAnnoBar />
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/sell" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
@@ -534,6 +537,7 @@ export default function SellDetailPage() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

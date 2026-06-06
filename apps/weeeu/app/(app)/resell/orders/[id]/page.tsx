@@ -2,22 +2,24 @@
 
 /**
  * Resell Order Detail — WeeeU (Extended transaction page)
+ * Screen ID: U-RES-ORD  ·  Path: /resell/orders/[id]
  * Covers:
- *   R6  — seller ไม่ส่ง/หายตัว (timeout) → buyer แจ้ง Admin
- *   R8  — buyer ปฏิเสธ inspection (สินค้าไม่ตรงปก) → dispute
- *         seller รับ notification → ยอมรับ (คืนเงิน) / เปิด dispute
- *   R11 — พัสดุเสียหายระหว่างส่ง → form แนบหลักฐาน → แจ้ง Admin
- *   R12 — buyer ขอยกเลิกร่วมกัน / seller ยืนยัน → mutually_cancelled
+ *   R6  — seller timeout → buyer แจ้ง Admin
+ *   R7  — §8 cross-app: WeeeR buyer tracking (resell/purchases/[id] :3001)
+ *   R8  — buyer ปฏิเสธ inspection → dispute · seller รับ → ยอมรับ / dispute
+ *   R10 — happy path: inspection_period → completed → Escrow ปลด → review
+ *   R11 — พัสดุเสียหาย → form → Admin
+ *   R12 — mutual cancel request
  *
- * Path: /resell/orders/[id]
- *
- * วิธีทดสอบ state ต่างๆ: เปลี่ยน MOCK_TX.state ด้านล่าง
+ * วิธีทดสอบ: เปลี่ยน MOCK_ORDER.state + is_buyer
+ * mock-anno: ลบ class mock-anno* ก่อน production (grep mock-anno)
  */
 
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type OrderState =
@@ -94,6 +96,7 @@ function EvidenceUploader({
 
   return (
     <div>
+      <MockAnnoBar />
       <p className="text-xs font-medium text-gray-700 mb-2">{label}</p>
       <div className="flex flex-wrap gap-2">
         {files.map((f) => (
@@ -157,6 +160,10 @@ export default function ResellOrderPage() {
 
   return (
     <div className="max-w-xl space-y-4">
+      {/* §5 mock-anno-origin — มาจาก U-RES-PAY /resell/awaiting-payment/[id] หลังชำระเงิน */}
+
+      {/* §8 mock-anno-xapp — R7: WeeeR buyer · R6/R8/R11: WeeeR seller · Admin */}
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
@@ -540,11 +547,30 @@ export default function ResellOrderPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           Terminal states
           ════════════════════════════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════════
+          R10 — Happy path completed (buyer ยืนยันรับ → Escrow ปลด → review)
+          ════════════════════════════════════════════════════════════════ */}
       {state === "completed" && (
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center space-y-2">
-          <p className="text-5xl">🎉</p>
-          <p className="font-bold text-green-800 text-lg">ธุรกรรมเสร็จสมบูรณ์!</p>
-          <p className="text-sm text-green-600">ขอบคุณที่ใช้บริการ WeeeU</p>
+        <div className="space-y-3">
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center space-y-3">
+            <p className="text-5xl">🎉</p>
+            <p className="font-bold text-green-800 text-lg">ธุรกรรมเสร็จสมบูรณ์!</p>
+            {/* B3: Escrow ตัวเลขชัดเจน */}
+            <p className="text-sm text-green-700 font-medium">
+              💰 ระบบพักเงินกลาง (Escrow) ปลดล็อก
+              <br />
+              <span className="text-green-800 font-bold">{order.agreed_price.toLocaleString()} Gold</span> โอนให้ผู้ขายแล้ว
+            </p>
+            <p className="text-sm text-green-600">ขอบคุณที่ใช้บริการ WeeeU</p>
+          </div>
+          {/* §8 cross-app: R10 — WeeeR seller เห็น Gold เข้า wallet */}
+          {/* A1: หน้า review หลัง completed (F1: รีวิวหลังธุรกรรมเสร็จ) */}
+          <Link
+            href={`/resell/orders/${order.id}/review`}
+            className="block w-full text-center bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
+          >
+            ⭐ รีวิวธุรกรรมนี้
+          </Link>
         </div>
       )}
 

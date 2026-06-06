@@ -7,6 +7,17 @@ import { apiFetch } from "@/lib/api-client";
 import { listingsApi } from "@/lib/api/listings";
 import type { Appliance } from "@/lib/types";
 import OtpInput from "@/components/shared/OtpInput";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+
+// USE_MOCK: true = ใช้ mock appliances list ไม่ต้อง BE running (R1 demo)
+//           false = เรียก /api/v1/appliances/mine/ จริง
+const USE_MOCK = true;
+
+const MOCK_APPLIANCES = [
+  { id: "ap-001", name: "ตู้เย็น Samsung 2 ประตู 14 คิว", brand: "Samsung", model: "RT38K501JS8" },
+  { id: "ap-002", name: "แอร์ Daikin 12000 BTU Inverter", brand: "Daikin", model: "FTKF35TV2S" },
+  { id: "ap-003", name: "เครื่องซักผ้า LG 8 กก. ฝาบน", brand: "LG", model: "T2108VS2W" },
+];
 
 // ค่าลงประกาศ (mock · admin rate-by-type จริง = BE) — used_appliance ตัด Point · scrap = ฟรี
 const LISTING_FEE_POINTS = 50; // mock อัตราคงที่
@@ -92,6 +103,12 @@ export default function SellNewPage() {
   const [otpError, setOtpError] = useState("");
 
   useEffect(() => {
+    if (USE_MOCK) {
+      // R1 demo: ใช้ mock appliances ไม่ต้อง BE
+      setAppliances(MOCK_APPLIANCES as unknown as Appliance[]);
+      setLoadingAppliances(false);
+      return;
+    }
     apiFetch("/api/v1/appliances/mine/")
       .then(r => r.ok ? r.json() : [])
       .then(setAppliances)
@@ -242,6 +259,8 @@ export default function SellNewPage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      <MockAnnoBar />
+
       <div className="flex items-center gap-3">
         <Link href="/sell" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <h1 className="text-xl font-bold text-gray-900">ประกาศขายใหม่</h1>

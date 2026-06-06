@@ -2,15 +2,17 @@
 
 /**
  * Awaiting Payment — WeeeU
+ * Screen ID: U-RES-PAY  ·  Path: /resell/awaiting-payment/[id]
  * Covers: R4 — buyer Gold ไม่พอ / รอเติม ≤ 24ชม. · countdown bar · auto-cancel เมื่อ = 0
  *         R4 seller — แสดง state "รอการชำระเงินจากผู้ซื้อ"
- * Path: /resell/awaiting-payment/[id]
+ * mock-anno: ลบ class mock-anno* ก่อน production (grep mock-anno)
  */
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 const MOCK_ORDER = {
@@ -75,6 +77,7 @@ export default function AwaitingPaymentPage() {
   if (!order.is_buyer) {
     return (
       <div className="max-w-xl space-y-5">
+        {/* §5 §8 annotations */}
         <div className="flex items-center gap-3">
           <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
             ‹
@@ -128,6 +131,7 @@ export default function AwaitingPaymentPage() {
   if (paid) {
     return (
       <div className="max-w-xl space-y-5">
+        {/* §5 §8 annotations */}
         <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center space-y-3">
           <p className="text-5xl">✅</p>
           <p className="font-bold text-green-800 text-lg">ชำระเงินสำเร็จ!</p>
@@ -149,6 +153,8 @@ export default function AwaitingPaymentPage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      <MockAnnoBar />
+      {/* §5 origin + §8 cross-app */}
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
@@ -274,12 +280,14 @@ export default function AwaitingPaymentPage() {
       {!expired && (
         <div className="space-y-2.5">
           {shortfall > 0 ? (
-            <Link
-              href="/wallet/deposit"
-              className="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
-            >
-              🪙 เติม Gold ก่อนชำระ (ขาด {shortfall.toLocaleString()})
-            </Link>
+            <>
+              <Link
+                href="/wallet/deposit"
+                className="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
+              >
+                🪙 เติม Gold ก่อนชำระ (ขาด {shortfall.toLocaleString()})
+              </Link>
+            </>
           ) : (
             <button
               onClick={handlePay}

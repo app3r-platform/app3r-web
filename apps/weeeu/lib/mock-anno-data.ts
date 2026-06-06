@@ -377,6 +377,18 @@ const MOCK_ANNO_MAP: Record<string, MockAnnoEntry> = {
       { app: "WeeeR", screenId: "R-23", label: "R-23 order WeeeR", port: 3001, path: "/resell/purchases/r001" },
     ],
   },
+
+  "/resell/orders/[id]/review": {
+    screenId: "U-RES-REV",
+    from: ["U-19c (state = completed)"],
+    to: [
+      { id: "U-04", label: "กลับ /sell" },
+      { id: "U-21", label: "กลับ marketplace" },
+    ],
+    xapp: [
+      { app: "WeeeR", screenId: "R-WALLET", label: "Gold เข้า wallet หลัง review", port: 3001, path: "/wallet" },
+    ],
+  },
   "/offers": {
     screenId: "U-17b",
     from: ["U-01 (ดูข้อเสนอที่ฉันยื่น)"],
