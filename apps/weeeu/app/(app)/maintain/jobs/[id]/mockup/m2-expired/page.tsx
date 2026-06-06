@@ -9,10 +9,18 @@
  *  2. Banner แจ้งหมดอายุ + timestamp
  *  3. ปุ่ม "ลงประกาศใหม่" → redirect ไป maintain/book (pre-fill ข้อมูล)
  *
+ *
+ * mock-anno §5: มาจาก U-16 MAINTAIN-JOB-DETAIL (status = "expired") — redirect เมื่อหมดอายุ
+ * mock-anno §6: ปุ่ม "ลงประกาศใหม่" → U-11 MAINTAIN-BOOK (/maintain/book?rebook={id})
+ *               ปุ่ม "ดูรายการงานทั้งหมด" → U-12 MAINTAIN-JOBS (/maintain/jobs)
+ * mock-anno §8: WeeeR: ไม่เห็น job (expired ไม่แสดงใน queue)
+ *               Admin (A-07): เห็น job status "expired"
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M2
  */
 
 import Link from "next/link";
+import { MockAnnoBar } from "@/components/MockAnnoBar";
 
 /* ─── mock data ─── */
 const JOB = {
@@ -136,6 +144,19 @@ export default function M2ExpiredMockupPage() {
       >
         ← ดูรายการงานทั้งหมด
       </button>
+
+      <MockAnnoBar
+        caseId="M2"
+        screenId="U-16/m2"
+        origin="U-16 MAINTAIN-JOB-DETAIL (status=expired)"
+        nav={[
+          { label: "ลงประกาศใหม่", dest: "U-11 /maintain/book?rebook={id}" },
+          { label: "ดูรายการงานทั้งหมด", dest: "U-12 /maintain/jobs" },
+        ]}
+        crossApp={[
+          { app: "Admin", desc: "เห็น status expired (A-07)" },
+        ]}
+      />
     </div>
   );
 }

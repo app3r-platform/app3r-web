@@ -10,11 +10,20 @@
  *  3. Reason textarea บังคับ (≥ 10 ตัวอักษร) ก่อน submit
  *  4. หลัง confirm → สถานะเปลี่ยนเป็น "withdrawn" + แจ้งคืนพอยต์ทองที่ล็อกให้ WeeeU
  *
+ *
+ * mock-anno §5: มาจาก R-14 MAINTAIN-JOB-DETAIL (status = "assigned") — WeeeR กด "ถอนรับงาน"
+ * mock-anno §6: success → R-12 MAINTAIN-JOBS (/maintain/jobs)
+ * mock-anno §8: WeeeU (U-16/m6-weeer-withdrew): ได้รับ notification → เห็น banner M6
+ *               WeeeU ตัดสิน: หาร้านใหม่ → queue เปิดใหม่ / ยกเลิก → U-15 cancel
+ *               Admin (A-07): เห็น audit log WeeeR withdraw + penalty
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M6 WeeeR
  */
 
 import { useState } from "react";
 import Link from "next/link";
+// M6 case · Advisor maintain เจ้าของ case-flow · Word module-file อ้างถึงจอนี้
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m6-weeer-001",
@@ -62,9 +71,15 @@ export default function M6WithdrawWeeeRMockupPage() {
 
   return (
     <div className="space-y-5 max-w-xl pb-8">
+      {/* §5 — มาจาก R-14 */}
+      <MockAnnoOrigin from="R-14" />
+
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/maintain/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
+        {/* §6 — success → R-12 /maintain/jobs */}
+        <MockAnnoNav to="R-12">
+          <Link href="/maintain/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
+        </MockAnnoNav>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-gray-900 truncate">
@@ -207,6 +222,15 @@ export default function M6WithdrawWeeeRMockupPage() {
           </div>
         </div>
       )}
+
+      {/* §8 — cross-app ณ จังหวะนี้ */}
+      <MockAnnoXApp
+        entries={[{
+          app: "WeeeU",
+          screen: "U-16 m6-weeer-withdrew",
+          url: "http://localhost:3002/maintain/jobs/[id]/mockup/m6-weeer-withdrew",
+        }]}
+      />
     </div>
   );
 }

@@ -9,11 +9,19 @@
  *  2. 2 ตัวเลือก: "หา WeeeR ใหม่" (reroute) / "ยกเลิกงาน"
  *  3. ถ้ายกเลิก: แสดง settle ตาม offer lock (พอยต์ทองที่ล็อก/ค่าเดินทางที่ WeeeR เคยระบุ)
  *
+ *
+ * mock-anno §5: มาจาก U-16 MAINTAIN-JOB-DETAIL (status = "weeer_withdrawn") — notification push WeeeU
+ * mock-anno §6: ปุ่ม "หา WeeeR ใหม่" → U-12 MAINTAIN-JOBS → กลับ queue WeeeR (/maintain/jobs?reroute={id})
+ *               ปุ่ม "ยกเลิกงาน" → U-15 MAINTAIN-CANCEL (/maintain/jobs/{id}/cancel)
+ * mock-anno §8: WeeeR (R-14): เห็น status "withdrawn" · settle เข้า WeeeR pocket
+ *               Admin (A-07): เห็น audit log WeeeR withdraw + settle breakdown
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M6 WeeeU
  */
 
 import { useState } from "react";
 import Link from "next/link";
+import { MockAnnoBar } from "@/components/MockAnnoBar";
 
 const JOB = {
   id: "mock-m6-001",
@@ -171,6 +179,20 @@ export default function M6WeeeRWithdrewMockupPage() {
           <Row label="ที่อยู่"   value={JOB.address.address} />
         </div>
       </div>
+
+      <MockAnnoBar
+        caseId="M6"
+        screenId="U-16c"
+        origin="U-16 MAINTAIN-JOB-DETAIL (status=weeer_withdrawn) — notification"
+        nav={[
+          { label: "หา WeeeR ใหม่", dest: "U-12 /maintain/jobs?reroute={id}" },
+          { label: "ยกเลิกงาน", dest: "U-15 /maintain/jobs/{id}/cancel" },
+        ]}
+        crossApp={[
+          { app: "WeeeR", desc: "status withdrawn · settle เข้า pocket (R-14)" },
+          { app: "Admin", desc: "audit log WeeeR withdraw (A-07)" },
+        ]}
+      />
     </div>
   );
 }

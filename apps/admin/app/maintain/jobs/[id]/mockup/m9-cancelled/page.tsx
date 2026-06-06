@@ -10,12 +10,22 @@
  *  3. Audit log timeline (WeeeU ส่ง → ระบบ process → settle สำเร็จ)
  *  4. Admin action: "อนุมัติ settle" / "ปรับ settle" / "escalate dispute"
  *
+ *
+ * mock-anno §5: มาจาก A-06 MAINTAIN-JOBS list (Admin เลือก job ที่ status = "cancelled")
+ *               หรือ A-07 job detail เดิม → settle pending → เข้าหน้า audit
+ * mock-anno §6: ปุ่ม "อนุมัติ settle" / "ปรับ settle" / "escalate" → stay (A-07 updated)
+ *               ปุ่ม "กลับรายการ" → A-06 MAINTAIN-JOBS
+ * mock-anno §8: WeeeU (U-16): เห็น status "cancelled" + ยอด settle คืน
+ *               WeeeR (R-14): เห็น settle เข้า wallet + penalty (ถ้ามี)
+ *               WeeeT: งานหยุด (notification only)
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M9 Admin
  */
 
 import Link from "next/link";
 import { useState } from "react";
 import { Sidebar } from "@/components/sidebar";
+import { MockAnno } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m9-admin-001",
@@ -288,6 +298,21 @@ export default function M9CancelledAdminMockupPage() {
           </div>
         </div>
       </main>
+
+      <MockAnno
+        caseId="M9"
+        screenId="A-07/m9"
+        origin="A-06 MAINTAIN-JOBS (status=cancelled) — Admin เลือก job"
+        nav={[
+          { label: "อนุมัติ settle", dest: "A-07 updated" },
+          { label: "กลับรายการ", dest: "A-06 /maintain/jobs" },
+        ]}
+        crossApp={[
+          { app: "WeeeU", desc: "ยอด settle คืน (U-16)" },
+          { app: "WeeeR", desc: "settle เข้า wallet + penalty" },
+          { app: "WeeeT", desc: "notification หยุดงาน" },
+        ]}
+      />
     </div>
   );
 }

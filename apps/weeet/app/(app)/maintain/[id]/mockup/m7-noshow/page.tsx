@@ -11,11 +11,21 @@
  *  2. No-show confirm dialog (พร้อม countdown รอ 15 นาที)
  *  3. หลัง confirm → state "no_show" + แจ้ง WeeeU ทันที
  *
+ *
+ * mock-anno §5: มาจาก T-08a arrive/page.tsx — WeeeT กด "ถึงที่" upload รูป → เข้าหน้า "รอลูกค้า"
+ * mock-anno §6: ปุ่ม "เริ่มล้าง" → T-08c checklist (/maintain/[id]/checklist) [normal path]
+ *               ปุ่ม "ลูกค้าไม่อยู่" → stage noshow_confirm → noshow_done
+ *               หลัง noshow_done: ไม่มี navigate — แสดง "รอ WeeeU ตัดสินใจ"
+ * mock-anno §8: WeeeU (U-16/mockup m7-noshow): รับ notification → เห็น "no_show" banner
+ *               WeeeR (R-14): เห็น job status "no_show" · no action required
+ *               Admin (A-07): เห็น no-show event ใน audit log
+ *
  * Maintain Gen 4 · 2026-05-24 · Mockup เคส M7 WeeeT
  */
 
 import { useState } from "react";
 import Link from "next/link";
+import { MockAnno } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m7-weeet-001",
@@ -187,6 +197,13 @@ export default function M7NoShowWeeeTMockupPage() {
           </div>
         )}
       </div>
+
+      {/* caseId="M7" screenId="T-08/m7" */}
+      <MockAnno
+        origin="M7 · T-08/m7 · T-08b MAINTAIN-ARRIVE — WeeeT กด ลูกค้าไม่อยู่"
+        nav={"เริ่มล้าง → T-08c checklist (normal path)\nลูกค้าไม่อยู่ → noshow_confirm → noshow_done"}
+        xapp="WeeeU: รับ notification no_show (U-16) · WeeeR: status no_show (R-14) · Admin: no-show event audit log (A-07)"
+      />
     </div>
   );
 }
