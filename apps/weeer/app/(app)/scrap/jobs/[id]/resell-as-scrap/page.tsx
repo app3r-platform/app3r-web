@@ -1,10 +1,14 @@
 "use client";
 
+// ── WeeeR Scrap R-28b — resell-as-scrap (S1 ขายต่อซาก) ──────────────────────
+
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { scrapApi } from "../../../_lib/api";
 import type { ScrapJob } from "../../../_lib/types";
+
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 // ── MOCK_JOB — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
 const MOCK_JOB: ScrapJob = {
@@ -66,6 +70,18 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "ขายต่อซาก")' />
+      <MockAnnoXApp screenLabel="R-28b: ขายต่อซาก">
+        <p>• <strong>WeeeU :3002</strong> [U-55] เจ้าของซากเห็นสถานะเปลี่ยน → listing ของตัวเองใน Scrap feed
+          <a href="http://localhost:3002/scrap" className="underline ml-1">/scrap</a>
+        </p>
+        <p>• <strong>Admin :3000</strong> [A-08] Admin เห็น ScrapJob status = in_progress → resell_as_scrap
+          <a href="http://localhost:3000/scrap/jobs" className="underline ml-1">/scrap/jobs</a>
+        </p>
+        <p>• หลัง submit → ประกาศซากใหม่ปรากฏใน R-70 /scrap feed สาธารณะ</p>
+      </MockAnnoXApp>
+
       <div className="flex items-center gap-3">
         <Link href={`/scrap/jobs/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">🏷 ขายต่อซาก</h1>
@@ -102,13 +118,17 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
         <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-red-600 text-sm">{submitError}</div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={submitting}
-        className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
-        {submitting ? "กำลังสร้างประกาศ…" : "✅ สร้างประกาศขายซาก"}
-      </button>
+      <div>
+        <button
+          onClick={handleSubmit}
+          disabled={submitting}
+          className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
+            ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
+          {submitting ? "กำลังสร้างประกาศ…" : "✅ สร้างประกาศขายซาก"}
+        </button>
+        {/* §6 Nav annotation */}
+        <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-1">→ กลับ R-28 /scrap/jobs/[id] (listing ใหม่ปรากฏใน R-70 feed)</p>
+      </div>
     </div>
   );
 }

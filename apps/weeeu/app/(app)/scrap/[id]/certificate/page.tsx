@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 const MOCK_CERT = {
   number: "EW-2026-001234",
@@ -13,6 +14,17 @@ export default async function ScrapCertificatePage({ params }: { params: Promise
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
+        {/* §5 Origin + §8 Cross-app annotations */}
+        <MockAnnoOrigin text="◀ มาจาก: U-33 · /scrap/[id] (S4: เลือก dispose → E-Waste cert ออกแล้ว) หรือ push notification" />
+        <MockAnnoXApp screenLabel="U-32: E-Waste cert (S4)">
+          <p>• <strong>Admin :3000</strong> [A-11] ออกใบรับรอง E-Waste ก่อน WeeeU เห็นหน้านี้
+            <a href="http://localhost:3000/scrap/certificates/EW-2026-001234" className="underline ml-1">/scrap/certificates/[id]</a>
+          </p>
+          <p>• <strong>WeeeR :3001</strong> [R-28e] R-28e ตัดสินใจ dispose → ส่ง Admin ออก cert
+            <a href="http://localhost:3001/scrap/jobs/SJ001/dispose" className="underline ml-1">/scrap/jobs/[id]/dispose</a>
+          </p>
+        </MockAnnoXApp>
+
         {/* Back link */}
         <Link href={`/scrap/${id}`} className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1">
           ← กลับรายละเอียดซาก

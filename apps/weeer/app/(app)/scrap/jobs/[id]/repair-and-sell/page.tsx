@@ -1,6 +1,9 @@
 "use client";
 
+// ── WeeeR Scrap R-28d — repair-and-sell (S3 ซ่อมขาย) ─────────────────────────
+
 import { use, useEffect, useState } from "react";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { scrapApi } from "../../../_lib/api";
@@ -96,6 +99,18 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "ซ่อมขาย")' />
+      <MockAnnoXApp screenLabel="R-28d: ซ่อมขาย">
+        <p>• <strong>WeeeT :3003</strong> [T-04] ช่างที่เลือกได้รับ assignment ใบซ่อมใหม่ (source: purchased_scrap)
+          <a href="http://localhost:3003/jobs" className="underline ml-1">/jobs</a>
+        </p>
+        <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็น status = repair_in_progress
+          <a href="http://localhost:3002/scrap/SC002" className="underline ml-1">/scrap/[id]</a>
+        </p>
+        <p>• หลัง submit → navigate ไป /repair/jobs/[newId] (R-11) ไม่ใช่ R-28</p>
+      </MockAnnoXApp>
+
       <div className="flex items-center gap-3">
         <Link href={`/scrap/jobs/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">🛠 สร้างใบซ่อม</h1>
@@ -183,13 +198,17 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
         <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-red-600 text-sm">{submitError}</div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={submitting}
-        className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
-          ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
-        {submitting ? "กำลังสร้างใบซ่อม…" : "✅ สร้างใบซ่อม (RepairJob)"}
-      </button>
+      <div>
+        <button
+          onClick={handleSubmit}
+          disabled={submitting}
+          className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors
+            ${submitting ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#FF663A] hover:bg-[#F04E20] text-white"}`}>
+          {submitting ? "กำลังสร้างใบซ่อม…" : "✅ สร้างใบซ่อม (RepairJob)"}
+        </button>
+        {/* §6 Nav annotation */}
+        <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-1">→ R-11 /repair/jobs/[newRepairJobId] (ไม่ใช่กลับ R-28)</p>
+      </div>
 
       <p className="text-center text-xs text-gray-400">
         หลังสร้างแล้วระบบจะพาไปหน้า RepairJob ที่สร้าง

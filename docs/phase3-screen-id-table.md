@@ -37,13 +37,15 @@
 | U-26 | RESELL-R8-DISPUTE | /purchases/r001/dispute | R8 | WeeeU |
 | U-27 | RESELL-PURCHASE | /purchases/r001 | R1-R3 | WeeeU |
 | U-28 | RESELL-PURCHASES | /purchases | R1-R3 | WeeeU |
-| U-29 | SCRAP-CREATE | /scrap/new | S1-S5 entry | WeeeU |
+| U-29 | SCRAP-CREATE | /scrap/new | S1-S5 entry · S12 ?from_repair | WeeeU |
 | U-30 | SCRAP-S1-OFFERS | /scrap/s001/offers | S1, S2, S5 | WeeeU |
 | U-31 | SCRAP-S1-CONFIRM | /scrap/s001/confirm | S1, S2 | WeeeU |
-| U-32 | SCRAP-S4-CERT | /scrap/s001/certificate | S4 | WeeeU |
-| U-33 | SCRAP-DETAIL | /scrap/s001 | S1-S5,S10 | WeeeU |
+| U-32 | SCRAP-S4-CERT | /scrap/s001/certificate | S4 E-Waste | WeeeU |
+| U-33 | SCRAP-DETAIL | /scrap/s001 | S1-S5,S8,S9,S10,S12 | WeeeU |
 | U-34 | APPLIANCES | /appliances | — | WeeeU |
 | U-35 | PROFILE | /profile | — | WeeeU |
+| U-41 | SCRAP-CREATE-SUCCESS | /scrap/new/success | S1/S2/S12 หลัง submit | WeeeU |
+| U-55 | SCRAP-HOME | /scrap | My Listings S5·S6·S10·S12 | WeeeU |
 
 ---
 
@@ -74,11 +76,19 @@
 | R-21 | RESELL-R1-INSPECT | /resell/purchases/r001/inspect | R1, R8 | WeeeR |
 | R-22 | RESELL-R8-DISPUTE | /resell/purchases/r001/dispute | R8 | WeeeR |
 | R-23 | RESELL-PURCHASE-DETAIL | /resell/purchases/r001 | R1-R3 | WeeeR |
-| R-24 | SCRAP-ANNOUNCE-LIST | /scrap/announcements | S1-S5 | WeeeR |
-| R-25 | SCRAP-BID | /scrap/announcements/s001/offer | S1, S2 | WeeeR |
+| R-24 | SCRAP-ANNOUNCE-LIST | /scrap/announcements | → redirect R-72 /scrap/browse | WeeeR |
+| R-25 | SCRAP-BID | /scrap/announcements/s001/offer | S1/S2 WeeeR ยื่น offer | WeeeR |
 | R-26 | SCRAP-ANNOUNCE-DETAIL | /scrap/announcements/s001 | S1-S5 | WeeeR |
-| R-27 | SCRAP-JOBS | /scrap/jobs | S1-S12 | WeeeR |
-| R-28 | SCRAP-JOB-DETAIL | /scrap/jobs/s001 | S1-S12 | WeeeR |
+| R-27 | SCRAP-JOBS | /scrap/jobs | S1-S12 งานซากทั้งหมด | WeeeR |
+| R-28 | SCRAP-JOB-DETAIL | /scrap/jobs/s001 | S1-S12 ตัดสินใจ | WeeeR |
+| R-28b | SCRAP-S1-DECISION | /scrap/jobs/s001/resell-as-scrap | S1 ขายต่อซาก | WeeeR |
+| R-28c | SCRAP-S2-DECISION | /scrap/jobs/s001/resell-parts | S2 แยกอะไหล่ | WeeeR |
+| R-28d | SCRAP-S3-DECISION | /scrap/jobs/s001/repair-and-sell | S3 ซ่อมขาย | WeeeR |
+| R-28e | SCRAP-S4-DECISION | /scrap/jobs/s001/dispose | S4 รีไซเคิล+cert | WeeeR |
+| R-70 | SCRAP-HUB | /scrap | Public feed S1-S12 | WeeeR |
+| R-71 | SCRAP-ITEM-DETAIL | /scrap/s001 | Public item detail | WeeeR |
+| R-72 | SCRAP-BROWSE | /scrap/browse | Browse + filter | WeeeR |
+| R-78 | SCRAP-BROWSE-DETAIL | /scrap/browse/s001 | รายละเอียด + ซื้อ | WeeeR |
 | R-29 | PARTS-MY-LISTINGS | /parts/my-listings | P1 | WeeeR |
 | R-30 | PARTS-MARKETPLACE | /parts/marketplace | P2, P3 | WeeeR |
 | R-31 | PARTS-ORDERS | /parts/orders | P5, P6 | WeeeR |
@@ -95,15 +105,17 @@
 | T-01 | JOBS-LIST | /jobs | C1-C10, M1-M9, S1-S12 | WeeeT |
 | T-02 | REPAIR-DIAGNOSE | /jobs/c001/diagnose | C1-C4 | WeeeT |
 | T-03 | REPAIR-C1-COMPLETE | /jobs/c001/repair | C1 | WeeeT |
-| T-04 | SCRAP-S6-PICKUP | /jobs/s001/pickup | S6, S9 | WeeeT |
+| T-04 | SCRAP-S6-PICKUP | /jobs/s001/pickup | S6 รับซาก · S9 no-show | WeeeT |
 | T-05 | REPAIR-C3-SCHEDULE | /jobs/c001/schedule | C3 | WeeeT |
 | T-06 | REPAIR-C4-SCRAP | /jobs/c001/scrap-offer | C4, S12 | WeeeT |
 | T-07 | JOB-COMPLETE | /jobs/c001/complete | C1-C4 complete | WeeeT |
 | T-08 | MAINTAIN-INSPECT | /jobs/m001/inspect | M4, M7 | WeeeT |
 | T-09 | MAINTAIN-M4-ISSUE | /jobs/m001/issue | M4 | WeeeT |
-| T-10 | SCRAP-S8-MISMATCH | /jobs/s001/mismatch | S8 | WeeeT |
+| T-10 | SCRAP-S8-MISMATCH | /jobs/s001/mismatch | S8 ซากไม่ตรงประกาศ | WeeeT |
 | T-11 | JOB-DETAIL | /jobs/c001 | All modules | WeeeT |
 | T-12 | PROFILE | /profile | — | WeeeT |
+| T-22 | SCRAP-HOME (T) | /scrap | Scrap list WeeeT | WeeeT |
+| T-23 | SCRAP-DETAIL (T) | /scrap/s001 | Scrap job detail | WeeeT |
 
 ---
 

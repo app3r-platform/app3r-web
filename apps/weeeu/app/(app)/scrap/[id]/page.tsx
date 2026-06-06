@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PublicQAThread } from "@/components/listing/PublicQAThread";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 // ── Mock types ────────────────────────────────────────────────────────────────
 interface ScrapOffer {
@@ -212,6 +213,20 @@ function ScrapListingDetailContent({
   return (
     <div className="max-w-xl space-y-5">
 
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <MockAnnoOrigin text="◀ มาจาก: U-55 · /scrap (รายการของฉัน) หรือ push notification" />
+      <MockAnnoXApp screenLabel="U-33: รายละเอียดซาก (S6/S8/S10)">
+        <p>• <strong>WeeeR :3001</strong> [R-28] S6: ร้านที่ยื่น offer เห็นสถานะรอพิจารณา
+          <a href="http://localhost:3001/scrap/jobs/SJ001" className="underline ml-1">/scrap/jobs/SJ001</a>
+        </p>
+        <p>• <strong>WeeeT :3003</strong> [T-04] S10: ช่างเห็นสถานะ in_progress กำลังเดินทาง
+          <a href="http://localhost:3003/jobs/J001/pickup" className="underline ml-1">/jobs/[id]/pickup</a>
+        </p>
+        <p>• <strong>WeeeT :3003</strong> [T-10] S8: ช่างรายงานของไม่ตรง → WeeeU เห็นแจ้งเตือนที่หน้านี้
+          <a href="http://localhost:3003/jobs/J001/mismatch" className="underline ml-1">/jobs/[id]/mismatch</a>
+        </p>
+      </MockAnnoXApp>
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/scrap" className="text-gray-400 hover:text-gray-700 text-xl">‹</Link>
@@ -348,13 +363,17 @@ function ScrapListingDetailContent({
               {/* S6 — Actions (เฉพาะ pending offer) */}
               {offer.status === "pending" && listing.status === "pending_offer" && (
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleAcceptOffer(offer.id)}
-                    disabled={submitting}
-                    className="flex-1 py-2 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
-                  >
-                    ✅ รับข้อเสนอนี้
-                  </button>
+                  <div className="flex-1">
+                    <button
+                      onClick={() => handleAcceptOffer(offer.id)}
+                      disabled={submitting}
+                      className="w-full py-2 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
+                    >
+                      ✅ รับข้อเสนอนี้
+                    </button>
+                    {/* §6 Nav annotation */}
+                    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">→ U-31 /scrap/[id]/confirm (S6 accept)</p>
+                  </div>
                   <button
                     onClick={() => setDeclineOfferId(offer.id)}
                     className="px-4 py-2 bg-white hover:bg-red-50 text-red-600 border border-red-200 text-sm rounded-xl transition-colors"

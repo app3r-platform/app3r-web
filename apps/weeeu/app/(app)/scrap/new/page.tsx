@@ -11,6 +11,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 // ── Mock: ดึงข้อมูล Repair Job (S12 pre-fill) ────────────────────────────────
 function getMockRepairJobData(repairJobId: string) {
@@ -63,6 +64,13 @@ function NewScrapForm() {
 
   return (
     <div className="max-w-xl space-y-6">
+
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <MockAnnoOrigin text="◀ มาจาก: U-55 · /scrap หรือ U-07 · /repair/[id]/scrap-offer (S12: Repair C4 → ?from_repair=REP-xxx)" />
+      <MockAnnoXApp screenLabel="U-29: ประกาศซากใหม่">
+        <p>• ขณะ WeeeU กรอกฟอร์มนี้ — แอพฯอื่นยังไม่เห็นรายการ (ยังไม่ publish)</p>
+        <p>• หลัง submit → <strong>WeeeR :3001</strong> [R-70] จะเห็นรายการใน feed /scrap</p>
+      </MockAnnoXApp>
 
       {/* Header */}
       <div className="flex items-center gap-3">
@@ -240,6 +248,8 @@ function NewScrapForm() {
         >
           {submitting ? "กำลังประกาศ..." : "✅ ประกาศซาก"}
         </button>
+        {/* §6 Nav annotation */}
+        <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono text-center">→ U-41 /scrap/new/success → U-55 /scrap</p>
       </form>
 
       <p className="text-xs text-center text-gray-400">

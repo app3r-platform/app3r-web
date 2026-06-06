@@ -1,11 +1,15 @@
 "use client";
 
+// ── WeeeR Scrap Job Detail — R-28 (S1-S4: ตัดสินใจจัดการซาก) ─────────────────
+
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { scrapApi } from "../../_lib/api";
 import type { ScrapJob, ScrapJobOption } from "../../_lib/types";
 import { SCRAP_JOB_STATUS_LABEL, SCRAP_JOB_STATUS_COLOR } from "../../_lib/types";
+
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 /* S7/S8 — extended fields (mock patch — ไม่แก้ shared type) */
 interface MismatchReport {
@@ -115,6 +119,20 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
 
   return (
     <div className="space-y-5 max-w-xl">
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <MockAnnoOrigin text="◀ มาจาก: R-27 · /scrap/jobs หรือ R-78 · /scrap/browse/[id] (กด 'ซื้อซากนี้')" />
+      <MockAnnoXApp screenLabel="R-28: Job">
+        <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ listing เปลี่ยนเป็น in_progress
+          <a href={`http://localhost:3002/scrap/SCR-002`} className="underline ml-1">/scrap/[id]</a>
+        </p>
+        <p>• <strong>WeeeT :3003</strong> [T-04] เมื่อ WeeeR เลือก option → ช่างได้รับ assignment รับซาก
+          <a href={`http://localhost:3003/jobs/J001/pickup`} className="underline ml-1">/jobs/[id]/pickup</a>
+        </p>
+        <p>• <strong>Admin :3000</strong> [A-08] Admin เห็นงานนี้ใน overview
+          <a href="http://localhost:3000/scrap/jobs" className="underline ml-1">/scrap/jobs</a>
+        </p>
+      </MockAnnoXApp>
+
       <div className="flex items-center gap-3">
         <Link href="/scrap/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">งานซาก</h1>
@@ -174,7 +192,13 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
                 </div>
                 {deciding === opt.value && <span className="text-xs text-[#F04E20]">กำลังบันทึก…</span>}
                 {isSelected && <span className="text-[#F04E20] text-sm">✓</span>}
-                {!isSelected && !opt.disabled && deciding === null && <span className="text-gray-300 text-sm">→</span>}
+                {!isSelected && !opt.disabled && deciding === null && (
+                  <div className="text-right">
+                    <span className="text-gray-300 text-sm">→</span>
+                    {/* §6 Nav annotation */}
+                    <MockAnnoNav text={`→ R-28${opt.value === "resell_as_scrap" ? "b" : opt.value === "resell_parts" ? "c" : opt.value === "repair_and_sell" ? "d" : "e"}`} />
+                  </div>
+                )}
               </button>
             );
           })}
