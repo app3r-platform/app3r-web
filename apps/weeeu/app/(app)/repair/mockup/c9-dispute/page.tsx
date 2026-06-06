@@ -23,14 +23,17 @@ export default function C9DisputePage() {
         <p className="text-xs text-gray-500">WeeeU เปิด Dispute → state: DISPUTED → Admin: A-04 → A-05 → A-03c → ตัดสิน</p>
       </div>
 
-      <MockAnnoBar variant="dispute" label="⚖️ Dispute Flow">
+      {/* C9 Dispute Flow · conformed to weeeu canonical MockAnnoBar (data-driven) — chrome content below */}
+      <MockAnnoBar />
+      <div className="mock-anno mock-anno-c9-dispute bg-purple-50 border border-purple-200 rounded-lg p-3 text-xs text-purple-900">
+        <p className="font-bold mb-1">⚖️ Dispute Flow</p>
         <p>
           WeeeU เปิด Dispute ที่ <strong>U-09b</strong> (ไม่พอใจคุณภาพ/ซ่อมไม่สำเร็จ)<br/>
           Admin รับเรื่องที่ <strong>A-04</strong> → สอบสวน <strong>A-05</strong> (disputes/[id])<br/>
           Admin ตัดสิน → <strong>A-03c</strong> (manual-override) → ผล: COMPLETED หรือ REFUND<br/>
           Escrow ถูก freeze ตลอด dispute period
         </p>
-      </MockAnnoBar>
+      </div>
 
       <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 text-sm space-y-1">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">📋 Sample Data</p>
