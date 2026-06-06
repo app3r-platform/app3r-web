@@ -19,39 +19,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
-
-// ─── mock-anno helpers — ลบก่อน production (grep mock-anno) ─────────────────
-function AnnoOrigin({ screenId, path }: { screenId: string; path: string }) {
-  return (
-    <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-      ◀ มาจาก: {screenId} · {path}
-    </div>
-  );
-}
-function AnnoNav({ screenId, path }: { screenId: string; path: string }) {
-  return (
-    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">
-      → {screenId} {path}
-    </p>
-  );
-}
-function AnnoXApp({ items }: { items: { app: string; port: number; screenId: string; path: string; note: string }[] }) {
-  return (
-    <details className="mock-anno mock-anno-xapp">
-      <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium select-none">
-        👁 แอพฯอื่น ณ จังหวะนี้
-      </summary>
-      <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-        {items.map((it, i) => (
-          <p key={i}>• <strong>{it.app} :{it.port}</strong> [{it.screenId}]
-            <a href={`http://localhost:${it.port}${it.path}`} className="underline ml-1 text-purple-600">{it.path}</a>
-            {it.note ? ` — ${it.note}` : ""}
-          </p>
-        ))}
-      </div>
-    </details>
-  );
-}
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type OrderState =
@@ -128,6 +96,7 @@ function EvidenceUploader({
 
   return (
     <div>
+      <MockAnnoBar />
       <p className="text-xs font-medium text-gray-700 mb-2">{label}</p>
       <div className="flex flex-wrap gap-2">
         {files.map((f) => (
@@ -192,14 +161,8 @@ export default function ResellOrderPage() {
   return (
     <div className="max-w-xl space-y-4">
       {/* §5 mock-anno-origin — มาจาก U-RES-PAY /resell/awaiting-payment/[id] หลังชำระเงิน */}
-      <AnnoOrigin screenId="U-RES-PAY" path="/resell/awaiting-payment/[id]" />
 
       {/* §8 mock-anno-xapp — R7: WeeeR buyer · R6/R8/R11: WeeeR seller · Admin */}
-      <AnnoXApp items={[
-        { app: "WeeeR (ผู้ขาย)", port: 3001, screenId: "R-RES-TX", path: "/resell/transactions/ord-001", note: "เห็น state ปัจจุบันของธุรกรรม" },
-        { app: "WeeeR (ผู้ซื้อ)", port: 3001, screenId: "R-RES-PUR", path: "/resell/purchases/ord-001", note: "R7: WeeeR ซื้อมือสอง — ติดตามสั่งซื้อ" },
-        { app: "Admin", port: 3003, screenId: "A-RES-DSP", path: "/resell/disputes/ord-001", note: "เห็นเมื่อ state=disputed" },
-      ]} />
 
       {/* Header */}
       <div className="flex items-center gap-3">
@@ -601,10 +564,6 @@ export default function ResellOrderPage() {
             <p className="text-sm text-green-600">ขอบคุณที่ใช้บริการ WeeeU</p>
           </div>
           {/* §8 cross-app: R10 — WeeeR seller เห็น Gold เข้า wallet */}
-          <AnnoXApp items={[
-            { app: "WeeeR (ผู้ขาย)", port: 3001, screenId: "R-WALLET", path: "/wallet", note: `Gold ${order.agreed_price.toLocaleString()} เข้า wallet แล้ว` },
-            { app: "WeeeR (ผู้ขาย)", port: 3001, screenId: "R-RES-TX", path: "/resell/transactions/ord-001", note: "สถานะ: completed" },
-          ]} />
           {/* A1: หน้า review หลัง completed (F1: รีวิวหลังธุรกรรมเสร็จ) */}
           <Link
             href={`/resell/orders/${order.id}/review`}
@@ -612,7 +571,6 @@ export default function ResellOrderPage() {
           >
             ⭐ รีวิวธุรกรรมนี้
           </Link>
-          <AnnoNav screenId="U-RES-REV" path="/resell/orders/[id]/review" />
         </div>
       )}
 
@@ -655,7 +613,6 @@ export default function ResellOrderPage() {
       >
         ← กลับไปข้อเสนอ
       </Link>
-      <AnnoNav screenId="U-OFFERS" path="/offers" />
     </div>
   );
 }

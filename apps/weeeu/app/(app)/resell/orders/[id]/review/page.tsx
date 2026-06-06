@@ -11,6 +11,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 const MOCK_ORDER = {
   id: "ord-001",
@@ -32,6 +33,7 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
   const [hover, setHover] = useState(0);
   return (
     <div className="flex gap-1">
+      <MockAnnoBar />
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -76,10 +78,6 @@ export default function ResellOrderReviewPage() {
   if (done) {
     return (
       <div className="max-w-xl space-y-5">
-        {/* mock-anno-origin §5 — มาจาก: U-RES-ORD /resell/orders/[id] (state=completed) */}
-        <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-          ◀ มาจาก: U-RES-ORD · /resell/orders/[id]
-        </div>
 
         <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center space-y-4">
           <p className="text-5xl">🌟</p>
@@ -94,7 +92,6 @@ export default function ResellOrderReviewPage() {
           </div>
         </div>
 
-        {/* mock-anno-nav §6 → U-04 /sell หรือ U-41 /marketplace */}
         <div className="space-y-2">
           <Link
             href="/sell"
@@ -102,14 +99,12 @@ export default function ResellOrderReviewPage() {
           >
             📋 ดูรายการขายของฉัน
           </Link>
-          <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono text-center">→ U-04 /sell</p>
           <Link
             href="/marketplace"
             className="block w-full text-center border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors"
           >
             🛒 กลับตลาดสินค้ามือสอง
           </Link>
-          <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono text-center">→ U-41 /marketplace</p>
         </div>
       </div>
     );
@@ -118,31 +113,6 @@ export default function ResellOrderReviewPage() {
   // ─── Review form ─────────────────────────────────────────────────────────
   return (
     <div className="max-w-xl space-y-5">
-      {/* mock-anno-origin §5 — มาจาก: U-RES-ORD /resell/orders/[id] */}
-      <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-        ◀ มาจาก: U-RES-ORD · /resell/orders/[id] (state = completed)
-      </div>
-
-      {/* mock-anno-xapp §8 — จอที่แอพฯอื่นเห็น ณ จังหวะนี้ */}
-      <details className="mock-anno mock-anno-xapp">
-        <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-          👁 แอพฯอื่น ณ จังหวะนี้ (R10 completed)
-        </summary>
-        <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-          <p>• <strong>WeeeR :3001</strong> (ผู้ขาย) →
-            <a href="http://localhost:3001/resell/transactions/ord-001" className="underline ml-1">
-              /resell/transactions/[id]
-            </a>
-            — สถานะ: &#34;ธุรกรรมเสร็จสมบูรณ์ · Gold {MOCK_ORDER.agreed_price.toLocaleString()} โอนเข้ากระเป๋าแล้ว&#34;
-          </p>
-          <p>• <strong>Admin</strong> →
-            <a href="http://localhost:3003/resell/transactions" className="underline ml-1">
-              /resell/transactions
-            </a>
-            — บันทึก: ปิดธุรกรรมสำเร็จ
-          </p>
-        </div>
-      </details>
 
       {/* Header */}
       <div className="flex items-center gap-3">
@@ -224,10 +194,6 @@ export default function ResellOrderReviewPage() {
         >
           {submitting ? "⟳ กำลังส่ง..." : "⭐ ส่งรีวิว"}
         </button>
-        {/* mock-anno-nav §6 → done screen */}
-        <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono text-center">
-          → U-RES-REV-OK (done banner · /sell หรือ /marketplace)
-        </p>
         <button
           onClick={() => router.push(`/resell/orders/${id}`)}
           className="w-full border border-gray-200 text-gray-500 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors"

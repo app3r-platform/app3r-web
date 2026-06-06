@@ -1,35 +1,7 @@
 import Link from "next/link";
 import { ReviewsSection } from "@/components/listing/ReviewsSection";
 import { ReportButton } from "@/components/listing/ReportButton";
-
-// mock-anno: ลบก่อน production
-const AnnoOriginMkt = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: U-41 · /marketplace
-  </div>
-);
-const AnnoNavMkt = () => (
-  <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">
-    → U-22 /marketplace/[id]/offer
-  </p>
-);
-const AnnoXAppMkt = ({ id }: { id: string }) => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (R9)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeR :3001</strong> [R-RES-LST-DET]
-        <a href={`http://localhost:3001/resell/listings/${id}`} className="underline ml-1">/resell/listings/[id]</a>
-        — ผู้ขาย WeeeR เห็นประกาศตัวเองพร้อมข้อเสนอที่ได้รับ
-      </p>
-      <p>• <strong>WeeeU :3002</strong> [U-SLL-DET]
-        <a href={`http://localhost:3002/sell/${id}`} className="underline ml-1">/sell/[listingId]</a>
-        — ผู้ขาย WeeeU เห็นรายการข้อเสนอ (ถ้า WeeeU เป็น seller)
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 const MOCK_ITEM = {
   id: "r001",
@@ -50,9 +22,8 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <MockAnnoBar />
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
-        {/* mock-anno §5 origin */}
-        <AnnoOriginMkt />
 
         {/* Back link */}
         <Link href="/marketplace" className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1">
@@ -97,9 +68,6 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
           </div>
         </div>
 
-        {/* mock-anno §8 cross-app */}
-        <AnnoXAppMkt id={id} />
-
         {/* Action buttons */}
         <div className="space-y-3 pt-2">
           <Link href={`/marketplace/${id}/offer`}>
@@ -107,8 +75,6 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
               ยื่นข้อเสนอซื้อ
             </button>
           </Link>
-          {/* mock-anno §6 nav */}
-          <AnnoNavMkt />
           <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
             แชทกับร้าน
           </button>

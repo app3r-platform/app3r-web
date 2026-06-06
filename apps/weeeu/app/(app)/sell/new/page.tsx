@@ -7,18 +7,7 @@ import { apiFetch } from "@/lib/api-client";
 import { listingsApi } from "@/lib/api/listings";
 import type { Appliance } from "@/lib/types";
 import OtpInput from "@/components/shared/OtpInput";
-
-// mock-anno helpers — ลบก่อน production
-const AnnoOriginSellNew = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: U-04 · /sell (กดปุ่ม "ประกาศขายใหม่")
-  </div>
-);
-const AnnoNavSellDet = () => (
-  <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">
-    → U-SLL-DET /sell/[listingId] (หลัง OTP ผ่าน + BE สร้าง listing)
-  </p>
-);
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // USE_MOCK: true = ใช้ mock appliances list ไม่ต้อง BE running (R1 demo)
 //           false = เรียก /api/v1/appliances/mine/ จริง
@@ -263,8 +252,6 @@ export default function SellNewPage() {
           >
             {submitting ? "⟳ กำลังประกาศ..." : "ยืนยัน OTP และประกาศ"}
           </button>
-          {/* mock-anno §6 nav */}
-          <AnnoNavSellDet />
         </div>
       </div>
     );
@@ -272,8 +259,7 @@ export default function SellNewPage() {
 
   return (
     <div className="max-w-xl space-y-5">
-      {/* mock-anno §5 origin */}
-      <AnnoOriginSellNew />
+      <MockAnnoBar />
 
       <div className="flex items-center gap-3">
         <Link href="/sell" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>

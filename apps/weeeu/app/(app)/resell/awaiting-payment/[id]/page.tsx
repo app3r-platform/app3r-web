@@ -12,30 +12,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
-
-// ─── mock-anno helpers (ลบก่อน production) ───────────────────────────────────
-const AnnoOriginBlock = ({ screenId, path }: { screenId: string; path: string }) => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: {screenId} · {path}
-  </div>
-);
-const AnnoNavTag = ({ screenId, path }: { screenId: string; path: string }) => (
-  <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5">→ {screenId} {path}</p>
-);
-const AnnoXAppBlock = () => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (R4)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeR :3001</strong> [R-RES-TX]
-        <a href="http://localhost:3001/resell/transactions/txn-001" className="underline ml-1">/resell/transactions/[id]</a>
-        — แสดง: &#34;รอการชำระเงิน (Gold 4,300) จากผู้ซื้อ — เหลือ XX ชม.&#34;
-      </p>
-      <p>• <strong>WeeeU :3002</strong> [U-SLL-DET] (seller) — เห็นเหมือนกัน (is_buyer=false)</p>
-    </div>
-  </details>
-);
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 const MOCK_ORDER = {
@@ -101,8 +78,6 @@ export default function AwaitingPaymentPage() {
     return (
       <div className="max-w-xl space-y-5">
         {/* §5 §8 annotations */}
-        <AnnoOriginBlock screenId="U-SLL-DET" path="/sell/[listingId] (offer_selected)" />
-        <AnnoXAppBlock />
         <div className="flex items-center gap-3">
           <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
             ‹
@@ -157,8 +132,6 @@ export default function AwaitingPaymentPage() {
     return (
       <div className="max-w-xl space-y-5">
         {/* §5 §8 annotations */}
-        <AnnoOriginBlock screenId="U-RES-PAY" path="/resell/awaiting-payment/[id]" />
-        <AnnoXAppBlock />
         <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center space-y-3">
           <p className="text-5xl">✅</p>
           <p className="font-bold text-green-800 text-lg">ชำระเงินสำเร็จ!</p>
@@ -173,7 +146,6 @@ export default function AwaitingPaymentPage() {
           >
             ดูสถานะคำสั่งซื้อ
           </Link>
-          <AnnoNavTag screenId="U-RES-ORD" path="/resell/orders/[id]" />
         </div>
       </div>
     );
@@ -181,9 +153,8 @@ export default function AwaitingPaymentPage() {
 
   return (
     <div className="max-w-xl space-y-5">
+      <MockAnnoBar />
       {/* §5 origin + §8 cross-app */}
-      <AnnoOriginBlock screenId="U-MKT-OFFER-OK" path="/marketplace/[id]/offer/success (U-42)" />
-      <AnnoXAppBlock />
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
@@ -316,7 +287,6 @@ export default function AwaitingPaymentPage() {
               >
                 🪙 เติม Gold ก่อนชำระ (ขาด {shortfall.toLocaleString()})
               </Link>
-              <AnnoNavTag screenId="U-WALLET-DEP" path="/wallet/deposit" />
             </>
           ) : (
             <button
