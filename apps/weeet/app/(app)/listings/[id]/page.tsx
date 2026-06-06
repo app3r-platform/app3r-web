@@ -4,6 +4,7 @@
 import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getListing, transitionListing } from "@/lib/listing-api";
+import { MockAnno } from "@/components/MockAnno";
 import {
   type ListingMetaDto,
   type ListingState,
@@ -101,6 +102,11 @@ export default function ServiceListingDetailPage({
 
   return (
     <div className="pb-8">
+      <MockAnno
+        origin="T-17 ประกาศบริการของฉัน /listings"
+        nav="completed → release escrow Gold Point\ncancelled → refund Gold Point"
+        xapp="§8 Escrow: WeeeR (จัดการ escrow) · WeeeU (ผู้ซื้อ ได้รับ refund)"
+      />
       {/* Header */}
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">

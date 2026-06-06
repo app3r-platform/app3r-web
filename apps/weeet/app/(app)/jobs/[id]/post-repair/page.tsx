@@ -85,7 +85,7 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">T5 — บันทึกหลังซ่อม</h1>
+          <h1 className="font-bold text-white">T-38 — บันทึกหลังซ่อม</h1>
           <p className="text-xs text-gray-400">รูป {MIN_PHOTOS}+ ใบ + คลิป {MIN_CLIPS}+ คลิป (บังคับ)</p>
         </div>
       </div>

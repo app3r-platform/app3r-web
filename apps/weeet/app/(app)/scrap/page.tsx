@@ -146,7 +146,7 @@ export default function WeeeTScrapJobsPage() {
               filterStatus === s
                 ? s === "no_show"
                   ? "bg-red-100 text-red-700"
-                  : "bg-[#1696F9] text-white"
+                  : "bg-weeet-primary text-white"
                 : "text-gray-500 hover:text-gray-900"
             }`}
           >

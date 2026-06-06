@@ -2,6 +2,7 @@
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
+import { MockAnno } from "@/components/MockAnno";
 
 export default function DepartPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -43,9 +44,14 @@ export default function DepartPage({ params }: { params: Promise<{ id: string }>
 
   return (
     <div className="pb-6">
+      <MockAnno
+        origin="T-11 รายละเอียดงาน /jobs/[id]"
+        nav="T-11 /jobs/[id] (ยืนยันออกเดินทางสำเร็จ)"
+        xapp="→ WeeeR (รับ GPS depart) · → WeeeU (แจ้งช่างออกเดินทาง)"
+      />
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
-        <h1 className="font-bold text-white">T1 — ออกเดินทาง</h1>
+        <h1 className="font-bold text-white">T-34 — ออกเดินทาง</h1>
       </div>
 
       <div className="px-4 pt-6 space-y-5">

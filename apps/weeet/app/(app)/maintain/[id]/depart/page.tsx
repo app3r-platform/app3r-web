@@ -45,7 +45,7 @@ export default function MaintainDepartPage({ params }: { params: Promise<{ id: s
     <div className="pb-6">
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
-        <h1 className="font-bold text-white">M1 — ออกเดินทาง</h1>
+        <h1 className="font-bold text-white">T-43 — ออกเดินทาง</h1>
       </div>
 
       <div className="px-4 pt-6 space-y-5">
