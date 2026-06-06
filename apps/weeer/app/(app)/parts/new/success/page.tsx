@@ -5,7 +5,7 @@
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { FlowOrigin, FlowNav } from "@/components/MockAnno";
+import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export default function PartsNewSuccessPage() {
   const router = useRouter();
@@ -19,11 +19,8 @@ export default function PartsNewSuccessPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 px-4 max-w-sm mx-auto text-center">
-      {/* §5 P1 Flow Origin */}
-      <FlowOrigin
-        sources={[{ id: "R-29", label: "My Listings (+ ลงขายใหม่)" }]}
-        cases="P1"
-      />
+      {/* §5 Flow Origin — เคส P1 */}
+      <MockAnnoOrigin from={["R-29"]} />
 
       {/* ✅ Icon */}
       <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
@@ -55,15 +52,15 @@ export default function PartsNewSuccessPage() {
         </p>
       </div>
 
-      {/* CTA */}
-      {/* §6 FlowNav: ปุ่ม CTA → R-29 */}
-      <button
-        onClick={() => router.push("/parts/my-listings")}
-        className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
-      >
-        ดูรายการขายของฉัน
-        <FlowNav targetId="R-29" targetLabel="My Listings" />
-      </button>
+      {/* CTA §6 → R-29 */}
+      <MockAnnoNav to="R-29" style={{ display: "block" }}>
+        <button
+          onClick={() => router.push("/parts/my-listings")}
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
+        >
+          ดูรายการขายของฉัน
+        </button>
+      </MockAnnoNav>
     </div>
   );
 }

@@ -16,7 +16,7 @@ import { MarketplaceStatsCard } from "../../../../components/parts/MarketplaceSt
 import { getCurrentShopId, getListings, saveListings, usePartsSync } from "../../../../lib/utils/parts-sync";
 import { FEATURE_FLAGS } from "../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../_lib/catalog-api";
-import { FlowOrigin, CrossAppPanel } from "@/components/MockAnno";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 export default function MarketplacePage() {
   const router = useRouter();
@@ -74,22 +74,16 @@ export default function MarketplacePage() {
 
   return (
     <div className="space-y-4">
-      {/* §5 Flow Origin */}
-      <FlowOrigin
-        sources={[{ id: "R-51", label: "Parts Hub (shortcut ตลาด B2B)" }]}
-        cases="P3, P4, P10, P11"
-      />
+      {/* §5 Flow Origin — เคส P3, P4, P10, P11 */}
+      <MockAnnoOrigin from={["R-51"]} />
 
-      {/* §8 Cross-App — ผู้ขาย WeeeR เห็น R-29 ขณะผู้ซื้อกำลัง browse */}
-      <CrossAppPanel
-        moment="ผู้ซื้อ browse ตลาด"
+      {/* §8 Cross-App — ผู้ขาย WeeeR เห็น R-29 ขณะผู้ซื้อกำลัง browse (เคส P3) */}
+      <MockAnnoXApp
         entries={[{
           app: "WeeeR (ร้านผู้ขาย)",
-          screenId: "R-29",
-          screenLabel: "My Listings",
-          description: "เห็น listing ของตนปรากฏใน marketplace · รอการสั่งซื้อ",
+          screen: "R-29 My Listings",
+          url: "http://localhost:3001/parts/my-listings",
         }]}
-        cases="P3"
       />
 
       {apiError && (
@@ -136,9 +130,9 @@ export default function MarketplacePage() {
         />
       )}
 
-      {/* §6 FlowNav: แต่ละ card → R-30c (Item Detail) */}
+      {/* §6 mock-anno: แต่ละ card → R-30c (Item Detail) */}
       {filtered.length > 0 && (
-        <p className="mock-anno mock-anno-nav text-xs text-orange-600 bg-orange-50 border border-orange-100 rounded-lg px-2 py-1">
+        <p className="mock-anno text-xs text-orange-600 bg-orange-50 border border-orange-100 rounded-lg px-2 py-1">
           §6 คลิก card → <span className="font-mono font-semibold">R-30c</span> รายละเอียดอะไหล่ (P3, P4, P10, P11)
         </p>
       )}

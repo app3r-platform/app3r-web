@@ -21,7 +21,7 @@ import {
 } from "../../../../lib/utils/parts-sync";
 import { escrowRelease, escrowRefund, getEscrowHeldByShop } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
-import { FlowOrigin, CrossAppPanel } from "@/components/MockAnno";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 type SideTab = "buyer" | "seller";
 type StageFilter = PartOrder["stage"] | "all";
@@ -129,33 +129,23 @@ export default function MyOrdersPage() {
 
   return (
     <div className="space-y-4">
-      {/* §5 Flow Origin */}
-      <FlowOrigin
-        sources={[
-          { id: "R-30c", label: "Item Detail (สั่งซื้อสำเร็จ)" },
-          { id: "R-51", label: "Parts Hub (nav)" },
-        ]}
-        cases="P4, P5, P6, P7, P8, P9"
-      />
+      {/* §5 Flow Origin — เคส P4, P5, P6, P7, P8, P9 */}
+      <MockAnnoOrigin from={["R-30c", "R-51"]} />
 
-      {/* §8 Cross-App — ผู้ขาย WeeeR ณ ขณะต่างๆ ของ flow */}
-      <CrossAppPanel
-        moment="ผู้ซื้อดูออเดอร์ / ดำเนินการ"
+      {/* §8 Cross-App — ผู้ขาย WeeeR ณ ขณะต่างๆ ของ flow (เคส P5, P6, P7) */}
+      <MockAnnoXApp
         entries={[
           {
             app: "WeeeR (ร้านผู้ขาย)",
-            screenId: "R-29",
-            screenLabel: "My Listings (tab: คำสั่งซื้อ)",
-            description: "[P5] เมื่อผู้ซื้อรอ confirm → ผู้ขายเห็น order ใหม่ใน incoming · [P6] กดส่ง → tracking ปรากฏ",
+            screen: "R-29 My Listings (tab: คำสั่งซื้อ)",
+            url: "http://localhost:3001/parts/my-listings",
           },
           {
             app: "WeeeR (ร้านผู้ขาย)",
-            screenId: "R-33",
-            screenLabel: "My Orders (seller tab)",
-            description: "[P7] เมื่อผู้ซื้อรับของ → escrow release → ยอด pts เข้าร้านผู้ขาย",
+            screen: "R-33 My Orders (seller tab)",
+            url: "http://localhost:3001/parts/my-orders",
           },
         ]}
-        cases="P5, P6, P7"
       />
 
       <h1 className="text-xl font-bold text-gray-900">คำสั่งซื้อของฉัน</h1>
@@ -203,7 +193,7 @@ export default function MyOrdersPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {/* §6 FlowNav: click order card → R-34 (Buyer Order Detail) */}
+          {/* §6 mock-anno: click order card → R-34 (Buyer Order Detail) */}
           {filtered.map((o) => (
             <div key={o.id} onClick={() => router.push(`/parts/my-orders/${o.id}`)} className="cursor-pointer" title="§6 → R-34 Buyer Order Detail">
               <OrderCard order={o} role={sideTab} onAction={handleAction} />

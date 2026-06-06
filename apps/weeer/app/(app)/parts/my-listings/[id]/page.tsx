@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { getListings } from "../../../../../lib/utils/parts-sync";
 import { PART_LISTINGS_MOCK } from "../../_lib/mock-data";
 import { B2B_CONDITION_LABEL } from "../../_lib/types";
-import { FlowOrigin } from "@/components/MockAnno";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function MyListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -33,10 +33,8 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
   return (
     <div className="space-y-4">
       {/* §5 Flow Origin — P2 */}
-      <FlowOrigin
-        sources={[{ id: "R-29", label: "My Listings (listing card)" }]}
-        cases="P2"
-      />
+      {/* §5 Flow Origin — เคส P2 */}
+      <MockAnnoOrigin from={["R-29"]} />
 
       {/* Header */}
       <div className="flex items-center gap-3">
