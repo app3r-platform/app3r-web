@@ -198,19 +198,11 @@ export default function M7NoShowWeeeTMockupPage() {
         )}
       </div>
 
+      {/* caseId="M7" screenId="T-08/m7" */}
       <MockAnno
-        caseId="M7"
-        screenId="T-08/m7"
-        origin="T-08b MAINTAIN-ARRIVE — WeeeT กด ลูกค้าไม่อยู่"
-        nav={[
-          { label: "เริ่มล้าง", dest: "T-08c checklist (normal path)" },
-          { label: "ลูกค้าไม่อยู่", dest: "noshow_confirm → noshow_done" },
-        ]}
-        crossApp={[
-          { app: "WeeeU", desc: "รับ notification no_show (U-16)" },
-          { app: "WeeeR", desc: "status no_show (R-14)" },
-          { app: "Admin", desc: "no-show event audit log (A-07)" },
-        ]}
+        origin="M7 · T-08/m7 · T-08b MAINTAIN-ARRIVE — WeeeT กด ลูกค้าไม่อยู่"
+        nav={"เริ่มล้าง → T-08c checklist (normal path)\nลูกค้าไม่อยู่ → noshow_confirm → noshow_done"}
+        xapp="WeeeU: รับ notification no_show (U-16) · WeeeR: status no_show (R-14) · Admin: no-show event audit log (A-07)"
       />
     </div>
   );

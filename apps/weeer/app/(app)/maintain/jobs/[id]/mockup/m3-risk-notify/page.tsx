@@ -23,7 +23,8 @@
 
 import Link from "next/link";
 import { use } from "react";
-import { MockAnno } from "@/components/MockAnno";
+// M3 case · Advisor maintain เจ้าของ case-flow · Word module-file อ้างถึงจอนี้
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 const MOCK_JOB = {
   id: "mock-m3-weeer-001",
@@ -94,6 +95,9 @@ export default function M3RiskNotifyWeeRMockupPage({
       </div>
 
       <div className="px-4 pt-4 space-y-4">
+
+        {/* §5 — มาจาก R-14 */}
+        <MockAnnoOrigin from="R-14" />
 
         {/* ─── M3 Risk Banner (WeeeR read-only) ─── */}
         <div className="bg-amber-900/30 border border-amber-700/50 rounded-2xl p-5 space-y-4">
@@ -174,28 +178,25 @@ export default function M3RiskNotifyWeeRMockupPage({
           <p>งานจะดำเนินต่อหรือยุติ ขึ้นอยู่กับ WeeeU — ร้านจะได้รับแจ้งอัตโนมัติ</p>
         </div>
 
-        {/* mock-anno §6: กลับ → R-12 */}
-        <Link
-          href="/maintain/jobs"
-          className="block w-full text-center border border-gray-700 text-gray-300 hover:bg-gray-800 font-medium py-3 rounded-2xl text-sm transition-colors"
-        >
-          ← กลับรายการงาน
-        </Link>
-      </div>
+        {/* §6 — กลับ → R-12 */}
+        <MockAnnoNav to="R-12" style={{ display: "block", width: "100%" }}>
+          <Link
+            href="/maintain/jobs"
+            className="block w-full text-center border border-gray-700 text-gray-300 hover:bg-gray-800 font-medium py-3 rounded-2xl text-sm transition-colors"
+          >
+            ← กลับรายการงาน
+          </Link>
+        </MockAnnoNav>
 
-      <MockAnno
-        caseId="M3"
-        screenId="R-14/m3"
-        origin="R-14 MAINTAIN-JOB-DETAIL (notification badge) — risk_reported"
-        nav={[
-          { label: "กลับรายการ", dest: "R-12 /maintain/jobs" },
-        ]}
-        crossApp={[
-          { app: "WeeeU", desc: "กำลังเห็น m3-risk-inspect รอตัดสิน" },
-          { app: "WeeeT", desc: "รออยู่หน้างาน (T-08)" },
-          { app: "Admin", desc: "status risk_reported (A-07)" },
-        ]}
-      />
+        {/* §8 — cross-app ณ จังหวะนี้ */}
+        <MockAnnoXApp
+          entries={[{
+            app: "WeeeU",
+            screen: "U-16 m3-risk-inspect",
+            url: "http://localhost:3002/maintain/jobs/[id]/mockup/m3-risk-inspect",
+          }]}
+        />
+      </div>
     </div>
   );
 }

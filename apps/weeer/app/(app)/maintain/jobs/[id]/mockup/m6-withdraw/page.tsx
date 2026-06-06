@@ -22,7 +22,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MockAnno } from "@/components/MockAnno";
+// M6 case · Advisor maintain เจ้าของ case-flow · Word module-file อ้างถึงจอนี้
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 const JOB = {
   id: "mock-m6-weeer-001",
@@ -70,9 +71,15 @@ export default function M6WithdrawWeeeRMockupPage() {
 
   return (
     <div className="space-y-5 max-w-xl pb-8">
+      {/* §5 — มาจาก R-14 */}
+      <MockAnnoOrigin from="R-14" />
+
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/maintain/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
+        {/* §6 — success → R-12 /maintain/jobs */}
+        <MockAnnoNav to="R-12">
+          <Link href="/maintain/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
+        </MockAnnoNav>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-gray-900 truncate">
@@ -216,17 +223,13 @@ export default function M6WithdrawWeeeRMockupPage() {
         </div>
       )}
 
-      <MockAnno
-        caseId="M6"
-        screenId="R-14/m6"
-        origin="R-14 MAINTAIN-JOB-DETAIL (status=assigned) — ปุ่ม ถอนรับงาน"
-        nav={[
-          { label: "ยืนยันถอน", dest: "R-12 /maintain/jobs" },
-        ]}
-        crossApp={[
-          { app: "WeeeU", desc: "ได้รับ notification · เห็น m6-weeer-withdrew (U-16c)" },
-          { app: "Admin", desc: "audit log WeeeR withdraw + penalty (A-07)" },
-        ]}
+      {/* §8 — cross-app ณ จังหวะนี้ */}
+      <MockAnnoXApp
+        entries={[{
+          app: "WeeeU",
+          screen: "U-16 m6-weeer-withdrew",
+          url: "http://localhost:3002/maintain/jobs/[id]/mockup/m6-weeer-withdrew",
+        }]}
       />
     </div>
   );

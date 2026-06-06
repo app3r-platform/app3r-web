@@ -269,19 +269,11 @@ export default function M5ConvertRepairWeeeTMockupPage({
         )}
       </div>
 
+      {/* caseId="M5-HA" screenId="T-08/m5" */}
       <MockAnno
-        caseId="M5-HA"
-        screenId="T-08/m5"
-        origin="T-08 MAINTAIN-INSPECT — WeeeT กด พบความเสียหาย (D-Maintain-2)"
-        nav={[
-          { label: "submit D-Maintain-2", dest: "damage_submitted (รอ WeeeU)" },
-          { label: "กลับ", dest: "T-08 inspect (stage=inspect)" },
-        ]}
-        crossApp={[
-          { app: "WeeeU", desc: "ได้รับ notification · เห็น m5-hybrid-a (U-16/m5)" },
-          { app: "WeeeR", desc: "closed_for_repair (R-14)" },
-          { app: "Admin", desc: "damage report ใน job detail (A-07)" },
-        ]}
+        origin="M5-HA · T-08/m5 · T-08 MAINTAIN-INSPECT — WeeeT กด พบความเสียหาย (D-Maintain-2)"
+        nav={"submit D-Maintain-2 → damage_submitted (รอ WeeeU)\nกลับ → T-08 inspect (stage=inspect)"}
+        xapp="WeeeU: ได้รับ notification · เห็น m5-hybrid-a (U-16/m5) · WeeeR: closed_for_repair (R-14) · Admin: damage report (A-07)"
       />
     </div>
   );

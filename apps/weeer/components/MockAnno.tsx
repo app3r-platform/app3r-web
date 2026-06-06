@@ -1,91 +1,161 @@
 "use client";
 /**
- * MockAnno — annotation component สำหรับ WeeeR mockup pages (Phase 3 dev tool)
+ * mock-anno — Mockup Annotation Components (§5/§6/§8)
+ * ลบทีเดียวด้วย: grep -r "mock-anno" apps/weeer --include="*.tsx" -l
  *
- * dark theme (bg-gray-950) ตาม WeeeR app theme
- * ปิดอัตโนมัติเมื่อ NEXT_PUBLIC_DEV_NAV !== "true"
- *
- * ใช้เฉพาะ WeeeR — WeeeU ใช้ MockAnnoBar · WeeeT/Admin ใช้ MockAnno ของตัวเอง
+ * §5  MockAnnoOrigin  — "◀ มาจาก: <ID>" บนหัวจอ
+ * §6  MockAnnoNav     — "→ <ID>" ที่ปุ่ม/ลิงก์
+ * §8  MockAnnoXApp    — "👁 แอพฯอื่น ณ จังหวะนี้" panel
  */
 
-import { useState } from "react";
+import React from "react";
 
-export interface MockAnnoNavItem {
-  label: string;
-  dest: string;
+// ────────────────────────────────────────────────────────────
+// §5 — Origin banner
+// ────────────────────────────────────────────────────────────
+interface OriginProps {
+  /** รหัสจอต้นทาง ≥1 (ยกเว้นจอแรกของแอพฯ ไม่ต้องใส่) */
+  from: string | string[];
 }
 
-export interface MockAnnoCrossApp {
-  app: "WeeeU" | "WeeeT" | "Admin" | "Website";
-  desc: string;
-}
-
-export interface MockAnnoProps {
-  caseId: string;
-  screenId: string;
-  origin?: string;
-  nav?: MockAnnoNavItem[];
-  crossApp?: MockAnnoCrossApp[];
-}
-
-const APP_COLOR: Record<string, string> = {
-  WeeeU: "bg-green-900/50 text-green-300",
-  WeeeT: "bg-gray-700 text-gray-300",
-  Admin: "bg-purple-900/50 text-purple-300",
-  Website: "bg-blue-900/50 text-blue-300",
-};
-
-export function MockAnno({ caseId, screenId, origin, nav, crossApp }: MockAnnoProps) {
-  const [open, setOpen] = useState(false);
-
+export function MockAnnoOrigin({ from }: OriginProps) {
   if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
-
+  const ids = Array.isArray(from) ? from : [from];
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 font-mono text-[10px]">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-2 px-3 py-1.5 bg-[#1696F9] text-white text-[10px] font-medium"
-      >
-        <span className="shrink-0">📐 mock-anno</span>
-        <span className="bg-white/20 px-1.5 py-0.5 rounded text-[9px]">{screenId}</span>
-        <span className="bg-white/20 px-1.5 py-0.5 rounded text-[9px]">เคส {caseId}</span>
-        <span className="ml-auto">{open ? "▼" : "▲"}</span>
-      </button>
+    <div
+      className="mock-anno mock-anno-origin"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        background: "rgba(255,102,58,0.08)",
+        border: "1px dashed #FF663A",
+        borderRadius: 6,
+        padding: "2px 10px",
+        fontSize: 11,
+        color: "#D63B12",
+        fontFamily: "ui-monospace, monospace",
+        marginBottom: 8,
+      }}
+    >
+      ◀ มาจาก: {ids.join(" | ")}
+    </div>
+  );
+}
 
-      {open && (
-        <div className="bg-gray-900 border-t-2 border-[#1696F9] px-3 py-2 space-y-2 max-h-48 overflow-y-auto">
-          {origin && (
-            <div className="flex items-start gap-2">
-              <span className="shrink-0 text-[#1696F9] font-bold">§5</span>
-              <span className="text-gray-400">มาจาก: <span className="font-medium text-gray-200">{origin}</span></span>
-            </div>
-          )}
-          {nav && nav.length > 0 && (
-            <div className="flex items-start gap-2">
-              <span className="shrink-0 text-[#1696F9] font-bold">§6</span>
-              <div className="flex flex-wrap gap-1">
-                {nav.map((item, i) => (
-                  <span key={i} className="bg-gray-800 border border-[#1696F9]/30 rounded px-1.5 py-0.5 text-gray-300">
-                    {item.label} → <span className="font-medium text-[#1696F9]">{item.dest}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-          {crossApp && crossApp.length > 0 && (
-            <div className="flex items-start gap-2">
-              <span className="shrink-0 text-[#1696F9] font-bold">§8</span>
-              <div className="flex flex-wrap gap-1">
-                {crossApp.map((item, i) => (
-                  <span key={i} className={`rounded px-1.5 py-0.5 ${APP_COLOR[item.app] ?? "bg-gray-700 text-gray-300"}`}>
-                    <span className="font-bold">{item.app}</span>: {item.desc}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+// ────────────────────────────────────────────────────────────
+// §6 — Destination label (wrap ปุ่ม/ลิงก์)
+// ────────────────────────────────────────────────────────────
+interface NavProps {
+  /** รหัสจอปลายทาง เช่น "R-09" */
+  to: string;
+  children: React.ReactNode;
+  /** optional label (ignored, สำหรับ docs เท่านั้น) */
+  label?: string;
+  /** optional wrapper style เช่น { display: "contents" } */
+  style?: React.CSSProperties;
+}
+
+export function MockAnnoNav({ to, children, style }: NavProps) {
+  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return <>{children}</>;
+  return (
+    <span
+      className="mock-anno mock-anno-nav"
+      style={{ position: "relative", display: "inline-block", ...style }}
+    >
+      {children}
+      <span
+        style={{
+          position: "absolute",
+          top: -16,
+          left: "50%",
+          transform: "translateX(-50%)",
+          whiteSpace: "nowrap",
+          fontSize: 9,
+          color: "#0891b2",
+          fontFamily: "ui-monospace, monospace",
+          background: "rgba(255,255,255,0.95)",
+          border: "1px dashed #0891b2",
+          borderRadius: 3,
+          padding: "0 4px",
+          pointerEvents: "none",
+        }}
+      >
+        → {to}
+      </span>
+    </span>
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// §8 — Cross-app view panel
+// ────────────────────────────────────────────────────────────
+interface XAppEntry {
+  /** ชื่อแอพฯ เช่น "WeeeU" */
+  app: string;
+  /** รหัสจอ+ชื่อ เช่น "U-22 ดูสถานะงาน" */
+  screen: string;
+  /** URL localhost เปิดดูได้เลย */
+  url: string;
+}
+
+interface XAppProps {
+  entries: XAppEntry[];
+}
+
+export function MockAnnoXApp({ entries }: XAppProps) {
+  if (process.env.NEXT_PUBLIC_DEV_NAV !== "true") return null;
+  return (
+    <div
+      className="mock-anno mock-anno-xapp"
+      style={{
+        background: "rgba(255,102,58,0.05)",
+        border: "1px dashed #FF663A",
+        borderRadius: 8,
+        padding: "8px 12px",
+        marginTop: 16,
+        fontSize: 11,
+        fontFamily: "ui-monospace, monospace",
+      }}
+    >
+      <p style={{ fontWeight: 700, color: "#B8300E", marginBottom: 6, fontSize: 11 }}>
+        👁 แอพฯอื่น ณ จังหวะนี้
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        {entries.map((e, i) => (
+          <a
+            key={i}
+            href={e.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              color: "#FF663A",
+              textDecoration: "none",
+              fontSize: 11,
+            }}
+          >
+            <span
+              style={{
+                background: "#FFE0D6",
+                color: "#B8300E",
+                borderRadius: 4,
+                padding: "0 5px",
+                fontSize: 10,
+                fontWeight: 700,
+              }}
+            >
+              {e.app}
+            </span>
+            <span style={{ color: "#374151" }}>{e.screen}</span>
+            <span style={{ color: "#9ca3af", fontSize: 10 }}>
+              {e.url}
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
   );
 }
