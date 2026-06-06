@@ -75,7 +75,7 @@ export default function ResellPartsPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "แยกอะไหล่")' />
+      <MockAnnoOrigin from='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "แยกอะไหล่")' />
       <MockAnnoXApp screenLabel="R-28c: แยกอะไหล่">
         <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ in_progress → ซากอยู่ระหว่างแยกชิ้นส่วน
           <a href="http://localhost:3002/scrap/SC001" className="underline ml-1">/scrap/[id]</a>

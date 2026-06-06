@@ -106,7 +106,7 @@ export default function ScrapJobsPage() {
   return (
     <div className="space-y-5">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <MockAnnoOrigin text="◀ มาจาก: R-70 · /scrap (tab 'งานของฉัน') หรือ push notification งานใหม่" />
+      <MockAnnoOrigin from="◀ มาจาก: R-70 · /scrap (tab 'งานของฉัน') หรือ push notification งานใหม่" />
       <MockAnnoXApp screenLabel="R-27: Jobs">
         <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ accepted/in_progress</p>
         <p>• <strong>WeeeT :3003</strong> [T-22] ช่างเห็น jobs ที่ได้รับมอบหมาย

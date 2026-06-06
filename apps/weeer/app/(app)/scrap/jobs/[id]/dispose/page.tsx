@@ -82,7 +82,7 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "รีไซเคิล")' />
+      <MockAnnoOrigin from='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "รีไซเคิล")' />
       <MockAnnoXApp screenLabel="R-28e: รีไซเคิล/E-Waste cert">
         <p>• <strong>Admin :3000</strong> [A-11] Admin เห็น cert ใหม่ใน Scrap Certificates list
           <a href="http://localhost:3000/scrap/certificates" className="underline ml-1">/scrap/certificates</a>

@@ -71,7 +71,7 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "ขายต่อซาก")' />
+      <MockAnnoOrigin from='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "ขายต่อซาก")' />
       <MockAnnoXApp screenLabel="R-28b: ขายต่อซาก">
         <p>• <strong>WeeeU :3002</strong> [U-55] เจ้าของซากเห็นสถานะเปลี่ยน → listing ของตัวเองใน Scrap feed
           <a href="http://localhost:3002/scrap" className="underline ml-1">/scrap</a>

@@ -100,7 +100,7 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "ซ่อมขาย")' />
+      <MockAnnoOrigin from='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "ซ่อมขาย")' />
       <MockAnnoXApp screenLabel="R-28d: ซ่อมขาย">
         <p>• <strong>WeeeT :3003</strong> [T-04] ช่างที่เลือกได้รับ assignment ใบซ่อมใหม่ (source: purchased_scrap)
           <a href="http://localhost:3003/jobs" className="underline ml-1">/jobs</a>

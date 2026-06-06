@@ -120,7 +120,7 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <MockAnnoOrigin text="◀ มาจาก: R-27 · /scrap/jobs หรือ R-78 · /scrap/browse/[id] (กด 'ซื้อซากนี้')" />
+      <MockAnnoOrigin from="◀ มาจาก: R-27 · /scrap/jobs หรือ R-78 · /scrap/browse/[id] (กด 'ซื้อซากนี้')" />
       <MockAnnoXApp screenLabel="R-28: Job">
         <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ listing เปลี่ยนเป็น in_progress
           <a href={`http://localhost:3002/scrap/SCR-002`} className="underline ml-1">/scrap/[id]</a>
