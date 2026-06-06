@@ -111,7 +111,7 @@
 
 | Short ID | Full Code | Route URL | Case | App |
 |----------|-----------|-----------|------|-----|
-| A-01 | DASHBOARD | /dashboard | — | Admin |
+| A-01 | DASHBOARD | / | — | Admin |
 | A-02 | REPAIR-JOBS | /repair/jobs | C1-C10 | Admin |
 | A-03 | REPAIR-JOB-DETAIL | /repair/jobs/c001 | C1-C10 | Admin |
 | A-04 | REPAIR-DISPUTES | /repair/disputes | C9 | Admin |
