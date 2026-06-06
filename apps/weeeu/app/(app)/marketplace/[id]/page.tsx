@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ReviewsSection } from "@/components/listing/ReviewsSection";
 import { ReportButton } from "@/components/listing/ReportButton";
+import { FallbackImg } from "@/components/shared/FallbackImg";
 
 const MOCK_ITEM = {
   id: "r001",
@@ -27,12 +28,12 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
           ← กลับตลาดสินค้า
         </Link>
 
-        {/* Product image */}
+        {/* Product image — D1 media fallback via FallbackImg */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <img
+          <FallbackImg
             src={item.image}
             alt={item.name}
-            className="w-full h-52 object-cover"
+            className="w-full h-52 object-cover bg-gray-100"
           />
         </div>
 

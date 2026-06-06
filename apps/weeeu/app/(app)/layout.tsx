@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ScreenBadge } from "@/components/ScreenBadge";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ── 5 Bottom tabs (A2 spec — icon + label + active prefix matching) ────────────
 const BOTTOM_TABS = [
@@ -125,6 +126,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         </div>
       </header>
+
+      {/* ── P2 mock-anno bar (§5 origin · §6 nav · §8 xapp) — dev only ──────── */}
+      {/* ลบด้วย: grep -r "mock-anno" apps/weeeu --include="*.tsx" -l */}
+      <MockAnnoBar />
 
       {/* ── Page content ───────────────────────────────────────────────────── */}
       {/* pb-20 = 80px — เผื่อ bottom nav ความสูง ~60px */}

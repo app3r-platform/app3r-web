@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ScreenBadge } from "@/components/ScreenBadge";
+import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,6 +27,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           {children}
         </div>
       </div>
+
+      {/* ── P2 mock-anno bar (§5 origin · §6 nav · §8 xapp) — dev only ──── */}
+      <MockAnnoBar />
 
       {/* ── Screen ID Badge (dev only) ─────────────────────────────────────── */}
       <ScreenBadge />

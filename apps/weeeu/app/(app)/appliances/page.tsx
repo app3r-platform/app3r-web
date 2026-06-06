@@ -108,11 +108,17 @@ export default function AppliancesPage() {
             key={app.id}
             className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-start gap-4 hover:border-weeeu-primary/20 transition-colors"
           >
+            {/* D1 media fallback: onError → แสดง emoji icon แทน */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={app.image}
               alt={app.name}
               className="w-14 h-14 bg-gray-50 rounded-2xl object-cover flex-shrink-0"
+              onError={(e) => {
+                const t = e.target as HTMLImageElement;
+                t.onerror = null;
+                t.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect fill='%23f3f4f6' width='56' height='56' rx='8'/%3E%3Ctext font-size='28' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3E🔌%3C/text%3E%3C/svg%3E";
+              }}
             />
 
             <div className="flex-1 min-w-0">

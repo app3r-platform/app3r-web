@@ -117,6 +117,10 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   // ── Round 2 (WP-0/WP-2) — หน้าใหม่ ──────────────────────────────────────────
   { pattern: "/suspended",                             info: { num: "U-65", code: "USER-SUSPENDED" } },
   { pattern: "/settings/account",                      info: { num: "U-66", code: "USER-DATA-MANAGE" } },
+  // ── P2 R4 — จอ distinct ยังไม่มี ID (mint U-67/U-68 · รายงาน HUB) ──────────
+  // R4 ruling: /welcome + /forgot-password = จอ distinct จริง (ไม่ใช่ param-variant) → mint ใหม่
+  { pattern: "/welcome",                               info: { num: "U-67", code: "WELCOME-LANDING" } },
+  { pattern: "/forgot-password",                       info: { num: "U-68", code: "FORGOT-PASSWORD" } },
 ];
 
 function matchScreen(pathname: string): ScreenInfo | null {

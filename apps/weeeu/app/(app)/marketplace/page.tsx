@@ -150,10 +150,12 @@ export default function MarketplacePage() {
           ).slice(0, pageSize === "all" ? undefined : pageSize).map((item) => (
             <Link key={item.id} href={`/marketplace/${item.id}`}>
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                {/* D1 media fallback */}
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-32 object-cover"
+                  className="w-full h-32 object-cover bg-gray-100"
+                  onError={(e) => { const t = e.target as HTMLImageElement; t.onerror = null; t.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='128'%3E%3Crect fill='%23f3f4f6' width='300' height='128'/%3E%3Ctext fill='%239ca3af' font-size='12' font-family='sans-serif' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3Eรูปภาพ%3C/text%3E%3C/svg%3E"; }}
                 />
                 <div className="p-3 space-y-1.5">
                   <p className="text-xs font-semibold text-weeeu-dark leading-snug line-clamp-2">{item.name}</p>
