@@ -23,7 +23,7 @@ import { createPartsOrder } from "../../../../../lib/parts-api";
 import { FEATURE_FLAGS } from "../../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../../_lib/catalog-api";
 import { ListingEngagement } from "../../../../../components/parts/ListingEngagement";
-import { FlowOrigin, FlowNav, CrossAppPanel } from "../../../../../components/parts/MockFlowAnno";
+import { FlowOrigin, FlowNav, CrossAppPanel } from "@/components/MockAnno";
 
 export default function MarketplaceDetailPage({
   params,

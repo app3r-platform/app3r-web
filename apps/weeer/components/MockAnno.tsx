@@ -1,4 +1,4 @@
-// ── MockFlowAnno — P2 Flow Annotation Components (Parts Module) ───────────────
+// ── MockAnno — P2 Flow Annotation Components (Parts Module) ────────────────────
 // ใช้สำหรับ mockup เท่านั้น — แสดง §5 origin / §6 nav / §8 cross-app
 // อ้างอิง: HUB Gen 52 CMD ⑤ · Tier-1 lens · R3 canonical IDs
 

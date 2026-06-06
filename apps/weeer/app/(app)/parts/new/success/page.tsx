@@ -5,7 +5,7 @@
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { FlowOrigin, FlowNav } from "../../../../../components/parts/MockFlowAnno";
+import { FlowOrigin, FlowNav } from "@/components/MockAnno";
 
 export default function PartsNewSuccessPage() {
   const router = useRouter();

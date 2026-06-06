@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { getListings } from "../../../../../lib/utils/parts-sync";
 import { PART_LISTINGS_MOCK } from "../../_lib/mock-data";
 import { B2B_CONDITION_LABEL } from "../../_lib/types";
-import { FlowOrigin } from "../../../../../components/parts/MockFlowAnno";
+import { FlowOrigin } from "@/components/MockAnno";
 
 export default function MyListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

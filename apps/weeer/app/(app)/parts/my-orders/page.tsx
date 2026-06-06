@@ -21,7 +21,7 @@ import {
 } from "../../../../lib/utils/parts-sync";
 import { escrowRelease, escrowRefund, getEscrowHeldByShop } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
-import { FlowOrigin, CrossAppPanel } from "../../../../components/parts/MockFlowAnno";
+import { FlowOrigin, CrossAppPanel } from "@/components/MockAnno";
 
 type SideTab = "buyer" | "seller";
 type StageFilter = PartOrder["stage"] | "all";

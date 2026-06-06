@@ -5,7 +5,6 @@ import Link from "next/link";
 import { partsApi } from "./_lib/api";
 import type { Part } from "./_lib/types";
 import { CONDITION_LABEL, CONDITION_COLOR } from "./_lib/types";
-import { FlowNav, CrossAppPanel } from "../../../components/parts/MockFlowAnno";
 
 const CATEGORIES = ["ทั้งหมด", "คอมเพรสเซอร์", "มอเตอร์", "แผงวงจร", "ท่อ/วาล์ว", "อื่นๆ"];
 const CONDITIONS: { label: string; value: Part["condition"] | "all" }[] = [
@@ -38,28 +37,7 @@ export default function PartsListPage() {
 
   return (
     <div className="space-y-5">
-      {/* §8 Cross-App: จาก R-51 ผู้ขายสามารถ list, ผู้ซื้อ browse แยก path */}
-      <CrossAppPanel
-        moment="เข้าหน้า Parts Hub (entry point)"
-        entries={[
-          {
-            app: "WeeeR (ร้านผู้ซื้อ)",
-            screenId: "R-30",
-            screenLabel: "Marketplace",
-            description: "[P3] ผู้ซื้อเข้าตลาด B2B ผ่าน shortcut ด้านบน",
-          },
-          {
-            app: "WeeeR (ร้านผู้ขาย)",
-            screenId: "R-29",
-            screenLabel: "My Listings",
-            description: "[P1/P2] ผู้ขายเข้า 'ขายของฉัน' จาก bottom nav",
-          },
-        ]}
-        cases="P1, P2, P3"
-      />
-
       {/* B2B Marketplace shortcut (C-6) */}
-      {/* §6 FlowNav: shortcut card → R-30 */}
       <Link href="/parts/marketplace"
         className="flex items-center justify-between bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-4 py-3 hover:bg-[#FFE0D6] transition-colors">
         <div>
@@ -79,8 +57,6 @@ export default function PartsListPage() {
           <Link href="/parts/new"
             className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
             + เพิ่มอะไหล่
-            {/* §6 FlowNav: → R-57 (PARTS-NEW inventory form) */}
-            <FlowNav targetId="R-57" targetLabel="เพิ่มอะไหล่ใหม่" />
           </Link>
         </div>
       </div>

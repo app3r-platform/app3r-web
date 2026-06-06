@@ -20,7 +20,7 @@ import {
 } from "../../../../lib/utils/parts-sync";
 import { escrowRefund } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
-import { FlowOrigin, FlowNav, CrossAppPanel } from "../../../../components/parts/MockFlowAnno";
+import { FlowOrigin, FlowNav, CrossAppPanel } from "@/components/MockAnno";
 
 type TabType = "listings" | "incoming";
 

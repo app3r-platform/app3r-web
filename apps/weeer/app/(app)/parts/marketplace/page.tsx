@@ -16,7 +16,7 @@ import { MarketplaceStatsCard } from "../../../../components/parts/MarketplaceSt
 import { getCurrentShopId, getListings, saveListings, usePartsSync } from "../../../../lib/utils/parts-sync";
 import { FEATURE_FLAGS } from "../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../_lib/catalog-api";
-import { FlowOrigin, CrossAppPanel } from "../../../../components/parts/MockFlowAnno";
+import { FlowOrigin, CrossAppPanel } from "@/components/MockAnno";
 
 export default function MarketplacePage() {
   const router = useRouter();

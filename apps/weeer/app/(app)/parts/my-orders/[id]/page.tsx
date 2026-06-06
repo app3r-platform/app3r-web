@@ -8,7 +8,7 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import type { PartOrder } from "../../_lib/types";
 import { PART_ORDERS_MOCK } from "../../_lib/mock-data";
-import { FlowOrigin, CrossAppPanel } from "../../../../../components/parts/MockFlowAnno";
+import { FlowOrigin, CrossAppPanel } from "@/components/MockAnno";
 import { OrderStageStepper } from "../../../../../components/parts/OrderStageStepper";
 import { ORDER_STAGE_LABEL, ORDER_STAGE_COLOR, DELIVERY_LABEL } from "../../_lib/types";
 import {
