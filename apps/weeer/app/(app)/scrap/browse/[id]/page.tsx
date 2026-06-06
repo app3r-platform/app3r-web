@@ -9,24 +9,7 @@ import { scrapApi } from "../../_lib/api";
 import type { ScrapItem } from "../../_lib/types";
 import { CONDITION_GRADE_LABEL, CONDITION_GRADE_COLOR, SCRAP_ITEM_STATUS_LABEL } from "../../_lib/types";
 
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginBrowseDetail = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: R-72 · /scrap/browse (เลือกรายการจาก grid)
-  </div>
-);
-const AnnoXAppBrowseDetail = ({ id }: { id: string }) => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (R-78)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ available รอข้อเสนอ
-        <a href={`http://localhost:3002/scrap/${id}`} className="underline ml-1">/scrap/[id]</a>
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 // ── MOCK_ITEM — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ──────────
 const MOCK_ITEM: ScrapItem = {
@@ -88,8 +71,12 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <AnnoOriginBrowseDetail />
-      <AnnoXAppBrowseDetail id={id} />
+      <MockAnnoOrigin text="◀ มาจาก: R-72 · /scrap/browse (เลือกรายการจาก grid)" />
+      <MockAnnoXApp screenLabel="R-78: Browse Detail">
+        <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ available รอข้อเสนอ
+          <a href={`http://localhost:3002/scrap/${id}`} className="underline ml-1">/scrap/[id]</a>
+        </p>
+      </MockAnnoXApp>
 
       <div className="flex items-center gap-3">
         <Link href="/scrap/browse" className="text-gray-400 hover:text-gray-600">←</Link>

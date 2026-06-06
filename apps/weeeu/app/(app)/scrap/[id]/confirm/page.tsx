@@ -1,27 +1,6 @@
 import Link from "next/link";
 import { SuccessTrackingBanner } from "@/components/shared/SuccessTrackingBanner";
-
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginConfirm = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: U-30 · /scrap/[id]/offers (กด "เลือกข้อเสนอนี้") หรือ U-33 · /scrap/[id] (รับ offer โดยตรง)
-  </div>
-);
-const AnnoXAppConfirm = () => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (S1: ยืนยัน)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeR :3001</strong> [R-28] ร้านรับแจ้งเตือน offer ถูกเลือก → งาน pending_pickup
-        <a href="http://localhost:3001/scrap/jobs/SJ001" className="underline ml-1">/scrap/jobs/SJ001</a>
-      </p>
-      <p>• <strong>WeeeT :3003</strong> [T-04] ช่างได้รับ task รับซาก → กำหนดวันรับ
-        <a href="http://localhost:3003/jobs/J001/pickup" className="underline ml-1">/jobs/[id]/pickup</a>
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 const MOCK_OFFER = {
   shop: "ร้านรับซากดีเจริญ",
@@ -36,8 +15,15 @@ export default async function ScrapConfirmPage({ params }: { params: Promise<{ i
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
         {/* §5 Origin + §8 Cross-app annotations */}
-        <AnnoOriginConfirm />
-        <AnnoXAppConfirm />
+        <MockAnnoOrigin text='◀ มาจาก: U-30 · /scrap/[id]/offers (กด "เลือกข้อเสนอนี้") หรือ U-33 · /scrap/[id] (รับ offer โดยตรง)' />
+        <MockAnnoXApp screenLabel="U-31: ยืนยัน (S1)">
+          <p>• <strong>WeeeR :3001</strong> [R-28] ร้านรับแจ้งเตือน offer ถูกเลือก → งาน pending_pickup
+            <a href="http://localhost:3001/scrap/jobs/SJ001" className="underline ml-1">/scrap/jobs/SJ001</a>
+          </p>
+          <p>• <strong>WeeeT :3003</strong> [T-04] ช่างได้รับ task รับซาก → กำหนดวันรับ
+            <a href="http://localhost:3003/jobs/J001/pickup" className="underline ml-1">/jobs/[id]/pickup</a>
+          </p>
+        </MockAnnoXApp>
 
         {/* Back link */}
         <Link href={`/scrap/${id}/offers`} className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1">

@@ -14,31 +14,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PublicQAThread } from "@/components/listing/PublicQAThread";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
-
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginDetail = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: U-55 · /scrap (รายการของฉัน) หรือ push notification
-  </div>
-);
-const AnnoXAppDetail = ({ id }: { id: string }) => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (S6/S8/S10)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeR :3001</strong> [R-28] S6: ร้านที่ยื่น offer เห็นสถานะรอพิจารณา
-        <a href={`http://localhost:3001/scrap/jobs/SJ001`} className="underline ml-1">/scrap/jobs/SJ001</a>
-      </p>
-      <p>• <strong>WeeeT :3003</strong> [T-04] S10: ช่างเห็นสถานะ in_progress กำลังเดินทาง
-        <a href={`http://localhost:3003/jobs/J001/pickup`} className="underline ml-1">/jobs/[id]/pickup</a>
-      </p>
-      <p>• <strong>WeeeT :3003</strong> [T-10] S8: ช่างรายงานของไม่ตรง → WeeeU เห็นแจ้งเตือนที่หน้านี้
-        <a href={`http://localhost:3003/jobs/J001/mismatch`} className="underline ml-1">/jobs/[id]/mismatch</a>
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 // ── Mock types ────────────────────────────────────────────────────────────────
 interface ScrapOffer {
@@ -238,8 +214,18 @@ function ScrapListingDetailContent({
     <div className="max-w-xl space-y-5">
 
       {/* §5 Origin + §8 Cross-app annotations */}
-      <AnnoOriginDetail />
-      <AnnoXAppDetail id={id} />
+      <MockAnnoOrigin text="◀ มาจาก: U-55 · /scrap (รายการของฉัน) หรือ push notification" />
+      <MockAnnoXApp screenLabel="U-33: รายละเอียดซาก (S6/S8/S10)">
+        <p>• <strong>WeeeR :3001</strong> [R-28] S6: ร้านที่ยื่น offer เห็นสถานะรอพิจารณา
+          <a href="http://localhost:3001/scrap/jobs/SJ001" className="underline ml-1">/scrap/jobs/SJ001</a>
+        </p>
+        <p>• <strong>WeeeT :3003</strong> [T-04] S10: ช่างเห็นสถานะ in_progress กำลังเดินทาง
+          <a href="http://localhost:3003/jobs/J001/pickup" className="underline ml-1">/jobs/[id]/pickup</a>
+        </p>
+        <p>• <strong>WeeeT :3003</strong> [T-10] S8: ช่างรายงานของไม่ตรง → WeeeU เห็นแจ้งเตือนที่หน้านี้
+          <a href="http://localhost:3003/jobs/J001/mismatch" className="underline ml-1">/jobs/[id]/mismatch</a>
+        </p>
+      </MockAnnoXApp>
 
       {/* Header */}
       <div className="flex items-center gap-3">

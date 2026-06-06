@@ -12,29 +12,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOrigin = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: U-01 · /dashboard หรือ U-41 · /scrap/new/success (S12) หรือ U-07 · /repair/[id]/scrap-offer (C4)
-  </div>
-);
-const AnnoXApp = () => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeR :3001</strong> [R-70]
-        <a href="http://localhost:3001/scrap" className="underline ml-1">/scrap</a>
-        — WeeeR เห็น feed ซากที่ WeeeU ประกาศ (S1/S2: ยื่นข้อเสนอ)
-      </p>
-      <p>• <strong>WeeeR :3001</strong> [R-72]
-        <a href="http://localhost:3001/scrap/browse" className="underline ml-1">/scrap/browse</a>
-        — WeeeR เลือกซื้อซากจาก feed
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 // ── Mock types (เฟส 2 = mock state local — ไม่แตะ backend) ──────────────────
 type ListingStatus =
@@ -145,10 +123,18 @@ export default function MyScrapListingsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
 
-      {/* §5 Origin annotation */}
-      <AnnoOrigin />
-      {/* §8 Cross-app annotation */}
-      <AnnoXApp />
+      {/* §5 Origin + §8 Cross-app annotations */}
+      <MockAnnoOrigin text="◀ มาจาก: U-01 · /dashboard หรือ U-41 · /scrap/new/success (S12) หรือ U-07 · /repair/[id]/scrap-offer (C4)" />
+      <MockAnnoXApp screenLabel="U-55: ซากของฉัน">
+        <p>• <strong>WeeeR :3001</strong> [R-70]
+          <a href="http://localhost:3001/scrap" className="underline ml-1">/scrap</a>
+          — WeeeR เห็น feed ซากที่ WeeeU ประกาศ (S1/S2: ยื่นข้อเสนอ)
+        </p>
+        <p>• <strong>WeeeR :3001</strong> [R-72]
+          <a href="http://localhost:3001/scrap/browse" className="underline ml-1">/scrap/browse</a>
+          — WeeeR เลือกซื้อซากจาก feed
+        </p>
+      </MockAnnoXApp>
 
       {/* Header */}
       <div className="flex items-center justify-between">

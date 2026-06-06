@@ -2,30 +2,8 @@
 
 // ── WeeeR Scrap R-28e — dispose (S4 รีไซเคิล/E-Waste cert) ───────────────────
 
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginDispose = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "รีไซเคิล")
-  </div>
-);
-const AnnoXAppDispose = () => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (R-28e: รีไซเคิล/E-Waste cert)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>Admin :3000</strong> [A-11] Admin เห็น cert ใหม่ใน Scrap Certificates list
-        <a href="http://localhost:3000/scrap/certificates" className="underline ml-1">/scrap/certificates</a>
-      </p>
-      <p>• <strong>WeeeU :3002</strong> [U-32] เจ้าของซากเห็น cert จาก WeeeR (E-Waste ที่เคยทิ้ง)
-        <a href="http://localhost:3002/scrap/SC003/certificate" className="underline ml-1">/scrap/[id]/certificate</a>
-      </p>
-      <p>• หลัง submit → cert แสดงในหน้าเดิม (ไม่ navigate ออก) + ปุ่มดาวน์โหลด HTML</p>
-    </div>
-  </details>
-);
-
 import { use, useEffect, useState } from "react";
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 import Link from "next/link";
 import { scrapApi } from "../../../_lib/api";
 import type { ScrapJob, EWasteCertificate } from "../../../_lib/types";
@@ -104,8 +82,16 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <AnnoOriginDispose />
-      <AnnoXAppDispose />
+      <MockAnnoOrigin text='◀ มาจาก: R-28 · /scrap/jobs/[id] (เลือก "รีไซเคิล")' />
+      <MockAnnoXApp screenLabel="R-28e: รีไซเคิล/E-Waste cert">
+        <p>• <strong>Admin :3000</strong> [A-11] Admin เห็น cert ใหม่ใน Scrap Certificates list
+          <a href="http://localhost:3000/scrap/certificates" className="underline ml-1">/scrap/certificates</a>
+        </p>
+        <p>• <strong>WeeeU :3002</strong> [U-32] เจ้าของซากเห็น cert จาก WeeeR (E-Waste ที่เคยทิ้ง)
+          <a href="http://localhost:3002/scrap/SC003/certificate" className="underline ml-1">/scrap/[id]/certificate</a>
+        </p>
+        <p>• หลัง submit → cert แสดงในหน้าเดิม (ไม่ navigate ออก) + ปุ่มดาวน์โหลด HTML</p>
+      </MockAnnoXApp>
 
       <div className="flex items-center gap-3">
         <Link href={`/scrap/jobs/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>

@@ -9,30 +9,7 @@ import { scrapApi } from "../../_lib/api";
 import type { ScrapJob, ScrapJobOption } from "../../_lib/types";
 import { SCRAP_JOB_STATUS_LABEL, SCRAP_JOB_STATUS_COLOR } from "../../_lib/types";
 
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginJobDetail = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: R-27 · /scrap/jobs หรือ R-78 · /scrap/browse/[id] (กด "ซื้อซากนี้")
-  </div>
-);
-const AnnoXAppJobDetail = ({ id }: { id: string }) => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (R-28: Job)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ listing เปลี่ยนเป็น in_progress
-        <a href={`http://localhost:3002/scrap/SCR-002`} className="underline ml-1">/scrap/[id]</a>
-      </p>
-      <p>• <strong>WeeeT :3003</strong> [T-04] เมื่อ WeeeR เลือก option → ช่างได้รับ assignment รับซาก
-        <a href={`http://localhost:3003/jobs/J001/pickup`} className="underline ml-1">/jobs/[id]/pickup</a>
-      </p>
-      <p>• <strong>Admin :3000</strong> [A-08] Admin เห็นงานนี้ใน overview
-        <a href="http://localhost:3000/scrap/jobs" className="underline ml-1">/scrap/jobs</a>
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 
 /* S7/S8 — extended fields (mock patch — ไม่แก้ shared type) */
 interface MismatchReport {
@@ -143,8 +120,18 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
   return (
     <div className="space-y-5 max-w-xl">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <AnnoOriginJobDetail />
-      <AnnoXAppJobDetail id={id} />
+      <MockAnnoOrigin text="◀ มาจาก: R-27 · /scrap/jobs หรือ R-78 · /scrap/browse/[id] (กด 'ซื้อซากนี้')" />
+      <MockAnnoXApp screenLabel="R-28: Job">
+        <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ listing เปลี่ยนเป็น in_progress
+          <a href={`http://localhost:3002/scrap/SCR-002`} className="underline ml-1">/scrap/[id]</a>
+        </p>
+        <p>• <strong>WeeeT :3003</strong> [T-04] เมื่อ WeeeR เลือก option → ช่างได้รับ assignment รับซาก
+          <a href={`http://localhost:3003/jobs/J001/pickup`} className="underline ml-1">/jobs/[id]/pickup</a>
+        </p>
+        <p>• <strong>Admin :3000</strong> [A-08] Admin เห็นงานนี้ใน overview
+          <a href="http://localhost:3000/scrap/jobs" className="underline ml-1">/scrap/jobs</a>
+        </p>
+      </MockAnnoXApp>
 
       <div className="flex items-center gap-3">
         <Link href="/scrap/jobs" className="text-gray-400 hover:text-gray-600">←</Link>
@@ -209,7 +196,7 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
                   <div className="text-right">
                     <span className="text-gray-300 text-sm">→</span>
                     {/* §6 Nav annotation */}
-                    <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono">→ R-28{opt.value === "resell_as_scrap" ? "b" : opt.value === "resell_parts" ? "c" : opt.value === "repair_and_sell" ? "d" : "e"}</p>
+                    <MockAnnoNav text={`→ R-28${opt.value === "resell_as_scrap" ? "b" : opt.value === "resell_parts" ? "c" : opt.value === "repair_and_sell" ? "d" : "e"}`} />
                   </div>
                 )}
               </button>

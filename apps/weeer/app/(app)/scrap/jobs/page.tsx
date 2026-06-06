@@ -5,28 +5,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginJobs = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: R-70 · /scrap (tab "งานของฉัน") หรือ push notification งานใหม่
-  </div>
-);
-const AnnoXAppJobs = () => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้ (R-27: Jobs)
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ accepted/in_progress</p>
-      <p>• <strong>WeeeT :3003</strong> [T-22] ช่างเห็น jobs ที่ได้รับมอบหมาย
-        <a href="http://localhost:3003/scrap" className="underline ml-1">/scrap</a>
-      </p>
-      <p>• <strong>Admin :3000</strong> [A-08] Admin ดูภาพรวม ScrapJobs ทั้งหมด
-        <a href="http://localhost:3000/scrap/jobs" className="underline ml-1">/scrap/jobs</a>
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 import type { ScrapJob, ScrapJobStatus } from "../_lib/types";
 import {
   SCRAP_JOB_STATUS_LABEL, SCRAP_JOB_STATUS_COLOR,
@@ -127,8 +106,16 @@ export default function ScrapJobsPage() {
   return (
     <div className="space-y-5">
       {/* §5 Origin + §8 Cross-app annotations */}
-      <AnnoOriginJobs />
-      <AnnoXAppJobs />
+      <MockAnnoOrigin text="◀ มาจาก: R-70 · /scrap (tab 'งานของฉัน') หรือ push notification งานใหม่" />
+      <MockAnnoXApp screenLabel="R-27: Jobs">
+        <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ accepted/in_progress</p>
+        <p>• <strong>WeeeT :3003</strong> [T-22] ช่างเห็น jobs ที่ได้รับมอบหมาย
+          <a href="http://localhost:3003/scrap" className="underline ml-1">/scrap</a>
+        </p>
+        <p>• <strong>Admin :3000</strong> [A-08] Admin ดูภาพรวม ScrapJobs ทั้งหมด
+          <a href="http://localhost:3000/scrap/jobs" className="underline ml-1">/scrap/jobs</a>
+        </p>
+      </MockAnnoXApp>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

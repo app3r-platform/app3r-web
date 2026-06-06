@@ -1,24 +1,6 @@
 import Link from "next/link";
 import { GoldLockCountdown } from "@/components/shared/GoldLockCountdown";
-
-// ── mock-anno §5/§6/§8 (ลบก่อน production) ──────────────────────────────────
-const AnnoOriginOffers = () => (
-  <div className="mock-anno mock-anno-origin text-[10px] bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-1 text-yellow-700 font-mono">
-    ◀ มาจาก: U-33 · /scrap/[id] (กด "ดูและเลือกข้อเสนอ")
-  </div>
-);
-const AnnoXAppOffers = () => (
-  <details className="mock-anno mock-anno-xapp">
-    <summary className="cursor-pointer text-xs bg-purple-50 border border-purple-200 text-purple-700 rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 font-medium">
-      👁 แอพฯอื่น ณ จังหวะนี้
-    </summary>
-    <div className="mt-1 bg-purple-50 border border-purple-200 rounded-xl p-3 text-xs text-purple-800 space-y-1">
-      <p>• <strong>WeeeR :3001</strong> [R-25] ร้านที่ยื่นข้อเสนอเห็นสถานะรอพิจารณา
-        <a href="http://localhost:3001/scrap/announcements/SC001/offer" className="underline ml-1">/scrap/announcements/[id]/offer</a>
-      </p>
-    </div>
-  </details>
-);
+import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
 const MOCK_SCRAP_ITEM = {
   name: "เครื่องซักผ้าเก่า Samsung",
@@ -39,8 +21,12 @@ export default async function ScrapOffersPage({ params }: { params: Promise<{ id
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-6 space-y-4">
         {/* §5 Origin + §8 Cross-app annotations */}
-        <AnnoOriginOffers />
-        <AnnoXAppOffers />
+        <MockAnnoOrigin text='◀ มาจาก: U-33 · /scrap/[id] (กด "ดูและเลือกข้อเสนอ")' />
+        <MockAnnoXApp screenLabel="U-30: ข้อเสนอรับซาก">
+          <p>• <strong>WeeeR :3001</strong> [R-25] ร้านที่ยื่นข้อเสนอเห็นสถานะรอพิจารณา
+            <a href="http://localhost:3001/scrap/announcements/SC001/offer" className="underline ml-1">/scrap/announcements/[id]/offer</a>
+          </p>
+        </MockAnnoXApp>
 
         {/* Back link */}
         <Link href={`/scrap/${id}`} className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1">
