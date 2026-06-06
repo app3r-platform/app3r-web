@@ -64,12 +64,23 @@ const SOCIAL_ICON: Record<SocialPlatform, string> = {
   twitter: "🐦",
 };
 
+// ── Static fallback — shown when /api/contact-info is unavailable (D-T4-03 fix) ──
+const FOOTER_FALLBACK: ContactInfoDto = {
+  companyName: "App3R Platform",
+  address: { street: "123 ถนนสุขุมวิท", district: "คลองเตย", province: "กรุงเทพมหานคร", postalCode: "10110", country: "ไทย" },
+  phones: [{ label: "ติดต่อทั่วไป", number: "02-000-0000", hours: "จ-ศ 09:00-18:00" }],
+  emails: [{ label: "Support", address: "support@app3r.co.th" }],
+  socials: [{ platform: "line", handle: "@app3r", url: "https://line.me/ti/p/@app3r" }],
+  businessHours: { weekdays: "จ–ศ 09:00–18:00", weekend: "ปิดทำการ" },
+  mapEmbedUrl: null,
+  updatedAt: "2026-06-01T00:00:00Z",
+};
+
 // ── Footer Component ──────────────────────────────────────────────────────────
 
 export default function Footer() {
   const [info, setInfo] = useState<ContactInfoDto | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     apiFetch("/api/contact-info")
@@ -82,7 +93,7 @@ export default function Footer() {
         setLoading(false);
       })
       .catch(() => {
-        setError(true);
+        setInfo(FOOTER_FALLBACK);  // D-T4-03: static fallback — no error banner
         setLoading(false);
       });
   }, []);
@@ -93,7 +104,7 @@ export default function Footer() {
         <div className="text-center text-gray-300 py-2 animate-pulse">
           กำลังโหลดข้อมูลติดต่อ…
         </div>
-      ) : error || !info ? (
+      ) : !info ? (
         /* API down — minimal fallback (hide sensitive info) */
         <div className="text-center text-gray-400 py-2">
           ℹ️ ไม่สามารถโหลดข้อมูลติดต่อได้ — กรุณาติดต่อ admin

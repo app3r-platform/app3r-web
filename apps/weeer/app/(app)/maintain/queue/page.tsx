@@ -13,6 +13,45 @@ import {
 } from "../_lib/types";
 import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
+// ── Mock fallback — fresh-session seed (D-T4-02 fix) ──────────────────────────
+function freshMockQueueJobs(): MaintainJob[] {
+  const now = Date.now();
+  const iso = (ms: number) => new Date(now + ms).toISOString();
+  return [
+    {
+      id: "mock-mq-001", serviceCode: "M-2026-010", customerId: "C010",
+      status: "pending",
+      applianceType: "AC", cleaningType: "deep", serviceMethod: "on_site",
+      scheduledAt: iso(26 * 3600000), estimatedDuration: 3,
+      address: { lat: 13.756, lng: 100.502, address: "234 ถนนสาทร แขวงทุ่งมหาเมฆ กรุงเทพฯ" },
+      totalPrice: 1500,
+      offerDeadlineAt: iso(22 * 3600000),
+      createdAt: iso(-2 * 3600000), updatedAt: iso(-2 * 3600000),
+    },
+    {
+      id: "mock-mq-002", serviceCode: "M-2026-011", customerId: "C011",
+      status: "pending",
+      applianceType: "WashingMachine", cleaningType: "general", serviceMethod: "on_site",
+      scheduledAt: iso(48 * 3600000), estimatedDuration: 2,
+      address: { lat: 13.778, lng: 100.521, address: "567 ถนนรัชดาภิเษก แขวงดินแดง กรุงเทพฯ" },
+      totalPrice: 800,
+      offerDeadlineAt: iso(20 * 3600000),
+      createdAt: iso(-4 * 3600000), updatedAt: iso(-4 * 3600000),
+    },
+    {
+      id: "mock-mq-003", serviceCode: "M-2026-012", customerId: "C012",
+      status: "pending",
+      applianceType: "AC", cleaningType: "sanitize", serviceMethod: "on_site",
+      scheduledAt: iso(36 * 3600000), estimatedDuration: 4,
+      address: { lat: 13.792, lng: 100.535, address: "890 ถนนวิภาวดีรังสิต แขวงจตุจักร กรุงเทพฯ" },
+      totalPrice: 2000,
+      recurring: { enabled: true, interval: "6_months", nextScheduledAt: iso(180 * 24 * 3600000) },
+      offerDeadlineAt: iso(18 * 3600000),
+      createdAt: iso(-6 * 3600000), updatedAt: iso(-6 * 3600000),
+    },
+  ];
+}
+
 // ── M2: Offer countdown helper ─────────────────────────────────────────────────
 // deadline = offerDeadlineAt ?? createdAt + 24h
 function getOfferDeadline(job: MaintainJob): Date {
@@ -66,7 +105,7 @@ export default function MaintainQueuePage() {
   useEffect(() => {
     maintainApi.getQueue()
       .then(setJobs)
-      .catch((e: Error) => setError(e.message))
+      .catch(() => setJobs(freshMockQueueJobs()))  // D-T4-02: seed sample data on API unavailable
       .finally(() => setLoading(false));
   }, []);
 
