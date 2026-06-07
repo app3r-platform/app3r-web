@@ -266,8 +266,9 @@ export default function AdminDisputeDetailPage() {
       {/* ─── Resolution panel ─── */}
       <div className="bg-white rounded-2xl border-2 border-admin-primary/20 shadow-sm p-5 space-y-5">
         <p className="text-sm font-bold text-admin-dark">⚖️ ตัดสิน Dispute (Admin)</p>
+        {/* PHASE-4: SoT = Source of Truth (Offer terms reference) */}
         <p className="text-xs text-gray-500">
-          Offer = SoT (Source of Truth) — พิจารณา: terms ที่ตกลง + หลักฐาน seller + buyer + precedent
+          Offer = ข้อตกลงหลัก — พิจารณา: terms ที่ตกลง + หลักฐาน seller + buyer + precedent
         </p>
 
         {/* 3-way resolution */}

@@ -234,14 +234,15 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
   return (
     <section className="bg-white rounded-xl border border-red-200 p-5 space-y-5">
       <div className="flex items-center gap-2">
-        <h2 className="text-sm font-bold text-red-700">⚖️ Dispute Resolution — Offer = SoT</h2>
+        {/* PHASE-4: SoT = Source of Truth (Offer terms) */}
+        <h2 className="text-sm font-bold text-red-700">⚖️ Dispute Resolution — Offer = ข้อตกลงหลัก</h2>
         <span className="text-xs px-2 py-0.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-full">🔶 Mockup</span>
       </div>
 
       {/* L1 — Offer Terms */}
       <div className="bg-gray-50 rounded-lg p-4 space-y-2">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-          L1 — Offer Terms (Source of Truth)
+          L1 — Offer Terms (ข้อตกลงหลัก)
         </p>
         <div className="grid grid-cols-3 gap-3 mt-2">
           <div className="text-center">

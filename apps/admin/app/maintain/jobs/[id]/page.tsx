@@ -374,12 +374,13 @@ export default function MaintainJobDetailPage() {
             </div>
 
             {/* L1: Offer Terms Lock */}
+            {/* PHASE-4: SoT = Source of Truth (Offer terms lock) */}
             <div className="rounded-lg bg-gray-50 border border-gray-200 p-4">
               <p className="text-xs font-semibold text-gray-600 mb-2">
-                L1 — เงื่อนไขที่ตกลงใน Offer (Source of Truth)
+                L1 — เงื่อนไขที่ตกลงใน Offer (ข้อตกลงหลัก)
               </p>
               <p className="text-xs text-gray-500">
-                ข้อตกลงที่ WeeeU และ WeeeT ยืนยันก่อนเริ่มงาน ถูกล็อกเป็น SoT สำหรับวินิจฉัยข้อพิพาทนี้
+                ข้อตกลงที่ WeeeU และ WeeeT ยืนยันก่อนเริ่มงาน ถูกล็อกเป็นข้อตกลงหลัก สำหรับวินิจฉัยข้อพิพาทนี้
               </p>
               {job.dispute?.offer_terms_ref && (
                 <p className="text-xs text-admin-primary mt-1">ref: {job.dispute.offer_terms_ref}</p>
