@@ -37,7 +37,7 @@ export function PaymentWalletCard() {
           <span className="text-2xl font-bold text-white">฿{fmt(balance?.available ?? 0)}</span>
           <span className="text-xs text-gray-400 mb-0.5">พร้อมโอน</span>
         </div>
-        {(balance?.pending ?? 0) > 0 && <p className="text-xs text-amber-400 mt-1">฿{fmt(balance!.pending)} รอปล่อย (escrow)</p>}
+        {(balance?.pending ?? 0) > 0 && <p className="text-xs text-amber-400 mt-1">฿{fmt(balance!.pending)} รอปล่อยจากพักเงินกลาง (Escrow)</p>}
         {/* PHASE-4: withdrawal flow via ops team — automated payout deferred Phase D-5 */}
         <p className="text-xs text-gray-500 mt-2">💡 การโอนเงินจัดการผ่านทีมงาน</p>
       </div>
