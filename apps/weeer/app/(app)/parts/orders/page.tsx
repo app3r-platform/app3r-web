@@ -155,7 +155,7 @@ export default function PartsOrdersPage() {
   return (
     <div className="space-y-5 max-w-2xl">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-1">คำสั่งซื้อ B2B (ระหว่างร้านค้า)<HelpTip tip="B2B (Business-to-Business) — การซื้อขายระหว่างร้าน/ธุรกิจ ไม่ใช่ลูกค้าทั่วไป" /></h1>
+        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-1">คำสั่งซื้อ B2B (ระหว่างร้านค้า)<HelpTip content="B2B (Business-to-Business) — การซื้อขายระหว่างร้าน/ธุรกิจ ไม่ใช่ลูกค้าทั่วไป" /></h1>
         <Link href="/parts" className="text-sm text-gray-400 hover:text-gray-600">← คลังอะไหล่</Link>
       </div>
 

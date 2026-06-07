@@ -54,7 +54,7 @@ export default function WalletPage() {
           <div>
             <div className="text-sm font-semibold text-[#B8300E] mb-1">วิธีรับเงิน (WeeeR Earner)</div>
             <ul className="text-xs text-[#D63B12] space-y-1">
-              <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → ปลดพักเงินกลาง<HelpTip tip="พักเงินกลาง (Escrow) — คะแนนที่ระบบล็อกไว้ระหว่างกลางจนกว่างานจะเสร็จสมบูรณ์ แล้วปล่อยให้ผู้รับงานอัตโนมัติ" /> → ได้รับ Silver อัตโนมัติ</li>
+              <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → ปลดพักเงินกลาง<HelpTip content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง" /> → ได้รับ Silver อัตโนมัติ</li>
               <li>• B2B Parts: ผู้ซื้อกด "รับของ" → ปลดพักเงินกลาง → หักค่าธรรมเนียม 3% → รับ Silver{/* PHASE-4: D81 */}</li>
             </ul>
           </div>
