@@ -151,7 +151,8 @@ export default function AccountSettingsPage() {
           {/* Google Map placeholder — Phase D-2 (พิกัดจริง = BE) */}
           <div className="mt-2 h-32 bg-gray-50 border border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400">
             <span className="text-2xl">🗺️</span>
-            <span className="text-xs mt-1">แผนที่ (Google Map) — Phase D-2</span>
+            {/* PHASE-4: Phase D-2 */}
+            <span className="text-xs mt-1">แผนที่ (Google Map) — เร็วๆ นี้</span>
           </div>
         </div>
       </section>
