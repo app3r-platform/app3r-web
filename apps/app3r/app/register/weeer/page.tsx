@@ -131,7 +131,7 @@ export default function RegisterWeeeRPage() {
               </li>
               <li className="flex gap-3">
                 <span className="text-orange-500 text-lg shrink-0">✓</span>
-                <span><strong>สิทธิ์เพิ่มเติม</strong> — จัดการช่าง WeeeT ในร้าน · ระบบ Escrow · รายงานยอดขาย</span>
+                <span><strong>สิทธิ์เพิ่มเติม</strong> — จัดการช่าง WeeeT ในร้าน · ระบบพักเงินกลาง (Escrow) · รายงานยอดขาย</span>
               </li>
             </ul>
           </div>
@@ -146,7 +146,7 @@ export default function RegisterWeeeRPage() {
             <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">🛡️</div>
               <p className="font-semibold text-website-brand-900 text-sm flex items-center justify-center gap-1">
-                ระบบพักเงินกลางคุ้มครอง
+                ระบบพักเงินกลาง (Escrow) คุ้มครอง
                 <HelpTip
                   content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง"
                   ariaLabel="ระบบพักเงินกลางคืออะไร"

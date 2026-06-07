@@ -213,7 +213,7 @@ export default async function PreviewPage({ params }: Props) {
               </div>
               <p className="text-xs text-gray-400 text-center">
                 เมื่อเผยแพร่แล้ว ผู้ใช้จะติดต่อผ่านระบบ WeeeU —
-                มีระบบ <TermTooltip term="escrow" label="พักเงินกลาง" /> คุ้มครอง
+                มีระบบ <TermTooltip term="escrow" label="พักเงินกลาง (Escrow)" /> คุ้มครอง
               </p>
             </div>
 
