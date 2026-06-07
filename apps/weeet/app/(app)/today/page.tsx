@@ -82,7 +82,8 @@ export default function TodayPage() {
 
       <div className="bg-gray-800/40 border border-gray-700/40 rounded-xl p-3">
         <p className="text-xs text-gray-600">
-          ⚠️ Phase 2: ข้อมูล localStorage เท่านั้น — ไม่ sync ข้าม app (Phase D WebSocket)
+          {/* PHASE-4: localStorage-only today data — real-time sync via WebSocket deferred Phase D */}
+          ข้อมูลงานวันนี้อัพเดตเมื่อโหลดหน้าใหม่
         </p>
       </div>
     </div>
