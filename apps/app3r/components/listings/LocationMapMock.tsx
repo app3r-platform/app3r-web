@@ -60,7 +60,8 @@ export default function LocationMapMock({ area, detail, className = "" }: Locati
 
       <div className="px-4 py-3 text-xs text-gray-500 leading-relaxed">
         {detail ? <span className="text-gray-700">{detail} · </span> : null}
-        ตำแหน่งโดยประมาณเพื่อความเป็นส่วนตัว — แผนที่จริงและการนำทางเปิดใช้งานใน Phase D
+        {/* PHASE-4: real map/nav (Phase D) */}
+        ตำแหน่งโดยประมาณเพื่อความเป็นส่วนตัว — แผนที่จริงและการนำทางเปิดใช้งานเร็วๆ นี้
       </div>
     </div>
   );
