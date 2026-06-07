@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { HelpTip } from "@app3r/ui";
 
 export default function ScrapPickupPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -42,7 +43,7 @@ export default function ScrapPickupPage({ params }: { params: Promise<{ id: stri
 
         {/* GPS */}
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-700 mb-4">
-          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3">ตำแหน่ง GPS</p>
+          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3 flex items-center gap-1">ตำแหน่ง GPS (ระบุตำแหน่ง) <HelpTip content="GPS — ระบบระบุพิกัดตำแหน่ง ใช้บันทึกตำแหน่งจริงตอนรับ/ส่งงาน"/></p>
           {gpsRecorded ? (
             <div className="flex items-center gap-2 text-green-400">
               <span className="text-sm font-medium">✅ บันทึก GPS แล้ว</span>

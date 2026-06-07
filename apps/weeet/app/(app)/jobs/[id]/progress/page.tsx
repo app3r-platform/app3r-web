@@ -161,7 +161,7 @@ export default function JobProgressPage({
       )}
 
       <div className="space-y-2">
-        <p className="text-sm font-semibold text-gray-300">Timeline</p>
+        <p className="text-sm font-semibold text-gray-300">ลำดับเหตุการณ์</p>
         <ServiceProgressTimeline job={job} />
       </div>
 

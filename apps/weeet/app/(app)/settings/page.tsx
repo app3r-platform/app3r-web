@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { LocationPickerSection } from "@/components/location/LocationPickerSection";
 import { PushPermissionBanner } from "@/components/push/PushPermissionBanner";
+import { HelpTip } from "@app3r/ui";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function SettingsPage() {
         <SettingRow
           icon="📍"
           label="เปิด GPS ตลอดเวลา"
-          description="ช่วยให้ WeeeR ติดตามตำแหน่งของคุณได้"
+          description={<>ช่วยให้ WeeeR ติดตามตำแหน่งของคุณได้ <HelpTip content="GPS — ระบบระบุพิกัดตำแหน่ง ใช้บันทึกตำแหน่งจริงตอนรับ/ส่งงาน"/></>}
           value={
             <Toggle value={gpsEnabled} onChange={setGpsEnabled} />
           }
@@ -299,7 +300,7 @@ function SettingRow({
 }: {
   icon: string;
   label: string;
-  description?: string;
+  description?: React.ReactNode;
   value?: React.ReactNode;
   onClick?: () => void;
   arrow?: boolean;

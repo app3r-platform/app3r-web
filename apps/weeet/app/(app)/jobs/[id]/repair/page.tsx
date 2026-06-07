@@ -3,6 +3,7 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { HelpTip } from "@app3r/ui";
 
 export default function RepairCompletePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -98,7 +99,7 @@ export default function RepairCompletePage({ params }: { params: Promise<{ id: s
 
         {/* OTP input */}
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-700 mb-6">
-          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-1">OTP ยืนยันการรับมอบ</p>
+          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-1 flex items-center gap-1">OTP ยืนยันการรับมอบ <HelpTip content="OTP (One-Time Password) — รหัสยืนยันใช้ครั้งเดียว ส่งทาง SMS ใช้ยืนยันตอนรับ-ส่งมอบงาน"/></p>
           <p className="text-xs text-gray-600 mb-3">WeeeU จะได้รับ OTP — กรอกเพื่อยืนยัน</p>
           <input
             type="text"
