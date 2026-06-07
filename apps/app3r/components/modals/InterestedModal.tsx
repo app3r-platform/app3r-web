@@ -61,7 +61,7 @@ export default function InterestedModal({
         <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-sm text-website-brand-800">
           <p className="font-semibold mb-1">เข้าสู่ระบบ WeeeU เพื่อติดต่อผู้ขาย</p>
           <p className="text-website-brand-600">
-            สมาชิก WeeeU สามารถดูข้อมูลผู้ขาย ยื่น Offer และติดตามสถานะผ่านระบบ Escrow ที่ปลอดภัย
+            สมาชิก WeeeU สามารถดูข้อมูลผู้ขาย ยื่น Offer และติดตามสถานะผ่านระบบพักเงินกลาง (Escrow) ที่ปลอดภัย
           </p>
         </div>
 

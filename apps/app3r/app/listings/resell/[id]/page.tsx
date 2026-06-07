@@ -13,6 +13,7 @@ import LocationMapMock from "../../../../components/listings/LocationMapMock";
 import QnASection from "../../../../components/listings/QnASection";
 import EngagementCounters from "../../../../components/listings/EngagementCounters";
 import { AdSlot, RoleAwareCTA, TermTooltip, CopyShareButton, MockAnnoOrigin, MockAnnoXapp } from "../../../../components/common";
+import { HelpTip } from "@app3r/ui";
 import { getMockEngagement } from "../../../../lib/mock/listing-engagement";
 import { getMockQnA } from "../../../../lib/mock/listing-qna";
 
@@ -97,8 +98,12 @@ export default async function ResellDetailPage({ params }: PageProps) {
                 {listing.condition}
               </span>
               {listing.sponsored && (
-                <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full font-semibold">
-                  Sponsored
+                <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full font-semibold">
+                  โฆษณา
+                  <HelpTip
+                    content="ประกาศนี้จ่ายเงินเพื่อแสดงผลเด่นขึ้น"
+                    ariaLabel="โฆษณาคืออะไร"
+                  />
                 </span>
               )}
             </div>

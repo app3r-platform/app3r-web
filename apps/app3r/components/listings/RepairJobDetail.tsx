@@ -140,7 +140,7 @@ export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetai
             </button>
             {/* PHASE-4: offer+escrow (Phase D) */}
             <p className="text-xs text-gray-400 text-center">
-              ระบบยื่น offer และ Escrow เปิดใช้งานเร็วๆ นี้
+              ระบบยื่น offer และพักเงินกลาง (Escrow) เปิดใช้งานเร็วๆ นี้
             </p>
           </div>
 
