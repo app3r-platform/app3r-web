@@ -40,7 +40,8 @@ export default function Dashboard() {
             <div className="grid grid-cols-3 gap-4 mb-8">
               <StatCard icon="👥" label="ผู้ใช้ทั้งหมด" value={total} sub="ทั้งระบบ" />
               <StatCard icon="⏳" label="WeeeR รออนุมัติ" value={pending} sub="รอดำเนินการ" alert={pending > 0} />
-              <StatCard icon="✅" label="API Status" value="Online" sub="port 8000" green />
+              {/* PHASE-4: API endpoint config (port 8000) */}
+              <StatCard icon="✅" label="สถานะระบบ" value="พร้อมใช้งาน" sub="" green />
             </div>
 
             {/* Recent users */}
