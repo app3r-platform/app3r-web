@@ -20,7 +20,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'แอร์ Daikin 2 ตัว ขนาด 12000 และ 18000 BTU ต้องการล้างทำความสะอาดประจำปี และเช็คปริมาณน้ำยา ถ้าน้ำยาน้อยให้เติมพร้อมได้เลย',
     photos: ['https://picsum.photos/400/300?seed=m001a', 'https://picsum.photos/400/300?seed=m001b'],
     estimatedBudget: 1200, feePreview: fee(1200),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)', featured: true,
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', featured: true, // PHASE-4
   },
   {
     id: 'm002', jobType: 'maintain',
@@ -30,7 +30,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'เครื่องซักผ้า Samsung ฝาบน 10 กก. ใช้มา 3 ปี ต้องการล้างทำความสะอาดลึก มีกลิ่นอับในถัง ต้องการให้ฆ่าเชื้อด้วย ถ่ายรูปก่อน-หลังให้ด้วย',
     photos: ['https://picsum.photos/400/300?seed=m002a'],
     estimatedBudget: 800, feePreview: fee(800),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)', featured: true,
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', featured: true, // PHASE-4
   },
   {
     id: 'm003', jobType: 'maintain',
@@ -40,7 +40,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'แอร์ฝังฝ้า Mitsubishi 18000 BTU ในออฟฟิศ ต้องการช่างที่มีประสบการณ์ล้างแอร์ฝังฝ้าโดยเฉพาะ ไม่ให้สกปรกพื้นออฟฟิศ',
     photos: ['https://picsum.photos/400/300?seed=m003a', 'https://picsum.photos/400/300?seed=m003b'],
     estimatedBudget: 1500, feePreview: fee(1500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'm004', jobType: 'maintain',
@@ -50,7 +50,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'ตู้เย็น LG 2 ประตู 14 คิว ยางขอบตู้เริ่มแข็งและไม่กระชับ ต้องการเปลี่ยนยางขอบทั้ง 2 ชั้น และล้างสระระบายน้ำด้านหลัง',
     photos: ['https://picsum.photos/400/300?seed=m004a'],
     estimatedBudget: 1000, feePreview: fee(1000),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'm005', jobType: 'maintain',
@@ -60,7 +60,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'พัดลมตั้งพื้น 3 ตัว ยี่ห้อต่างๆ ต้องการล้างใบพัดและตะแกรง เติมน้ำมันแกนพัดลม เพื่อให้เงียบและเย็นขึ้น',
     photos: ['https://picsum.photos/400/300?seed=m005a'],
     estimatedBudget: 600, feePreview: fee(600),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'm006', jobType: 'maintain',
@@ -70,7 +70,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'เครื่องดูดฝุ่น Dyson V8 ต้องการล้างทำความสะอาดหัวดูดทุกหัว เปลี่ยนไส้กรอง HEPA และตรวจสอบสภาพแบตเตอรี่',
     photos: ['https://picsum.photos/400/300?seed=m006a', 'https://picsum.photos/400/300?seed=m006b'],
     estimatedBudget: 900, feePreview: fee(900),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'm007', jobType: 'maintain',
@@ -80,7 +80,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'แอร์ Carrier แยกส่วน 3 ตัว ขนาด 9000, 12000, 12000 BTU ต้องการล้างพร้อมกัน 1 วัน ต้องการช่าง 2 คนขึ้นไป',
     photos: ['https://picsum.photos/400/300?seed=m007a'],
     estimatedBudget: 2500, feePreview: fee(2500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'm008', jobType: 'maintain',
@@ -90,7 +90,7 @@ export const WEEER_MAINTAIN_JOBS: WeeeRJobListing[] = [
     problemDescription: 'เครื่องซักผ้าฝาหน้า LG 9 กก. ใช้มา 5 ปี ต้องการล้างถังลึก ทำความสะอาดยางขอบประตู และตรวจสอบกรองปั๊มน้ำ มีกลิ่นอับเล็กน้อย',
     photos: ['https://picsum.photos/400/300?seed=m008a'],
     estimatedBudget: 950, feePreview: fee(950),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
 ];
 

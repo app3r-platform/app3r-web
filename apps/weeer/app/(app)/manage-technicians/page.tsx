@@ -157,7 +157,7 @@ function CredentialsModal({ username, password, onClose }: { username: string; p
             {copied ? "✅ คัดลอกแล้ว" : "📋 คัดลอก username & password"}
           </button>
           <p className="text-xs text-gray-400">
-            (D16: ไม่มีระบบ SMS — กรุณาส่งให้ช่างด้วยตนเอง)
+            (ไม่มีระบบ SMS — กรุณาส่งให้ช่างด้วยตนเอง) {/* PHASE-4: D16 */}
           </p>
           <button onClick={onClose} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
             รับทราบ — ปิด
@@ -209,7 +209,7 @@ function ResetPasswordModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => v
               className="w-full border border-[#F04E20] text-[#D63B12] font-medium py-2.5 rounded-xl text-sm hover:bg-[#FFF1ED] transition-colors">
               {copied ? "✅ คัดลอกแล้ว" : "📋 คัดลอก Password ใหม่"}
             </button>
-            <p className="text-xs text-gray-400 text-center">(D16: ไม่มีระบบ SMS — ส่งให้ช่างด้วยตนเอง)</p>
+            <p className="text-xs text-gray-400 text-center">(ไม่มีระบบ SMS — ส่งให้ช่างด้วยตนเอง) {/* PHASE-4: D16 */}</p>
             <button onClick={onClose} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm">ปิด</button>
           </>
         )}
@@ -392,10 +392,10 @@ export default function ManageTechniciansPage() {
       {/* Info box */}
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-600 space-y-1">
         <div className="font-semibold text-blue-700">ℹ️ ข้อมูลบัญชี WeeeT</div>
-        <div>• Default WeeeT: สร้างอัตโนมัติเมื่อได้รับอนุมัติ (D15) — ไม่มีค่าใช้จ่าย</div>
+        <div>• Default WeeeT: สร้างอัตโนมัติเมื่อได้รับอนุมัติ — ไม่มีค่าใช้จ่าย{/* PHASE-4: D15 */}</div>
         <div>• Rented WeeeT: หัก {GOLD_PER_WEEET} Gold/ปี — ต้องต่ออายุทุกปี</div>
         <div>• สลับเข้าใช้: redirect ไป WeeeT app พร้อม session ชั่วคราว</div>
-        <div>• Password: ระบบสุ่มให้ — WeeeR ส่งให้ช่างเองทาง LINE หรือโทร (D16: ไม่มี SMS)</div>
+        <div>• Password: ระบบสุ่มให้ — WeeeR ส่งให้ช่างเองทาง LINE หรือโทร (ไม่มี SMS){/* PHASE-4: D16 */}</div>
       </div>
 
       {/* Modals */}

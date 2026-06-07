@@ -54,7 +54,7 @@ export default function WalletPage() {
             <div className="text-sm font-semibold text-[#B8300E] mb-1">วิธีรับเงิน (WeeeR Earner)</div>
             <ul className="text-xs text-[#D63B12] space-y-1">
               <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → escrow release → ได้รับ Silver อัตโนมัติ</li>
-              <li>• B2B Parts (D81): ผู้ซื้อกด "รับของ" → escrow release → หักค่าธรรมเนียม 3% → รับ Silver</li>
+              <li>• B2B Parts: ผู้ซื้อกด "รับของ" → escrow release → หักค่าธรรมเนียม 3% → รับ Silver{/* PHASE-4: D81 */}</li>
             </ul>
           </div>
         </div>

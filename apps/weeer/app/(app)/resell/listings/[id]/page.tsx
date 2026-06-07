@@ -316,10 +316,10 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
 
       {/* Q&A Placeholder (FLAG-3 · D82) */}
       <div className="bg-white border border-gray-100 rounded-xl p-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">💬 Q&A (ไอเดีย 9 — D82)</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">💬 Q&A{/* PHASE-4: D82 */}</p>
         <div className="bg-gray-50 rounded-xl p-4 text-center">
           <p className="text-sm text-gray-400">ฟีเจอร์ถาม-ตอบกำลังพัฒนา</p>
-          <p className="text-xs text-gray-300 mt-1">ผู้ซื้อสามารถถามผู้ขายได้โดยตรง (cross-module · Phase D)</p>
+          <p className="text-xs text-gray-300 mt-1">ผู้ซื้อสามารถถามผู้ขายได้โดยตรง (cross-module · เร็วๆ นี้) {/* PHASE-4 */}</p>
         </div>
       </div>
 

@@ -53,7 +53,8 @@ export default async function RepairDetailPage({ params }: Props) {
 
       {/* Mock data notice */}
       <div className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
-        ⚙️ ข้อมูลตัวอย่าง (Phase D) — sensitive fields จะเชื่อม Backend เมื่อ DB schema พร้อม
+        ⚙️ ข้อมูลตัวอย่าง — sensitive fields จะเชื่อม Backend เมื่อ DB schema พร้อม
+        {/* PHASE-4: removed Phase-D label from user-visible text */}
         {/* TODO: connect real Backend endpoint when sensitive fields added to DB schema */}
       </div>
 
@@ -146,7 +147,7 @@ export default async function RepairDetailPage({ params }: Props) {
           </div>
         </div>
         <p className="text-xs text-gray-400 mt-3 border-t border-gray-50 pt-3">
-          * ชื่อและเบอร์จริงจะแสดงเมื่อ admin อนุมัติ match (Phase D+)
+          * ชื่อและเบอร์จริงจะแสดงเมื่อ admin อนุมัติ match {/* PHASE-4 */}
         </p>
       </div>
 

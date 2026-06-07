@@ -25,7 +25,7 @@ export function FeeBreakdown({ totalPoints, quantity, pricePerUnit }: FeeBreakdo
         <span className="flex items-center gap-1">
           {roundedFee.toLocaleString()} pts
           {direction !== "exact" && (
-            <span className="text-xs text-orange-500" title={`ค่าจริง ${rawFee.toFixed(2)} pts — ปัด${direction === "up" ? "ขึ้น" : "ลง"} (D75)`}>
+            <span className="text-xs text-orange-500" title={`ค่าจริง ${rawFee.toFixed(2)} pts — ปัด${direction === "up" ? "ขึ้น" : "ลง"}`}>{/* PHASE-4: D75 */}
               {direction === "up" ? "⬆️" : "⬇️"}
             </span>
           )}
@@ -39,7 +39,7 @@ export function FeeBreakdown({ totalPoints, quantity, pricePerUnit }: FeeBreakdo
         <span>ยอดที่คุณต้องจ่าย</span>
         <span>{totalPoints.toLocaleString()} pts</span>
       </div>
-      <p className="text-xs text-gray-400">* ค่าธรรมเนียมปัดเศษตามกฎ D75 (ปัดเป็น integer — ≥0.5 ขึ้น)</p>
+      <p className="text-xs text-gray-400">* ค่าธรรมเนียมปัดเศษ (ปัดเป็น integer — ≥0.5 ขึ้น){/* PHASE-4: D75 */}</p>
     </div>
   );
 }
