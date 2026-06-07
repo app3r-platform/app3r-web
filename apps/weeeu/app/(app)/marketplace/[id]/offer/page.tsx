@@ -58,7 +58,7 @@ export default function MarketplaceOfferPage() {
       setError("กรุณาระบุราคาที่ต้องการเสนอ"); return;
     }
     if (!goldAck) {
-      setError("กรุณารับทราบการล็อกพอยต์ทอง (Escrow) ก่อนยื่นข้อเสนอ"); return;
+      setError("กรุณารับทราบการล็อกพอยต์ทองในระบบพักเงินกลาง (Escrow) ก่อนยื่นข้อเสนอ"); return;
     }
     setError("");
     setOtp(""); setOtpError(""); setOtpAttempts(0);

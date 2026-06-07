@@ -40,7 +40,7 @@ type TransactionData = {
 // Timeline 9 step (รวม awaiting_payment + escrow + evidence)
 const STEPS: { key: string; label: string; icon: string }[] = [
   { key: "offer_selected",   label: "เลือกข้อเสนอ",          icon: "🤝" },
-  { key: "awaiting_payment", label: "รอ Gold Escrow ≤ 24ชม.", icon: "💰" }, // R4
+  { key: "awaiting_payment", label: "รอ Gold เข้าพักเงินกลาง (Escrow) ≤ 24ชม.", icon: "💰" }, // R4
   { key: "buyer_confirmed",  label: "Gold ล็อกแล้ว",          icon: "🔒" },
   { key: "in_progress",      label: "ผู้ขายเตรียมส่ง",         icon: "📦" }, // R6 evidence
   { key: "delivered",        label: "ส่งถึงแล้ว",              icon: "🏠" },
@@ -241,7 +241,7 @@ export default function TransactionPage() {
       {/* R4: awaiting_payment banner */}
       {tx.status === "awaiting_payment" && (
         <div className="bg-orange-50 border-2 border-orange-300 rounded-2xl p-4 space-y-3">
-          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold Escrow <EscrowInfoIcon /> (R4)</p>
+          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold พักเงินกลาง (Escrow) <EscrowInfoIcon /> (R4)</p>
           <p className="text-xs text-orange-700">
             {isBuyer
               ? `Gold ของคุณขาดอีก ${mockR4Shortfall.toLocaleString()} — เติมให้ครบใน 24 ชม.`
@@ -289,7 +289,7 @@ export default function TransactionPage() {
         {isAfterEscrow && (
           <div className="flex items-center gap-1.5 pt-1 border-t border-gray-50">
             <span className="text-sm">🔒</span>
-            <p className="text-xs text-weeeu-primary font-medium">Gold {tx.agreed_price.toLocaleString()} ล็อกใน Escrow <EscrowInfoIcon /> แล้ว</p>
+            <p className="text-xs text-weeeu-primary font-medium">Gold {tx.agreed_price.toLocaleString()} ล็อกในระบบพักเงินกลาง <EscrowInfoIcon /> แล้ว</p>
           </div>
         )}
       </div>
@@ -460,7 +460,7 @@ export default function TransactionPage() {
       {parcelClaimSent && (
         <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
           <p className="text-sm font-semibold text-orange-800">📬 แจ้งเรื่องพัสดุเสียหายแล้ว (R11)</p>
-          <p className="text-xs text-orange-700 mt-1">Admin กำลังตรวจสอบ — Gold ใน Escrow <EscrowInfoIcon /> ถูกล็อกไว้</p>
+          <p className="text-xs text-orange-700 mt-1">Admin กำลังตรวจสอบ — Gold ในระบบพักเงินกลาง <EscrowInfoIcon /> ถูกล็อกไว้</p>
         </div>
       )}
 
@@ -511,7 +511,7 @@ export default function TransactionPage() {
         <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4">
             <p className="text-base font-bold text-gray-900">⚖️ เปิดข้อพิพาท</p>
-            <p className="text-xs text-gray-500">Admin จะตรวจสอบหลักฐานและตัดสิน — Gold ใน Escrow <EscrowInfoIcon /> ถูกล็อกระหว่างรอ</p>
+            <p className="text-xs text-gray-500">Admin จะตรวจสอบหลักฐานและตัดสิน — Gold ในระบบพักเงินกลาง <EscrowInfoIcon /> ถูกล็อกระหว่างรอ</p>
 
             <div className="space-y-1.5">
               {[
