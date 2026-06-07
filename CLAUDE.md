@@ -8,11 +8,11 @@ pnpm + Turborepo workspace. Multiple Next.js apps share two internal packages:
 
 ```
 apps/
-  weeer/          ← WeeeR (ร้านค้า/บริษัท) — port 3001 — PRIMARY scope
-  admin/          ← Admin portal
-  weeeu/          ← WeeeU (ลูกค้า)
-  weeet/          ← WeeeT (ช่าง)
-  app3r/          ← App3R (Website/landing)
+  app3r/          ← App3R (Website/landing) — port 3004
+  weeeu/          ← WeeeU (ลูกค้า) — port 3002
+  weeer/          ← WeeeR (ร้านค้า/บริษัท) — port 3001
+  weeet/          ← WeeeT (ช่าง) — port 3003
+  admin/          ← Admin portal — port 3000
 packages/
   shared/         ← @app3r/shared — DAL types, IWeeerDAL interface
   ui/             ← @app3r/ui — shared React components
@@ -22,7 +22,9 @@ e2e/              ← Playwright API-level E2E tests (no browser)
   shared/
 ```
 
-**File ownership rule**: When working on WeeeR, only touch `apps/weeer/`. Never touch `apps/app3r/` or other apps. Mock data must be copied inline — no cross-app imports.
+**File ownership rule**: monorepo มี 5 แอป (ports 3000–3004) — แต่ละแชท implementer แก้เฉพาะแอปที่ตน own ตาม **App3R Baseline §3 (Surgical)** ท้ายไฟล์นี้ · canonical/shared ใน `packages/` = owner แก้คนเดียว แชทอื่นเรียก API เท่านั้น · ไฟล์นอก ownership = escalate HUB ไม่แตะเอง · mock data must be copied inline — no cross-app imports.
+
+> **📎 ภาคผนวก (Appendix) — WeeeR reference:** หัวข้อ Commands / App Architecture / Testing / Dev Auth / Environment ด้านล่างเขียนอ้างอิงแอป **WeeeR** (`apps/weeer/`, port 3001) เป็นตัวอย่าง · โครงสร้าง pattern (route groups, DAL feature-flag, server/client split, jest+SWC, `.env.local` per-module) ใช้ได้กับทุกแอป — แทนชื่อแอป/พอร์ตตามแอปที่ทำงาน · กฎ ownership จริงยึด **App3R Baseline §3** ท้ายไฟล์
 
 ## Commands
 
