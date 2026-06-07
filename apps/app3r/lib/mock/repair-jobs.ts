@@ -37,8 +37,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/seed/101/400/300',
     ],
     estimatedBudget: 1500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
     featured: true,
   }),
 
@@ -58,8 +58,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/seed/103/400/300',
     ],
     estimatedBudget: 3500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
     featured: true,
   }),
 
@@ -76,8 +76,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'เครื่องซักผ้า LG ฝาบน 10 กก. ใช้งานมา 4 ปี เริ่มมีเสียงดังผิดปกติตอนปั่น และบางครั้งถังไม่หมุน น้ำระบายปกติ ต้องการช่างมาดูที่บ้าน',
     photos: ['https://picsum.photos/seed/104/400/300'],
     estimatedBudget: 1200,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -97,8 +97,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/seed/107/400/300',
     ],
     estimatedBudget: 2500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -114,8 +114,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'ไมโครเวฟ Panasonic 25 ลิตร เปิดสวิตช์แล้วจอไม่ติด ไม่ให้ความร้อน ฟิวส์อาจขาด หรือบอร์ดเสีย สามารถส่งพัสดุมาซ่อมได้',
     photos: ['https://picsum.photos/seed/108/400/300'],
     estimatedBudget: 800,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -131,8 +131,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'พัดลมตั้งพื้น Hatari 16 นิ้ว หมุนช้าทุกสปีด มีเสียงพัดดัง น่าจะลูกปืนหรือคาปาซิเตอร์เสีย จะนำมาซ่อมที่ร้านเอง',
     photos: ['https://picsum.photos/seed/109/400/300'],
     estimatedBudget: 500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -148,8 +148,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'หม้อหุงข้าว Toshiba 1.8 ลิตร ฝาไม่ล็อกแน่น กดสวิตช์แล้วข้ามไปโหมด warm เลย ข้าวไม่สุก คาดว่าเทอร์โมสตัทเสีย',
     photos: ['https://picsum.photos/seed/110/400/300'],
     estimatedBudget: 600,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -168,8 +168,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/seed/111/400/300',
     ],
     estimatedBudget: 700,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -185,8 +185,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'เครื่องดูดฝุ่น Dyson V11 ใช้มา 3 ปี แบตเสื่อมชัดเจน ใช้ได้แค่ 5 นาที ต้องการเปลี่ยนแบตใหม่ หรือตรวจหัวดูดด้วย สามารถส่งพัสดุได้',
     photos: ['https://picsum.photos/seed/112/400/300'],
     estimatedBudget: 2000,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -205,8 +205,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/seed/114/400/300',
     ],
     estimatedBudget: 1800,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -222,8 +222,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'เครื่องซักผ้า Bosch ฝาหน้า 8 กก. ขึ้น Error E18 ทุกรอบ น้ำไม่ระบาย ลองทำความสะอาดกรองแล้วยังเป็นอยู่ อาจปั๊มน้ำเสีย',
     photos: ['https://picsum.photos/seed/115/400/300'],
     estimatedBudget: 1500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeRepairJob({
@@ -239,8 +239,8 @@ export const repairJobs: AuthenticatedJobProjection[] = [
       'ทีวี LG Smart TV 43 นิ้ว เปิดไม่ติด ไฟ standby กระพริบแดง 3 ครั้งแล้วดับ น่าจะบอร์ดจ่ายไฟเสีย ต้องการนำมาให้ช่างดูที่ร้าน',
     photos: ['https://picsum.photos/seed/116/400/300'],
     estimatedBudget: 2200,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 ];
 

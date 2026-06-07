@@ -73,7 +73,8 @@ export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetai
                   { label: 'ประเภทบริการ',   value: getServiceTypeLabel(job.serviceType) },
                   { label: 'โพสต์เมื่อ',     value: job.postedAt },
                   { label: 'งบประมาณ',       value: `${job.estimatedBudget.toLocaleString()} บาท` },
-                  { label: 'ค่าธรรมเนียมประมาณ', value: `${job.feePreview.toLocaleString()} บาท (D75)` },
+                  // PHASE-4: fee round D75
+                  { label: 'ค่าธรรมเนียมประมาณ', value: `${job.feePreview.toLocaleString()} บาท` },
                 ].map(({ label, value }) => (
                   <tr key={label} className="border-b border-gray-100 last:border-0">
                     <td className="px-4 py-3 text-gray-500 font-medium w-40">{label}</td>

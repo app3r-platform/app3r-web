@@ -37,8 +37,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/400/300?seed=m001b',
     ],
     estimatedBudget: 1200,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
     featured: true,
   }),
 
@@ -54,8 +54,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'เครื่องซักผ้า Samsung ฝาบน 10 กก. ใช้มา 3 ปี ต้องการล้างทำความสะอาดลึก มีกลิ่นอับในถัง ต้องการให้ฆ่าเชื้อด้วย ถ่ายรูปก่อน-หลังให้ด้วย',
     photos: ['https://picsum.photos/400/300?seed=m002a'],
     estimatedBudget: 800,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
     featured: true,
   }),
 
@@ -74,8 +74,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/400/300?seed=m003b',
     ],
     estimatedBudget: 1500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeMaintainJob({
@@ -90,8 +90,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'ตู้เย็น LG 2 ประตู 14 คิว ยางขอบตู้เริ่มแข็งและไม่กระชับ ต้องการเปลี่ยนยางขอบทั้ง 2 ชั้น และล้างสระระบายน้ำด้านหลัง',
     photos: ['https://picsum.photos/400/300?seed=m004a'],
     estimatedBudget: 1000,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeMaintainJob({
@@ -106,8 +106,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'พัดลมตั้งพื้น 3 ตัว ยี่ห้อต่างๆ ต้องการล้างใบพัดและตะแกรง เติมน้ำมันแกนพัดลม เพื่อให้เงียบและเย็นขึ้น',
     photos: ['https://picsum.photos/400/300?seed=m005a'],
     estimatedBudget: 600,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeMaintainJob({
@@ -125,8 +125,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'https://picsum.photos/400/300?seed=m006b',
     ],
     estimatedBudget: 900,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeMaintainJob({
@@ -141,8 +141,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'แอร์ Carrier แยกส่วน 3 ตัว ขนาด 9000, 12000, 12000 BTU ต้องการล้างพร้อมกัน 1 วัน ต้องการช่าง 2 คนขึ้นไป',
     photos: ['https://picsum.photos/400/300?seed=m007a'],
     estimatedBudget: 2500,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 
   makeMaintainJob({
@@ -157,8 +157,8 @@ export const maintainJobs: AuthenticatedJobProjection[] = [
       'เครื่องซักผ้าฝาหน้า LG 9 กก. ใช้มา 5 ปี ต้องการล้างถังลึก ทำความสะอาดยางขอบประตู และตรวจสอบกรองปั๊มน้ำ มีกลิ่นอับเล็กน้อย',
     photos: ['https://picsum.photos/400/300?seed=m008a'],
     estimatedBudget: 950,
-    customerName: 'รอยืนยัน (Phase D)',
-    customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', // PHASE-4: customer name (Phase D)
+    customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4: customer phone (Phase D)
   }),
 ];
 
