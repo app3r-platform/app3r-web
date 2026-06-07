@@ -110,7 +110,7 @@ const FILTER_TABS = [
   { value: "maintain", label: "บำรุง" },
   { value: "resell",   label: "ซื้อ/ขาย" },
   { value: "scrap",    label: "ซาก" },
-  { value: "wallet",   label: "Wallet" },
+  { value: "wallet",   label: "กระเป๋าเงิน" },
   { value: "system",   label: "ระบบ" },
 ];
 

@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { HelpTip } from "@app3r/ui";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type DisputeStatus =
@@ -128,10 +129,18 @@ const STATUS_COLOR: Record<DisputeStatus, string> = {
 };
 
 const TIER_LABEL: Record<DisputeTier, string> = {
-  1: "Tier 1 — เงื่อนไขข้อเสนอ",
-  2: "Tier 2 — ชั่งหลักฐาน",
-  3: "Tier 3 — Default คืนลูกค้า",
-  4: "Tier 4 — Admin ตัดสิน",
+  1: "ระดับ 1 — เงื่อนไขข้อเสนอ",
+  2: "ระดับ 2 — ชั่งหลักฐาน",
+  3: "ระดับ 3 — คืนลูกค้าเต็มจำนวน",
+  4: "ระดับ 4 — Admin ตัดสิน",
+};
+
+// PT-Audit #28: HelpTip ต่อระดับ — นิยามยืนยันจาก code comment (Advisor Gen 114)
+const TIER_HELP: Record<DisputeTier, string> = {
+  1: "ตรวจสอบว่าเงื่อนไขข้อเสนอที่ตกลงกันไว้ครอบคลุมประเด็นหรือไม่ ถ้าข้อเสนอระบุไว้ชัด = ยึดตามนั้น",
+  2: "ฝ่ายใดมีหลักฐานสนับสนุนมากกว่าจะได้รับการพิจารณาก่อน ควรส่งรูป/วิดีโอ/บันทึกการสนทนา",
+  3: "เมื่อหลักฐานทัดเทียมกัน ระบบจะคืนเงินให้ลูกค้าเต็มจำนวนเป็นค่าเริ่มต้น",
+  4: "Admin ตรวจสอบและตัดสินขั้นสุดท้าย ผลการตัดสินจะถูกบันทึกเป็นแนวทางสำหรับข้อพิพาทในอนาคต",
 };
 
 function formatDate(iso: string | null | undefined): string {
@@ -386,9 +395,12 @@ export default function DisputePage() {
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${data.tier > tier ? "bg-weeeu-primary text-white" : data.tier === tier ? "bg-weeeu-dark text-white" : "bg-gray-200 text-gray-400"}`}>
                     {data.tier > tier ? "✓" : tier}
                   </span>
-                  <p className={`text-xs font-medium ${data.tier >= tier ? "text-weeeu-text" : "text-gray-400"}`}>
-                    {TIER_LABEL[tier]}
-                  </p>
+                  <div className="flex items-center gap-1">
+                    <p className={`text-xs font-medium ${data.tier >= tier ? "text-weeeu-text" : "text-gray-400"}`}>
+                      {TIER_LABEL[tier]}
+                    </p>
+                    <HelpTip content={TIER_HELP[tier]} />
+                  </div>
                 </div>
               ))}
             </div>

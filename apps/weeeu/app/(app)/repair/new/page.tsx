@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
-import { ScreenIdBadge } from "@app3r/ui";
+import { ScreenIdBadge, HelpTip } from "@app3r/ui";
 
 // ─── Local Types ──────────────────────────────────────────────────────────────
 type Appliance = { id: string; name: string; brand: string; model: string };
@@ -333,10 +333,10 @@ export default function RepairNewPage() {
           <div className="grid grid-cols-2 gap-2">
             {(["on_site", "walk_in", "pickup", "parcel"] as ServiceType[]).map(type => {
               const conf = {
-                on_site: { icon: "🏠", label: "On-site\nช่างมาบ้าน",    active: "bg-weeeu-primary border-weeeu-primary text-white" },
-                walk_in: { icon: "🚶", label: "Walk-in\nไปร้านเอง",      active: "bg-green-600 border-green-600 text-white" },
-                pickup:  { icon: "🚛", label: "Pickup\nช่างมารับ-ส่ง",   active: "bg-weeeu-primary border-weeeu-primary text-white" },
-                parcel:  { icon: "📦", label: "Parcel\nส่งพัสดุ",        active: "bg-orange-500 border-orange-500 text-white" },
+                on_site: { icon: "🏠", label: "บริการถึงบ้าน",           active: "bg-weeeu-primary border-weeeu-primary text-white" },
+                walk_in: { icon: "🚶", label: "นำไปร้าน",                active: "bg-green-600 border-green-600 text-white" },
+                pickup:  { icon: "🚛", label: "นัดรับ",                  active: "bg-weeeu-primary border-weeeu-primary text-white" },
+                parcel:  { icon: "📦", label: "ส่งพัสดุ",                active: "bg-orange-500 border-orange-500 text-white" },
               }[type];
               return (
                 <button key={type} type="button"
@@ -450,7 +450,14 @@ export default function RepairNewPage() {
                     }`}
                   >
                     <span className="text-base leading-none">{cfg.icon}</span>
-                    <span>{cfg.label}</span>
+                    <span className="flex items-center gap-0.5">
+                      {cfg.label}
+                      {p === "vip" && (
+                        <span onClick={e => e.stopPropagation()}>
+                          <HelpTip content="บริการด่วนพิเศษ มีค่าบริการเพิ่ม ช่างมาเร็วกว่าปกติ (ไม่เกี่ยวกับสมาชิก VIP)" />
+                        </span>
+                      )}
+                    </span>
                   </button>
                 );
               })}

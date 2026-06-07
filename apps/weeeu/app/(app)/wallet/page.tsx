@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { HelpTip } from "@app3r/ui";
 import { FileUpload } from "@/components/upload/FileUpload";
 
 type WalletTab = "all" | "gold" | "silver";
@@ -97,7 +97,7 @@ export default function WalletPage() {
             <div className="text-4xl opacity-80">🥇</div>
           </div>
           <div className="bg-white/20 rounded-xl p-2 mb-4">
-            <p className="text-xs opacity-90">🔒 พอยต์ทอง = ซื้อขายได้ · เข้าระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> · ถอนได้</p>
+            <p className="text-xs opacity-90">🔒 พอยต์ทอง = ซื้อขายได้ · เข้าระบบพักเงินกลาง <HelpTip content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง" /> · ถอนได้</p>
             <p className="text-xs opacity-70">1 พอยต์ทอง = 1 บาท · ไม่หมดอายุ</p>
           </div>
           <div className="flex gap-2">
