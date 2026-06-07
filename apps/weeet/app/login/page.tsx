@@ -175,7 +175,8 @@ function LoginForm() {
               <p className="text-red-400 text-xs">
                 กรุณารอ <span className="font-bold text-red-300">{remainingMinutes} นาที</span> แล้วลองใหม่
               </p>
-              <p className="text-gray-500 text-xs">ติดต่อร้านของคุณเพื่อรับรหัสผ่านใหม่ (D16)</p>
+              {/* PHASE-4: D16 — no self-serve reset; shop admin resets password */}
+              <p className="text-gray-500 text-xs">ติดต่อร้านของคุณเพื่อรับรหัสผ่านใหม่</p>
             </div>
           )}
 

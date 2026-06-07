@@ -152,7 +152,8 @@ export default function ServiceListingDetailPage({
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-xs text-gray-500">สถานะ (D83)</p>
+                {/* PHASE-4: D83 listing state machine */}
+                <p className="text-xs text-gray-500">สถานะ</p>
                 <span
                   className={`text-xs px-3 py-1 rounded-full border font-medium ${STATE_BADGE[listing.state]}`}
                 >
@@ -208,7 +209,8 @@ export default function ServiceListingDetailPage({
             {/* ── D83 stepper ─────────────────────────────────────────────── */}
             <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                ลำดับสถานะ (D83)
+                {/* PHASE-4: D83 state stepper */}
+                ลำดับสถานะ
               </p>
               {listing.state === "cancelled" ? (
                 <p className="text-sm text-red-300">❌ ประกาศถูกยกเลิก</p>

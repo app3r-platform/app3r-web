@@ -376,7 +376,8 @@ export default function JobProgressPage({
         <div className="bg-gray-800/60 rounded-xl px-4 py-2.5 border border-gray-700/60">
           <p className="text-xs text-gray-500">
             ร้าน: <span className="text-gray-300">{job.shopName}</span>
-            <span className="text-gray-600 ml-2">(D60 — text ref only)</span>
+            {/* PHASE-4: D60 shop-reference text */}
+            <span className="text-gray-600 ml-2">(หมายเหตุอ้างอิง)</span>
           </p>
         </div>
       )}
