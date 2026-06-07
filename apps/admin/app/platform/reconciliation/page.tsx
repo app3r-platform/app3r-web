@@ -92,7 +92,6 @@ export default function ReconciliationPage() {
             </button>
           )}
         </div>
-        {/* D-num: D17 = Gold Point invariant */}
         <p className="text-gray-500 text-sm mb-8">ตรวจสอบดุลคงค้างพอยต์ทอง — Total Minted = Sum of all buckets</p>
 
         {loading ? (
@@ -122,7 +121,6 @@ export default function ReconciliationPage() {
 
             {/* Breakdown */}
             <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-              {/* D-num: D17 = Gold Point invariant */}
               <h2 className="font-semibold mb-4">📐 รายละเอียด (ดุลคงค้างพอยต์ทอง)</h2>
               <div className="space-y-3">
                 <BreakdownRow label="Total Minted (A)" value={fmtG(status.total_minted)} highlight />
@@ -148,7 +146,6 @@ export default function ReconciliationPage() {
             {/* Run button for non-super */}
             {!isSuper && (
               <div className="mb-6 bg-white border border-gray-200 rounded-xl p-4 text-sm text-gray-500">
-                {/* D-num: D27 = Super Admin permission */}
                 ⚠️ การรัน Reconciliation ต้องการสิทธิ์ Super Admin
               </div>
             )}

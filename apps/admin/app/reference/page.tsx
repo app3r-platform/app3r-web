@@ -150,7 +150,7 @@ function SoftDeleteBtn({ active, onToggle, hasChildren }: { active: boolean; onT
     <button
       onClick={() => {
         if (hasChildren && active) {
-          alert("⚠️ ไม่สามารถปิดใช้งานได้ — มีรายการย่อยที่ active อยู่ กรุณาปิดรายการย่อยก่อน"); // D-num: D90
+          alert("⚠️ ไม่สามารถปิดใช้งานได้ — มีรายการย่อยที่ active อยู่ กรุณาปิดรายการย่อยก่อน");
           return;
         }
         onToggle();
@@ -852,7 +852,6 @@ function Tab4Images() {
       </div>
 
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-700">
-        {/* D-num: D89 = asset_images schema */}
         <strong>โครงสร้างตาราง asset_images:</strong> category · appliance_category · local_path · cloud_url (→R2 prod) · alt_text · linked_entity_type + linked_entity_id · sort_order
       </div>
 
@@ -976,7 +975,6 @@ export default function ReferenceDataPage() {
         <div>
           <h1 className="text-2xl font-bold">📥 Reference Data</h1>
           <p className="text-gray-500 text-sm mt-1">
-            {/* D-num: D5 = Generic-First, D92 = Master 3 ชั้น, D89 = asset_images, D90 = Soft Delete */}
             การออกแบบ Generic-First · โครงสร้างข้อมูล 3 ชั้น · ตาราง asset_images · Soft Delete · Dynamic form per-category
           </p>
         </div>

@@ -131,7 +131,6 @@ export default function SilverPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Silver Points</h1>
-        {/* D-num: D29 = Silver Engagement, D30 = Signup Bonus */}
         <p className="text-gray-500 text-sm mb-6">จัดการ Silver Point (ไม่สามารถแลกเงินสด)</p>
 
         {/* Tabs */}
@@ -166,7 +165,6 @@ export default function SilverPage() {
                 {/* D29 Engagement Triggers */}
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-200">
-                    {/* D-num: D29 = Silver Engagement Rewards */}
                     <h3 className="font-semibold">🎯 Silver Engagement Rewards</h3>
                     <p className="text-xs text-gray-500 mt-0.5">8 triggers กำหนดได้ผ่าน system_config</p>
                   </div>
@@ -189,7 +187,6 @@ export default function SilverPage() {
 
                 {/* D30 Signup Bonus */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  {/* D-num: D30 = Signup Bonus */}
                   <h3 className="font-semibold mb-4">🎁 โบนัสสมัครสมาชิก (Signup Bonus)</h3>
                   <div className="flex items-center gap-6 flex-wrap">
                     <label className="flex items-center gap-3 cursor-pointer">

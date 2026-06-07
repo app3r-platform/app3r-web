@@ -97,7 +97,7 @@ export default function ConfigPage() {
       const updated = await putAdminConfig<BadRecordPolicy>(
         BAD_RECORD_POLICY_KEY,
         draft,
-        'นโยบาย Bad Record — admin-tunable threshold/window/cool-down', // D-num: D84
+        'นโยบาย Bad Record — admin-tunable threshold/window/cool-down',
       )
       setEntry(updated)
       setSaved(updated.value)
@@ -120,7 +120,6 @@ export default function ConfigPage() {
       <Sidebar />
 
       <main className="flex-1 p-8 max-w-3xl">
-        {/* D-num: D84 = Bad Record Policy */}
         <h1 className="text-2xl font-bold mb-1">ตั้งค่าระบบ — นโยบาย Bad Record</h1>
         <p className="text-gray-500 text-sm mb-6">
           ปรับเกณฑ์การระงับลงประกาศ · จำนวนครั้ง (threshold) · ช่วงเวลา (window) · cool-down — เปิด/ปิดได้แต่ละระดับ

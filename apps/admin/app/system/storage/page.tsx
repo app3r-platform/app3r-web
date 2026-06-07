@@ -154,7 +154,6 @@ export default function StoragePage() {
             🔄 Auto-refresh 5 นาที
           </span>
         </div>
-        {/* D-num: D20 = Entity storage, D22 = Appliance ownership, D25 = PDPA retention */}
         <p className="text-gray-500 text-sm mb-6">จัดการไฟล์ระบบ, PDPA Cleanup, และ Appliance Transfer</p>
 
         {/* Tabs */}
@@ -185,7 +184,6 @@ export default function StoragePage() {
 
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-200">
-                    {/* D-num: D20 = Entity type storage breakdown */}
                     <h3 className="font-semibold">แยกตามประเภท Entity</h3>
                   </div>
                   <table className="w-full text-sm">
@@ -251,7 +249,6 @@ export default function StoragePage() {
             {tab === "appliance" && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200">
-                  {/* D-num: D22 = Appliance ownership transfer history */}
                   <h3 className="font-semibold">ประวัติการเป็นเจ้าของ Appliance</h3>
                   <p className="text-xs text-gray-500 mt-0.5">ประวัติการ Transfer ของ appliance ผ่าน Resell flow</p>
                 </div>
@@ -293,8 +290,7 @@ export default function StoragePage() {
               <div className="space-y-6">
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-200">
-                    {/* D-num: D25 = PDPA data retention schedule */}
-                  <h3 className="font-semibold">กำหนดการเก็บข้อมูล PDPA</h3>
+                    <h3 className="font-semibold">กำหนดการเก็บข้อมูล PDPA</h3>
                   </div>
                   <table className="w-full text-sm">
                     <thead>

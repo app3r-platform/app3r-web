@@ -201,7 +201,7 @@ export default function RepairAnalyticsPage() {
               </section>
             </div>
 
-            {/* D-num: D64 = Jobs by source classification */}
+            {/* By Source section */}
             <section className="bg-white rounded-xl border border-gray-200 p-5">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                 🔍 งานตามแหล่งที่มา

@@ -104,7 +104,7 @@ export default function AdsConfigPage() {
     setActionId(id)
     try {
       await api.post(`/ads/${id}/approve`, {})
-      showToast('✅ อนุมัติโฆษณาแล้ว — พอยต์ทอง (Gold Point) ถูกตัดแล้ว') // D-num: D75
+      showToast('✅ อนุมัติโฆษณาแล้ว — พอยต์ทอง (Gold Point) ถูกตัดแล้ว')
       void loadData()
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : 'อนุมัติไม่สำเร็จ', 'err')
@@ -267,7 +267,6 @@ export default function AdsConfigPage() {
                 <p className="text-sm text-gray-600">
                   อัตราค่าโฆษณา (Gold Point/วัน) — บันทึกใน admin_config key{' '}
                   <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">ad_rates</code>
-                  {/* D-num: D75 = goldCost = Math.round(rate × วัน) */}
                   <br /><span className="text-xs text-gray-400">การคำนวณ: goldCost = Math.round(rate × วัน)</span>
                 </p>
                 {(Object.entries(POSITION_LABEL) as [AdPosition, string][]).map(([pos, label]) => (
@@ -303,7 +302,7 @@ export default function AdsConfigPage() {
                 <div className="bg-admin-surface border border-admin-primary/20 rounded-xl p-4 text-xs text-gray-600">
                   <p className="font-medium text-admin-primary mb-1">💡 Ad Spec (C12)</p>
                   <ul className="space-y-1 list-disc ml-4">
-                    <li>ตัด Gold Point ล่วงหน้าตอนซื้อ · Math.round · Admin อนุมัติ → active{/* D-num: D75 */}</li>
+                    <li>ตัด Gold Point ล่วงหน้าตอนซื้อ · Math.round · Admin อนุมัติ → active</li>
                     <li>ปฏิเสธ → คืน Gold Point เต็มจำนวน · ยกเลิก active → คืนตามสัดส่วนวัน</li>
                     <li>Banner ร้าน/บริษัท: ลูกค้าติดต่อ admin ผ่าน contact form</li>
                   </ul>

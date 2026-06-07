@@ -296,7 +296,6 @@ export default function KYCReviewPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 flex items-center gap-1">
-                      {/* D-num: D24 = Signed URL spec */}
                       🔒 Signed URL · TTL 1 ชม.
                     </span>
                     <a href={activeDoc.file_url} target="_blank" rel="noopener noreferrer"
@@ -520,7 +519,6 @@ export default function KYCReviewPage() {
 
                 {/* WeeeT auto-creation */}
                 <div className="bg-admin-surface border border-admin-primary/20 rounded-xl p-3.5">
-                  {/* D-num: D15 = WeeeT auto account creation */}
                   <p className="text-xs font-semibold text-admin-primary mb-1.5">🔧 WeeeT — สร้างบัญชีอัตโนมัติ</p>
                   <div className="text-xs text-gray-600 space-y-1">
                     <div className="flex justify-between">
@@ -529,7 +527,7 @@ export default function KYCReviewPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">รหัสผ่านเริ่มต้น</span>
-                      <span className="text-gray-500">[เหมือน WeeeR]{/* D-num: D15 */}</span>
+                      <span className="text-gray-500">[เหมือน WeeeR]</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Mode</span>
@@ -540,7 +538,6 @@ export default function KYCReviewPage() {
 
                 {/* Note D16 */}
                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-xs text-orange-700">
-                  {/* D-num: D16 = No SMS system */}
                   ⚠️ WeeeR ต้องแจ้ง credentials ให้ช่างเอง (ไม่มีระบบ SMS)
                 </div>
               </div>

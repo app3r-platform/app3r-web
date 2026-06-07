@@ -97,7 +97,6 @@ export default function TransactionsPage() {
             📥 Export CSV
           </button>
         </div>
-        {/* D-num: D19 = Append-only ledger, ลบไม่ได้ */}
         <p className="text-gray-500 text-sm mb-6">ประวัติธุรกรรมระดับ Platform ทั้งหมด (Append-only, ลบไม่ได้)</p>
 
         {/* Filter Bar */}

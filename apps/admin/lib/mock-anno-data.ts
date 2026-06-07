@@ -12,6 +12,8 @@ export interface MockAnnoData {
   destinations: { buttonLabel: string; targetId: string; targetLabel: string }[];
   /** §8 cross-app — แอพฯอื่นเห็นจอไหน ณ จังหวะนี้ */
   xapp: { app: string; port: number; screenId: string; label: string }[];
+  /** §D D-refs — Design Rule refs ที่ใช้ในจอนี้ (dev overlay · ลบตอน Phase 4) */
+  drefs?: { id: string; desc: string }[];
 }
 
 /**
@@ -356,6 +358,10 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     xapp: [
       { app: "WeeeR", port: 3001, screenId: "R-01", label: "ร้านรอผล KYC (dashboard)" },
     ],
+    drefs: [
+      { id: "D24", desc: "Signed URL · TTL 1 ชม. สำหรับเอกสาร KYC" },
+      { id: "D25", desc: "KYC document retention ตาม PDPA" },
+    ],
   },
 
   // ── A-20 KYC Detail ── ──────────────────────────────────────────────────────
@@ -381,6 +387,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
       { buttonLabel: "กลับ Jobs", targetId: "A-02", targetLabel: "Repair Jobs" },
     ],
     xapp: [],
+    drefs: [
+      { id: "D64", desc: "Jobs by source classification (customer/walk-in/resell)" },
+    ],
   },
 
   // ── A-22 Repair Parcel Queue ── ─────────────────────────────────────────────
@@ -556,6 +565,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D14", desc: "Listing Lifecycle Policy — อายุประกาศ/Offer Window/Inspection/Escrow" },
+    ],
   },
 
   // ── A-38 Resell Analytics ── ────────────────────────────────────────────────
@@ -614,6 +626,11 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-42", label: "Users" }],
     destinations: [{ buttonLabel: "กลับ", targetId: "A-42", targetLabel: "Users" }],
     xapp: [],
+    drefs: [
+      { id: "D24", desc: "Signed URL · TTL 1 ชม. สำหรับเอกสาร KYC" },
+      { id: "D15", desc: "WeeeT Auto Create Account — ใช้ phone เป็น username" },
+      { id: "D16", desc: "ไม่มีระบบ SMS — WeeeR แจ้ง credentials ช่างเอง" },
+    ],
   },
 
   // ── A-44 Points ── ──────────────────────────────────────────────────────────
@@ -633,6 +650,10 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
       { buttonLabel: "ยกเลิก", targetId: "A-44", targetLabel: "กลับ Points" },
     ],
     xapp: [],
+    drefs: [
+      { id: "D27", desc: "Super Admin permission — ต้องมีสิทธิ์ Super Admin เท่านั้น" },
+      { id: "D28", desc: "Manual adjust limit per transaction" },
+    ],
   },
 
   // ── A-46 Platform Balances ── ────────────────────────────────────────────────
@@ -640,6 +661,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D17", desc: "Gold Point invariant — Total Minted = Reserve + Fee Pools + Escrow + Written-Off" },
+    ],
   },
 
   // ── A-47 Platform Gold Management ── ────────────────────────────────────────
@@ -647,6 +671,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D17", desc: "Gold Point invariant — Total Minted = Reserve + Fee Pools + Escrow + Written-Off" },
+    ],
   },
 
   // ── A-48 Platform Reconciliation ── ─────────────────────────────────────────
@@ -654,6 +681,10 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D17", desc: "Gold Point invariant — Total Minted = Sum of all buckets" },
+      { id: "D27", desc: "Super Admin permission — ต้องมีสิทธิ์ Super Admin เพื่อ Run Reconciliation" },
+    ],
   },
 
   // ── A-49 Platform Silver ── ─────────────────────────────────────────────────
@@ -661,6 +692,10 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D29", desc: "Silver Engagement Rewards — 8 triggers กำหนดผ่าน system_config" },
+      { id: "D30", desc: "Signup Bonus — โบนัสสมัครสมาชิกครั้งแรก" },
+    ],
   },
 
   // ── A-50 Platform Transactions ── ────────────────────────────────────────────
@@ -668,6 +703,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D19", desc: "Append-only ledger — ลบหรือแก้ไข transaction ไม่ได้" },
+    ],
   },
 
   // ── A-51 Topup ── ───────────────────────────────────────────────────────────
@@ -682,6 +720,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D91", desc: "Gold withdrawal rules — WeeeU + WeeeR ถอน Gold ได้" },
+    ],
   },
 
   // ── A-53 Transfers Deposits ── ──────────────────────────────────────────────
@@ -710,6 +751,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D84", desc: "Bad Record Policy — admin-tunable threshold/window/cool-down" },
+    ],
   },
 
   // ── A-57 Reference Data ── ──────────────────────────────────────────────────
@@ -717,6 +761,12 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D5",  desc: "Generic-First — architecture pattern สำหรับ appliance categories" },
+      { id: "D89", desc: "asset_images schema — category/local_path/cloud_url/linked_entity" },
+      { id: "D90", desc: "Soft Delete — ปิดใช้งานรายการโดยไม่ลบจริง (active flag)" },
+      { id: "D92", desc: "Master 3-layer — ประเภท > ยี่ห้อ > รุ่น" },
+    ],
   },
 
   // ── A-58 Audit Log ── ───────────────────────────────────────────────────────
@@ -731,6 +781,11 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D20", desc: "Entity storage classification — breakdown by entity type" },
+      { id: "D22", desc: "Appliance ownership transfer history ผ่าน Resell flow" },
+      { id: "D25", desc: "PDPA retention schedule — กำหนดการเก็บและลบข้อมูล" },
+    ],
   },
 
   // ── A-60 Pricing ── ─────────────────────────────────────────────────────────
@@ -818,6 +873,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D78", desc: "Contact info edit spec — D78-shaped fields (phone/email/address)" },
+    ],
   },
 
   // ── A-68 Testimonials ── ────────────────────────────────────────────────────
@@ -828,6 +886,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
       { buttonLabel: "แก้ไข", targetId: "A-68b", targetLabel: "Testimonial Edit" },
     ],
     xapp: [],
+    drefs: [
+      { id: "D86", desc: "Testimonials spec — star-sort · website-pick · ลำดับแสดงบนเว็บ" },
+    ],
   },
 
   "A-68c": {
@@ -853,6 +914,9 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [
+      { id: "D75", desc: "Gold Point deduction — goldCost = Math.round(rate × วัน) ตัดล่วงหน้าตอนซื้อ" },
+    ],
   },
 
   // ── A-70 Notify Download ── ─────────────────────────────────────────────────

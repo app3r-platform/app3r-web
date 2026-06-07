@@ -98,7 +98,6 @@ export default function ResellLifecyclePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            {/* D-num: D14 = Listing Lifecycle Policy */}
             <h1 className="text-2xl font-bold">⏳ วงจรประกาศขาย</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตั้งค่าอายุประกาศแยกตามโมดูล — Repair / Maintain / Resell / Scrap / Parts
@@ -115,7 +114,6 @@ export default function ResellLifecyclePage() {
 
         {/* Info box */}
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-700">
-          {/* D-num: D14 = Listing Lifecycle Policy */}
           <p className="font-semibold mb-1">📋 นโยบายวงจรประกาศขาย</p>
           <ul className="text-xs space-y-1 text-blue-600 list-disc list-inside">
             <li>อายุประกาศ (Listing Days): เมื่อหมดอายุ ประกาศ expired อัตโนมัติ</li>
@@ -236,7 +234,6 @@ export default function ResellLifecyclePage() {
 
         {/* Note */}
         <div className="bg-gray-100 border border-gray-200 rounded-xl p-4 text-xs text-gray-500">
-          {/* D-num: D14 = Listing Lifecycle Policy */}
           <p className="font-semibold text-gray-700 mb-1">📌 หมายเหตุ</p>
           <ul className="space-y-1 list-disc list-inside">
             <li>การแก้ไข Lifecycle Config จะมีผลกับ listing ที่สร้างใหม่เท่านั้น — ไม่ retroactive</li>

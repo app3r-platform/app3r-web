@@ -77,7 +77,6 @@ export default function KYCQueuePage() {
           ตรวจเอกสารยืนยันตัวตน (KYC)
           <HelpTip content="KYC (Know Your Customer) — ขั้นตอนยืนยันตัวตนผู้ใช้ด้วยเอกสาร" />
         </h1>
-        {/* D-num: D24 = Signed URL spec, D25 = KYC document retention */}
         <p className="text-gray-500 text-sm mb-6">ตรวจสอบเอกสาร KYC ของ WeeeR ก่อนอนุมัติเป็นผู้รับงาน</p>
 
         {/* Status Filter Tabs */}
