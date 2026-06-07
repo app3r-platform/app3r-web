@@ -190,7 +190,7 @@ export default function ProfilePage() {
                                          "bg-gray-100 text-gray-600"
               }`}>
                 {user.tier === "gold" ? "🥇" : user.tier === "silver" ? "💎" : "🔰"}{" "}
-                {user.tier === "gold" ? "Gold Member" : user.tier === "silver" ? "Silver Member" : "Bronze Member"}
+                {user.tier === "gold" ? "สมาชิกระดับทอง" : user.tier === "silver" ? "สมาชิกระดับเงิน" : "สมาชิกระดับบรอนซ์"}
               </span>
               <span className="text-xs text-gray-400">สมาชิกตั้งแต่ {user.member_since}</span>
             </div>

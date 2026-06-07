@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
+import { HelpTip } from "@app3r/ui";
 import { FileUpload } from "@/components/upload/FileUpload";
 
 type WalletTab = "all" | "gold" | "silver";
@@ -13,10 +13,10 @@ const MOCK_SILVER_BALANCE = 1250;
 
 const MOCK_TRANSACTIONS = [
   { type: "credit",  icon: "🥇", label: "เติมพอยต์ทอง (admin อนุมัติ)", amount: "+500",   date: "23 พ.ค. 69", wallet: "gold"   },
-  { type: "debit",   icon: "🔒", label: "ล็อกพอยต์ทอง — Escrow ธุรกรรม TX-001", amount: "-350", date: "22 พ.ค. 69", wallet: "gold"   },
+  { type: "debit",   icon: "🔒", label: "ล็อกพอยต์ทอง — พักเงินกลาง (Escrow) ธุรกรรม TX-001", amount: "-350", date: "22 พ.ค. 69", wallet: "gold"   },
   { type: "credit",  icon: "💎", label: "เติมพอยต์เงิน",                 amount: "+500",   date: "2 พ.ค. 69",  wallet: "silver" },
   { type: "debit",   icon: "🔧", label: "ชำระค่าบำรุงรักษา",                 amount: "-200",   date: "1 พ.ค. 69",  wallet: "silver" },
-  { type: "credit",  icon: "🥇", label: "รับพอยต์ทองจาก Escrow (ธุรกรรมจบ)", amount: "+1,200", date: "30 เม.ย. 69", wallet: "gold"   },
+  { type: "credit",  icon: "🥇", label: "รับพอยต์ทองจากระบบพักเงินกลาง (ธุรกรรมจบ)", amount: "+1,200", date: "30 เม.ย. 69", wallet: "gold"   },
   { type: "debit",   icon: "💳", label: "ถอนพอยต์ทอง → บัญชีธนาคาร",           amount: "-300",   date: "28 เม.ย. 69", wallet: "gold"   },
   { type: "credit",  icon: "💎", label: "โบนัสสมัคร พอยต์เงิน",               amount: "+100",   date: "25 เม.ย. 69", wallet: "silver" },
 ];
@@ -97,7 +97,7 @@ export default function WalletPage() {
             <div className="text-4xl opacity-80">🥇</div>
           </div>
           <div className="bg-white/20 rounded-xl p-2 mb-4">
-            <p className="text-xs opacity-90">🔒 พอยต์ทอง = ซื้อขายได้ · เข้าระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> · ถอนได้</p>
+            <p className="text-xs opacity-90">🔒 พอยต์ทอง = ซื้อขายได้ · เข้าระบบพักเงินกลาง (Escrow) <HelpTip content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง" /> · ถอนได้</p>
             <p className="text-xs opacity-70">1 พอยต์ทอง = 1 บาท · ไม่หมดอายุ</p>
           </div>
           <div className="flex gap-2">

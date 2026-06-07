@@ -47,7 +47,7 @@ const notifications = [
   },
   {
     id: "8", icon: "📦", title: "ผู้ขายจัดส่งสินค้าแล้ว — ยืนยันรับของ",
-    body: "ตรวจสภาพแล้วกดยืนยันรับสินค้าเพื่อปล่อยพอยต์ทองจาก Escrow",
+    body: "ตรวจสภาพแล้วกดยืนยันรับสินค้าเพื่อปล่อยพอยต์ทองจากระบบพักเงินกลาง (Escrow)",
     time: "5 ชม.ที่แล้ว", isNew: false, category: "resell", link: "/purchases/p-001",
   },
   {
@@ -110,7 +110,7 @@ const FILTER_TABS = [
   { value: "maintain", label: "บำรุง" },
   { value: "resell",   label: "ซื้อ/ขาย" },
   { value: "scrap",    label: "ซาก" },
-  { value: "wallet",   label: "Wallet" },
+  { value: "wallet",   label: "กระเป๋าเงิน" },
   { value: "system",   label: "ระบบ" },
 ];
 

@@ -160,7 +160,7 @@ export default function AwaitingPaymentPage() {
         <Link href="/offers" className="text-gray-500 hover:text-gray-800 text-xl">
           ‹
         </Link>
-        <h1 className="text-xl font-bold text-gray-900">ชำระเงิน — Escrow <EscrowInfoIcon /></h1>
+        <h1 className="text-xl font-bold text-gray-900">ชำระเงิน — พักเงินกลาง (Escrow) <EscrowInfoIcon /></h1>
       </div>
 
       {/* Order info */}
@@ -174,7 +174,7 @@ export default function AwaitingPaymentPage() {
           {order.agreed_price.toLocaleString()} Gold
         </p>
         <p className="text-xs text-gray-400">
-          Gold จะถูกล็อคใน Escrow <EscrowInfoIcon className="inline-flex" /> (บัญชีกลาง) จนกว่าคุณยืนยันรับสินค้า
+          Gold จะถูกล็อคในระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /> จนกว่าคุณยืนยันรับสินค้า
         </p>
       </div>
 
@@ -257,7 +257,7 @@ export default function AwaitingPaymentPage() {
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">ต้องใช้ (Escrow) <EscrowInfoIcon className="inline-flex" /></span>
+              <span className="text-sm text-gray-600">ต้องใช้ระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></span>
               <span className="font-bold text-weeeu-primary">
                 {order.required_gold.toLocaleString()} Gold
               </span>
@@ -299,7 +299,7 @@ export default function AwaitingPaymentPage() {
                   <span className="animate-spin inline-block">⟳</span> กำลังชำระ...
                 </>
               ) : (
-                <>✅ ชำระ {order.agreed_price.toLocaleString()} Gold เข้า Escrow <EscrowInfoIcon className="inline-flex" /></>
+                <>✅ ชำระ {order.agreed_price.toLocaleString()} Gold เข้าระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></>
               )}
             </button>
           )}

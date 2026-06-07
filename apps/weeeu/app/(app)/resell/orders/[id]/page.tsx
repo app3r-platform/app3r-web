@@ -350,7 +350,7 @@ export default function ResellOrderPage() {
               onClick={() =>
                 doTransition(
                   "mutually_cancelled",
-                  "ยอมรับการคืนสินค้า — Escrow จะคืนให้ผู้ซื้อภายใน 24 ชั่วโมง",
+                  "ยอมรับการคืนสินค้า — ระบบพักเงินกลาง จะคืนให้ผู้ซื้อภายใน 24 ชั่วโมง",
                   "info"
                 )
               }
@@ -461,7 +461,7 @@ export default function ResellOrderPage() {
                 ยกเลิกร่วมกัน
               </p>
               <p className="text-sm text-gray-500">
-                หากทั้งสองฝ่ายตกลงยกเลิก Escrow <EscrowInfoIcon /> จะคืนเต็มจำนวน — ไม่มีค่าธรรมเนียม
+                หากทั้งสองฝ่ายตกลงยกเลิก ระบบพักเงินกลาง <EscrowInfoIcon /> จะคืนเต็มจำนวน — ไม่มีค่าธรรมเนียม
               </p>
               <button
                 onClick={() => setShowMutualConfirm(true)}
@@ -511,14 +511,14 @@ export default function ResellOrderPage() {
           </div>
           <p className="text-sm text-weeeu-dark">
             ผู้ซื้อ (<strong>{order.buyer_name}</strong>) ส่งคำขอยกเลิกธุรกรรม
-            — Escrow <EscrowInfoIcon /> จะคืนเต็มจำนวน ไม่มีการลงโทษทั้งสองฝ่าย
+            — ระบบพักเงินกลาง <EscrowInfoIcon /> จะคืนเต็มจำนวน ไม่มีการลงโทษทั้งสองฝ่าย
           </p>
           <div className="flex gap-2">
             <button
               onClick={() =>
                 doTransition(
                   "mutually_cancelled",
-                  "✅ ยกเลิกร่วมกันเสร็จสมบูรณ์ — Escrow คืนให้ผู้ซื้อแล้ว",
+                  "✅ ยกเลิกร่วมกันเสร็จสมบูรณ์ — ระบบพักเงินกลาง คืนให้ผู้ซื้อแล้ว",
                   "success"
                 )
               }
@@ -578,7 +578,7 @@ export default function ResellOrderPage() {
         <div className="bg-gray-100 border border-gray-200 rounded-2xl p-8 text-center space-y-2">
           <p className="text-5xl">🤝</p>
           <p className="font-bold text-gray-700 text-lg">ยกเลิกร่วมกันเรียบร้อย</p>
-          <p className="text-sm text-gray-500">Escrow <EscrowInfoIcon /> คืนเต็มจำนวน — ไม่มีค่าธรรมเนียม</p>
+          <p className="text-sm text-gray-500">ระบบพักเงินกลาง <EscrowInfoIcon /> คืนเต็มจำนวน — ไม่มีค่าธรรมเนียม</p>
         </div>
       )}
 
