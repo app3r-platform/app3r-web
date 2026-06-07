@@ -61,22 +61,22 @@ const REFUND_TIERS: RefundTier[] = [
   },
   {
     tier: "T2", label: "ยกเลิกหลัง offer selected",
-    condition: "ผู้ขายยกเลิก หลังเลือก offer แล้ว แต่ยังไม่ได้รับ Escrow",
-    buyer_refund: "100% (Escrow ยังไม่ถูก lock)",
+    condition: "ผู้ขายยกเลิก หลังเลือก offer แล้ว แต่ยังไม่ได้รับพักเงินกลาง (Escrow)",
+    buyer_refund: "100% (พักเงินกลาง ยังไม่ถูก lock)",
     seller_penalty: "Warning 1 ครั้ง — ทำบ่อย suspend listing",
     color: "bg-yellow-50 border-yellow-200",
   },
   {
-    tier: "T3", label: "ยกเลิกหลัง Escrow locked",
-    condition: "ผู้ขายยกเลิก หลังผู้ซื้อโอน Escrow แล้ว (สถานะ buyer_confirmed ขึ้นไป)",
-    buyer_refund: "100% Escrow คืนผู้ซื้อ",
+    tier: "T3", label: "ยกเลิกหลังพักเงินกลาง (Escrow) ล็อก",
+    condition: "ผู้ขายยกเลิก หลังผู้ซื้อโอนพักเงินกลางแล้ว (สถานะ buyer_confirmed ขึ้นไป)",
+    buyer_refund: "100% พักเงินกลางคืนผู้ซื้อ",
     seller_penalty: "Platform fee 3% ของราคา — หักจากกระเป๋าผู้ขาย + Warning",
     color: "bg-orange-50 border-orange-200",
   },
   {
     tier: "T4", label: "ผู้ซื้อ Dispute — seller แพ้",
     condition: "Admin ตัดสิน to_buyer — ผู้ขายแพ้ dispute",
-    buyer_refund: "100% (หรือตาม split%) Escrow คืนผู้ซื้อ",
+    buyer_refund: "100% (หรือตาม split%) พักเงินกลางคืนผู้ซื้อ",
     seller_penalty: "Platform fee เต็มตาม fee matrix + ค่าจัดการ dispute 2%",
     color: "bg-red-50 border-red-200",
   },
@@ -189,7 +189,7 @@ export default function ResellFeesPage() {
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-5 py-3 border-b border-gray-200 bg-gray-50">
             <h2 className="text-sm font-bold text-gray-700">📋 Fee Matrix — 4 คู่ D-Resell-1</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Platform fee หักจาก Escrow ตอน completed → กระเป๋า Platform</p>
+            <p className="text-xs text-gray-500 mt-0.5">Platform fee หักจากพักเงินกลางตอน completed → กระเป๋า Platform</p>
           </div>
           <table className="w-full text-sm">
             <thead>
@@ -274,9 +274,9 @@ export default function ResellFeesPage() {
 
         {/* Escrow flow note */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-gray-500">
-          <p className="font-semibold text-gray-700 mb-2">📌 Escrow Flow (Resell)</p>
+          <p className="font-semibold text-gray-700 mb-2">📌 พักเงินกลาง (Escrow) Flow (Resell)</p>
           <div className="flex items-center gap-2 flex-wrap text-xs">
-            {["ผู้ซื้อโอน Escrow", "→", "lock 24 ชม. (awaiting_payment)", "→", "buyer_confirmed", "→",
+            {["ผู้ซื้อโอนพักเงินกลาง", "→", "lock 24 ชม. (awaiting_payment)", "→", "buyer_confirmed", "→",
               "ดำเนินการ / ส่งสินค้า", "→", "inspection 48 ชม.", "→", "completed", "→",
               "หัก fee → กระเป๋า 2 Platform", "→", "โอนเงินให้ผู้ขาย"].map((step, i) => (
               <span key={i} className={step === "→" ? "text-gray-400" : "bg-white border border-gray-200 rounded px-2 py-0.5"}>

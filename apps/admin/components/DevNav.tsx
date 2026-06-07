@@ -31,8 +31,8 @@ const devNavLinks: DevNavLink[] = [
   // ── Scrap (Admin) ────────────────────────────────────────────────────────────
   { label: "→ ดูรายละเอียด",                    href: "/scrap/jobs/s001",                          type: "next-step", forPath: "/scrap/jobs" },
   { label: "→ [dispute-S11]",                   href: "/scrap/disputes/s001",                      type: "branch",    forPath: "/scrap/jobs/s001" },
-  { label: "→ [A] คืน escrow ผู้รับซาก",        href: "/scrap/disputes",                           type: "branch",    forPath: "/scrap/disputes/s001" },
-  { label: "→ [B] โอน escrow เจ้าของซาก",       href: "/scrap/disputes",                           type: "branch",    forPath: "/scrap/disputes/s001" },
+  { label: "→ [A] คืนพักเงินกลางผู้รับซาก",      href: "/scrap/disputes",                           type: "branch",    forPath: "/scrap/disputes/s001" },
+  { label: "→ [B] โอนพักเงินกลางเจ้าของซาก",    href: "/scrap/disputes",                           type: "branch",    forPath: "/scrap/disputes/s001" },
   { label: "→ ออก E-Waste Cert (S4)",           href: "/scrap/certificates",                       type: "next-step", forPath: "/scrap/certificates/s001" },
 
   // ── Resell (Admin) ───────────────────────────────────────────────────────────

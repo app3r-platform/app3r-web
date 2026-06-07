@@ -101,7 +101,7 @@ const MOCK_DETAIL: Record<string, ResellJobDetail> = {
       { status: "announced",         label: "ประกาศ",      actor: "นายสมชาย ใจดี",        note: "ลงประกาศขายแอร์", timestamp: "2026-01-10T09:00:00Z" },
       { status: "receiving_offers",  label: "รับ offer",   actor: "ระบบ",                  note: "เปิดรับข้อเสนอ", timestamp: "2026-01-10T09:05:00Z" },
       { status: "offer_selected",    label: "เลือก offer", actor: "นายสมชาย ใจดี",        note: "เลือก offer ของนางสาวอรุณ", timestamp: "2026-01-11T10:00:00Z" },
-      { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",                  note: "รอผู้ซื้อโอนเงิน Escrow", timestamp: "2026-01-11T10:01:00Z" },
+      { status: "awaiting_payment",  label: "รอชำระ",      actor: "ระบบ",                  note: "รอผู้ซื้อโอนพักเงินกลาง (Escrow)", timestamp: "2026-01-11T10:01:00Z" },
       { status: "buyer_confirmed",   label: "ยืนยันซื้อ",  actor: "นางสาวอรุณ แสงทอง",   note: "โอนเงินพักกลาง (Escrow) แล้ว", timestamp: "2026-01-11T11:00:00Z" },
       { status: "in_progress",       label: "ดำเนิน",      actor: "นายสมชาย ใจดี",        note: "จัดส่งสินค้าแล้ว", timestamp: "2026-01-12T08:00:00Z" },
       { status: "delivered",         label: "จัดส่ง",       actor: "ขนส่ง",                note: "ส่งถึงผู้ซื้อ", timestamp: "2026-01-13T14:00:00Z" },
@@ -315,8 +315,8 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
                   : "border-admin-primary bg-admin-surface text-admin-primary"
                   : "border-gray-200 bg-white text-gray-500 hover:border-gray-300"
               }`}>
-              {r === "to_buyer"  ? "🛒 ผู้ซื้อชนะ\nคืน escrow"
-               : r === "to_seller" ? "🧑‍💼 ผู้ขายชนะ\nโอน escrow"
+              {r === "to_buyer"  ? "🛒 ผู้ซื้อชนะ\nคืนพักเงินกลาง"
+               : r === "to_seller" ? "🧑‍💼 ผู้ขายชนะ\nโอนพักเงินกลาง"
                : "⚡ แบ่ง\nsplit%"}
             </button>
           ))}
@@ -427,7 +427,7 @@ export default function ResellJobDetailPage() {
               </span>
               {job.escrow_locked && (
                 <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  🔒 Escrow {job.escrow_amount.toLocaleString()} G
+                  🔒 พักเงินกลาง (Escrow) {job.escrow_amount.toLocaleString()} G
                 </span>
               )}
               {job.dispute_flag && (

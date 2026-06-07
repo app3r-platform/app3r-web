@@ -97,7 +97,7 @@ export default function TransactionsPage() {
             📥 Export CSV
           </button>
         </div>
-        <p className="text-gray-500 text-sm mb-6">ประวัติธุรกรรมระดับ Platform ทั้งหมด (D19 — Append-only, ลบไม่ได้)</p>
+        <p className="text-gray-500 text-sm mb-6">ประวัติธุรกรรมระดับ Platform ทั้งหมด (Append-only, ลบไม่ได้)</p>
 
         {/* Filter Bar */}
         <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex flex-wrap gap-3 items-end">

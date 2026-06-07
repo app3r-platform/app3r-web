@@ -51,7 +51,7 @@ const MOCK_CASE: DisputeCase = {
   evidence_buyer: ["buyer_receipt.jpg", "damage_close.jpg"],
   timeline: [
     { time: "22 พ.ค. 09:00", event: "สร้างคำสั่งซื้อ", by: "system" },
-    { time: "22 พ.ค. 14:00", event: "ชำระ Escrow สำเร็จ", by: "buyer" },
+    { time: "22 พ.ค. 14:00", event: "ชำระพักเงินกลาง (Escrow) สำเร็จ", by: "buyer" },
     { time: "23 พ.ค. 10:00", event: "ผู้ขายจัดส่งพัสดุ + แนบรูปส่ง", by: "seller" },
     { time: "23 พ.ค. 14:00", event: "ผู้ซื้อรับพัสดุ — ปฏิเสธ inspection", by: "buyer" },
     { time: "23 พ.ค. 14:30", event: "Dispute เปิด — รอ Admin", by: "system" },
@@ -299,12 +299,12 @@ export default function AdminDisputeDetailPage() {
                 </p>
                 {r === "buyer_wins" && (
                   <p className="text-xs text-gray-400 mt-0.5">
-                    Escrow {c.agreed_price.toLocaleString()} ฿ → คืนผู้ซื้อทั้งหมด
+                    พักเงินกลาง {c.agreed_price.toLocaleString()} ฿ → คืนผู้ซื้อทั้งหมด
                   </p>
                 )}
                 {r === "seller_wins" && (
                   <p className="text-xs text-gray-400 mt-0.5">
-                    Escrow {c.agreed_price.toLocaleString()} ฿ → โอนผู้ขายทั้งหมด
+                    พักเงินกลาง {c.agreed_price.toLocaleString()} ฿ → โอนผู้ขายทั้งหมด
                   </p>
                 )}
                 {r === "split" && (

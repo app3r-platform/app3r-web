@@ -201,10 +201,10 @@ export default function RepairAnalyticsPage() {
               </section>
             </div>
 
-            {/* By Source — D64 */}
+            {/* By Source section */}
             <section className="bg-white rounded-xl border border-gray-200 p-5">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                🔍 Jobs by Source (D64)
+                🔍 งานตามแหล่งที่มา
               </h2>
               {!data.by_source || data.by_source.length === 0 ? (
                 <p className="text-xs text-gray-600">ยังไม่มีข้อมูล by_source — รอ Backend C-3.3</p>

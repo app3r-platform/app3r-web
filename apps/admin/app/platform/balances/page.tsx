@@ -74,13 +74,13 @@ export default function BalancesPage() {
             {/* Gold Buckets */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                🥇 พอยต์ทอง (Gold Point) Buckets (D17 — 3 Buckets)
+                🥇 พอยต์ทอง (Gold Point) — 3 กลุ่ม
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <BucketCard label="Listing Offer Fee Pool" value={fmtG(data.listing_offer_fee_pool)} accent="yellow" />
                 <BucketCard label="Platform Fee Pool" value={fmtG(data.platform_fee_pool)} accent="yellow" />
                 <BucketCard label="Advertising Pool" value={fmtG(data.advertising_pool)} accent="admin-primary" />
-                <BucketCard label="Escrow Pool" value={fmtG(data.escrow_pool)} accent="blue" />
+                <BucketCard label="พักเงินกลาง (Escrow) Pool" value={fmtG(data.escrow_pool)} accent="blue" />
                 <BucketCard label="Reserve Pool" value={fmtG(data.reserve_pool)} accent="green" />
                 <BucketCard label="Written-Off" value={fmtG(data.written_off)} accent="red" />
               </div>

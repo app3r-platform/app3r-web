@@ -56,7 +56,7 @@ export default function ScrapDisputeDetailPage({ params }: { params: Promise<{ i
           เหตุผล Dispute
         </p>
         <p className="text-sm text-gray-700 leading-relaxed">
-          ร้านรับซากแจ้งว่าของไม่ตรงประกาศ (S8) ขอคืน escrow
+          ร้านรับซากแจ้งว่าของไม่ตรงประกาศ (S8) ขอคืนพักเงินกลาง
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export default function ScrapDisputeDetailPage({ params }: { params: Promise<{ i
               resolution !== null && resolution !== "S11-A" ? "opacity-50" : "opacity-100"
             }`}
           >
-            🔄 [A] คืน escrow ให้ผู้รับซาก (S11-A)
+            🔄 [A] คืนพักเงินกลางให้ผู้รับซาก (S11-A)
           </button>
           <button
             onClick={() => setResolution("S11-B")}
@@ -104,7 +104,7 @@ export default function ScrapDisputeDetailPage({ params }: { params: Promise<{ i
               resolution === "S11-B" ? "border-green-500 bg-green-50 text-green-700" : ""
             }`}
           >
-            ✅ [B] โอน escrow ให้เจ้าของซาก (S11-B)
+            ✅ [B] โอนพักเงินกลางให้เจ้าของซาก (S11-B)
           </button>
         </div>
         <textarea

@@ -357,7 +357,7 @@ export default function ResellJobsPage() {
                         )}
                         {job.escrow_locked && (
                           <span className="inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 whitespace-nowrap">
-                            🔒 Escrow
+                            🔒 พักเงินกลาง (Escrow)
                           </span>
                         )}
                         {job.awaiting_payment_flag && (

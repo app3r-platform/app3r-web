@@ -167,7 +167,7 @@ export default function WithdrawalPage() {
           )}
         </div>
         <p className="text-gray-500 text-sm mb-6">
-          WeeeU + WeeeR ถอน Gold ได้ (D91) · ตรวจสอบบัญชีธนาคาร → อนุมัติ → โอนเงินจริง → ยืนยัน Transfer
+          WeeeU + WeeeR ถอน Gold ได้ · ตรวจสอบบัญชีธนาคาร → อนุมัติ → โอนเงินจริง → ยืนยัน Transfer
         </p>
 
         {/* Flow Info */}

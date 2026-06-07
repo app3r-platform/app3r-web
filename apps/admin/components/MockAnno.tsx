@@ -23,6 +23,15 @@ const ROUTE_MAP: Record<string, string> = {
   "A-14": "/resell/disputes/[id]", "A-15": "/parts/orders",
   "A-16": "/parts/orders/[id]", "A-17": "/disputes", "A-18": "/disputes/[id]",
   "A-19": "/kyc", "A-20": "/kyc/[id]",
+  // ── D-ref screens (Gen 57 FIX 2) ──────────────────────────────────────────
+  "A-21": "/repair/analytics", "A-37": "/resell/lifecycle",
+  "A-43": "/users/weeer/[id]/kyc", "A-45": "/points/manual-adjust",
+  "A-46": "/platform/balances", "A-47": "/platform/gold-management",
+  "A-48": "/platform/reconciliation", "A-49": "/platform/silver",
+  "A-50": "/platform/transactions", "A-52": "/withdrawal",
+  "A-56": "/config", "A-57": "/reference",
+  "A-59": "/system/storage", "A-67": "/contact/info",
+  "A-68": "/testimonials", "A-69": "/ads",
 };
 
 // Match pathname → Screen ID (simplified — ScreenBadge มี full logic)
@@ -63,7 +72,8 @@ export function MockAnno() {
     anno &&
     (anno.origins.length > 0 ||
       anno.destinations.length > 0 ||
-      anno.xapp.length > 0);
+      anno.xapp.length > 0 ||
+      (anno.drefs && anno.drefs.length > 0));
 
   return (
     // mock-anno — grep marker สำหรับลบทีเดียวตอน Phase 4
@@ -141,6 +151,21 @@ export function MockAnno() {
               <span className="text-gray-500 italic">ไม่มี cross-app context</span>
             )}
           </div>
+
+          {/* §D D-refs */}
+          {anno && anno.drefs && anno.drefs.length > 0 && (
+            <div className="mock-anno-drefs">
+              <div className="text-pink-400 font-semibold mb-1">📐 §D Design Rule Refs</div>
+              <ul className="space-y-0.5">
+                {anno.drefs.map((d) => (
+                  <li key={d.id} className="flex gap-2">
+                    <span className="text-pink-300 w-10 shrink-0 font-bold">{d.id}</span>
+                    <span className="text-gray-300 text-[10px] leading-relaxed">{d.desc}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="text-gray-600 text-[10px] border-t border-gray-700 pt-2">
             mock-anno · ลบตอน Phase 4 · grep &quot;mock-anno&quot;

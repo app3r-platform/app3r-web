@@ -154,7 +154,7 @@ export default function StoragePage() {
             🔄 Auto-refresh 5 นาที
           </span>
         </div>
-        <p className="text-gray-500 text-sm mb-6">จัดการไฟล์ระบบ, PDPA Cleanup, และ Appliance Transfer (D20–D25)</p>
+        <p className="text-gray-500 text-sm mb-6">จัดการไฟล์ระบบ, PDPA Cleanup, และ Appliance Transfer</p>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200">
@@ -184,7 +184,7 @@ export default function StoragePage() {
 
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-200">
-                    <h3 className="font-semibold">Breakdown by Entity Type (D20)</h3>
+                    <h3 className="font-semibold">แยกตามประเภท Entity</h3>
                   </div>
                   <table className="w-full text-sm">
                     <thead>
@@ -249,7 +249,7 @@ export default function StoragePage() {
             {tab === "appliance" && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-semibold">Appliance Ownership History (D22)</h3>
+                  <h3 className="font-semibold">ประวัติการเป็นเจ้าของ Appliance</h3>
                   <p className="text-xs text-gray-500 mt-0.5">ประวัติการ Transfer ของ appliance ผ่าน Resell flow</p>
                 </div>
                 <table className="w-full text-sm">
@@ -290,7 +290,7 @@ export default function StoragePage() {
               <div className="space-y-6">
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-200">
-                    <h3 className="font-semibold">PDPA Retention Schedule (D25)</h3>
+                    <h3 className="font-semibold">กำหนดการเก็บข้อมูล PDPA</h3>
                   </div>
                   <table className="w-full text-sm">
                     <thead>
