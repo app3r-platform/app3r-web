@@ -11,3 +11,4 @@ export { NearMeFilter } from "./near-me-filter";
 export type { NearMeFilterProps, NearbyTambonDto } from "./near-me-filter";
 export { ScreenIdBadge } from "./screen-id-badge";
 export type { ScreenIdBadgeProps, ScreenBadgeCorner } from "./screen-id-badge";
+export { HelpTip } from "./help-tip";
