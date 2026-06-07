@@ -307,7 +307,7 @@ export default function MyOrderDetailPage({
       {receiveResult && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 space-y-1">
           <p className="text-sm font-semibold text-emerald-700">
-            ✅ ยืนยันรับของสำเร็จ — escrow ปล่อยแล้ว
+            ✅ ยืนยันรับของสำเร็จ — ปลดพักเงินกลาง (Escrow) แล้ว
           </p>
           <p className="text-xs text-emerald-600">
             ผู้ขายได้รับ {receiveResult.netToSeller.toLocaleString()} pts
@@ -355,12 +355,12 @@ export default function MyOrderDetailPage({
         )}
         {order.stage === "received" && !receiveResult && (
           <p className="text-xs text-center text-gray-400">
-            ✅ งานนี้ปิดแล้ว — escrow ถูกปล่อยแล้ว
+            ✅ งานนี้ปิดแล้ว — ปลดพักเงินกลาง (Escrow) แล้ว
           </p>
         )}
         {order.stage === "cancelled" && !cancelDone && (
           <p className="text-xs text-center text-gray-400">
-            🚫 คำสั่งซื้อถูกยกเลิก — escrow คืนแล้ว
+            🚫 คำสั่งซื้อถูกยกเลิก — พักเงินกลาง (Escrow) คืนแล้ว
           </p>
         )}
         {order.stage === "ordered" && role === "seller" && (
@@ -421,7 +421,7 @@ export default function MyOrderDetailPage({
 
             {/* Escrow info */}
             <div className="bg-blue-50 rounded-lg px-3 py-2 text-xs text-blue-700">
-              💰 escrow {order.totalPoints.toLocaleString()} pts จะถูกปล่อยให้ผู้ขายทันที
+              💰 พักเงินกลาง (Escrow) {order.totalPoints.toLocaleString()} pts จะถูกปล่อยให้ผู้ขายทันที
               (หักค่าธรรมเนียม {order.platformFee.toLocaleString()} pts · ผู้ขายได้{" "}
               {order.netToSeller.toLocaleString()} pts)
             </div>
@@ -484,7 +484,7 @@ export default function MyOrderDetailPage({
             <p className="text-sm text-gray-600">
               {role === "buyer"
                 ? "ออเดอร์ยังรอผู้ขายรับ — สามารถยกเลิกได้"
-                : "ยกเลิกก่อนจัดส่ง — escrow จะถูกคืนให้ผู้ซื้อ"}
+                : "ยกเลิกก่อนจัดส่ง — พักเงินกลาง (Escrow) จะถูกคืนให้ผู้ซื้อ"}
             </p>
 
             <div className="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-700">

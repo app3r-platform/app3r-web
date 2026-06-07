@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { HelpTip } from "@app3r/ui";
 import {
   listMyOrders,
   fulfillPartsOrder,
@@ -116,7 +117,7 @@ export default function PartsOrdersPage() {
   }, [tab, loadOrders]);
 
   async function handleFulfill(orderId: string) {
-    const trackingNumber = prompt("กรอก Tracking Number (ถ้ามี):");
+    const trackingNumber = prompt("กรอกหมายเลขพัสดุ (ถ้ามี)");
     if (trackingNumber === null) return;
     setActionId(orderId);
     setErrorMsg(null);
@@ -154,7 +155,7 @@ export default function PartsOrdersPage() {
   return (
     <div className="space-y-5 max-w-2xl">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">คำสั่งซื้อ B2B</h1>
+        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-1">คำสั่งซื้อ B2B (ระหว่างร้านค้า)<HelpTip content="B2B (Business-to-Business) — การซื้อขายระหว่างร้าน/ธุรกิจ ไม่ใช่ลูกค้าทั่วไป" /></h1>
         <Link href="/parts" className="text-sm text-gray-400 hover:text-gray-600">← คลังอะไหล่</Link>
       </div>
 
@@ -216,7 +217,7 @@ export default function PartsOrdersPage() {
                   <div className="min-w-0">
                     <p className="text-xs font-mono text-gray-400">#{order.id.slice(0, 8)}…</p>
                     <p className="text-sm font-medium text-gray-800 mt-0.5">
-                      Part: <span className="font-mono text-xs">{order.partId.slice(0, 8)}…</span>
+                      ชิ้นส่วน: <span className="font-mono text-xs">{order.partId.slice(0, 8)}…</span>
                     </p>
                   </div>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${statusColor}`}>
@@ -243,7 +244,7 @@ export default function PartsOrdersPage() {
                 {/* Fulfillment info */}
                 {order.trackingNumber && (
                   <div className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
-                    📦 Tracking: <span className="font-mono font-medium">{order.trackingNumber}</span>
+                    📦 เลขพัสดุ: <span className="font-mono font-medium">{order.trackingNumber}</span>
                   </div>
                 )}
                 {order.fulfillmentNote && !order.trackingNumber && (

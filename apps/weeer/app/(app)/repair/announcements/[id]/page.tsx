@@ -71,7 +71,7 @@ export default async function RepairAnnouncementDetailPage({ params }: { params:
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ประเภทบริการ</p>
-            <p className="text-sm font-medium text-gray-800">🏠 ช่างไปบ้าน (On-site)</p>
+            <p className="text-sm font-medium text-gray-800">🏠 ช่างไปบ้าน</p>
           </div>
           <div>
             <p className="text-xs text-gray-400">งบประมาณสูงสุด</p>

@@ -34,7 +34,7 @@ export function ConfirmReceiveModal({ order, onConfirm, onClose }: ConfirmReceiv
           <ul className="text-xs text-gray-600 space-y-1">
             <li>✅ โอน <strong>{netToSeller.toLocaleString()} pts</strong> ให้ผู้ขาย</li>
             <li>💰 หักค่าธรรมเนียม <strong>{roundedFee.toLocaleString()} pts</strong> (3% ปัดเศษ){/* PHASE-4: D75 */}</li>
-            <li>🔓 ปลด escrow (คะแนนพักระหว่างกลาง) ทั้งหมด</li>
+            <li>🔓 ปลดพักเงินกลาง (Escrow) ทั้งหมด</li>
           </ul>
         </div>
 
@@ -43,7 +43,7 @@ export function ConfirmReceiveModal({ order, onConfirm, onClose }: ConfirmReceiv
           disabled={loading}
           className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
         >
-          {loading ? "กำลังยืนยัน…" : "✅ ยืนยันรับของ & ปลด escrow"}
+          {loading ? "กำลังยืนยัน…" : "✅ ยืนยันรับของ & ปลดพักเงินกลาง (Escrow)"}
         </button>
       </div>
     </div>

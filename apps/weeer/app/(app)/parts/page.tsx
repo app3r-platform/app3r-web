@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { partsApi } from "./_lib/api";
 import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
+import { HelpTip } from "@app3r/ui";
 import type { Part } from "./_lib/types";
 import { CONDITION_LABEL, CONDITION_COLOR } from "./_lib/types";
 
@@ -69,13 +70,16 @@ export default function PartsListPage() {
       </div>
 
       {/* Search */}
-      <input
-        type="text"
-        placeholder="ค้นหา SKU หรือชื่ออะไหล่…"
-        value={search}
-        onChange={e => { setSearch(e.target.value); setLoading(true); }}
-        className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
-      />
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="ค้นหารหัสสินค้า (SKU) หรือชื่ออะไหล่"
+          value={search}
+          onChange={e => { setSearch(e.target.value); setLoading(true); }}
+          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
+        />
+        <HelpTip content="SKU — รหัสประจำสินค้าแต่ละรายการในคลัง" />
+      </div>
 
       {/* Filters */}
       <div className="space-y-2">

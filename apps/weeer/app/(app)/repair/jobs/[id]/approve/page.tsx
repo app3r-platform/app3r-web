@@ -41,7 +41,7 @@ const BRANCH_CONFIG: Record<ApproveAction, {
   },
   "B2.1": {
     label: "ยืนยัน — ซ่อมไม่ได้ ยกเลิกงาน",
-    description: "งานจะถูกยกเลิก นโยบายพอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) ตามที่ตกลงไว้",
+    description: "งานจะถูกยกเลิก นโยบายพอยต์ทองพักเงินกลาง (Escrow) ตามที่ตกลงไว้",
     color: "text-red-700",
     bg: "bg-red-50",
     border: "border-red-200",

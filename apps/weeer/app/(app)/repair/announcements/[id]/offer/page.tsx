@@ -130,7 +130,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
         </div>
 
         <div className="border-t border-gray-100 pt-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">ค่าตรวจสภาพ (On-site)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">ค่าตรวจสภาพ (บริการถึงบ้าน)</label>
           <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-2.5">
             <span className="text-sm text-gray-600 flex-1">ค่าธรรมเนียม (Fee) ตรวจสภาพมาตรฐาน</span>
             <span className="text-sm font-semibold text-[#D63B12]">100 pts</span>
@@ -143,7 +143,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
             <input type="checkbox" id="has_deposit" checked={form.has_deposit}
               onChange={(e) => setForm((f) => ({ ...f, has_deposit: e.target.checked }))}
               className="w-4 h-4 text-[#F04E20] rounded" />
-            <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">ล็อกพอยต์ทอง (ระบบพักเงินกลาง / Escrow)</label>
+            <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">ล็อกพอยต์ทองพักเงินกลาง (Escrow)</label>
           </div>
           {form.has_deposit && (
             <div className="space-y-3 pl-7">

@@ -199,7 +199,7 @@ export default function MarketplaceDetailPage({
             </div>
           </div>
           <div className="bg-white rounded-lg px-3 py-2 text-xs text-gray-500 border border-gray-100">
-            💡 คะแนน escrow ยังไม่ถูกหัก — จะดำเนินการก็ต่อเมื่อการสั่งซื้อสำเร็จเท่านั้น
+            💡 คะแนนพักเงินกลาง (Escrow) ยังไม่ถูกหัก — จะดำเนินการก็ต่อเมื่อการสั่งซื้อสำเร็จเท่านั้น
           </div>
           <div className="flex gap-2">
             <button

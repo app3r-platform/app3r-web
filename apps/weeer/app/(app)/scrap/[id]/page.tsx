@@ -192,7 +192,7 @@ export default function ScrapDetailPage({ params }: { params: Promise<{ id: stri
       {escrowLocked && successJobId && (
         <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4 text-center space-y-2">
           <span className="text-3xl">🔐</span>
-          <p className="text-sm font-bold text-[#D63B12]">Gold ถูก Lock แล้ว (Escrow)</p>
+          <p className="text-sm font-bold text-[#D63B12]">Gold ถูกล็อกพักเงินกลาง (Escrow) แล้ว</p>
           <p className="text-xs text-[#F04E20]">
             {item.isFree
               ? "รอ WeeeU ยืนยันการรับซาก"
@@ -247,7 +247,7 @@ export default function ScrapDetailPage({ params }: { params: Promise<{ id: stri
               {/* Escrow notice */}
               <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-lg px-3 py-2">
                 <p className="text-xs text-[#D63B12] font-medium">
-                  🔐 เมื่อยืนยัน — Gold {item.isFree ? "0" : `${offerPrice || "?"}`} pts จะถูก Lock (Escrow)
+                  🔐 เมื่อยืนยัน — Gold {item.isFree ? "0" : `${offerPrice || "?"}`} pts จะเข้าพักเงินกลาง (Escrow)
                 </p>
                 <p className="text-xs text-[#F04E20] mt-0.5">
                   Gold จะโอนให้ WeeeU เมื่อรับซากเสร็จ · คืนถ้าถอน (S7)
@@ -259,7 +259,7 @@ export default function ScrapDetailPage({ params }: { params: Promise<{ id: stri
               <div className="flex gap-2">
                 <button type="submit" disabled={submitting}
                   className="flex-1 bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
-                  {submitting ? "กำลังส่ง…" : "✅ ยืนยัน + Lock Escrow"}
+                  {submitting ? "กำลังส่ง…" : "✅ ยืนยัน + ล็อกพักเงินกลาง (Escrow)"}
                 </button>
                 <button type="button" onClick={() => { setShowForm(false); setOfferError(""); }}
                   className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-colors">

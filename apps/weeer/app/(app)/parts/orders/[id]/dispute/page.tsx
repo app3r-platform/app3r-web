@@ -92,7 +92,7 @@ export default function DisputePage() {
               {statusLabel}
             </span>
           </p>
-          <p className="text-xs text-gray-400">แจ้งปัญหาได้เฉพาะ order ที่อยู่ในสถานะ ถือ Escrow หรือ ส่งของแล้ว</p>
+          <p className="text-xs text-gray-400">แจ้งปัญหาได้เฉพาะ order ที่อยู่ในสถานะ ถือพักเงินกลาง (Escrow) หรือ ส่งของแล้ว</p>
         </div>
       </div>
     );

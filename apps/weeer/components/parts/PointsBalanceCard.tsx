@@ -22,7 +22,7 @@ export function PointsBalanceCard({ balance, escrowHeld, shopName }: PointsBalan
         </div>
         <div>
           <p className="text-sm font-semibold text-yellow-300">{escrowHeld.toLocaleString()}</p>
-          <p className="text-xs opacity-75">พักระหว่างกลาง (escrow)</p>
+          <p className="text-xs opacity-75">พักเงินกลาง (Escrow)</p>
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function RepairAnnouncementsPage() {
       <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">ประกาศรับงาน (On-site)</h1>
+          <h1 className="text-xl font-bold text-gray-900">ประกาศรับงาน</h1>
           <p className="text-xs text-gray-500 mt-0.5">ประกาศที่ยังไม่มีข้อเสนอ — ยื่นข้อเสนอได้เลย</p>
         </div>
       </div>
@@ -44,7 +44,7 @@ export default function RepairAnnouncementsPage() {
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs bg-blue-100 text-blue-700 font-medium px-2 py-0.5 rounded-full">On-site</span>
+                  <span className="text-xs bg-blue-100 text-blue-700 font-medium px-2 py-0.5 rounded-full">บริการถึงบ้าน</span>
                   {item.offer_count > 0 && (
                     <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{item.offer_count} ข้อเสนอ</span>
                   )}
