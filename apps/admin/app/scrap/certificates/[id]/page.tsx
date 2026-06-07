@@ -78,11 +78,12 @@ function generateCertHtml(cert: EWasteCertificate): string {
     <div class="footer">
       <p>ใบรับรองนี้ออกโดยระบบ App3R Platform</p>
       <p>เพื่อรับรองว่าได้ดำเนินการกำจัดซากเครื่องใช้ไฟฟ้าอย่างถูกต้องตามหลักสิ่งแวดล้อม</p>
-      <p style="margin-top: 8px; color: #bbb;">⚠️ ใบรับรองนี้เป็น HTML Mock — ระบบ PDF จะพัฒนาใน Phase D</p>
+      <!-- PHASE-4: PDF generation (Phase D) -->
+      <p style="margin-top: 8px; color: #bbb;">⚠️ ใบรับรองนี้เป็น HTML Mock — ระบบ PDF จะพัฒนาเร็วๆ นี้</p>
     </div>
 
     <div class="note">
-      ⚠️ นี่คือเอกสารจาก App3R Admin (HTML Preview) — ยังไม่ใช่ PDF อย่างเป็นทางการ การออก PDF จะพัฒนาใน Phase D
+      ⚠️ นี่คือเอกสารจาก App3R Admin (HTML Preview) — ยังไม่ใช่ PDF อย่างเป็นทางการ การออก PDF จะพัฒนาเร็วๆ นี้<!-- PHASE-4: Phase D -->
     </div>
   </div>
 </body>
@@ -233,8 +234,9 @@ export default function CertificateDetailPage() {
               sandbox="allow-same-origin"
             />
           </div>
+          {/* PHASE-4: PDF generation (Phase D) */}
           <p className="text-xs text-gray-600 mt-2">
-            ⚠️ HTML Mock — ระบบ PDF จะพัฒนาใน Phase D
+            ⚠️ HTML Mock — ระบบ PDF จะพัฒนาเร็วๆ นี้
           </p>
         </section>
 
