@@ -120,7 +120,8 @@ export default function DepositPage() {
               <div className="text-center text-weeeu-primary/40">
                 <p className="text-3xl">📱</p>
                 <p className="text-xs mt-1">QR Code</p>
-                <p className="text-xs">(Phase D-2)</p>
+                {/* PHASE-4: Phase D-2 */}
+                <p className="text-xs">(เร็วๆ นี้)</p>
               </div>
             </div>
           </div>

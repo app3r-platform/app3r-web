@@ -167,7 +167,8 @@ export default function WalletPage() {
             <div className="mt-2 mx-auto w-28 h-28 bg-white border-2 border-weeeu-primary/20 rounded-xl flex flex-col items-center justify-center text-weeeu-primary/40">
               <p className="text-2xl">📱</p>
               <p className="text-[10px] mt-0.5">QR Code</p>
-              <p className="text-[10px]">(Phase D-2)</p>
+              {/* PHASE-4: Phase D-2 */}
+              <p className="text-[10px]">(เร็วๆ นี้)</p>
             </div>
           </div>
           <div className="border-t border-weeeu-primary/10 pt-2.5 space-y-1 text-xs">
