@@ -39,12 +39,12 @@ const MOCK_LIFECYCLE: LifecycleConfig[] = [
   {
     module: "scrap", label: "Scrap", icon: "♻️",
     listing_days: 14, offer_window_hrs: 24, inspection_hrs: 0, escrow_lock_hrs: 12,
-    suspended: true, suspended_reason: "R2 — โมดูล Scrap อยู่ระหว่างพัฒนา (Phase E)",
+    suspended: true, suspended_reason: "R2 — โมดูล Scrap อยู่ระหว่างพัฒนา", // PHASE-4: Phase E
   },
   {
     module: "parts", label: "Parts (อะไหล่)", icon: "⚙️",
     listing_days: 30, offer_window_hrs: 48, inspection_hrs: 24, escrow_lock_hrs: 24,
-    suspended: true, suspended_reason: "R3 — โมดูล Parts/D81 อยู่ระหว่างพัฒนา (Phase E)",
+    suspended: true, suspended_reason: "R3 — โมดูล Parts/D81 อยู่ระหว่างพัฒนา", // PHASE-4: Phase E
   },
 ];
 
