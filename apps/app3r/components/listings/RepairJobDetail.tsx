@@ -135,10 +135,11 @@ export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetai
               disabled
               className="w-full bg-blue-600 text-white py-3 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
             >
-              ยื่นข้อเสนอ (Phase D)
+              ยื่นข้อเสนอ (เร็วๆ นี้)
             </button>
+            {/* PHASE-4: offer+escrow (Phase D) */}
             <p className="text-xs text-gray-400 text-center">
-              ระบบยื่น offer และ Escrow เปิดใช้งาน Phase D
+              ระบบยื่น offer และ Escrow เปิดใช้งานเร็วๆ นี้
             </p>
           </div>
 

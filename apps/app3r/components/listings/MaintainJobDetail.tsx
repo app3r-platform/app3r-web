@@ -132,7 +132,8 @@ export default function MaintainJobDetail({ job, isAdmin = false }: MaintainJobD
 
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-sm text-orange-800">
               <strong>บำรุงรักษา</strong> — ช่างรับงานผ่านระบบ WeeeR<br />
-              <span className="text-xs text-orange-600">ระบบจับคู่ช่าง เปิดใช้งาน Phase D</span>
+              {/* PHASE-4: match-tech (Phase D) */}
+              <span className="text-xs text-orange-600">ระบบจับคู่ช่าง เปิดใช้งานเร็วๆ นี้</span>
             </div>
             <p className="text-xs text-gray-400 text-center">
               บริการนอกสถานที่เท่านั้น (ช่างมาหาลูกค้า)
