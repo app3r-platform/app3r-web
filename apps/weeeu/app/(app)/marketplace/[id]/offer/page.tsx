@@ -165,7 +165,8 @@ export default function MarketplaceOfferPage() {
           <span className="text-base">📋</span>
           <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider">เงื่อนไขยกเลิก / คืนพอยต์</p>
         </div>
-        <p className="text-xs text-gray-500">เงื่อนไขนี้เป็น Source of Truth กรณีข้อพิพาท — ผู้ขายเห็นก่อนเลือกข้อเสนอ</p>
+        {/* PHASE-4: Offer = source of truth */}
+        <p className="text-xs text-gray-500">เงื่อนไขนี้ยึดเป็นหลักกรณีพิพาท — ผู้ขายเห็นก่อนเลือกข้อเสนอ</p>
         <div className="space-y-1.5">
           {CANCEL_TERMS_OPTIONS.map(opt => (
             <button

@@ -135,8 +135,9 @@ export default function MaintainCancelPage() {
       {/* settle ตามเฟส + offer terms (DECISION จุด1) */}
       <div className="bg-white rounded-2xl border border-amber-200 shadow-sm p-5 space-y-3">
         <p className="text-xs font-semibold text-amber-800 uppercase tracking-wider">การคิดค่าใช้จ่ายเมื่อยุติงาน (ตามเงื่อนไขข้อเสนอ)</p>
+        {/* PHASE-4: Offer = source of truth */}
         <p className="text-xs text-gray-500">
-          ยอด settle คิดตามเฟสปัจจุบันและเงื่อนไขที่ตกลงกับ WeeeR — เงื่อนไขข้อเสนอเป็น Source of Truth กรณีข้อพิพาท
+          ยอด settle คิดตามเฟสปัจจุบันและเงื่อนไขที่ตกลงกับ WeeeR — ยึดเงื่อนไขข้อเสนอนี้เป็นหลักกรณีพิพาท
         </p>
         <div className="space-y-1.5 border-t border-gray-100 pt-3">
           {settle.lines.map((l, i) => (
