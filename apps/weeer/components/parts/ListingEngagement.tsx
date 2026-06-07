@@ -109,7 +109,7 @@ export function ListingEngagement({ listingMetaId, initialState, isOwn }: Props)
       {isOwn && state && (
         <section className="bg-white border border-gray-100 rounded-xl p-4 space-y-2">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-gray-700">สถานะรายการ (D83)</h3>
+            <h3 className="text-sm font-semibold text-gray-700">สถานะรายการ{/* PHASE-4: D83 */}</h3>
             <span className="text-xs font-medium bg-gray-100 text-gray-700 px-2.5 py-1 rounded-full">
               {LISTING_STATE_LABEL[state]}
             </span>

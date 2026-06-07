@@ -19,7 +19,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'แอร์ Daikin 12000 BTU อายุ 5 ปี เปิดแล้วลมออกแต่ไม่เย็น อาจต้องเติมน้ำยา หรือคอมเพรสเซอร์มีปัญหา ต้องการช่างมาตรวจที่บ้าน',
     photos: ['https://picsum.photos/400/300?seed=r001a', 'https://picsum.photos/400/300?seed=r001b'],
     estimatedBudget: 1500, feePreview: fee(1500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)', featured: true,
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', featured: true, // PHASE-4
   },
   {
     id: 'r002', jobType: 'repair',
@@ -29,7 +29,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'ทีวี Sony Bravia 55 นิ้ว มีเส้นดำแนวตั้งประมาณ 3 เส้น ปรากฏตลอดเวลา เสียงปกติ ต้องการช่างรับไปซ่อมและส่งคืน',
     photos: ['https://picsum.photos/400/300?seed=r002a', 'https://picsum.photos/400/300?seed=r002b'],
     estimatedBudget: 3500, feePreview: fee(3500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)', featured: true,
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', featured: true, // PHASE-4
   },
   {
     id: 'r003', jobType: 'repair',
@@ -39,7 +39,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'เครื่องซักผ้า LG ฝาบน 10 กก. ใช้งานมา 4 ปี เริ่มมีเสียงดังผิดปกติตอนปั่น และบางครั้งถังไม่หมุน น้ำระบายปกติ ต้องการช่างมาดูที่บ้าน',
     photos: ['https://picsum.photos/400/300?seed=r003a'],
     estimatedBudget: 1200, feePreview: fee(1200),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r004', jobType: 'repair',
@@ -49,7 +49,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'ตู้เย็น Hitachi 2 ประตู 14 คิว ทำงานมา 7 ปี เริ่มเย็นน้อยลง คอมเพรสเซอร์มีเสียงดัง จะนำมาซ่อมที่ร้านได้เลย ต้องการประเมินราคาก่อน',
     photos: ['https://picsum.photos/400/300?seed=r004a', 'https://picsum.photos/400/300?seed=r004b', 'https://picsum.photos/400/300?seed=r004c'],
     estimatedBudget: 2500, feePreview: fee(2500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r005', jobType: 'repair',
@@ -59,7 +59,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'ไมโครเวฟ Panasonic 25 ลิตร เปิดสวิตช์แล้วจอไม่ติด ไม่ให้ความร้อน ฟิวส์อาจขาด หรือบอร์ดเสีย สามารถส่งพัสดุมาซ่อมได้',
     photos: ['https://picsum.photos/400/300?seed=r005a'],
     estimatedBudget: 800, feePreview: fee(800),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r006', jobType: 'repair',
@@ -69,7 +69,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'พัดลมตั้งพื้น Hatari 16 นิ้ว หมุนช้าทุกสปีด มีเสียงพัดดัง น่าจะลูกปืนหรือคาปาซิเตอร์เสีย จะนำมาซ่อมที่ร้านเอง',
     photos: ['https://picsum.photos/400/300?seed=r006a'],
     estimatedBudget: 500, feePreview: fee(500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r007', jobType: 'repair',
@@ -79,7 +79,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'หม้อหุงข้าว Toshiba 1.8 ลิตร ฝาไม่ล็อกแน่น กดสวิตช์แล้วข้ามไปโหมด warm เลย ข้าวไม่สุก คาดว่าเทอร์โมสตัทเสีย',
     photos: ['https://picsum.photos/400/300?seed=r007a'],
     estimatedBudget: 600, feePreview: fee(600),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r008', jobType: 'repair',
@@ -89,7 +89,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'แอร์ Samsung Inverter 18000 BTU รุ่นใหม่อายุ 2 ปี น้ำหยดจากตัวในลงพื้นห้อง อาจท่อระบายน้ำตัน หรืออีวาพอเรเตอร์น้ำแข็งเกาะ ต้องการช่างด่วนวันนี้',
     photos: ['https://picsum.photos/400/300?seed=r008a', 'https://picsum.photos/400/300?seed=r008b'],
     estimatedBudget: 700, feePreview: fee(700),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r009', jobType: 'repair',
@@ -99,7 +99,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'เครื่องดูดฝุ่น Dyson V11 ใช้มา 3 ปี แบตเสื่อมชัดเจน ใช้ได้แค่ 5 นาที ต้องการเปลี่ยนแบตใหม่ หรือตรวจหัวดูดด้วย สามารถส่งพัสดุได้',
     photos: ['https://picsum.photos/400/300?seed=r009a'],
     estimatedBudget: 2000, feePreview: fee(2000),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r010', jobType: 'repair',
@@ -109,7 +109,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'ตู้เย็น Sharp 2 ประตู ช่องฟรีซไม่แข็ง น้ำแข็งละลายตอนกลางคืน ช่องธรรมดายังเย็นอยู่บ้าง น่าจะแก๊สรั่วหรือ defrost timer เสีย',
     photos: ['https://picsum.photos/400/300?seed=r010a', 'https://picsum.photos/400/300?seed=r010b'],
     estimatedBudget: 1800, feePreview: fee(1800),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r011', jobType: 'repair',
@@ -119,7 +119,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'เครื่องซักผ้า Bosch ฝาหน้า 8 กก. ขึ้น Error E18 ทุกรอบ น้ำไม่ระบาย ลองทำความสะอาดกรองแล้วยังเป็นอยู่ อาจปั๊มน้ำเสีย',
     photos: ['https://picsum.photos/400/300?seed=r011a'],
     estimatedBudget: 1500, feePreview: fee(1500),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
   {
     id: 'r012', jobType: 'repair',
@@ -129,7 +129,7 @@ export const WEEER_REPAIR_JOBS: WeeeRJobListing[] = [
     problemDescription: 'ทีวี LG Smart TV 43 นิ้ว เปิดไม่ติด ไฟ standby กระพริบแดง 3 ครั้งแล้วดับ น่าจะบอร์ดจ่ายไฟเสีย ต้องการนำมาให้ช่างดูที่ร้าน',
     photos: ['https://picsum.photos/400/300?seed=r012a'],
     estimatedBudget: 2200, feePreview: fee(2200),
-    customerName: 'รอยืนยัน (Phase D)', customerPhone: '0xx-xxx-xxxx (Phase D)',
+    customerName: 'รอยืนยัน (ตัวอย่าง)', customerPhone: '0xx-xxx-xxxx (ตัวอย่าง)', // PHASE-4
   },
 ];
 
