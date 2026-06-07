@@ -286,14 +286,16 @@ export default function JobProgressPage({
               ค่าบริการ: {job.serviceFeeRounded.toLocaleString()} บาท
             </p>
           )}
-          <p className="text-xs text-gray-500">รอลูกค้า review (WeeeU — Phase D)</p>
+          {/* PHASE-4: WeeeU review event — WebSocket push pending (Phase D) */}
+          <p className="text-xs text-gray-500">รอลูกค้ายืนยันงาน</p>
         </div>
       )}
 
       {/* Sub-5 Wave 2: API-based Progress Update (D79) */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-gray-300">📡 อัพเดต Progress (D79 API)</p>
+          {/* PHASE-4: D79 API-based progress update (Sub-5 Wave 2) */}
+          <p className="text-sm font-semibold text-gray-300">📡 อัพเดตความคืบหน้า</p>
           {!showUpdateForm && (
             <button
               onClick={() => { setEditingEntry(undefined); setShowUpdateForm(true); }}

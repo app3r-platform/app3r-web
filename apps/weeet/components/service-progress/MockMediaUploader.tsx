@@ -83,7 +83,8 @@ export function MockMediaUploader({ onMediaAdded }: Props) {
       <input ref={imageRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
       <input ref={videoRef} type="file" accept="video/*" className="hidden" onChange={handleVideoChange} />
       <p className="text-xs text-gray-600 italic">
-        ⚠️ Phase 2: ใช้ Lorem Picsum แทน real upload (D76 defer Phase D)
+        {/* PHASE-4: Lorem Picsum placeholder images — real file upload deferred D76 Phase D */}
+        ไฟล์ที่เพิ่มจะถูกบันทึกเมื่อส่งงาน
       </p>
     </div>
   );

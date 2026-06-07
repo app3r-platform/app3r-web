@@ -38,7 +38,8 @@ export function PaymentWalletCard() {
           <span className="text-xs text-gray-400 mb-0.5">พร้อมโอน</span>
         </div>
         {(balance?.pending ?? 0) > 0 && <p className="text-xs text-amber-400 mt-1">฿{fmt(balance!.pending)} รอปล่อย (escrow)</p>}
-        <p className="text-xs text-gray-500 mt-2">💡 การโอนเงินจัดการผ่านทีมงาน — Phase D-5</p>
+        {/* PHASE-4: withdrawal flow via ops team — automated payout deferred Phase D-5 */}
+        <p className="text-xs text-gray-500 mt-2">💡 การโอนเงินจัดการผ่านทีมงาน</p>
       </div>
       <button onClick={() => setShowTx(!showTx)} className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-sm text-gray-300 hover:border-gray-500 transition-colors">
         <span>📋 ประวัติรายการ</span><span className="text-gray-500 text-xs">{showTx ? "▲" : "▼"}</span>
