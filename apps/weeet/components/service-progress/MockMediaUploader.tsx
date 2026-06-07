@@ -61,7 +61,7 @@ export function MockMediaUploader({ onMediaAdded }: Props) {
 
   return (
     <div className="space-y-2">
-      <p className="text-xs font-semibold text-gray-400">แนบสื่อ (Mock — Phase 2)</p>
+      <p className="text-xs font-semibold text-gray-400">แนบสื่อ (ตัวอย่าง)</p>
       <div className="flex gap-2">
         <button
           type="button"

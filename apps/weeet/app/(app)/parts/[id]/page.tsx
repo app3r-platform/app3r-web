@@ -189,7 +189,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
 
                 {/* Optional service ID */}
                 <div className="space-y-1">
-                  <label className="text-xs text-gray-400">เชื่อมกับงานซ่อม (ไม่บังคับ — ใส่ Job ID)</label>
+                  <label className="text-xs text-gray-400">เชื่อมกับงานซ่อม (ไม่บังคับ — ใส่รหัสงาน)</label>
                   <input
                     type="text"
                     value={orderServiceId}

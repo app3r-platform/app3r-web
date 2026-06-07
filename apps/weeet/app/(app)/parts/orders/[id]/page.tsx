@@ -476,7 +476,7 @@ export default function PartsOrderDetailPage({
             {/* ── Part ID (small reference) ─────────────────────────────── */}
             <div className="text-center">
               <p className="text-xs text-gray-700 font-mono">
-                Order ID: {order.id}
+                รหัสคำสั่งซื้อ: {order.id}
               </p>
             </div>
           </>
