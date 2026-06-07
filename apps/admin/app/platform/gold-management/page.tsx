@@ -120,7 +120,7 @@ export default function GoldManagementPage() {
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-500">
                   <p className="font-semibold text-gray-700 mb-1">📐 ดุลคงค้างพอยต์ทอง</p>
                   <code className="text-xs text-green-600">
-                    Total Minted = Reserve + Fee Pools + Escrow + Written-Off (ต้องสมดุลเสมอ)
+                    Total Minted = Reserve + Fee Pools + พักเงินกลาง (Escrow) + Written-Off (ต้องสมดุลเสมอ)
                   </code>
                 </div>
 
@@ -149,7 +149,7 @@ export default function GoldManagementPage() {
                 <InfoCard label="Listing Offer Fee Pool" value={fmtG(data.fee_pools.listing_offer_fee_pool)} accent="yellow" />
                 <InfoCard label="Platform Fee Pool" value={fmtG(data.fee_pools.platform_fee_pool)} accent="yellow" />
                 <InfoCard label="Advertising Pool" value={fmtG(data.fee_pools.advertising_pool)} accent="admin-primary" />
-                <InfoCard label="Escrow Pool" value={fmtG(data.fee_pools.escrow_pool)} accent="blue" />
+                <InfoCard label="พักเงินกลาง (Escrow) Pool" value={fmtG(data.fee_pools.escrow_pool)} accent="blue" />
               </div>
             )}
           </>

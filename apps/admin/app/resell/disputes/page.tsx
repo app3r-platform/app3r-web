@@ -149,11 +149,11 @@ export default function ResellDisputesPage() {
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <div className="font-semibold text-blue-700 mb-1">🛒 Buyer ชนะ</div>
-              <div className="text-xs text-gray-500">คืน escrow เต็มจำนวนให้ buyer · listing → CANCELLED</div>
+              <div className="text-xs text-gray-500">คืนพักเงินกลางเต็มจำนวนให้ buyer · listing → CANCELLED</div>
             </div>
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <div className="font-semibold text-green-700 mb-1">🧑‍💼 Seller ชนะ</div>
-              <div className="text-xs text-gray-500">โอน escrow ให้ seller · listing → COMPLETED</div>
+              <div className="text-xs text-gray-500">โอนพักเงินกลางให้ seller · listing → COMPLETED</div>
             </div>
             <div className="bg-admin-surface border border-admin-primary/30 rounded-lg p-3">
               <div className="font-semibold text-admin-primary mb-1">⚡ แบ่ง (Split)</div>

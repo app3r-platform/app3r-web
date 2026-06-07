@@ -118,8 +118,8 @@ export default function ResellLifecyclePage() {
           <ul className="text-xs space-y-1 text-blue-600 list-disc list-inside">
             <li>อายุประกาศ (Listing Days): เมื่อหมดอายุ ประกาศ expired อัตโนมัติ</li>
             <li>Offer Window: ช่วงเวลารับ offer ก่อน listing expired</li>
-            <li>Inspection Period: ผู้ซื้อมีเวลาตรวจสอบสินค้าก่อน release escrow</li>
-            <li>Escrow Lock: timeout ก่อนระบบ auto-release กรณีไม่มีการตอบสนอง</li>
+            <li>Inspection Period: ผู้ซื้อมีเวลาตรวจสอบสินค้าก่อนปลดพักเงินกลาง</li>
+            <li>พักเงินกลาง (Escrow) Lock: timeout ก่อนระบบ auto-release กรณีไม่มีการตอบสนอง</li>
             <li>🔴 SUSPENDED: โมดูลที่ยังไม่เปิดใช้ (R2=Scrap / R3=Parts)</li>
           </ul>
         </div>
@@ -168,7 +168,7 @@ export default function ResellLifecyclePage() {
                     { label: "อายุประกาศ",       value: `${cfg.listing_days} วัน`,    icon: "📅" },
                     { label: "Offer Window",      value: `${cfg.offer_window_hrs} ชม.`, icon: "📨" },
                     { label: "Inspection Period", value: cfg.inspection_hrs > 0 ? `${cfg.inspection_hrs} ชม.` : "—", icon: "🔍" },
-                    { label: "Escrow Lock",       value: `${cfg.escrow_lock_hrs} ชม.`, icon: "🔒" },
+                    { label: "พักเงินกลาง Lock",  value: `${cfg.escrow_lock_hrs} ชม.`, icon: "🔒" },
                   ].map(item => (
                     <div key={item.label} className="bg-white rounded-lg border border-gray-200 p-3 text-center">
                       <p className="text-lg">{item.icon}</p>
@@ -208,7 +208,7 @@ export default function ResellLifecyclePage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">🔒 Escrow Lock (ชม.)</label>
+                      <label className="text-xs text-gray-500 block mb-1">🔒 พักเงินกลาง Lock (ชม.)</label>
                       <input type="number" min={1} max={72}
                         value={editVal.escrow_lock_hrs ?? cfg.escrow_lock_hrs}
                         onChange={e => setEditVal(v => ({ ...v, escrow_lock_hrs: Number(e.target.value) }))}

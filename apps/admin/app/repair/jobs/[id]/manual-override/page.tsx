@@ -21,30 +21,30 @@ const ACTION_CONFIG: Record<OverrideAction, {
 }> = {
   cancel: {
     label:    "Cancel Job",
-    desc:     "ยกเลิกงานและคืนเงินตาม deposit policy",
+    desc:     "ยกเลิกงานและคืนเงินตามนโยบายเงินค้ำประกัน (Deposit)",
     color:    "border-orange-300 bg-orange-50 text-orange-700",
     btnColor: "bg-orange-600 hover:bg-orange-700 text-white",
     axes: [
       { key: "price",        icon: "💰", implication: "ไม่มีการจ่ายเงินค่าซ่อม (Final price = 0)" },
       { key: "deposit",      icon: "💳", implication: "พอยต์ทองที่ล็อกคืนตาม policy (อิง cancellation point)" },
       { key: "cancellation", icon: "❌", implication: "เปิดใช้ cancellation policy ทันที" },
-      { key: "timeline",     icon: "⏱️", implication: "งานสิ้นสุดก่อนกำหนด — ช่วงยกเลิกมีผลต่อ deposit" },
+      { key: "timeline",     icon: "⏱️", implication: "งานสิ้นสุดก่อนกำหนด — ช่วงยกเลิกมีผลต่อเงินค้ำประกัน (Deposit)" },
     ],
   },
   refund: {
     label:    "Force Refund",
-    desc:     "คืนเงินให้ WeeeU ทั้งหมด (override deposit policy)",
+    desc:     "คืนเงินให้ WeeeU ทั้งหมด — override นโยบายเงินค้ำประกัน (Deposit)",
     color:    "border-blue-300 bg-blue-50 text-blue-700",
     btnColor: "bg-admin-primary hover:bg-admin-dark text-white",
     axes: [
-      { key: "price",    icon: "💰", implication: "คืน escrow ทั้งหมดให้ WeeeU (override ราคาตกลง)" },
-      { key: "deposit",  icon: "💳", implication: "override deposit policy — คืนพอยต์ทองที่ล็อก 100%" },
+      { key: "price",    icon: "💰", implication: "คืนพักเงินกลางทั้งหมดให้ WeeeU (override ราคาตกลง)" },
+      { key: "deposit",  icon: "💳", implication: "override นโยบายเงินค้ำประกัน (Deposit) — คืนพอยต์ทองที่ล็อก 100%" },
       { key: "quality",  icon: "⭐", implication: "บ่งชี้ว่างานไม่ผ่านมาตรฐาน (เหตุผล Refund)" },
       { key: "evidence", icon: "📸", implication: "หลักฐานต้องสนับสนุนการ Refund ใน Audit Log" },
     ],
   },
   forfeit: {
-    label:    "Forfeit Deposit",
+    label:    "ยึดเงินค้ำประกัน (Deposit)",
     desc:     "ยึดพอยต์ทองที่ล็อกให้ WeeeR ทั้งหมด (override policy)",
     color:    "border-red-300 bg-red-50 text-red-700",
     btnColor: "bg-red-600 hover:bg-red-700 text-white",
@@ -172,7 +172,7 @@ export default function ManualOverridePage() {
             {job.deposit_amount != null && (
               <div className="mt-3 pt-3 border-t border-gray-100 flex gap-4 text-xs">
                 <div>
-                  <span className="text-gray-500">Deposit: </span>
+                  <span className="text-gray-500">เงินค้ำประกัน (Deposit): </span>
                   <span className="font-semibold text-admin-primary">{job.deposit_amount.toLocaleString()} G</span>
                   {job.deposit_action && <span className="text-gray-500 ml-1">({job.deposit_action})</span>}
                 </div>

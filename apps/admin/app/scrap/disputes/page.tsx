@@ -128,11 +128,11 @@ export default function ScrapDisputesPage() {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-blue-950 border border-blue-800 rounded-lg p-3">
               <div className="font-semibold text-blue-300 mb-1">ตัดสินให้ Buyer ชนะ</div>
-              <div className="text-xs text-gray-500">คืน escrow เต็มจำนวนให้ buyer · Scrap Job → CANCELLED</div>
+              <div className="text-xs text-gray-500">คืนพักเงินกลางเต็มจำนวนให้ buyer · Scrap Job → CANCELLED</div>
             </div>
             <div className="bg-green-950 border border-green-800 rounded-lg p-3">
               <div className="font-semibold text-green-700 mb-1">ตัดสินให้ Seller ชนะ</div>
-              <div className="text-xs text-gray-500">โอน escrow ให้ seller · ไม่หัก platform fee · Scrap Job → COMPLETED</div>
+              <div className="text-xs text-gray-500">โอนพักเงินกลางให้ seller · ไม่หัก platform fee · Scrap Job → COMPLETED</div>
             </div>
           </div>
         </div>
@@ -260,7 +260,7 @@ export default function ScrapDisputesPage() {
                   resolution === "to_buyer" ? "border-blue-500 bg-blue-950" : "border-gray-300 bg-gray-100 hover:border-gray-600"
                 }`}>
                 <div className="font-semibold text-blue-300 mb-1">Buyer ชนะ</div>
-                <div className="text-xs text-gray-500">คืน escrow ให้ {resolveModal.buyer_name}</div>
+                <div className="text-xs text-gray-500">คืนพักเงินกลางให้ {resolveModal.buyer_name}</div>
                 <div className="text-xs text-gray-600 mt-1">→ CANCELLED</div>
               </button>
               <button onClick={() => setResolution("to_seller")}
@@ -268,7 +268,7 @@ export default function ScrapDisputesPage() {
                   resolution === "to_seller" ? "border-green-500 bg-green-950" : "border-gray-300 bg-gray-100 hover:border-gray-600"
                 }`}>
                 <div className="font-semibold text-green-700 mb-1">Seller ชนะ</div>
-                <div className="text-xs text-gray-500">โอน escrow ให้ {resolveModal.seller_name}</div>
+                <div className="text-xs text-gray-500">โอนพักเงินกลางให้ {resolveModal.seller_name}</div>
                 <div className="text-xs text-gray-600 mt-1">→ COMPLETED</div>
               </button>
             </div>

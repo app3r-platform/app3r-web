@@ -80,7 +80,7 @@ export default function BalancesPage() {
                 <BucketCard label="Listing Offer Fee Pool" value={fmtG(data.listing_offer_fee_pool)} accent="yellow" />
                 <BucketCard label="Platform Fee Pool" value={fmtG(data.platform_fee_pool)} accent="yellow" />
                 <BucketCard label="Advertising Pool" value={fmtG(data.advertising_pool)} accent="admin-primary" />
-                <BucketCard label="Escrow Pool" value={fmtG(data.escrow_pool)} accent="blue" />
+                <BucketCard label="พักเงินกลาง (Escrow) Pool" value={fmtG(data.escrow_pool)} accent="blue" />
                 <BucketCard label="Reserve Pool" value={fmtG(data.reserve_pool)} accent="green" />
                 <BucketCard label="Written-Off" value={fmtG(data.written_off)} accent="red" />
               </div>

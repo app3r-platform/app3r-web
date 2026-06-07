@@ -127,7 +127,7 @@ export default function ReconciliationPage() {
                 <div className="border-t border-gray-200 pt-3 space-y-2.5">
                   <BreakdownRow label="Reserve Pool" value={fmtG(status.reserve_pool)} />
                   <BreakdownRow label="Fee Pools (รวม)" value={fmtG(status.fee_pools_total)} />
-                  <BreakdownRow label="Escrow Pool" value={fmtG(status.escrow_pool)} />
+                  <BreakdownRow label="พักเงินกลาง (Escrow) Pool" value={fmtG(status.escrow_pool)} />
                   <BreakdownRow label="Written-Off" value={fmtG(status.written_off)} />
                 </div>
                 <div className="border-t border-gray-200 pt-3">

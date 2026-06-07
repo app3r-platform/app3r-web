@@ -78,7 +78,7 @@ const LAYER_GUIDE = [
     label: "Default Rule (คืนลูกค้าเต็ม)",
     color: "bg-green-50 border-l-4 border-brand-success",
     textColor: "text-green-700",
-    desc: "หากไม่สามารถระบุต้นเหตุชัด → Default คืนเงินให้ WeeeU เต็มจำนวน escrow",
+    desc: "หากไม่สามารถระบุต้นเหตุชัด → Default คืนเงินให้ WeeeU เต็มจำนวนพักเงินกลาง",
   },
   {
     layer: "L4",
@@ -410,7 +410,7 @@ export default function DisputesPage() {
             </div>
             <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-center shadow-sm">
               <p className="text-xl font-bold text-admin-primary">{escTotal.toLocaleString()}</p>
-              <p className="text-xs text-gray-500">G Escrow (หน้านี้)</p>
+              <p className="text-xs text-gray-500">G พักเงินกลาง (Escrow) (หน้านี้)</p>
             </div>
           </div>
         </div>

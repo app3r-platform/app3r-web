@@ -125,7 +125,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
     stats: [
       { label: "ประกาศใหม่วันนี้", value: "19", color: "text-blue-600" },
       { label: "คำสั่งซื้อ active",  value: "31", color: "text-orange-600" },
-      { label: "escrow รอโอน",     value: "8",  color: "text-yellow-600" },
+      { label: "พักเงินกลาง รอโอน", value: "8",  color: "text-yellow-600" },
       { label: "Dispute เปิด",     value: "2",  color: "text-red-600" },
     ],
     tabs: [
