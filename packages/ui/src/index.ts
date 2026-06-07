@@ -11,3 +11,7 @@ export { NearMeFilter } from "./near-me-filter";
 export type { NearMeFilterProps, NearbyTambonDto } from "./near-me-filter";
 export { ScreenIdBadge } from "./screen-id-badge";
 export type { ScreenIdBadgeProps, ScreenBadgeCorner } from "./screen-id-badge";
+
+// PT-Audit shared component (Advisor Gen 114 CMD 378813ec-7277-817c-89d4-c44af1bea631)
+export { HelpTip } from "./help-tip";
+export type { HelpTipProps } from "./help-tip";
