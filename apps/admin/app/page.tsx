@@ -29,7 +29,7 @@ export default function Dashboard() {
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-1">Dashboard</h1>
+        <h1 className="text-2xl font-bold mb-1">ภาพรวมระบบ</h1>
         <p className="text-gray-500 text-sm mb-8">ภาพรวมระบบ App3R</p>
 
         {loading ? (
@@ -52,9 +52,9 @@ export default function Dashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-gray-500 text-left">
-                    <th className="px-6 py-3">ID</th>
+                    <th className="px-6 py-3">รหัส</th>
                     <th className="px-6 py-3">ชื่อ</th>
-                    <th className="px-6 py-3">Role</th>
+                    <th className="px-6 py-3">บทบาท</th>
                     <th className="px-6 py-3">สถานะ</th>
                   </tr>
                 </thead>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { isAuthenticated } from "@/lib/auth";
 import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
+import { HelpTip } from "@app3r/ui";
 
 interface KYCApplication {
   user_id: number;
@@ -72,8 +73,12 @@ export default function KYCQueuePage() {
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-1">KYC Document Review</h1>
-        <p className="text-gray-500 text-sm mb-6">ตรวจสอบเอกสาร KYC ของ WeeeR ก่อนอนุมัติเป็นผู้รับงาน (D24, D25)</p>
+        <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
+          ตรวจเอกสารยืนยันตัวตน (KYC)
+          <HelpTip content="KYC (Know Your Customer) — ขั้นตอนยืนยันตัวตนผู้ใช้ด้วยเอกสาร" />
+        </h1>
+        {/* D-num: D24 = Signed URL spec, D25 = KYC document retention */}
+        <p className="text-gray-500 text-sm mb-6">ตรวจสอบเอกสาร KYC ของ WeeeR ก่อนอนุมัติเป็นผู้รับงาน</p>
 
         {/* Status Filter Tabs */}
         <div className="flex flex-wrap gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">

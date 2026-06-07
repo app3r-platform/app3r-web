@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HelpTip } from "@app3r/ui";
 
 export default async function KycReviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -19,8 +20,9 @@ export default async function KycReviewPage({ params }: { params: Promise<{ id: 
 
       {/* Header */}
       <div className="flex items-center gap-4 mt-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          KYC Review — {id}
+        <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          ตรวจเอกสารยืนยันตัวตน (KYC) — {id}
+          <HelpTip content="KYC (Know Your Customer) — ขั้นตอนยืนยันตัวตนผู้ใช้ด้วยเอกสาร" />
         </h1>
         <span className="inline-flex items-center gap-1.5 bg-yellow-50 text-yellow-700 border border-yellow-200 text-xs font-semibold px-3 py-1.5 rounded-full">
           🔍 รอตรวจสอบ

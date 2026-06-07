@@ -92,8 +92,9 @@ export default function TestimonialList() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
+          {/* D-num: D86 = Testimonials spec */}
           <h1 className="text-2xl font-bold text-gray-900">
-            รีวิวลูกค้า (Testimonials) — D86
+            รีวิวลูกค้า (Testimonials)
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">star-sort · website-pick · ลำดับที่แสดงบนเว็บไซต์</p>
         </div>

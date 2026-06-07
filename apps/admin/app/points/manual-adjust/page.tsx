@@ -92,7 +92,8 @@ export default function ManualAdjustPage() {
           <div className="text-center">
             <div className="text-6xl mb-4">🔒</div>
             <h2 className="text-xl font-bold mb-2">Super Admin Only</h2>
-            <p className="text-gray-500 text-sm">หน้านี้ต้องการสิทธิ์ Super Admin เท่านั้น (D27)</p>
+            {/* D-num: D27 = Super Admin permission */}
+            <p className="text-gray-500 text-sm">หน้านี้ต้องการสิทธิ์ Super Admin เท่านั้น</p>
           </div>
         </main>
       </div>
@@ -104,13 +105,15 @@ export default function ManualAdjustPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-1">Manual Adjust Points</h1>
-        <p className="text-gray-500 text-sm mb-6">ปรับยอด พอยต์ทอง/พอยต์เงิน (Gold/Silver Point) ด้วยตนเอง — Super Admin Only (D27)</p>
+        {/* D-num: D27 = Super Admin permission, D28 = Manual adjust limit */}
+        <p className="text-gray-500 text-sm mb-6">ปรับยอด พอยต์ทอง/พอยต์เงิน (Gold/Silver Point) ด้วยตนเอง — Super Admin Only</p>
 
         {/* D28 Limit Indicator */}
         <div className="mb-6 bg-orange-900/20 border border-orange-800/50 rounded-xl p-4 flex items-center gap-3">
           <span className="text-orange-700 text-lg">⚠️</span>
           <div>
-            <p className="text-sm font-medium text-orange-700">D28 — Limit ต่อครั้ง: {maxLimit.toLocaleString()} points</p>
+            {/* D-num: D28 = Manual adjust limit per transaction */}
+            <p className="text-sm font-medium text-orange-700">จำกัดต่อครั้ง: {maxLimit.toLocaleString()} points</p>
             <p className="text-xs text-gray-500 mt-0.5">ค่าบวก = เพิ่ม, ค่าลบ = ลด | ทุกการเปลี่ยนแปลงจะถูกบันทึกใน Audit Log</p>
           </div>
         </div>

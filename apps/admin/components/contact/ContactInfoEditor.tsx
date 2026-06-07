@@ -154,7 +154,8 @@ export default function ContactInfoEditor() {
         >
           ← กลับ Inbox
         </button>
-        <h1 className="text-xl font-bold text-gray-900">แก้ไขข้อมูลติดต่อ (D78)</h1>
+        {/* D-num: D78 = Contact info edit permission */}
+        <h1 className="text-xl font-bold text-gray-900">แก้ไขข้อมูลติดต่อ</h1>
       </div>
 
       {success && (

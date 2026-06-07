@@ -117,9 +117,9 @@ export default function GoldManagementPage() {
                   <InfoCard label="Written-Off" value={fmtG(data.reserve.total_written_off)} accent="gray" />
                 </div>
 
-                {/* D17 Invariant */}
+                {/* D-num: D17 = Gold Point invariant */}
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-500">
-                  <p className="font-semibold text-gray-700 mb-1">📐 D17 Invariant</p>
+                  <p className="font-semibold text-gray-700 mb-1">📐 ดุลคงค้างพอยต์ทอง</p>
                   <code className="text-xs text-green-600">
                     Total Minted = Reserve + Fee Pools + Escrow + Written-Off (ต้องสมดุลเสมอ)
                   </code>
