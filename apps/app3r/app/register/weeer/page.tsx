@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMockRole } from "@/lib/auth/useMockRole";
 import { crossAppUrls } from "@/lib/config/urls";
 import { MockAnnoOrigin, MockAnnoXapp } from "@/components/common";
+import { HelpTip } from "@app3r/ui";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -140,11 +141,17 @@ export default function RegisterWeeeRPage() {
             <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">📊</div>
               <p className="font-semibold text-website-brand-900 text-sm">รายงานยอดขาย</p>
-              <p className="text-xs text-website-brand-700 mt-0.5">Dashboard real-time</p>
+              <p className="text-xs text-website-brand-700 mt-0.5">แดชบอร์ดแบบเรียลไทม์</p>
             </div>
             <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
               <div className="text-2xl mb-1">🛡️</div>
-              <p className="font-semibold text-website-brand-900 text-sm">Escrow คุ้มครอง</p>
+              <p className="font-semibold text-website-brand-900 text-sm flex items-center justify-center gap-1">
+                ระบบพักเงินกลางคุ้มครอง
+                <HelpTip
+                  content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง"
+                  ariaLabel="ระบบพักเงินกลางคืออะไร"
+                />
+              </p>
               <p className="text-xs text-website-brand-700 mt-0.5">รับเงินตรงเวลา</p>
             </div>
             <div className="bg-website-brand-50 border border-website-brand-200 rounded-xl p-4 text-center">
@@ -410,7 +417,14 @@ export default function RegisterWeeeRPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    LINE ID
+                    LINE ID (ไอดีไลน์){" "}
+                    {/* LINE brand icon — #06C755 */}
+                    <span
+                      className="inline-flex items-center justify-center w-4 h-4 rounded bg-[#06C755] text-white text-[8px] font-extrabold leading-none ml-0.5 align-middle select-none"
+                      aria-hidden="true"
+                    >
+                      L
+                    </span>
                     <span className="text-gray-400 text-xs font-normal ml-1">(ถ้ามี)</span>
                   </label>
                   <input
