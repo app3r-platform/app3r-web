@@ -10,7 +10,7 @@ import { HelpTip } from "@app3r/ui";
 export const metadata: Metadata = { title: "กระเป๋าเงิน — WeeeR" };
 
 const TX = [
-  { type: "credit", currency: "silver", amount: 500,  desc: "ค่าบริการซ่อมแอร์ (JOB-0421) — WeeeU escrow release", date: "2026-05-02", source: "escrow" },
+  { type: "credit", currency: "silver", amount: 500,  desc: "ค่าบริการซ่อมแอร์ (JOB-0421) — WeeeU ปลดพักเงินกลาง (Escrow)", date: "2026-05-02", source: "escrow" },
   { type: "credit", currency: "silver", amount: 1455, desc: "ค่าอะไหล่ B2B Parts — ORDER-0089 (net หลังหัก 3%)",       date: "2026-05-01", source: "parts" },
   { type: "debit",  currency: "silver", amount: 50,   desc: "ค่าลงประกาศ (LIST-092)",                                  date: "2026-05-01", source: "fee" },
   { type: "credit", currency: "gold",   amount: 200,  desc: "โบนัสรีวิว 5 ดาว",                                       date: "2026-04-30", source: "bonus" },
@@ -54,7 +54,7 @@ export default function WalletPage() {
           <div>
             <div className="text-sm font-semibold text-[#B8300E] mb-1">วิธีรับเงิน (WeeeR Earner)</div>
             <ul className="text-xs text-[#D63B12] space-y-1">
-              <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → ปลดพักเงินกลาง<HelpTip content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง" /> → ได้รับ Silver อัตโนมัติ</li>
+              <li>• งานบริการ (Repair / Maintain): WeeeU ยืนยัน → ปลดพักเงินกลาง (Escrow)<HelpTip content="เงินของคุณจะถูกเก็บไว้ในระบบกลางอย่างปลอดภัย จนกว่างานเสร็จและคุณยืนยัน จึงโอนให้ปลายทาง" /> → ได้รับ Silver อัตโนมัติ</li>
               <li>• B2B Parts: ผู้ซื้อกด "รับของ" → ปลดพักเงินกลาง → หักค่าธรรมเนียม 3% → รับ Silver{/* PHASE-4: D81 */}</li>
             </ul>
           </div>

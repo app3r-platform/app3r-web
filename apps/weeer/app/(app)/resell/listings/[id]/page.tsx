@@ -196,7 +196,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติม Gold (Escrow)</p>
+              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติม Gold เข้าพักเงินกลาง (Escrow)</p>
               <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
             </div>
             <EscrowCountdown />

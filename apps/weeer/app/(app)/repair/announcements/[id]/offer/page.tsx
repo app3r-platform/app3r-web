@@ -143,7 +143,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
             <input type="checkbox" id="has_deposit" checked={form.has_deposit}
               onChange={(e) => setForm((f) => ({ ...f, has_deposit: e.target.checked }))}
               className="w-4 h-4 text-[#F04E20] rounded" />
-            <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">ล็อกพอยต์ทอง (ระบบพักเงินกลาง / Escrow)</label>
+            <label htmlFor="has_deposit" className="text-sm font-medium text-gray-700">ล็อกพอยต์ทองพักเงินกลาง (Escrow)</label>
           </div>
           {form.has_deposit && (
             <div className="space-y-3 pl-7">

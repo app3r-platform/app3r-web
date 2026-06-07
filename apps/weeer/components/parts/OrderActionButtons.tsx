@@ -60,7 +60,7 @@ export function OrderActionButtons({
       )}
       {showReceive && (
         <button onClick={onReceive} className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
-          ✅ ยืนยันรับของ & ปลด escrow (P7)
+          ✅ ยืนยันรับของ & ปลดพักเงินกลาง (Escrow) (P7)
         </button>
       )}
       {showCancel && (

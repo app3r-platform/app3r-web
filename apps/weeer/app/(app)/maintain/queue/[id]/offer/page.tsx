@@ -130,7 +130,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
         {/* ── แกน 1: พอยต์ทองที่ล็อก (Escrow) ── */}
         <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-gray-800">💰 แกน 1 — พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow)</p>
+            <p className="text-sm font-semibold text-gray-800">💰 แกน 1 — พอยต์ทองพักเงินกลาง (Escrow)</p>
             <label className="flex items-center gap-2 cursor-pointer">
               <span className="text-xs text-gray-500">เรียกล็อกพอยต์ทอง</span>
               <div

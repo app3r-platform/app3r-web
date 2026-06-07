@@ -6,8 +6,8 @@ import PushSubscribeButton from "../../../components/push/PushSubscribeButton";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const NOTIFS = [
-  { icon: "🔓", title: "รับ Silver จากงานซ่อม", body: "รับ 500 Silver จาก WeeeU escrow release — JOB-0421 เสร็จสมบูรณ์", time: "09:00", unread: true, tag: "payment" },
-  { icon: "📦", title: "B2B Parts — ยืนยันรับของ", body: "ผู้ซื้อ S002 ยืนยันรับสินค้า ORDER-0089 แล้ว — escrow release กำลังดำเนินการ", time: "08:45", unread: true, tag: "parts" },
+  { icon: "🔓", title: "รับ Silver จากงานซ่อม", body: "รับ 500 Silver จาก WeeeU ปลดพักเงินกลาง (Escrow) — JOB-0421 เสร็จสมบูรณ์", time: "09:00", unread: true, tag: "payment" },
+  { icon: "📦", title: "B2B Parts — ยืนยันรับของ", body: "ผู้ซื้อ S002 ยืนยันรับสินค้า ORDER-0089 แล้ว — ปลดพักเงินกลาง (Escrow) กำลังดำเนินการ", time: "08:45", unread: true, tag: "parts" },
   { icon: "📥", title: "งานใหม่เข้า", body: "มีคำขอซ่อมแอร์ใหม่ใน queue — กรุณามอบหมายช่าง", time: "08:30", unread: true, tag: "job" },
   { icon: "👷", title: "WeeeT ได้รับการอนุมัติ", body: "Admin อนุมัติ WeeeT \"นายวิทยา ซ่อมเก่ง\" แล้ว", time: "เมื่อวาน", unread: false, tag: "staff" },
   { icon: "🔄", title: "งานอัปเดต", body: "JOB-0420 — นายสมชาย เริ่มดำเนินการแล้ว", time: "เมื่อวาน", unread: false, tag: "job" },

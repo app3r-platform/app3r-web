@@ -209,7 +209,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
           <div className="space-y-1.5 text-sm">
             <div className="flex items-start gap-2 text-gray-600">
               <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>
-              <span>พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) ที่รับไว้ — คืนให้ WeeeU เต็มจำนวน</span>
+              <span>พอยต์ทองพักเงินกลาง (Escrow) ที่รับไว้ — คืนให้ WeeeU เต็มจำนวน</span>
             </div>
             <div className="flex items-start gap-2 text-gray-600">
               <span className="text-[#FF663A] shrink-0 mt-0.5">•</span>

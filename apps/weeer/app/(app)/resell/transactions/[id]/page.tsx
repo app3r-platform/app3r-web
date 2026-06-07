@@ -20,7 +20,7 @@ type TxStep = {
 const TX_STEPS: TxStep[] = [
   { status: "announced",         label: "ประกาศขาย",      icon: "📢" },
   { status: "receiving_offers",  label: "รับข้อเสนอ",     icon: "🤝" },
-  { status: "offer_selected",    label: "เลือกข้อเสนอ",   icon: "⭐", note: "Escrow lock 24ชม." },
+  { status: "offer_selected",    label: "เลือกข้อเสนอ",   icon: "⭐", note: "ล็อกพักเงินกลาง (Escrow) 24ชม." },
   { status: "buyer_confirmed",   label: "ผู้ซื้อยืนยัน",  icon: "✅" },
   { status: "in_progress",       label: "กำลังส่ง",        icon: "📦", note: "ต้องส่งหลักฐานก่อนส่ง (R6)" },
   { status: "delivered",         label: "ส่งมอบแล้ว",     icon: "🚚", note: "ผู้ซื้อตรวจรับ (R7/R8)" },
@@ -322,7 +322,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
             <h2 className="text-base font-bold text-gray-900">ขอยกเลิกร่วม (R12)</h2>
-            <p className="text-sm text-gray-600">ส่งคำขอให้อีกฝ่ายยืนยัน — ถ้ายืนยันทั้งคู่ ธุรกรรมยกเลิก · คืน Escrow ตามข้อตกลง</p>
+            <p className="text-sm text-gray-600">ส่งคำขอให้อีกฝ่ายยืนยัน — ถ้ายืนยันทั้งคู่ ธุรกรรมยกเลิก · คืนพักเงินกลาง (Escrow) ตามข้อตกลง</p>
             <div className="flex gap-3">
               <button onClick={() => setShowCancelModal(false)}
                 className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50">

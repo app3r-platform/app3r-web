@@ -182,7 +182,7 @@ export default function ScrapAnnouncementOfferPage({
         {mode === "buy" && (
           <div className="border-t border-gray-100 pt-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              ล็อกพอยต์ทอง (ระบบพักเงินกลาง / Escrow)
+              ล็อกพอยต์ทองพักเงินกลาง (Escrow)
             </label>
             <input
               type="number"

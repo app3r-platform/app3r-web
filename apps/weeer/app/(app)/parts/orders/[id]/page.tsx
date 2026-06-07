@@ -219,7 +219,7 @@ export default function PartsOrderDetailPage({
           <div>
             <p className="text-sm font-semibold text-green-700">ยืนยันรับของเรียบร้อย</p>
             <p className="text-xs text-green-600 mt-0.5">
-              คะแนน escrow โอนให้ผู้ขายแล้ว (สุทธิ {netToSeller.toLocaleString()} pts)
+              คะแนนพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว (สุทธิ {netToSeller.toLocaleString()} pts)
             </p>
           </div>
         </div>
@@ -241,7 +241,7 @@ export default function PartsOrderDetailPage({
           <div>
             <p className="text-sm font-semibold text-orange-700">ปฏิเสธออเดอร์แล้ว (P9)</p>
             <p className="text-xs text-orange-600 mt-0.5">
-              escrow {order.totalThb.toLocaleString()} pts คืนผู้ซื้อแล้ว
+              พักเงินกลาง (Escrow) {order.totalThb.toLocaleString()} pts คืนผู้ซื้อแล้ว
             </p>
           </div>
         </div>
@@ -298,7 +298,7 @@ export default function PartsOrderDetailPage({
             </div>
             {order.escrowHeldThb > 0 && (
               <div className="flex justify-between text-blue-600 bg-blue-50 rounded-lg px-2 py-1.5 mt-1">
-                <span>🔒 Gold escrow (พักอยู่)</span>
+                <span>🔒 Gold พักเงินกลาง (Escrow)</span>
                 <span className="font-semibold">{order.escrowHeldThb.toLocaleString()} pts</span>
               </div>
             )}
@@ -431,7 +431,7 @@ export default function PartsOrderDetailPage({
               <div>
                 <p className="text-sm font-bold text-gray-900">ปฏิเสธออเดอร์นี้?</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  escrow {order.totalThb.toLocaleString()} pts จะถูกคืนผู้ซื้อทันที
+                  พักเงินกลาง (Escrow) {order.totalThb.toLocaleString()} pts จะถูกคืนผู้ซื้อทันที
                 </p>
               </div>
             </div>
