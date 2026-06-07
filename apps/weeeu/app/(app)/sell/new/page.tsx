@@ -522,7 +522,8 @@ export default function SellNewPage() {
           <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider">เงื่อนไขการขาย (3 ข้อ)</p>
         </div>
         <div className="bg-weeeu-surface rounded-xl p-3">
-          <p className="text-xs text-weeeu-text">เงื่อนไขนี้จะแสดงให้ผู้ซื้อเห็นก่อนยื่นข้อเสนอ — เป็น Source of Truth ในกรณีข้อพิพาท</p>
+          {/* PHASE-4: Offer = source of truth */}
+          <p className="text-xs text-weeeu-text">เงื่อนไขนี้จะแสดงให้ผู้ซื้อเห็นก่อนยื่นข้อเสนอ — ยึดเป็นหลักหากเกิดข้อพิพาท</p>
         </div>
 
         {/* เงื่อนไข 1: ค่าส่ง */}

@@ -59,7 +59,8 @@ const OFFER_SOT_PRINCIPLES = [
   "WeeeR กำหนดเงื่อนไขเอง — คุณต้องรับทราบก่อนยืนยัน",
   "ค่าใช้จ่ายแสดงครบก่อนกดยืนยัน — ไม่มีค่าใช้จ่ายซ่อน",
   "สิ่งที่ไม่ระบุในข้อเสนอ = ไม่มีสิทธิ์เรียกร้อง (ใช้ Platform Policy)",
-  "เลือกข้อเสนอนี้แล้ว = ยอมรับเงื่อนไขทุกข้อ (SoT สำหรับข้อพิพาท)",
+  // PHASE-4: Offer = source of truth
+  "เลือกข้อเสนอนี้แล้ว = ยอมรับเงื่อนไขทุกข้อ — ยึดเป็นหลักกรณีพิพาท",
   "ข้อเสนอมีอายุ — หมดอายุแล้วต้องรอข้อเสนอใหม่จาก WeeeR",
 ];
 
@@ -309,7 +310,8 @@ export default function MaintainOffersPage() {
 
       {/* Decision กลาง — Offer=SoT notice */}
       <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
-        <p className="text-xs font-semibold text-amber-800">📌 หลักการ Offer=SoT — อ่านก่อนยืนยัน</p>
+        {/* PHASE-4: Offer = source of truth */}
+        <p className="text-xs font-semibold text-amber-800">📌 เงื่อนไขข้อเสนอ — อ่านก่อนยืนยัน</p>
         <ul className="space-y-1">
           {OFFER_SOT_PRINCIPLES.map((p, i) => (
             <li key={i} className="text-xs text-amber-700 flex items-start gap-1.5">
@@ -409,7 +411,8 @@ export default function MaintainOffersPage() {
               {[
                 "ค่าบริการและเงื่อนไขที่แสดงคือที่ตกลงกับ WeeeR รายนี้",
                 "สิ่งที่ไม่ระบุในข้อเสนอ = ไม่มีสิทธิ์เรียกร้องเพิ่มเติม",
-                "กดยืนยัน = ยอมรับข้อเสนอนี้เป็น SoT สำหรับข้อพิพาท",
+                // PHASE-4: Offer = source of truth
+                "กดยืนยัน = ยึดเงื่อนไขข้อเสนอนี้เป็นหลักกรณีพิพาท",
               ].map((item, i) => (
                 <li key={i} className="text-xs text-weeeu-dark flex items-start gap-1.5">
                   <span className="text-weeeu-primary shrink-0">✓</span>
