@@ -8,7 +8,7 @@ export type ConditionType = "มือสอง-ดีมาก" | "มือส
 
 export type ScrapMaterial = "อลูมิเนียม" | "ทองแดง" | "เหล็ก" | "พลาสติก" | "อื่นๆ";
 
-export type ListingStatus = "active" | "sold" | "reserved" | "closed";
+export type ListingStatus = "active" | "sold" | "reserved" | "closed" | "suspended";
 
 export interface SellerInfo {
   id: string;
