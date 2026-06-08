@@ -37,6 +37,15 @@ interface PaginatedDisputes {
 
 type Resolution = "to_buyer" | "to_seller" | "split" | "";
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_RESELL_DISPUTES: PaginatedDisputes = {
+  items: [
+    { listing_id: 101, title: "iPhone 14 Pro 256GB สภาพดี", service_type: "A", poster_id: 1001, poster_name: "ร้านไอทีสุขุมวิท", buyer_id: 2001, buyer_name: "WeeeU ธนา", seller_id: 1001, seller_name: "ร้านไอทีสุขุมวิท", final_price: 28000, escrow_amount: 28000, transaction_id: 5001, disputed_at: "2026-05-20T10:00:00Z" },
+    { listing_id: 102, title: "Samsung Galaxy S23+ 512GB", service_type: "A", poster_id: 1002, poster_name: "ร้านโฟนเซ็นเตอร์", buyer_id: 2002, buyer_name: "WeeeU สมใจ", seller_id: 1002, seller_name: "ร้านโฟนเซ็นเตอร์", final_price: 22000, escrow_amount: 22000, transaction_id: 5002, disputed_at: "2026-05-22T14:30:00Z" },
+  ],
+  total: 2, page: 1, pages: 1,
+};
+
 export default function ResellDisputesPage() {
   const router = useRouter();
   const [data,          setData]          = useState<PaginatedDisputes | null>(null);
@@ -55,8 +64,10 @@ export default function ResellDisputesPage() {
       const params = new URLSearchParams({ page: String(page), limit: "20", service_type: "A" });
       const result = await api.get<PaginatedDisputes>(`/admin/disputes?${params}`);
       setData(result);
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setData(MOCK_RESELL_DISPUTES);
     } finally {
       setLoading(false);
     }

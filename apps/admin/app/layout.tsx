@@ -3,6 +3,7 @@ import "./globals.css";
 import { DevNav } from "@/components/DevNav";
 import { ScreenBadge } from "@/components/ScreenBadge";
 import { MockAnno } from "@/components/MockAnno";
+import { DevAuthInit } from "@/components/DevAuthInit";
 
 export const metadata: Metadata = {
   title: "App3R Admin",
@@ -14,6 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="th">
       <body>
         {children}
+        {/* TODO: REMOVE BEFORE PROD — dev auth bypass seed (TD-05) */}
+        <DevAuthInit />
         <DevNav />
         <ScreenBadge />
         <MockAnno />

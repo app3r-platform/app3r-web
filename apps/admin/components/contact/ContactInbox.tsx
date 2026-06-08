@@ -40,6 +40,13 @@ function getToken(): string {
   return localStorage.getItem('app3r_admin_token') ?? ''
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_CONTACT_MESSAGES: ContactMessageDto[] = [
+  { id: "MSG-001", category: "support", name: "ธนาชัย วงษ์ใหญ่", email: "thanachai@example.com", phone: "081-234-5678", subject: "แจ้งปัญหาการใช้งานแอพ", body: "ไม่สามารถ login ได้ครับ", status: "new", createdAt: "2026-05-20T09:00:00Z", updatedAt: "2026-05-20T09:00:00Z", repliedAt: null, repliedBy: null, deletedAt: null },
+  { id: "MSG-002", category: "general", name: "สมใจ รักดี", email: "somjai@example.com", phone: null, subject: "สอบถามค่าบริการซ่อม", body: "อยากทราบราคาซ่อมแอร์ครับ", status: "read", createdAt: "2026-05-18T14:00:00Z", updatedAt: "2026-05-19T10:00:00Z", repliedAt: null, repliedBy: null, deletedAt: null },
+  { id: "MSG-003", category: "partnership", name: "กิตติ ธนาวิชย์", email: "kitti@biz.co.th", phone: "089-876-5432", subject: "ต้องการเป็นพาร์ทเนอร์", body: "มีเครือข่ายช่างซ่อมทั่วกรุงเทพ", status: "replied", createdAt: "2026-05-15T11:00:00Z", updatedAt: "2026-05-16T09:00:00Z", repliedAt: "2026-05-16T09:00:00Z", repliedBy: "admin-001", deletedAt: null },
+]
+
 export default function ContactInbox() {
   const [messages, setMessages] = useState<ContactMessageDto[]>([])
   const [loading, setLoading] = useState(true)
@@ -57,7 +64,12 @@ export default function ContactInbox() {
     })
       // defensive: always coerce to array (Carry-over #2 — avoid undefined.length)
       .then((data) => setMessages(Array.isArray(data) ? data : []))
-      .catch((e) => setError(e instanceof Error ? e.message : 'โหลดข้อมูลไม่สำเร็จ'))
+      .catch((e: unknown) => {
+        // API ไม่พร้อม → ใช้ mock fallback
+        console.warn('[mock fallback]', e)
+        setMessages(MOCK_CONTACT_MESSAGES)
+        setError(null)
+      })
       .finally(() => setLoading(false))
   }, [filterCategory, filterStatus])
 

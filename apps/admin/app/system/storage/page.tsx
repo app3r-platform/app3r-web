@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -356,7 +356,7 @@ export default function StoragePage() {
                   <div>
                     <label className="text-xs text-gray-500 mb-1 block">Role</label>
                     <select value={filterRole} onChange={(e) => { setFilterRole(e.target.value); setAuditPage(1); }}
-                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
                       <option value="">ทั้งหมด</option>
                       {["weeeu", "weeer", "weeet", "admin"].map((r) => (
                         <option key={r} value={r}>{r}</option>
@@ -366,7 +366,7 @@ export default function StoragePage() {
                   <div>
                     <label className="text-xs text-gray-500 mb-1 block">Entity Type</label>
                     <select value={filterEntity} onChange={(e) => { setFilterEntity(e.target.value); setAuditPage(1); }}
-                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
                       <option value="">ทั้งหมด</option>
                       {["profile", "kyc", "appliances", "jobs", "disputes", "ads", "scrap"].map((e) => (
                         <option key={e} value={e}>{e}</option>
@@ -376,7 +376,7 @@ export default function StoragePage() {
                   <div>
                     <label className="text-xs text-gray-500 mb-1 block">Visibility</label>
                     <select value={filterVis} onChange={(e) => { setFilterVis(e.target.value); setAuditPage(1); }}
-                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+                      className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
                       <option value="">ทั้งหมด</option>
                       <option value="public">Public</option>
                       <option value="private">Private</option>

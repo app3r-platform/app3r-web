@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -167,13 +167,13 @@ export default function GoldManagementPage() {
                 <div>
                   <label className="text-sm text-gray-500 mb-1 block">จำนวน (Gold)</label>
                   <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)}
-                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-500"
                     placeholder="เช่น 1000" min="1" />
                 </div>
                 <div>
                   <label className="text-sm text-gray-500 mb-1 block">เหตุผล (จำเป็น)</label>
                   <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3}
-                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
+                    className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-500 resize-none"
                     placeholder="ระบุเหตุผลการดำเนินการ..." />
                 </div>
 
@@ -222,7 +222,7 @@ function InfoCard({ label, value, accent }: { label: string; value: string; acce
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className={`text-xl font-bold ${colors[accent] ?? "text-white"}`}>{value}</p>
+      <p className={`text-xl font-bold ${colors[accent] ?? "text-gray-900"}`}>{value}</p>
     </div>
   );
 }

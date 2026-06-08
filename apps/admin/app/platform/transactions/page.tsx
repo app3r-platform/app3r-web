@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -104,7 +104,7 @@ export default function TransactionsPage() {
           <div>
             <label className="text-xs text-gray-500 mb-1 block">ประเภท</label>
             <select value={filterType} onChange={(e) => { setFilterType(e.target.value); setPage(1); }}
-              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
               <option value="">ทั้งหมด</option>
               {Object.keys(TX_TYPE_COLORS).map((k) => (
                 <option key={k} value={k}>{k}</option>
@@ -114,7 +114,7 @@ export default function TransactionsPage() {
           <div>
             <label className="text-xs text-gray-500 mb-1 block">สกุลเงิน</label>
             <select value={filterCurrency} onChange={(e) => { setFilterCurrency(e.target.value); setPage(1); }}
-              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white">
+              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
               <option value="">ทั้งหมด</option>
               <option value="gold">Gold</option>
               <option value="silver">Silver</option>
@@ -123,12 +123,12 @@ export default function TransactionsPage() {
           <div>
             <label className="text-xs text-gray-500 mb-1 block">วันที่เริ่ม</label>
             <input type="date" value={filterDateFrom} onChange={(e) => { setFilterDateFrom(e.target.value); setPage(1); }}
-              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white" />
+              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900" />
           </div>
           <div>
             <label className="text-xs text-gray-500 mb-1 block">วันที่สิ้นสุด</label>
             <input type="date" value={filterDateTo} onChange={(e) => { setFilterDateTo(e.target.value); setPage(1); }}
-              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-white" />
+              className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900" />
           </div>
           <button onClick={() => { setFilterType(""); setFilterCurrency(""); setFilterDateFrom(""); setFilterDateTo(""); setPage(1); }}
             className="px-3 py-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">

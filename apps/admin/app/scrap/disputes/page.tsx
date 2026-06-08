@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * /scrap/disputes — Scrap-specific dispute monitoring
@@ -36,6 +36,15 @@ interface PaginatedDisputes {
   pages: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_SCRAP_DISPUTES: PaginatedDisputes = {
+  items: [
+    { listing_id: 201, title: "เครื่องซักผ้า Samsung 10kg เสียหาย", service_type: "B", poster_id: 1003, poster_name: "WeeeU กิตติ", buyer_id: 3001, buyer_name: "WeeeR ซากดี", seller_id: 1003, seller_name: "WeeeU กิตติ", final_price: 1200, escrow_amount: 1200, transaction_id: 6001, disputed_at: "2026-05-18T09:00:00Z" },
+    { listing_id: 202, title: "แอร์ Mitsubishi 18000BTU ชำรุด", service_type: "B", poster_id: 1004, poster_name: "WeeeU สุภา", buyer_id: 3002, buyer_name: "WeeeR อีโค", seller_id: 1004, seller_name: "WeeeU สุภา", final_price: 2500, escrow_amount: 2500, transaction_id: 6002, disputed_at: "2026-05-21T11:00:00Z" },
+  ],
+  total: 2, page: 1, pages: 1,
+};
+
 export default function ScrapDisputesPage() {
   const router = useRouter();
   const [data, setData] = useState<PaginatedDisputes | null>(null);
@@ -54,8 +63,10 @@ export default function ScrapDisputesPage() {
       const params = new URLSearchParams({ page: String(page), limit: "20", service_type: "B" });
       const result = await api.get<PaginatedDisputes>(`/admin/disputes?${params}`);
       setData(result);
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setData(MOCK_SCRAP_DISPUTES);
     } finally {
       setLoading(false);
     }
@@ -216,11 +227,11 @@ export default function ScrapDisputesPage() {
             </p>
             <div className="flex gap-2">
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg">
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-900 rounded-lg">
                 ← ก่อนหน้า
               </button>
               <button onClick={() => setPage(p => Math.min(data.pages, p + 1))} disabled={page === data.pages}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg">
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-900 rounded-lg">
                 ถัดไป →
               </button>
             </div>
@@ -276,7 +287,7 @@ export default function ScrapDisputesPage() {
             <textarea value={adminNote} onChange={e => setAdminNote(e.target.value)}
               placeholder="เหตุผลการตัดสิน..."
               rows={2}
-              className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 resize-none mb-5"
+              className="w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 resize-none mb-5"
             />
             <div className="flex gap-3">
               <button onClick={() => { setResolveModal(null); setResolution(""); setAdminNote(""); }}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -121,7 +121,7 @@ export default function ManualAdjustPage() {
             <div>
               <label className="text-sm text-gray-500 mb-1 block">User ID *</label>
               <input type="number" value={userId} onChange={(e) => setUserId(e.target.value)}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-gray-900"
                 placeholder="เช่น 12345" />
             </div>
             <div>
@@ -140,7 +140,7 @@ export default function ManualAdjustPage() {
             <div>
               <label className="text-sm text-gray-500 mb-1 block">จำนวน *</label>
               <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)}
-                className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm focus:outline-none text-white ${
+                className={`w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900 ${
                   amount && !amountValid ? "border-red-600" : "border-gray-300 focus:border-blue-500"
                 }`}
                 placeholder={`เช่น 500 (สูงสุด ±${maxLimit.toLocaleString()})`} />
@@ -151,7 +151,7 @@ export default function ManualAdjustPage() {
             <div>
               <label className="text-sm text-gray-500 mb-1 block">เหตุผล * (≥ 10 ตัวอักษร)</label>
               <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3}
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-white resize-none"
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-gray-900 resize-none"
                 placeholder="ระบุเหตุผลการปรับยอด..." />
             </div>
             <button

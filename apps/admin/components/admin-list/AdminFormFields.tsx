@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 // Sub-5b D80 — form fields registry + renderer (react-hook-form)
 import type { ComponentType } from 'react'
 import type { UseFormRegister, FieldErrors, FieldValues } from 'react-hook-form'
@@ -150,7 +150,7 @@ export function AdminFormFields({ module, register, errors }: AdminFormFieldsPro
               <select
                 id={f.name}
                 {...register(f.name)}
-                className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
+                className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-500"
               >
                 <option value="">— เลือก —</option>
                 {f.options?.map((o) => (
@@ -162,7 +162,7 @@ export function AdminFormFields({ module, register, errors }: AdminFormFieldsPro
                 id={f.name}
                 type={f.type === 'number' ? 'number' : f.type === 'email' ? 'email' : 'text'}
                 {...register(f.name)}
-                className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
+                className="bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-500"
               />
             )}
             {err && (

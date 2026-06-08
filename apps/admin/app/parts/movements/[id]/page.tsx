@@ -24,6 +24,13 @@ const REASON_LABEL: Record<string, string> = {
   manual:                 "Manual",
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_MOVEMENT_DETAIL = {
+  id: "MOV-001", partId: "PART-001", type: "STOCK_IN" as const,
+  qty: 3, reason: "purchase" as const,
+  performedBy: "admin", performedAt: "2026-05-10T09:00:00Z", balanceAfter: 5,
+} as unknown as StockMovement;
+
 // refId link routing — best-effort based on reason
 function refIdLink(reason: string, refId: string) {
   if (reason === "use_for_repair") return `/repair/jobs/${refId}`;
@@ -53,7 +60,10 @@ export default function MovementDetailPage() {
       setMovement(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setMovement(MOCK_MOVEMENT_DETAIL);
+      setError(null);
     } finally {
       setLoading(false);
     }

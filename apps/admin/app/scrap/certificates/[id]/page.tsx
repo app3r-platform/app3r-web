@@ -263,7 +263,7 @@ export default function CertificateDetailPage() {
                   onChange={e => setRejectNote(e.target.value)}
                   placeholder="เหตุผลที่ปฏิเสธ..."
                   rows={3}
-                  className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
+                  className="w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
                 />
                 <div className="flex gap-3">
                   <button onClick={handleReject} disabled={actionLoading !== null || !rejectNote.trim()}

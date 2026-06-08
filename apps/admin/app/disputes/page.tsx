@@ -351,6 +351,18 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
 }
 
 /* ─────────────────────────────────────────────
+   Mock Fallback Data — ลบตอน Phase 4 (TD-06)
+───────────────────────────────────────────── */
+const MOCK_DISPUTES_DATA: PaginatedDisputes = {
+  items: [
+    { id: "DSP-001", service_type: "repair", job_id: "JOB-R-001", title: "ช่างซ่อมไม่ส่งคืนอะไหล่", weeeu_name: "WeeeU ธนา", weeer_name: "ร้านซ่อมดี", escrow_amount: 3500, status: "open", opened_at: "2026-05-20T10:00:00Z" },
+    { id: "DSP-002", service_type: "resell", listing_id: "LST-001", title: "สินค้าไม่ตรงกับรูป", buyer_name: "WeeeU สมใจ", seller_name: "ร้านไอที", escrow_amount: 12000, status: "in_review", opened_at: "2026-05-18T09:00:00Z" },
+    { id: "DSP-003", service_type: "scrap", listing_id: "LST-002", title: "น้ำหนักซากไม่ตรง", weeeu_name: "WeeeU กิตติ", weeer_name: "WeeeR ซากดี", escrow_amount: 800, status: "resolved", opened_at: "2026-05-10T08:00:00Z", resolved_at: "2026-05-15T14:00:00Z", fault_party: "platform" },
+  ],
+  total: 3, page: 1, limit: 20,
+};
+
+/* ─────────────────────────────────────────────
    Main Page
 ───────────────────────────────────────────── */
 export default function DisputesPage() {
@@ -378,6 +390,11 @@ export default function DisputesPage() {
       const data = await api.get<PaginatedDisputes>(`/admin/disputes?${params}`);
       setDisputes(data.items);
       setTotal(data.total);
+    } catch (e) {
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setDisputes(MOCK_DISPUTES_DATA.items);
+      setTotal(MOCK_DISPUTES_DATA.total);
     } finally {
       setLoading(false);
     }

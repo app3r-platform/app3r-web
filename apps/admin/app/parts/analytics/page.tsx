@@ -47,7 +47,7 @@ function StatCard({ label, value, sub, warn }: { label: string; value: string; s
   return (
     <div className={`bg-white rounded-xl border p-5 ${warn ? "border-red-900/50" : "border-gray-200"}`}>
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className={`text-2xl font-bold ${warn ? "text-red-600" : "text-white"}`}>{value}</p>
+      <p className={`text-2xl font-bold ${warn ? "text-red-600" : "text-gray-900"}`}>{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
     </div>
   );
@@ -70,6 +70,32 @@ function BarRow({ label, value, total, color }: { label: string; value: number; 
 
 type PeriodKey = "top_moving_7d" | "top_moving_30d" | "top_moving_90d";
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PARTS_ANALYTICS: PartsAnalytics = {
+  total_parts: 12,
+  total_stock_value: 87500,
+  low_stock_count: 2,
+  disassembly_conversion_rate: 0.28,
+  low_stock_items: [
+    { partId: "PART-002", shopId: "SHOP-002", name: "PCB Board Samsung", sku: "PCB-SAM-002", stockQty: 1, reservedQty: 1, unit: "ชิ้น" },
+    { partId: "PART-003", shopId: "SHOP-001", name: "มอเตอร์พัดลม LG", sku: "MTR-LG-003", stockQty: 1, reservedQty: 1, unit: "ตัว" },
+  ],
+  top_moving_7d: [{ partId: "PART-001", name: "คอมเพรสเซอร์ Daikin", sku: "CP-DAI-001", totalQty: 3, movementCount: 2 }],
+  top_moving_30d: [
+    { partId: "PART-001", name: "คอมเพรสเซอร์ Daikin", sku: "CP-DAI-001", totalQty: 8, movementCount: 5 },
+    { partId: "PART-002", name: "PCB Board Samsung", sku: "PCB-SAM-002", totalQty: 4, movementCount: 3 },
+  ],
+  top_moving_90d: [
+    { partId: "PART-001", name: "คอมเพรสเซอร์ Daikin", sku: "CP-DAI-001", totalQty: 18, movementCount: 11 },
+    { partId: "PART-002", name: "PCB Board Samsung", sku: "PCB-SAM-002", totalQty: 9, movementCount: 7 },
+    { partId: "PART-003", name: "มอเตอร์พัดลม LG", sku: "MTR-LG-003", totalQty: 6, movementCount: 4 },
+  ],
+  stock_value_by_shop: [
+    { shopId: "SHOP-001", totalParts: 7, totalValue: 52500 },
+    { shopId: "SHOP-002", totalParts: 5, totalValue: 35000 },
+  ],
+};
+
 export default function PartsAnalyticsPage() {
   const router = useRouter();
   const [data, setData] = useState<PartsAnalytics | null>(null);
@@ -81,7 +107,12 @@ export default function PartsAnalyticsPage() {
     if (!isAuthenticated()) { router.push("/login"); return; }
     api.get<PartsAnalytics>("/admin/parts/analytics/")
       .then(d => { setData(d); setError(null); })
-      .catch(e => setError((e as Error).message))
+      .catch((e: unknown) => {
+        // API ไม่พร้อม → ใช้ mock fallback
+        console.warn("[mock fallback]", e);
+        setData(MOCK_PARTS_ANALYTICS);
+        setError(null);
+      })
       .finally(() => setLoading(false));
   }, [router]);
 

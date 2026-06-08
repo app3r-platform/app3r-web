@@ -44,6 +44,23 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_LISTING_DETAIL: ListingDetail = {
+  id: "LST-001", sellerId: "WEEER-001", sellerType: "WeeeR", listingType: "used_appliance",
+  applianceId: "APP-001", price: 12000,
+  deliveryMethods: ["self_pickup", "shipping"],
+  status: "receiving_offers",
+  expiresAt: "2026-07-01T00:00:00Z",
+  createdAt: "2026-05-01T09:00:00Z",
+  updatedAt: "2026-05-20T10:00:00Z",
+  sellerName: "ร้านซ่อมเอ", applianceName: "Samsung เครื่องซักผ้า 10kg", viewCount: 15,
+} as unknown as ListingDetail;
+
+const MOCK_LISTING_OFFERS: Offer[] = [
+  { id: "OFR-001", listingId: "LST-001", buyerId: "WEEEU-001", buyerType: "WeeeU", offerPrice: 11000, deliveryMethod: "self_pickup", message: "ขอซื้อด้วยครับ", status: "pending", expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-10T11:00:00Z" },
+  { id: "OFR-002", listingId: "LST-001", buyerId: "WEEER-002", buyerType: "WeeeR", offerPrice: 11500, deliveryMethod: "shipping", status: "pending", expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-11T09:00:00Z" },
+] as unknown as Offer[];
+
 export default function ListingDetailPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -62,7 +79,11 @@ export default function ListingDetailPage() {
       setOffers(o);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setListing(MOCK_LISTING_DETAIL);
+      setOffers(MOCK_LISTING_OFFERS);
+      setError(null);
     } finally {
       setLoading(false);
     }
