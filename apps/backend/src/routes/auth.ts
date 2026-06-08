@@ -1,12 +1,13 @@
 /**
  * auth.ts — D83: Auth endpoints (signup/signin/refresh/logout/me)
+ *          + D-1 Sprint: otp-request / otp-verify
  * REST + OpenAPI 3.1 via @hono/zod-openapi (D85)
  */
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { eq } from 'drizzle-orm'
+import { and, eq, gt, isNull } from 'drizzle-orm'
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie'
 import { db } from '../db/client'
-import { users } from '../db/schema'
+import { users, otpCodes } from '../db/schema'
 import { hashPassword, verifyPassword } from '../lib/password'
 import { signAccessToken, verifyAccessToken } from '../lib/jwt'
 import {
@@ -16,6 +17,13 @@ import {
 } from '../lib/refresh-token'
 import { jwtAuth, type AuthVariables } from '../middleware/jwt-auth'
 import { env } from '../env'
+
+// ── OTP helpers ────────────────────────────────────────────────────────────────
+function generateOtpCode(): string {
+  return String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0')
+}
+
+const OTP_TTL_MINUTES = 10
 
 export const authRouter = new OpenAPIHono<{ Variables: AuthVariables }>()
 
@@ -264,4 +272,165 @@ authRouter.openapi(meRoute, async (c) => {
     return c.json({ error: { code: 'USER_NOT_FOUND', message: 'User not found' } }, 401)
   }
   return c.json({ user }, 200)
+})
+
+// ── OTP Request + Verify ───────────────────────────────────────────────────────
+
+const OtpTypeEnum = z.enum(['email_verify', 'phone', '2fa'])
+
+const OtpRequestBodySchema = z
+  .object({
+    email: z.string().email().openapi({ example: 'user@example.com' }),
+    type: OtpTypeEnum.default('email_verify'),
+  })
+  .openapi('OtpRequestBody')
+
+const OtpRequestResponseSchema = z
+  .object({
+    message: z.string(),
+    // In dev/test mode, code is returned for convenience
+    code: z.string().optional().openapi({ description: 'OTP code (dev/test mode only)' }),
+    expiresAt: z.string().datetime().openapi({ description: 'ISO-8601 expiry timestamp' }),
+  })
+  .openapi('OtpRequestResponse')
+
+const OtpVerifyBodySchema = z
+  .object({
+    email: z.string().email().openapi({ example: 'user@example.com' }),
+    code: z.string().length(6).openapi({ example: '123456' }),
+    type: OtpTypeEnum.default('email_verify'),
+  })
+  .openapi('OtpVerifyBody')
+
+const OtpVerifyResponseSchema = z
+  .object({ verified: z.literal(true), message: z.string() })
+  .openapi('OtpVerifyResponse')
+
+// POST /auth/otp-request
+const otpRequestRoute = createRoute({
+  method: 'post',
+  path: '/auth/otp-request',
+  tags: ['Auth'],
+  summary: 'Request a 6-digit OTP (email/phone/2fa)',
+  request: {
+    body: { content: { 'application/json': { schema: OtpRequestBodySchema } } },
+  },
+  responses: {
+    200: {
+      content: { 'application/json': { schema: OtpRequestResponseSchema } },
+      description: 'OTP created — sent to user (code exposed only in dev/test mode)',
+    },
+    404: {
+      content: { 'application/json': { schema: ErrorSchema } },
+      description: 'User not found',
+    },
+  },
+})
+
+authRouter.openapi(otpRequestRoute, async (c) => {
+  const { email, type } = c.req.valid('json')
+
+  const [user] = await db
+    .select({ id: users.id, email: users.email })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+
+  if (!user) {
+    return c.json({ error: { code: 'USER_NOT_FOUND', message: 'User not found' } }, 404)
+  }
+
+  const code = generateOtpCode()
+  const expiresAt = new Date(Date.now() + OTP_TTL_MINUTES * 60 * 1000)
+
+  await db.insert(otpCodes).values({
+    userId: user.id,
+    code,
+    type,
+    expiresAt,
+  })
+
+  // TODO (D-1 future): send code via email/SMS in production
+  // For now, return code in dev/test mode (NODE_ENV !== 'production')
+  const response: { message: string; expiresAt: string; code?: string } = {
+    message: `OTP sent (type: ${type})`,
+    expiresAt: expiresAt.toISOString(),
+  }
+  if (env.NODE_ENV !== 'production') {
+    response.code = code
+  }
+
+  return c.json(response, 200)
+})
+
+// POST /auth/otp-verify
+const otpVerifyRoute = createRoute({
+  method: 'post',
+  path: '/auth/otp-verify',
+  tags: ['Auth'],
+  summary: 'Verify a 6-digit OTP code',
+  request: {
+    body: { content: { 'application/json': { schema: OtpVerifyBodySchema } } },
+  },
+  responses: {
+    200: {
+      content: { 'application/json': { schema: OtpVerifyResponseSchema } },
+      description: 'OTP verified',
+    },
+    400: {
+      content: { 'application/json': { schema: ErrorSchema } },
+      description: 'Invalid, expired, or already-used OTP',
+    },
+    404: {
+      content: { 'application/json': { schema: ErrorSchema } },
+      description: 'User not found',
+    },
+  },
+})
+
+authRouter.openapi(otpVerifyRoute, async (c) => {
+  const { email, code, type } = c.req.valid('json')
+
+  const [user] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+
+  if (!user) {
+    return c.json({ error: { code: 'USER_NOT_FOUND', message: 'User not found' } }, 404)
+  }
+
+  const now = new Date()
+
+  // Find a valid (unexpired + unused) OTP matching user + code + type
+  const [otp] = await db
+    .select()
+    .from(otpCodes)
+    .where(
+      and(
+        eq(otpCodes.userId, user.id),
+        eq(otpCodes.code, code),
+        eq(otpCodes.type, type),
+        gt(otpCodes.expiresAt, now),
+        isNull(otpCodes.usedAt),
+      ),
+    )
+    .orderBy(otpCodes.createdAt)
+    .limit(1)
+
+  if (!otp) {
+    return c.json(
+      { error: { code: 'INVALID_OTP', message: 'OTP is invalid, expired, or already used' } },
+      400,
+    )
+  }
+
+  // Mark as used
+  await db
+    .update(otpCodes)
+    .set({ usedAt: now })
+    .where(eq(otpCodes.id, otp.id))
+
+  return c.json({ verified: true as const, message: 'OTP verified successfully' }, 200)
 })

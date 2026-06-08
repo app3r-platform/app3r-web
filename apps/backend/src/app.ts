@@ -13,6 +13,8 @@ import { logger } from 'hono/logger'
 // D-1 routes
 import { healthRouter } from './routes/health'
 import { authRouter } from './routes/auth'
+import { pointsRouter } from './routes/points'
+import { userProfileRouter } from './routes/user-profile'
 
 // D-2 routes
 import { filesRouter } from './routes/files'
@@ -90,6 +92,8 @@ app.use(
 // ── Routes D-1 ───────────────────────────────────────────────────────────────
 app.route('/health', healthRouter)
 app.route('/api/v1', authRouter)
+app.route('/api/v1', pointsRouter)      // GET /points/balance, POST /points/topup, /points/withdraw
+app.route('/api/v1', userProfileRouter) // GET/PUT /users/me, GET/PUT /shops/me
 
 // ── Routes D-2 ───────────────────────────────────────────────────────────────
 // D87: File Upload (R2 + ClamAV)
