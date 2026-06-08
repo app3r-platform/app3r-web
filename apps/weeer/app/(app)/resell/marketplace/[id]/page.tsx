@@ -10,17 +10,40 @@ import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../../_lib/types";
 
 const DELIVERY_OPTIONS = ["ส่ง Kerry", "ส่ง Flash", "รับเอง", "ส่งเอง (ช่างไปส่ง)"];
 
-// Mock listing (Mockup 2.2)
-const MOCK_LISTING: Listing = {
-  id: "MKT001", sellerId: "U999", sellerType: "WeeeU", listingType: "used_appliance",
-  applianceName: "Sony Bravia XR 55\" A80K", applianceBrand: "Sony", applianceModel: "XR55A80K",
-  price: 16500, deliveryMethods: ["ส่ง Kerry", "รับเอง"],
-  status: "receiving_offers", expiresAt: "2026-06-05", createdAt: "2026-05-20", updatedAt: "2026-05-22",
-  description: "สภาพ 90% ขึ้นตู้ดีมาก มีรีโมท มีกล่อง ขาตั้งครบ ไม่มีรอยขีดข่วน",
-  warranty: { sourceWarranty: 4, additionalWarranty: 0 },
-  terms3: { shipping: "ผู้ซื้อรับผิดชอบ", usedWarranty: "14 วัน", liability: "ผู้ขายรับผิด" },
-  offerCount: 1,
-};
+// RC-E: shared fixture — IDs ตรงกับ marketplace list (r001-r006)
+// ใช้ find(id) ก่อน fallback [0] เพื่อให้ list↔detail fixture ตรงกัน
+const MOCK_RESELL_ITEMS: Listing[] = [
+  {
+    id: "r001", sellerId: "shop-001", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "แอร์ Daikin 12000 BTU มือสอง", applianceBrand: "Daikin", price: 4500,
+    imageUrl: "https://picsum.photos/seed/r001/300/200",
+    deliveryMethods: ["นัดรับ"], status: "receiving_offers",
+    expiresAt: "2026-06-26", createdAt: "2026-05-26", updatedAt: "2026-05-26",
+    description: "แอร์ Daikin 12000 BTU มือสอง สภาพดี อายุ 3 ปี ยังใช้งานได้ดี",
+    terms3: { shipping: "ผู้ซื้อรับผิดชอบ", usedWarranty: "7 วัน", liability: "ผู้ขายรับผิด" },
+    offerCount: 0,
+  },
+  {
+    id: "r002", sellerId: "shop-002", sellerType: "WeeeR", listingType: "used_appliance",
+    applianceName: "ตู้เย็น Samsung 2 ประตู 14 คิว", applianceBrand: "Samsung", price: 3200,
+    imageUrl: "https://picsum.photos/seed/r002/300/200",
+    deliveryMethods: ["นัดรับ", "จัดส่ง"], status: "receiving_offers",
+    expiresAt: "2026-06-26", createdAt: "2026-05-26", updatedAt: "2026-05-26",
+    description: "ตู้เย็น Samsung 14 คิว สภาพ 85% ทำงานปกติ ไม่มีสนิม",
+    terms3: { shipping: "ผู้ขายรับผิดชอบ", usedWarranty: "7 วัน", liability: "ผู้ขายรับผิด" },
+    offerCount: 2,
+  },
+  {
+    id: "MKT001", sellerId: "U999", sellerType: "WeeeU", listingType: "used_appliance",
+    applianceName: "Sony Bravia XR 55\" A80K", applianceBrand: "Sony", applianceModel: "XR55A80K",
+    price: 16500, deliveryMethods: ["ส่ง Kerry", "รับเอง"],
+    status: "receiving_offers", expiresAt: "2026-06-26", createdAt: "2026-05-20", updatedAt: "2026-05-22",
+    description: "สภาพ 90% ขึ้นตู้ดีมาก มีรีโมท มีกล่อง ขาตั้งครบ ไม่มีรอยขีดข่วน",
+    warranty: { sourceWarranty: 4, additionalWarranty: 0 },
+    terms3: { shipping: "ผู้ซื้อรับผิดชอบ", usedWarranty: "14 วัน", liability: "ผู้ขายรับผิด" },
+    offerCount: 1,
+  },
+];
 
 export default function MarketplaceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -40,7 +63,11 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
   useEffect(() => {
     resellApi.marketplaceGet(id)
       .then(setListing)
-      .catch(() => setListing(MOCK_LISTING))  // Mockup fallback
+      .catch(() => {
+        // RC-E: find by id ก่อน fallback [0] ให้ list↔detail fixture ตรงกัน
+        const mock = MOCK_RESELL_ITEMS.find(l => l.id === id) ?? MOCK_RESELL_ITEMS[0];
+        setListing(mock);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 

@@ -17,25 +17,28 @@ const TABS: { value: OfferStatus | ""; label: string }[] = [
   { value: "withdrawn", label: "ถอนแล้ว" },
 ];
 
+// RC-B: relative date helper (expiresAt 7 วันจากตอนนี้ ไม่ใช้ hardcode date)
+function addDays(d: Date, n: number): Date { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+
 // Mock offers data (Mockup 2.2)
 const MOCK_OFFERS: Offer[] = [
   {
     id: "O3", listingId: "L002", buyerId: "S1", buyerType: "WeeeR",
     offerPrice: 8500, deliveryMethod: "รับเอง",
-    status: "selected", expiresAt: "2026-05-26", createdAt: "2026-05-22",
+    status: "selected", expiresAt: addDays(new Date(), 7).toISOString(), createdAt: addDays(new Date(), -3).toISOString(),
     listingTitle: "Dyson V15 Detect", buyerName: "ร้านของฉัน",
     message: "ราคาตามประกาศ",
   },
   {
     id: "O5", listingId: "MKT001", buyerId: "S1", buyerType: "WeeeR",
     offerPrice: 15000, deliveryMethod: "ส่ง Kerry",
-    status: "pending", expiresAt: "2026-05-27", createdAt: "2026-05-23",
+    status: "pending", expiresAt: addDays(new Date(), 7).toISOString(), createdAt: addDays(new Date(), -2).toISOString(),
     listingTitle: "Sony Bravia XR 55\"", buyerName: "ร้านของฉัน",
   },
   {
     id: "O6", listingId: "MKT002", buyerId: "S1", buyerType: "WeeeR",
     offerPrice: 5200, deliveryMethod: "รับเอง",
-    status: "rejected", expiresAt: "2026-05-24", createdAt: "2026-05-20",
+    status: "rejected", expiresAt: addDays(new Date(), -1).toISOString(), createdAt: addDays(new Date(), -6).toISOString(),
     listingTitle: "iPad Pro 11\" M2", buyerName: "ร้านของฉัน",
   },
 ];

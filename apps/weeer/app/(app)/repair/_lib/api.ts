@@ -1,5 +1,15 @@
 import type { RepairJob, RepairAnnouncement, RepairDashboard, WalkInJob, WalkInQueue, PickupJob, PickupQueue, WeeeTStaff, ParcelJob, ParcelQueue } from "./types";
 import type { ScrapJob } from "../../scrap/_lib/types";
+// RC-1: Mock fallback data (dev/offline)
+import {
+  MOCK_REPAIR_DASHBOARD,
+  MOCK_REPAIR_JOBS,
+  MOCK_REPAIR_ANNOUNCEMENTS,
+  MOCK_WALKIN_QUEUE,
+  MOCK_PICKUP_QUEUE,
+  MOCK_WEEET_STAFF,
+  MOCK_PARCEL_QUEUE,
+} from "./mock";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -28,16 +38,21 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const repairApi = {
-  getDashboard: () =>
-    apiFetch<RepairDashboard>("/repair/dashboard"),
-
-  getJobs: (params?: { status?: string }) => {
-    const qs = new URLSearchParams({ service_type: "on_site", ...(params ?? {}) });
-    return apiFetch<RepairJob[]>(`/repair/jobs?${qs}`);
+  getDashboard: async () => {
+    try { return await apiFetch<RepairDashboard>("/repair/dashboard"); }
+    catch (err) { console.warn("[mock fallback] repair.getDashboard", err); return MOCK_REPAIR_DASHBOARD; }
   },
 
-  getJob: (id: string) =>
-    apiFetch<RepairJob>(`/repair/jobs/${id}`),
+  getJobs: async (params?: { status?: string }) => {
+    const qs = new URLSearchParams({ service_type: "on_site", ...(params ?? {}) });
+    try { return await apiFetch<RepairJob[]>(`/repair/jobs?${qs}`); }
+    catch (err) { console.warn("[mock fallback] repair.getJobs", err); return MOCK_REPAIR_JOBS; }
+  },
+
+  getJob: async (id: string) => {
+    try { return await apiFetch<RepairJob>(`/repair/jobs/${id}`); }
+    catch (err) { console.warn("[mock fallback] repair.getJob", err); return MOCK_REPAIR_JOBS.find(j => j.id === id) ?? MOCK_REPAIR_JOBS[0]; }
+  },
 
   approveProposal: (id: string, body: {
     action: "approve" | "reject" | "request_info";
@@ -56,13 +71,16 @@ export const repairApi = {
       body: JSON.stringify(body),
     }),
 
-  getAnnouncements: () => {
+  getAnnouncements: async () => {
     const qs = new URLSearchParams({ service_type: "on_site", unmatched: "true" });
-    return apiFetch<RepairAnnouncement[]>(`/repair/announcements?${qs}`);
+    try { return await apiFetch<RepairAnnouncement[]>(`/repair/announcements?${qs}`); }
+    catch (err) { console.warn("[mock fallback] repair.getAnnouncements", err); return MOCK_REPAIR_ANNOUNCEMENTS; }
   },
 
-  getAnnouncement: (id: string) =>
-    apiFetch<RepairAnnouncement>(`/repair/announcements/${id}`),
+  getAnnouncement: async (id: string) => {
+    try { return await apiFetch<RepairAnnouncement>(`/repair/announcements/${id}`); }
+    catch (err) { console.warn("[mock fallback] repair.getAnnouncement", err); return MOCK_REPAIR_ANNOUNCEMENTS.find(a => a.id === id) ?? MOCK_REPAIR_ANNOUNCEMENTS[0]; }
+  },
 
   submitOffer: (announcementId: string, body: {
     price: number;
@@ -81,11 +99,15 @@ export const repairApi = {
 
   // ── Walk-in ────────────────────────────────────────────────────────────────
 
-  getWalkInQueue: () =>
-    apiFetch<WalkInQueue>("/repair/walk-in/queue"),
+  getWalkInQueue: async () => {
+    try { return await apiFetch<WalkInQueue>("/repair/walk-in/queue"); }
+    catch (err) { console.warn("[mock fallback] repair.getWalkInQueue", err); return MOCK_WALKIN_QUEUE; }
+  },
 
-  getWalkIn: (id: string) =>
-    apiFetch<WalkInJob>(`/repair/walk-in/${id}`),
+  getWalkIn: async (id: string) => {
+    try { return await apiFetch<WalkInJob>(`/repair/walk-in/${id}`); }
+    catch (err) { console.warn("[mock fallback] repair.getWalkIn", err); return MOCK_WALKIN_QUEUE.items.find(w => w.id === id) ?? MOCK_WALKIN_QUEUE.items[0]; }
+  },
 
   receiveWalkIn: (id: string, body: {
     customer_name: string;
@@ -115,8 +137,10 @@ export const repairApi = {
   readyWalkIn: (id: string) =>
     apiFetch<WalkInJob>(`/repair/walk-in/${id}/ready`, { method: "POST", body: JSON.stringify({}) }),
 
-  getStorageFee: (id: string) =>
-    apiFetch<{ fee_accrued: number; days: number; rate: number }>(`/repair/walk-in/${id}/storage-fee`),
+  getStorageFee: async (id: string) => {
+    try { return await apiFetch<{ fee_accrued: number; days: number; rate: number }>(`/repair/walk-in/${id}/storage-fee`); }
+    catch (err) { console.warn("[mock fallback] repair.getStorageFee", err); return { fee_accrued: 0, days: 0, rate: 5 }; }
+  },
 
   abandonWalkIn: (id: string, body: {
     grace_days: 7 | 14 | 30;
@@ -130,14 +154,20 @@ export const repairApi = {
 
   // ── Pickup ─────────────────────────────────────────────────────────────────
 
-  getPickupQueue: () =>
-    apiFetch<PickupQueue>("/repair/shops/me/pickup-queue"),
+  getPickupQueue: async () => {
+    try { return await apiFetch<PickupQueue>("/repair/shops/me/pickup-queue"); }
+    catch (err) { console.warn("[mock fallback] repair.getPickupQueue", err); return MOCK_PICKUP_QUEUE; }
+  },
 
-  getPickupJob: (id: string) =>
-    apiFetch<PickupJob>(`/repair/jobs/${id}`),
+  getPickupJob: async (id: string) => {
+    try { return await apiFetch<PickupJob>(`/repair/jobs/${id}`); }
+    catch (err) { console.warn("[mock fallback] repair.getPickupJob", err); return MOCK_PICKUP_QUEUE.items.find(p => p.id === id) ?? MOCK_PICKUP_QUEUE.items[0]; }
+  },
 
-  getAvailableStaff: () =>
-    apiFetch<WeeeTStaff[]>("/repair/shops/me/available-staff"),
+  getAvailableStaff: async () => {
+    try { return await apiFetch<WeeeTStaff[]>("/repair/shops/me/available-staff"); }
+    catch (err) { console.warn("[mock fallback] repair.getAvailableStaff", err); return MOCK_WEEET_STAFF; }
+  },
 
   dispatchPickup: (id: string, body: {
     tech_id: string;
@@ -148,10 +178,14 @@ export const repairApi = {
       body: JSON.stringify(body),
     }),
 
-  trackPickup: (id: string) =>
-    apiFetch<{ job: PickupJob; timeline: { status: string; timestamp: string; note?: string }[] }>(
-      `/repair/jobs/${id}/track`
-    ),
+  trackPickup: async (id: string) => {
+    try { return await apiFetch<{ job: PickupJob; timeline: { status: string; timestamp: string; note?: string }[] }>(`/repair/jobs/${id}/track`); }
+    catch (err) {
+      console.warn("[mock fallback] repair.trackPickup", err);
+      const job = MOCK_PICKUP_QUEUE.items.find(p => p.id === id) ?? MOCK_PICKUP_QUEUE.items[0];
+      return { job, timeline: [{ status: job.status, timestamp: job.created_at, note: "mock fallback" }] };
+    }
+  },
 
   intakePickup: (id: string, body: {
     condition_notes: string;
@@ -183,11 +217,15 @@ export const repairApi = {
 
   // ── Parcel ─────────────────────────────────────────────────────────────────
 
-  getParcelQueue: () =>
-    apiFetch<ParcelQueue>("/repair/shops/me/parcel-queue"),
+  getParcelQueue: async () => {
+    try { return await apiFetch<ParcelQueue>("/repair/shops/me/parcel-queue"); }
+    catch (err) { console.warn("[mock fallback] repair.getParcelQueue", err); return MOCK_PARCEL_QUEUE; }
+  },
 
-  getParcelJob: (id: string) =>
-    apiFetch<ParcelJob>(`/repair/jobs/${id}`),
+  getParcelJob: async (id: string) => {
+    try { return await apiFetch<ParcelJob>(`/repair/jobs/${id}`); }
+    catch (err) { console.warn("[mock fallback] repair.getParcelJob", err); return MOCK_PARCEL_QUEUE.items.find(p => p.id === id) ?? MOCK_PARCEL_QUEUE.items[0]; }
+  },
 
   confirmShippingDetails: (id: string, body: {
     shop_address: string;

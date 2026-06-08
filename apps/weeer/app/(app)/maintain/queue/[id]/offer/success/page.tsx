@@ -59,12 +59,12 @@ export default function MaintainOfferSuccessPage({
       </div>
 
       {/* CTA */}
-      <MockAnnoNav to="R-01" label="ดูคิวงาน" style={{ display: "contents" }}>
+      <MockAnnoNav to="R-01" label="ดูงานบำรุง" style={{ display: "contents" }}>
         <button
-          onClick={() => router.push("/maintain/queue")}
+          onClick={() => router.push("/maintain/jobs")}
           className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
         >
-          ดูคิวงาน
+          ดูงานบำรุง
         </button>
       </MockAnnoNav>
     </div>
