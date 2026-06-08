@@ -4,7 +4,9 @@
   "private": true,
   "exports": {
     "./dal": "./dal/index.ts",
-    "./dal/weeeu": "./dal/weeeu.types.ts"
+    "./dal/weeeu": "./dal/weeeu.types.ts",
+    "./src/api-client": "./src/api-client.ts",
+    "./src/mock-fixtures": "./src/mock-fixtures/index.ts"
   },
   "devDependencies": {
     "typescript": "^5"
