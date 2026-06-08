@@ -40,7 +40,7 @@ export default function PartsListPage() {
   return (
     <div className="space-y-5">
       <MockAnnoOrigin from="R-51" />
-      <MockAnnoXApp entries={[{ app: "WeeeU", screen: "Parts Browse", url: "http://localhost:3000/parts" }]} />
+      <MockAnnoXApp entries={[{ app: "WeeeU", screen: "Parts Browse", url: "http://localhost:3002/parts" }]} />
       {/* B2B Marketplace shortcut (C-6) */}
       <Link href="/parts/marketplace"
         className="flex items-center justify-between bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-4 py-3 hover:bg-[#FFE0D6] transition-colors">

@@ -297,7 +297,8 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
       {showDisputeModal && (
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">เปิด Dispute (R8/R10)</h2>
+            {/* §7 เคส R8/R10 */}
+            <h2 className="text-base font-bold text-gray-900">เปิด ข้อพิพาท (Dispute)</h2>
             <textarea value={disputeNote} onChange={e => setDisputeNote(e.target.value)} rows={3}
               placeholder="อธิบายปัญหา + แนบ URL หลักฐาน (คลิปตอนรับ/รูปสินค้า)…"
               className="w-full border border-red-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-300 resize-none" />
@@ -321,7 +322,8 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
       {showCancelModal && (
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">ขอยกเลิกร่วม (R12)</h2>
+            {/* §7 เคส R12 */}
+            <h2 className="text-base font-bold text-gray-900">ขอยกเลิกร่วม</h2>
             <p className="text-sm text-gray-600">ส่งคำขอให้อีกฝ่ายยืนยัน — ถ้ายืนยันทั้งคู่ ธุรกรรมยกเลิก · คืนพักเงินกลาง (Escrow) ตามข้อตกลง</p>
             <div className="flex gap-3">
               <button onClick={() => setShowCancelModal(false)}

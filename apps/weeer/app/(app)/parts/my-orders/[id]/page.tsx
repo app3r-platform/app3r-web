@@ -382,7 +382,8 @@ export default function MyOrderDetailPage({
       {showReceiveModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
-            <h2 className="font-bold text-gray-900">✅ ยืนยันรับของ (P7)</h2>
+            {/* §7 เคส P7 */}
+            <h2 className="font-bold text-gray-900">✅ ยืนยันรับของ</h2>
             <p className="text-sm text-gray-600">
               กรุณาตรวจสอบสินค้าก่อนยืนยัน — ติ๊กครบทุกข้อ:
             </p>

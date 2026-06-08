@@ -41,7 +41,8 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
         <button onClick={() => router.back()} className="text-gray-500 text-sm">
           ← กลับ {/* §6 → R-29 */}
         </button>
-        <h1 className="text-lg font-bold text-gray-900">รายละเอียดสินค้า (P2)</h1>
+        {/* §7 เคส P2 */}
+        <h1 className="text-lg font-bold text-gray-900">รายละเอียดสินค้า</h1>
       </div>
 
       {/* Photo */}

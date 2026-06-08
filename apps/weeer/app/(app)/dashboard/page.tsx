@@ -187,9 +187,9 @@ export default function DashboardPage() {
       {/* §8 Cross-app panel */}
       <MockAnnoXApp
         entries={[
-          { app: "WeeeU",  screen: "U-01 แดชบอร์ดผู้ใช้",      url: "http://localhost:3000/dashboard" },
-          { app: "WeeeT",  screen: "T-01 แดชบอร์ดช่าง",         url: "http://localhost:3002/dashboard" },
-          { app: "Admin",  screen: "A-01 Admin Dashboard",       url: "http://localhost:3003/dashboard" },
+          { app: "WeeeU",  screen: "U-01 แดชบอร์ดผู้ใช้",      url: "http://localhost:3002/dashboard" },
+          { app: "WeeeT",  screen: "T-01 แดชบอร์ดช่าง",         url: "http://localhost:3003/dashboard" },
+          { app: "Admin",  screen: "A-01 Admin Dashboard",       url: "http://localhost:3000/dashboard" },
         ]}
       />
     </div>
