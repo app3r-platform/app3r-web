@@ -8,8 +8,9 @@ export default function DashboardPage() {
   const { auth } = useAuth();
   const tech = auth.technician;
 
+  const today = new Date().toISOString().slice(0, 10);
   const completedToday = mockJobs.filter(
-    (j) => j.scheduledAt.startsWith("2026-05-02") && j.status === "completed"
+    (j) => j.scheduledAt.startsWith(today) && j.status === "completed"
   ).length;
 
   return (

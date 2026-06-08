@@ -53,7 +53,8 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/maintain/[id]/depart",        num: "T-43" },
   // maintain detail base T-46 (Gen 109 ruling · ยังไม่มี /maintain/[id] route → ฐานใหม่ 1 ตัว)
   // หมายเหตุ: path มี segment "mockup" = dev artifact → LOG normalize เฟส 4 (ไม่แก้ route รอบนี้)
-  { pattern: "/maintain/[id]/mockup/m7-noshow", num: "T-46", label: "ไม่มาตามนัด" },
+  { pattern: "/maintain/[id]/mockup/m5-convert-repair", num: "T-46", label: "D-Maintain-2" },
+  { pattern: "/maintain/[id]/mockup/m7-noshow",         num: "T-46", label: "ไม่มาตามนัด" },
   // ── Service listings ─────────────────────────────────────────────────────────
   { pattern: "/listings/[id]",               num: "T-16" },
   { pattern: "/listings",                    num: "T-17" },

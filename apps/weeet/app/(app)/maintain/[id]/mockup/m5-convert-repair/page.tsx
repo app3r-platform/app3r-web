@@ -149,7 +149,7 @@ export default function M5ConvertRepairWeeeTMockupPage({
         {stage === "damage_form" && (
           <div className="space-y-4">
             <div className="bg-red-900/20 border border-red-700/40 rounded-xl p-3 text-xs text-red-300">
-              <p className="font-semibold">📋 แจ้งพบความเสียหาย (D-Maintain-2)</p>
+              <p className="font-semibold">📋 แจ้งพบความเสียหาย</p>
               <p className="text-gray-400 mt-1">เลือกประเภทเสียหาย + รายละเอียด → ส่งให้ WeeeU ตัดสินใจ</p>
             </div>
 
