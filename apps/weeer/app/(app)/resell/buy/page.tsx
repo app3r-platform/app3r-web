@@ -122,7 +122,8 @@ export default function ResellBuyPage() {
       <div className="flex items-center gap-3">
         <Link href="/resell" className="text-gray-400 hover:text-gray-600">←</Link>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">📥 รับซื้อมือสอง (B6)</h1>
+          {/* §7 เคส B6 */}
+          <h1 className="text-xl font-bold text-gray-900">📥 รับซื้อมือสอง</h1>
           <p className="text-xs text-gray-500 mt-0.5">ตีราคารับซื้อ + สแกน Barcode เพิ่มเข้าสต๊อก</p>
         </div>
       </div>

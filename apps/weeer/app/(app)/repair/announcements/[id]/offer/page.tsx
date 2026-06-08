@@ -203,8 +203,8 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
       {/* §8 Cross-app */}
       <MockAnnoXApp
         entries={[
-          { app: "WeeeU", screen: "U-04 ดูข้อเสนอซ่อม", url: "http://localhost:3000/repair/c001/offers" },
-          { app: "WeeeT", screen: "T-03 รอรับมอบหมาย",  url: "http://localhost:3002/jobs/pending" },
+          { app: "WeeeU", screen: "U-04 ดูข้อเสนอซ่อม", url: "http://localhost:3002/repair/c001/offers" },
+          { app: "WeeeT", screen: "T-03 รอรับมอบหมาย",  url: "http://localhost:3003/jobs/pending" },
         ]}
       />
     </div>

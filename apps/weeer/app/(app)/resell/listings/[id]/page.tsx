@@ -400,7 +400,8 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
       {showR5Confirm && (
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">ยืนยันถอนการเลือก (R5)</h2>
+            {/* §7 เคส R5 */}
+            <h2 className="text-base font-bold text-gray-900">ยืนยันถอนการเลือก</h2>
             <p className="text-sm text-gray-600">ถอนการเลือก — ประกาศจะกลับสู่ "รับข้อเสนอ" และผู้ซื้อรายนี้จะไม่ถูกเลือกอีก</p>
             <div className="flex gap-3">
               <button onClick={() => setShowR5Confirm(false)}

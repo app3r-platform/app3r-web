@@ -60,7 +60,7 @@ export default function ScrapAnnouncementOfferPage({
       <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 px-4 max-w-sm mx-auto text-center">
         <MockAnnoXApp
           entries={[
-            { app: "WeeeU", screen: "U-15 ดูข้อเสนอรับซาก", url: "http://localhost:3000/scrap/offers" },
+            { app: "WeeeU", screen: "U-15 ดูข้อเสนอรับซาก", url: "http://localhost:3002/scrap/offers" },
           ]}
         />
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
@@ -262,7 +262,7 @@ export default function ScrapAnnouncementOfferPage({
       {/* §8 Cross-app */}
       <MockAnnoXApp
         entries={[
-          { app: "WeeeU", screen: "U-14 ดูข้อเสนอซาก", url: "http://localhost:3000/scrap/s001/offers" },
+          { app: "WeeeU", screen: "U-14 ดูข้อเสนอซาก", url: "http://localhost:3002/scrap/s001/offers" },
         ]}
       />
     </div>
