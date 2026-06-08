@@ -101,8 +101,9 @@ export default function WalletPage() {
             <p className="text-xs opacity-70">1 พอยต์ทอง = 1 บาท · ไม่หมดอายุ</p>
           </div>
           <div className="flex gap-2">
+            {/* RC-E: canonical deposit flow → /wallet/deposit */}
             <Link
-              href="#gold-topup"
+              href="/wallet/deposit"
               className="flex-1 text-center bg-white/20 hover:bg-white/30 text-white text-sm font-semibold py-2.5 rounded-xl transition-all"
             >
               + เติมพอยต์ทอง

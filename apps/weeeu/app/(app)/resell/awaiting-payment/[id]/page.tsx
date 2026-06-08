@@ -3,7 +3,7 @@
 /**
  * Awaiting Payment — WeeeU
  * Screen ID: U-RES-PAY  ·  Path: /resell/awaiting-payment/[id]
- * Covers: R4 — buyer Gold ไม่พอ / รอเติม ≤ 24ชม. · countdown bar · auto-cancel เมื่อ = 0
+ * Covers: R4 — buyer พอยต์ทอง ไม่พอ / รอเติม ≤ 24ชม. · countdown bar · auto-cancel เมื่อ = 0
  *         R4 seller — แสดง state "รอการชำระเงินจากผู้ซื้อ"
  * mock-anno: ลบ class mock-anno* ก่อน production (grep mock-anno)
  */
@@ -23,8 +23,8 @@ const MOCK_ORDER = {
   agreed_price: 4300,
   // 18 hours from now — เปลี่ยน offset เพื่อทดสอบ (ใส่ 0 เพื่อ test expired state)
   payment_deadline: new Date(Date.now() + 18 * 60 * 60 * 1000).toISOString(),
-  gold_balance: 3000,       // ยอด Gold ปัจจุบันของ buyer
-  required_gold: 4300,      // ยอด Gold ที่ต้องการ
+  gold_balance: 3000,       // ยอด พอยต์ทอง ปัจจุบันของ buyer
+  required_gold: 4300,      // ยอด พอยต์ทอง ที่ต้องการ
   is_buyer: true,           // false = seller view
 };
 
@@ -91,7 +91,7 @@ export default function AwaitingPaymentPage() {
           </p>
           <p className="font-semibold text-gray-900">{order.listing_title}</p>
           <p className="text-xl font-bold text-weeeu-primary">
-            {order.agreed_price.toLocaleString()} ฿
+            {order.agreed_price.toLocaleString()} พอยต์ทอง
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function AwaitingPaymentPage() {
           {expired && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-3">
               <p className="text-sm text-red-700 font-medium">
-                ⌛ หมดเวลาแล้ว — ระบบจะปลดล็อคข้อเสนืออื่นอัตโนมัติ
+                ⌛ หมดเวลาแล้ว — ระบบจะปลดล็อคข้อเสนออื่นอัตโนมัติ
               </p>
             </div>
           )}
@@ -136,7 +136,7 @@ export default function AwaitingPaymentPage() {
           <p className="text-5xl">✅</p>
           <p className="font-bold text-green-800 text-lg">ชำระเงินสำเร็จ!</p>
           <p className="text-sm text-green-600">
-            Gold {order.agreed_price.toLocaleString()} ถูกล็อคในระบบพักเงินกลาง (Escrow) <EscrowInfoIcon className="inline-flex" /> แล้ว
+            พอยต์ทอง {order.agreed_price.toLocaleString()} ถูกล็อคในระบบพักเงินกลาง (Escrow) <EscrowInfoIcon className="inline-flex" /> แล้ว
             <br />
             รอผู้ขายจัดส่งสินค้า
           </p>
@@ -171,10 +171,10 @@ export default function AwaitingPaymentPage() {
         <p className="font-semibold text-gray-900">{order.listing_title}</p>
         <p className="text-sm text-gray-600">ผู้ขาย: {order.seller_name}</p>
         <p className="text-2xl font-bold text-weeeu-primary">
-          {order.agreed_price.toLocaleString()} Gold
+          {order.agreed_price.toLocaleString()} พอยต์ทอง
         </p>
         <p className="text-xs text-gray-400">
-          Gold จะถูกล็อคในระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /> จนกว่าคุณยืนยันรับสินค้า
+          พอยต์ทอง จะถูกล็อคในระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /> จนกว่าคุณยืนยันรับสินค้า
         </p>
       </div>
 
@@ -230,45 +230,45 @@ export default function AwaitingPaymentPage() {
           <p className="text-sm text-gray-500">
             ข้อเสนอของคุณถูกยกเลิกอัตโนมัติ
             <br />
-            ผู้ขายสามารถเลือกข้อเสนืออื่นได้แล้ว
+            ผู้ขายสามารถเลือกข้อเสนออื่นได้แล้ว
           </p>
           <div className="pt-2">
             <Link
               href="/offers"
               className="inline-block border border-gray-300 text-gray-600 font-medium px-5 py-2 rounded-xl text-sm hover:bg-gray-50"
             >
-              ← ดูข้อเสนืออื่น
+              ← ดูข้อเสนออื่น
             </Link>
           </div>
         </div>
       )}
 
-      {/* Gold balance */}
+      {/* พอยต์ทอง balance */}
       {!expired && (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            ยอด Gold ของคุณ
+            ยอด พอยต์ทอง ของคุณ
           </p>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">ยอดปัจจุบัน</span>
               <span className="font-bold text-yellow-600">
-                🪙 {order.gold_balance.toLocaleString()} Gold
+                🪙 {order.gold_balance.toLocaleString()} พอยต์ทอง
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">ต้องใช้ระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></span>
               <span className="font-bold text-weeeu-primary">
-                {order.required_gold.toLocaleString()} Gold
+                {order.required_gold.toLocaleString()} พอยต์ทอง
               </span>
             </div>
             {shortfall > 0 && (
               <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 flex items-center justify-between">
                 <p className="text-sm text-orange-700 font-medium">
-                  Gold ไม่พอ — ขาดอีก
+                  พอยต์ทอง ไม่พอ — ขาดอีก
                 </p>
                 <p className="text-sm font-bold text-orange-700">
-                  {shortfall.toLocaleString()} Gold
+                  {shortfall.toLocaleString()} พอยต์ทอง
                 </p>
               </div>
             )}
@@ -285,7 +285,7 @@ export default function AwaitingPaymentPage() {
                 href="/wallet/deposit"
                 className="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
               >
-                🪙 เติม Gold ก่อนชำระ (ขาด {shortfall.toLocaleString()})
+                🪙 เติม พอยต์ทอง ก่อนชำระ (ขาด {shortfall.toLocaleString()})
               </Link>
             </>
           ) : (
@@ -299,7 +299,7 @@ export default function AwaitingPaymentPage() {
                   <span className="animate-spin inline-block">⟳</span> กำลังชำระ...
                 </>
               ) : (
-                <>✅ ชำระ {order.agreed_price.toLocaleString()} Gold เข้าระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></>
+                <>✅ ชำระ {order.agreed_price.toLocaleString()} พอยต์ทอง เข้าระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></>
               )}
             </button>
           )}
@@ -307,7 +307,7 @@ export default function AwaitingPaymentPage() {
             href="/offers"
             className="w-full block text-center border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors"
           >
-            กลับไปข้อเสนืออื่น
+            กลับไปข้อเสนออื่น
           </Link>
         </div>
       )}

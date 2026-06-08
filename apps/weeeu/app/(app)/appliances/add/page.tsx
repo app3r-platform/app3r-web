@@ -16,6 +16,17 @@ const categories = [
   { id: "other",  icon: "🔌", label: "อื่นๆ" },
 ];
 
+// U-34b — brand dropdown by category (3.1 brand select)
+const BRANDS_BY_CATEGORY: Record<string, string[]> = {
+  ac:     ["Daikin", "Mitsubishi", "Carrier", "Panasonic", "LG", "Samsung", "Sharp", "Toshiba", "อื่นๆ"],
+  fridge: ["Samsung", "LG", "Sharp", "Mitsubishi", "Hitachi", "Haier", "Panasonic", "อื่นๆ"],
+  washer: ["LG", "Samsung", "Panasonic", "Sharp", "Haier", "Whirlpool", "Toshiba", "อื่นๆ"],
+  tv:     ["Samsung", "LG", "Sony", "Sharp", "Hisense", "TCL", "Philips", "อื่นๆ"],
+  micro:  ["Samsung", "Panasonic", "Sharp", "LG", "Toshiba", "อื่นๆ"],
+  water:  ["Ariston", "Rheem", "AO Smith", "Panasonic", "อื่นๆ"],
+  other:  ["อื่นๆ"],
+};
+
 export default function AddAppliancePage() {
   const router = useRouter();
 
@@ -103,13 +114,28 @@ export default function AddAppliancePage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">ยี่ห้อ</label>
-            <input
-              type="text"
+            {/* U-34b: brand dropdown ตามประเภทที่เลือก (3.1) */}
+            <select
               value={brand}
               onChange={e => setBrand(e.target.value)}
-              placeholder="เช่น Mitsubishi, LG"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
-            />
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm bg-white"
+            >
+              <option value="">— เลือกยี่ห้อ —</option>
+              {(BRANDS_BY_CATEGORY[selectedCat] ?? BRANDS_BY_CATEGORY.other).map(b => (
+                <option key={b} value={b === "อื่นๆ" ? "__other__" : b}>{b}</option>
+              ))}
+            </select>
+            {/* แสดง text input เมื่อเลือก "อื่นๆ" */}
+            {brand === "__other__" && (
+              <input
+                type="text"
+                value=""
+                onChange={e => setBrand(e.target.value)}
+                placeholder="ระบุยี่ห้อ..."
+                autoFocus
+                className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-weeeu-primary text-sm"
+              />
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">รุ่น</label>

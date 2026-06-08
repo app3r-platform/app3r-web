@@ -56,6 +56,9 @@ type Tab = (typeof BOTTOM_TABS)[number];
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  // ── Suspended: ซ่อน nav bar เพื่อป้องกัน bypass (U-65) ──────────────────────
+  const isSuspended = pathname.startsWith("/suspended");
+
   function isActive(tab: Tab): boolean {
     return tab.matchPrefixes.some(prefix => pathname.startsWith(prefix));
   }
@@ -137,8 +140,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {/* ── Bottom navigation bar (5 แท็บ) ─────────────────────────────────── */}
-      <nav
+      {/* ── Bottom navigation bar (5 แท็บ) — ซ่อนเมื่อ suspended ─────────────── */}
+      {!isSuspended && <nav
         className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-100"
         style={{ boxShadow: "0 -1px 8px rgba(0,0,0,0.06)" }}
       >
@@ -175,7 +178,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             );
           })}
         </div>
-      </nav>
+      </nav>}
 
       {/* ── Screen ID Badge (dev only) ─────────────────────────────────────── */}
       <ScreenBadge />

@@ -49,6 +49,7 @@ export default function SignupOtpPage() {
     await new Promise((r) => setTimeout(r, 600));
     setLoading(false);
     setPhoneSubmitted(true);
+    setOtp("123456"); // U-63 — OTP prefill สำหรับ demo/mockup
     setSecondsLeft(OTP_DURATION);
     setResendCooldown(RESEND_COOLDOWN);
     setSendCount((c) => c + 1);
