@@ -34,7 +34,7 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/jobs/[id]/depart",            num: "T-34" },
   { pattern: "/jobs/[id]/photo",             num: "T-35" },
   { pattern: "/jobs/[id]/parts",             num: "T-36" },
-  { pattern: "/jobs/[id]/progress",          num: "T-37" },
+  { pattern: "/jobs/[id]/progress",          num: "T-37", label: "ติดตามงาน" },
   { pattern: "/jobs/[id]/post-repair",       num: "T-38" },
   // delivery sub-flow (Gen 109 ruling: ฐานใหม่ T-44 + ป้ายสถานะ · ไม่มี base route)
   { pattern: "/jobs/[id]/delivery/en-route", num: "T-44", label: "กำลังส่ง" },
