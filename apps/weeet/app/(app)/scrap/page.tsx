@@ -81,21 +81,21 @@ const MOCK_JOBS: ScrapPickupJob[] = [
 ];
 
 const STATUS_META: Record<ScrapPickupStatus, { label: string; color: string; emoji: string }> = {
-  assigned:          { label: "รับงานใหม่",      color: "bg-blue-100 text-blue-700",   emoji: "📋" },
-  traveling:         { label: "กำลังเดินทาง",   color: "bg-amber-100 text-amber-700", emoji: "🚗" },
-  arrived:           { label: "ถึงแล้ว",         color: "bg-teal-100 text-teal-700",   emoji: "📍" },
-  verifying:         { label: "กำลังตรวจซาก",   color: "bg-yellow-100 text-yellow-700", emoji: "🔍" },
-  mismatch_reported: { label: "รายงานไม่ตรง",   color: "bg-orange-100 text-orange-700", emoji: "⚠️" },
-  pickup_confirmed:  { label: "รับซากแล้ว",     color: "bg-green-100 text-green-700",  emoji: "✅" },
-  no_show:           { label: "ไม่พบลูกค้า",    color: "bg-red-100 text-red-600",      emoji: "🚫" },
-  completed:         { label: "เสร็จสิ้น",       color: "bg-gray-100 text-gray-600",    emoji: "🏁" },
-  cancelled:         { label: "ยกเลิก",          color: "bg-gray-100 text-gray-500",    emoji: "❌" },
+  assigned:          { label: "รับงานใหม่",      color: "bg-blue-900/40 text-blue-300",   emoji: "📋" },
+  traveling:         { label: "กำลังเดินทาง",   color: "bg-amber-900/40 text-amber-300", emoji: "🚗" },
+  arrived:           { label: "ถึงแล้ว",         color: "bg-teal-900/40 text-teal-300",   emoji: "📍" },
+  verifying:         { label: "กำลังตรวจซาก",   color: "bg-yellow-900/40 text-yellow-300", emoji: "🔍" },
+  mismatch_reported: { label: "รายงานไม่ตรง",   color: "bg-orange-900/40 text-orange-300", emoji: "⚠️" },
+  pickup_confirmed:  { label: "รับซากแล้ว",     color: "bg-green-900/40 text-green-300",  emoji: "✅" },
+  no_show:           { label: "ไม่พบลูกค้า",    color: "bg-red-900/40 text-red-300",      emoji: "🚫" },
+  completed:         { label: "เสร็จสิ้น",       color: "bg-gray-800 text-gray-400",       emoji: "🏁" },
+  cancelled:         { label: "ยกเลิก",          color: "bg-gray-800 text-gray-500",       emoji: "❌" },
 };
 
 const GRADE_COLOR: Record<string, string> = {
-  grade_A: "bg-green-100 text-green-700",
-  grade_B: "bg-yellow-100 text-yellow-700",
-  grade_C: "bg-red-100 text-red-500",
+  grade_A: "bg-green-900/40 text-green-300",
+  grade_B: "bg-yellow-900/40 text-yellow-300",
+  grade_C: "bg-red-900/40 text-red-300",
 };
 
 export default function WeeeTScrapJobsPage() {
@@ -111,33 +111,33 @@ export default function WeeeTScrapJobsPage() {
   ).length;
 
   return (
-    <div className="space-y-5 max-w-xl">
+    <div className="space-y-5">
 
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-gray-900">♻️ งานรับซาก</h1>
+        <h1 className="text-xl font-bold text-white">♻️ งานรับซาก</h1>
         <p className="text-xs text-gray-400 mt-1">งานที่ร้านมอบหมายให้รับซากจากลูกค้า</p>
       </div>
 
       {/* Summary */}
       <div className="flex gap-3 flex-wrap">
         {activeCount > 0 && (
-          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2 text-sm">
-            <span className="text-blue-600 font-bold">{activeCount}</span>
-            <span className="text-blue-700">งานที่กำลังดำเนินอยู่</span>
+          <div className="flex items-center gap-2 bg-blue-900/30 border border-blue-700/50 rounded-xl px-3 py-2 text-sm">
+            <span className="text-blue-400 font-bold">{activeCount}</span>
+            <span className="text-blue-300">งานที่กำลังดำเนินอยู่</span>
           </div>
         )}
         {/* S9 — no-show alert */}
         {noShowCount > 0 && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2 text-sm">
-            <span className="text-red-500">🚫</span>
-            <span className="text-red-700">{noShowCount} งาน ไม่พบลูกค้า (No-show)</span>
+          <div className="flex items-center gap-2 bg-red-900/30 border border-red-700/50 rounded-xl px-3 py-2 text-sm">
+            <span className="text-red-400">🚫</span>
+            <span className="text-red-300">{noShowCount} งาน ไม่พบลูกค้า (No-show)</span>
           </div>
         )}
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-1 bg-white border border-gray-200 rounded-xl p-1 w-fit flex-wrap">
+      <div className="flex gap-1 bg-gray-900 border border-gray-700 rounded-xl p-1 w-fit flex-wrap">
         {(["", "assigned", "arrived", "no_show", "completed"] as const).map(s => (
           <button
             key={s}
@@ -145,9 +145,9 @@ export default function WeeeTScrapJobsPage() {
             className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
               filterStatus === s
                 ? s === "no_show"
-                  ? "bg-red-100 text-red-700"
+                  ? "bg-red-900/40 text-red-300"
                   : "bg-weeet-primary text-white"
-                : "text-gray-500 hover:text-gray-900"
+                : "text-gray-500 hover:text-gray-200"
             }`}
           >
             {s === "" ? "ทั้งหมด"
@@ -170,14 +170,14 @@ export default function WeeeTScrapJobsPage() {
             <Link
               key={job.id}
               href={`/scrap/${job.id}`}
-              className={`block bg-white rounded-2xl border shadow-sm p-4 space-y-3 transition-colors hover:border-blue-200 ${
-                job.status === "no_show" ? "border-red-200 bg-red-50/30" : "border-gray-100"
+              className={`block bg-gray-900 rounded-2xl border p-4 space-y-3 transition-colors hover:border-weeet-primary/40 ${
+                job.status === "no_show" ? "border-red-700/50 bg-red-950/20" : "border-gray-800"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-gray-800 truncate">
+                    <p className="text-sm font-semibold text-gray-100 truncate">
                       {job.scrapDescription}
                     </p>
                     {/* S12 badge */}
@@ -187,7 +187,7 @@ export default function WeeeTScrapJobsPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
                     <span className={`px-1.5 py-0.5 rounded-full ${GRADE_COLOR[job.grade]}`}>
                       {job.grade.replace("grade_", "")}
                     </span>
@@ -201,12 +201,12 @@ export default function WeeeTScrapJobsPage() {
                     {sm.emoji} {sm.label}
                   </span>
                   {job.offeredPrice > 0 && (
-                    <p className="text-xs font-mono text-green-600 mt-1">{job.offeredPrice} พอยต์ทอง (Gold Point)</p>
+                    <p className="text-xs font-mono text-green-600 mt-1">{job.offeredPrice} พอยต์ทอง</p>
                   )}
                 </div>
               </div>
 
-              <div className="text-xs text-gray-500 space-y-1">
+              <div className="text-xs text-gray-400 space-y-1">
                 <p>📍 {job.weeeUAddress}</p>
                 <p>📅 นัดรับ: {job.scheduledDate}</p>
               </div>

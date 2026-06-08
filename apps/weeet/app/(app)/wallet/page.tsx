@@ -32,17 +32,19 @@ export default function WalletPage() {
   const [goldBalance, setGoldBalance] = useState(MOCK_GOLD_BALANCE);
   const [silverBalance] = useState(MOCK_SILVER_BALANCE);
 
-  // Mock top-up Gold state
+  // Mock top-up Gold state — RC-F: pending (ไม่อัพ balance ทันที รอ Admin อนุมัติ)
   const [goldTopUpAmount, setGoldTopUpAmount] = useState("");
   const [topUpSubmitting, setTopUpSubmitting] = useState(false);
   const [topUpSuccess, setTopUpSuccess] = useState(false);
+  const [pendingTopup, setPendingTopup] = useState<{ amount: number; status: "pending"; message: string } | null>(null);
 
   const handleGoldTopUp = () => {
     const amount = Math.round(Number(goldTopUpAmount));
     if (!amount || amount <= 0) return;
     setTopUpSubmitting(true);
     setTimeout(() => {
-      setGoldBalance((prev) => prev + amount);
+      // RC-F: ไม่อัพ goldBalance ทันที — รอ Admin อนุมัติ (pending state)
+      setPendingTopup({ amount, status: "pending", message: "รอ Admin อนุมัติ" });
       setTopUpSuccess(true);
       setGoldTopUpAmount("");
       setTopUpSubmitting(false);
@@ -74,7 +76,7 @@ export default function WalletPage() {
           <div className="wallet-gold rounded-3xl p-6 text-white shadow-lg">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium opacity-80">พอยต์ทอง (Gold Point)</p>
+                <p className="text-sm font-medium opacity-80">พอยต์ทอง</p>
                 <p className="text-4xl font-bold mt-1">{goldBalance.toLocaleString()}</p>
                 <p className="text-sm opacity-70 mt-1">≈ ฿{goldBalance.toLocaleString()}</p>
               </div>
@@ -89,6 +91,12 @@ export default function WalletPage() {
                 ช่างใช้พอยต์ทองสำหรับค่าธรรมเนียม/บริการในระบบ
               </p>
             </div>
+            {/* RC-F: pending topup indicator */}
+            {pendingTopup && (
+              <div className="bg-amber-500/20 border border-amber-400/40 rounded-xl px-3 py-2">
+                <p className="text-xs text-amber-200 font-medium">⏳ รอ Admin อนุมัติ +{pendingTopup.amount.toLocaleString()} พอยต์ทอง</p>
+              </div>
+            )}
             <a
               href="#gold-topup"
               className="mt-3 block text-center bg-white/20 hover:bg-white/30 text-white text-sm font-semibold py-2.5 rounded-xl transition-colors"
@@ -101,7 +109,7 @@ export default function WalletPage() {
           <div className="wallet-silver rounded-3xl p-6 text-white shadow-lg">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium opacity-80">พอยต์เงิน (Silver Point)</p>
+                <p className="text-sm font-medium opacity-80">พอยต์เงิน</p>
                 <p className="text-4xl font-bold mt-1">{silverBalance.toLocaleString()}</p>
                 <p className="text-sm opacity-70 mt-1">ใช้ชำระค่าบริการในระบบ</p>
               </div>

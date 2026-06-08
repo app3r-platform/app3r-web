@@ -165,7 +165,7 @@ export default function ParcelInProgressPage({
       <button
         onClick={handleSubmit}
         disabled={loading || !serviceLog.trim()}
-        className="w-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+        className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-colors"
       >
         {loading ? "กำลังบันทึก..." : "🔧 บันทึกการซ่อม"}
       </button>

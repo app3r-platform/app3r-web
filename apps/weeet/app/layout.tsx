@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import DevNav, { type DevNavLink } from "@/components/DevNav";
 import { ScreenBadge } from "@/components/ScreenBadge";
+import { JunctionPopup } from "@/components/JunctionPopup";
 
 export const metadata: Metadata = {
   title: "WeeeT — แอปช่าง",
@@ -18,7 +19,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#1c0a00",
+  themeColor: "#1696F9",
 };
 
 // ── Dev Navigator link map v2 (Advisor Gen 94 — Gap Fill ครบ 6 โมดูล) ─────────
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <DevNav links={devNavLinks} />
         )}
         <ScreenBadge />
+        <JunctionPopup />
       </body>
     </html>
   );

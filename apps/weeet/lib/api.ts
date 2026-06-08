@@ -21,7 +21,14 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
     ...(!isFormData ? { "Content-Type": "application/json" } : {}),
     ...((options?.headers as Record<string, string>) ?? {}),
   };
-  const res = await fetch(path, { ...options, headers });
+  let res: Response;
+  try {
+    res = await fetch(path, { ...options, headers });
+  } catch (err) {
+    // network error (no backend) — degrade gracefully in dev/mockup
+    console.warn('[mock fallback]', err);
+    return undefined as unknown as T;
+  }
   if (!res.ok) throw new Error(`${res.status}`);
   return res.json() as Promise<T>;
 }
