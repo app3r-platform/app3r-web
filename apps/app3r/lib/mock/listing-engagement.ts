@@ -37,16 +37,18 @@ export function getMockEngagement(id: string, baseViews?: number): ListingEngage
   return { viewCount, offerCount, remainingDays };
 }
 
-/** อำเภอ stub pool (MOCKUP-only) — ใช้ derive อำเภอแบบ deterministic จาก id. */
+/** อำเภอ stub pool (MOCKUP-only) — ใช้ derive อำเภอแบบ deterministic จาก id.
+ *  RC-E fix: ใช้เขตกรุงเทพ (multi-province listings ส่วนใหญ่อยู่ในกรุงเทพ)
+ *  เดิม: Ubon Ratchathani districts (วารินชำราบ/พิบูลมังสาหาร/...) → ไม่ตรงกับ province */
 const MOCK_DISTRICTS = [
-  'เมือง',
-  'วารินชำราบ',
-  'พิบูลมังสาหาร',
-  'เดชอุดม',
-  'ตระการพืชผล',
-  'ม่วงสามสิบ',
-  'เขมราฐ',
-  'นาจะหลวย',
+  'ลาดพร้าว',
+  'บางรัก',
+  'วัฒนา',
+  'มีนบุรี',
+  'สาทร',
+  'บางเขน',
+  'บึงกุ่ม',
+  'ห้วยขวาง',
 ] as const;
 
 /**
@@ -58,16 +60,17 @@ export function getMockDistrict(id: string): string {
   return MOCK_DISTRICTS[seedFromId(id) % MOCK_DISTRICTS.length];
 }
 
-/** ตำบล/แขวง stub pool (MOCKUP-only) — Advisor: การ์ดต้องลงลึกระดับตำบล ไม่ใช่อำเภอ. */
+/** ตำบล/แขวง stub pool (MOCKUP-only) — Advisor: การ์ดต้องลงลึกระดับตำบล ไม่ใช่อำเภอ.
+ *  RC-E fix: ใช้แขวงกรุงเทพ — เดิม: Ubon Ratchathani tambons (แสนสุข/ขามใหญ่/...) */
 const MOCK_TAMBONS = [
-  'ในเมือง',
-  'แสนสุข',
-  'หนองกอมเกาะ',
-  'ขามใหญ่',
-  'ปทุม',
-  'ไร่น้อย',
-  'หัวเรือ',
-  'กุดลาด',
+  'ลาดพร้าว',
+  'บางรัก',
+  'คลองเตย',
+  'ห้วยขวาง',
+  'บางกอกน้อย',
+  'บึงกุ่ม',
+  'จตุจักร',
+  'มีนบุรี',
 ] as const;
 
 /**

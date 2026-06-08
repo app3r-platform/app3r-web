@@ -5,6 +5,7 @@ import { useMockRole } from "@/lib/auth/useMockRole";
 import { crossAppUrls } from "@/lib/config/urls";
 import { MockAnnoOrigin, MockAnnoXapp } from "@/components/common";
 import { HelpTip } from "@app3r/ui";
+import { LocationCascade } from "@/components/listings/LocationCascade";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -479,31 +480,25 @@ export default function RegisterWeeeRPage() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500 resize-none"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">แขวง/ตำบล <span className="text-red-500">*</span></label>
-                  <input type="text" value={form.subDistrict || ""} onChange={(e) => updateForm("subDistrict", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">เขต/อำเภอ <span className="text-red-500">*</span></label>
-                  <input type="text" value={form.district || ""} onChange={(e) => updateForm("district", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">จังหวัด <span className="text-red-500">*</span></label>
-                  <select value={form.province || ""} onChange={(e) => updateForm("province", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500">
-                    <option value="">เลือกจังหวัด</option>
-                    <option>กรุงเทพฯ</option>
-                    <option>นนทบุรี</option>
-                    <option>ปทุมธานี</option>
-                    <option>สมุทรปราการ</option>
-                    <option>ชลบุรี</option>
-                    <option>อื่นๆ</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">รหัสไปรษณีย์ <span className="text-red-500">*</span></label>
-                  <input type="text" value={form.postalCode || ""} onChange={(e) => updateForm("postalCode", e.target.value)} maxLength={5} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" />
-                </div>
+              {/* 3.2 Cascade Address — จังหวัด → อำเภอ → ตำบล (GR-9) */}
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-gray-700">
+                  ที่อยู่ร้าน (จังหวัด / อำเภอ / ตำบล) <span className="text-red-500">*</span>
+                </p>
+                <LocationCascade
+                  onChange={({ provinceId, amphoeId, tambonId }) => {
+                    updateForm("province", provinceId !== null ? String(provinceId) : "");
+                    updateForm("district", amphoeId !== null ? String(amphoeId) : "");
+                    updateForm("subDistrict", tambonId !== null ? String(tambonId) : "");
+                  }}
+                />
+                <p className="text-xs text-gray-400">
+                  ระบบจะโหลดข้อมูลจาก Backend — หาก Backend ไม่พร้อม dropdown จะว่างเปล่า
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">รหัสไปรษณีย์ <span className="text-red-500">*</span></label>
+                <input type="text" value={form.postalCode || ""} onChange={(e) => updateForm("postalCode", e.target.value)} maxLength={5} className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500" placeholder="เช่น 10400" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

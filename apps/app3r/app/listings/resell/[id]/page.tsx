@@ -3,7 +3,7 @@
 // ============================================================
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getResellListing } from "../../../../lib/api/listings";
 import { getMockRoleFromCookie } from "../../../../lib/auth/mock-auth";
 import PhotoGallery from "../../../../components/listings/PhotoGallery";
@@ -41,6 +41,8 @@ export default async function ResellDetailPage({ params }: PageProps) {
   const { id } = await params;
   const listing = getResellListing(id);
   if (!listing) notFound();
+  // W-12b: listing ถูก suspend → redirect ไปหน้า suspended (ไม่แสดง detail)
+  if (listing.status === "suspended") redirect(`/listings/resell/${id}/suspended`);
 
   // W-2-D (D6): Tier-based privacy
   const role = await getMockRoleFromCookie();
