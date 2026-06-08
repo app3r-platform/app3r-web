@@ -5,17 +5,93 @@
  * §5 origin   : ◀ มาจาก: <Screen IDs>
  * §6 nav      : → ไปต่อ: <destination IDs + labels>
  * §8 cross-app: 👁 แอพฯอื่น ณ จังหวะนี้ → ลิงก์
+ * JUNCTION 2.4: [↔] popup — flow map ต่อจอ
  *
  * ลบทั้งหมดด้วย: grep -r "mock-anno" apps/weeeu --include="*.tsx" -l
  * ทุก element ใช้ className ที่ขึ้นต้น "mock-anno" เพื่อ grep-delete ง่าย
  *
- * อ้างอิง: P0 Advisor Specs §3 + §5 + §6 + §8 · Gen 113
+ * อ้างอิง: P0 Advisor Specs §3 + §5 + §6 + §8 · Gen 113 · JUNCTION 2.4
  */
 
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { getMockAnnoEntry, type NavTarget, type XAppLink } from "@/lib/mock-anno-data";
+import { getJunctionEntry, type JunctionTo } from "@/lib/junction-data";
 
 // ── Sub-components ────────────────────────────────────────────────────────────
+
+/** [↔] JUNCTION 2.4 — popup แสดง from/to flow ของจอนี้ */
+function JunctionButton({ screenId }: { screenId: string }) {
+  const [open, setOpen] = useState(false);
+  const junction = getJunctionEntry(screenId);
+  if (!junction) return null;
+
+  return (
+    <span className="mock-anno mock-anno-junction relative">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="mock-anno mock-anno-junction-btn inline-flex items-center bg-teal-100 hover:bg-teal-200 text-teal-700 text-[10px] font-bold rounded px-1.5 py-0.5 transition-colors cursor-pointer"
+        title={`JUNCTION 2.4 — ${junction.title}`}
+      >
+        [↔]
+      </button>
+      {open && (
+        <>
+          {/* Click-away backdrop */}
+          <span
+            className="mock-anno fixed inset-0 z-40"
+            onClick={() => setOpen(false)}
+          />
+          <div className="mock-anno mock-anno-junction-popup absolute top-full left-0 mt-1 z-50 bg-white border border-teal-200 rounded-xl shadow-xl p-3 w-64">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold text-teal-700">
+                {junction.screenId} · {junction.title}
+              </span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="text-gray-400 hover:text-gray-600 text-[10px] ml-2 leading-none"
+              >
+                ✕
+              </button>
+            </div>
+            {/* From */}
+            {junction.from.length > 0 && (
+              <div className="mb-2">
+                <p className="text-[9px] text-gray-400 mb-1">◀ มาจาก</p>
+                <div className="flex flex-wrap gap-1">
+                  {junction.from.map((f, i) => (
+                    <span key={i} className="text-[9px] bg-gray-100 rounded px-1 py-0.5 text-gray-600">
+                      {f}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* To */}
+            {junction.to.length > 0 && (
+              <div>
+                <p className="text-[9px] text-gray-400 mb-1">→ ไปต่อ</p>
+                <div className="flex flex-wrap gap-1">
+                  {junction.to.map((t: JunctionTo, i: number) => (
+                    <span key={i} className="text-[9px] bg-teal-50 rounded px-1 py-0.5 text-teal-700">
+                      <span className="font-bold">{t.id}</span>
+                      {t.note && <span className="text-teal-400 ml-0.5">[{t.note}]</span>}
+                      {" "}
+                      <span className="text-teal-500">{t.label}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </span>
+  );
+}
 
 function OriginBadge({ from }: { from: string[] }) {
   if (!from.length) return null;
@@ -98,6 +174,8 @@ export function MockAnnoBar() {
         <span className="mock-anno mock-anno-screen-id inline-flex items-center bg-amber-100 text-amber-700 text-[10px] font-bold rounded px-1.5 py-0.5 shrink-0">
           🏷 {entry.screenId}
         </span>
+        {/* JUNCTION 2.4 — [↔] popup */}
+        <JunctionButton screenId={entry.screenId} />
         <OriginBadge from={entry.from} />
         <NavBadge to={entry.to} />
         {entry.xapp && <XAppBadge xapp={entry.xapp} />}

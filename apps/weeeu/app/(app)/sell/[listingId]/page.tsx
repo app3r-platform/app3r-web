@@ -19,7 +19,7 @@ import type { Listing, Offer } from "@/lib/types";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 
 // ─── Demo mock overlay (toggle USE_MOCK = true เพื่อทดสอบ R2/R5) ──────────────
-const USE_MOCK = false;
+const USE_MOCK = true;
 const MOCK_STATUS: "suspended" | "offer_selected" = "offer_selected"; // เปลี่ยนเพื่อ demo
 const MOCK_SUSPENDED_REASON =
   "ข้อมูลสินค้าไม่ครบถ้วน — กรุณาเพิ่มรูปภาพที่ชัดเจนและรายละเอียดสภาพสินค้า";
@@ -266,7 +266,7 @@ export default function SellDetailPage() {
         </div>
 
         <div className="border-t border-gray-50 pt-3 space-y-2">
-          <InfoRow label="ราคา" value={`${listing.price.toLocaleString()} ฿`} bold />
+          <InfoRow label="ราคา" value={`${listing.price.toLocaleString()} พอยต์ทอง`} bold />
           {listing.conditionGrade && (
             <InfoRow label="สภาพ" value={GRADE_LABEL[listing.conditionGrade] ?? listing.conditionGrade} />
           )}
@@ -368,7 +368,7 @@ export default function SellDetailPage() {
                 </span>
               </div>
               <p className="text-sm font-bold text-green-700">
-                {selectedOffer.offerPrice.toLocaleString()} ฿
+                {selectedOffer.offerPrice.toLocaleString()} พอยต์ทอง
               </p>
               <p className="text-xs text-green-600">
                 จัดส่ง: {DELIVERY_LABEL[selectedOffer.deliveryMethod] ?? selectedOffer.deliveryMethod}
@@ -404,7 +404,7 @@ export default function SellDetailPage() {
                 <span className="text-xs text-gray-400">{OFFER_STATUS_LABEL[offer.status]}</span>
               </div>
               <p className="text-sm font-bold text-weeeu-primary">
-                {offer.offerPrice.toLocaleString()} ฿
+                {offer.offerPrice.toLocaleString()} พอยต์ทอง
               </p>
               <p className="text-xs text-gray-500">
                 จัดส่ง: {DELIVERY_LABEL[offer.deliveryMethod] ?? offer.deliveryMethod}

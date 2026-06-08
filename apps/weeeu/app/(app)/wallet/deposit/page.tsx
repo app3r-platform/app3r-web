@@ -76,7 +76,7 @@ export default function DepositPage() {
 
         <div className="bg-green-50 border border-green-100 rounded-2xl p-8 text-center space-y-3">
           <p className="text-4xl">✅</p>
-          <h2 className="text-lg font-bold text-green-800">ส่งคำขอสำเร็จ!</h2>
+          <h2 className="text-lg font-bold text-green-800">อยู่ระหว่างรอ Admin อนุมัติ</h2>
           <p className="text-sm text-green-600">
             Admin จะตรวจสอบสลิปและยืนยันการเติมพอยต์ทองภายใน 1-2 ชั่วโมง
           </p>

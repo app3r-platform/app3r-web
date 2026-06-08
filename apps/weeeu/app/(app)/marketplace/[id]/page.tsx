@@ -43,7 +43,7 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
             <h1 className="text-base font-bold text-weeeu-dark leading-snug flex-1">{item.name}</h1>
             <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium whitespace-nowrap">{item.condition}</span>
           </div>
-          <p className="text-2xl font-bold text-weeeu-primary">{item.price.toLocaleString()} ฿</p>
+          <p className="text-2xl font-bold text-weeeu-primary">{item.price.toLocaleString()} พอยต์ทอง</p>
           <p className="text-xs text-gray-400">{item.category}</p>
           <hr className="border-gray-100" />
           <div>

@@ -4,7 +4,7 @@
 // R2-3: รูป min3-max5 / คลิป min1-max3 · R2-4: งบ slider
 // R2-5: ลบค่าตรวจ 100 · R2-6: checklist สภาพ · R2-7: วันรอ slider
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
@@ -121,6 +121,11 @@ export default function RepairNewPage() {
   // R2-7: วันรอ
   const [waitDays, setWaitDays] = useState(7);
 
+  // 3.4 GPS+map state (U-03)
+  const [gpsCoords, setGpsCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const [gpsError, setGpsError] = useState("");
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -160,6 +165,24 @@ export default function RepairNewPage() {
       setPhotos(mockFiles);
       setPhotoUrls(mockFiles.map(() => URL.createObjectURL(blob)));
     } catch { /* ignore — dev only */ }
+  }, []);
+
+  // 3.4 GPS handler (U-03)
+  const handleGetGPS = useCallback(() => {
+    if (!navigator.geolocation) { setGpsError("เบราเซอร์ไม่รองรับ GPS"); return; }
+    setGpsLoading(true);
+    setGpsError("");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setGpsCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setGpsLoading(false);
+      },
+      () => {
+        setGpsError("ไม่สามารถดึงตำแหน่งได้ — กรุณาอนุญาต GPS");
+        setGpsLoading(false);
+      },
+      { timeout: 8000 }
+    );
   }, []);
 
   const clearErr = (key: string) =>
@@ -674,10 +697,34 @@ export default function RepairNewPage() {
                       className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
                     />
                   )}
-                  {/* Map UI placeholder — พิกัดจริง = BE จังหวะ2 */}
-                  <div className="mt-2 bg-gray-100 rounded-xl h-24 flex flex-col items-center justify-center border border-gray-200 border-dashed">
-                    <span className="text-gray-400 text-lg">🗺️</span>
-                    <p className="text-xs text-gray-400 mt-1">แผนที่ยืนยันที่ตั้ง (จังหวะ 2 — รอพิกัดจาก BE)</p>
+                  {/* 3.4 GPS + Map UI (U-03) */}
+                  <div className="mt-2 space-y-2">
+                    <button
+                      type="button"
+                      onClick={handleGetGPS}
+                      disabled={gpsLoading}
+                      className="w-full flex items-center justify-center gap-2 border border-weeeu-primary/40 text-weeeu-primary text-xs font-medium py-2.5 rounded-xl hover:bg-weeeu-surface transition-colors disabled:opacity-60"
+                    >
+                      {gpsLoading ? <><span className="animate-spin">⟳</span> กำลังดึงตำแหน่ง...</> : <>📍 ใช้ GPS ตำแหน่งปัจจุบัน</>}
+                    </button>
+                    {gpsError && <p className="text-xs text-red-500">{gpsError}</p>}
+                    {gpsCoords ? (
+                      <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl p-3 space-y-1">
+                        <p className="text-xs font-medium text-weeeu-text">📍 ตำแหน่ง GPS ที่ได้รับ</p>
+                        <p className="text-xs text-weeeu-primary font-mono">
+                          {gpsCoords.lat.toFixed(6)}, {gpsCoords.lng.toFixed(6)}
+                        </p>
+                        <div className="bg-gray-100 rounded-lg h-20 flex flex-col items-center justify-center border border-gray-200">
+                          <span className="text-lg">🗺️</span>
+                          <p className="text-[10px] text-gray-400 mt-1">แผนที่จาก Maps API (Phase D-2)</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-gray-100 rounded-xl h-20 flex flex-col items-center justify-center border border-gray-200 border-dashed">
+                        <span className="text-gray-400">🗺️</span>
+                        <p className="text-[10px] text-gray-400 mt-1">กด "ใช้ GPS" เพื่อยืนยันที่ตั้ง</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </>

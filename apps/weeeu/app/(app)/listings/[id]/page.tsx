@@ -52,6 +52,27 @@ const MOCK_TERMS: MockSellerTerms = {
   liability_policy: "หากสินค้าไม่ตรงปก ผู้ขายรับผิดชอบคืนเงินเต็มจำนวนภายใน 7 วัน",
 };
 
+// Mock fallback สำหรับ demo ถ้า API ไม่ตอบสนอง (RC-1)
+const MOCK_LISTING_DATA: ListingDetail = {
+  id: "r001",
+  sellerId: "u001",
+  sellerType: "WeeeU",
+  listingType: "used_appliance",
+  appliance_name: "แอร์ Daikin 12000 BTU",
+  seller_name: "ร้านดีเจริญ",
+  price: 4500,
+  status: "receiving_offers",
+  conditionGrade: "grade_A",
+  deliveryMethods: ["on_site", "parcel"],
+  viewCount: 42,
+  offerCount: 3,
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  images: [{ url: "https://picsum.photos/seed/r001/400/400" }],
+  description: "สภาพดีมาก ใช้งานได้ปกติ ทำความเย็นดี (Mockup fallback)",
+};
+
 // Mock Q&A สำหรับ demo (Mockup — buyer เห็นเฉพาะของตัวเอง)
 const MOCK_QA: MockQA[] = [
   {
@@ -84,7 +105,10 @@ export default function ListingDetailPage() {
   useEffect(() => {
     listingsApi.get(id)
       .then(setListing)
-      .catch(() => setError("ไม่สามารถโหลดข้อมูลได้"))
+      .catch((err) => {
+        console.warn("[mock fallback] listings/[id]", err);
+        setListing(MOCK_LISTING_DATA);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -177,7 +201,7 @@ export default function ListingDetailPage() {
           )}
         </div>
 
-        <p className="text-2xl font-bold text-weeeu-primary">{listing.price.toLocaleString()} ฿</p>
+        <p className="text-2xl font-bold text-weeeu-primary">{listing.price.toLocaleString()} พอยต์ทอง</p>
 
         {showEngagement && (
           <div className="flex items-center gap-3 text-xs text-gray-500">
@@ -246,9 +270,9 @@ export default function ListingDetailPage() {
         <div>
           <p className="text-xs font-semibold text-yellow-800">ชำระด้วย Gold Point</p>
           <p className="text-xs text-yellow-700 mt-0.5">
-            เมื่อข้อเสนอถูกเลือก ระบบล็อก Gold ในบัญชีคุณ — คุณมีเวลา 24 ชม. เติม Gold ถ้าไม่พอ
+            เมื่อข้อเสนอถูกเลือก ระบบล็อกพอยต์ทองในบัญชีคุณ — คุณมีเวลา 24 ชม. เติมพอยต์ทองถ้าไม่พอ
           </p>
-          <Link href="/wallet" className="inline-block text-xs text-yellow-800 font-semibold underline mt-1">ดูกระเป๋า Gold →</Link>
+          <Link href="/wallet" className="inline-block text-xs text-yellow-800 font-semibold underline mt-1">ดูกระเป๋าพอยต์ทอง →</Link>
         </div>
       </div>
 
@@ -284,13 +308,13 @@ export default function ListingDetailPage() {
           <p className="text-sm font-semibold text-gray-800">ยื่นข้อเสนอ</p>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium text-gray-600">ราคาที่เสนอ (บาท) *</label>
+            <label className="block text-xs font-medium text-gray-600">ราคาที่เสนอ (พอยต์ทอง) *</label>
             <input
               type="number"
               min="1"
               value={offerPrice}
               onChange={e => setOfferPrice(e.target.value)}
-              placeholder={`ราคาประกาศ ${listing.price.toLocaleString()} ฿`}
+              placeholder={`ราคาประกาศ ${listing.price.toLocaleString()} พอยต์ทอง`}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
             />
           </div>
