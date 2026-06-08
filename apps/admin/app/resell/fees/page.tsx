@@ -165,7 +165,7 @@ export default function ResellFeesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">💰 Resell Fees — D-Resell-1</h1>
+            <h1 className="text-2xl font-bold">💰 Resell Fees</h1>
             <p className="text-gray-500 text-sm mt-1">
               Fee matrix 4 คู่ (U↔U/U→R/R→U/R↔R) + Refund Tiers T1–T4
             </p>
@@ -188,7 +188,7 @@ export default function ResellFeesPage() {
         {/* Fee Matrix */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-5 py-3 border-b border-gray-200 bg-gray-50">
-            <h2 className="text-sm font-bold text-gray-700">📋 Fee Matrix — 4 คู่ D-Resell-1</h2>
+            <h2 className="text-sm font-bold text-gray-700">📋 Fee Matrix — 4 คู่</h2>
             <p className="text-xs text-gray-500 mt-0.5">Platform fee หักจากพักเงินกลางตอน completed → กระเป๋า Platform</p>
           </div>
           <table className="w-full text-sm">

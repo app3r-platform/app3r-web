@@ -558,6 +558,7 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
     destinations: [],
     xapp: [],
+    drefs: [{ id: "D-Resell-1", desc: "Fee rate matrix 4 คู่ U↔U/U→R/R→U/R↔R + Refund Tiers T1-T4" }],
   },
 
   // ── A-37 Resell Lifecycle ── ────────────────────────────────────────────────
