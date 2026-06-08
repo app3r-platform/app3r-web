@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { partsApi } from "../../_lib/api";
 import type { Part } from "../../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const CATEGORIES = ["คอมเพรสเซอร์", "มอเตอร์", "แผงวงจร", "ท่อ/วาล์ว", "อื่นๆ"];
 
@@ -64,6 +65,7 @@ export default function PartsEditPage({ params }: { params: Promise<{ id: string
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-63b" />
       <div className="flex items-center gap-3">
         <Link href={`/parts/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">แก้ไขอะไหล่</h1>

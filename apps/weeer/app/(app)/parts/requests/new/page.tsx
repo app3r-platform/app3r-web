@@ -118,7 +118,7 @@ export default function NewPartsRequestPage() {
 
   return (
     <div className="px-4 pt-5 pb-4 space-y-5">
-      <MockAnnoOrigin from="R-51" />
+      <MockAnnoOrigin from="R-62" />
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => router.back()} className="text-gray-500">← กลับ</button>
