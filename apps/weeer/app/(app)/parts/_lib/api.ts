@@ -1,4 +1,6 @@
 import type { Part, StockMovement } from "./types";
+// RC-1: Mock fallback data (dev/offline)
+import { MOCK_PARTS, MOCK_STOCK_MOVEMENTS, MOCK_PARTS_DASHBOARD } from "./mock";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -29,15 +31,18 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 // ── D57: Wire direct to real /api/v1/parts/ — no mock ─────────────────────────
 
 export const partsApi = {
-  list: (params?: { category?: string; condition?: string; search?: string }) => {
+  list: async (params?: { category?: string; condition?: string; search?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<Part[]>(`/parts/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<Part[]>(`/parts/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] parts.list", err); return MOCK_PARTS; }
   },
 
-  get: (id: string) =>
-    apiFetch<Part>(`/parts/${id}/`),
+  get: async (id: string) => {
+    try { return await apiFetch<Part>(`/parts/${id}/`); }
+    catch (err) { console.warn("[mock fallback] parts.get", err); return MOCK_PARTS.find(p => p.id === id) ?? MOCK_PARTS[0]; }
+  },
 
   create: (data: Omit<Part, "id" | "shopId" | "stockQty" | "reservedQty" | "createdAt" | "updatedAt">) =>
     apiFetch<Part>(`/parts/`, { method: "POST", body: JSON.stringify(data) }),
@@ -51,26 +56,26 @@ export const partsApi = {
   stockAdjust: (id: string, data: { qty: number; note: string }) =>
     apiFetch<StockMovement>(`/parts/${id}/stock-adjust/`, { method: "POST", body: JSON.stringify(data) }),
 
-  movements: (params?: { partId?: string; type?: string; dateFrom?: string; dateTo?: string }) => {
+  movements: async (params?: { partId?: string; type?: string; dateFrom?: string; dateTo?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<StockMovement[]>(`/parts/movements/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<StockMovement[]>(`/parts/movements/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] parts.movements", err); return MOCK_STOCK_MOVEMENTS; }
   },
 
-  getMovement: (id: string) =>
-    apiFetch<StockMovement>(`/parts/movements/${id}/`),
+  getMovement: async (id: string) => {
+    try { return await apiFetch<StockMovement>(`/parts/movements/${id}/`); }
+    catch (err) { console.warn("[mock fallback] parts.getMovement", err); return MOCK_STOCK_MOVEMENTS.find(m => m.id === id) ?? MOCK_STOCK_MOVEMENTS[0]; }
+  },
 
-  reservations: () =>
-    apiFetch<{ partId: string; partName: string; qty: number; jobId: string; jobType: string; reservedAt: string }[]>(
-      `/parts/reservations/`
-    ),
+  reservations: async () => {
+    try { return await apiFetch<{ partId: string; partName: string; qty: number; jobId: string; jobType: string; reservedAt: string }[]>(`/parts/reservations/`); }
+    catch (err) { console.warn("[mock fallback] parts.reservations", err); return []; }
+  },
 
-  dashboard: () =>
-    apiFetch<{
-      total_skus: number;
-      total_stock_value: number;
-      low_stock: Part[];
-      recent_movements: StockMovement[];
-    }>(`/parts/dashboard/`),
+  dashboard: async () => {
+    try { return await apiFetch<typeof MOCK_PARTS_DASHBOARD>(`/parts/dashboard/`); }
+    catch (err) { console.warn("[mock fallback] parts.dashboard", err); return MOCK_PARTS_DASHBOARD; }
+  },
 };

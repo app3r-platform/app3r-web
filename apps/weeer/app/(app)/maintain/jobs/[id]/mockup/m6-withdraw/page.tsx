@@ -88,7 +88,7 @@ export default function M6WithdrawWeeeRMockupPage() {
             <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${
               withdrawn
                 ? "bg-gray-100 text-gray-500"
-                : "bg-blue-50 text-blue-700"
+                : "bg-[#FFF1ED] text-[#FF663A]"
             }`}>
               {withdrawn ? "ถอนรับงานแล้ว" : "มอบหมายแล้ว"}
             </span>

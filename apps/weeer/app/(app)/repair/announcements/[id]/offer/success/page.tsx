@@ -59,12 +59,12 @@ export default function RepairBidSuccessPage({
       </div>
 
       {/* CTA */}
-      <MockAnnoNav to="R-01" label="ดูประกาศทั้งหมด" style={{ display: "contents" }}>
+      <MockAnnoNav to="R-01" label="ดูงานซ่อม" style={{ display: "contents" }}>
         <button
-          onClick={() => router.push("/repair/announcements")}
+          onClick={() => router.push("/repair/jobs")}
           className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-2xl transition-colors"
         >
-          ดูประกาศทั้งหมด
+          ดูงานซ่อม
         </button>
       </MockAnnoNav>
     </div>

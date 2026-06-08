@@ -27,7 +27,7 @@ export default function StaffPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">จัดการทีมช่าง (WeeeT)</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Mode 1 ฟรี 1 ตัว | Mode 2 เช่ารายปี (5,000 Gold/ปี)</p>
+          <p className="text-sm text-gray-500 mt-0.5">Mode 1 ฟรี 1 ตัว | Mode 2 เช่ารายปี (100 พอยต์ทอง/ปี)</p>
         </div>
         <MockAnnoNav to="R-49">
           <button className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">

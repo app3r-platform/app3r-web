@@ -31,7 +31,7 @@ interface ScrapJobExtended extends ScrapJob {
 // ── MOCK_JOB — hardcoded fallback สำหรับ dev (ใช้เมื่อ API ไม่ตอบ) ────────────
 const MOCK_JOB: ScrapJobExtended = {
   id: "SPJ-001",
-  scrapItemId: "SCR-002",
+  scrapItemId: "SC002",
   buyerId: "weeer-demo-001",
   buyerType: "WeeeR",
   decision: "resell_parts",
@@ -80,12 +80,9 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
   useEffect(() => {
     scrapApi.getJob(id)
       .then(d => {
-        // Inject S7/S8/S12 fields for demo (backend จะส่ง field จริงใน Phase D)
-        const extended = d as ScrapJobExtended;
-        extended.canWithdraw = true;  // S7 demo: แสดงปุ่มถอน offer เสมอ
-        extended.mismatchReport = MOCK_JOB.mismatchReport;  // S8 demo: mismatch report
-        extended.sourceRepairJobId = "REP-0042";             // S12 demo: Repair badge
-        setJob(extended);
+        // RC-F: ใช้ field จาก API response ตามจริง (ไม่ inject ทุก record)
+        // S7 canWithdraw / S8 mismatchReport มาจาก API เมื่อ Backend รองรับ Phase D
+        setJob(d as ScrapJobExtended);
       })
       .catch(() => {
         // DEV fallback: API ไม่ตอบ → ใช้ MOCK_JOB แทน (ไม่แสดง error)
@@ -123,7 +120,7 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
       <MockAnnoOrigin from="◀ มาจาก: R-27 · /scrap/jobs หรือ R-78 · /scrap/browse/[id] (กด 'ซื้อซากนี้')" />
       <MockAnnoXApp screenLabel="R-28: Job">
         <p>• <strong>WeeeU :3002</strong> [U-33] เจ้าของซากเห็นสถานะ listing เปลี่ยนเป็น in_progress
-          <a href={`http://localhost:3002/scrap/SCR-002`} className="underline ml-1">/scrap/[id]</a>
+          <a href={`http://localhost:3002/scrap/browse/SC002`} className="underline ml-1">/scrap/browse/[id]</a>
         </p>
         <p>• <strong>WeeeT :3003</strong> [T-04] เมื่อ WeeeR เลือก option → ช่างได้รับ assignment รับซาก
           <a href={`http://localhost:3003/jobs/J001/pickup`} className="underline ml-1">/jobs/[id]/pickup</a>

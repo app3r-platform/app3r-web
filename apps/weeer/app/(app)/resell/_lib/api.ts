@@ -1,4 +1,14 @@
 import type { UsedAppliance, Listing, Offer, ResellTransaction } from "./types";
+// RC-1: Mock fallback data (dev/offline)
+import {
+  MOCK_RESELL_DASHBOARD,
+  MOCK_RESELL_INVENTORY,
+  MOCK_RESELL_LISTINGS,
+  MOCK_MARKETPLACE_LISTINGS,
+  MOCK_MY_OFFERS,
+  MOCK_LISTING_OFFERS,
+  MOCK_RESELL_TRANSACTIONS,
+} from "./mock";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -30,25 +40,24 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const resellApi = {
   // ── Dashboard ──────────────────────────────────────────────────────────
-  dashboard: () =>
-    apiFetch<{
-      total_inventory: number;
-      total_listings_active: number;
-      total_offers_pending: number;
-      total_revenue: number;
-      recent_listings: Listing[];
-    }>(`/resell/dashboard/`),
+  dashboard: async () => {
+    try { return await apiFetch<typeof MOCK_RESELL_DASHBOARD>(`/resell/dashboard/`); }
+    catch (err) { console.warn("[mock fallback] resell.dashboard", err); return MOCK_RESELL_DASHBOARD; }
+  },
 
   // ── Inventory (UsedAppliance) ───────────────────────────────────────────
-  inventoryList: (params?: { status?: string; category?: string; search?: string }) => {
+  inventoryList: async (params?: { status?: string; category?: string; search?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<UsedAppliance[]>(`/resell/inventory/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<UsedAppliance[]>(`/resell/inventory/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] resell.inventoryList", err); return MOCK_RESELL_INVENTORY; }
   },
 
-  inventoryGet: (id: string) =>
-    apiFetch<UsedAppliance>(`/resell/inventory/${id}/`),
+  inventoryGet: async (id: string) => {
+    try { return await apiFetch<UsedAppliance>(`/resell/inventory/${id}/`); }
+    catch (err) { console.warn("[mock fallback] resell.inventoryGet", err); return MOCK_RESELL_INVENTORY.find(i => i.id === id) ?? MOCK_RESELL_INVENTORY[0]; }
+  },
 
   inventoryCreate: (data: Omit<UsedAppliance, "id" | "shopId" | "status" | "createdAt" | "updatedAt">) =>
     apiFetch<UsedAppliance>(`/resell/inventory/`, { method: "POST", body: JSON.stringify(data) }),
@@ -60,15 +69,18 @@ export const resellApi = {
     apiFetch<Partial<UsedAppliance> | null>(`/resell/inventory/lookup-sku/?sku=${encodeURIComponent(sku)}`),
 
   // ── Listings (Sell flow) ────────────────────────────────────────────────
-  listingsList: (params?: { status?: string; listingType?: string }) => {
+  listingsList: async (params?: { status?: string; listingType?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<Listing[]>(`/resell/listings/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<Listing[]>(`/resell/listings/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] resell.listingsList", err); return MOCK_RESELL_LISTINGS; }
   },
 
-  listingsGet: (id: string) =>
-    apiFetch<Listing>(`/resell/listings/${id}/`),
+  listingsGet: async (id: string) => {
+    try { return await apiFetch<Listing>(`/resell/listings/${id}/`); }
+    catch (err) { console.warn("[mock fallback] resell.listingsGet", err); return MOCK_RESELL_LISTINGS.find(l => l.id === id) ?? MOCK_RESELL_LISTINGS[0]; }
+  },
 
   listingsCreate: (data: {
     applianceId: string;
@@ -84,8 +96,10 @@ export const resellApi = {
     apiFetch<Listing>(`/resell/listings/${id}/status/`, { method: "POST", body: JSON.stringify({ status }) }),
 
   // ── Offers (received on my listings) ───────────────────────────────────
-  listingOffers: (listingId: string) =>
-    apiFetch<Offer[]>(`/resell/listings/${listingId}/offers/`),
+  listingOffers: async (listingId: string) => {
+    try { return await apiFetch<Offer[]>(`/resell/listings/${listingId}/offers/`); }
+    catch (err) { console.warn("[mock fallback] resell.listingOffers", err); return MOCK_LISTING_OFFERS.filter(o => o.listingId === listingId); }
+  },
 
   acceptOffer: (listingId: string, offerId: string) =>
     apiFetch<Listing>(`/resell/listings/${listingId}/offers/${offerId}/accept/`, { method: "POST" }),
@@ -94,22 +108,26 @@ export const resellApi = {
     apiFetch<Offer>(`/resell/listings/${listingId}/offers/${offerId}/reject/`, { method: "POST" }),
 
   // ── Marketplace (Buy flow) ─────────────────────────────────────────────
-  marketplaceList: (params?: { category?: string; listingType?: string; minPrice?: string; maxPrice?: string; sellerType?: string }) => {
+  marketplaceList: async (params?: { category?: string; listingType?: string; minPrice?: string; maxPrice?: string; sellerType?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<Listing[]>(`/resell/marketplace/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<Listing[]>(`/resell/marketplace/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] resell.marketplaceList", err); return MOCK_MARKETPLACE_LISTINGS; }
   },
 
-  marketplaceGet: (id: string) =>
-    apiFetch<Listing>(`/resell/marketplace/${id}/`),
+  marketplaceGet: async (id: string) => {
+    try { return await apiFetch<Listing>(`/resell/marketplace/${id}/`); }
+    catch (err) { console.warn("[mock fallback] resell.marketplaceGet", err); return MOCK_MARKETPLACE_LISTINGS.find(l => l.id === id) ?? MOCK_MARKETPLACE_LISTINGS[0]; }
+  },
 
   // ── Offers (sent by me) ────────────────────────────────────────────────
-  myOffers: (params?: { status?: string }) => {
+  myOffers: async (params?: { status?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<Offer[]>(`/resell/offers/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<Offer[]>(`/resell/offers/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] resell.myOffers", err); return MOCK_MY_OFFERS; }
   },
 
   submitOffer: (data: { listingId: string; offerPrice: number; deliveryMethod: string; message?: string }) =>
@@ -119,15 +137,18 @@ export const resellApi = {
     apiFetch<Offer>(`/resell/offers/${offerId}/withdraw/`, { method: "POST" }),
 
   // ── Transactions ────────────────────────────────────────────────────────
-  transactionsList: (params?: { status?: string }) => {
+  transactionsList: async (params?: { status?: string }) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    return apiFetch<ResellTransaction[]>(`/resell/transactions/${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch<ResellTransaction[]>(`/resell/transactions/${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] resell.transactionsList", err); return MOCK_RESELL_TRANSACTIONS; }
   },
 
-  transactionsGet: (id: string) =>
-    apiFetch<ResellTransaction>(`/resell/transactions/${id}/`),
+  transactionsGet: async (id: string) => {
+    try { return await apiFetch<ResellTransaction>(`/resell/transactions/${id}/`); }
+    catch (err) { console.warn("[mock fallback] resell.transactionsGet", err); return MOCK_RESELL_TRANSACTIONS.find(t => t.id === id) ?? MOCK_RESELL_TRANSACTIONS[0]; }
+  },
 
   transitionStatus: (id: string, action: "confirm_delivery" | "complete" | "dispute") =>
     apiFetch<ResellTransaction>(`/resell/transactions/${id}/${action}/`, { method: "POST" }),

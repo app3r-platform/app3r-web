@@ -4,6 +4,8 @@
 
 import { getDevTestToken } from "../../../../lib/dev-auth";
 import type { ScrapItem, ScrapJob, ScrapJobOption, EWasteCertificate } from "./types";
+// RC-1: Mock fallback data (dev/offline)
+import { MOCK_SCRAP_ITEMS, MOCK_SCRAP_JOBS, MOCK_SCRAP_DASHBOARD, MOCK_EWASTE_CERTIFICATE } from "./mock";
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const token = await getDevTestToken();
@@ -24,17 +26,13 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
 
 export const scrapApi = {
   // ── Dashboard ────────────────────────────────────────────────────────
-  dashboard(): Promise<{
-    availableCount: number;
-    soldCount: number;
-    activeJobs: number;
-    pendingDecisions: number;
-  }> {
-    return apiFetch("/scrap/dashboard");
+  async dashboard(): Promise<typeof MOCK_SCRAP_DASHBOARD> {
+    try { return await apiFetch("/scrap/dashboard"); }
+    catch (err) { console.warn("[mock fallback] scrap.dashboard", err); return MOCK_SCRAP_DASHBOARD; }
   },
 
   // ── ScrapItem Browse (WeeeR buys scrap from WeeeU) ───────────────────
-  browseList(params?: {
+  async browseList(params?: {
     conditionGrade?: string;
     minPrice?: string;
     maxPrice?: string;
@@ -44,11 +42,13 @@ export const scrapApi = {
     if (params?.minPrice) q.set("minPrice", params.minPrice);
     if (params?.maxPrice) q.set("maxPrice", params.maxPrice);
     const qs = q.toString();
-    return apiFetch(`/scrap/items${qs ? `?${qs}` : ""}`);
+    try { return await apiFetch(`/scrap/items${qs ? `?${qs}` : ""}`); }
+    catch (err) { console.warn("[mock fallback] scrap.browseList", err); return MOCK_SCRAP_ITEMS; }
   },
 
-  getItem(id: string): Promise<ScrapItem> {
-    return apiFetch(`/scrap/items/${id}`);
+  async getItem(id: string): Promise<ScrapItem> {
+    try { return await apiFetch(`/scrap/items/${id}`); }
+    catch (err) { console.warn("[mock fallback] scrap.getItem", err); return MOCK_SCRAP_ITEMS.find(i => i.id === id) ?? MOCK_SCRAP_ITEMS[0]; }
   },
 
   // Direct buy — WeeeR purchases ScrapItem → creates ScrapJob
@@ -57,12 +57,14 @@ export const scrapApi = {
   },
 
   // ── ScrapJob ─────────────────────────────────────────────────────────
-  jobList(): Promise<ScrapJob[]> {
-    return apiFetch("/scrap/jobs");
+  async jobList(): Promise<ScrapJob[]> {
+    try { return await apiFetch("/scrap/jobs"); }
+    catch (err) { console.warn("[mock fallback] scrap.jobList", err); return MOCK_SCRAP_JOBS; }
   },
 
-  getJob(id: string): Promise<ScrapJob> {
-    return apiFetch(`/scrap/jobs/${id}`);
+  async getJob(id: string): Promise<ScrapJob> {
+    try { return await apiFetch(`/scrap/jobs/${id}`); }
+    catch (err) { console.warn("[mock fallback] scrap.getJob", err); return MOCK_SCRAP_JOBS.find(j => j.id === id) ?? MOCK_SCRAP_JOBS[0]; }
   },
 
   decideJob(id: string, decision: ScrapJobOption): Promise<ScrapJob> {
@@ -105,7 +107,8 @@ export const scrapApi = {
     });
   },
 
-  getCertificate(jobId: string): Promise<EWasteCertificate> {
-    return apiFetch(`/scrap/jobs/${jobId}/certificate`);
+  async getCertificate(jobId: string): Promise<EWasteCertificate> {
+    try { return await apiFetch(`/scrap/jobs/${jobId}/certificate`); }
+    catch (err) { console.warn("[mock fallback] scrap.getCertificate", err); return { ...MOCK_EWASTE_CERTIFICATE, scrapJobId: jobId }; }
   },
 };

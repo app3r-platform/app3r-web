@@ -6,8 +6,8 @@ import { MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
 export const metadata: Metadata = { title: "Dashboard — WeeeR" };
 
 const STATS = [
-  { label: "Silver",       value: "4,250",  suffix: "pts",  icon: "🪙",  bg: "bg-gray-50",   text: "text-gray-700" },
-  { label: "Gold",         value: "1,800",  suffix: "pts",  icon: "⭐",  bg: "bg-yellow-50",  text: "text-yellow-700" },
+  { label: "พอยต์เงิน",   value: "350",    suffix: "point", icon: "🪙",  bg: "bg-gray-50",   text: "text-gray-700" },
+  { label: "พอยต์ทอง",   value: "2,055",  suffix: "point", icon: "⭐",  bg: "bg-yellow-50",  text: "text-yellow-700" },
   { label: "งานเดือนนี้",  value: "37",     suffix: "งาน",  icon: "📋",  bg: "bg-blue-50",    text: "text-blue-700" },
   { label: "WeeeT Active", value: "3",      suffix: "คน",   icon: "👷",  bg: "bg-[#FFF1ED]",   text: "text-[#D63B12]" },
 ];

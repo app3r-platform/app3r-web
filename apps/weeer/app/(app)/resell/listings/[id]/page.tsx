@@ -14,27 +14,30 @@ import { createAd, estimateGoldCost, AD_POSITION_OPTIONS, type AdPosition } from
 import type { Listing, Offer } from "../../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, OFFER_STATUS_LABEL, OFFER_STATUS_COLOR, LISTING_TERMINAL } from "../../_lib/types";
 
+// RC-B: relative date helper
+function addDays(d: Date, n: number): Date { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+
 // ── Mock data (Mockup 2.2) ──────────────────────────────────────────────────
 const MOCK_LISTINGS: Record<string, Listing & { offers?: Offer[] }> = {
   L001: {
     id: "L001", sellerId: "S1", sellerType: "WeeeR", listingType: "used_appliance",
     applianceName: "Samsung Q9 QLED 65\"", price: 18900, deliveryMethods: ["ส่ง Kerry"],
-    status: "receiving_offers", expiresAt: "2026-06-01", createdAt: "2026-05-20", updatedAt: "2026-05-20", offerCount: 2,
+    status: "receiving_offers", expiresAt: addDays(new Date(), 30).toISOString(), createdAt: addDays(new Date(), -7).toISOString(), updatedAt: addDays(new Date(), -7).toISOString(), offerCount: 2,
     description: "สภาพ 95% มีกล่อง ใช้งาน 1 ปี ไม่มีรอยขีด",
     warranty: { sourceWarranty: 6, additionalWarranty: 3 },
     terms3: { shipping: "ผู้ขายรับผิดชอบ", usedWarranty: "30 วัน", liability: "ผู้ขายรับผิด" },
     offers: [
-      { id: "O1", listingId: "L001", buyerId: "U1", buyerType: "WeeeU", offerPrice: 17500, deliveryMethod: "ส่ง Kerry", status: "pending", expiresAt: "2026-05-25", createdAt: "2026-05-21", buyerName: "สมชาย ใจดี", message: "ขอต่อราคาหน่อยครับ" },
-      { id: "O2", listingId: "L001", buyerId: "U2", buyerType: "WeeeU", offerPrice: 18000, deliveryMethod: "ส่ง Kerry", status: "pending", expiresAt: "2026-05-25", createdAt: "2026-05-22", buyerName: "สุดา รักชาติ" },
+      { id: "O1", listingId: "L001", buyerId: "U1", buyerType: "WeeeU", offerPrice: 17500, deliveryMethod: "ส่ง Kerry", status: "pending", expiresAt: addDays(new Date(), 7).toISOString(), createdAt: addDays(new Date(), -3).toISOString(), buyerName: "สมชาย ใจดี", message: "ขอต่อราคาหน่อยครับ" },
+      { id: "O2", listingId: "L001", buyerId: "U2", buyerType: "WeeeU", offerPrice: 18000, deliveryMethod: "ส่ง Kerry", status: "pending", expiresAt: addDays(new Date(), 7).toISOString(), createdAt: addDays(new Date(), -2).toISOString(), buyerName: "สุดา รักชาติ" },
     ],
   },
   L002: {
     id: "L002", sellerId: "S1", sellerType: "WeeeR", listingType: "used_appliance",
     applianceName: "Dyson V15 Detect", price: 8500, deliveryMethods: ["รับเอง"],
-    status: "offer_selected", expiresAt: "2026-06-01", createdAt: "2026-05-18", updatedAt: "2026-05-22", offerCount: 1,
+    status: "offer_selected", expiresAt: addDays(new Date(), 30).toISOString(), createdAt: addDays(new Date(), -10).toISOString(), updatedAt: addDays(new Date(), -3).toISOString(), offerCount: 1,
     terms3: { shipping: "ผู้ซื้อรับผิดชอบ", usedWarranty: "7 วัน", liability: "ไม่รับผิด" },
     offers: [
-      { id: "O3", listingId: "L002", buyerId: "U3", buyerType: "WeeeR", offerPrice: 8500, deliveryMethod: "รับเอง", status: "selected", expiresAt: "2026-05-26", createdAt: "2026-05-22", buyerName: "ร้าน ElecPlus" },
+      { id: "O3", listingId: "L002", buyerId: "U3", buyerType: "WeeeR", offerPrice: 8500, deliveryMethod: "รับเอง", status: "selected", expiresAt: addDays(new Date(), 7).toISOString(), createdAt: addDays(new Date(), -3).toISOString(), buyerName: "ร้าน ElecPlus" },
     ],
   },
   L003: {

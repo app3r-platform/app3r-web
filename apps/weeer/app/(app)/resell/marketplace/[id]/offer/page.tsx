@@ -102,15 +102,21 @@ export default function ResellMarketplaceOfferPage({ params }: { params: Promise
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Link href="/resell/marketplace"
-            className="flex-1 text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl text-sm transition-colors">
-            ← กลับสู่ Marketplace
+        <div className="flex flex-col gap-2">
+          <Link href="/resell/transactions"
+            className="block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl text-sm transition-colors">
+            📋 ติดตามสถานะข้อเสนอ
           </Link>
-          <Link href={`/resell/marketplace/${id}`}
-            className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
-            ดูประกาศนี้
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/resell/marketplace"
+              className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
+              ← Marketplace
+            </Link>
+            <Link href={`/resell/marketplace/${id}`}
+              className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
+              ดูประกาศนี้
+            </Link>
+          </div>
         </div>
       </div>
     );

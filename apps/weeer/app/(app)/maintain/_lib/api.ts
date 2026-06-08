@@ -1,4 +1,6 @@
 import type { MaintainJob, MaintainOfferPayload, WithdrawReason } from "./types";
+// RC-1: Mock fallback data (dev/offline)
+import { MOCK_MAINTAIN_JOBS, MOCK_MAINTAIN_QUEUE } from "./mock";
 // TODO: REMOVE BEFORE PROD — dev auth bypass
 import { getDevTestToken } from "../../../../lib/dev-auth";
 
@@ -28,18 +30,23 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const maintainApi = {
   // GET /maintain/jobs/queue/ — pending jobs in radius
-  getQueue: () =>
-    apiFetch<MaintainJob[]>("/maintain/jobs/queue/"),
+  getQueue: async () => {
+    try { return await apiFetch<MaintainJob[]>("/maintain/jobs/queue/"); }
+    catch (err) { console.warn("[mock fallback] maintain.getQueue", err); return MOCK_MAINTAIN_QUEUE; }
+  },
 
   // GET /maintain/jobs/shop/ — jobs accepted by this shop
-  getShopJobs: (params?: { status?: string }) => {
+  getShopJobs: async (params?: { status?: string }) => {
     const qs = params?.status ? `?status=${params.status}` : "";
-    return apiFetch<MaintainJob[]>(`/maintain/jobs/shop/${qs}`);
+    try { return await apiFetch<MaintainJob[]>(`/maintain/jobs/shop/${qs}`); }
+    catch (err) { console.warn("[mock fallback] maintain.getShopJobs", err); return MOCK_MAINTAIN_JOBS; }
   },
 
   // GET /maintain/jobs/{id}/
-  getJob: (id: string) =>
-    apiFetch<MaintainJob>(`/maintain/jobs/${id}/`),
+  getJob: async (id: string) => {
+    try { return await apiFetch<MaintainJob>(`/maintain/jobs/${id}/`); }
+    catch (err) { console.warn("[mock fallback] maintain.getJob", err); return MOCK_MAINTAIN_JOBS.find(j => j.id === id) ?? MOCK_MAINTAIN_JOBS[0]; }
+  },
 
   // POST /maintain/jobs/{id}/accept/
   acceptJob: (id: string) =>
