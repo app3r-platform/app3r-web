@@ -23,7 +23,7 @@ const ROUTE_MAP: Record<string, string> = {
   "A-14": "/resell/disputes/[id]", "A-15": "/parts/orders",
   "A-16": "/parts/orders/[id]", "A-17": "/disputes", "A-18": "/disputes/[id]",
   "A-19": "/kyc", "A-20": "/kyc/[id]",
-  "A-21": "/repair/analytics", "A-37": "/resell/lifecycle",
+  "A-21": "/repair/analytics", "A-36": "/resell/fees", "A-37": "/resell/lifecycle",
   "A-43": "/users/weeer/[id]/kyc", "A-45": "/points/manual-adjust",
   "A-46": "/platform/balances", "A-47": "/platform/gold-management",
   "A-48": "/platform/reconciliation", "A-49": "/platform/silver",
