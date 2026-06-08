@@ -21,7 +21,7 @@ export default function ScrapPickupPage({ params }: { params: Promise<{ id: stri
 
         {/* Header */}
         <h1 className="text-xl font-bold text-white mt-4 mb-6">
-          📍 ถึงหน้างาน (S6)
+          📍 ถึงหน้างาน
         </h1>
 
         {/* Job summary */}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 // 🧪 MOCKUP PAGE — T-06 "เสนอซื้อซากเครื่อง (C4)"
 // Mockup-only (no backend). State toggle lets reviewer preview each outcome.
 // Escrow direction (C4 scrap): WeeeR pays Gold → WeeeU. POINT-LOCK terminology.
@@ -45,7 +45,7 @@ export default function ScrapOfferPage({ params }: { params: Promise<{ id: strin
         >
           ←
         </button>
-        <h1 className="font-bold text-white">T-06 — เสนอซื้อซากเครื่อง</h1>
+        <h1 className="font-bold text-white">เสนอซื้อซากเครื่อง</h1>
       </div>
 
       <div className="px-4 pt-4 space-y-5">
