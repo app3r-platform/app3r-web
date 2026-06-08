@@ -23,6 +23,15 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PART_DETAIL = {
+  id: "PART-001", shopId: "SHOP-001", name: "คอมเพรสเซอร์ Daikin R410A", sku: "CP-DAI-001",
+  category: "เครื่องปรับอากาศ", unit: "ตัว", condition: "new" as const,
+  stockQty: 5, reservedQty: 1, unitPrice: 4500,
+  source: { type: "purchase" as const },
+  createdAt: "2026-01-15T09:00:00Z", updatedAt: "2026-05-20T12:00:00Z",
+} as unknown as Part;
+
 export default function PartDetailPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -36,7 +45,10 @@ export default function PartDetailPage() {
       setPart(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setPart(MOCK_PART_DETAIL);
+      setError(null);
     } finally {
       setLoading(false);
     }

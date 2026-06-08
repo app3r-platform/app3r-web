@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -272,14 +272,14 @@ export default function TopupPage() {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg"
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-900 rounded-lg"
               >
                 ← ก่อนหน้า
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(data.pages, p + 1))}
                 disabled={page === data.pages}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-white rounded-lg"
+                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-900 rounded-lg"
               >
                 ถัดไป →
               </button>
@@ -302,7 +302,7 @@ export default function TopupPage() {
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder="เช่น: สลิปไม่ชัด, ยอดไม่ตรง, สลิปซ้ำ..."
               rows={3}
-              className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
+              className="w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400 resize-none"
             />
             <div className="flex gap-3 mt-5">
               <button

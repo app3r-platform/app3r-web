@@ -21,6 +21,16 @@ interface PartsListResponse {
   count: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PARTS_DATA: PartsListResponse = {
+  results: [
+    { id: "PART-001", shopId: "SHOP-001", name: "คอมเพรสเซอร์ Daikin R410A", sku: "CP-DAI-001", category: "เครื่องปรับอากาศ", unit: "ตัว", condition: "new", stockQty: 5, reservedQty: 1, unitPrice: 4500, source: { type: "purchase" }, createdAt: "2026-01-15T09:00:00Z", updatedAt: "2026-05-20T12:00:00Z" },
+    { id: "PART-002", shopId: "SHOP-002", name: "PCB Board Samsung A/C", sku: "PCB-SAM-002", category: "เครื่องใช้ไฟฟ้า", unit: "ชิ้น", condition: "used", stockQty: 3, reservedQty: 0, unitPrice: 1200, source: { type: "disassembly", refId: "SCRAP-001" }, createdAt: "2026-02-10T10:00:00Z", updatedAt: "2026-05-22T14:00:00Z" },
+    { id: "PART-003", shopId: "SHOP-001", name: "มอเตอร์พัดลม LG 18BTU", sku: "MTR-LG-003", category: "เครื่องปรับอากาศ", unit: "ตัว", condition: "refurbished", stockQty: 2, reservedQty: 1, unitPrice: 2800, source: { type: "purchase" }, createdAt: "2026-03-05T08:00:00Z", updatedAt: "2026-05-25T10:00:00Z" },
+  ] as unknown as Part[],
+  count: 3,
+};
+
 function EmptyState({ message }: { message: string }) {
   return (
     <tr>
@@ -57,7 +67,11 @@ export default function PartsPage() {
       setTotal(d.count);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_PARTS_DATA.results);
+      setTotal(MOCK_PARTS_DATA.count);
+      setError(null);
     } finally {
       setLoading(false);
     }

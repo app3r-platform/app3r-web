@@ -9,48 +9,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { ADMIN_ANNO_MAP } from "@/lib/mock-anno-data";
-
-// รหัสจอ → route (จาก SCREEN_MAP ใน ScreenBadge.tsx) — ย่อเฉพาะ base routes
-const ROUTE_MAP: Record<string, string> = {
-  "A-01": "/", "A-02": "/repair/jobs", "A-03": "/repair/jobs/[id]",
-  "A-03c": "/repair/jobs/[id]/manual-override", "A-04": "/repair/disputes",
-  "A-05": "/repair/disputes/[id]", "A-06": "/maintain/jobs",
-  "A-07": "/maintain/jobs/[id]", "A-07c": "/maintain/jobs/[id]/mockup/m9-cancelled",
-  "A-08": "/scrap/jobs", "A-08b": "/scrap/jobs/[id]", "A-09": "/scrap/disputes",
-  "A-10": "/scrap/disputes/[id]", "A-11": "/scrap/certificates",
-  "A-11b": "/scrap/certificates/[id]", "A-12": "/resell/listings",
-  "A-12b": "/resell/listings/[id]", "A-13": "/resell/disputes",
-  "A-14": "/resell/disputes/[id]", "A-15": "/parts/orders",
-  "A-16": "/parts/orders/[id]", "A-17": "/disputes", "A-18": "/disputes/[id]",
-  "A-19": "/kyc", "A-20": "/kyc/[id]",
-  // ── D-ref screens (Gen 57 FIX 2) ──────────────────────────────────────────
-  "A-21": "/repair/analytics", "A-37": "/resell/lifecycle",
-  "A-43": "/users/weeer/[id]/kyc", "A-45": "/points/manual-adjust",
-  "A-46": "/platform/balances", "A-47": "/platform/gold-management",
-  "A-48": "/platform/reconciliation", "A-49": "/platform/silver",
-  "A-50": "/platform/transactions", "A-52": "/withdrawal",
-  "A-56": "/config", "A-57": "/reference",
-  "A-59": "/system/storage", "A-67": "/contact/info",
-  "A-68": "/testimonials", "A-69": "/ads",
-};
-
-// Match pathname → Screen ID (simplified — ScreenBadge มี full logic)
-function matchId(pathname: string): string | null {
-  const sorted = Object.entries(ROUTE_MAP).sort(
-    (a, b) => b[1].length - a[1].length
-  );
-  for (const [id, pattern] of sorted) {
-    const re = new RegExp(
-      "^" +
-        pattern
-          .replace(/\[[^\]]+\]/g, "[^/]+")
-          .replace(/\//g, "\\/") +
-        "$"
-    );
-    if (re.test(pathname)) return id;
-  }
-  return null;
-}
+import { matchScreenId, JUNCTION_MAP } from "@/lib/junction-data";
 
 const PORT_MAP: Record<string, number> = {
   WeeeU: 3002, WeeeR: 3001, WeeeT: 3003, Admin: 3000, Website: 3004,
@@ -60,12 +19,15 @@ export function MockAnno() {
   // ── Hooks ก่อน early return เสมอ (Rules of Hooks) ──────────────────────────
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [junctionOpen, setJunctionOpen] = useState(false);
 
   const flag = process.env.NEXT_PUBLIC_DEV_NAV;
   if (flag !== "true" && flag !== "1") return null;
 
-  const screenId = matchId(pathname);
+  const screenId = matchScreenId(pathname);
   const anno = screenId ? ADMIN_ANNO_MAP[screenId] : null;
+  // TODO: REMOVE BEFORE PROD — junction entry (TD-07)
+  const junctionEntry = screenId ? JUNCTION_MAP[screenId] : undefined;
 
   // ถ้าไม่มีข้อมูล annotation แสดงแค่ปุ่มเล็กๆ
   const hasData =
@@ -77,7 +39,17 @@ export function MockAnno() {
 
   return (
     // mock-anno — grep marker สำหรับลบทีเดียวตอน Phase 4
-    <div className="mock-anno fixed bottom-12 right-4 z-50 font-mono text-xs">
+    <div className="mock-anno fixed bottom-12 right-4 z-50 font-mono text-xs flex items-center gap-1">
+      {/* TODO: REMOVE BEFORE PROD — junction button (TD-07) */}
+      {junctionEntry && (
+        <button
+          onClick={() => setJunctionOpen((j) => !j)}
+          title={`Tree Junction: ${junctionEntry.screenTitle} (dev only)`}
+          className="px-2 py-1 rounded shadow border bg-teal-700 border-teal-500 text-white hover:bg-teal-600 transition-colors"
+        >
+          ↔
+        </button>
+      )}
       <button
         onClick={() => setOpen((o) => !o)}
         title="Mockup Annotations (dev only)"
@@ -169,6 +141,79 @@ export function MockAnno() {
 
           <div className="text-gray-600 text-[10px] border-t border-gray-700 pt-2">
             mock-anno · ลบตอน Phase 4 · grep &quot;mock-anno&quot;
+          </div>
+        </div>
+      )}
+
+      {/* TODO: REMOVE BEFORE PROD — Junction popup modal (TD-07) */}
+      {junctionOpen && junctionEntry && (
+        <div
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]"
+          onClick={() => setJunctionOpen(false)}
+        >
+          <div
+            className="bg-gray-900 border border-teal-700/60 rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between px-5 py-4 border-b border-gray-700 bg-gray-800/60 rounded-t-2xl">
+              <div>
+                <div className="text-teal-400 text-[10px] font-mono mb-0.5 uppercase tracking-wider">
+                  ↔ Tree Junction v2 · {junctionEntry.screenCode}
+                </div>
+                <div className="text-white font-semibold text-sm">{junctionEntry.screenTitle}</div>
+              </div>
+              <button
+                onClick={() => setJunctionOpen(false)}
+                className="text-gray-400 hover:text-white ml-3 text-xl leading-none mt-0.5"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-5 space-y-5">
+              {/* 📋 หน้าที่ */}
+              <section>
+                <div className="text-indigo-400 font-semibold text-[10px] uppercase tracking-widest mb-2">
+                  📋 หน้าที่
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed">{junctionEntry.role}</p>
+              </section>
+
+              {/* ◀ มาจาก */}
+              <section>
+                <div className="text-yellow-400 font-semibold text-[10px] uppercase tracking-widest mb-2">
+                  ◀ มาจาก
+                </div>
+                <ul className="space-y-1.5">
+                  {junctionEntry.origins.map((o, i) => (
+                    <li key={i} className="flex gap-2 text-sm">
+                      <span className="text-yellow-600 shrink-0 mt-0.5">•</span>
+                      <span className="text-gray-300">{o}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {/* ▶ ไปต่อ */}
+              <section>
+                <div className="text-green-400 font-semibold text-[10px] uppercase tracking-widest mb-2">
+                  ▶ ไปต่อ
+                </div>
+                <ul className="space-y-1.5">
+                  {junctionEntry.destinations.map((d, i) => (
+                    <li key={i} className="flex gap-2 text-sm">
+                      <span className="text-green-600 shrink-0 mt-0.5">→</span>
+                      <span className="text-gray-300">{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <div className="text-gray-600 text-[10px] border-t border-gray-700 pt-3">
+                Tree Junction v2 · Advisor Gen 115 · dev only — ลบตอน Phase 4
+              </div>
+            </div>
           </div>
         </div>
       )}

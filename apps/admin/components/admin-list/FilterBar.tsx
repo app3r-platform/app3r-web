@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 // Sub-5a D80 Admin Lists Foundation — shared FilterBar
 import { useCallback, useRef } from 'react'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
@@ -48,7 +48,7 @@ export function FilterBar({
         defaultValue={search}
         onChange={handleSearch}
         placeholder="ค้นหา..."
-        className="rounded-md border border-gray-300 bg-gray-100 px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-admin-primary w-56"
+        className="rounded-md border border-gray-300 bg-gray-100 px-3 py-1.5 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-admin-primary w-56"
       />
 
       {statusOptions.length > 0 && (

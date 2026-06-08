@@ -17,6 +17,14 @@ function getToken(): string {
 
 const NEXT_STATUSES: ContactStatus[] = ['read', 'replied', 'closed']
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_MESSAGE_DETAIL: ContactMessageDto = {
+  id: 'MSG-001', category: 'support', name: 'ธนาชัย วงษ์ใหญ่', email: 'thanachai@example.com',
+  phone: '081-234-5678', subject: 'แจ้งปัญหาการใช้งานแอพ', body: 'ไม่สามารถ login ได้ครับ กรุณาช่วยตรวจสอบด้วย',
+  status: 'new', createdAt: '2026-05-20T09:00:00Z', updatedAt: '2026-05-20T09:00:00Z',
+  repliedAt: null, repliedBy: null, deletedAt: null,
+}
+
 export default function MessageDetail({ id }: { id: string }) {
   const router = useRouter()
   const [message, setMessage] = useState<ContactMessageDto | null>(null)
@@ -32,7 +40,10 @@ export default function MessageDetail({ id }: { id: string }) {
       const m = await getContactMessage(getToken(), id)
       setMessage(m)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'โหลดข้อมูลไม่สำเร็จ')
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn('[mock fallback]', e)
+      setMessage(MOCK_MESSAGE_DETAIL)
+      setError(null)
     } finally {
       setLoading(false)
     }

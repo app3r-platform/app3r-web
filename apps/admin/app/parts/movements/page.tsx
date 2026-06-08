@@ -38,6 +38,17 @@ interface MovementsListResponse {
   count: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_MOVEMENTS_DATA: MovementsListResponse = {
+  results: [
+    { id: "MOV-001", partId: "PART-001", type: "STOCK_IN", qty: 3, reason: "purchase", performedBy: "admin", performedAt: "2026-05-10T09:00:00Z", balanceAfter: 5 },
+    { id: "MOV-002", partId: "PART-001", type: "STOCK_OUT", qty: 1, reason: "use_for_repair", refId: "JOB-R-001", performedBy: "admin", performedAt: "2026-05-15T11:00:00Z", balanceAfter: 4 },
+    { id: "MOV-003", partId: "PART-002", type: "STOCK_IN", qty: 2, reason: "receive_from_disassembly", refId: "SCRAP-001", performedBy: "admin", performedAt: "2026-05-18T14:00:00Z", balanceAfter: 3 },
+    { id: "MOV-004", partId: "PART-003", type: "STOCK_ADJUSTMENT", qty: -1, reason: "manual", note: "ชิ้นส่วนเสียหาย", performedBy: "admin", performedAt: "2026-05-20T10:00:00Z", balanceAfter: 2 },
+  ] as unknown as StockMovement[],
+  count: 4,
+};
+
 function MovementsInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -76,7 +87,11 @@ function MovementsInner() {
       setTotal(d.count);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_MOVEMENTS_DATA.results);
+      setTotal(MOCK_MOVEMENTS_DATA.count);
+      setError(null);
     } finally {
       setLoading(false);
     }

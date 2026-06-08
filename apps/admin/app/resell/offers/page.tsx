@@ -22,6 +22,16 @@ interface OffersResponse {
   count: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_OFFERS_DATA: OffersResponse = {
+  results: [
+    { id: "OFR-001", listingId: "LST-001", buyerId: "WEEEU-001", buyerType: "WeeeU", offerPrice: 11000, deliveryMethod: "self_pickup", message: "ขอซื้อด้วยครับ", status: "pending", expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-10T11:00:00Z" },
+    { id: "OFR-002", listingId: "LST-001", buyerId: "WEEER-002", buyerType: "WeeeR", offerPrice: 11500, deliveryMethod: "shipping", status: "selected", expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-11T09:00:00Z" },
+    { id: "OFR-003", listingId: "LST-002", buyerId: "WEEEU-003", buyerType: "WeeeU", offerPrice: 9800, deliveryMethod: "self_pickup", status: "rejected", expiresAt: "2026-06-10T00:00:00Z", createdAt: "2026-05-08T14:00:00Z" },
+  ] as unknown as Offer[],
+  count: 3,
+};
+
 function OffersInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,7 +59,11 @@ function OffersInner() {
       setTotal(d.count);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_OFFERS_DATA.results);
+      setTotal(MOCK_OFFERS_DATA.count);
+      setError(null);
     } finally {
       setLoading(false);
     }

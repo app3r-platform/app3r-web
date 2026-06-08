@@ -302,7 +302,7 @@ function SCard({ label, value, color }: { label: string; value: string; color: s
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className={`text-xl font-bold ${colors[color] ?? "text-white"}`}>{value}</p>
+      <p className={`text-xl font-bold ${colors[color] ?? "text-gray-900"}`}>{value}</p>
     </div>
   );
 }

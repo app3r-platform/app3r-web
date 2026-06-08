@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { matchScreenId, JUNCTION_MAP } from "@/lib/junction-data";
 
 // ═══════════════════════════════════════════════════════════════
 // DevNav — Developer Navigation Panel (Admin)
@@ -56,9 +58,16 @@ const DEV_NAV_ENABLED = process.env.NEXT_PUBLIC_DEV_NAV === "true";
 
 export function DevNav() {
   const [open, setOpen] = useState(false);
+  // TODO: REMOVE BEFORE PROD — junction state (TD-07)
+  const [junctionOpen, setJunctionOpen] = useState(false);
+  const pathname = usePathname();
 
   // ซ่อนทั้งหมดถ้า flag ไม่เปิด
   if (!DEV_NAV_ENABLED) return null;
+
+  // TODO: REMOVE BEFORE PROD — junction lookup (TD-07)
+  const screenId = matchScreenId(pathname);
+  const junctionEntry = screenId ? JUNCTION_MAP[screenId] : undefined;
 
   // จัด group
   const groups = devNavLinks.reduce<Record<string, DevNavLink[]>>((acc, link) => {
@@ -90,9 +99,21 @@ export function DevNav() {
               <span className="text-sm font-bold text-admin-primary">🧭 Dev Navigator</span>
               <span className="text-xs bg-admin-primary text-white px-1.5 py-0.5 rounded font-mono">Admin</span>
             </div>
-            <span className="text-xs text-gray-400 font-mono">
-              {devNavLinks.length} links
-            </span>
+            <div className="flex items-center gap-2">
+              {/* TODO: REMOVE BEFORE PROD — junction button (TD-07) */}
+              {junctionEntry && (
+                <button
+                  onClick={() => setJunctionOpen(true)}
+                  title={`Tree Junction: ${junctionEntry.screenTitle}`}
+                  className="text-xs px-2 py-0.5 rounded border bg-teal-50 border-teal-300 text-teal-700 hover:bg-teal-100 transition-colors font-mono"
+                >
+                  ↔ {screenId}
+                </button>
+              )}
+              <span className="text-xs text-gray-400 font-mono">
+                {devNavLinks.length} links
+              </span>
+            </div>
           </div>
 
           {/* Links */}
@@ -129,6 +150,79 @@ export function DevNav() {
             <p className="text-xs text-gray-400 text-center">
               NEXT_PUBLIC_DEV_NAV=true · dev only
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* TODO: REMOVE BEFORE PROD — Junction popup modal (TD-07) */}
+      {junctionOpen && junctionEntry && (
+        <div
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]"
+          onClick={() => setJunctionOpen(false)}
+        >
+          <div
+            className="bg-gray-900 border border-teal-700/60 rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between px-5 py-4 border-b border-gray-700 bg-gray-800/60 rounded-t-2xl">
+              <div>
+                <div className="text-teal-400 text-[10px] font-mono mb-0.5 uppercase tracking-wider">
+                  ↔ Tree Junction v2 · {junctionEntry.screenCode}
+                </div>
+                <div className="text-white font-semibold text-sm">{junctionEntry.screenTitle}</div>
+              </div>
+              <button
+                onClick={() => setJunctionOpen(false)}
+                className="text-gray-400 hover:text-white ml-3 text-xl leading-none mt-0.5"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-5 space-y-5">
+              {/* 📋 หน้าที่ */}
+              <section>
+                <div className="text-indigo-400 font-semibold text-[10px] uppercase tracking-widest mb-2">
+                  📋 หน้าที่
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed">{junctionEntry.role}</p>
+              </section>
+
+              {/* ◀ มาจาก */}
+              <section>
+                <div className="text-yellow-400 font-semibold text-[10px] uppercase tracking-widest mb-2">
+                  ◀ มาจาก
+                </div>
+                <ul className="space-y-1.5">
+                  {junctionEntry.origins.map((o, i) => (
+                    <li key={i} className="flex gap-2 text-sm">
+                      <span className="text-yellow-600 shrink-0 mt-0.5">•</span>
+                      <span className="text-gray-300">{o}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {/* ▶ ไปต่อ */}
+              <section>
+                <div className="text-green-400 font-semibold text-[10px] uppercase tracking-widest mb-2">
+                  ▶ ไปต่อ
+                </div>
+                <ul className="space-y-1.5">
+                  {junctionEntry.destinations.map((d, i) => (
+                    <li key={i} className="flex gap-2 text-sm">
+                      <span className="text-green-600 shrink-0 mt-0.5">→</span>
+                      <span className="text-gray-300">{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <div className="text-gray-600 text-[10px] border-t border-gray-700 pt-3">
+                Tree Junction v2 · Advisor Gen 115 · dev only — ลบตอน Phase 4
+              </div>
+            </div>
           </div>
         </div>
       )}

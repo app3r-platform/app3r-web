@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -337,7 +337,7 @@ export default function PromotionsPage() {
                     min="0"
                     value={bonusPoints}
                     onChange={(e) => setBonusPoints(e.target.value)}
-                    className="w-40 bg-gray-100 border border-gray-300 text-white text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary"
+                    className="w-40 bg-gray-100 border border-gray-300 text-gray-900 text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary"
                   />
                   <span className="text-gray-500 text-sm">Points</span>
                 </div>
@@ -373,7 +373,7 @@ export default function PromotionsPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="ชื่อ หรือ email หรือ เบอร์โทร..."
-                  className="flex-1 bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
+                  className="flex-1 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
                 />
                 <button
                   onClick={handleSearch}
@@ -473,7 +473,7 @@ export default function PromotionsPage() {
                   value={adjustAmount}
                   onChange={(e) => setAdjustAmount(e.target.value)}
                   placeholder="เช่น 100"
-                  className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
+                  className="w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400"
                 />
               </div>
             </div>
@@ -510,7 +510,7 @@ export default function PromotionsPage() {
                 onChange={(e) => setAdjustDetail(e.target.value)}
                 placeholder="อธิบายเหตุผลให้ครบถ้วน เช่น เลขที่ transaction ที่เกิดปัญหา, วันที่เกิดเหตุ, การตกลงกับผู้ใช้..."
                 rows={3}
-                className="w-full bg-gray-100 border border-gray-300 text-white text-sm rounded-lg px-4 py-3 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400 resize-none"
+                className="w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg px-4 py-3 focus:outline-none focus:outline-none focus:border-admin-primary placeholder-gray-400 resize-none"
               />
               <div className="text-xs text-gray-600 mt-1 text-right">
                 {adjustDetail.length} / 10 ตัวอักษรขั้นต่ำ

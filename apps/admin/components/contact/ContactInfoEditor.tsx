@@ -66,12 +66,10 @@ export default function ContactInfoEditor() {
         mapEmbedUrl: info.mapEmbedUrl ?? null,
       })
     } catch (e) {
-      // pre-T+2 Backend endpoint not live → keep empty form, show notice
-      setError(
-        e instanceof Error
-          ? `โหลดข้อมูลเดิมไม่สำเร็จ (${e.message}) — แก้ไขบนฟอร์มเปล่าได้`
-          : 'โหลดข้อมูลไม่สำเร็จ',
-      )
+      // API ไม่พร้อม → mock fallback: keep empty form, clear error
+      console.warn('[mock fallback]', e)
+      setForm(EMPTY_FORM)
+      setError(null)
     } finally {
       setLoading(false)
     }

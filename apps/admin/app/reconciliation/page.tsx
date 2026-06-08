@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * /reconciliation/page.tsx
@@ -124,7 +124,7 @@ function ResolveModal({
           <div>
             <label className="text-xs text-gray-500 block mb-1">การดำเนินการ (Action)</label>
             <select value={action} onChange={e => setAction(e.target.value as ResolvePayload["action"])}
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-blue-500">
               <option value="retry">🔄 Retry — ลองประมวลผลอีกครั้ง</option>
               <option value="force_complete">✅ Force Complete — บังคับให้สำเร็จ</option>
               <option value="force_fail">❌ Force Fail — บังคับให้ล้มเหลว</option>
@@ -137,7 +137,7 @@ function ResolveModal({
               value={note}
               onChange={e => setNote(e.target.value)}
               placeholder="อธิบายเหตุผลที่แก้ไข settlement นี้..."
-              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 resize-none"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-blue-500 resize-none"
               rows={3}
             />
           </div>
