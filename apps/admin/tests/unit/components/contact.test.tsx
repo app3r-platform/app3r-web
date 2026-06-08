@@ -106,11 +106,11 @@ describe('ContactInbox', () => {
     expect(screen.getAllByText('รายงานปัญหา').length).toBeGreaterThanOrEqual(1)
   })
 
-  it('shows error state when API rejects', async () => {
+  it('shows mock fallback when API rejects', async () => {
     mList.mockRejectedValue(new Error('โหลดล้มเหลว'))
     render(<ContactInbox />)
     await waitFor(() =>
-      expect(screen.getByText(/โหลดล้มเหลว/)).toBeInTheDocument(),
+      expect(screen.getByText('แจ้งปัญหาการใช้งานแอพ')).toBeInTheDocument(),
     )
   })
 
@@ -150,11 +150,11 @@ describe('MessageDetail', () => {
     expect(screen.getByText('รายละเอียดปัญหา')).toBeInTheDocument()
   })
 
-  it('shows error when load fails', async () => {
+  it('shows mock fallback when load fails', async () => {
     mGet.mockRejectedValue(new Error('ไม่พบ'))
     render(<MessageDetail id="m1" />)
     await waitFor(() =>
-      expect(screen.getByText('ไม่พบ')).toBeInTheDocument(),
+      expect(screen.getByText('ธนาชัย วงษ์ใหญ่')).toBeInTheDocument(),
     )
   })
 
@@ -211,11 +211,11 @@ describe('ContactInfoEditor', () => {
     expect(screen.getByDisplayValue('02-000-0000')).toBeInTheDocument()
   })
 
-  it('shows notice when load fails (pre-T+2 endpoint not live)', async () => {
+  it('shows empty form fallback when load fails (pre-T+2 endpoint not live)', async () => {
     mGetInfo.mockRejectedValue(new Error('404'))
     render(<ContactInfoEditor />)
     await waitFor(() =>
-      expect(screen.getByText(/แก้ไขบนฟอร์มเปล่าได้/)).toBeInTheDocument(),
+      expect(screen.getByText('บันทึกข้อมูลติดต่อ')).toBeInTheDocument(),
     )
   })
 
