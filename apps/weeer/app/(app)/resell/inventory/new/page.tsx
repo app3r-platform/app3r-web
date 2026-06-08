@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { resellApi } from "../../_lib/api";
@@ -10,14 +10,28 @@ import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const CATEGORIES = ["เครื่องปรับอากาศ", "ตู้เย็น", "เครื่องซักผ้า", "ทีวี", "อื่นๆ"];
 
+// 3.1 — brand/model dropdown options (+ "อื่นๆ" → free-text)
+const BRAND_OPTIONS = [
+  "Samsung", "LG", "Panasonic", "Hitachi",
+  "Mitsubishi Electric", "Sharp", "Carrier", "Daikin",
+  "Toshiba", "Haier", "อื่นๆ",
+];
+const MODEL_OPTIONS = [
+  "รุ่นมาตรฐาน", "รุ่นประหยัดพลังงาน", "รุ่น Inverter",
+  "รุ่น Smart Wi-Fi", "รุ่น Premium", "อื่นๆ",
+];
+
 export default function ResellInventoryNewPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   const [name, setName] = useState("");
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
+  // 3.1: brand/model → dropdown + "อื่นๆ" + free-text fallback
+  const [brandSelect, setBrandSelect] = useState("");
+  const [brandCustom, setBrandCustom] = useState("");
+  const [modelSelect, setModelSelect] = useState("");
+  const [modelCustom, setModelCustom] = useState("");
   const [sku, setSku] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [condition, setCondition] = useState<ApplianceCondition>("good");
@@ -30,23 +44,37 @@ export default function ResellInventoryNewPage() {
   const { supported, state: scanState, result: scanResult, videoRef, startScan, stopScan } = useBarcodeScanner();
   const [showScanner, setShowScanner] = useState(false);
 
-  function handleScanResult(value: string) {
-    setSku(value);
+  // RC-D: move scanResult handler out of render body → useEffect
+  useEffect(() => {
+    if (!scanResult) return;
+    setSku(scanResult);
     setShowScanner(false);
-    // Try SKU lookup
-    resellApi.inventoryLookupSku(value)
+    resellApi.inventoryLookupSku(scanResult)
       .then(d => {
         if (d?.name) setName(d.name);
-        if (d?.brand) setBrand(d.brand ?? "");
-        if (d?.model) setModel(d.model ?? "");
+        if (d?.brand) {
+          if (BRAND_OPTIONS.includes(d.brand)) {
+            setBrandSelect(d.brand);
+          } else {
+            setBrandSelect("อื่นๆ");
+            setBrandCustom(d.brand);
+          }
+        }
+        if (d?.model) {
+          if (MODEL_OPTIONS.includes(d.model)) {
+            setModelSelect(d.model);
+          } else {
+            setModelSelect("อื่นๆ");
+            setModelCustom(d.model);
+          }
+        }
       })
       .catch(() => {/* silent */});
-  }
+  }, [scanResult]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // When scanner returns result, apply it
-  if (scanResult && sku !== scanResult) {
-    handleScanResult(scanResult);
-  }
+  // computed actual values for submit
+  const brandValue = brandSelect === "อื่นๆ" ? brandCustom : brandSelect;
+  const modelValue = modelSelect === "อื่นๆ" ? modelCustom : modelSelect;
 
   function validate() {
     const e: Record<string, string> = {};
@@ -65,8 +93,8 @@ export default function ResellInventoryNewPage() {
     try {
       const created = await resellApi.inventoryCreate({
         name: name.trim(),
-        brand: brand.trim() || undefined,
-        model: model.trim() || undefined,
+        brand: brandValue.trim() || undefined,
+        model: modelValue.trim() || undefined,
         sku: sku.trim() || undefined,
         category,
         condition,
@@ -100,11 +128,11 @@ export default function ResellInventoryNewPage() {
           <div className="flex gap-2">
             <input type="text" value={sku} onChange={e => setSku(e.target.value)}
               placeholder="กรอก SKU หรือสแกน Barcode"
-              className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             {supported ? (
               <button type="button"
                 onClick={() => { setShowScanner(s => !s); if (!showScanner) startScan(); else stopScan(); }}
-                className="shrink-0 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-semibold px-3 py-2 rounded-xl transition-colors">
+                className="shrink-0 bg-[#FFE0D6] hover:bg-[#FFCABB] text-[#B8300E] text-xs font-semibold px-3 py-2 rounded-xl transition-colors">
                 {showScanner ? "ปิด" : "📷 สแกน"}
               </button>
             ) : (
@@ -113,11 +141,11 @@ export default function ResellInventoryNewPage() {
           </div>
           {/* Camera feed */}
           {showScanner && (
-            <div className="mt-2 rounded-xl overflow-hidden border border-blue-200 bg-black relative">
+            <div className="mt-2 rounded-xl overflow-hidden border border-[#FF663A]/30 bg-black relative">
               <video ref={videoRef} className="w-full max-h-48 object-cover" muted playsInline />
               {scanState === "scanning" && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="border-2 border-blue-400 w-40 h-24 rounded-lg opacity-60" />
+                  <div className="border-2 border-[#FF663A] w-40 h-24 rounded-lg opacity-60" />
                 </div>
               )}
               {scanState === "error" && (
@@ -134,23 +162,39 @@ export default function ResellInventoryNewPage() {
           </label>
           <input type="text" value={name} onChange={e => { setName(e.target.value); setFormErrors(f => ({ ...f, name: "" })); }}
             placeholder="เช่น เครื่องปรับอากาศ Samsung 9000 BTU"
-            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 ${formErrors.name ? "border-red-400" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.name ? "border-red-400" : "border-gray-200"}`} />
           {formErrors.name && <p className="text-xs text-red-500 mt-1">{formErrors.name}</p>}
         </div>
 
-        {/* Brand + Model */}
+        {/* Brand + Model — 3.1 dropdown + "อื่นๆ" + free-text */}
         <div className="grid grid-cols-2 gap-3">
+          {/* ยี่ห้อ */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">ยี่ห้อ</label>
-            <input type="text" value={brand} onChange={e => setBrand(e.target.value)}
-              placeholder="Samsung"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <select value={brandSelect} onChange={e => { setBrandSelect(e.target.value); setBrandCustom(""); }}
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] bg-white">
+              <option value="">-- เลือกยี่ห้อ --</option>
+              {BRAND_OPTIONS.map(b => <option key={b} value={b}>{b}</option>)}
+            </select>
+            {brandSelect === "อื่นๆ" && (
+              <input type="text" value={brandCustom} onChange={e => setBrandCustom(e.target.value)}
+                placeholder="ระบุยี่ห้อ"
+                className="mt-1.5 w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
+            )}
           </div>
+          {/* รุ่น */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">รุ่น</label>
-            <input type="text" value={model} onChange={e => setModel(e.target.value)}
-              placeholder="AR09TYHQASINST"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <select value={modelSelect} onChange={e => { setModelSelect(e.target.value); setModelCustom(""); }}
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] bg-white">
+              <option value="">-- เลือกรุ่น --</option>
+              {MODEL_OPTIONS.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+            {modelSelect === "อื่นๆ" && (
+              <input type="text" value={modelCustom} onChange={e => setModelCustom(e.target.value)}
+                placeholder="ระบุรุ่น เช่น AR09TYHQ"
+                className="mt-1.5 w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
+            )}
           </div>
         </div>
 
@@ -158,7 +202,7 @@ export default function ResellInventoryNewPage() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">หมวดหมู่</label>
           <select value={category} onChange={e => setCategory(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
             {CATEGORIES.map(c => <option key={c}>{c}</option>)}
           </select>
         </div>
@@ -174,7 +218,7 @@ export default function ResellInventoryNewPage() {
             ] as { value: ApplianceCondition; label: string }[]).map(c => (
               <label key={c.value}
                 className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer text-xs font-medium transition-all
-                  ${condition === c.value ? "border-blue-300 bg-blue-50 text-blue-800" : "border-gray-100 text-gray-600"}`}>
+                  ${condition === c.value ? "border-[#FF663A] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="radio" className="sr-only" checked={condition === c.value} onChange={() => setCondition(c.value)} />
                 {c.label}
               </label>
@@ -190,7 +234,7 @@ export default function ResellInventoryNewPage() {
             </label>
             <input type="number" min={0} value={costPrice}
               onChange={e => { setCostPrice(e.target.value); setFormErrors(f => ({ ...f, costPrice: "" })); }}
-              className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 ${formErrors.costPrice ? "border-red-400" : "border-gray-200"}`} />
+              className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.costPrice ? "border-red-400" : "border-gray-200"}`} />
             {formErrors.costPrice && <p className="text-xs text-red-500 mt-1">{formErrors.costPrice}</p>}
           </div>
           <div>
@@ -199,7 +243,7 @@ export default function ResellInventoryNewPage() {
             </label>
             <input type="number" min={0} value={suggestedPrice}
               onChange={e => { setSuggestedPrice(e.target.value); setFormErrors(f => ({ ...f, suggestedPrice: "" })); }}
-              className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 ${formErrors.suggestedPrice ? "border-red-400" : "border-gray-200"}`} />
+              className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] ${formErrors.suggestedPrice ? "border-red-400" : "border-gray-200"}`} />
             {formErrors.suggestedPrice && <p className="text-xs text-red-500 mt-1">{formErrors.suggestedPrice}</p>}
           </div>
         </div>
@@ -209,7 +253,7 @@ export default function ResellInventoryNewPage() {
           <label className="block text-sm font-medium text-gray-700 mb-1">URL รูปภาพ (ถ้ามี)</label>
           <input type="url" value={imageUrl} onChange={e => setImageUrl(e.target.value)}
             placeholder="https://…"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
         </div>
 
         {/* Notes */}
@@ -217,13 +261,13 @@ export default function ResellInventoryNewPage() {
           <label className="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
           <textarea value={notes} onChange={e => setNotes(e.target.value)}
             rows={2} placeholder="รายละเอียดเพิ่มเติม สภาพจริง ข้อบกพร่อง ฯลฯ"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A] resize-none" />
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         <button type="submit" disabled={submitting}
-          className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
           {submitting ? "กำลังบันทึก…" : "📦 เพิ่มสินค้า"}
         </button>
       </form>

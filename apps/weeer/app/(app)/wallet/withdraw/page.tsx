@@ -29,6 +29,13 @@ const BANK_OPTIONS = [
 
 const MIN_AMOUNT_THB = 100; // บาท
 
+// 3.3 — mock bank account prefilled from signup data (R-77)
+const MOCK_SIGNUP_BANK = {
+  bankName: "ธนาคารกสิกรไทย (KBank)",
+  accountNo: "1234567890",
+  accountName: "นาย อรรถพล เจริญสุข",
+};
+
 type WithdrawStep = "form" | "submitting" | "success" | "error";
 
 /** validate เลขบัญชีธนาคารไทย: ตัวเลข 10–12 หลัก (รวมขีด) */
@@ -43,9 +50,10 @@ const PLACEHOLDER_USER_ID = "00000000-0000-0000-0000-000000000001";
 export default function WithdrawPage() {
   const [serviceId, setServiceId]     = useState("");
   const [amountThb, setAmountThb]     = useState("");
-  const [bankName, setBankName]       = useState("");
-  const [accountNo, setAccountNo]     = useState("");
-  const [accountName, setAccountName] = useState("");
+  // 3.3: prefilled from mock signup bank account data
+  const [bankName, setBankName]       = useState(MOCK_SIGNUP_BANK.bankName);
+  const [accountNo, setAccountNo]     = useState(MOCK_SIGNUP_BANK.accountNo);
+  const [accountName, setAccountName] = useState(MOCK_SIGNUP_BANK.accountName);
   const [step, setStep]               = useState<WithdrawStep>("form");
   const [errorMsg, setErrorMsg]       = useState<string | null>(null);
   const [settlement, setSettlement]   = useState<SettlementDetailDto | null>(null);
@@ -301,6 +309,9 @@ export default function WithdrawPage() {
             placeholder="เช่น นายสมชาย ใจดี"
             className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]"
           />
+          <p className="text-xs text-[#FF663A]/70 mt-1">
+            ✦ ข้อมูลบัญชีดึงจากที่ลงทะเบียนไว้ — แก้ไขได้ก่อนยืนยัน
+          </p>
         </div>
 
         {/* Error */}
