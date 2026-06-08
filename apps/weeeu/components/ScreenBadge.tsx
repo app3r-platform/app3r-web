@@ -49,6 +49,7 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/purchases",                       info: { num: "U-28", code: "RESELL-PURCHASES" } },
   { pattern: "/offers",                          info: { num: "U-17b", code: "RESELL-MY-OFFERS" } },
   { pattern: "/resell/awaiting-payment/[id]",    info: { num: "U-19b", code: "RESELL-AWAIT-PAYMENT" } },
+  { pattern: "/resell/orders/[id]/review",       info: { num: "U-69",  code: "RESELL-R10-REVIEW" } },
   { pattern: "/resell/orders/[id]",              info: { num: "U-19c", code: "RESELL-R12-ORDER" } },
   { pattern: "/scrap/new",                       info: { num: "U-29", code: "SCRAP-CREATE" } },
   { pattern: "/scrap/[id]/offers",               info: { num: "U-30", code: "SCRAP-S1-OFFERS" } },
