@@ -1,0 +1,1622 @@
+openapi: 3.1.0
+info:
+  title: App3R API
+  version: 1.0.0-wave0
+  description: |
+    App3R Platform Backend — Wave0 Blueprint (contract-first, pre-implementation)
+
+    ## Auth
+    JWT access token (15 min) — `Authorization: Bearer <token>`
+    HttpOnly refresh cookie (7 days) — set by /auth/signin
+
+    ## Point Types
+    - `cash` = Gold (1 Gold = 1 THB, real money)
+    - `bonus` = Silver (promotional, non-redeemable)
+
+    ## Error Format
+    All errors: `{ "error": { "code": "ERROR_CODE", "message": "Human readable" } }`
+
+    ## Idempotency (standalone wallet ops)
+    Include `Idempotency-Key: <uuid-v4>` header. Server stores result 24h.
+    Duplicate key + same body → replay original response (200/201).
+    Duplicate key + different body → 422 IDEMPOTENCY_CONFLICT.
+
+servers:
+  - url: http://localhost:8787/api/v1
+    description: Local development
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ── Generic ──────────────────────────────────────────────────────────────
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              example: INVALID_OTP
+            message:
+              type: string
+              example: OTP code is invalid or expired
+
+    # ── Auth ─────────────────────────────────────────────────────────────────
+    SignupRequest:
+      type: object
+      required: [email, password, role]
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          minLength: 8
+          example: SecurePass123!
+        role:
+          type: string
+          enum: [weeeu, weeer, weeet]
+          example: weeeu
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            role:
+              type: string
+
+    OtpRequestBody:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+        type:
+          type: string
+          enum: [email_verify, password_reset, phone_verify]
+          default: email_verify
+
+    OtpVerifyBody:
+      type: object
+      required: [email, code]
+      properties:
+        email:
+          type: string
+          format: email
+        code:
+          type: string
+          pattern: '^\d{6}$'
+          example: '123456'
+        type:
+          type: string
+          enum: [email_verify, password_reset, phone_verify]
+          default: email_verify
+
+    # ── User Profile ──────────────────────────────────────────────────────────
+    UserMeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [weeeu, weeer, weeet, admin]
+        displayName:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        avatarUrl:
+          type: string
+          nullable: true
+          format: uri
+        goldBalance:
+          type: integer
+          minimum: 0
+
+    UpdateUserMeBody:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+          maxLength: 20
+        avatarUrl:
+          type: string
+          format: uri
+
+    ShopMeResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        shopName:
+          type: string
+          maxLength: 200
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        address:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+
+    UpdateShopMeBody:
+      type: object
+      properties:
+        shopName:
+          type: string
+          maxLength: 200
+        phone:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+        description:
+          type: string
+
+    # ── Points ────────────────────────────────────────────────────────────────
+    PointsBalanceResponse:
+      type: object
+      properties:
+        gold:
+          type: integer
+          minimum: 0
+          description: Gold balance (1 Gold = 1 THB)
+        silver:
+          type: integer
+          minimum: 0
+          description: Silver/bonus balance
+
+    PointsTopupRequest:
+      type: object
+      required: [amountThb]
+      properties:
+        amountThb:
+          type: number
+          minimum: 0.01
+          example: 100
+          description: Amount in THB (decimal OK — D75 rounding applied)
+        reference:
+          type: string
+          maxLength: 200
+          description: Payment gateway ref or transfer ID
+        initiatedBy:
+          type: string
+          enum: [user, admin, payment_gateway]
+          default: user
+
+    PointsTopupResponse:
+      type: object
+      properties:
+        goldCredited:
+          type: integer
+          description: Gold actually credited (post-D75 rounding)
+        balanceAfter:
+          type: integer
+          description: New Gold balance
+        rounded:
+          type: boolean
+          description: true if D75 rounding was applied
+
+    PointsWithdrawRequest:
+      type: object
+      required: [goldAmount]
+      properties:
+        goldAmount:
+          type: integer
+          minimum: 1
+          example: 50
+        bankReference:
+          type: string
+          maxLength: 200
+          description: Bank/PromptPay reference for payout
+
+    PointsWithdrawResponse:
+      type: object
+      properties:
+        goldDebited:
+          type: integer
+        balanceAfter:
+          type: integer
+
+    # ── Services / Jobs ───────────────────────────────────────────────────────
+    ServiceStatus:
+      type: string
+      enum: [draft, published, in_progress, completed, cancelled]
+
+    ServiceType:
+      type: string
+      enum: [repair, maintain, resell, scrap]
+
+    ServiceResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        ownerId:
+          type: string
+          format: uuid
+        serviceType:
+          $ref: '#/components/schemas/ServiceType'
+        status:
+          $ref: '#/components/schemas/ServiceStatus'
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        pointAmount:
+          type: number
+          nullable: true
+        deadline:
+          type: string
+          format: date-time
+          nullable: true
+        listingMetaId:
+          type: string
+          format: uuid
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateServiceRequest:
+      type: object
+      required: [serviceType]
+      properties:
+        serviceType:
+          $ref: '#/components/schemas/ServiceType'
+        title:
+          type: string
+        description:
+          type: string
+        pointAmount:
+          type: number
+          minimum: 0
+        deadline:
+          type: string
+          format: date-time
+
+    # ── Listings ──────────────────────────────────────────────────────────────
+    ListingState:
+      type: string
+      enum:
+        - draft
+        - announced
+        - receiving_offers
+        - offer_selected
+        - buyer_confirmed
+        - in_progress
+        - delivered
+        - inspection_period
+        - completed
+        - cancelled
+        - disputed
+
+    ListingType:
+      type: string
+      enum: [repair, maintain, resell, scrap, parts]
+
+    ListingMetaResponse:
+      type: object
+      properties:
+        listingId:
+          type: string
+          format: uuid
+        listingType:
+          $ref: '#/components/schemas/ListingType'
+        ownerId:
+          type: string
+          format: uuid
+        state:
+          $ref: '#/components/schemas/ListingState'
+        viewCount:
+          type: integer
+        offerCount:
+          type: integer
+        tambonId:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ListingTransitionRequest:
+      type: object
+      required: [action]
+      properties:
+        action:
+          type: string
+          enum:
+            - publish
+            - cancel
+            - mark_in_progress
+            - mark_delivered
+            - complete
+            - dispute
+            - approve_inspection
+        reason:
+          type: string
+          description: Required for cancel/dispute actions
+
+    # ── Offers ────────────────────────────────────────────────────────────────
+    OfferStatus:
+      type: string
+      enum: [pending, accepted, rejected, withdrawn, expired]
+
+    OfferResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        listingId:
+          type: string
+          format: uuid
+        buyerId:
+          type: string
+          format: uuid
+        price:
+          type: number
+        status:
+          $ref: '#/components/schemas/OfferStatus'
+        message:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateOfferRequest:
+      type: object
+      required: [listingId, price]
+      properties:
+        listingId:
+          type: string
+          format: uuid
+        price:
+          type: number
+          minimum: 0
+        message:
+          type: string
+          maxLength: 500
+
+    # ── Transfers ─────────────────────────────────────────────────────────────
+    TransferStatus:
+      type: string
+      enum: [pending, approved, rejected]
+
+    TransferResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        amountThb:
+          type: number
+        goldRequested:
+          type: integer
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        slipUrl:
+          type: string
+          nullable: true
+        adminNote:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateTransferRequest:
+      type: object
+      required: [amountThb]
+      properties:
+        amountThb:
+          type: number
+          minimum: 100
+          example: 500
+        slipUrl:
+          type: string
+          format: uri
+          description: Uploaded slip image URL
+
+    # ── Notifications ─────────────────────────────────────────────────────────
+    NotificationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+          nullable: true
+        channel:
+          type: string
+          enum: [websocket, fcm, apns, email_fallback]
+        sentAt:
+          type: string
+          format: date-time
+        readAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    # ── Admin ─────────────────────────────────────────────────────────────────
+    AdminConfigEntry:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        description:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+
+paths:
+  # ── Auth ──────────────────────────────────────────────────────────────────
+  /auth/signup:
+    post:
+      tags: [Auth]
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: User created + access token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/signin:
+    post:
+      tags: [Auth]
+      summary: Sign in with email + password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Access token + refresh cookie set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh access token using HttpOnly cookie
+      responses:
+        '200':
+          description: New access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+        '401':
+          description: Refresh token expired or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Revoke refresh token + clear cookie
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logged out
+        '401':
+          description: Unauthorized
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current user from JWT
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeResponse'
+
+  /auth/otp-request:
+    post:
+      tags: [Auth]
+      summary: Request OTP code (email_verify / password_reset)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpRequestBody'
+      responses:
+        '200':
+          description: OTP sent (code returned in dev/test mode only)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: OTP sent to user@example.com
+                  expiresAt:
+                    type: string
+                    format: date-time
+                  code:
+                    type: string
+                    description: 6-digit code — ONLY in NODE_ENV=test|development
+                    example: '123456'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/otp-verify:
+    post:
+      tags: [Auth]
+      summary: Verify OTP code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpVerifyBody'
+      responses:
+        '200':
+          description: OTP verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  verified:
+                    type: boolean
+                    example: true
+        '400':
+          description: Invalid, expired, or already-used OTP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ── User Profile ─────────────────────────────────────────────────────────
+  /users/me:
+    get:
+      tags: [Profile]
+      summary: Get current user profile + Gold balance
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags: [Profile]
+      summary: Update user profile (displayName, phone, avatarUrl)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserMeBody'
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeResponse'
+
+  /shops/me:
+    get:
+      tags: [Profile]
+      summary: Get WeeeR shop profile (WeeeR role only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Shop profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopMeResponse'
+        '403':
+          description: Forbidden — WeeeR role required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags: [Profile]
+      summary: Update WeeeR shop profile (WeeeR role only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateShopMeBody'
+      responses:
+        '200':
+          description: Updated shop profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopMeResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ── Points ────────────────────────────────────────────────────────────────
+  /points/balance:
+    get:
+      tags: [Points]
+      summary: Get current user Gold + Silver balance
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Point balances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsBalanceResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /points/topup:
+    post:
+      tags: [Points]
+      summary: Top up Gold Points (D75 rounding if decimal)
+      description: |
+        Standalone wallet operation. Client MUST send `Idempotency-Key: <uuid-v4>` header.
+        D75 rounding: amountThb → Math.round(amountThb) Gold credited.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PointsTopupRequest'
+      responses:
+        '200':
+          description: Gold credited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsTopupResponse'
+        '409':
+          description: IDEMPOTENCY_CONFLICT — same key, different body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid amount
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /points/withdraw:
+    post:
+      tags: [Points]
+      summary: Withdraw Gold Points (debit wallet)
+      description: |
+        Standalone wallet operation. Client MUST send `Idempotency-Key: <uuid-v4>` header.
+        Fails with 400 INSUFFICIENT_GOLD if balance < goldAmount.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PointsWithdrawRequest'
+      responses:
+        '200':
+          description: Gold debited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsWithdrawResponse'
+        '400':
+          description: Insufficient Gold balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ── Services / Jobs ───────────────────────────────────────────────────────
+  /services:
+    get:
+      tags: [Services]
+      summary: List services for current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/ServiceStatus'
+        - in: query
+          name: serviceType
+          schema:
+            $ref: '#/components/schemas/ServiceType'
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Service list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceResponse'
+                  total:
+                    type: integer
+    post:
+      tags: [Services]
+      summary: Create a new service/job
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceRequest'
+      responses:
+        '201':
+          description: Service created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponse'
+
+  /services/{id}:
+    get:
+      tags: [Services]
+      summary: Get service by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Service detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [Services]
+      summary: Update service (title, description, pointAmount, deadline)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceRequest'
+      responses:
+        '200':
+          description: Updated service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponse'
+    delete:
+      tags: [Services]
+      summary: Cancel/delete service (draft only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+
+  /services/{id}/complete:
+    post:
+      tags: [Services]
+      summary: Complete a service (flow-bound point release)
+      description: |
+        Flow-bound point operation: atomic job state → completed + escrow release.
+        D75 rounding applied to final settlement amount.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Service completed + points settled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    $ref: '#/components/schemas/ServiceResponse'
+                  pointsReleased:
+                    type: integer
+        '400':
+          description: Invalid state transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ── Listings ──────────────────────────────────────────────────────────────
+  /listings:
+    get:
+      tags: [Listings]
+      summary: List listings
+      parameters:
+        - in: query
+          name: listingType
+          schema:
+            $ref: '#/components/schemas/ListingType'
+        - in: query
+          name: state
+          schema:
+            $ref: '#/components/schemas/ListingState'
+        - in: query
+          name: tambonId
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Listing list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ListingMetaResponse'
+                  total:
+                    type: integer
+
+  /listings/{id}:
+    get:
+      tags: [Listings]
+      summary: Get listing detail by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Listing detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingMetaResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [Listings]
+      summary: Update listing (draft/announced states only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tambonId:
+                  type: integer
+      responses:
+        '200':
+          description: Updated listing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingMetaResponse'
+        '403':
+          description: Edit locked (offer_selected/buyer_confirmed state)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /listings/{id}/transition:
+    post:
+      tags: [Listings]
+      summary: Transition listing state
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListingTransitionRequest'
+      responses:
+        '200':
+          description: State transitioned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingMetaResponse'
+        '400':
+          description: Invalid state transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /listings/{id}/reviews:
+    get:
+      tags: [Listings]
+      summary: Get reviews for a listing
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Reviews list
+
+    post:
+      tags: [Listings]
+      summary: Submit a review for a completed listing
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rating]
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                comment:
+                  type: string
+                  maxLength: 500
+      responses:
+        '201':
+          description: Review submitted
+
+  /listings/{id}/questions:
+    get:
+      tags: [Listings]
+      summary: Get Q&A for a listing
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Questions list
+    post:
+      tags: [Listings]
+      summary: Post a question on a listing
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+                  maxLength: 500
+      responses:
+        '201':
+          description: Question posted
+
+  # ── Offers ────────────────────────────────────────────────────────────────
+  /offers:
+    post:
+      tags: [Offers]
+      summary: Submit an offer on a listing
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOfferRequest'
+      responses:
+        '201':
+          description: Offer submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+
+  /offers/{id}:
+    get:
+      tags: [Offers]
+      summary: Get offer detail
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Offer detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+
+  /offers/{id}/accept:
+    post:
+      tags: [Offers]
+      summary: Accept an offer (listing owner only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Offer accepted + listing moved to offer_selected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+
+  /offers/{id}/withdraw:
+    post:
+      tags: [Offers]
+      summary: Withdraw offer (buyer only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Offer withdrawn
+
+  # ── Transfers ─────────────────────────────────────────────────────────────
+  /transfers:
+    post:
+      tags: [Transfers]
+      summary: Request manual bank transfer topup
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransferRequest'
+      responses:
+        '201':
+          description: Transfer request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+    get:
+      tags: [Transfers]
+      summary: List own transfer requests
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Transfer list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransferResponse'
+
+  /transfers/{id}/approve:
+    post:
+      tags: [Transfers]
+      summary: Admin approve transfer → credit Gold
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+      responses:
+        '200':
+          description: Approved + Gold credited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+
+  # ── Notifications ─────────────────────────────────────────────────────────
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: List in-app notifications for current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: unreadOnly
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Notifications list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NotificationResponse'
+                  unreadCount:
+                    type: integer
+
+  /notifications/{id}/read:
+    post:
+      tags: [Notifications]
+      summary: Mark notification as read
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Marked as read
+
+  # ── Ads ───────────────────────────────────────────────────────────────────
+  /ads:
+    get:
+      tags: [Ads]
+      summary: List ads by placement
+      parameters:
+        - in: query
+          name: placement
+          schema:
+            type: string
+            enum: [banner_top, sidebar, feed_inline, email_header]
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Ads list
+
+    post:
+      tags: [Ads]
+      summary: Create an ad placement
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [listingId, placement, startDate, endDate]
+              properties:
+                listingId:
+                  type: string
+                  format: uuid
+                placement:
+                  type: string
+                  enum: [banner_top, sidebar, feed_inline, email_header]
+                startDate:
+                  type: string
+                  format: date
+                endDate:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Ad created + Gold debited
+
+  /ads/{id}/cancel:
+    post:
+      tags: [Ads]
+      summary: Cancel ad + pro-rata refund
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Ad cancelled + partial Gold refunded
+
+  # ── Location ──────────────────────────────────────────────────────────────
+  /locations/provinces:
+    get:
+      tags: [Location]
+      summary: List all Thai provinces
+      responses:
+        '200':
+          description: Provinces list
+
+  /locations/tambons/nearby:
+    get:
+      tags: [Location]
+      summary: Tambons within radius (GR-10)
+      parameters:
+        - in: query
+          name: lat
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: lng
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: radiusKm
+          schema:
+            type: number
+            default: 20
+      responses:
+        '200':
+          description: Nearby tambons
+
+  # ── Admin ─────────────────────────────────────────────────────────────────
+  /admin/config:
+    get:
+      tags: [Admin]
+      summary: Get all platform config entries
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Config entries
+
+    put:
+      tags: [Admin]
+      summary: Update platform config
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [key, value]
+              properties:
+                key:
+                  type: string
+                value:
+                  type: string
+      responses:
+        '200':
+          description: Updated
+
+  /admin/moderation:
+    get:
+      tags: [Admin]
+      summary: List moderation queue items
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Moderation items
+
+  /admin/moderation/{id}/approve:
+    post:
+      tags: [Admin]
+      summary: Approve moderation item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approved
+
+  /admin/moderation/{id}/reject:
+    post:
+      tags: [Admin]
+      summary: Reject moderation item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Rejected

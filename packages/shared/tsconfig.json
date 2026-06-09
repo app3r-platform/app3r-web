@@ -10,6 +10,6 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["dal"],
+  "include": ["dal", "src"],
   "exclude": ["node_modules"]
 }
