@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   keywords: ["เครื่องใช้ไฟฟ้ามือสอง", "ซ่อมเครื่องใช้ไฟฟ้า", "บำรุงรักษา", "App3R", "WeeeR", "WeeeU"],
   authors: [{ name: "App3R Platform" }],
   creator: "App3R Platform",
-  metadataBase: new URL("https://app3r.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://app3r.com"),
   openGraph: {
     type: "website",
     locale: "th_TH",

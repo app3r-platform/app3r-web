@@ -10,6 +10,8 @@ import FilterSidebar from "../../components/listings/FilterSidebar";
 import ScrapModeChips from "../../components/listings/ScrapModeChips";
 import AdBanner from "../../components/ads/AdBanner";
 import { NearMeToggle } from "@/components/common";
+import { ListingPlaceholderGrid } from "../../components/listings/ListingPlaceholderGrid";
+import { WAVE0_LISTINGS } from "../../lib/wave0/listings-fixture";
 import type { UnifiedFilter } from "../../lib/types";
 import { MockAnnoOrigin, MockAnnoNav } from "@/components/common";
 
@@ -118,6 +120,16 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
           </Suspense>
         </div>
       </div>
+
+      {/* Wave0 listing placeholder — read-only mock-fixture data */}
+      <section className="mt-14">
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-lg font-bold text-gray-900">ข้อมูลตัวอย่าง (Wave0)</h2>
+          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Placeholder</span>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">ข้อมูลตัวอย่างจาก mock-fixtures — จะถูกแทนด้วย API จริงเมื่อ Wave1 พร้อม</p>
+        <ListingPlaceholderGrid listings={WAVE0_LISTINGS} />
+      </section>
     </div>
   );
 }
