@@ -2,7 +2,8 @@
 
 > **Status:** DRAFT — quality gate required before implementation  
 > **Canonical reference:** §D R3, D75 rounding rule, Advisor Gen 115  
-> **Gold = `point_type 'cash'` · 1 Gold = 1 THB**
+> **Gold = `point_type 'cash'` · 1 Gold = 1 THB**  
+> **Updated 2026-06-09:** Advisor Gen 115 rulings applied — Q1 (IDEMPOTENCY_CONFLICT) confirmed 422; Q2 (missing key) changed to server fallback-generate (see §2, §4, §6, §9)
 
 ---
 
@@ -48,10 +49,10 @@
 | Transfer approve | POST /transfers/{id}/approve | Admin |
 
 **Rules:**
-- Client MUST send `Idempotency-Key: <uuid v4>` header
+- Client SHOULD send `Idempotency-Key: <uuid v4>` header — if absent, **server fallback-generates a UUID v4 + logs WARN** (operation proceeds normally; dedup across retries is NOT guaranteed without a client key) _(Advisor Gen 115 ruling — Q2)_
 - Server stores key in `idempotency_keys` table with 24h TTL
 - Duplicate key + same body → **replay original response (200)** without re-executing
-- Duplicate key + different body → **422 IDEMPOTENCY_CONFLICT**
+- Duplicate key + different body → **422 IDEMPOTENCY_CONFLICT** — strict, no silent warn _(Advisor Gen 115 ruling — Q1: silent warn = hidden bug that silently double-credits/debits)_
 - Key expires after 24h → normal re-processing (new key assumed)
 
 ---
@@ -106,6 +107,14 @@ Client                          Server
   │                               └─ FOUND + different body hash → 422 IDEMPOTENCY_CONFLICT
   │                               │
   │                       ←── response
+
+  [Missing header path — Advisor Gen 115 ruling Q2]
+  │  POST /points/topup            │
+  │  (no Idempotency-Key header)  ──→ Server generates UUID v4 fallback key
+  │                               │   + logs WARN: idempotency-key-missing op=topup userId=...
+  │                               │   → executes operation normally → stores key+response → 200
+  │                               │   ⚠ Retry storms without client key = no dedup protection
+  │                       ←── response (identical to normal flow)
 ```
 
 ### Key Requirements
@@ -114,7 +123,7 @@ Client                          Server
 - Client-generated — server validates format only
 - Case-insensitive comparison
 - Scope: per user (key collision across users → independent)
-- Missing key → **422 MISSING_IDEMPOTENCY_KEY** (Class B endpoints require it)
+- Missing key → **server fallback-generates UUID v4** + logs `WARN idempotency-key-missing op={operation} userId={userId}` — operation proceeds, but dedup across retries is NOT guaranteed without a client key _(Advisor Gen 115 ruling Q2: no 422 rejection)_
 
 ### Stored Fields (`idempotency_keys`)
 
@@ -221,10 +230,11 @@ interface DebitArgs {
 | Code | HTTP | Trigger |
 |------|------|---------|
 | `INSUFFICIENT_GOLD` | 400 | Withdraw or Class A debit where balance < amount |
-| `MISSING_IDEMPOTENCY_KEY` | 422 | Class B endpoint called without Idempotency-Key header |
-| `IDEMPOTENCY_CONFLICT` | 422 | Same key reused with different request body |
+| `IDEMPOTENCY_CONFLICT` | 422 | Same key reused with **different** request body — strict 422, no silent warn _(Advisor Gen 115 Q1 confirmed)_ |
 | `INVALID_AMOUNT` | 422 | amountThb ≤ 0 or goldAmount ≤ 0 |
 | `WALLET_NOT_FOUND` | 404 | User has no wallet (shouldn't happen — created on signup) |
+
+> **Removed:** `MISSING_IDEMPOTENCY_KEY` (was 422) — per Advisor Gen 115 ruling Q2, missing header → server fallback-generate, not rejection. Error code retired.
 
 ---
 
@@ -259,4 +269,4 @@ Admin can reconstruct any balance at any point in time by SUM-ing `point_ledger`
 
 1. **holdGold / releaseHold** — should escrow use a separate `escrow_accounts` table (explicit hold balance) vs. wallet balance + in-flight `point_ledger` rows with type='hold'? Recommendation: separate `escrow_holds` table for clarity.
 2. **Silver earning** — how is Silver credited? Admin batch job? Campaign completion? Currently only Gold has earn/spend defined.
-3. **Idempotency-Key required/optional** — should Class B strictly reject missing key (422) or generate server-side key (silent dedup)? Recommendation: require client key for traceability.
+3. ~~**Idempotency-Key required/optional**~~ — **RESOLVED (Advisor Gen 115 ruling Q2):** missing header → server fallback-generates UUID v4 + logs WARN (no 422 rejection). Client SHOULD still send key for guaranteed retry dedup. ~~Recommendation: require client key for traceability.~~
