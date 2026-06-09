@@ -952,4 +952,54 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     ],
     xapp: [],
   },
+
+  // ── A-74 Parts Inventory List ── ─────────────────────────────────────────────
+  "A-74": {
+    origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
+    destinations: [
+      { buttonLabel: "Part Detail", targetId: "A-75", targetLabel: "Part Detail" },
+      { buttonLabel: "Movements", targetId: "A-77", targetLabel: "Parts Movements" },
+    ],
+    xapp: [],
+  },
+
+  // ── A-75 Part Detail ── ──────────────────────────────────────────────────────
+  "A-75": {
+    origins: [{ id: "A-74", label: "Parts Inventory" }],
+    destinations: [
+      { buttonLabel: "กลับ", targetId: "A-74", targetLabel: "Parts Inventory" },
+      { buttonLabel: "Movements", targetId: "A-77", targetLabel: "Parts Movements" },
+    ],
+    xapp: [],
+  },
+
+  // ── A-76 Parts Analytics ── ──────────────────────────────────────────────────
+  "A-76": {
+    origins: [{ id: "A-01", label: "Dashboard (sidebar)" }],
+    destinations: [
+      { buttonLabel: "กลับ", targetId: "A-01", targetLabel: "Dashboard" },
+    ],
+    xapp: [],
+  },
+
+  // ── A-77 Parts Movements ── ──────────────────────────────────────────────────
+  "A-77": {
+    origins: [
+      { id: "A-74", label: "Parts Inventory" },
+      { id: "A-75", label: "Part Detail" },
+    ],
+    destinations: [
+      { buttonLabel: "Movement Detail", targetId: "A-78", targetLabel: "Movement Detail" },
+    ],
+    xapp: [],
+  },
+
+  // ── A-78 Parts Movement Detail ── ────────────────────────────────────────────
+  "A-78": {
+    origins: [{ id: "A-77", label: "Parts Movements" }],
+    destinations: [
+      { buttonLabel: "กลับ", targetId: "A-77", targetLabel: "Parts Movements" },
+    ],
+    xapp: [],
+  },
 };

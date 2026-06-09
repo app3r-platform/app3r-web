@@ -31,6 +31,9 @@ const ROUTE_MAP: Record<string, string> = {
   "A-56": "/config", "A-57": "/reference",
   "A-59": "/system/storage", "A-67": "/contact/info",
   "A-68": "/testimonials", "A-69": "/ads",
+  "A-74": "/parts", "A-75": "/parts/[id]",
+  "A-76": "/parts/analytics",
+  "A-77": "/parts/movements", "A-78": "/parts/movements/[id]",
 };
 
 /** Match pathname → Admin screen ID (longest-match first) */
