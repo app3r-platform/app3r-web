@@ -29,7 +29,7 @@ export default function RepairCompletePage({ params }: { params: Promise<{ id: s
 
         {/* Header */}
         <h1 className="text-xl font-bold text-white mt-4 mb-6">
-          ✅ บันทึกผลซ่อม (C1)
+          ✅ บันทึกผลซ่อม
         </h1>
 
         {/* Job summary */}

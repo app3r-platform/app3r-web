@@ -1,5 +1,5 @@
-"use client";
-// T-39 — ตรวจสภาพก่อนล้าง (NEW · Blueprint WeeeT Maintain ขั้น 2.1)
+﻿"use client";
+// ตรวจสภาพก่อนล้าง (NEW · Blueprint WeeeT Maintain ขั้น 2.1)
 // M7 — No-show: ลูกค้าไม่อยู่/ไม่รับสาย → settle No-show (delta ขั้น 2.1)
 // State machine: arrive → inspect → checklist → complete
 // D-Maintain-1: Pre-cleaning inspection + risk reporting (WeeeR+WeeeU joint decision)
@@ -145,7 +145,7 @@ export default function MaintainInspectPage({
       <div className="sticky top-[41px] bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">T-39 — ตรวจสภาพก่อนล้าง</h1>
+          <h1 className="font-bold text-white">ตรวจสภาพก่อนล้าง</h1>
           <p className="text-xs text-gray-400">ถ่ายรูปก่อนล้าง + ตรวจสอบความเสี่ยง</p>
         </div>
       </div>

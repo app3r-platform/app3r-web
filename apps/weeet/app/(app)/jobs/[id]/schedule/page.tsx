@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -48,7 +48,7 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">T-05 — รออะไหล่ / นัดหมายใหม่</h1>
+          <h1 className="font-bold text-white">รออะไหล่ / นัดหมายใหม่</h1>
           <p className="text-xs text-gray-400">งาน #{id}</p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { use, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
@@ -68,7 +68,7 @@ export default function ArrivePage({ params }: { params: Promise<{ id: string }>
       <div className="sticky top-0 bg-gray-950/90 backdrop-blur-sm border-b border-gray-800 px-4 py-3 flex items-center gap-3 z-10">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white text-lg">←</button>
         <div>
-          <h1 className="font-bold text-white">T-33 — บันทึกถึงที่</h1>
+          <h1 className="font-bold text-white">บันทึกถึงที่</h1>
           <p className="text-xs text-gray-400">ถ่ายรูป {MIN_PHOTOS}-{MAX_PHOTOS} ใบ (จุดสังเกต + กับลูกค้า)</p>
         </div>
       </div>
