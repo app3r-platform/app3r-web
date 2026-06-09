@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/shared/PasswordInput";
+import { useAuth } from "@/lib/auth-context";
 
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_MINUTES = 30;
 
 export default function LoginPage() {
+  const { login } = useAuth();
+  const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -41,25 +45,19 @@ export default function LoginPage() {
     setErrors({});
     setLoading(true);
     try {
-      // Production: POST /api/v1/auth/login
-      await new Promise((r) => setTimeout(r, 800));
-      // Simulate failed login (demo)
-      if (form.password !== "Correct1") {
-        const newAttempts = attempts + 1;
-        setAttempts(newAttempts);
-        if (newAttempts >= MAX_ATTEMPTS) {
-          const until = new Date(Date.now() + LOCKOUT_MINUTES * 60 * 1000);
-          setLockedUntil(until);
-          setErrors({ general: `เข้าสู่ระบบผิดพลาดเกิน ${MAX_ATTEMPTS} ครั้ง — บัญชีถูกล็อคชั่วคราว ${LOCKOUT_MINUTES} นาที` });
-        } else {
-          setErrors({
-            general: `อีเมลหรือรหัสผ่านไม่ถูกต้อง (ครั้งที่ ${newAttempts}/${MAX_ATTEMPTS})`,
-          });
-        }
-        return;
+      // Wave1: mock auth — any non-empty email+password succeeds (simulates API call)
+      await login(form.email, form.password);
+      router.push("/dashboard");
+    } catch {
+      const newAttempts = attempts + 1;
+      setAttempts(newAttempts);
+      if (newAttempts >= MAX_ATTEMPTS) {
+        const until = new Date(Date.now() + LOCKOUT_MINUTES * 60 * 1000);
+        setLockedUntil(until);
+        setErrors({ general: `เข้าสู่ระบบผิดพลาดเกิน ${MAX_ATTEMPTS} ครั้ง — บัญชีถูกล็อคชั่วคราว ${LOCKOUT_MINUTES} นาที` });
+      } else {
+        setErrors({ general: `เข้าสู่ระบบไม่สำเร็จ (ครั้งที่ ${newAttempts}/${MAX_ATTEMPTS})` });
       }
-      // Success → redirect
-      window.location.href = "/dashboard";
     } finally {
       setLoading(false);
     }
