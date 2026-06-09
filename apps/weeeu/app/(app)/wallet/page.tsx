@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { HelpTip } from "@app3r/ui";
 import { FileUpload } from "@/components/upload/FileUpload";
+import { useAuth } from "@/lib/auth-context";
 
 type WalletTab = "all" | "gold" | "silver";
 
@@ -35,9 +36,10 @@ const PLATFORM_BANK_INFO = {
 };
 
 export default function WalletPage() {
+  const { user } = useAuth();
   const [tab, setTab] = useState<WalletTab>("all");
-  const [goldBalance] = useState(MOCK_GOLD_BALANCE);
-  const [silverBalance] = useState(MOCK_SILVER_BALANCE);
+  const goldBalance = user?.goldBalance ?? MOCK_GOLD_BALANCE;
+  const silverBalance = user?.silverBalance ?? MOCK_SILVER_BALANCE;
 
   // Mock top-up Gold state (R4 scenario)
   const [goldTopUpAmount, setGoldTopUpAmount] = useState("");

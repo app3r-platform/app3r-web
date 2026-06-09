@@ -9,6 +9,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ScreenBadge } from "@/components/ScreenBadge";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+import { useAuth } from "@/lib/auth-context";
 
 // ── 5 Bottom tabs (A2 spec — icon + label + active prefix matching) ────────────
 const BOTTOM_TABS = [
@@ -55,6 +56,7 @@ type Tab = (typeof BOTTOM_TABS)[number];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { user } = useAuth();
 
   // ── Suspended: ซ่อน nav bar เพื่อป้องกัน bypass (U-65) ──────────────────────
   const isSuspended = pathname.startsWith("/suspended");
@@ -96,7 +98,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded-lg transition-colors"
           >
             <span className="text-sm">💎</span>
-            <span className="text-xs font-semibold text-gray-700">1,250</span>
+            <span className="text-xs font-semibold text-gray-700">
+              {(user?.silverBalance ?? 120).toLocaleString()}
+            </span>
           </Link>
           <Link
             href="/wallet?tab=gold"
@@ -104,7 +108,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-1 bg-weeeu-surface hover:bg-green-100 px-2 py-1 rounded-lg transition-colors"
           >
             <span className="text-sm">🥇</span>
-            <span className="text-xs font-semibold text-weeeu-primary">350</span>
+            <span className="text-xs font-semibold text-weeeu-primary">
+              {(user?.goldBalance ?? 350).toLocaleString()}
+            </span>
           </Link>
 
           {/* 🔔 Notification bell — ไอคอนมุมขวาบน (A2 ข้อ 4) */}
@@ -124,7 +130,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-1 hover:bg-gray-100 px-1.5 py-1 rounded-xl transition-colors"
           >
             <span className="text-lg">👤</span>
-            <span className="text-xs font-medium text-gray-700 max-w-[64px] truncate hidden sm:inline">สมชาย</span>
+            <span className="text-xs font-medium text-gray-700 max-w-[64px] truncate hidden sm:inline">
+              {user?.displayName?.split(" ")[0] ?? "ฉัน"}
+            </span>
           </Link>
 
         </div>

@@ -1,6 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import DevNav, { type DevNavLink } from "@/components/DevNav";
+import { AuthProvider } from "@/lib/auth-context";
 
 export const metadata: Metadata = {
   title: {
@@ -98,10 +99,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="th">
       <body className="antialiased bg-gray-50">
-        {children}
-        {process.env.NEXT_PUBLIC_DEV_NAV === "true" && (
-          <DevNav links={devNavLinks} />
-        )}
+        <AuthProvider>
+          {children}
+          {process.env.NEXT_PUBLIC_DEV_NAV === "true" && (
+            <DevNav links={devNavLinks} />
+          )}
+        </AuthProvider>
       </body>
     </html>
   );
