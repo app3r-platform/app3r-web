@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { partsApi } from "../../_lib/api";
 import type { Part } from "../../_lib/types";
+import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function PartsStockAdjustPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -60,6 +61,7 @@ export default function PartsStockAdjustPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="space-y-5 max-w-xl">
+      <MockAnnoOrigin from="R-63d" />
       <div className="flex items-center gap-3">
         <Link href={`/parts/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">ปรับสต๊อก (Manual)</h1>

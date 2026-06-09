@@ -97,7 +97,7 @@ export default function PartsDisassemblePage() {
 
   return (
     <div className="space-y-5 max-w-xl">
-      <MockAnnoOrigin from="R-52" />
+      <MockAnnoOrigin from="R-56" />
       <div className="flex items-center gap-3">
         <Link href="/parts" className="text-gray-400 hover:text-gray-600">←</Link>
         <h1 className="text-xl font-bold text-gray-900">เพิ่มอะไหล่จากซาก</h1>

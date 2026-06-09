@@ -255,7 +255,7 @@ export default function InventoryPage() {
   // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-5">
-      <MockAnnoOrigin from="R-51" />
+      <MockAnnoOrigin from="R-53" />
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-3">
