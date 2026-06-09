@@ -16,6 +16,7 @@
     "test:e2e:report": "playwright show-report ../../playwright-report/admin"
   },
   "dependencies": {
+    "@app3r/shared": "workspace:*",
     "@app3r/ui": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
