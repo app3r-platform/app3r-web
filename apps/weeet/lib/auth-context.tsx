@@ -2,7 +2,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import type { AuthState, Technician, AccountType } from "./types";
 import { mockTechnician } from "./mock-data";
-import { getDevTestToken } from "./dev-auth"; // TODO: REMOVE BEFORE PROD
+// Wave1: wire sign-in to d2-openapi contract (mock adapter)
+import { wave1SignIn, wave1SignOut } from "./wave1-auth";
 
 interface AuthContextValue {
   auth: AuthState;
@@ -60,16 +61,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isRented = password === "changeme123";
     const accountType: AccountType = isRented ? "rented" : "default";
 
-    // TODO: REMOVE BEFORE PROD — populate token via dev bypass
-    let token: string | undefined;
-    if (process.env.NODE_ENV === "development") {
-      try {
-        token = await getDevTestToken();
-      } catch {
-        // Dev token unavailable — continue with mock (null token)
-        token = undefined;
-      }
-    }
+    // Wave1: call d2-openapi /auth/signin (mock adapter — replace with real API in Wave2)
+    const authResult = await wave1SignIn(email, password);
+    if (!authResult) return false;
 
     const newAuth: AuthState = {
       isAuthenticated: true,
@@ -78,13 +72,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       impersonatedByShop: shopName,
       accountType,
       forceChangePassword: isRented,
-      token,
+      // Wave1: JWT token from d2 contract AuthResponse
+      token: authResult.access_token,
     };
     persist(newAuth);
     return true;
   };
 
   const logout = () => {
+    // Wave1: clear JWT token via wave1-auth
+    wave1SignOut();
     const cleared: AuthState = {
       isAuthenticated: false,
       technician: null,
