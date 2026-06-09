@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MockAnnoOrigin } from "@/components/MockAnno";
+import { loginWithCredentials } from "@/lib/auth-shell";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,25 +18,30 @@ export default function LoginPage() {
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (lockout) return;
     if (!form.email || !form.password) { setError("กรุณากรอกอีเมลและรหัสผ่าน"); return; }
     setLoading(true);
     setError("");
-    // POST /api/v1/auth/login
-    setTimeout(() => {
-      setLoading(false);
-      const newAttempts = attempts + 1;
-      setAttempts(newAttempts);
-      if (newAttempts >= 5) {
-        setLockout(true);
-        setError("ล็อคบัญชีชั่วคราว 30 นาที — ลองใหม่อีกครั้งในภายหลัง");
-      } else {
-        setError(`อีเมลหรือรหัสผ่านไม่ถูกต้อง (เหลือ ${5 - newAttempts} ครั้ง)`);
-      }
-      // router.push("/dashboard"); // on success
-    }, 800);
+
+    // POST /api/v1/auth/login via auth-shell (Wave1)
+    const result = await loginWithCredentials(form.email, form.password);
+    setLoading(false);
+
+    if (result.ok) {
+      router.push("/dashboard");
+      return;
+    }
+
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+    if (newAttempts >= 5) {
+      setLockout(true);
+      setError("ล็อคบัญชีชั่วคราว 30 นาที — ลองใหม่อีกครั้งในภายหลัง");
+    } else {
+      setError(result.error || `อีเมลหรือรหัสผ่านไม่ถูกต้อง (เหลือ ${5 - newAttempts} ครั้ง)`);
+    }
   }
 
   return (

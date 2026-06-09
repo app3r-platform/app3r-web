@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SignupSteps } from "../_components/SignupSteps";
 import { MockAnnoOrigin } from "@/components/MockAnno";
+import { verifyOtpCode } from "@/lib/auth-shell";
 
 export default function SignupVerifyPage() {
   const router = useRouter();
@@ -36,17 +37,21 @@ export default function SignupVerifyPage() {
     if (e.key === "Backspace" && !otp[i] && i > 0) inputs.current[i - 1]?.focus();
   }
 
-  function handleVerifyOtp() {
+  async function handleVerifyOtp() {
     const code = otp.join("");
     if (code.length < 6) { setOtpError("กรุณากรอก OTP 6 หลักให้ครบ"); return; }
     setOtpLoading(true);
     setOtpError("");
-    // POST /api/v1/auth/verify-otp
-    setTimeout(() => {
-      setOtpLoading(false);
-      // Mock: OTP ถูก → ไปหน้าถัดไป
+
+    // POST /api/v1/auth/verify-otp via auth-shell (Wave1)
+    const result = await verifyOtpCode(code);
+    setOtpLoading(false);
+
+    if (result.ok) {
       router.push("/signup/business-type");
-    }, 800);
+    } else {
+      setOtpError(result.error);
+    }
   }
 
   function handleResend() {
