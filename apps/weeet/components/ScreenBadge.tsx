@@ -80,6 +80,8 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   // ── Auth (Gen 109 ruling · นอก group (app) · root layout mount badge ครอบให้แล้ว) ──
   { pattern: "/login",                       num: "T-47" },
   { pattern: "/change-password-first",       num: "T-48" },
+  // ── Wave1 Shell ──────────────────────────────────────────────────────────────────
+  { pattern: "/verify-otp",                  num: "T-49", label: "ยืนยัน OTP" },
   // ── Reserved (เลขเดิม · ยังไม่มี route จริง) ────────────────────────────────────
   { pattern: "/notifications",               num: "T-13" },
   { pattern: "/wallet",                      num: "T-14" },

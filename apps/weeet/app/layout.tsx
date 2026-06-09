@@ -61,6 +61,8 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ ประกาศบริการของฉัน",           href: "/listings",                                 type: "next-step", forPath: "/jobs" },
   { label: "→ [งานจับคู่แล้ว-matched]",       href: "/listings/demo-svc-001",                    type: "branch",    forPath: "/listings" },
   { label: "→ [งานเสร็จแล้ว-completed]",      href: "/listings/demo-svc-003",                    type: "branch",    forPath: "/listings" },
+  // ── Wave1 Shell Auth ─────────────────────────────────────────────────────────
+  { label: "→ [T-49] ยืนยัน OTP",            href: "/verify-otp?email=weeet%40app3r.test&type=email_verify", type: "branch", forPath: "/login" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

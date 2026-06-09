@@ -7,6 +7,51 @@ import type { RepairJob, RepairJobStatus } from "@/lib/types";
 // walk_in jobs belong to WeeeR (in-store) — never show on WeeeT
 const EXCLUDED_SERVICE_TYPES = ["walk_in"] as const;
 
+// ── Wave1: mock job list (aligned with services.fixtures.ts from Wave0 deliverable #6) ──
+// Used as placeholder when real API is unavailable (no backend in Wave1 shell).
+// Shape mirrors RepairJob (lib/types.ts) — serviceType on_site/pickup/parcel only.
+const WAVE1_MOCK_JOBS: RepairJob[] = [
+  {
+    id: "service-repair-001",
+    job_no: "JOB-W1-001",
+    status: "assigned",
+    service_type: "on_site",
+    scheduled_at: "2026-06-20T09:00:00Z",
+    title: "ซ่อมแอร์ Mitsubishi 12000 BTU",
+    appliance_name: "เครื่องปรับอากาศ",
+    customer_name: "คุณสมชาย",
+    customer_address: "123 ถ.สุขุมวิท กรุงเทพฯ",
+    point_amount: 800,
+    deadline: "2026-06-20T00:00:00Z",
+  },
+  {
+    id: "service-repair-002",
+    job_no: "JOB-W1-002",
+    status: "in_progress",
+    service_type: "pickup",
+    scheduled_at: "2026-06-12T10:00:00Z",
+    title: "ซ่อมเครื่องซักผ้า Samsung 8kg",
+    appliance_name: "เครื่องซักผ้า",
+    customer_name: "คุณมาลี",
+    customer_address: "456 ถ.รัชดา กรุงเทพฯ",
+    point_amount: 450,
+    deadline: "2026-06-12T00:00:00Z",
+  },
+  {
+    id: "service-maintain-001",
+    job_no: "JOB-W1-003",
+    status: "awaiting_decision",
+    service_type: "on_site",
+    scheduled_at: "2026-06-15T08:00:00Z",
+    title: "ล้างแอร์ 2 เครื่อง",
+    appliance_name: "เครื่องปรับอากาศ",
+    customer_name: "คุณวิชัย",
+    customer_address: "789 ถ.ลาดพร้าว กรุงเทพฯ",
+    point_amount: 500,
+    deadline: "2026-06-15T00:00:00Z",
+  },
+];
+
 type TabKey = "all" | "on_site" | "pickup" | "parcel" | "done";
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -97,9 +142,16 @@ export default function JobsPage() {
     repairApi
       .listMyJobs()
       .then((data) => {
+        // Wave1: API may return undefined when no backend — fall back to mock
+        const list = data ?? [];
+        if (list.length === 0) {
+          // Wave1 shell: use mock-fixtures-aligned placeholder jobs
+          setJobs(WAVE1_MOCK_JOBS);
+          return;
+        }
         // Safety filter: exclude walk_in even if backend returns them
         setJobs(
-          data.filter(
+          list.filter(
             (j) =>
               !EXCLUDED_SERVICE_TYPES.includes(
                 j.service_type as typeof EXCLUDED_SERVICE_TYPES[number]
@@ -107,7 +159,10 @@ export default function JobsPage() {
           )
         );
       })
-      .catch((e) => setError(e.message))
+      .catch(() => {
+        // Wave1: no backend — show mock jobs without error banner
+        setJobs(WAVE1_MOCK_JOBS);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -150,12 +205,22 @@ export default function JobsPage() {
     return jobs.filter((j) => DONE_STATUSES.includes(j.status)).length;
   }
 
+  // Wave1: detect mock mode (jobs from placeholder, not real backend)
+  const isMockData = jobs.length > 0 && jobs[0].job_no.startsWith("JOB-W1-");
+
   return (
     <div className="px-4 pt-5 pb-4 space-y-4">
       <div>
         <h1 className="text-xl font-bold text-white">รายการงานซ่อม</h1>
         <p className="text-xs text-gray-400 mt-0.5">ทั้งหมด {jobs.length} รายการ</p>
       </div>
+
+      {/* Wave1 Shell banner — dev/review only */}
+      {isMockData && process.env.NEXT_PUBLIC_DEV_NAV === "true" && (
+        <div className="bg-blue-950/40 border border-blue-800/60 rounded-xl px-3 py-2 text-xs text-blue-300">
+          🧱 Wave1 Shell — แสดงข้อมูล Mock (API ยังไม่พร้อม)
+        </div>
+      )}
 
       <div className="relative">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
