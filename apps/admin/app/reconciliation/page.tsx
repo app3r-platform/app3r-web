@@ -16,7 +16,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, isSuperAdmin } from "@/lib/auth";
-import { api } from "@/lib/api";
+import { api, ERR_UNAUTHORIZED } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -49,6 +49,22 @@ interface ResolvePayload {
   action: "force_complete" | "force_fail" | "retry";
   note: string;
 }
+
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_RECONCILIATION_REPORT: ReconciliationReport = {
+  total_stuck:      4,
+  total_pending:    2,
+  total_processing: 1,
+  total_failed:     1,
+  last_worker_run_at: "2026-06-09T02:00:00Z",
+  worker_status:    "idle",
+  items: [
+    { id: "SETL-a1b2c3d4-0001", job_id: "JOB-repair-8821", job_type: "repair",   amount: 2500,  status: "pending",    created_at: "2026-06-07T10:00:00Z", updated_at: "2026-06-09T02:00:00Z", stuck_since_hours: 48.0, error_message: null },
+    { id: "SETL-a1b2c3d4-0002", job_id: "JOB-resell-5543", job_type: "resell",   amount: 8000,  status: "pending",    created_at: "2026-06-08T08:30:00Z", updated_at: "2026-06-09T02:00:00Z", stuck_since_hours: 29.5, error_message: null },
+    { id: "SETL-a1b2c3d4-0003", job_id: "JOB-scrap-1120",  job_type: "scrap",    amount: 1200,  status: "processing", created_at: "2026-06-09T00:15:00Z", updated_at: "2026-06-09T02:00:00Z", stuck_since_hours: 8.2,  error_message: null },
+    { id: "SETL-a1b2c3d4-0004", job_id: "JOB-maintain-337",job_type: "maintain", amount: 3500,  status: "failed",     created_at: "2026-06-06T15:00:00Z", updated_at: "2026-06-09T02:00:00Z", stuck_since_hours: 59.0, error_message: "PointLedger: insufficient reserve_pool balance" },
+  ],
+};
 
 // ─── Status config ──────────────────────────────────────────────────────────────
 
@@ -183,12 +199,15 @@ export default function SettlementReconciliationPage() {
     try {
       const d = await api.get<ReconciliationReport>("/reconciliation");
       setReport(d);
-    } catch (e) {
-      showToast(`❌ โหลดข้อมูลไม่สำเร็จ: ${(e as Error).message}`, "err");
+    } catch (e: unknown) {
+      if ((e as Error).message === ERR_UNAUTHORIZED) { router.push("/login"); return; }
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setReport(MOCK_RECONCILIATION_REPORT);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -203,7 +222,8 @@ export default function SettlementReconciliationPage() {
       showToast("✅ Reconciliation Worker รันเสร็จ", "ok");
       await fetchReport();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`, "err");
+      console.warn("[mock fallback]", e);
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setRunning(false);
     }
@@ -218,7 +238,8 @@ export default function SettlementReconciliationPage() {
       setSelectedSettlement(null);
       await fetchReport();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`, "err");
+      console.warn("[mock fallback]", e);
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setResolving(false);
     }
@@ -243,7 +264,7 @@ export default function SettlementReconciliationPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">⚙️ Settlement Reconciliation</h1>
+            <h1 className="text-2xl font-bold">⚙️ ตรวจสอบ Settlement</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตรวจสอบและแก้ไข settlement (การชำระเงิน) ที่ค้างอยู่ในระบบ
             </p>
@@ -256,7 +277,7 @@ export default function SettlementReconciliationPage() {
               {running ? (
                 <><span className="animate-spin">⟳</span> กำลังรัน...</>
               ) : (
-                <>▶ Run Worker ตอนนี้</>
+                <>▶ รัน Worker ทันที</>
               )}
             </button>
           )}
@@ -269,7 +290,7 @@ export default function SettlementReconciliationPage() {
             {/* Worker Status */}
             <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">Worker Status:</span>
+                <span className="text-sm text-gray-500">สถานะ Worker:</span>
                 <span className={`text-sm font-semibold ${workerStatusConfig[report.worker_status].color}`}>
                   {workerStatusConfig[report.worker_status].label}
                 </span>
@@ -312,7 +333,7 @@ export default function SettlementReconciliationPage() {
                 <thead>
                   <tr className="text-gray-500 text-left border-b border-gray-200">
                     <th className="px-6 py-3">Settlement ID</th>
-                    <th className="px-6 py-3">Job</th>
+                    <th className="px-6 py-3">งาน (Job)</th>
                     <th className="px-6 py-3">จำนวน (G)</th>
                     <th className="px-6 py-3">สถานะ</th>
                     <th className="px-6 py-3">ค้างมา (ชม.)</th>

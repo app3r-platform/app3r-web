@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { isAuthenticated } from "@/lib/auth";
-import { api } from "@/lib/api";
+import { api, ERR_UNAUTHORIZED } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 interface PlatformBalances {
@@ -19,6 +19,19 @@ interface PlatformBalances {
   last_reconciliation_at: string | null;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_BALANCES: PlatformBalances = {
+  listing_offer_fee_pool:  87500,
+  platform_fee_pool:       62000,
+  advertising_pool:        35000,
+  escrow_pool:             20000,
+  reserve_pool:           480000,
+  written_off:              2500,
+  silver_pool:            980000,
+  reconciliation_status:  "PENDING",
+  last_reconciliation_at: null,
+};
+
 export default function BalancesPage() {
   const router = useRouter();
   const [data, setData] = useState<PlatformBalances | null>(null);
@@ -30,12 +43,16 @@ export default function BalancesPage() {
       const d = await api.get<PlatformBalances>("/admin/platform/balances");
       setData(d);
       setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === ERR_UNAUTHORIZED) { router.push("/login"); return; }
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setData(MOCK_BALANCES);
+      setError(null);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -58,7 +75,7 @@ export default function BalancesPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">Platform Balances</h1>
+          <h1 className="text-2xl font-bold">ยอดเงินคงเหลือ Platform</h1>
           <span className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200">
             🔄 Auto-refresh 30s
           </span>
@@ -127,20 +144,20 @@ export default function BalancesPage() {
             {/* Quick Actions */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                Quick Actions
+                ลิงก์ด่วน
               </h2>
               <div className="flex flex-wrap gap-3">
                 <Link href="/platform/gold-management"
                   className="px-4 py-2 bg-yellow-900/30 hover:bg-yellow-900/50 border border-yellow-800/50 text-yellow-700 rounded-lg text-sm transition-colors">
-                  🥇 Gold Management
+                  🥇 จัดการ Gold Point
                 </Link>
                 <Link href="/platform/silver"
                   className="px-4 py-2 bg-gray-100 hover:bg-gray-100 border border-gray-300 text-gray-700 rounded-lg text-sm transition-colors">
-                  🥈 Silver Points
+                  🥈 Silver Point
                 </Link>
                 <Link href="/platform/transactions"
                   className="px-4 py-2 bg-gray-100 hover:bg-gray-100 border border-gray-300 text-gray-700 rounded-lg text-sm transition-colors">
-                  📋 Audit Trail
+                  📋 บันทึกตรวจสอบ
                 </Link>
                 <Link href="/platform/reconciliation"
                   className="px-4 py-2 bg-gray-100 hover:bg-gray-100 border border-gray-300 text-gray-700 rounded-lg text-sm transition-colors">

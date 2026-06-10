@@ -98,7 +98,7 @@ export default function PartsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🔩 Parts Inventory</h1>
+            <h1 className="text-2xl font-bold">🔩 คลังอะไหล่</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการอะไหล่ข้าม shop — filter ร้าน / หมวด / สภาพ
             </p>
@@ -138,7 +138,7 @@ export default function PartsPage() {
             <input type="checkbox" checked={filterLowStock}
               onChange={e => { setFilterLowStock(e.target.checked); setPage(1); }}
               className="accent-red-500" />
-            Low stock only
+            สต็อกน้อยเท่านั้น
           </label>
           {hasFilters && (
             <button onClick={clearFilters}

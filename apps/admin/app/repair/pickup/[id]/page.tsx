@@ -81,6 +81,46 @@ const PHOTO_TYPE_LABEL: Record<string, string> = {
   other:           "อื่นๆ",
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PICKUP_DETAIL: PickupJobDetail = {
+  id: "pkj-001",
+  job_number: "PK-2026-0001",
+  repair_job_id: "rj-001",
+  shop_name: "ร้านซ่อมสุขุมวิท",
+  shop_address: "123 ถ.สุขุมวิท แขวงคลองตัน เขตคลองเตย กรุงเทพฯ 10110",
+  weeet_id: "weeet-001",
+  weeet_name: "นายชัยวัฒน์ วิ่งเร็ว",
+  weeet_phone: "062-111-2233",
+  customer_name: "นายสมชาย ใจดี",
+  customer_phone: "081-234-5678",
+  customer_address: "99/5 ถ.สุขุมวิท 22 แขวงคลองตัน กรุงเทพฯ 10110",
+  device_model: "iPhone 14 Pro",
+  device_brand: "Apple",
+  device_serial: "F2LXQ9XXXX",
+  status: "en_route_delivery",
+  direction: "shop_to_customer",
+  scheduled_at: "2026-06-10T13:00:00.000Z",
+  assigned_at: "2026-06-10T12:45:00.000Z",
+  picked_up_at: "2026-06-10T13:10:00.000Z",
+  delivered_at: null,
+  completed_at: null,
+  distance_km: 8.4,
+  travel_cost: 120,
+  travel_duration_min: 32,
+  signature_url: null,
+  signature_captured_at: null,
+  photos: [
+    { type: "pickup_proof", url: "https://placehold.co/300x300?text=PickupProof", taken_at: "2026-06-10T13:10:00.000Z" },
+  ],
+  timeline: [
+    { status: "pending",           actor: "ระบบ",               note: "สร้าง pickup job อัตโนมัติ", lat: null, lng: null, timestamp: "2026-06-10T10:00:00.000Z" },
+    { status: "assigned",          actor: "Admin — สมศรี",      note: "มอบหมายให้นายชัยวัฒน์",    lat: null, lng: null, timestamp: "2026-06-10T12:45:00.000Z" },
+    { status: "en_route_pickup",   actor: "นายชัยวัฒน์",        note: null,                         lat: 13.7463, lng: 100.5347, timestamp: "2026-06-10T12:50:00.000Z" },
+    { status: "picked_up",         actor: "นายชัยวัฒน์",        note: "รับเครื่องจากร้านแล้ว",     lat: 13.7380, lng: 100.5600, timestamp: "2026-06-10T13:10:00.000Z" },
+    { status: "en_route_delivery", actor: "นายชัยวัฒน์",        note: null,                         lat: 13.7350, lng: 100.5620, timestamp: "2026-06-10T13:12:00.000Z" },
+  ],
+};
+
 const OVERRIDE_ACTIONS = [
   { value: "cancel",   label: "Cancel Job",    desc: "ยกเลิก pickup job" },
   { value: "reassign", label: "Force Reassign", desc: "มอบหมาย WeeeT ใหม่" },
@@ -118,7 +158,9 @@ export default function PickupDetailPage() {
       setJob(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(MOCK_PICKUP_DETAIL);
     } finally {
       setLoading(false);
     }
@@ -143,7 +185,8 @@ export default function PickupDetailPage() {
       setOverrideConfirm(false);
       fetchJob();
     } catch (e) {
-      setOverrideMsg({ type: "error", text: (e as Error).message });
+      const msg = (e as Error).message;
+      setOverrideMsg({ type: "error", text: msg === "BACKEND_UNAVAILABLE" ? "โหมดสาธิต: backend ยังไม่พร้อม" : msg });
     } finally {
       setOverrideLoading(false);
     }

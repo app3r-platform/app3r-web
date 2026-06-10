@@ -65,6 +65,49 @@ interface ParcelJobDetail {
   disputes: ParcelDispute[];
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PARCEL_DETAIL: ParcelJobDetail = {
+  id: "pj-001",
+  job_number: "PJ-2026-0001",
+  repair_job_id: "rj-001",
+  shop_name: "ร้านซ่อม iCare สยาม",
+  shop_address: "12/34 สยามสแควร์ ซอย 4 ปทุมวัน กรุงเทพฯ 10330",
+  customer_name: "สมชาย ใจดี",
+  customer_phone: "081-234-5678",
+  customer_address: "123 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ 10110",
+  device_model: "iPhone 14 Pro",
+  device_brand: "Apple",
+  device_serial: "F2LXQ1ABCDE",
+  status: "at_shop",
+  shipping_cost: 120,
+  insurance_value: 35000,
+  legs: [
+    {
+      leg: "outbound",
+      courier_name: "Kerry Express",
+      tracking_number: "KE1234567890TH",
+      shipped_at: "2026-06-05T09:00:00Z",
+      delivered_at: "2026-06-06T10:30:00Z",
+      events: [
+        { timestamp: "2026-06-05T09:00:00Z", location: "กรุงเทพฯ", description: "รับพัสดุแล้ว", status_code: "PICKED_UP" },
+        { timestamp: "2026-06-05T18:00:00Z", location: "คลังกลาง Kerry", description: "พัสดุถึงคลังคัดแยก", status_code: "AT_SORT_HUB" },
+        { timestamp: "2026-06-06T08:00:00Z", location: "กรุงเทพฯ สาขาสยาม", description: "นำออกส่ง", status_code: "OUT_FOR_DELIVERY" },
+        { timestamp: "2026-06-06T10:30:00Z", location: "ร้านซ่อม iCare สยาม", description: "ส่งถึงร้านแล้ว", status_code: "DELIVERED" },
+      ],
+    },
+    {
+      leg: "return",
+      courier_name: "Kerry Express",
+      tracking_number: "",
+      shipped_at: null,
+      delivered_at: null,
+      events: [],
+    },
+  ],
+  photos: [],
+  disputes: [],
+};
+
 const STATUS_META: Record<string, { label: string; color: string }> = {
   pending:          { label: "รอดำเนินการ",      color: "bg-gray-100 text-gray-500" },
   label_created:    { label: "สร้าง label แล้ว", color: "bg-gray-700 text-gray-700" },
@@ -127,12 +170,14 @@ export default function ParcelDetailPage() {
       const d = await api.get<ParcelJobDetail>(`/admin/repair/parcel/${jobId}`);
       setJob(d);
       setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(MOCK_PARCEL_DETAIL);
     } finally {
       setLoading(false);
     }
-  }, [jobId]);
+  }, [jobId, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -156,7 +201,7 @@ export default function ParcelDetailPage() {
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
             {error ?? "ไม่พบข้อมูล"}
           </div>
-          <Link href="/repair/parcel/queue" className="text-sm text-admin-primary hover:text-admin-dark">← Queue</Link>
+          <Link href="/repair/parcel/queue" className="text-sm text-admin-primary hover:text-admin-dark">← คิวพัสดุ</Link>
         </main>
       </div>
     );
@@ -178,12 +223,12 @@ export default function ParcelDetailPage() {
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               {openDisputes.length > 0 && (
                 <span className="text-xs px-2 py-0.5 rounded-full bg-orange-50 text-orange-700">
-                  ⚠️ {openDisputes.length} dispute{openDisputes.length > 1 ? "s" : ""}
+                  ⚠️ {openDisputes.length} ข้อพิพาท
                 </span>
               )}
             </div>
             <p className="text-gray-500 text-sm">
-              Repair Job:{" "}
+              งานซ่อม:{" "}
               <Link href={`/repair/jobs/${job.repair_job_id}`}
                 className="text-admin-primary hover:text-admin-dark font-mono text-xs">
                 {job.repair_job_id.slice(0, 8)}…
@@ -192,7 +237,7 @@ export default function ParcelDetailPage() {
           </div>
           <Link href="/repair/parcel/queue"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Queue
+            ← คิวพัสดุ
           </Link>
         </div>
 
@@ -240,7 +285,9 @@ export default function ParcelDetailPage() {
                 {leg.leg === "outbound" ? "↗ ขาออก (ลูกค้า → ร้านซ่อม)" : "↙ ขาคืน (ร้านซ่อม → ลูกค้า)"}
               </h2>
               <span className="text-xs font-bold text-gray-200">{leg.courier_name}</span>
-              <span className="text-xs font-mono text-blue-400">{leg.tracking_number}</span>
+              {leg.tracking_number && (
+                <span className="text-xs font-mono text-blue-400">{leg.tracking_number}</span>
+              )}
             </div>
 
             {/* Timeline events */}
@@ -272,7 +319,7 @@ export default function ParcelDetailPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-gray-600">ยังไม่มี tracking events</p>
+              <p className="text-xs text-gray-600">ยังไม่มีข้อมูล tracking</p>
             )}
 
             {/* Leg timestamps summary */}
@@ -297,7 +344,7 @@ export default function ParcelDetailPage() {
         {job.photos?.length > 0 && (
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-              📷 Photos Timeline
+              📷 รูปภาพ
             </h2>
             {(["packaging", "shipping_label", "received_at_shop", "return_packaging", "delivery_proof", "damage"] as const).map(type => {
               const typePhotos = job.photos.filter(p => p.type === type);
@@ -332,7 +379,7 @@ export default function ParcelDetailPage() {
         {job.disputes?.length > 0 && (
           <section className="bg-white rounded-xl border border-orange-900/40 p-5">
             <h2 className="text-xs font-semibold text-orange-700 uppercase tracking-wider mb-4">
-              ⚠️ Dispute Log
+              ⚠️ บันทึกข้อพิพาท
             </h2>
             <div className="space-y-3">
               {job.disputes.map(d => {
@@ -368,7 +415,7 @@ export default function ParcelDetailPage() {
                     {(d.status === "open" || d.status === "in_review") && (
                       <Link href={`/repair/parcel/disputes`}
                         className="inline-block mt-2 text-xs text-orange-700 hover:text-orange-700">
-                        จัดการ Dispute →
+                        จัดการข้อพิพาท →
                       </Link>
                     )}
                   </div>

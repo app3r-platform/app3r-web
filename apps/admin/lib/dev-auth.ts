@@ -18,26 +18,41 @@ export async function getDevTestToken(): Promise<string> {
 
   if (cachedToken) return cachedToken;
 
-  const response = await fetch("/api/v1/_dev/get-test-token", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: 1,
-      role: "admin",
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to get test token: ${response.status}`);
+  // RC1 (CMD #115-V) — Mock-First: dev-nav mode ไม่มี backend → ใช้ bypass token
+  // ❌ ห้ามยิง /api/v1/_dev/get-test-token (ไม่มี route = 404 รก console)
+  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+    cachedToken = "dev-jwt-bypass";
+    saveToken(cachedToken);
+    return cachedToken;
   }
 
-  const data = await response.json();
-  cachedToken = data.token as string;
+  try {
+    const response = await fetch("/api/v1/_dev/get-test-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: 1,
+        role: "admin",
+      }),
+    });
 
-  // TODO: REMOVE BEFORE PROD — persist to localStorage so isAuthenticated() works
-  saveToken(cachedToken);
+    if (!response.ok) {
+      throw new Error(`Failed to get test token: ${response.status}`);
+    }
 
-  return cachedToken;
+    const data = await response.json();
+    cachedToken = data.token as string;
+
+    // TODO: REMOVE BEFORE PROD — persist to localStorage so isAuthenticated() works
+    saveToken(cachedToken);
+
+    return cachedToken;
+  } catch {
+    // mock-first: token fetch ล้มเหลว → ใช้ bypass แทน (ไม่ throw ให้ caller พัง)
+    cachedToken = "dev-jwt-bypass";
+    saveToken(cachedToken);
+    return cachedToken;
+  }
 }
 
 /**

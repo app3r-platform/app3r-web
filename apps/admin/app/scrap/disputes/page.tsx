@@ -113,7 +113,7 @@ export default function ScrapDisputesPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
           <div>
-            <h1 className="text-2xl font-bold">⚖️ Scrap Disputes</h1>
+            <h1 className="text-2xl font-bold">⚖️ ข้อพิพาทการรับซาก</h1>
             <p className="text-gray-500 text-sm mt-1">
               ข้อพิพาท Scrap เท่านั้น — service_type B
             </p>
@@ -164,9 +164,9 @@ export default function ScrapDisputesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-5 py-3">Job / Listing</th>
-                  <th className="px-5 py-3">Buyer (WeeeR)</th>
-                  <th className="px-5 py-3">Seller (WeeeU)</th>
+                  <th className="px-5 py-3">งาน / ประกาศ</th>
+                  <th className="px-5 py-3">ผู้รับซื้อ (WeeeR)</th>
+                  <th className="px-5 py-3">ผู้ขาย (WeeeU)</th>
                   <th className="px-5 py-3">เงินพักกลาง (Escrow)</th>
                   <th className="px-5 py-3">เวลาที่พิพาท</th>
                   <th className="px-5 py-3 text-right">จัดการ</th>
@@ -251,11 +251,11 @@ export default function ScrapDisputesPage() {
             </p>
             <div className="bg-gray-100 rounded-xl p-4 mb-5 grid grid-cols-2 gap-3 text-sm">
               <div>
-                <div className="text-xs text-gray-500 mb-1">Buyer (WeeeR)</div>
+                <div className="text-xs text-gray-500 mb-1">ผู้รับซื้อ (WeeeR)</div>
                 <div className="text-blue-300 font-medium">{resolveModal.buyer_name}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500 mb-1">Seller (WeeeU)</div>
+                <div className="text-xs text-gray-500 mb-1">ผู้ขาย (WeeeU)</div>
                 <div className="text-green-700 font-medium">{resolveModal.seller_name}</div>
               </div>
               <div className="col-span-2">

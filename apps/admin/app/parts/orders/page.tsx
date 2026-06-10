@@ -82,7 +82,7 @@ export default function PartsOrdersPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📦 Parts Orders</h1>
+            <h1 className="text-2xl font-bold">📦 คำสั่งซื้ออะไหล่</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการสั่งซื้ออะไหล่ — B2B marketplace orders
             </p>

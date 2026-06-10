@@ -34,6 +34,16 @@ const REASON_CATEGORIES = [
   "อื่นๆ",
 ];
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_CONFIG: Config = {
+  signup_bonus_enabled: "true",
+  signup_bonus_points: "100",
+  promo_free_repair: "false",
+  promo_free_secondhand: "true",
+  promo_free_maintenance: "false",
+  promo_free_scrap: "false",
+};
+
 const PROMOS = [
   {
     key: "promo_free_repair",
@@ -95,8 +105,11 @@ export default function PromotionsPage() {
       const result = await api.get<Config>("/admin/config");
       setConfig(result);
       setBonusPoints(result["signup_bonus_points"] ?? "0");
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setConfig(MOCK_CONFIG);
+      setBonusPoints(MOCK_CONFIG["signup_bonus_points"] ?? "0");
     } finally {
       setLoading(false);
     }
@@ -116,7 +129,8 @@ export default function PromotionsPage() {
       setConfig((prev) => ({ ...prev, [key]: newValue }));
       showToast(newValue === "true" ? "เปิดโปรโมชันแล้ว ✓" : "ปิดโปรโมชันแล้ว", "ok");
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setSaving(null);
     }
@@ -132,7 +146,8 @@ export default function PromotionsPage() {
       setConfig((prev) => ({ ...prev, signup_bonus_enabled: newValue }));
       showToast(newValue === "true" ? "เปิด Signup Bonus แล้ว ✓" : "ปิด Signup Bonus แล้ว", "ok");
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setSaving(null);
     }
@@ -150,7 +165,8 @@ export default function PromotionsPage() {
       setConfig((prev) => ({ ...prev, signup_bonus_points: String(val) }));
       showToast(`บันทึกแล้ว: ${val} Points ต่อการสมัคร`, "ok");
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setSaving(null);
     }
@@ -164,8 +180,9 @@ export default function PromotionsPage() {
       const params = new URLSearchParams({ search: searchQuery, limit: "10" });
       const result = await api.get<PaginatedUsers>(`/admin/users?${params}`);
       setSearchResults(result.items.filter((u) => u.role === "weeeu" || u.role === "weeer"));
-    } catch {
-      showToast("ค้นหาไม่สำเร็จ", "err");
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setSearching(false);
     }
@@ -205,7 +222,8 @@ export default function PromotionsPage() {
       setAdjustDetail("");
       setAdjustDirection("credit");
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setAdjustLoading(false);
     }

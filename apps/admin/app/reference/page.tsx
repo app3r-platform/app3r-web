@@ -973,7 +973,7 @@ export default function ReferenceDataPage() {
 
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold">📥 Reference Data</h1>
+          <h1 className="text-2xl font-bold">📥 ข้อมูลอ้างอิง</h1>
           <p className="text-gray-500 text-sm mt-1">
             การออกแบบ Generic-First · โครงสร้างข้อมูล 3 ชั้น · ตาราง asset_images · Soft Delete · Dynamic form per-category
           </p>

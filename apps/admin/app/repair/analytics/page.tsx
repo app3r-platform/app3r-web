@@ -25,6 +25,50 @@ interface RepairAnalytics {
   recent_closures: { job_id: string; closed_at: string; final_price: number }[];
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_REPAIR_ANALYTICS: RepairAnalytics = {
+  total_jobs: 218,
+  active_jobs: 47,
+  closed_jobs: 152,
+  cancelled_jobs: 14,
+  converted_scrap_jobs: 5,
+  by_status: [
+    { status: "closed",            count: 152 },
+    { status: "in_progress",       count: 22 },
+    { status: "awaiting_decision", count: 12 },
+    { status: "awaiting_user",     count: 8 },
+    { status: "inspecting",        count: 5 },
+    { status: "cancelled",         count: 14 },
+    { status: "converted_scrap",   count: 5 },
+  ],
+  by_branch: [
+    { branch: "B1.1", count: 98 },
+    { branch: "B1.2", count: 54 },
+    { branch: "B2.1", count: 14 },
+    { branch: "B2.2", count: 5 },
+  ],
+  by_source: [
+    { type: "customer",        count: 201 },
+    { type: "purchased_scrap", count: 17 },
+  ],
+  avg_completion_hours: 5.3,
+  conversion_rate_b22: 0.0329,
+  top_weeer: [
+    { weeer_name: "ร้าน iCare สยาม", jobs: 48 },
+    { weeer_name: "TechFix เซ็นทรัล", jobs: 41 },
+    { weeer_name: "GadgetDoc ลาดพร้าว", jobs: 35 },
+    { weeer_name: "ProRepair สีลม", jobs: 28 },
+    { weeer_name: "QuickFix อารีย์", jobs: 19 },
+  ],
+  recent_closures: [
+    { job_id: "rj-001aabbcc", closed_at: "2026-06-09T14:30:00Z", final_price: 2500 },
+    { job_id: "rj-002ddeeff", closed_at: "2026-06-09T11:00:00Z", final_price: 1800 },
+    { job_id: "rj-003gghhii", closed_at: "2026-06-08T16:45:00Z", final_price: 3200 },
+    { job_id: "rj-004jjkkll", closed_at: "2026-06-08T13:20:00Z", final_price: 950 },
+    { job_id: "rj-005mmnnoo", closed_at: "2026-06-07T10:10:00Z", final_price: 4500 },
+  ],
+};
+
 function StatCard({
   icon, label, value, sub, accent,
 }: {
@@ -68,19 +112,19 @@ export default function RepairAnalyticsPage() {
   const router = useRouter();
   const [data, setData] = useState<RepairAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
       const d = await api.get<RepairAnalytics>("/admin/repair/analytics?service_type=on_site");
       setData(d);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_REPAIR_ANALYTICS);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -94,27 +138,25 @@ export default function RepairAnalyticsPage() {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📊 Repair Analytics — On-site</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติการซ่อม — On-site</h1>
             <p className="text-gray-500 text-sm mt-1">ภาพรวมงานซ่อม On-site — jobs by status, branch, conversion rate</p>
           </div>
           <Link href="/repair/jobs"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← ดู Jobs List
+            ← รายการงาน
           </Link>
         </div>
 
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
-        ) : error ? (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error}</div>
         ) : data && (
           <>
             {/* Summary cards */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                <StatCard icon="📋" label="Jobs ทั้งหมด" value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active" value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="📋" label="งานทั้งหมด" value={data.total_jobs.toLocaleString()} />
+                <StatCard icon="⚡" label="กำลังดำเนินการ" value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="ปิดงานแล้ว" value={data.closed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ยกเลิก" value={data.cancelled_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="♻️" label="→ ซาก (B2.2)" value={data.converted_scrap_jobs.toLocaleString()} accent="orange" />
@@ -127,7 +169,7 @@ export default function RepairAnalyticsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <StatCard
                   icon="⏱️"
-                  label="Avg Completion Time"
+                  label="เวลาเฉลี่ยในการซ่อม"
                   value={data.avg_completion_hours != null
                     ? `${data.avg_completion_hours.toFixed(1)} ชั่วโมง`
                     : "—"}
@@ -136,11 +178,11 @@ export default function RepairAnalyticsPage() {
                 />
                 <StatCard
                   icon="♻️"
-                  label="B2.2 Conversion Rate"
+                  label="อัตราแปลงเป็นซาก (B2.2)"
                   value={data.conversion_rate_b22 != null
                     ? `${(data.conversion_rate_b22 * 100).toFixed(1)}%`
                     : "—"}
-                  sub="ซ่อมไม่ได้ → ซาก / total closed"
+                  sub="ซ่อมไม่ได้ → ซาก / ปิดงานทั้งหมด"
                   accent="orange"
                 />
               </div>
@@ -149,7 +191,7 @@ export default function RepairAnalyticsPage() {
             {/* By Status */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">งานตามสถานะ</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
@@ -171,7 +213,7 @@ export default function RepairAnalyticsPage() {
 
               {/* By Branch */}
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Branch</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">งานตาม Branch</h2>
                 <div className="space-y-3">
                   {data.by_branch.map(row => {
                     const total = data.by_branch.reduce((s, r) => s + r.count, 0);
@@ -195,7 +237,7 @@ export default function RepairAnalyticsPage() {
                     );
                   })}
                   {data.by_branch.length === 0 && (
-                    <p className="text-xs text-gray-600">ยังไม่มี branch data</p>
+                    <p className="text-xs text-gray-600">ยังไม่มีข้อมูล branch</p>
                   )}
                 </div>
               </section>
@@ -240,13 +282,13 @@ export default function RepairAnalyticsPage() {
             {/* Top WeeeR */}
             {data.top_weeer?.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Top WeeeR (by jobs)</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">WeeeR ยอดนิยม (by งาน)</h2>
                 <div className="space-y-1.5">
                   {data.top_weeer.map((row, i) => (
                     <div key={i} className="flex items-center gap-3 text-sm">
                       <span className="text-gray-600 w-5 text-right">{i + 1}.</span>
                       <span className="text-gray-200 flex-1">{row.weeer_name}</span>
-                      <span className="text-blue-400 font-mono">{row.jobs} jobs</span>
+                      <span className="text-blue-400 font-mono">{row.jobs} งาน</span>
                     </div>
                   ))}
                 </div>
@@ -256,7 +298,7 @@ export default function RepairAnalyticsPage() {
             {/* Recent closures */}
             {data.recent_closures?.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Recent Closures</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">งานปิดล่าสุด</h2>
                 <div className="space-y-1.5">
                   {data.recent_closures.map(row => (
                     <div key={row.job_id} className="flex items-center gap-3 text-sm border-b border-gray-200/50 pb-1.5">

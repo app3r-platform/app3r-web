@@ -84,7 +84,7 @@ function OffersInner() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🤝 Offer Audit</h1>
+            <h1 className="text-2xl font-bold">🤝 ตรวจสอบข้อเสนอ</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตรวจสอบ offers ข้าม listings — anti-fraud monitoring
             </p>
@@ -150,9 +150,9 @@ function OffersInner() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Offer ID</th>
                   <th className="px-4 py-3">Listing ID</th>
-                  <th className="px-4 py-3">Buyer</th>
+                  <th className="px-4 py-3">ผู้ซื้อ</th>
                   <th className="px-4 py-3">ราคา Offer</th>
-                  <th className="px-4 py-3">Delivery</th>
+                  <th className="px-4 py-3">การจัดส่ง</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">หมดอายุ</th>
                   <th className="px-4 py-3">วันที่</th>

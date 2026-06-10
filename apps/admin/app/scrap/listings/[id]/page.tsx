@@ -13,6 +13,23 @@ interface ScrapItemExtended extends ScrapItem {
   source_repair_job_id?: string | null;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_SCRAP_ITEM: ScrapItemExtended = {
+  id: "SCR-001",
+  sellerId: "USR-1001",
+  sellerType: "WeeeU",
+  applianceId: "APP-5501",
+  conditionGrade: "grade_A",
+  workingParts: ["คอมเพรสเซอร์", "พัดลม", "บอร์ดควบคุม", "วาล์วขยาย"],
+  description: "แอร์ Daikin 12,000 BTU ปี 2021 ใช้งานปกติ ชิ้นส่วนครบ สภาพดีมาก",
+  photos: [],
+  price: 3500,
+  status: "available",
+  createdAt: "2026-05-10T08:00:00Z",
+  updatedAt: "2026-05-10T08:00:00Z",
+  source_repair_job_id: null,
+};
+
 const STATUS_META: Record<ScrapItem["status"], { label: string; color: string }> = {
   available: { label: "ขายได้",  color: "bg-green-50 text-green-700" },
   sold:      { label: "ขายแล้ว", color: "bg-blue-50 text-blue-700" },
@@ -39,22 +56,25 @@ export default function ScrapListingDetailPage() {
   const { id } = useParams() as { id: string };
   const [item, setItem] = useState<ScrapItemExtended | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
   const [removeConfirm, setRemoveConfirm] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const superAdmin = isSuperAdmin();
+
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
   const fetchItem = useCallback(async () => {
     try {
       const d = await api.get<ScrapItemExtended>(`/admin/scrap/items/${id}/`);
       setItem(d);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItem(MOCK_SCRAP_ITEM);
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -68,8 +88,9 @@ export default function ScrapListingDetailPage() {
       await api.patch(`/admin/scrap/items/${id}/force_remove/`, {});
       await fetchItem();
       setRemoveConfirm(false);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
+      setRemoveConfirm(false);
     } finally {
       setRemoving(false);
     }
@@ -81,14 +102,12 @@ export default function ScrapListingDetailPage() {
     </div>
   );
 
-  if (error || !item) return (
+  if (!item) return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
-          {error ?? "ยังไม่มีข้อมูลซาก"}
-        </div>
-        <Link href="/scrap/listings" className="text-sm text-admin-primary hover:text-admin-dark">← Listings</Link>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">ยังไม่มีข้อมูลซาก</div>
+        <Link href="/scrap/listings" className="text-sm text-admin-primary hover:text-admin-dark">← รายการซาก</Link>
       </main>
     </div>
   );
@@ -105,11 +124,12 @@ export default function ScrapListingDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">♻️ Scrap Detail</h1>
+              <h1 className="text-2xl font-bold">♻️ รายละเอียดซาก</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${gm.color}`}>{gm.label}</span>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
             </div>
-            <p className="text-gray-500 text-sm font-mono">{item.id}</p>
+            <p className="text-gray-500 text-xs mt-0.5">ข้อมูลซากเครื่องใช้ไฟฟ้า — ตรวจสอบสถานะและจัดการรายการ</p>
+            <p className="text-gray-400 text-xs font-mono mt-0.5">{item.id}</p>
           </div>
           <Link href="/scrap/listings"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
@@ -221,10 +241,14 @@ export default function ScrapListingDetailPage() {
                 🗑️ Force Remove
               </button>
             )}
-            {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
           </section>
         )}
 
+        {toast && (
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
+            {toast}
+          </div>
+        )}
       </main>
     </div>
   );

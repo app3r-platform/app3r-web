@@ -117,7 +117,7 @@ export default function ScrapJobsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🔨 Scrap Jobs</h1>
+            <h1 className="text-2xl font-bold">🔨 งานรับซาก</h1>
             <p className="text-gray-500 text-sm mt-1">
               Pipeline การตัดสินใจซาก — filter สถานะ / ตัวเลือก / ผู้ซื้อ
             </p>
@@ -206,14 +206,14 @@ export default function ScrapJobsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-4 py-3">Job ID</th>
-                  <th className="px-4 py-3">Scrap Item</th>
-                  <th className="px-4 py-3">Buyer</th>
+                  <th className="px-4 py-3">รหัสงาน</th>
+                  <th className="px-4 py-3">รายการซาก</th>
+                  <th className="px-4 py-3">ผู้รับซื้อ (WeeeR)</th>
                   <th className="px-4 py-3">ตัวเลือก</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">ตัดสินใจเมื่อ</th>
-                  <th className="px-4 py-3">Flags</th>
-                  <th className="px-4 py-3">Cert</th>
+                  <th className="px-4 py-3">ธงแจ้งเตือน</th>
+                  <th className="px-4 py-3">ใบรับรอง</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>

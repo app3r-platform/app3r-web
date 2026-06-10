@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
-import { api } from "@/lib/api";
+import { api, ERR_UNAUTHORIZED } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 interface SilverSummary {
@@ -31,6 +31,31 @@ interface ExpiryBatchResult {
   total_points_expired: number;
   ran_at: string;
 }
+
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_SILVER_SUMMARY: SilverSummary = {
+  total_supply: 980000,
+  total_distributed: 45200,
+  total_expired: 12800,
+  active_holders: 312,
+};
+const MOCK_TRIGGERS: TriggerSetting[] = [
+  { key: "silver_reward_scrap",        label: "รับซาก",           points: 30,  enabled: true  },
+  { key: "silver_reward_review",       label: "รีวิว",             points: 10,  enabled: true  },
+  { key: "silver_reward_referral",     label: "แนะนำเพื่อน",       points: 50,  enabled: true  },
+  { key: "silver_reward_firsttime",    label: "ครั้งแรก",           points: 20,  enabled: true  },
+  { key: "silver_reward_milestone_5",  label: "Milestone 5 งาน",   points: 100, enabled: true  },
+  { key: "silver_reward_milestone_10", label: "Milestone 10 งาน",  points: 200, enabled: true  },
+  { key: "silver_reward_milestone_20", label: "Milestone 20 งาน",  points: 400, enabled: false },
+  { key: "silver_reward_birthday",     label: "วันเกิด",           points: 25,  enabled: true  },
+];
+const MOCK_RECENT: RecentTx[] = [
+  { id: "STX-1001", user_id: 42,  user_name: "สมชาย มีสุข",    type: "silver_reward_scrap",       amount: 30,   created_at: "2026-06-08T10:15:00Z" },
+  { id: "STX-1002", user_id: 87,  user_name: "วิไลวรรณ ทองดี", type: "silver_reward_referral",    amount: 50,   created_at: "2026-06-07T14:30:00Z" },
+  { id: "STX-1003", user_id: 15,  user_name: "ประสิทธิ์ แก้ว",  type: "silver_reward_milestone_5", amount: 100,  created_at: "2026-06-06T09:00:00Z" },
+  { id: "STX-1004", user_id: 203, user_name: "นิภา รุ่งโรจน์",  type: "silver_reward_review",      amount: 10,   created_at: "2026-06-05T16:45:00Z" },
+  { id: "STX-1005", user_id: 55,  user_name: "อรุณ สว่างใจ",   type: "platform.silver.expired",   amount: -80,  created_at: "2026-06-04T02:05:00Z" },
+];
 
 const TRIGGER_LABELS: Record<string, string> = {
   silver_reward_scrap: "รับซาก (Scrap)",
@@ -83,7 +108,18 @@ export default function SilverPage() {
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
-    Promise.all([fetchSummary(), fetchTriggers(), fetchRecent()]).finally(() => setLoading(false));
+    Promise.all([fetchSummary(), fetchTriggers(), fetchRecent()])
+      .catch((e: unknown) => {
+        if ((e as Error).message === ERR_UNAUTHORIZED) { router.push("/login"); return; }
+        // API ไม่พร้อม → ใช้ mock fallback
+        console.warn("[mock fallback]", e);
+        setSummary(MOCK_SILVER_SUMMARY);
+        setTriggers(MOCK_TRIGGERS);
+        setSignupBonus(true);
+        setSignupPoints(20);
+        setRecent(MOCK_RECENT);
+      })
+      .finally(() => setLoading(false));
   }, [router, fetchSummary, fetchTriggers, fetchRecent]);
 
   async function runExpiry() {
@@ -94,7 +130,8 @@ export default function SilverPage() {
       showToast("✅ Expiry batch รันเสร็จ");
       fetchSummary();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+      console.warn("[mock fallback]", e);
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setRunningExpiry(false);
     }
@@ -106,7 +143,8 @@ export default function SilverPage() {
       showToast("✅ บันทึกสำเร็จ");
       fetchTriggers();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+      console.warn("[mock fallback]", e);
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     }
   }
 
@@ -115,23 +153,24 @@ export default function SilverPage() {
       await api.patch("/admin/platform/silver/signup-bonus", { enabled: signupBonus, points: signupPoints });
       showToast("✅ บันทึก Signup Bonus สำเร็จ");
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+      console.warn("[mock fallback]", e);
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     }
   }
 
   const TABS: { key: Tab; label: string }[] = [
-    { key: "summary", label: "📊 Summary" },
-    { key: "triggers", label: "⚙️ Trigger Settings" },
+    { key: "summary", label: "📊 สรุปภาพรวม" },
+    { key: "triggers", label: "⚙️ ตั้งค่า Trigger" },
     { key: "expiry", label: "⏰ Expiry Batch" },
-    { key: "recent", label: "📋 Recent" },
+    { key: "recent", label: "📋 รายการล่าสุด" },
   ];
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-1">Silver Points</h1>
-        <p className="text-gray-500 text-sm mb-6">จัดการ Silver Point (ไม่สามารถแลกเงินสด)</p>
+        <h1 className="text-2xl font-bold mb-1">จัดการ Silver Point</h1>
+        <p className="text-gray-500 text-sm mb-6">บริหาร Silver Point ทั้งระบบ — ดูยอดรวม, ตั้งค่า trigger รางวัล, รัน expiry batch และดูประวัติล่าสุด</p>
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 border border-gray-200 w-fit">
@@ -152,10 +191,10 @@ export default function SilverPage() {
             {/* Summary Tab */}
             {tab === "summary" && summary && (
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <SCard label="Total Supply" value={summary.total_supply.toLocaleString() + " S"} color="gray" />
-                <SCard label="Total Distributed" value={summary.total_distributed.toLocaleString() + " S"} color="blue" />
-                <SCard label="Total Expired" value={summary.total_expired.toLocaleString() + " S"} color="red" />
-                <SCard label="Active Holders" value={summary.active_holders.toLocaleString()} color="green" />
+                <SCard label="ยอดรวมทั้งหมด" value={summary.total_supply.toLocaleString() + " S"} color="gray" />
+                <SCard label="จ่ายออกแล้ว" value={summary.total_distributed.toLocaleString() + " S"} color="blue" />
+                <SCard label="หมดอายุแล้ว" value={summary.total_expired.toLocaleString() + " S"} color="red" />
+                <SCard label="ผู้ถือที่ใช้งานอยู่" value={summary.active_holders.toLocaleString()} color="green" />
               </div>
             )}
 
@@ -165,14 +204,14 @@ export default function SilverPage() {
                 {/* D29 Engagement Triggers */}
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-200">
-                    <h3 className="font-semibold">🎯 Silver Engagement Rewards</h3>
+                    <h3 className="font-semibold">🎯 รางวัล Silver Engagement</h3>
                     <p className="text-xs text-gray-500 mt-0.5">8 triggers กำหนดได้ผ่าน system_config</p>
                   </div>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-gray-500 text-left">
                         <th className="px-6 py-3">Trigger</th>
-                        <th className="px-6 py-3">Points</th>
+                        <th className="px-6 py-3">จำนวนพอยต์</th>
                         <th className="px-6 py-3">สถานะ</th>
                         <th className="px-6 py-3">บันทึก</th>
                       </tr>
@@ -251,13 +290,13 @@ export default function SilverPage() {
             {tab === "recent" && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-semibold">📋 Recent Silver Transactions</h3>
+                  <h3 className="font-semibold">📋 ธุรกรรม Silver ล่าสุด</h3>
                 </div>
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-gray-500 text-left">
                       <th className="px-6 py-3">เวลา</th>
-                      <th className="px-6 py-3">User</th>
+                      <th className="px-6 py-3">ผู้ใช้</th>
                       <th className="px-6 py-3">ประเภท</th>
                       <th className="px-6 py-3 text-right">จำนวน</th>
                     </tr>

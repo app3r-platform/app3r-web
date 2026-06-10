@@ -31,6 +31,52 @@ interface PickupAnalytics {
   by_direction: { direction: string; count: number }[];
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PICKUP_ANALYTICS: PickupAnalytics = {
+  total_jobs: 203,
+  active_jobs: 8,
+  completed_jobs: 178,
+  failed_jobs: 9,
+  cancelled_jobs: 8,
+  avg_pickup_to_shop_min: 22.5,
+  avg_shop_to_delivery_min: 35.8,
+  avg_total_time_min: 61.2,
+  avg_travel_cost: 98.4,
+  on_time_rate: 0.913,
+  success_rate: 0.877,
+  total_travel_cost: 19978,
+  travel_cost_this_month: 3840,
+  by_status: [
+    { status: "pending",             count: 2 },
+    { status: "assigned",            count: 1 },
+    { status: "en_route_pickup",     count: 3 },
+    { status: "picked_up",           count: 1 },
+    { status: "en_route_delivery",   count: 2 },
+    { status: "delivered",           count: 1 },
+    { status: "completed",           count: 178 },
+    { status: "failed",              count: 9 },
+    { status: "cancelled",           count: 8 },
+  ],
+  top_weeet: [
+    { weeet_name: "นายชัยวัฒน์ วิ่งเร็ว",    jobs: 72, avg_time_min: 55.3 },
+    { weeet_name: "นางสาวปิยะดา รีบมา",      jobs: 58, avg_time_min: 63.1 },
+    { weeet_name: "นายนิรันดร์ ส่งไว",        jobs: 45, avg_time_min: 59.7 },
+    { weeet_name: "นายเอกชัย ตรงเวลา",       jobs: 28, avg_time_min: 68.0 },
+  ],
+  monthly_travel_cost: [
+    { month: "2026-01", cost: 2800, jobs: 28 },
+    { month: "2026-02", cost: 3100, jobs: 32 },
+    { month: "2026-03", cost: 3500, jobs: 36 },
+    { month: "2026-04", cost: 3200, jobs: 33 },
+    { month: "2026-05", cost: 3538, jobs: 36 },
+    { month: "2026-06", cost: 3840, jobs: 38 },
+  ],
+  by_direction: [
+    { direction: "shop_to_customer", count: 124 },
+    { direction: "customer_to_shop", count: 79 },
+  ],
+};
+
 const STATUS_LABELS: Record<string, string> = {
   pending:             "รอมอบหมาย",
   assigned:            "มอบหมายแล้ว",
@@ -89,7 +135,9 @@ export default function PickupAnalyticsPage() {
       setData(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_PICKUP_ANALYTICS);
     } finally {
       setLoading(false);
     }
@@ -108,7 +156,7 @@ export default function PickupAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-bold">📊 Pickup Analytics</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติงานรับ-ส่งอุปกรณ์</h1>
             <p className="text-gray-500 text-sm mt-1">
               avg pickup time + travel cost + KPI — ภาพรวม pickup jobs
             </p>
@@ -144,7 +192,7 @@ export default function PickupAnalyticsPage() {
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard icon="📋" label="Jobs ทั้งหมด"  value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active"        value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="⚡" label="กำลังดำเนิน"    value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="เสร็จสิ้น"      value={data.completed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ล้มเหลว"        value={data.failed_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="🚫" label="ยกเลิก"         value={data.cancelled_jobs.toLocaleString()} accent="orange" />
@@ -154,7 +202,7 @@ export default function PickupAnalyticsPage() {
             {/* KPI: avg times */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                KPI — Avg Time
+                KPI — เวลาเฉลี่ย
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
@@ -190,32 +238,32 @@ export default function PickupAnalyticsPage() {
             {/* KPI: rates */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                KPI — Rate
+                KPI — อัตรา
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                   icon="⏰"
-                  label="On-time Rate"
+                  label="อัตราตรงเวลา"
                   value={data.on_time_rate != null ? `${(data.on_time_rate * 100).toFixed(1)}%` : "—"}
                   sub="ส่งทันกำหนด"
                   accent={data.on_time_rate != null && data.on_time_rate >= 0.9 ? "green" : "orange"}
                 />
                 <StatCard
                   icon="✅"
-                  label="Success Rate"
+                  label="อัตราสำเร็จ"
                   value={data.success_rate != null ? `${(data.success_rate * 100).toFixed(1)}%` : "—"}
                   sub="completed / total"
                   accent="green"
                 />
                 <StatCard
                   icon="💵"
-                  label="Travel Cost รวม"
+                  label="ค่าเดินทางรวม"
                   value={`${data.total_travel_cost.toLocaleString()} ฿`}
                   accent="yellow"
                 />
                 <StatCard
                   icon="📅"
-                  label="Travel Cost เดือนนี้"
+                  label="ค่าเดินทางเดือนนี้"
                   value={`${data.travel_cost_this_month.toLocaleString()} ฿`}
                   accent="yellow"
                 />
@@ -226,7 +274,7 @@ export default function PickupAnalyticsPage() {
             {data.monthly_travel_cost?.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                  Travel Cost รายเดือน
+                  ค่าเดินทางรายเดือน
                 </h2>
                 <div className="space-y-2.5">
                   {(() => {
@@ -257,7 +305,7 @@ export default function PickupAnalyticsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* By Status */}
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">งานตามสถานะ</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
@@ -279,7 +327,7 @@ export default function PickupAnalyticsPage() {
 
               {/* By Direction */}
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Direction</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">งานตามทิศทาง</h2>
                 <div className="space-y-3">
                   {data.by_direction.map(row => {
                     const total = data.by_direction.reduce((s, r) => s + r.count, 0);
@@ -305,14 +353,14 @@ export default function PickupAnalyticsPage() {
             {/* Top WeeeT */}
             {data.top_weeet?.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Top WeeeT</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">WeeeT อันดับต้น</h2>
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-gray-500 text-left border-b border-gray-200">
                       <th className="pb-2">#</th>
                       <th className="pb-2">WeeeT</th>
-                      <th className="pb-2 text-right">Jobs</th>
-                      <th className="pb-2 text-right">Avg Time</th>
+                      <th className="pb-2 text-right">งาน</th>
+                      <th className="pb-2 text-right">เวลาเฉลี่ย</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">

@@ -21,6 +21,55 @@ interface CertListResponse {
   count: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_CERTIFICATES: EWasteCertificate[] = [
+  {
+    id: "CERT-0001",
+    scrapJobId: "SJ-2026-0035",
+    issuedById: "ADM-001",
+    issuedAt: "2026-05-08T10:00:00Z",
+    certNumber: "EW-2026-0001",
+    itemDescription: "แอร์ Panasonic 9,000 BTU ปี 2019 — คอยล์รั่ว กำจัดตามมาตรฐาน E-Waste",
+    status: "issued",
+  },
+  {
+    id: "CERT-0002",
+    scrapJobId: "SJ-2026-0038",
+    issuedById: "ADM-001",
+    issuedAt: "2026-05-12T14:00:00Z",
+    certNumber: "EW-2026-0002",
+    itemDescription: "ตู้เย็น Hitachi 2 ประตู ปี 2018 — ระบบทำความเย็นเสีย",
+    status: "pending",
+  },
+  {
+    id: "CERT-0003",
+    scrapJobId: "SJ-2026-0040",
+    issuedById: "ADM-002",
+    issuedAt: "2026-05-15T09:30:00Z",
+    certNumber: "EW-2026-0003",
+    itemDescription: "เครื่องซักผ้า Samsung 9 กก. ปี 2017 — มอเตอร์ไหม้",
+    status: "pending",
+  },
+  {
+    id: "CERT-0004",
+    scrapJobId: "SJ-2026-0042",
+    issuedById: "ADM-001",
+    issuedAt: "2026-05-18T11:00:00Z",
+    certNumber: "EW-2026-0004",
+    itemDescription: "ไมโครเวฟ Sharp 20 ลิตร ปี 2016 — แผงวงจรลัดวงจร",
+    status: "rejected",
+  },
+  {
+    id: "CERT-0005",
+    scrapJobId: "SJ-2026-0044",
+    issuedById: "ADM-002",
+    issuedAt: "2026-05-20T08:00:00Z",
+    certNumber: "EW-2026-0005",
+    itemDescription: "ทีวี LG OLED 55 นิ้ว ปี 2020 — จอแตก บอร์ดภาพเสีย",
+    status: "issued",
+  },
+];
+
 function EmptyState({ message }: { message: string }) {
   return (
     <tr>
@@ -34,7 +83,6 @@ export default function CertificatesPage() {
   const [items, setItems] = useState<EWasteCertificate[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
   const [page, setPage] = useState(1);
 
@@ -49,13 +97,15 @@ export default function CertificatesPage() {
       const d = await api.get<CertListResponse>("/admin/scrap/certificates/?" + params);
       setItems(d.results);
       setTotal(d.count);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_CERTIFICATES);
+      setTotal(MOCK_CERTIFICATES.length);
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus]);
+  }, [page, filterStatus, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -73,9 +123,9 @@ export default function CertificatesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📜 E-Waste Certificates</h1>
+            <h1 className="text-2xl font-bold">📜 ใบรับรอง E-Waste</h1>
             <p className="text-gray-500 text-sm mt-1">
-              คิวออกใบรับรองทำลาย E-Waste — review / issue / reject
+              คิวออกใบรับรองการกำจัดซากอิเล็กทรอนิกส์ — ตรวจสอบ / ออก / ปฏิเสธ
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -121,9 +171,7 @@ export default function CertificatesPage() {
             )}
           </div>
 
-          {error ? (
-            <div className="px-6 py-8 text-red-600">ระบบ E-Waste Certificate กำลังพัฒนา — {error}</div>
-          ) : loading ? (
+          {loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">

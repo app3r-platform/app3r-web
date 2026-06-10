@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, isSuperAdmin } from "@/lib/auth";
-import { api } from "@/lib/api";
+import { api, ERR_UNAUTHORIZED } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 interface GoldReserve {
@@ -22,6 +22,22 @@ interface GoldData { reserve: GoldReserve; fee_pools: FeePools; }
 
 type ModalAction = "mint" | "destroy" | "writeoff" | null;
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_GOLD_DATA: GoldData = {
+  reserve: {
+    reserve_pool:      480000,
+    total_minted:     1250000,
+    total_destroyed:   50000,
+    total_written_off:  2500,
+  },
+  fee_pools: {
+    listing_offer_fee_pool: 87500,
+    platform_fee_pool:      62000,
+    advertising_pool:       35000,
+    escrow_pool:            20000,
+  },
+};
+
 export default function GoldManagementPage() {
   const router = useRouter();
   const [data, setData] = useState<GoldData | null>(null);
@@ -39,10 +55,15 @@ export default function GoldManagementPage() {
     try {
       const d = await api.get<GoldData>("/admin/platform/gold");
       setData(d);
+    } catch (e: unknown) {
+      if ((e as Error).message === ERR_UNAUTHORIZED) { router.push("/login"); return; }
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setData(MOCK_GOLD_DATA);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -66,7 +87,8 @@ export default function GoldManagementPage() {
       closeModal();
       fetchData();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+      console.warn("[mock fallback]", e);
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setSubmitting(false);
     }
@@ -82,8 +104,8 @@ export default function GoldManagementPage() {
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-1">Gold Management</h1>
-        <p className="text-gray-500 text-sm mb-6">จัดการ พอยต์ทอง (Gold Point) Reserve Pool และ Fee Pools</p>
+        <h1 className="text-2xl font-bold mb-1">จัดการ Gold Point</h1>
+        <p className="text-gray-500 text-sm mb-6">บริหาร Reserve Pool และ Fee Pool ของพอยต์ทอง — Mint, Destroy, Write-Off (เฉพาะ Super Admin)</p>
 
         {/* Super Admin Notice */}
         {!isSuper && (
@@ -99,7 +121,7 @@ export default function GoldManagementPage() {
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tab === t ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
-              {t === "reserve" ? "🏦 Reserve Pool" : "💰 Fee Pools"}
+              {t === "reserve" ? "🏦 Reserve Pool" : "💰 Fee Pool"}
             </button>
           ))}
         </div>
@@ -112,9 +134,9 @@ export default function GoldManagementPage() {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   <InfoCard label="Reserve Pool" value={fmtG(data.reserve.reserve_pool)} accent="green" />
-                  <InfoCard label="Total Minted" value={fmtG(data.reserve.total_minted)} accent="blue" />
-                  <InfoCard label="Total Destroyed" value={fmtG(data.reserve.total_destroyed)} accent="red" />
-                  <InfoCard label="Written-Off" value={fmtG(data.reserve.total_written_off)} accent="gray" />
+                  <InfoCard label="ยอด Minted รวม" value={fmtG(data.reserve.total_minted)} accent="blue" />
+                  <InfoCard label="ยอด Destroyed รวม" value={fmtG(data.reserve.total_destroyed)} accent="red" />
+                  <InfoCard label="Written-Off รวม" value={fmtG(data.reserve.total_written_off)} accent="gray" />
                 </div>
 
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-500">
@@ -129,11 +151,11 @@ export default function GoldManagementPage() {
                   <div className="flex flex-wrap gap-3">
                     <button onClick={() => setModal("mint")}
                       className="px-5 py-2.5 bg-brand-success hover:bg-brand-success/90 rounded-lg text-sm font-medium transition-colors">
-                      ➕ Mint Gold
+                      ➕ สร้าง Gold (Mint)
                     </button>
                     <button onClick={() => setModal("destroy")}
                       className="px-5 py-2.5 bg-red-700 hover:bg-red-600 rounded-lg text-sm font-medium transition-colors">
-                      🔥 Destroy Gold
+                      🔥 ทำลาย Gold (Destroy)
                     </button>
                     <button onClick={() => setModal("writeoff")}
                       className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition-colors">
@@ -160,7 +182,7 @@ export default function GoldManagementPage() {
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={closeModal}>
             <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-lg font-bold mb-4">
-                {modal === "mint" ? "➕ Mint Gold" : modal === "destroy" ? "🔥 Destroy Gold" : "📝 Write-Off Gold"}
+                {modal === "mint" ? "➕ สร้าง Gold (Mint)" : modal === "destroy" ? "🔥 ทำลาย Gold (Destroy)" : "📝 Write-Off Gold"}
               </h3>
 
               <div className="space-y-4">

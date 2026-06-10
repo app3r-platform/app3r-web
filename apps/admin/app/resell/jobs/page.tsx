@@ -213,7 +213,7 @@ export default function ResellJobsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🔄 Resell Jobs — Audit</h1>
+            <h1 className="text-2xl font-bold">🔄 งานขายต่อ (ตรวจสอบ)</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการ listing ทั้งหมด — 10 สถานะ + flags (escrow/dispute/awaiting)
             </p>
@@ -299,13 +299,13 @@ export default function ResellJobsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-gray-500 text-left border-b border-gray-200">
-                <th className="px-4 py-3">Listing Code</th>
+                <th className="px-4 py-3">รหัสประกาศ</th>
                 <th className="px-4 py-3">สินค้า</th>
                 <th className="px-4 py-3">สถานะ</th>
                 <th className="px-4 py-3">ผู้ขาย</th>
                 <th className="px-4 py-3">ผู้ซื้อ</th>
                 <th className="px-4 py-3">ราคา</th>
-                <th className="px-4 py-3">Flags</th>
+                <th className="px-4 py-3">ธงแจ้งเตือน</th>
                 <th className="px-4 py-3">วันที่</th>
                 <th className="px-4 py-3"></th>
               </tr>

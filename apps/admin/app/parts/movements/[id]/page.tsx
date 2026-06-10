@@ -106,7 +106,7 @@ export default function MovementDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">📦 Movement Detail</h1>
+              <h1 className="text-2xl font-bold">📦 รายละเอียดความเคลื่อนไหว</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${tm.color}`}>{tm.label}</span>
             </div>
             <p className="text-gray-500 text-sm font-mono">{movement.id}</p>

@@ -29,6 +29,20 @@ interface PaginatedTopup {
   pages: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_TOPUP: PaginatedTopup = {
+  items: [
+    { id: 1001, user_id: 201, user_name: "สมชาย ใจดี", amount: 500, payment_method: "promptpay", slip_url: null, reference_no: "PP20260610001", status: "pending", reject_reason: null, created_at: "2026-06-10T08:15:00Z", reviewed_at: null },
+    { id: 1002, user_id: 202, user_name: "วิไลพร มั่นคง", amount: 1000, payment_method: "bank_transfer", slip_url: "https://example.com/slip1.jpg", reference_no: "KTB20260610042", status: "pending", reject_reason: null, created_at: "2026-06-10T09:30:00Z", reviewed_at: null },
+    { id: 1003, user_id: 203, user_name: "ประเสริฐ รักชาติ", amount: 250, payment_method: "truemoney", slip_url: null, reference_no: "TM20260609177", status: "approved", reject_reason: null, created_at: "2026-06-09T14:20:00Z", reviewed_at: "2026-06-09T15:00:00Z" },
+    { id: 1004, user_id: 204, user_name: "นภาพร ทองดี", amount: 750, payment_method: "promptpay", slip_url: "https://example.com/slip2.jpg", reference_no: "PP20260609088", status: "rejected", reject_reason: "สลิปไม่ชัดเจน", created_at: "2026-06-09T11:00:00Z", reviewed_at: "2026-06-09T12:30:00Z" },
+    { id: 1005, user_id: 205, user_name: "เอกชัย สุขสันต์", amount: 2000, payment_method: "bank_transfer", slip_url: "https://example.com/slip3.jpg", reference_no: "SCB20260608211", status: "pending", reject_reason: null, created_at: "2026-06-08T16:45:00Z", reviewed_at: null },
+  ],
+  total: 5,
+  page: 1,
+  pages: 1,
+};
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TopupPage() {
@@ -54,8 +68,10 @@ export default function TopupPage() {
       if (statusFilter) params.set("status", statusFilter);
       const result = await api.get<PaginatedTopup>(`/admin/topup/requests?${params}`);
       setData(result);
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_TOPUP);
     } finally {
       setLoading(false);
     }
@@ -75,7 +91,8 @@ export default function TopupPage() {
       showToast("อนุมัติเติม Point สำเร็จ ✓", "ok");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -98,7 +115,8 @@ export default function TopupPage() {
       setRejectReason("");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }

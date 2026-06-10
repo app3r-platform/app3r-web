@@ -8,6 +8,52 @@ import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 import type { ScrapItem } from "@/lib/types";
 
+/* ─── mock fallback — ลบตอน Phase 4 (TD-06) ─── */
+const MOCK_SCRAP_ITEMS: ScrapItemExtended[] = [
+  {
+    id: "SCR-001", sellerId: "USR-1001", sellerType: "WeeeU",
+    applianceId: "APP-5501",
+    conditionGrade: "grade_A", workingParts: ["คอมเพรสเซอร์", "พัดลม", "บอร์ดควบคุม"],
+    description: "แอร์ Daikin 12,000 BTU ปี 2021 ใช้งานปกติ ชิ้นส่วนครบ",
+    photos: [], price: 3500, status: "available",
+    createdAt: "2026-05-10T08:00:00Z", updatedAt: "2026-05-10T08:00:00Z",
+    source_repair_job_id: null,
+  },
+  {
+    id: "SCR-002", sellerId: "USR-1002", sellerType: "WeeeU",
+    applianceId: "APP-5502",
+    conditionGrade: "grade_B", workingParts: ["มอเตอร์", "แผงควบคุม"],
+    description: "เครื่องซักผ้า Samsung 8 กก. เสียกลอง ส่วนอื่นสมบูรณ์",
+    photos: [], price: 1200, status: "available",
+    createdAt: "2026-05-12T09:30:00Z", updatedAt: "2026-05-12T09:30:00Z",
+    source_repair_job_id: "RPJ-2201",
+  },
+  {
+    id: "SCR-003", sellerId: "USR-1003", sellerType: "WeeeU",
+    conditionGrade: "grade_C", workingParts: [],
+    description: "ตู้เย็น LG ฝาแตก คอยล์รั่ว เหมาะส่งทำลาย E-Waste เท่านั้น",
+    photos: [], price: 500, status: "sold",
+    createdAt: "2026-05-14T11:00:00Z", updatedAt: "2026-05-15T10:00:00Z",
+    source_repair_job_id: null,
+  },
+  {
+    id: "SCR-004", sellerId: "USR-1004", sellerType: "WeeeU",
+    conditionGrade: "grade_A", workingParts: ["ตัวแปลงไฟ", "จอ LCD", "แผงวงจร"],
+    description: "ทีวี Sony 43 นิ้ว ป้ายแตก ชิ้นส่วนภายในดี",
+    photos: [], price: 2800, status: "removed",
+    createdAt: "2026-05-16T07:00:00Z", updatedAt: "2026-05-17T08:00:00Z",
+    source_repair_job_id: null,
+  },
+  {
+    id: "SCR-005", sellerId: "USR-1005", sellerType: "WeeeU",
+    conditionGrade: "grade_B", workingParts: ["บอร์ดหลัก", "ปั๊มน้ำ"],
+    description: "เครื่องล้างจาน Bosch 6 ชุด ปุ่มกดชำรุด ส่วนกลไกทำงานดี",
+    photos: [], price: 1800, status: "available",
+    createdAt: "2026-05-18T13:00:00Z", updatedAt: "2026-05-18T13:00:00Z",
+    source_repair_job_id: null,
+  },
+];
+
 /* ─── S5/S6: extended status (mock — ไม่อยู่ใน ScrapItem type เดิม) ─── */
 type ExtendedStatus = ScrapItem["status"] | "expired" | "no_offer";
 
@@ -60,7 +106,6 @@ export default function ScrapListingsPage() {
   const [items, setItems] = useState<ScrapItemExtended[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
   const [filterGrade, setFilterGrade] = useState("");
   const [filterSeller, setFilterSeller] = useState("");
@@ -79,13 +124,15 @@ export default function ScrapListingsPage() {
       const d = await api.get<ScrapListResponse>("/admin/scrap/items/?" + params);
       setItems(d.results);
       setTotal(d.count);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_SCRAP_ITEMS);
+      setTotal(MOCK_SCRAP_ITEMS.length);
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus, filterGrade, filterSeller]);
+  }, [page, filterStatus, filterGrade, filterSeller, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -108,9 +155,9 @@ export default function ScrapListingsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">♻️ Scrap Listings</h1>
+            <h1 className="text-2xl font-bold">♻️ รายการซาก</h1>
             <p className="text-gray-500 text-sm mt-1">
-              รายการซากเครื่องใช้ไฟฟ้า — filter สถานะ / เกรด / ผู้ขาย · S5/S6/S12
+              รายการซากเครื่องใช้ไฟฟ้าทั้งหมด — กรองตามสถานะ / เกรด / ผู้ขาย
             </p>
           </div>
           <div className="flex gap-2">
@@ -176,9 +223,7 @@ export default function ScrapListingsPage() {
             )}
           </div>
 
-          {error ? (
-            <div className="px-6 py-8 text-red-600">ระบบ Scrap กำลังพัฒนา — {error}</div>
-          ) : loading ? (
+          {loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">

@@ -19,6 +19,65 @@ interface RepairDispute {
   resolved_at: string | null;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_REPAIR_DISPUTES: RepairDispute[] = [
+  {
+    id: "rd-001aabbcc",
+    repair_job_id: "rj-010ddeeff",
+    weeeu_name: "สมชาย ใจดี",
+    weeer_name: "ร้าน iCare สยาม",
+    status: "open",
+    opened_by: "WeeeU",
+    reason: "ช่างไม่มาตามนัดหมายและไม่แจ้งล่วงหน้า ทำให้ลูกค้าต้องรอที่บ้านเป็นเวลา 3 ชั่วโมง",
+    created_at: "2026-06-09T10:00:00Z",
+    resolved_at: null,
+  },
+  {
+    id: "rd-002gghhii",
+    repair_job_id: "rj-011jjkkll",
+    weeeu_name: "วิภา สุขสันต์",
+    weeer_name: "TechFix เซ็นทรัล",
+    status: "in_review",
+    opened_by: "WeeeU",
+    reason: "ราคาซ่อมสูงกว่าที่ตกลงไว้ในตอนต้น 500 บาท ไม่มีการแจ้งก่อน",
+    created_at: "2026-06-07T14:30:00Z",
+    resolved_at: null,
+  },
+  {
+    id: "rd-003mmnnoo",
+    repair_job_id: "rj-012ppqqrr",
+    weeeu_name: "ประสิทธิ์ มีสุข",
+    weeer_name: "GadgetDoc ลาดพร้าว",
+    status: "escalated",
+    opened_by: "WeeeR",
+    reason: "ลูกค้าปฏิเสธการชำระเงินหลังซ่อมเสร็จ อ้างว่าอาการไม่หายขาดทั้งที่ตรวจสอบแล้วว่าปกติ",
+    created_at: "2026-06-05T09:00:00Z",
+    resolved_at: null,
+  },
+  {
+    id: "rd-004ssttuu",
+    repair_job_id: "rj-013vvwwxx",
+    weeeu_name: "นิภา รักไทย",
+    weeer_name: "ProRepair สีลม",
+    status: "resolved",
+    opened_by: "WeeeU",
+    reason: "อะไหล่ที่ใช้ซ่อมไม่ใช่อะไหล่แท้ตามที่ตกลงไว้",
+    created_at: "2026-06-01T11:00:00Z",
+    resolved_at: "2026-06-04T16:00:00Z",
+  },
+  {
+    id: "rd-005yyzz11",
+    repair_job_id: "rj-014223344",
+    weeeu_name: "อรุณ ดีงาม",
+    weeer_name: "QuickFix อารีย์",
+    status: "resolved",
+    opened_by: "WeeeU",
+    reason: "งานซ่อมเสร็จแล้วแต่ช่างทิ้งเศษอะไหล่ไว้ในบ้านโดยไม่เก็บกวาด",
+    created_at: "2026-05-28T15:00:00Z",
+    resolved_at: "2026-05-30T10:00:00Z",
+  },
+];
+
 const DISPUTE_STATUS: Record<string, { label: string; color: string }> = {
   open:       { label: "เปิด",         color: "bg-red-50 text-red-700" },
   in_review:  { label: "กำลังตรวจ",   color: "bg-yellow-50 text-yellow-700" },
@@ -50,10 +109,18 @@ export default function RepairDisputesPage() {
       );
       setItems(d.items);
       setTotal(d.total);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      const filtered = filterStatus
+        ? MOCK_REPAIR_DISPUTES.filter(d => d.status === filterStatus)
+        : MOCK_REPAIR_DISPUTES;
+      setItems(filtered);
+      setTotal(filtered.length);
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus]);
+  }, [page, filterStatus, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -67,14 +134,14 @@ export default function RepairDisputesPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">⚖️ Repair Disputes</h1>
+          <h1 className="text-2xl font-bold">⚖️ ข้อพิพาทการซ่อม</h1>
           <Link href="/disputes"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ดู Disputes ทั้งหมด →
+            ดูข้อพิพาททั้งหมด →
           </Link>
         </div>
         <p className="text-gray-500 text-sm mb-6">
-          ข้อพิพาทที่เกี่ยวกับ Repair module — filter จาก /admin/disputes?module=repair
+          ข้อพิพาทที่เกี่ยวกับโมดูลซ่อม — filter จาก /admin/disputes?module=repair
         </p>
 
         {/* Status filter */}
@@ -117,7 +184,7 @@ export default function RepairDisputesPage() {
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-6 py-3">Dispute ID</th>
-                  <th className="px-6 py-3">Repair Job</th>
+                  <th className="px-6 py-3">งานซ่อม</th>
                   <th className="px-6 py-3">WeeeU</th>
                   <th className="px-6 py-3">WeeeR</th>
                   <th className="px-6 py-3">เปิดโดย</th>

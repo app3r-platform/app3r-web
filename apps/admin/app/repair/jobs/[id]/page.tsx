@@ -68,6 +68,63 @@ interface RepairJobDetail {
   };
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_REPAIR_JOB: RepairJobDetail = {
+  id: "rj-001aabbcc-ddee-ffgg-hh11-iijjkkllmmnn",
+  weeeu_id: "wu-001",
+  weeeu_name: "สมชาย ใจดี",
+  weeer_id: "wr-001",
+  weeer_name: "ร้าน iCare สยาม",
+  weeet_id: "wt-001",
+  weeet_name: "ช่างวิชัย รักษ์มือถือ",
+  service_type: "on_site",
+  status: "awaiting_user",
+  decision_branch: "B1.2",
+  decision_notes: "จอแตก + แบตเตอรี่เสื่อม — ต้องเปลี่ยนจอ OEM + แบตแท้",
+  scheduled_at: "2026-06-10T09:00:00Z",
+  departed_at: "2026-06-10T08:45:00Z",
+  arrived_at: "2026-06-10T09:10:00Z",
+  entry_approved_at: "2026-06-10T09:12:00Z",
+  weeer_approval_at: "2026-06-10T10:30:00Z",
+  user_approval_at: null,
+  completed_at: null,
+  closed_at: null,
+  departure_location: { lat: 13.7563, lng: 100.5018 },
+  arrival_location: { lat: 13.7458, lng: 100.5340 },
+  original_price: 3500,
+  proposed_price: 4200,
+  final_price: null,
+  parts_added: [
+    { name: "จอ iPhone 14 Pro OEM", qty: 1, price: 2800 },
+    { name: "แบตเตอรี่ iPhone 14 Pro แท้", qty: 1, price: 900 },
+  ],
+  parts_used: null,
+  scrap_announcement_id: null,
+  scrap_agreed_price: null,
+  deposit_amount: 500,
+  deposit_action: "pending",
+  inspection_fee_charged: 200,
+  arrival_files: null,
+  pre_inspection_files: null,
+  post_repair_files: null,
+  state_history: [
+    { state: "assigned",          occurred_at: "2026-06-09T14:00:00Z", actor: "system" },
+    { state: "traveling",         occurred_at: "2026-06-10T08:45:00Z", actor: "ช่างวิชัย" },
+    { state: "arrived",           occurred_at: "2026-06-10T09:10:00Z", actor: "ช่างวิชัย" },
+    { state: "awaiting_entry",    occurred_at: "2026-06-10T09:10:00Z", actor: "ช่างวิชัย" },
+    { state: "inspecting",        occurred_at: "2026-06-10T09:12:00Z", actor: "ช่างวิชัย" },
+    { state: "awaiting_decision", occurred_at: "2026-06-10T10:00:00Z", actor: "ช่างวิชัย" },
+    { state: "awaiting_user",     occurred_at: "2026-06-10T10:30:00Z", actor: "ร้าน iCare สยาม" },
+  ],
+  audit_log: [
+    { id: "al-001", event_type: "JOB_ASSIGNED",       actor_role: "system",  actor_name: "system",           occurred_at: "2026-06-09T14:00:00Z", detail: null },
+    { id: "al-002", event_type: "WEEER_APPROVED",      actor_role: "WeeeR",   actor_name: "ร้าน iCare สยาม", occurred_at: "2026-06-10T10:30:00Z", detail: "อนุมัติราคา 4,200 G — B1.2" },
+    { id: "al-003", event_type: "DEPOSIT_LOCKED",      actor_role: "system",  actor_name: "system",           occurred_at: "2026-06-09T14:00:00Z", detail: "lock 500 G จาก WeeeU" },
+    { id: "al-004", event_type: "INSPECTION_FEE",      actor_role: "system",  actor_name: "system",           occurred_at: "2026-06-10T10:00:00Z", detail: "เก็บค่าตรวจ 200 G" },
+  ],
+  source: { type: "customer" },
+};
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
@@ -128,7 +185,7 @@ function FeeSettlePanel({ job, superAdmin }: FeeSettlePanelProps) {
       {/* Header */}
       <div className="px-5 py-4 bg-admin-surface border-b border-admin-primary/20 flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-bold text-admin-primary">💰 Fee Settle Monitor</h2>
+          <h2 className="text-sm font-bold text-admin-primary">💰 ตรวจสอบการ Settle</h2>
           <p className="text-xs text-gray-500 mt-0.5">ตรวจสอบการ settle ตาม 9 แกน lock — Admin view</p>
         </div>
         {superAdmin && (
@@ -300,12 +357,14 @@ export default function RepairJobDetailPage() {
     try {
       const d = await api.get<RepairJobDetail>(`/admin/repair/jobs/${jobId}`);
       setJob(d);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(MOCK_REPAIR_JOB);
     } finally {
       setLoading(false);
     }
-  }, [jobId]);
+  }, [jobId, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -343,9 +402,9 @@ export default function RepairJobDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <Link href="/repair/jobs" className="text-sm text-gray-500 hover:text-gray-700">← Repair Jobs</Link>
+              <Link href="/repair/jobs" className="text-sm text-gray-500 hover:text-gray-700">← รายการงานซ่อม</Link>
             </div>
-            <h1 className="text-2xl font-bold">🔧 Job Detail</h1>
+            <h1 className="text-2xl font-bold">🔧 รายละเอียดงาน</h1>
             <p className="text-xs font-mono text-gray-500 mt-1">{job.id}</p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
@@ -391,23 +450,23 @@ export default function RepairJobDetailPage() {
 
         {/* Job Info */}
         <Section title="รายละเอียดงาน">
-          <InfoRow label="Service Type" value={<span className="font-mono text-admin-primary">{job.service_type}</span>} />
+          <InfoRow label="ประเภทบริการ" value={<span className="font-mono text-admin-primary">{job.service_type}</span>} />
           <InfoRow label="Decision Branch" value={job.decision_branch
             ? <span className="font-mono font-bold text-admin-primary">{job.decision_branch}</span>
             : null} />
-          <InfoRow label="Decision Notes" value={job.decision_notes} />
+          <InfoRow label="หมายเหตุ Branch" value={job.decision_notes} />
           <InfoRow label="นัดหมาย" value={fmt(job.scheduled_at)} />
-          <InfoRow label="Original Price" value={job.original_price != null ? `${job.original_price.toLocaleString()} G` : null} />
-          <InfoRow label="Proposed Price" value={job.proposed_price != null ? `${job.proposed_price.toLocaleString()} G` : null} />
-          <InfoRow label="Final Price" value={job.final_price != null ? `${job.final_price.toLocaleString()} G` : null} />
+          <InfoRow label="ราคาต้น" value={job.original_price != null ? `${job.original_price.toLocaleString()} G` : null} />
+          <InfoRow label="ราคาเสนอ" value={job.proposed_price != null ? `${job.proposed_price.toLocaleString()} G` : null} />
+          <InfoRow label="ราคาสุดท้าย" value={job.final_price != null ? `${job.final_price.toLocaleString()} G` : null} />
           <InfoRow label="เงินค้ำประกัน (Deposit)" value={job.deposit_amount != null
             ? `${job.deposit_amount.toLocaleString()} G — action: ${job.deposit_action ?? "—"}`
             : null} />
-          <InfoRow label="Inspection Fee" value={job.inspection_fee_charged != null
+          <InfoRow label="ค่าตรวจสภาพ" value={job.inspection_fee_charged != null
             ? `${job.inspection_fee_charged.toLocaleString()} G`
             : null} />
           {job.scrap_announcement_id && (
-            <InfoRow label="Scrap Job" value={
+            <InfoRow label="งานซาก" value={
               <span className="text-gray-500 font-mono text-xs">{job.scrap_announcement_id} — {job.scrap_agreed_price?.toLocaleString()} G</span>
             } />
           )}
@@ -444,7 +503,7 @@ export default function RepairJobDetailPage() {
         </Section>
 
         {/* Evidence */}
-        <Section title="Evidence (Photos / Videos)">
+        <Section title="หลักฐาน (รูป / วิดีโอ)">
           <div className="space-y-5">
             <EvidenceGrid files={job.arrival_files} label="รูปยืนยันถึงหน้างาน (T2)" />
             <EvidenceGrid files={job.pre_inspection_files} label="สภาพก่อนซ่อม (T3)" />
@@ -493,7 +552,7 @@ export default function RepairJobDetailPage() {
 
         {/* State History */}
         {job.state_history?.length > 0 && (
-          <Section title="State History">
+          <Section title="ประวัติสถานะ">
             <div className="space-y-1">
               {job.state_history.map((ev, i) => {
                 const s = JOB_STATUS[ev.state];

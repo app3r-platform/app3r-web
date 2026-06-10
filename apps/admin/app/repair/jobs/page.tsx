@@ -120,7 +120,7 @@ export default function RepairJobsPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">🔧 Repair Jobs — On-site</h1>
+          <h1 className="text-2xl font-bold">🔧 งานซ่อมหน้าร้าน</h1>
           <div className="flex gap-2">
             <Link href="/repair/analytics"
               className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
@@ -194,7 +194,7 @@ export default function RepairJobsPage() {
                   <th className="px-6 py-3">WeeeT (ช่าง)</th>
                   <th className="px-6 py-3">สถานะ</th>
                   <th className="px-6 py-3">แหล่งที่มา</th>
-                  <th className="px-6 py-3">Branch</th>
+                  <th className="px-6 py-3">สาขา</th>
                   <th className="px-6 py-3">นัดหมาย</th>
                   <th className="px-6 py-3"></th>
                 </tr>

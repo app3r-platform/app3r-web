@@ -157,7 +157,7 @@ export default function ResellAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📊 Resell Analytics</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติการขายต่อ</h1>
             <p className="text-gray-500 text-sm mt-1">
               ภาพรวม Resell — 12 เคส (R1-R12) / 4 คู่ / dispute 3-way
             </p>
@@ -210,18 +210,18 @@ export default function ResellAnalyticsPage() {
             accent="border-blue-200"
           />
           <StatCard
-            label="⚖️ Dispute"
+            label="⚖️ ข้อพิพาท"
             value={d.disputed_count.toLocaleString()}
             sub={`Dispute Rate ${(d.dispute_rate * 100).toFixed(1)}%`}
             accent="border-red-200"
           />
           <StatCard
-            label="Offer Acceptance"
+            label="อัตรายอมรับ Offer"
             value={`${(d.offer_acceptance_rate * 100).toFixed(1)}%`}
             sub="offer → selected"
           />
           <StatCard
-            label="Sales Conversion"
+            label="อัตราแปลงยอดขาย"
             value={`${(d.conversion_rate * 100).toFixed(1)}%`}
             sub="listings → completed"
           />
@@ -251,7 +251,7 @@ export default function ResellAnalyticsPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
             <div>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                Seller Type
+                ประเภทผู้ขาย
               </h2>
               <div className="space-y-2">
                 <BarRow label="WeeeU (บุคคล)" value={d.by_seller_type["WeeeU"] ?? 0} total={d.total_listings} color="bg-sky-500" />
@@ -274,7 +274,7 @@ export default function ResellAnalyticsPage() {
           {/* Dispute Resolution 3-way */}
           <section className="bg-white rounded-xl border border-red-200 p-5 space-y-3">
             <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider">
-              ⚖️ Dispute Resolution (3-way)
+              ⚖️ ผลการตัดสินข้อพิพาท (3 ทาง)
             </h2>
             <div className="space-y-2">
               <BarRow label="🛒 ผู้ซื้อชนะ (to_buyer)"   value={d.dispute_resolution["to_buyer"]  ?? 0} total={d.disputed_count} color="bg-blue-500" />
@@ -284,7 +284,7 @@ export default function ResellAnalyticsPage() {
             </div>
             <div className="pt-3 border-t border-gray-100">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Dispute Rate</span>
+                <span className="text-gray-500">อัตราข้อพิพาท</span>
                 <span className={`font-mono font-bold ${
                   d.dispute_rate >= 0.1 ? "text-red-600"
                   : d.dispute_rate >= 0.05 ? "text-yellow-700"
@@ -311,7 +311,7 @@ export default function ResellAnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 Top Sellers</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 ผู้ขายสูงสุด</h2>
             <div className="space-y-2.5">
               {d.top_sellers.map((u, i) => (
                 <div key={u.id} className="flex items-center gap-3">
@@ -332,7 +332,7 @@ export default function ResellAnalyticsPage() {
           </section>
 
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 Top Buyers</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 ผู้ซื้อสูงสุด</h2>
             <div className="space-y-2.5">
               {d.top_buyers.map((u, i) => (
                 <div key={u.id} className="flex items-center gap-3">

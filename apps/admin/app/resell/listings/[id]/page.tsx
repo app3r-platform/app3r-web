@@ -124,7 +124,7 @@ export default function ListingDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">🛍️ Listing Detail</h1>
+              <h1 className="text-2xl font-bold">🛍️ รายละเอียดประกาศ</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-300">{tm}</span>
             </div>
@@ -140,7 +140,7 @@ export default function ListingDetailPage() {
 
           {/* Listing info */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Listing</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลประกาศ</h2>
             <InfoRow label="Seller ID" value={
               <span className="font-mono text-xs">{listing.sellerId}</span>
             } />
@@ -187,7 +187,7 @@ export default function ListingDetailPage() {
 
           {/* Timeline */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Timeline</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ประวัติเหตุการณ์</h2>
             <InfoRow label="สร้างเมื่อ" value={new Date(listing.createdAt).toLocaleString("th-TH")} />
             <InfoRow label="อัพเดตล่าสุด" value={new Date(listing.updatedAt).toLocaleString("th-TH")} />
             <InfoRow label="หมดอายุ" value={new Date(listing.expiresAt).toLocaleString("th-TH")} />
@@ -214,7 +214,7 @@ export default function ListingDetailPage() {
         {/* Offer history */}
         <section className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-            Offer History ({offers.length})
+            ประวัติ Offer ({offers.length})
           </h2>
           {offers.length === 0 ? (
             <p className="text-sm text-gray-600">ยังไม่มี offers</p>

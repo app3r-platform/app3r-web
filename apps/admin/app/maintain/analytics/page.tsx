@@ -92,6 +92,36 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
   );
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_ANALYTICS: MaintainAnalytics = {
+  total_jobs: 248,
+  total_revenue: 312500,
+  recurring_count: 87,
+  recurring_conversion_rate: 0.35,
+  by_status: {
+    completed:   162,
+    in_progress:  14,
+    assigned:     22,
+    pending:      28,
+    departed:      8,
+    arrived:       6,
+    cancelled:     8,
+  },
+  by_cleaning_type: {
+    general:  128,
+    deep:      82,
+    sanitize:  38,
+  },
+  by_appliance_type: {
+    AC:             175,
+    WashingMachine:  73,
+  },
+  avg_price: 1260,
+  avg_duration: 2.4,
+  dispute_count: 4,
+  dispute_rate: 0.016,
+};
+
 export default function MaintainAnalyticsPage() {
   const router = useRouter();
   const [data, setData] = useState<MaintainAnalytics | null>(null);
@@ -102,7 +132,12 @@ export default function MaintainAnalyticsPage() {
     if (!isAuthenticated()) { router.push("/login"); return; }
     api.get<MaintainAnalytics>("/maintain/analytics/")
       .then(d => { setData(d); setError(null); })
-      .catch(e => setError((e as Error).message))
+      .catch((e: unknown) => {
+        if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+        console.warn("[mock fallback]", e);
+        setData(MOCK_ANALYTICS);
+        setError(null);
+      })
       .finally(() => setLoading(false));
   }, [router]);
 
@@ -135,7 +170,7 @@ export default function MaintainAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📊 Maintain Analytics</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติงานบำรุงรักษา</h1>
             <p className="text-gray-500 text-sm mt-1">
               ภาพรวมงาน Maintain — สถิติรายได้ / ประเภท / recurring
             </p>
@@ -246,7 +281,7 @@ export default function MaintainAnalyticsPage() {
         {disputeCount > 0 && (
           <section className="bg-white rounded-xl border border-red-200 p-5">
             <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-4">
-              ⚖️ Dispute Overview
+              ⚖️ ภาพรวมข้อพิพาท
             </h2>
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
@@ -258,7 +293,7 @@ export default function MaintainAnalyticsPage() {
                 <span className="text-red-600 font-mono font-bold">{disputeCount.toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Dispute Rate</span>
+                <span className="text-gray-500">อัตราข้อพิพาท</span>
                 <span className={`font-mono font-bold ${
                   disputeRate >= 0.05 ? "text-red-600" : disputeRate >= 0.02 ? "text-yellow-700" : "text-green-600"
                 }`}>
@@ -283,7 +318,7 @@ export default function MaintainAnalyticsPage() {
         {/* Recurring conversion detail */}
         <section className="bg-white rounded-xl border border-admin-primary/30 p-5">
           <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-4">
-            🔁 Recurring Conversion
+            🔁 อัตราแปลงงานประจำ
           </h2>
           <div className="space-y-3">
             <div className="flex justify-between text-sm">

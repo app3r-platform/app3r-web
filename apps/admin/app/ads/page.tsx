@@ -56,6 +56,46 @@ const STATUS_LABEL: Record<AdStatus, { label: string; color: string }> = {
   expired:   { label: 'หมดอายุ',  color: 'bg-gray-100 text-gray-400 border-gray-200' },
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_ADS: AdItem[] = [
+  {
+    id: 'ad-001', adType: 'own_listing', listingId: 'lst-2026-0088',
+    position: 'home_first_row', goldCost: 35, durationDays: 7, status: 'pending',
+    rejectReason: null, startDate: null, endDate: null, cancelledAt: null,
+    createdAt: '2026-06-08T09:00:00Z',
+  },
+  {
+    id: 'ad-002', adType: 'banner_shop', listingId: null,
+    position: 'module_first_row', goldCost: 60, durationDays: 20, status: 'pending',
+    rejectReason: null, startDate: null, endDate: null, cancelledAt: null,
+    createdAt: '2026-06-09T11:30:00Z',
+  },
+  {
+    id: 'ad-003', adType: 'own_listing', listingId: 'lst-2026-0061',
+    position: 'sidebar', goldCost: 21, durationDays: 7, status: 'active',
+    rejectReason: null, startDate: '2026-06-01T00:00:00Z', endDate: '2026-06-08T00:00:00Z',
+    cancelledAt: null, createdAt: '2026-05-30T10:00:00Z',
+  },
+  {
+    id: 'ad-004', adType: 'banner_company', listingId: null,
+    position: 'home_first_row', goldCost: 150, durationDays: 30, status: 'active',
+    rejectReason: null, startDate: '2026-05-15T00:00:00Z', endDate: '2026-06-14T00:00:00Z',
+    cancelledAt: null, createdAt: '2026-05-14T08:00:00Z',
+  },
+  {
+    id: 'ad-005', adType: 'banner_shop', listingId: null,
+    position: 'sidebar', goldCost: 45, durationDays: 15, status: 'rejected',
+    rejectReason: 'ไฟล์รูปภาพไม่ตรงตามสเปค (ต้องการ 1200×628 px)', startDate: null,
+    endDate: null, cancelledAt: null, createdAt: '2026-06-05T14:00:00Z',
+  },
+  {
+    id: 'ad-006', adType: 'own_listing', listingId: 'lst-2026-0042',
+    position: 'module_first_row', goldCost: 18, durationDays: 6, status: 'expired',
+    rejectReason: null, startDate: '2026-05-01T00:00:00Z', endDate: '2026-05-07T00:00:00Z',
+    cancelledAt: null, createdAt: '2026-04-30T09:00:00Z',
+  },
+]
+
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function AdsConfigPage() {
@@ -88,8 +128,10 @@ export default function AdsConfigPage() {
           setRates(r => ({ ...r, ...cfg.value }))
         }
       } catch { /* key not set yet → use DEFAULT_RATES */ }
-    } catch {
-      router.push('/login')
+    } catch (e: unknown) {
+      if ((e as Error).message === 'UNAUTHORIZED') { router.push('/login'); return }
+      console.warn('[mock fallback]', e)
+      setAds(MOCK_ADS)
     } finally {
       setLoading(false)
     }
@@ -106,8 +148,8 @@ export default function AdsConfigPage() {
       await api.post(`/ads/${id}/approve`, {})
       showToast('✅ อนุมัติโฆษณาแล้ว — พอยต์ทอง (Gold Point) ถูกตัดแล้ว')
       void loadData()
-    } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'อนุมัติไม่สำเร็จ', 'err')
+    } catch {
+      showToast('โหมดสาธิต: backend ยังไม่พร้อม', 'err')
     } finally { setActionId(null) }
   }
 
@@ -120,8 +162,8 @@ export default function AdsConfigPage() {
       setRejectModal(null)
       setRejectReason('')
       void loadData()
-    } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'ปฏิเสธไม่สำเร็จ', 'err')
+    } catch {
+      showToast('โหมดสาธิต: backend ยังไม่พร้อม', 'err')
     } finally { setActionId(null) }
   }
 
@@ -137,8 +179,8 @@ export default function AdsConfigPage() {
       setRates(nextRates)
       setEditingPos(null)
       showToast(`✅ อัปเดตอัตรา ${POSITION_LABEL[pos]} → ${val} พอยต์ทอง/วัน`)
-    } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'บันทึกอัตราไม่สำเร็จ', 'err')
+    } catch {
+      showToast('โหมดสาธิต: backend ยังไม่พร้อม', 'err')
     }
   }
 

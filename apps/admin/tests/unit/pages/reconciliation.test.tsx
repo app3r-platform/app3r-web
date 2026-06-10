@@ -80,7 +80,7 @@ describe('SettlementReconciliationPage — render', () => {
   it('แสดง heading "Settlement Reconciliation"', async () => {
     render(<SettlementReconciliationPage />)
     await waitFor(() => {
-      expect(screen.getByText(/Settlement Reconciliation/)).toBeInTheDocument()
+      expect(screen.getByText(/ตรวจสอบ Settlement/)).toBeInTheDocument()
     })
   })
 
@@ -95,7 +95,7 @@ describe('SettlementReconciliationPage — render', () => {
   it('แสดงปุ่ม "Run Worker" เมื่อเป็น Super Admin', async () => {
     render(<SettlementReconciliationPage />)
     await waitFor(() => {
-      expect(screen.getByText(/Run Worker ตอนนี้/)).toBeInTheDocument()
+      expect(screen.getByText(/รัน Worker ทันที/)).toBeInTheDocument()
     })
   })
 
@@ -103,7 +103,7 @@ describe('SettlementReconciliationPage — render', () => {
     mockIsSuperAdmin.mockReturnValue(false)
     render(<SettlementReconciliationPage />)
     await waitFor(() => {
-      expect(screen.queryByText(/Run Worker/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/รัน Worker/)).not.toBeInTheDocument()
     })
   })
 
@@ -143,8 +143,8 @@ describe('SettlementReconciliationPage — actions', () => {
   it('เรียก api.post เมื่อกด Run Worker', async () => {
     mockApi.post.mockResolvedValue({})
     render(<SettlementReconciliationPage />)
-    await waitFor(() => screen.getByText(/Run Worker ตอนนี้/))
-    fireEvent.click(screen.getByText(/Run Worker ตอนนี้/))
+    await waitFor(() => screen.getByText(/รัน Worker ทันที/))
+    fireEvent.click(screen.getByText(/รัน Worker ทันที/))
     await waitFor(() => {
       expect(mockApi.post).toHaveBeenCalledWith('/reconciliation/run', {})
     })

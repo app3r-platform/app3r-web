@@ -110,7 +110,7 @@ export default function AdminDisputeDetailPage() {
       <div className="max-w-2xl space-y-5">
         <div className="flex items-center gap-3">
           <Link href="/resell/disputes" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
-          <h1 className="text-xl font-bold text-gray-900">Dispute ปิดแล้ว</h1>
+          <h1 className="text-xl font-bold text-gray-900">ข้อพิพาทปิดแล้ว</h1>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center space-y-3">
           <p className="text-5xl">✅</p>
@@ -136,7 +136,7 @@ export default function AdminDisputeDetailPage() {
       <div className="flex items-center gap-3">
         <Link href="/resell/disputes" className="text-gray-500 hover:text-gray-800 text-xl">‹</Link>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Dispute #{c.id}</h1>
+          <h1 className="text-xl font-bold text-gray-900">ข้อพิพาท #{c.id}</h1>
           <p className="text-xs text-gray-400">เปิดเมื่อ {c.created_at}</p>
         </div>
       </div>
@@ -247,7 +247,7 @@ export default function AdminDisputeDetailPage() {
       {/* Timeline */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Timeline
+          ประวัติเหตุการณ์
         </p>
         <div className="space-y-3">
           {c.timeline.map((t, i) => (

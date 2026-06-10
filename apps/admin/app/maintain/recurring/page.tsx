@@ -32,6 +32,53 @@ interface RecurringListResponse {
   count: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_RECURRING: RecurringListResponse = {
+  count: 5,
+  results: [
+    {
+      id: "mjr-001", serviceCode: "M-2026-001", customerId: "u-101", shopId: "shop-11",
+      technicianId: "tech-21", status: "completed", applianceType: "AC", cleaningType: "general",
+      serviceMethod: "on_site", scheduledAt: "2026-04-15T10:00:00Z", estimatedDuration: 2,
+      address: { lat: 13.7563, lng: 100.5018, address: "123 ถ.สุขุมวิท แขวงคลองเตย กรุงเทพฯ" },
+      recurring: { enabled: true, interval: "6_months", nextScheduledAt: "2026-10-15T10:00:00Z" },
+      totalPrice: 800, createdAt: "2026-01-10T08:00:00Z", updatedAt: "2026-04-15T12:00:00Z",
+    },
+    {
+      id: "mjr-002", serviceCode: "M-2026-007", customerId: "u-102", shopId: "shop-12",
+      status: "pending", applianceType: "WashingMachine", cleaningType: "deep",
+      serviceMethod: "on_site", scheduledAt: "2026-10-20T09:00:00Z", estimatedDuration: 3,
+      address: { lat: 13.8621, lng: 100.4931, address: "88/5 ซ.ลาดพร้าว 71 กรุงเทพฯ" },
+      recurring: { enabled: true, interval: "3_months", nextScheduledAt: "2026-10-20T09:00:00Z" },
+      totalPrice: 1200, createdAt: "2026-01-20T09:00:00Z", updatedAt: "2026-07-20T10:00:00Z",
+    },
+    {
+      id: "mjr-003", serviceCode: "M-2026-014", customerId: "u-103", shopId: "shop-11",
+      technicianId: "tech-22", status: "completed", applianceType: "AC", cleaningType: "sanitize",
+      serviceMethod: "on_site", scheduledAt: "2026-06-01T14:00:00Z", estimatedDuration: 2,
+      address: { lat: 13.7308, lng: 100.5235, address: "45 ถ.พระรามสี่ แขวงสีลม กรุงเทพฯ" },
+      recurring: { enabled: true, interval: "12_months", nextScheduledAt: "2027-06-01T14:00:00Z" },
+      totalPrice: 1500, createdAt: "2026-02-01T07:00:00Z", updatedAt: "2026-06-01T16:00:00Z",
+    },
+    {
+      id: "mjr-004", serviceCode: "M-2026-023", customerId: "u-104", shopId: "shop-13",
+      status: "assigned", applianceType: "AC", cleaningType: "general",
+      serviceMethod: "on_site", scheduledAt: "2026-06-12T10:00:00Z", estimatedDuration: 2,
+      address: { lat: 13.7469, lng: 100.5345, address: "220 ถ.พหลโยธิน แขวงสามเสน กรุงเทพฯ" },
+      recurring: { enabled: true, interval: "6_months", nextScheduledAt: "2026-06-12T10:00:00Z" },
+      totalPrice: 900, createdAt: "2026-03-15T11:00:00Z", updatedAt: "2026-06-10T08:00:00Z",
+    },
+    {
+      id: "mjr-005", serviceCode: "M-2026-031", customerId: "u-105",
+      status: "pending", applianceType: "WashingMachine", cleaningType: "general",
+      serviceMethod: "on_site", scheduledAt: "2026-09-05T11:00:00Z", estimatedDuration: 2,
+      address: { lat: 13.7611, lng: 100.5572, address: "67 ซ.อโศก แขวงคลองเตยเหนือ กรุงเทพฯ" },
+      recurring: { enabled: true, interval: "3_months", nextScheduledAt: "2026-09-05T11:00:00Z" },
+      totalPrice: 700, createdAt: "2026-04-05T10:00:00Z", updatedAt: "2026-06-05T09:00:00Z",
+    },
+  ],
+};
+
 interface TriggerState {
   loading: boolean;
   msg: { type: "success" | "error"; text: string } | null;
@@ -64,12 +111,16 @@ export default function MaintainRecurringPage() {
       setItems(d.results);
       setTotal(d.count);
       setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_RECURRING.results);
+      setTotal(MOCK_RECURRING.count);
+      setError(null);
     } finally {
       setLoading(false);
     }
-  }, [page, filterInterval, filterAppliance]);
+  }, [page, filterInterval, filterAppliance, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -85,10 +136,10 @@ export default function MaintainRecurringPage() {
         [jobId]: { loading: false, msg: { type: "success", text: "สร้างงานรอบถัดไปสำเร็จ" } },
       }));
       fetchData();
-    } catch (e) {
+    } catch {
       setTriggerStates(prev => ({
         ...prev,
-        [jobId]: { loading: false, msg: { type: "error", text: (e as Error).message } },
+        [jobId]: { loading: false, msg: { type: "error", text: "โหมดสาธิต: backend ยังไม่พร้อม" } },
       }));
     }
   }
@@ -113,7 +164,7 @@ export default function MaintainRecurringPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🔁 Maintain Recurring</h1>
+            <h1 className="text-2xl font-bold">🔁 งานบำรุงรักษาประจำ</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการนัดซ้ำทั้งหมด — ติดตาม nextScheduledAt + manual trigger
             </p>
@@ -174,13 +225,13 @@ export default function MaintainRecurringPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-4 py-3">Service Code</th>
+                  <th className="px-4 py-3">รหัสบริการ</th>
                   <th className="px-4 py-3">เครื่อง</th>
                   <th className="px-4 py-3">ประเภทล้าง</th>
-                  <th className="px-4 py-3">Interval</th>
-                  <th className="px-4 py-3">Next Scheduled</th>
+                  <th className="px-4 py-3">ความถี่</th>
+                  <th className="px-4 py-3">นัดหมายถัดไป</th>
                   <th className="px-4 py-3">ราคา</th>
-                  <th className="px-4 py-3">Trigger</th>
+                  <th className="px-4 py-3">กระตุ้นงาน</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>

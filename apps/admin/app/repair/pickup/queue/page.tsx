@@ -48,6 +48,58 @@ const DIRECTION_LABEL: Record<string, string> = {
   customer_to_shop: "ลูกค้า → ร้าน",
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PICKUP_QUEUE: { items: PickupJob[]; total: number } = {
+  total: 5,
+  items: [
+    {
+      id: "pkj-001", job_number: "PK-2026-0001", repair_job_id: "rj-001",
+      shop_name: "ร้านซ่อมสุขุมวิท", weeet_name: "นายชัยวัฒน์ วิ่งเร็ว", weeet_phone: "062-111-2233",
+      customer_name: "นายสมชาย ใจดี", customer_address: "99/5 ถ.สุขุมวิท 22 กรุงเทพฯ 10110",
+      device_model: "iPhone 14 Pro", status: "en_route_delivery",
+      direction: "shop_to_customer", scheduled_at: "2026-06-10T13:00:00.000Z",
+      picked_up_at: "2026-06-10T13:10:00.000Z", delivered_at: null,
+      travel_cost: 120, distance_km: 8.4, created_at: "2026-06-10T10:00:00.000Z",
+    },
+    {
+      id: "pkj-002", job_number: "PK-2026-0002", repair_job_id: "rj-002",
+      shop_name: "ร้านซ่อมรัชดา", weeet_name: "นางสาวปิยะดา รีบมา", weeet_phone: "091-444-5566",
+      customer_name: "นางสาวมณี ทองคำ", customer_address: "456 ถ.รัชดาภิเษก ดินแดง กรุงเทพฯ",
+      device_model: "Samsung Galaxy S23", status: "en_route_pickup",
+      direction: "customer_to_shop", scheduled_at: "2026-06-10T14:30:00.000Z",
+      picked_up_at: null, delivered_at: null,
+      travel_cost: 90, distance_km: 5.2, created_at: "2026-06-10T11:00:00.000Z",
+    },
+    {
+      id: "pkj-003", job_number: "PK-2026-0003", repair_job_id: "rj-003",
+      shop_name: "ร้านซ่อมสุขุมวิท", weeet_name: null, weeet_phone: null,
+      customer_name: "นายประเสริฐ วงศ์ดี", customer_address: "78 ซ.ลาดพร้าว 101 กรุงเทพฯ",
+      device_model: "OPPO Reno 10", status: "pending",
+      direction: "shop_to_customer", scheduled_at: null,
+      picked_up_at: null, delivered_at: null,
+      travel_cost: null, distance_km: null, created_at: "2026-06-10T12:00:00.000Z",
+    },
+    {
+      id: "pkj-004", job_number: "PK-2026-0004", repair_job_id: "rj-004",
+      shop_name: "ร้านซ่อมเชียงใหม่", weeet_name: "นายนิรันดร์ ส่งไว", weeet_phone: "082-888-9900",
+      customer_name: "นางสาวสุดา พรรณา", customer_address: "250 ถ.นิมมานเหมินท์ เชียงใหม่ 50200",
+      device_model: "Xiaomi Redmi Note 12", status: "completed",
+      direction: "shop_to_customer", scheduled_at: "2026-06-09T15:00:00.000Z",
+      picked_up_at: "2026-06-09T15:05:00.000Z", delivered_at: "2026-06-09T15:48:00.000Z",
+      travel_cost: 85, distance_km: 6.1, created_at: "2026-06-09T13:00:00.000Z",
+    },
+    {
+      id: "pkj-005", job_number: "PK-2026-0005", repair_job_id: "rj-005",
+      shop_name: "ร้านซ่อมรัชดา", weeet_name: "นายชัยวัฒน์ วิ่งเร็ว", weeet_phone: "062-111-2233",
+      customer_name: "นายกิตติพงษ์ แก้วใส", customer_address: "33 ถ.พระราม 9 กรุงเทพฯ 10310",
+      device_model: "Apple iPad Air 5", status: "failed",
+      direction: "customer_to_shop", scheduled_at: "2026-06-09T10:00:00.000Z",
+      picked_up_at: null, delivered_at: null,
+      travel_cost: 60, distance_km: 4.0, created_at: "2026-06-09T09:00:00.000Z",
+    },
+  ],
+};
+
 const STATUS_TABS = [
   { label: "ทั้งหมด", value: "" },
   { label: "รอมอบหมาย", value: "pending" },
@@ -89,7 +141,10 @@ export default function PickupQueuePage() {
       setTotal(d.total);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_PICKUP_QUEUE.items);
+      setTotal(MOCK_PICKUP_QUEUE.total);
     } finally {
       setLoading(false);
     }
@@ -110,7 +165,7 @@ export default function PickupQueuePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🚛 Pickup Queue</h1>
+            <h1 className="text-2xl font-bold">🚛 คิวงานรับ-ส่งอุปกรณ์</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตารางรวม pickup jobs — filter ร้าน / WeeeT / สถานะ / วัน
             </p>

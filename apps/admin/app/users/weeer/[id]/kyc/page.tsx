@@ -62,6 +62,33 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; border: stri
 /* ─────────────────────────────────────────────
    Component
 ───────────────────────────────────────────── */
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_KYC_APP: KYCApplication = {
+  user_id: 1001,
+  user_name: "นายวิรัตน์ สุขประเสริฐ",
+  phone: "081-234-5678",
+  overall_status: "reviewing",
+  is_registered_business: true,
+  business_type: "นิติบุคคล (ห้างหุ้นส่วน)",
+  shop_name: "ร้านแอร์เซอร์วิสคุณภาพ",
+  documents: [
+    { id: "doc-001", document_type: "id_card",          file_url: "https://placehold.co/800x500?text=id_card",          file_type: "image", status: "ok",      reviewed_at: "2026-06-01T10:00:00Z" },
+    { id: "doc-002", document_type: "business_license", file_url: "https://placehold.co/800x1100?text=business_license", file_type: "pdf",   status: "pending", reviewed_at: null },
+    { id: "doc-003", document_type: "bank_account",     file_url: "https://placehold.co/800x500?text=bank_account",     file_type: "image", status: "ok",      reviewed_at: "2026-06-01T10:05:00Z" },
+    { id: "doc-004", document_type: "shop_photo",       file_url: "https://placehold.co/800x600?text=shop_photo",       file_type: "image", status: "issue",   reviewed_at: "2026-06-01T10:10:00Z" },
+    { id: "doc-005", document_type: "tax_id",           file_url: "https://placehold.co/800x500?text=tax_id",           file_type: "image", status: "pending", reviewed_at: null },
+  ],
+};
+const MOCK_KYC_HISTORY: HistoryEntry[] = [
+  { id: "h-001", created_at: "2026-05-20T09:00:00Z", admin_name: "admin@app3r.co",        from_status: "pending",   to_status: "reviewing", reason: null },
+  { id: "h-002", created_at: "2026-05-28T14:30:00Z", admin_name: "supervisor@app3r.co",   from_status: "reviewing", to_status: "additional_required", reason: "รูปหน้าร้านไม่ชัด กรุณาส่งใหม่" },
+  { id: "h-003", created_at: "2026-06-01T10:00:00Z", admin_name: "admin@app3r.co",        from_status: "additional_required", to_status: "reviewing", reason: null },
+];
+
+function buildKYCMock(uid: string): KYCApplication {
+  return { ...MOCK_KYC_APP, user_id: Number(uid) || 1001 };
+}
+
 export default function KYCReviewPage() {
   const params   = useParams();
   const userId   = params.id as string;
@@ -106,10 +133,17 @@ export default function KYCReviewPage() {
       setApp(appData);
       setHistory(histData.items);
       if (appData.documents.length > 0) setActiveDoc(appData.documents[0]);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      const mockApp = buildKYCMock(userId);
+      setApp(mockApp);
+      setHistory(MOCK_KYC_HISTORY);
+      if (mockApp.documents.length > 0) setActiveDoc(mockApp.documents[0]);
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, [userId, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -127,8 +161,8 @@ export default function KYCReviewPage() {
       showToast("✅ อนุมัติ KYC สำเร็จ — WeeeR active + WeeeT account สร้างแล้ว");
       setShowApproveModal(false);
       fetchData();
-    } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+    } catch {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setSubmitting(false);
     }
@@ -153,8 +187,8 @@ export default function KYCReviewPage() {
       showToast("✅ อัพเดตสถานะสำเร็จ");
       setNewStatus(""); setReason(""); setAdditionalDocs([]);
       fetchData();
-    } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+    } catch {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setSubmitting(false);
     }
@@ -167,8 +201,8 @@ export default function KYCReviewPage() {
       await api.post(`/admin/weeer/${userId}/kyc/restore`, {});
       showToast("✅ Restore จาก archive สำเร็จ");
       fetchData();
-    } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+    } catch {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setSubmitting(false);
     }
@@ -213,7 +247,10 @@ export default function KYCReviewPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-xl font-bold text-gray-900">{app.user_name}</h1>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">{app.user_name}</h1>
+              <p className="text-gray-500 text-sm mt-0.5">ตรวจสอบเอกสาร KYC และอนุมัติสถานะ WeeeR</p>
+            </div>
             <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${sc.color} ${sc.border}`}>
               {sc.label}
             </span>

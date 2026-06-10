@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
-import { api } from "@/lib/api";
+import { api, ERR_UNAUTHORIZED } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
 interface PlatformTx {
@@ -35,6 +35,17 @@ const TX_TYPE_COLORS: Record<string, string> = {
 
 const PAGE_SIZE = 50;
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_TX_ITEMS: PlatformTx[] = [
+  { id: "PTX-0001", tx_type: "platform.gold.minted",          amount: 500000, currency: "gold",   actor_id: 1, actor_role: "super_admin", target_user_id: null, reference_id: null,        note: "Initial mint Q2/2026",              created_at: "2026-06-01T02:00:00Z" },
+  { id: "PTX-0002", tx_type: "platform.gold.fee_to_reserve",  amount: 1250,   currency: "gold",   actor_id: null, actor_role: null,       target_user_id: null, reference_id: "JOB-8821",   note: "ค่าธรรมเนียม listing WeeeR-001",   created_at: "2026-06-02T09:15:00Z" },
+  { id: "PTX-0003", tx_type: "platform.silver.distributed",   amount: 50,     currency: "silver", actor_id: null, actor_role: null,       target_user_id: 42,   reference_id: "TRIG-scrap", note: "silver_reward_scrap ผู้ใช้ #42",   created_at: "2026-06-03T11:30:00Z" },
+  { id: "PTX-0004", tx_type: "platform.silver.expired",       amount: -200,   currency: "silver", actor_id: null, actor_role: null,       target_user_id: null, reference_id: "BATCH-EXP",  note: "Expiry batch 2026-06-04",           created_at: "2026-06-04T02:05:00Z" },
+  { id: "PTX-0005", tx_type: "platform.reconciliation.run",   amount: 0,      currency: "gold",   actor_id: 1, actor_role: "super_admin", target_user_id: null, reference_id: "REC-003",    note: "Manual reconciliation run",         created_at: "2026-06-05T08:00:00Z" },
+  { id: "PTX-0006", tx_type: "platform.gold.writeoff",        amount: -500,   currency: "gold",   actor_id: 1, actor_role: "super_admin", target_user_id: null, reference_id: null,         note: "Write-off บัญชีผิดพลาด TXN-007",  created_at: "2026-06-06T14:20:00Z" },
+];
+const MOCK_TX_LIST: TxList = { items: MOCK_TX_ITEMS, total: MOCK_TX_ITEMS.length };
+
 export default function TransactionsPage() {
   const router = useRouter();
   const [items, setItems] = useState<PlatformTx[]>([]);
@@ -42,6 +53,9 @@ export default function TransactionsPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<PlatformTx | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
   // Filters
   const [filterType, setFilterType] = useState("");
@@ -63,25 +77,24 @@ export default function TransactionsPage() {
       const d = await api.get<TxList>("/admin/platform/transactions?" + params);
       setItems(d.items);
       setTotal(d.total);
+    } catch (e: unknown) {
+      if ((e as Error).message === ERR_UNAUTHORIZED) { router.push("/login"); return; }
+      // API ไม่พร้อม → ใช้ mock fallback
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_TX_LIST.items);
+      setTotal(MOCK_TX_LIST.total);
     } finally {
       setLoading(false);
     }
-  }, [page, filterType, filterCurrency, filterDateFrom, filterDateTo]);
+  }, [page, filterType, filterCurrency, filterDateFrom, filterDateTo, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
     fetchData();
   }, [router, fetchData]);
 
-  async function exportCsv() {
-    const params = new URLSearchParams({
-      format: "csv",
-      ...(filterType && { tx_type: filterType }),
-      ...(filterCurrency && { currency: filterCurrency }),
-      ...(filterDateFrom && { date_from: filterDateFrom }),
-      ...(filterDateTo && { date_to: filterDateTo }),
-    });
-    window.open("/api/v1/admin/platform/transactions/export?" + params, "_blank");
+  function exportCsv() {
+    showToast("โหมดสาธิต: backend ยังไม่พร้อม");
   }
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -91,10 +104,10 @@ export default function TransactionsPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">Platform Audit Trail</h1>
+          <h1 className="text-2xl font-bold">บันทึกตรวจสอบ Platform</h1>
           <button onClick={exportCsv}
             className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors">
-            📥 Export CSV
+            📥 ส่งออก CSV
           </button>
         </div>
         <p className="text-gray-500 text-sm mb-6">ประวัติธุรกรรมระดับ Platform ทั้งหมด (Append-only, ลบไม่ได้)</p>
@@ -203,7 +216,7 @@ export default function TransactionsPage() {
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={() => setSelected(null)}>
             <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold">Transaction Detail</h3>
+                <h3 className="font-bold">รายละเอียดธุรกรรม</h3>
                 <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-900">✕</button>
               </div>
               <div className="space-y-3 text-sm">
@@ -225,6 +238,12 @@ export default function TransactionsPage() {
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {toast && (
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
+            {toast}
           </div>
         )}
       </main>

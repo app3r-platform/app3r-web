@@ -110,7 +110,7 @@ export default function ResellListingsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🛍️ Resell Listings — Audit</h1>
+            <h1 className="text-2xl font-bold">🛍️ ประกาศขายต่อ (ตรวจสอบ)</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการ listings ข้าม sellers — filter สถานะ / sellerType / listingType / วันที่
             </p>
@@ -186,9 +186,9 @@ export default function ResellListingsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-4 py-3">Listing ID</th>
+                  <th className="px-4 py-3">รหัสประกาศ</th>
                   <th className="px-4 py-3">ประเภท</th>
-                  <th className="px-4 py-3">Seller</th>
+                  <th className="px-4 py-3">ผู้ขาย</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">ราคา</th>
                   <th className="px-4 py-3">หมดอายุ</th>

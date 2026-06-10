@@ -140,7 +140,7 @@ function MovementsInner() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📦 Stock Movements</h1>
+            <h1 className="text-2xl font-bold">📦 ความเคลื่อนไหวสต็อก</h1>
             <p className="text-gray-500 text-sm mt-1">
               ประวัติการเคลื่อนไหวสต็อกข้าม shop — filter ประเภท / ร้าน / อะไหล่ / วันที่
             </p>

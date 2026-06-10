@@ -108,7 +108,7 @@ export default function ReconciliationPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">Reconciliation</h1>
+          <h1 className="text-2xl font-bold">กระทบยอด Point ทอง</h1>
           {isSuper && (
             <button onClick={runReconciliation} disabled={running}
               className="px-5 py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
@@ -136,7 +136,7 @@ export default function ReconciliationPage() {
                 </div>
                 {status.status === "DISCREPANCY" && (
                   <div className="text-right">
-                    <p className="text-xs opacity-70">Difference</p>
+                    <p className="text-xs opacity-70">ส่วนต่าง</p>
                     <p className="text-2xl font-bold font-mono">{status.difference.toLocaleString()} G</p>
                   </div>
                 )}
@@ -193,7 +193,7 @@ export default function ReconciliationPage() {
                   <tr className="text-gray-500 text-left">
                     <th className="px-6 py-3">เวลา</th>
                     <th className="px-6 py-3">สถานะ</th>
-                    <th className="px-6 py-3 text-right">Difference</th>
+                    <th className="px-6 py-3 text-right">ส่วนต่าง</th>
                     <th className="px-6 py-3">รันโดย</th>
                   </tr>
                 </thead>

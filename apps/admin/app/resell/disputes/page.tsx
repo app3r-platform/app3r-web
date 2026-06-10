@@ -132,7 +132,7 @@ export default function ResellDisputesPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
           <div>
-            <h1 className="text-2xl font-bold">⚖️ Resell Disputes</h1>
+            <h1 className="text-2xl font-bold">⚖️ ข้อพิพาทการขายต่อ</h1>
             <p className="text-gray-500 text-sm mt-1">
               ข้อพิพาท Resell — service_type A · ตัดสิน 3 ทาง (buyer/seller/split)
             </p>
@@ -189,7 +189,7 @@ export default function ResellDisputesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-5 py-3">Listing</th>
+                  <th className="px-5 py-3">ประกาศ</th>
                   <th className="px-5 py-3">Buyer</th>
                   <th className="px-5 py-3">Seller</th>
                   <th className="px-5 py-3">เงินพักกลาง (Escrow)</th>

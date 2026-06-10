@@ -33,6 +33,110 @@ interface ParcelJob {
   created_at: string;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PARCEL_JOBS: ParcelJob[] = [
+  {
+    id: "pj-001",
+    job_number: "PJ-2026-0001",
+    repair_job_id: "rj-001",
+    shop_name: "ร้านซ่อม iCare สยาม",
+    courier_name: "Kerry Express",
+    tracking_out: "KE1234567890TH",
+    tracking_back: null,
+    customer_name: "สมชาย ใจดี",
+    customer_address: "123 ถ.สุขุมวิท กรุงเทพฯ",
+    device_model: "iPhone 14 Pro",
+    status: "at_shop",
+    shipped_out_at: "2026-06-05T09:00:00Z",
+    delivered_to_shop_at: "2026-06-06T10:30:00Z",
+    shipped_back_at: null,
+    delivered_to_customer_at: null,
+    shipping_cost: 120,
+    has_dispute: false,
+    created_at: "2026-06-04T08:00:00Z",
+  },
+  {
+    id: "pj-002",
+    job_number: "PJ-2026-0002",
+    repair_job_id: "rj-002",
+    shop_name: "TechFix เซ็นทรัล",
+    courier_name: "Flash Express",
+    tracking_out: "FL9876543210TH",
+    tracking_back: "FL1111222233TH",
+    customer_name: "วิภา สุขสันต์",
+    customer_address: "456 ถ.รัชดาภิเษก กรุงเทพฯ",
+    device_model: "Samsung Galaxy S24",
+    status: "in_transit_back",
+    shipped_out_at: "2026-06-01T08:00:00Z",
+    delivered_to_shop_at: "2026-06-02T11:00:00Z",
+    shipped_back_at: "2026-06-08T09:00:00Z",
+    delivered_to_customer_at: null,
+    shipping_cost: 95,
+    has_dispute: false,
+    created_at: "2026-05-31T14:00:00Z",
+  },
+  {
+    id: "pj-003",
+    job_number: "PJ-2026-0003",
+    repair_job_id: "rj-003",
+    shop_name: "ร้านซ่อม iCare สยาม",
+    courier_name: "J&T Express",
+    tracking_out: "JT5555666677TH",
+    tracking_back: null,
+    customer_name: "ประสิทธิ์ มีสุข",
+    customer_address: "789 ถ.พระราม 9 กรุงเทพฯ",
+    device_model: "MacBook Air M2",
+    status: "in_transit_out",
+    shipped_out_at: "2026-06-09T07:00:00Z",
+    delivered_to_shop_at: null,
+    shipped_back_at: null,
+    delivered_to_customer_at: null,
+    shipping_cost: 180,
+    has_dispute: true,
+    created_at: "2026-06-08T16:00:00Z",
+  },
+  {
+    id: "pj-004",
+    job_number: "PJ-2026-0004",
+    repair_job_id: "rj-004",
+    shop_name: "GadgetDoc ลาดพร้าว",
+    courier_name: "Kerry Express",
+    tracking_out: "KE2222333344TH",
+    tracking_back: "KE4444555566TH",
+    customer_name: "นิภา รักไทย",
+    customer_address: "321 ถ.ลาดพร้าว กรุงเทพฯ",
+    device_model: "iPad Pro 12.9",
+    status: "completed",
+    shipped_out_at: "2026-05-28T08:00:00Z",
+    delivered_to_shop_at: "2026-05-29T10:00:00Z",
+    shipped_back_at: "2026-06-03T09:00:00Z",
+    delivered_to_customer_at: "2026-06-04T14:00:00Z",
+    shipping_cost: 150,
+    has_dispute: false,
+    created_at: "2026-05-27T10:00:00Z",
+  },
+  {
+    id: "pj-005",
+    job_number: "PJ-2026-0005",
+    repair_job_id: "rj-005",
+    shop_name: "TechFix เซ็นทรัล",
+    courier_name: "Thailand Post EMS",
+    tracking_out: "EMS7777888899TH",
+    tracking_back: null,
+    customer_name: "อรุณ ดีงาม",
+    customer_address: "654 ถ.ศรีนครินทร์ สมุทรปราการ",
+    device_model: "Sony PlayStation 5",
+    status: "lost",
+    shipped_out_at: "2026-05-20T08:00:00Z",
+    delivered_to_shop_at: null,
+    shipped_back_at: null,
+    delivered_to_customer_at: null,
+    shipping_cost: 250,
+    has_dispute: true,
+    created_at: "2026-05-19T12:00:00Z",
+  },
+];
+
 const STATUS_META: Record<string, { label: string; color: string }> = {
   pending:               { label: "รอดำเนินการ",      color: "bg-gray-100 text-gray-500" },
   label_created:         { label: "สร้าง label แล้ว", color: "bg-gray-700 text-gray-700" },
@@ -65,7 +169,6 @@ export default function ParcelQueuePage() {
   const [items, setItems] = useState<ParcelJob[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
   const [filterShop, setFilterShop] = useState("");
   const [filterCourier, setFilterCourier] = useState("");
@@ -88,13 +191,18 @@ export default function ParcelQueuePage() {
       );
       setItems(d.items);
       setTotal(d.total);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      const filtered = filterStatus
+        ? MOCK_PARCEL_JOBS.filter(j => j.status === filterStatus)
+        : MOCK_PARCEL_JOBS;
+      setItems(filtered);
+      setTotal(filtered.length);
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus, filterShop, filterCourier, filterDate]);
+  }, [page, filterStatus, filterShop, filterCourier, filterDate, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -111,7 +219,7 @@ export default function ParcelQueuePage() {
         {/* Header */}
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-bold">📦 Parcel Queue</h1>
+            <h1 className="text-2xl font-bold">📦 คิวพัสดุ (Parcel Queue)</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตาราง parcel jobs — filter ร้าน / courier / สถานะ / วัน
             </p>
@@ -119,11 +227,11 @@ export default function ParcelQueuePage() {
           <div className="flex gap-2">
             <Link href="/repair/parcel/disputes"
               className="px-3 py-1.5 text-xs bg-orange-900/40 hover:bg-orange-900/60 border border-orange-700/50 text-orange-700 rounded-lg transition-colors">
-              ⚠️ Disputes
+              ⚠️ ข้อพิพาท
             </Link>
             <Link href="/repair/parcel/analytics"
               className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-              📊 Analytics →
+              📊 สถิติ →
             </Link>
           </div>
         </div>
@@ -178,9 +286,7 @@ export default function ParcelQueuePage() {
             )}
           </div>
 
-          {error ? (
-            <div className="px-6 py-8 text-red-600">{error}</div>
-          ) : loading ? (
+          {loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
@@ -194,7 +300,7 @@ export default function ParcelQueuePage() {
                   <th className="px-4 py-3">Tracking</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">ค่าส่ง</th>
-                  <th className="px-4 py-3">Dispute</th>
+                  <th className="px-4 py-3">ข้อพิพาท</th>
                   <th className="px-4 py-3">วันที่</th>
                   <th className="px-4 py-3"></th>
                 </tr>
@@ -232,7 +338,7 @@ export default function ParcelQueuePage() {
                       <td className="px-4 py-3">
                         {job.has_dispute && (
                           <span className="text-xs px-2 py-0.5 rounded-full bg-orange-50 text-orange-700">
-                            ⚠️ Dispute
+                            ⚠️ ข้อพิพาท
                           </span>
                         )}
                       </td>

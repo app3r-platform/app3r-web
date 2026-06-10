@@ -41,6 +41,48 @@ const STATUS_META: Record<string, { label: string; color: string; dot: string }>
   delivered:         { label: "ส่งแล้ว",       color: "text-brand-success", dot: "bg-brand-success" },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_DISPATCH_MONITOR: DispatchMonitor = {
+  total_active: 3,
+  total_delayed: 1,
+  last_updated: "2026-06-10T13:45:00.000Z",
+  active_jobs: [
+    {
+      id: "pkj-001", job_number: "PK-2026-0001",
+      weeet_name: "นายชัยวัฒน์ วิ่งเร็ว", weeet_phone: "062-111-2233",
+      shop_name: "ร้านซ่อมสุขุมวิท", customer_name: "นายสมชาย ใจดี",
+      customer_address: "99/5 ถ.สุขุมวิท 22 กรุงเทพฯ", device_model: "iPhone 14 Pro",
+      status: "en_route_delivery", direction: "shop_to_customer",
+      current_lat: 13.7350, current_lng: 100.5620,
+      eta_minutes: 12, delay_minutes: 0,
+      last_location_at: "2026-06-10T13:44:00.000Z",
+      picked_up_at: "2026-06-10T13:10:00.000Z",
+    },
+    {
+      id: "pkj-002", job_number: "PK-2026-0002",
+      weeet_name: "นางสาวปิยะดา รีบมา", weeet_phone: "091-444-5566",
+      shop_name: "ร้านซ่อมรัชดา", customer_name: "นางสาวมณี ทองคำ",
+      customer_address: "456 ถ.รัชดาภิเษก ดินแดง กรุงเทพฯ", device_model: "Samsung Galaxy S23",
+      status: "en_route_pickup", direction: "customer_to_shop",
+      current_lat: 13.7600, current_lng: 100.5710,
+      eta_minutes: 25, delay_minutes: 18,
+      last_location_at: "2026-06-10T13:43:00.000Z",
+      picked_up_at: null,
+    },
+    {
+      id: "pkj-006", job_number: "PK-2026-0006",
+      weeet_name: "นายนิรันดร์ ส่งไว", weeet_phone: "082-888-9900",
+      shop_name: "ร้านซ่อมเชียงใหม่", customer_name: "นางวิไล สุขสันต์",
+      customer_address: "50 ถ.เชียงใหม่-ลำพูน ต.หายยา เชียงใหม่", device_model: "Vivo V27e",
+      status: "picked_up", direction: "shop_to_customer",
+      current_lat: 18.7883, current_lng: 98.9853,
+      eta_minutes: 8, delay_minutes: 0,
+      last_location_at: "2026-06-10T13:42:00.000Z",
+      picked_up_at: "2026-06-10T13:30:00.000Z",
+    },
+  ],
+};
+
 const REFRESH_INTERVAL = 30_000; // 30 seconds
 
 export default function DispatchMonitorPage() {
@@ -58,7 +100,9 @@ export default function DispatchMonitorPage() {
       setData(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_DISPATCH_MONITOR);
     } finally {
       setLoading(false);
       setCountdown(30);
@@ -98,7 +142,7 @@ export default function DispatchMonitorPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold">📡 Dispatch Monitor</h1>
+              <h1 className="text-2xl font-bold">📡 ติดตามการส่งงาน</h1>
               {/* Live pulse */}
               <span className="flex items-center gap-1.5 text-xs text-green-600 bg-green-900/30 border border-green-800/50 px-2 py-0.5 rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
@@ -126,7 +170,7 @@ export default function DispatchMonitorPage() {
         {data && (
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <p className="text-xs text-gray-500 mb-1">Active Jobs</p>
+              <p className="text-xs text-gray-500 mb-1">งานที่กำลังดำเนินการ</p>
               <p className="text-3xl font-bold text-blue-400">{data.total_active}</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">

@@ -32,6 +32,18 @@ const STATUS_META: Record<DepositRequest["status"], { label: string; color: stri
   rejected: { label: "ปฏิเสธ",      color: "bg-red-50 text-red-700" },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_DEPOSITS: PaginatedDeposits = {
+  items: [
+    { id: "DEP-2026-0601", user_id: 501, user_name: "ธนาคาร วงษ์สวรรค์", amount: 500, reference: "KTB20260610001", slip_url: "https://example.com/slip_dep1.jpg", submitted_at: "2026-06-10T07:30:00Z", status: "pending", note: null },
+    { id: "DEP-2026-0602", user_id: 502, user_name: "สุดา พลอยงาม", amount: 1000, reference: "SCB20260610055", slip_url: "https://example.com/slip_dep2.jpg", submitted_at: "2026-06-10T09:15:00Z", status: "pending", note: null },
+    { id: "DEP-2026-0603", user_id: 503, user_name: "ชูศักดิ์ มาลา", amount: 250, reference: "PP20260609122", slip_url: null, submitted_at: "2026-06-09T11:00:00Z", status: "verified", note: null },
+    { id: "DEP-2026-0604", user_id: 504, user_name: "เพ็ญพักตร์ ทองสุข", amount: 750, reference: "KBANK20260609088", slip_url: "https://example.com/slip_dep3.jpg", submitted_at: "2026-06-09T14:20:00Z", status: "rejected", note: "ยอดโอนไม่ตรงกับที่แจ้ง" },
+    { id: "DEP-2026-0605", user_id: 505, user_name: "สมศักดิ์ ขาวสะอาด", amount: 2000, reference: "BBL20260608311", slip_url: "https://example.com/slip_dep4.jpg", submitted_at: "2026-06-08T16:00:00Z", status: "pending", note: null },
+  ],
+  total: 5,
+};
+
 export default function TransferDepositsPage() {
   const router = useRouter();
   const [items, setItems] = useState<DepositRequest[]>([]);
@@ -55,10 +67,15 @@ export default function TransferDepositsPage() {
       const d = await api.get<PaginatedDeposits>(`/admin/transfers/deposits?${params}`);
       setItems(d.items);
       setTotal(d.total);
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_DEPOSITS.items);
+      setTotal(MOCK_DEPOSITS.total);
     } finally {
       setLoading(false);
     }
-  }, [filterStatus]);
+  }, [filterStatus, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -72,7 +89,8 @@ export default function TransferDepositsPage() {
       showToast("✅ อนุมัติการเติม Point สำเร็จ", "ok");
       fetchData();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`, "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -94,7 +112,8 @@ export default function TransferDepositsPage() {
       setRejectNote(prev => { const n = { ...prev }; delete n[id]; return n; });
       fetchData();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`, "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }

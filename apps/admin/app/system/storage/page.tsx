@@ -50,6 +50,61 @@ interface AuditFile {
 
 type Tab = "overview" | "top-users" | "appliance" | "pdpa" | "audit";
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_SUMMARY: StorageSummary = {
+  total_bytes: 12_884_901_888,
+  total_files: 34820,
+  total_photos: 28650,
+  total_videos: 420,
+  by_entity: [
+    { entity_type: "jobs",     files: 18400, bytes: 7_516_192_768 },
+    { entity_type: "profile",  files:  6200, bytes: 2_147_483_648 },
+    { entity_type: "kyc",      files:  4100, bytes: 1_610_612_736 },
+    { entity_type: "ads",      files:  2800, bytes:   858_993_459 },
+    { entity_type: "disputes", files:  1920, bytes:   536_870_912 },
+    { entity_type: "scrap",    files:  1400, bytes:   214_748_364 },
+  ],
+};
+const MOCK_TOP_USERS: TopUser[] = [
+  { user_id: 1001, user_name: "ร้านสยามแอร์เซอร์วิส",  role: "weeer", file_count: 1842, total_bytes: 921_600_000 },
+  { user_id: 1002, user_name: "ช่างวิชัย เก่งล้าง",       role: "weeet", file_count: 1234, total_bytes: 617_000_000 },
+  { user_id: 1003, user_name: "คุณสมศรี วงษ์ดี",          role: "weeeu", file_count:  876, total_bytes: 438_000_000 },
+  { user_id: 1004, user_name: "ร้านเครื่องใช้ไฟฟ้าดี",   role: "weeer", file_count:  654, total_bytes: 327_000_000 },
+  { user_id: 1005, user_name: "ช่างสมชาย มีฝีมือ",         role: "weeet", file_count:  512, total_bytes: 256_000_000 },
+];
+const MOCK_TRANSFERS: ApplianceTransfer[] = [
+  { id: "tr-001", transferred_at: "2026-05-10T11:00:00Z", appliance_id: "AP-20230015",
+    from_user: "คุณนภา รักษ์บ้าน",  from_role: "weeeu",
+    to_user:   "ร้านสยามแอร์เซอร์วิส", to_role: "weeer",
+    price_points: 2500, announcement_id: "ANN-2026-0312" },
+  { id: "tr-002", transferred_at: "2026-05-18T14:30:00Z", appliance_id: "AP-20220078",
+    from_user: "คุณประทีป สุขใจ",     from_role: "weeeu",
+    to_user:   "ร้านเครื่องใช้ไฟฟ้าดี", to_role: "weeer",
+    price_points: 1800, announcement_id: "ANN-2026-0389" },
+  { id: "tr-003", transferred_at: "2026-06-02T09:15:00Z", appliance_id: "AP-20240103",
+    from_user: "คุณมาลี พันธ์สวรรค์",  from_role: "weeeu",
+    to_user:   "ร้านสยามแอร์เซอร์วิส", to_role: "weeer",
+    price_points: 3200, announcement_id: "ANN-2026-0451" },
+];
+const MOCK_CLEANUP: CleanupSchedule[] = [
+  { file_type: "KYC Documents",    retention: "7 ปี",  pending_count: 0,   last_cleanup_at: "2026-06-01T02:00:00Z" },
+  { file_type: "Job Photos",       retention: "3 ปี",  pending_count: 0,   last_cleanup_at: "2026-06-01T02:00:00Z" },
+  { file_type: "Dispute Evidence", retention: "10 ปี", pending_count: 0,   last_cleanup_at: "2026-05-01T02:00:00Z" },
+  { file_type: "Profile Photos",   retention: "ถาวร",  pending_count: 0,   last_cleanup_at: null },
+  { file_type: "Temp Uploads",     retention: "7 วัน", pending_count: 142, last_cleanup_at: "2026-06-09T02:00:00Z" },
+];
+const MOCK_AUDIT: { items: AuditFile[]; total: number } = {
+  total: 34820,
+  items: [
+    { id: "af-001", file_path: "kyc/1001/id_card_front.jpg",       owner_name: "ร้านสยามแอร์เซอร์วิส",  entity_type: "kyc",     size_bytes: 512_000, uploaded_at: "2026-04-01T10:00:00Z", visibility: "private",    file_type: "image" },
+    { id: "af-002", file_path: "jobs/mjd-014/before_1.jpg",         owner_name: "ช่างวิชัย เก่งล้าง",       entity_type: "jobs",    size_bytes: 1_200_000, uploaded_at: "2026-06-01T14:00:00Z", visibility: "restricted", file_type: "image" },
+    { id: "af-003", file_path: "ads/banner/shop_siam_may26.png",    owner_name: "ร้านสยามแอร์เซอร์วิส",  entity_type: "ads",     size_bytes: 320_000, uploaded_at: "2026-05-12T09:30:00Z", visibility: "public",     file_type: "image" },
+    { id: "af-004", file_path: "profile/1003/avatar.jpg",           owner_name: "คุณสมศรี วงษ์ดี",          entity_type: "profile", size_bytes: 98_304,  uploaded_at: "2026-03-20T08:00:00Z", visibility: "public",     file_type: "image" },
+    { id: "af-005", file_path: "disputes/dsp-007/evidence_1.jpg",   owner_name: "admin@app3r.co",           entity_type: "disputes",size_bytes: 2_100_000, uploaded_at: "2026-05-28T16:00:00Z", visibility: "private",    file_type: "image" },
+    { id: "af-006", file_path: "kyc/1004/business_license.pdf",     owner_name: "ร้านเครื่องใช้ไฟฟ้าดี",   entity_type: "kyc",     size_bytes: 870_000, uploaded_at: "2026-04-15T11:00:00Z", visibility: "private",    file_type: "pdf" },
+  ],
+};
+
 const fmtBytes = (b: number): string => {
   if (b >= 1024 ** 3) return (b / 1024 ** 3).toFixed(2) + " GB";
   if (b >= 1024 ** 2) return (b / 1024 ** 2).toFixed(1) + " MB";
@@ -117,6 +172,16 @@ export default function StoragePage() {
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
     Promise.all([fetchSummary(), fetchTopUsers(), fetchTransfers(), fetchCleanup(), fetchAudit()])
+      .catch((e: unknown) => {
+        if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+        console.warn("[mock fallback]", e);
+        setSummary(MOCK_SUMMARY);
+        setTopUsers(MOCK_TOP_USERS);
+        setTransfers(MOCK_TRANSFERS);
+        setCleanup(MOCK_CLEANUP);
+        setAuditFiles(MOCK_AUDIT.items);
+        setAuditTotal(MOCK_AUDIT.total);
+      })
       .finally(() => setLoading(false));
   }, [router, fetchSummary, fetchTopUsers, fetchTransfers, fetchCleanup, fetchAudit]);
 
@@ -127,19 +192,19 @@ export default function StoragePage() {
       showToast(`✅ Cleanup เสร็จ: ลบ ${r.deleted_count} ไฟล์, คืน ${fmtBytes(r.bytes_freed)}`);
       fetchSummary();
       fetchCleanup();
-    } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+    } catch {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setRunningCleanup(false);
     }
   }
 
   const TABS: { key: Tab; label: string }[] = [
-    { key: "overview", label: "📊 Overview" },
-    { key: "top-users", label: "👑 Top Users" },
-    { key: "appliance", label: "🔄 Appliance History" },
-    { key: "pdpa", label: "🗑️ PDPA Cleanup" },
-    { key: "audit", label: "📁 File Audit" },
+    { key: "overview", label: "📊 ภาพรวม" },
+    { key: "top-users", label: "👑 ผู้ใช้ใช้พื้นที่สูงสุด" },
+    { key: "appliance", label: "🔄 ประวัติโอน Appliance" },
+    { key: "pdpa", label: "🗑️ ล้างข้อมูล PDPA" },
+    { key: "audit", label: "📁 ตรวจสอบไฟล์" },
   ];
 
   const auditTotalPages = Math.ceil(auditTotal / 20);
@@ -149,7 +214,7 @@ export default function StoragePage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">Storage Admin</h1>
+          <h1 className="text-2xl font-bold">จัดการพื้นที่จัดเก็บ (Storage)</h1>
           <span className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200">
             🔄 Auto-refresh 5 นาที
           </span>
@@ -272,7 +337,7 @@ export default function StoragePage() {
                         <td className="px-6 py-3 text-xs">
                           <span className="text-gray-500">{t.from_user} ({t.from_role})</span>
                           <span className="text-gray-600 mx-1.5">→</span>
-                          <span className="text-white">{t.to_user} ({t.to_role})</span>
+                          <span className="text-gray-800">{t.to_user} ({t.to_role})</span>
                         </td>
                         <td className="px-6 py-3 text-right font-mono text-yellow-700 font-semibold">
                           {t.price_points.toLocaleString()}

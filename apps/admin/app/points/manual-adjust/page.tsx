@@ -19,6 +19,14 @@ interface AdjustHistory {
 
 const MAX_PER_TX = 1000; // D28 default
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_HISTORY: AdjustHistory[] = [
+  { id: "ADJ-001", user_id: 201, user_name: "สมชาย ใจดี", currency: "gold", amount: 200, reason: "แก้ไขข้อผิดพลาดของระบบ — ธุรกรรม TX-20260601-009 หักซ้ำ", admin_id: 1, created_at: "2026-06-09T10:00:00Z" },
+  { id: "ADJ-002", user_id: 302, user_name: "วิชัย ช่างซ่อม", currency: "silver", amount: -50, reason: "ปรับยอดตามคำร้องขอ — ยอดเกินจากงาน W-2026-0312", admin_id: 1, created_at: "2026-06-08T14:30:00Z" },
+  { id: "ADJ-003", user_id: 403, user_name: "ดารณี สุขใส", currency: "gold", amount: 100, reason: "โบนัสพิเศษจาก Admin — รางวัลผู้ใช้ดีเดือนพฤษภาคม", admin_id: 1, created_at: "2026-06-07T09:00:00Z" },
+  { id: "ADJ-004", user_id: 504, user_name: "มานพ แก้วใส", currency: "gold", amount: -150, reason: "คืน Point กรณีข้อพิพาท — ยกเลิกงาน A-2026-0289 ตกลงกันทั้งสองฝ่าย", admin_id: 1, created_at: "2026-06-05T16:00:00Z" },
+];
+
 export default function ManualAdjustPage() {
   const router = useRouter();
   const [isSuper, setIsSuper] = useState(false);
@@ -39,7 +47,11 @@ export default function ManualAdjustPage() {
     try {
       const d = await api.get<{ items: AdjustHistory[] }>("/admin/platform/points/manual-adjust/history");
       setHistory(d.items);
-    } catch { /* ignore */ }
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") return;
+      console.warn("[mock fallback]", e);
+      setHistory(MOCK_HISTORY);
+    }
   }
 
   async function fetchConfig() {
@@ -76,7 +88,8 @@ export default function ManualAdjustPage() {
       setUserId(""); setAmount(""); setReason(""); setConfirmText("");
       fetchHistory();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
       setShowModal(false);
     } finally {
       setSubmitting(false);
@@ -91,7 +104,7 @@ export default function ManualAdjustPage() {
         <main className="flex-1 p-8 flex items-center justify-center">
           <div className="text-center">
             <div className="text-6xl mb-4">🔒</div>
-            <h2 className="text-xl font-bold mb-2">Super Admin Only</h2>
+            <h2 className="text-xl font-bold mb-2">สิทธิ์ Super Admin เท่านั้น</h2>
             <p className="text-gray-500 text-sm">หน้านี้ต้องการสิทธิ์ Super Admin เท่านั้น</p>
           </div>
         </main>
@@ -103,8 +116,8 @@ export default function ManualAdjustPage() {
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-1">Manual Adjust Points</h1>
-        <p className="text-gray-500 text-sm mb-6">ปรับยอด พอยต์ทอง/พอยต์เงิน (Gold/Silver Point) ด้วยตนเอง — Super Admin Only</p>
+        <h1 className="text-2xl font-bold mb-1">ปรับยอด Point ด้วยมือ</h1>
+        <p className="text-gray-500 text-sm mb-6">ปรับยอด Gold/Silver Point สำหรับผู้ใช้รายบุคคล — เฉพาะ Super Admin เท่านั้น</p>
 
         {/* D28 Limit Indicator */}
         <div className="mb-6 bg-orange-900/20 border border-orange-800/50 rounded-xl p-4 flex items-center gap-3">
@@ -166,7 +179,7 @@ export default function ManualAdjustPage() {
         {/* History */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="font-semibold">📋 ประวัติ Manual Adjust</h2>
+            <h2 className="font-semibold">📋 ประวัติการปรับยอด Point</h2>
           </div>
           <table className="w-full text-sm">
             <thead>
