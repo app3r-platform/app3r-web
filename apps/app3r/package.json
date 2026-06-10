@@ -6,8 +6,7 @@
     "dev": "next dev --port 3004",
     "build": "next build",
     "start": "next start --port 3004",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "lint": "next lint"
   },
   "dependencies": {
     "@app3r/ui": "workspace:*",
