@@ -11,12 +11,18 @@
  *   - cache token ใน memory + persist ผ่าน saveToken (inject ต่อแอพ)
  *
  * App-specific (inject ผ่าน config): token storage (saveToken/removeToken),
- * endpoint, request payload (เช่น role) — ส่วนที่เหลือ generic ทุกแอพ
+ * endpoint, request payload (เช่น role), mockMode — ส่วนที่เหลือ generic ทุกแอพ
+ *
+ * ⚠️ mockMode = REQUIRED (CMD #115-AG/AH · config injection): app ต้องส่ง
+ *    `process.env.NEXT_PUBLIC_DEV_NAV === 'true'` · shared ไม่อ่าน env เอง (กัน BUG-3)
  */
 
-import { isMockMode } from './mock-mode'
-
 export interface DevTokenConfig {
+  /**
+   * mock mode flag — app ต้อง inject (`process.env.NEXT_PUBLIC_DEV_NAV === 'true'`)
+   * REQUIRED (CMD #115-AG/AH): shared ไม่อ่าน env เอง → inline ใน app chunk = deterministic
+   */
+  mockMode: boolean
   /** persist token ลง storage ของแอพ (เช่น localStorage) ให้ isAuthenticated() ใช้ได้ */
   saveToken: (token: string) => void
   /** ล้าง token ออกจาก storage ของแอพ */
@@ -48,7 +54,8 @@ export function createDevTokenProvider(config: DevTokenConfig) {
     if (cachedToken) return cachedToken
 
     // mock mode → bypass token ทันที (ไม่ยิง endpoint ที่ไม่มี = ไม่รก console)
-    if (isMockMode()) {
+    //   mockMode = inject จาก app (config injection · ไม่อ่าน env ใน shared = กัน BUG-3)
+    if (config.mockMode) {
       cachedToken = bypassToken
       config.saveToken(cachedToken)
       return cachedToken
