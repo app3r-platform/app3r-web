@@ -93,10 +93,7 @@ export default async function AdBanner({
       className={`flex items-center justify-center bg-gray-100 border border-dashed border-gray-300 rounded-xl ${sizeClass} ${className}`}
     >
       <div className="text-center text-gray-400 select-none">
-        <p className="text-xs font-semibold uppercase tracking-wide">โฆษณา</p>
-        <p className="text-[10px] mt-0.5">
-          {isLeaderboard ? "728×90" : "300×600"} · {position}
-        </p>
+        <p className="text-xs font-semibold tracking-wide">โฆษณา</p>
       </div>
     </div>
   );
