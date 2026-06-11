@@ -298,7 +298,7 @@ export default function PartsOrderDetailPage({
             </div>
             {order.escrowHeldThb > 0 && (
               <div className="flex justify-between text-blue-600 bg-blue-50 rounded-lg px-2 py-1.5 mt-1">
-                <span>🔒 Gold พักเงินกลาง (Escrow)</span>
+                <span>🔒 พอยต์ทอง (Gold) พักเงินกลาง (Escrow)</span>
                 <span className="font-semibold">{order.escrowHeldThb.toLocaleString()} pts</span>
               </div>
             )}

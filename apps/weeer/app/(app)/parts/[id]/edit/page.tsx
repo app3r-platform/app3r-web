@@ -104,7 +104,7 @@ export default function PartsEditPage({ params }: { params: Promise<{ id: string
                 className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer text-xs font-medium transition-all
                   ${condition === c ? "border-[#FF8B66] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="radio" className="sr-only" checked={condition === c} onChange={() => setCondition(c)} />
-                {c === "new" ? "ใหม่" : c === "used" ? "มือสอง" : "Refurb"}
+                {c === "new" ? "ใหม่" : c === "used" ? "มือสอง" : "ปรับสภาพ"}
               </label>
             ))}
           </div>

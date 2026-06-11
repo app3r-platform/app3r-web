@@ -192,7 +192,7 @@ export default function DepositPage() {
           />
           {pointsPreview > 0 && (
             <p className="text-xs text-[#F04E20] mt-1.5">
-              จะได้รับ <strong>{pointsPreview.toLocaleString()} Silver Points</strong>
+              จะได้รับ <strong>{pointsPreview.toLocaleString()} พอยต์เงิน (Silver Point)</strong>
               {" "}(อัตรา {THB_PER_POINT} บาท/แต้ม)
             </p>
           )}

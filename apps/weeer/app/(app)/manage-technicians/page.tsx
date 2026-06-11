@@ -38,7 +38,7 @@ function StatusBadge({ status }: { status: WeeeT["status"] }) {
 function TypeBadge({ type }: { type: WeeeT["type"] }) {
   return (
     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${type === "default" ? "bg-green-100 text-green-700" : "bg-[#FFE0D6] text-[#D63B12]"}`}>
-      {type === "default" ? "Default" : "Rented"}
+      {type === "default" ? "ประจำ" : "เช่า"}
     </span>
   );
 }
@@ -392,10 +392,10 @@ export default function ManageTechniciansPage() {
       {/* Info box */}
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-600 space-y-1">
         <div className="font-semibold text-blue-700">ℹ️ ข้อมูลบัญชี WeeeT</div>
-        <div>• Default WeeeT: สร้างอัตโนมัติเมื่อได้รับอนุมัติ — ไม่มีค่าใช้จ่าย{/* PHASE-4: D15 */}</div>
-        <div>• Rented WeeeT: หัก {GOLD_PER_WEEET} Gold/ปี — ต้องต่ออายุทุกปี</div>
-        <div>• สลับเข้าใช้: redirect ไป WeeeT app พร้อม session ชั่วคราว</div>
-        <div>• Password: ระบบสุ่มให้ — WeeeR ส่งให้ช่างเองทาง LINE หรือโทร (ไม่มี SMS){/* PHASE-4: D16 */}</div>
+        <div>• WeeeT ประจำ (Default): สร้างอัตโนมัติเมื่อได้รับอนุมัติ — ไม่มีค่าใช้จ่าย{/* PHASE-4: D15 */}</div>
+        <div>• WeeeT เช่า (Rented): หัก {GOLD_PER_WEEET} พอยต์ทอง (Gold)/ปี — ต้องต่ออายุทุกปี</div>
+        <div>• สลับเข้าใช้: นำทาง (redirect) ไปแอป WeeeT พร้อมเซสชัน (session) ชั่วคราว</div>
+        <div>• รหัสผ่าน (Password): ระบบสุ่มให้ — WeeeR ส่งให้ช่างเองทาง LINE หรือโทร (ไม่มี SMS){/* PHASE-4: D16 */}</div>
       </div>
 
       {/* Modals */}

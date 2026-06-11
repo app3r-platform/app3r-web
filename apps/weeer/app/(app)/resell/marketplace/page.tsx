@@ -102,7 +102,7 @@ export default function ResellMarketplacePage() {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <Link href="/resell" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">🛒 Marketplace</h1>
+        <h1 className="text-xl font-bold text-gray-900">🛒 ตลาดซื้อขาย (Marketplace)</h1>
         <span className="ml-auto text-xs text-gray-400">{listings.length} รายการ</span>
       </div>
 

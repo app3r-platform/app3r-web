@@ -171,7 +171,7 @@ export default function NewPartsRequestPage() {
         <div className="grid grid-cols-2 gap-3">
           {/* Part number */}
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">Part Number (ถ้ามี)</label>
+            <label className="text-xs text-gray-500 mb-1 block">หมายเลขอะไหล่ (Part Number) — ถ้ามี</label>
             <input
               {...field("partNumber")}
               placeholder="เช่น CTR-001"

@@ -59,8 +59,8 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
   if (success) return (
     <div className="flex flex-col items-center justify-center h-48 text-center">
       <span className="text-4xl mb-3">📋</span>
-      <p className="text-sm font-semibold text-gray-800">เปิด Abandoned Protocol สำเร็จ</p>
-      <p className="text-xs text-gray-400 mt-1">ระบบจะแจ้งลูกค้าและติดตาม grace period</p>
+      <p className="text-sm font-semibold text-gray-800">เปิดขั้นตอนจัดการเครื่องที่ถูกทิ้ง (Abandoned Protocol) สำเร็จ</p>
+      <p className="text-xs text-gray-400 mt-1">ระบบจะแจ้งลูกค้าและติดตามระยะผ่อนผัน (grace period)</p>
     </div>
   );
   if (!job) return null;

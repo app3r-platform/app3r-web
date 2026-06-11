@@ -219,7 +219,7 @@ export default function NewServicePage() {
         {/* Info note */}
         <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
           <p className="text-xs text-blue-700">
-            💡 บันทึกเป็น <strong>draft</strong> ก่อน — กลับมาเผยแพร่ได้ที่หน้า "บริการของฉัน"
+            💡 บันทึกเป็น <strong>ฉบับร่าง (draft)</strong> ก่อน — กลับมาเผยแพร่ได้ที่หน้า "บริการของฉัน"
           </p>
         </div>
 

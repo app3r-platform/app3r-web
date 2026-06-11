@@ -169,11 +169,11 @@ export default function SettlementsPage() {
                 </div>
 
                 <div className="text-xs text-gray-500">
-                  Service: <span className="font-mono">{stl.serviceId.slice(0, 8)}…</span>
+                  รหัสบริการ (Service): <span className="font-mono">{stl.serviceId.slice(0, 8)}…</span>
                 </div>
                 {stl.bankRef && (
                   <div className="text-xs text-gray-400">
-                    Bank Ref: <span className="font-mono">{stl.bankRef}</span>
+                    อ้างอิงธนาคาร (Bank Ref): <span className="font-mono">{stl.bankRef}</span>
                   </div>
                 )}
                 <div className="text-xs text-gray-300 mt-1">

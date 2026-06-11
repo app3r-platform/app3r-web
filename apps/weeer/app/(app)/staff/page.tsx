@@ -40,8 +40,8 @@ export default function StaffPage() {
       <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-sm text-blue-800">
         <span className="shrink-0">ℹ️</span>
         <div>
-          <strong>Login as WeeeT (Impersonation):</strong> ทุกการกระทำถูกบันทึกใน Audit Log
-          Session หมดอายุอัตโนมัติใน 30 นาที — ห้าม Login ซ้อน (nested)
+          <strong>เข้าใช้งานแทน WeeeT (Impersonation):</strong> ทุกการกระทำถูกบันทึกใน บันทึกตรวจสอบ (Audit Log)
+          เซสชัน (Session) หมดอายุอัตโนมัติใน 30 นาที — ห้ามเข้าใช้งานซ้อน (nested)
         </div>
       </div>
 

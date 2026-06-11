@@ -701,7 +701,7 @@ export default function InventoryPage() {
           <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
             <h2 className="font-bold text-gray-900">🛒 ลงขายในตลาดอะไหล่ (Parts Marketplace)</h2>
             <p className="text-sm text-gray-600">
-              ต้องการลงขาย <span className="font-semibold">{marketTarget.name}</span> ใน Parts B2B Marketplace?
+              ต้องการลงขาย <span className="font-semibold">{marketTarget.name}</span> ในตลาดอะไหล่ B2B (Parts Marketplace)?
             </p>
             <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 space-y-1.5 text-xs">
               <div className="flex justify-between">

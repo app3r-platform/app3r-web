@@ -15,6 +15,8 @@ function removeToken(): void {
 }
 
 const provider = createDevTokenProvider({
+  // mockMode: inline env ใน app chunk (config injection · CMD #115-AH · กัน BUG-3)
+  mockMode: process.env.NEXT_PUBLIC_DEV_NAV === "true",
   saveToken,
   removeToken,
   // payload เดิมของ WeeeR (role weeer · shop_id 10 · phone)

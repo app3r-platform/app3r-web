@@ -13,7 +13,7 @@ const CONDITIONS: { label: string; value: Part["condition"] | "all" }[] = [
   { label: "ทั้งหมด", value: "all" },
   { label: "ใหม่", value: "new" },
   { label: "มือสอง", value: "used" },
-  { label: "Refurb", value: "refurbished" },
+  { label: "ปรับสภาพ", value: "refurbished" },
 ];
 
 export default function PartsListPage() {

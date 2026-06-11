@@ -14,7 +14,7 @@ type Condition = "like_new" | "good" | "fair" | "broken";
 
 const DEVICE_TYPES: { value: DeviceType; label: string; icon: string }[] = [
   { value: "iphone", label: "iPhone",      icon: "📱" },
-  { value: "notebook", label: "Notebook",  icon: "💻" },
+  { value: "notebook", label: "โน้ตบุ๊ก",  icon: "💻" },
   { value: "washing_machine", label: "เครื่องซักผ้า", icon: "🫧" },
   { value: "ac", label: "แอร์",           icon: "❄️" },
 ];
