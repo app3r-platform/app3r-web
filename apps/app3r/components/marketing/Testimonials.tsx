@@ -5,7 +5,7 @@
 import Image from 'next/image';
 import { getTestimonials } from '@/lib/testimonials-api';
 import type { TestimonialDto } from '@/lib/testimonials-api';
-import { ConditionalSection } from '@/components/common';
+import { ConditionalSection, SocialIcon } from '@/components/common';
 
 // ============================================================
 // Social links — mockup stub (ENV-overridable, ไม่ hardcode domain จริง)
@@ -19,9 +19,9 @@ interface SocialLink {
 }
 
 const SOCIAL_LINKS: SocialLink[] = [
-  { key: 'facebook', label: 'Facebook', icon: 'f', href: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK ?? '#' },
-  { key: 'line', label: 'LINE', icon: 'L', href: process.env.NEXT_PUBLIC_SOCIAL_LINE ?? '#' },
-  { key: 'instagram', label: 'Instagram', icon: 'ig', href: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM ?? '#' },
+  { key: 'facebook', label: 'Facebook', icon: 'facebook', href: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK ?? '#' },
+  { key: 'line', label: 'LINE', icon: 'line', href: process.env.NEXT_PUBLIC_SOCIAL_LINE ?? '#' },
+  { key: 'instagram', label: 'Instagram', icon: 'instagram', href: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM ?? '#' },
 ];
 
 /** ตรวจสอบว่า string เป็น URL (http/https หรือ /) สำหรับ Next/Image */
@@ -97,7 +97,7 @@ export default async function Testimonials() {
                     aria-label={s.label}
                     className="w-10 h-10 rounded-full bg-white border border-website-brand-200 flex items-center justify-center text-website-brand-700 font-bold text-sm hover:bg-website-brand-100 transition"
                   >
-                    {s.icon}
+                    <SocialIcon platform={s.icon} />
                   </a>
                 ))}
               </div>
