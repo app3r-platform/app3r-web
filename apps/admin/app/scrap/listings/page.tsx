@@ -192,9 +192,9 @@ export default function ScrapListingsPage() {
             onChange={e => { setFilterGrade(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-admin-primary">
             <option value="">ทุกเกรด</option>
-            <option value="grade_A">Grade A</option>
-            <option value="grade_B">Grade B</option>
-            <option value="grade_C">Grade C</option>
+            <option value="grade_A">เกรด A</option>
+            <option value="grade_B">เกรด B</option>
+            <option value="grade_C">เกรด C</option>
           </select>
           <input type="text" placeholder="รหัสผู้ขาย"
             value={filterSeller} onChange={e => { setFilterSeller(e.target.value); setPage(1); }}

@@ -660,7 +660,7 @@ function Tab3Pricing() {
           ) : (
             <table className="w-full text-sm">
               <thead><tr className="text-xs text-gray-500 border-b border-gray-100 text-left">
-                <th className="px-5 py-2">ลำดับ</th><th className="px-5 py-2">Key</th><th className="px-5 py-2">ป้ายกำกับ</th><th className="px-5 py-2">ประเภท</th><th className="px-5 py-2">ตัวเลือก</th><th className="px-5 py-2"></th>
+                <th className="px-5 py-2">ลำดับ</th><th className="px-5 py-2">คีย์</th><th className="px-5 py-2">ป้ายกำกับ</th><th className="px-5 py-2">ประเภท</th><th className="px-5 py-2">ตัวเลือก</th><th className="px-5 py-2"></th>
               </tr></thead>
               <tbody className="divide-y divide-gray-100">
                 {catDims.map(d => (
