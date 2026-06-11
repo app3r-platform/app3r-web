@@ -6,9 +6,11 @@
     "./dal": "./dal/index.ts",
     "./dal/weeeu": "./dal/weeeu.types.ts",
     "./src/api-client": "./src/api-client.ts",
-    "./src/mock-fixtures": "./src/mock-fixtures/index.ts"
+    "./src/mock-fixtures": "./src/mock-fixtures/index.ts",
+    "./src/mock-runtime": "./src/mock-runtime/index.ts"
   },
   "devDependencies": {
+    "@types/node": "^20",
     "typescript": "^5"
   }
 }
