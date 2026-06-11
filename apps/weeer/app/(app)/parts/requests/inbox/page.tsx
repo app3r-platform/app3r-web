@@ -52,7 +52,7 @@ export default function RequestsInboxPage() {
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="text-gray-500">← กลับ</button>
           <div>
-            <h1 className="text-lg font-bold text-gray-800">Inbox คำขอซื้ออะไหล่</h1>
+            <h1 className="text-lg font-bold text-gray-800">กล่องคำขอซื้ออะไหล่ (Inbox)</h1>
             <p className="text-xs text-gray-500">ร้านอื่นต้องการอะไหล่จากคุณ</p>
           </div>
         </div>

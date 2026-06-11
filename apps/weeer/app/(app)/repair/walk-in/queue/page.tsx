@@ -34,7 +34,7 @@ export default function WalkInQueuePage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Walk-in Queue</h1>
+          <h1 className="text-xl font-bold text-gray-900">คิวลูกค้าหน้าร้าน (Walk-in)</h1>
           <p className="text-xs text-gray-500 mt-0.5">ลูกค้าเดินมาหน้าร้าน — รับเครื่อง ตรวจ ซ่อม</p>
         </div>
         <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>

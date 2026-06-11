@@ -34,7 +34,7 @@ export default function ParcelQueuePage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Parcel Queue</h1>
+          <h1 className="text-xl font-bold text-gray-900">คิวงานพัสดุ (Parcel Queue)</h1>
           <p className="text-xs text-gray-500 mt-0.5">งานรับซ่อมทางไปรษณีย์ — ตกลง Shipping, รับพัสดุ, ซ่อม, ส่งคืน</p>
         </div>
         <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>

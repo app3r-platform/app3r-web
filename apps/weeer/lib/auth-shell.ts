@@ -4,7 +4,7 @@
 // Mock-fixture fallback: ใช้เมื่อ Backend Wave0 ยังไม่ deploy
 // TODO: REMOVE mock fallbacks BEFORE PROD
 
-import { apiGet, apiPost } from "./api-client";
+import { apiGet, apiPost, ERR_UNAUTHORIZED } from "./api-client";
 import { MOCK_WEEER_PROFILE } from "./mock-data/weeer-profile";
 
 // ── Response types (d2 contract shapes) ──────────────────────────────────────
@@ -73,13 +73,9 @@ export async function loginWithCredentials(
     return { ok: true };
   }
 
-  // TODO: REMOVE before prod — mock fallback เมื่อ API ยังไม่ deploy
-  if (
-    process.env.NODE_ENV === "development" &&
-    (result.error.startsWith("HTTP 404") ||
-      result.error.startsWith("HTTP 50") ||
-      result.error.startsWith("Network"))
-  ) {
+  // TODO: REMOVE before prod — mock fallback เมื่อ Backend ยังไม่ deploy
+  // RC2: 401 จริง = credential ผิด → คืน error · อื่นๆ (BACKEND_UNAVAILABLE) → dev fallback mock
+  if (process.env.NODE_ENV === "development" && result.error !== ERR_UNAUTHORIZED) {
     storeAuth(
       "mock-token-wave1",
       MOCK_WEEER_PROFILE.shopName,
@@ -113,13 +109,8 @@ export async function verifyOtpCode(
     return { ok: true };
   }
 
-  // TODO: REMOVE before prod — mock fallback
-  if (
-    process.env.NODE_ENV === "development" &&
-    (result.error.startsWith("HTTP 404") ||
-      result.error.startsWith("HTTP 50") ||
-      result.error.startsWith("Network"))
-  ) {
+  // TODO: REMOVE before prod — mock fallback (BACKEND_UNAVAILABLE → dev pass · 401 → error)
+  if (process.env.NODE_ENV === "development" && result.error !== ERR_UNAUTHORIZED) {
     return { ok: true };
   }
 

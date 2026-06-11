@@ -248,6 +248,9 @@ importers:
       '@app3r/dal':
         specifier: workspace:*
         version: link:../../packages/shared/dal
+      '@app3r/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@app3r/ui':
         specifier: workspace:*
         version: link:../../packages/ui

@@ -47,7 +47,15 @@ export default function MarketplaceDetailPage({
       catalogApi
         .get(id)
         .then((c) => setListing(mapCatalogToPartListing(c)))
-        .catch(() => setListing(null));
+        .catch(() => {
+          // RC3: catalog API ไม่พร้อม → fallback mock listing (ไม่ค้างหน้าโหลด)
+          const found =
+            getListings().find((l) => l.id === id) ??
+            PART_LISTINGS_MOCK.find((l) => l.id === id) ??
+            PART_LISTINGS_MOCK[0] ??
+            null;
+          setListing(found);
+        });
       return;
     }
     const stored = getListings();

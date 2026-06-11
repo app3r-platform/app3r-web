@@ -37,7 +37,7 @@ export default function PickupQueuePage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Pickup Queue</h1>
+          <h1 className="text-xl font-bold text-gray-900">คิวงานรับถึงที่ (Pickup Queue)</h1>
           <p className="text-xs text-gray-500 mt-0.5">งานรับ-ส่งเครื่องถึงบ้าน — มอบหมายช่าง ติดตาม ซ่อม ส่งคืน</p>
         </div>
         <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>

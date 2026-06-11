@@ -41,7 +41,7 @@ export default function MyRequestsPage() {
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="text-gray-500">← กลับ</button>
           <div>
-            <h1 className="text-lg font-bold text-gray-800">Request ของฉัน</h1>
+            <h1 className="text-lg font-bold text-gray-800">คำขอซื้อของฉัน (Request)</h1>
             <p className="text-xs text-gray-500">คำขอซื้ออะไหล่ที่ส่งออกไป</p>
           </div>
         </div>

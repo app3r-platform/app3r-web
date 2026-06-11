@@ -69,7 +69,7 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
     <div className="space-y-5 max-w-xl">
       <div className="flex items-center gap-3">
         <Link href={`/repair/walk-in/${id}/ready`} className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">Abandoned Device Protocol</h1>
+        <h1 className="text-xl font-bold text-gray-900">เครื่องที่ลูกค้าทิ้งไว้ (Abandoned Device)</h1>
       </div>
 
       {/* Warning */}
