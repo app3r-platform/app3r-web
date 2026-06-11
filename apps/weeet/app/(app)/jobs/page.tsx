@@ -56,9 +56,9 @@ type TabKey = "all" | "on_site" | "pickup" | "parcel" | "done";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "ทั้งหมด" },
-  { key: "on_site", label: "On-site" },
-  { key: "pickup", label: "🚛 Pickup" },
-  { key: "parcel", label: "📦 Parcel" },
+  { key: "on_site", label: "ออนไซต์" },
+  { key: "pickup", label: "🚛 รับเครื่อง" },
+  { key: "parcel", label: "📦 พัสดุ" },
   { key: "done", label: "เสร็จ/ปิด" },
 ];
 

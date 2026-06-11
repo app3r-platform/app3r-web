@@ -1,14 +1,38 @@
 import type { RepairJob, DiagnosePayload } from "./types";
-import { getDevTestToken } from "./dev-auth"; // TODO: REMOVE BEFORE PROD
+import { createDevTokenProvider, ERR_BACKEND_UNAVAILABLE } from "@app3r/shared/src/mock-runtime";
 
 export const API_BASE = "/api/v1";
 
+// BUG-3 fix: config injection — inline env ใน app chunk (CMD #115-AH)
+// ⚠️ อ่าน process.env ตรงนี้ (app chunk) ไม่ผ่าน shared isMockMode() —
+//    Next.js inline env เฉพาะ chunk ที่อ่านเอง · ข้าม package boundary = false ใน browser (BUG-3)
+const MOCK_MODE = process.env.NEXT_PUBLIC_DEV_NAV === "true";
+
+// Dev token provider — wire mockMode (REQUIRED หลัง CMD #115-AH)
+// mock mode → bypass token ทันที (ไม่ยิง /_dev endpoint = ไม่มี 500)
+const devToken = createDevTokenProvider({
+  mockMode: MOCK_MODE,
+  saveToken: (t) => {
+    if (typeof window !== "undefined") sessionStorage.setItem("weeet_dev_token", t);
+  },
+  removeToken: () => {
+    if (typeof window !== "undefined") sessionStorage.removeItem("weeet_dev_token");
+  },
+  endpoint: `${API_BASE}/_dev/get-test-token`,
+  payload: { user_id: 1, role: "weeet", phone: "+66812345678", shop_id: 10, weeer_id: 10 },
+});
+
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  // TODO: REMOVE BEFORE PROD — dev auth bypass
+  // BUG-3 fix: mock mode → ห้ามยิง backend · page .catch() → fallback mock
+  //   MOCK_MODE = inline ใน app chunk (ไม่ผ่าน shared isMockMode = กัน BUG-3)
+  if (MOCK_MODE) {
+    throw new Error(ERR_BACKEND_UNAVAILABLE);
+  }
+
   let token: string | null = null;
   if (process.env.NODE_ENV === "development") {
     try {
-      token = await getDevTestToken();
+      token = await devToken.getDevTestToken();
     } catch {
       // Dev token unavailable — proceed without token
     }

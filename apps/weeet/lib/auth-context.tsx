@@ -30,14 +30,20 @@ const AuthContext = createContext<AuthContextValue>({
 
 const SESSION_KEY = "weeet_auth";
 
+// DEV_NAV bypass: compute initial auth synchronously (กัน race condition กับ AppLayout useEffect)
+// useEffect ของ child (AppLayout) รันก่อน parent (AuthProvider) → ต้องใช้ initial state ไม่ใช่ useEffect
+function getInitialAuth(): AuthState {
+  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+    return { isAuthenticated: true, technician: mockTechnician, isImpersonated: false };
+  }
+  return { isAuthenticated: false, technician: null, isImpersonated: false };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [auth, setAuth] = useState<AuthState>({
-    isAuthenticated: false,
-    technician: null,
-    isImpersonated: false,
-  });
+  const [auth, setAuth] = useState<AuthState>(getInitialAuth);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return; // bypass handled in initial state
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
       if (stored) setAuth(JSON.parse(stored));
