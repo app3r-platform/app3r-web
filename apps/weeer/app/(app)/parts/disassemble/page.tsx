@@ -115,17 +115,17 @@ export default function PartsDisassemblePage() {
           ) : (
             <select value={selectedJobId} onChange={e => setSelectedJobId(e.target.value)}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]">
-              <option value="">— ไม่ระบุ ScrapJob —</option>
+              <option value="">— ไม่ระบุงานซาก (ScrapJob) —</option>
               {scrapJobs.map(j => (
                 <option key={j.id} value={j.id}>
-                  {j.scrapItemDescription ?? `ScrapJob ${j.id.slice(0, 8)}`}
+                  {j.scrapItemDescription ?? `งานซาก (ScrapJob) ${j.id.slice(0, 8)}`}
                   {j.conditionGrade ? ` (เกรด ${j.conditionGrade.replace("grade_", "")})` : ""}
                 </option>
               ))}
             </select>
           )}
           {scrapJobs.length === 0 && !jobsLoading && (
-            <p className="text-xs text-gray-400 mt-1">ไม่มี ScrapJob ที่พร้อม — สามารถเพิ่มอะไหล่โดยไม่ระบุซากได้</p>
+            <p className="text-xs text-gray-400 mt-1">ไม่มีงานซาก (ScrapJob) ที่พร้อม — สามารถเพิ่มอะไหล่โดยไม่ระบุซากได้</p>
           )}
         </div>
 

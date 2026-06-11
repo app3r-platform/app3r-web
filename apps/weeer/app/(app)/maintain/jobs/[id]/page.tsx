@@ -123,7 +123,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-start gap-2">
           <span className="text-lg">🔧</span>
           <div>
-            <p className="text-sm font-semibold text-gray-700">ปิดงาน Maintain → ส่งต่อซ่อม</p>
+            <p className="text-sm font-semibold text-gray-700">ปิดงานบำรุงรักษา (Maintain) → ส่งต่อซ่อม</p>
             <p className="text-xs text-gray-500 mt-0.5">งานนี้ถูกปิดและส่งต่อเป็นงานซ่อมแล้ว</p>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
               <span className="font-medium text-gray-800">{job.offerData.warranty.days} วัน</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">No-show fee</span>
+              <span className="text-gray-600">ค่าปรับไม่มาตามนัด (No-show fee)</span>
               <span className="font-medium text-gray-800">{job.offerData.noShow.fee.toLocaleString()} pts</span>
             </div>
             <div className="flex justify-between">

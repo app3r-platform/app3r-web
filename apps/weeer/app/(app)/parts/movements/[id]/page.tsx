@@ -94,11 +94,11 @@ export default function MovementDetailPage({ params }: { params: Promise<{ id: s
         )}
 
         <div className="border-t border-gray-50 pt-3">
-          <p className="text-xs text-gray-400 mb-1">Movement ID</p>
+          <p className="text-xs text-gray-400 mb-1">รหัสการเคลื่อนไหวสต็อก (Movement ID)</p>
           <p className="text-xs text-gray-400 font-mono break-all">{movement.id}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-400 mb-1">Part ID</p>
+          <p className="text-xs text-gray-400 mb-1">รหัสอะไหล่ (Part ID)</p>
           <p className="text-xs text-gray-400 font-mono break-all">{movement.partId}</p>
         </div>
       </div>

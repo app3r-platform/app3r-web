@@ -318,7 +318,7 @@ export default function PartsOrderDetailPage({
             <div className="flex items-center gap-2 bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl px-3 py-2.5">
               <span className="text-base">📦</span>
               <div>
-                <p className="text-xs text-[#F04E20]">Tracking Number</p>
+                <p className="text-xs text-[#F04E20]">เลขพัสดุ (Tracking Number)</p>
                 <p className="text-sm font-mono font-semibold text-[#D63B12]">{order.trackingNumber}</p>
               </div>
             </div>
@@ -389,7 +389,7 @@ export default function PartsOrderDetailPage({
               href={`/parts/orders/${order.id}/dispute`}
               className="flex items-center justify-center gap-1.5 w-full text-sm text-red-400 hover:text-red-600 py-2"
             >
-              ⚠️ แจ้งปัญหา / เปิด Dispute
+              ⚠️ แจ้งปัญหา / เปิดข้อพิพาท (Dispute)
             </Link>
           )}
         </div>

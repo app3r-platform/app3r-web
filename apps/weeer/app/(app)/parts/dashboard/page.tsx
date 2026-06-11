@@ -31,7 +31,7 @@ export default function PartsDashboardPage() {
       <MockAnnoOrigin from="R-52" />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Parts Dashboard</h1>
+          <h1 className="text-xl font-bold text-gray-900">แดชบอร์ดอะไหล่ (Parts Dashboard)</h1>
           <p className="text-xs text-gray-500 mt-0.5">ภาพรวมสต๊อกอะไหล่ — ใกล้หมด / ล่าสุด / มูลค่าคงคลัง</p>
         </div>
         <Link href="/parts" className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">

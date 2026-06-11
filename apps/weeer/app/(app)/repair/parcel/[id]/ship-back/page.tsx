@@ -32,7 +32,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!returnTracking.trim()) e.tracking = "กรุณากรอกเลข Tracking ขาออก";
+    if (!returnTracking.trim()) e.tracking = "กรุณากรอกเลขพัสดุขาออก (Tracking)";
     if (!postPhotoGate) e.postPhoto = "กรุณายืนยันถ่ายรูปหลังซ่อม";
     if (!packPhotoGate) e.packPhoto = "กรุณายืนยันถ่ายรูปการแพ็ค";
     return e;
@@ -156,7 +156,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
         {/* Return tracking */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            เลข Tracking ขาออก <span className="text-red-500">*</span>
+            เลขพัสดุขาออก (Tracking) <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -171,7 +171,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
         <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 flex items-start gap-2">
           <span className="text-base">🚀</span>
           <p className="text-xs text-[#D63B12]">
-            เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>กำลังส่งคืน</strong> ลูกค้าจะได้รับแจ้งเลข Tracking โดยอัตโนมัติ
+            เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>กำลังส่งคืน</strong> ลูกค้าจะได้รับแจ้งเลขพัสดุ (Tracking) โดยอัตโนมัติ
           </p>
         </div>
 

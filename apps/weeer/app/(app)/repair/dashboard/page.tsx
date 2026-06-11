@@ -37,7 +37,7 @@ export default function RepairDashboardPage() {
       <MockAnnoOrigin from="R-64" />
       <MockAnnoXApp entries={[{ app: "WeeeU", screen: "Dashboard", url: "http://localhost:3002/dashboard" }]} />
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">ซ่อม — Dashboard</h1>
+        <h1 className="text-xl font-bold text-gray-900">ซ่อม — แดชบอร์ด (Dashboard)</h1>
         <Link href="/repair/jobs" className="text-sm text-[#D63B12] hover:underline font-medium">ดูงานทั้งหมด →</Link>
       </div>
 

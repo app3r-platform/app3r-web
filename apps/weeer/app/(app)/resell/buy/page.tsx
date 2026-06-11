@@ -124,7 +124,7 @@ export default function ResellBuyPage() {
         <div>
           {/* §7 เคส B6 */}
           <h1 className="text-xl font-bold text-gray-900">📥 รับซื้อมือสอง</h1>
-          <p className="text-xs text-gray-500 mt-0.5">ตีราคารับซื้อ + สแกน Barcode เพิ่มเข้าสต๊อก</p>
+          <p className="text-xs text-gray-500 mt-0.5">ตีราคารับซื้อ + สแกนบาร์โค้ด (Barcode) เพิ่มเข้าสต๊อก</p>
         </div>
       </div>
 
@@ -132,8 +132,8 @@ export default function ResellBuyPage() {
       <Link href="/resell/buy/wizard"
         className="flex items-center justify-between bg-[#FCEAE3] border border-[#FFD5C4] rounded-2xl p-5 hover:bg-[#FAD9CB] transition-colors group">
         <div className="space-y-1">
-          <p className="text-sm font-bold text-[#4A1B0C]">🧮 ประเมินราคารับซื้อ (Generic Wizard)</p>
-          <p className="text-xs text-[#7A3A20]">5 ขั้น · Generic-First · รองรับทุกประเภทสินค้า</p>
+          <p className="text-sm font-bold text-[#4A1B0C]">🧮 ประเมินราคารับซื้อ — ตัวช่วยทั่วไป (Generic Wizard)</p>
+          <p className="text-xs text-[#7A3A20]">5 ขั้น · แบบทั่วไปก่อน (Generic-First) · รองรับทุกประเภทสินค้า</p>
           <p className="text-xs text-[#AA5030]">applies_when · reject_rules ทำงานอัตโนมัติ</p>
         </div>
         <span className="text-[#FF663A] text-2xl group-hover:translate-x-1 transition-transform">→</span>
@@ -142,7 +142,7 @@ export default function ResellBuyPage() {
       {/* ────────────── B6 WIZARD (Legacy 4-step Hardcoded) ─────────────── */}
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-sm font-bold text-[#FF663A]">B6 Wizard</span>
+          <span className="text-sm font-bold text-[#FF663A]">ตัวช่วย B6 (Wizard)</span>
           <span className="text-xs text-gray-400">— ตีราคารับซื้อ U→R</span>
           {[1,2,3,4].map(s => (
             <div key={s} className={`w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold
@@ -316,8 +316,8 @@ export default function ResellBuyPage() {
 
       {/* ────────────── BARCODE SCANNER ───────────────────────────────────── */}
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
-        <p className="text-sm font-bold text-gray-800 mb-1">📷 สแกน Barcode / SKU</p>
-        <p className="text-xs text-gray-400 mb-4">พิมพ์ barcode หรือ SKU เพื่อค้นหาและเพิ่มเข้า inventory</p>
+        <p className="text-sm font-bold text-gray-800 mb-1">📷 สแกนบาร์โค้ด (Barcode) / SKU</p>
+        <p className="text-xs text-gray-400 mb-4">พิมพ์บาร์โค้ด (barcode) หรือ SKU เพื่อค้นหาและเพิ่มเข้าคลัง (inventory)</p>
 
         <div className="flex gap-2 mb-4">
           <input type="text" value={barcodeInput} onChange={e => setBarcodeInput(e.target.value)}
@@ -334,7 +334,7 @@ export default function ResellBuyPage() {
 
         {barcodeNotFound && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-            <p className="text-sm text-red-700">❌ ไม่พบสินค้าในระบบ — เพิ่มด้วย B6 Wizard หรือ <Link href="/resell/inventory/new" className="underline">เพิ่มด้วยตนเอง</Link></p>
+            <p className="text-sm text-red-700">❌ ไม่พบสินค้าในระบบ — เพิ่มด้วยตัวช่วย B6 (Wizard) หรือ <Link href="/resell/inventory/new" className="underline">เพิ่มด้วยตนเอง</Link></p>
           </div>
         )}
 
@@ -356,7 +356,7 @@ export default function ResellBuyPage() {
 
         {barcodeDone && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-            <p className="text-base font-bold text-green-700">✅ เพิ่มเข้า Inventory แล้ว</p>
+            <p className="text-base font-bold text-green-700">✅ เพิ่มเข้าคลังสินค้า (Inventory) แล้ว</p>
             <p className="text-xs text-gray-500 mt-1">{barcodeResult?.name}</p>
             <button onClick={() => { setBarcodeDone(false); setBarcodeResult(null); setBarcodeInput(""); }}
               className="mt-3 text-xs text-[#FF663A] hover:underline">สแกนชิ้นต่อไป</button>

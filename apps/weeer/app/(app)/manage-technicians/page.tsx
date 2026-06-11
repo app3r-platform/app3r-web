@@ -246,8 +246,8 @@ function SwitchWeeeTModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => voi
         </p>
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700 space-y-1">
           <div className="font-semibold">⚠️ หมายเหตุ</div>
-          <div>• Session ชั่วคราว 30 นาที — หมดเวลาแล้ว logout อัตโนมัติ</div>
-          <div>• ระบบจะออก JWT sub_account context ใหม่ (HQ-7)</div>
+          <div>• เซสชัน (Session) ชั่วคราว 30 นาที — หมดเวลาแล้วออกจากระบบ (logout) อัตโนมัติ</div>
+          <div>• ระบบจะออกโทเคน JWT (sub_account) ใหม่ (HQ-7)</div>
           <div>• คุณจะถูก redirect ไปยัง WeeeT app</div>
         </div>
         <div className="flex gap-3">

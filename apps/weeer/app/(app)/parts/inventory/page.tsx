@@ -422,7 +422,7 @@ export default function InventoryPage() {
                   <th className="text-right px-4 py-3">จอง</th>
                   <th className="text-right px-4 py-3">ใช้ได้</th>
                   <th className="text-right px-4 py-3">ราคา</th>
-                  <th className="px-4 py-3 text-center">Actions</th>
+                  <th className="px-4 py-3 text-center">การดำเนินการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -532,7 +532,7 @@ export default function InventoryPage() {
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 block mb-1">Low-stock threshold</label>
+                <label className="text-xs font-medium text-gray-600 block mb-1">ระดับสต็อกต่ำ (Low-stock threshold)</label>
                 <input type="number" min={1} value={form.lowStockThreshold}
                   onChange={(e) => setForm((f) => ({ ...f, lowStockThreshold: Number(e.target.value) }))}
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
@@ -699,7 +699,7 @@ export default function InventoryPage() {
       {marketTarget && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
-            <h2 className="font-bold text-gray-900">🛒 ลงขายใน Parts Marketplace</h2>
+            <h2 className="font-bold text-gray-900">🛒 ลงขายในตลาดอะไหล่ (Parts Marketplace)</h2>
             <p className="text-sm text-gray-600">
               ต้องการลงขาย <span className="font-semibold">{marketTarget.name}</span> ใน Parts B2B Marketplace?
             </p>

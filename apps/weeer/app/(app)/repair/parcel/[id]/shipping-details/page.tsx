@@ -148,7 +148,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
   if (success) return (
     <div className="flex flex-col items-center justify-center h-48 text-center">
       <span className="text-4xl mb-3">📦</span>
-      <p className="text-sm font-semibold text-green-700">ยืนยัน Shipping Details สำเร็จ</p>
+      <p className="text-sm font-semibold text-green-700">ยืนยันรายละเอียดการจัดส่ง (Shipping Details) สำเร็จ</p>
       <p className="text-xs text-gray-400 mt-1">ลูกค้าจะได้รับที่อยู่ส่งของ</p>
     </div>
   );
@@ -158,7 +158,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
     <div className="space-y-5 max-w-xl">
       <div className="flex items-center gap-3">
         <Link href="/repair/parcel/queue" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">ตกลง Shipping Details</h1>
+        <h1 className="text-xl font-bold text-gray-900">ตกลงรายละเอียดการจัดส่ง (Shipping Details)</h1>
       </div>
 
       {/* Job summary */}

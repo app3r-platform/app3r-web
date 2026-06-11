@@ -187,7 +187,7 @@ export default function NewServicePage() {
           </div>
           {errors.pointAmount
             ? <p className="text-xs text-red-500 mt-1">{errors.pointAmount}</p>
-            : <p className="text-xs text-gray-400 mt-1">ใช้สำหรับ Sub-5 Progress Tracker + billing</p>
+            : <p className="text-xs text-gray-400 mt-1">ใช้สำหรับติดตามความคืบหน้า Sub-5 (Progress Tracker) + การเรียกเก็บเงิน (billing)</p>
           }
         </div>
 

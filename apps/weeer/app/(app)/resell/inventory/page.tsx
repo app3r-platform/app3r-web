@@ -102,7 +102,7 @@ export default function ResellInventoryPage() {
       <div className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl px-4 py-3 flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-[#4A1B0C]">📥 รับซื้อมือสองจากลูกค้า</p>
-          <p className="text-xs text-[#FF9C80] mt-0.5">ใช้ B6 wizard ตีราคา + สแกน Barcode เพิ่มเข้าสต๊อก</p>
+          <p className="text-xs text-[#FF9C80] mt-0.5">ใช้ตัวช่วย B6 (Wizard) ตีราคา + สแกนบาร์โค้ด (Barcode) เพิ่มเข้าสต๊อก</p>
         </div>
         <Link href="/resell/buy"
           className="bg-[#FF663A] hover:bg-[#D8491F] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shrink-0 ml-3">

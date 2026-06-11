@@ -282,7 +282,7 @@ export default function MyOrderDetailPage({
         {/* Tracking */}
         {order.trackingNumber && (
           <div className="bg-orange-50 rounded-lg px-3 py-2 text-xs">
-            📦 Tracking:{" "}
+            📦 เลขพัสดุ (Tracking):{" "}
             <span className="font-mono font-medium text-gray-800">{order.trackingNumber}</span>
           </div>
         )}

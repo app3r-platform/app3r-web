@@ -24,7 +24,7 @@ export default function ResellListingsNewSuccessPage() {
 
       {/* Heading */}
       <div className="space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">ลงประกาศ Resell สำเร็จ</h1>
+        <h1 className="text-xl font-bold text-gray-900">ลงประกาศขายต่อ (Resell) สำเร็จ</h1>
         <p className="text-sm font-medium text-green-700">ดำเนินการสำเร็จ</p>
       </div>
 

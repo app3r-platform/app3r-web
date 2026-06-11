@@ -27,7 +27,7 @@ export default function StaffPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">จัดการทีมช่าง (WeeeT)</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Mode 1 ฟรี 1 ตัว | Mode 2 เช่ารายปี (100 พอยต์ทอง/ปี)</p>
+          <p className="text-sm text-gray-500 mt-0.5">โหมด (Mode) 1 ฟรี 1 ตัว | โหมด 2 เช่ารายปี (100 พอยต์ทอง/ปี)</p>
         </div>
         <MockAnnoNav to="R-49">
           <button className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
@@ -76,9 +76,9 @@ export default function StaffPage() {
                 <button
                   disabled={w.status !== "active"}
                   className="flex items-center gap-1.5 text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-[#FFF1ED] hover:border-[#FF8B66] hover:text-[#D63B12] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  title="Login as WeeeT — Impersonation per CMD-015b"
+                  title="เข้าสู่ระบบแทน WeeeT (Impersonation) — CMD-015b"
                 >
-                  🔐 Login as
+                  🔐 เข้าระบบแทน (Login as)
                 </button>
                 {/* Suspend */}
                 {w.status === "active" && (
@@ -100,11 +100,11 @@ export default function StaffPage() {
       <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
         <p className="text-sm font-semibold text-orange-800 mb-1">🟠 Impersonation (Login as WeeeT) — CMD-015b</p>
         <ul className="text-xs text-orange-700 space-y-1 list-disc list-inside">
-          <li>WeeeR login as WeeeT ได้เฉพาะ WeeeT ที่เป็นของร้านตัวเอง</li>
-          <li>Session มี timeout 30 นาที (ค่า default)</li>
-          <li>Audit log บันทึกทุก action ระหว่าง session</li>
-          <li>ห้าม nested impersonation</li>
-          <li>แสดง banner สีส้ม ตลอดระหว่าง impersonation session</li>
+          <li>WeeeR เข้าระบบแทน (login as) WeeeT ได้เฉพาะ WeeeT ที่เป็นของร้านตัวเอง</li>
+          <li>เซสชัน (Session) มีหมดเวลา (timeout) 30 นาที (ค่าเริ่มต้น)</li>
+          <li>บันทึกตรวจสอบ (Audit log) ทุกการกระทำ (action) ระหว่างเซสชัน</li>
+          <li>ห้ามสวมสิทธิ์ซ้อน (nested impersonation)</li>
+          <li>แสดงแถบ (banner) สีส้ม ตลอดระหว่างการสวมสิทธิ์ (impersonation session)</li>
         </ul>
       </div>
     </div>

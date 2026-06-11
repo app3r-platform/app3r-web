@@ -97,7 +97,7 @@ export default function SettlementsPage() {
           <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-sm">← กลับ</Link>
           <div>
             <h1 className="text-xl font-bold text-gray-900">ประวัติการถอนเงิน</h1>
-            <p className="text-xs text-gray-500 mt-0.5">Settlement records — Sub-CMD-6</p>
+            <p className="text-xs text-gray-500 mt-0.5">รายการชำระบัญชี (Settlement records) — Sub-CMD-6</p>
           </div>
         </div>
         <Link

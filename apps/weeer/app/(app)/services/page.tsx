@@ -126,7 +126,7 @@ export default function ServicesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900">บริการของฉัน</h1>
-          <p className="text-xs text-gray-500 mt-0.5">จัดการ service records — title, ราคา, กำหนดเสร็จ</p>
+          <p className="text-xs text-gray-500 mt-0.5">จัดการรายการบริการ (service records) — ชื่อ (title), ราคา, กำหนดเสร็จ</p>
         </div>
         <Link
           href="/services/new"

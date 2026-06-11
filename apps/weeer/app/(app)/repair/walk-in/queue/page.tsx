@@ -37,7 +37,7 @@ export default function WalkInQueuePage() {
           <h1 className="text-xl font-bold text-gray-900">คิวลูกค้าหน้าร้าน (Walk-in)</h1>
           <p className="text-xs text-gray-500 mt-0.5">ลูกค้าเดินมาหน้าร้าน — รับเครื่อง ตรวจ ซ่อม</p>
         </div>
-        <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
+        <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← แดชบอร์ด (Dashboard)</Link>
       </div>
 
       {/* Summary cards */}
@@ -53,7 +53,7 @@ export default function WalkInQueuePage() {
           </div>
           <div className="bg-yellow-50 rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-yellow-700">{data.storage_fee_total.toLocaleString()}</p>
-            <p className="text-xs text-gray-500 mt-0.5">Storage fee (pts)</p>
+            <p className="text-xs text-gray-500 mt-0.5">ค่าฝากเก็บ (Storage fee) (pts)</p>
           </div>
         </div>
       )}
@@ -64,7 +64,7 @@ export default function WalkInQueuePage() {
       {!loading && !error && data?.items.length === 0 && (
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🚶</span>
-          <p className="text-sm">ไม่มีลูกค้า Walk-in ในขณะนี้</p>
+          <p className="text-sm">ไม่มีลูกค้าหน้าร้าน (Walk-in) ในขณะนี้</p>
         </div>
       )}
 

@@ -84,7 +84,7 @@ export default function WalkInInspectPage({ params }: { params: Promise<{ id: st
     <div className="space-y-5 max-w-xl">
       <div className="flex items-center gap-3">
         <Link href="/repair/walk-in/queue" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">ตรวจสภาพ Walk-in</h1>
+        <h1 className="text-xl font-bold text-gray-900">ตรวจสภาพลูกค้าหน้าร้าน (Walk-in)</h1>
       </div>
 
       {job && (

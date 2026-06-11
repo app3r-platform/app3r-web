@@ -72,7 +72,7 @@ export function MultiJobDashboard({
       {/* Maintain jobs */}
       {maintainJobs.length > 0 && (
         <div className="px-4 py-2">
-          <p className="text-xs font-medium text-gray-400 mb-2">🫧 งาน Maintain</p>
+          <p className="text-xs font-medium text-gray-400 mb-2">🫧 งานบำรุงรักษา (Maintain)</p>
           <div className="space-y-2">
             {maintainJobs.map((job) => (
               <Link

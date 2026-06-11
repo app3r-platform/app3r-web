@@ -111,7 +111,7 @@ export default function PickupTrackPage({ params }: { params: Promise<{ id: stri
 
       {/* Timeline */}
       <div className="bg-white border border-gray-100 rounded-xl p-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ไทม์ไลน์ (Timeline)</p>
         {timeline.length === 0 ? (
           <p className="text-sm text-gray-400 text-center py-4">ยังไม่มีประวัติ</p>
         ) : (

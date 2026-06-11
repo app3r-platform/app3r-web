@@ -134,7 +134,7 @@ export default function DisputePage() {
           <span className="font-bold text-[#D63B12]">{Number(order.totalThb).toLocaleString()} บาท</span>
         </p>
         {order.trackingNumber && (
-          <p className="text-xs text-gray-500">📦 Tracking: <span className="font-mono">{order.trackingNumber}</span></p>
+          <p className="text-xs text-gray-500">📦 เลขพัสดุ (Tracking): <span className="font-mono">{order.trackingNumber}</span></p>
         )}
       </div>
 

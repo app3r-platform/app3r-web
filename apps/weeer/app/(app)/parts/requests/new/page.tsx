@@ -87,7 +87,7 @@ export default function NewPartsRequestPage() {
       <div className="px-4 pt-10 pb-4 text-center space-y-6">
         <p className="text-6xl">📢</p>
         <div>
-          <h2 className="text-xl font-bold text-gray-800">ส่ง Broadcast แล้ว!</h2>
+          <h2 className="text-xl font-bold text-gray-800">ส่งกระจายคำขอ (Broadcast) แล้ว!</h2>
           <p className="text-sm text-gray-500 mt-1">ร้านอื่นจะเห็นคำขอของคุณในอีกไม่กี่วินาที</p>
         </div>
         <div className="flex gap-3 justify-center">
@@ -124,7 +124,7 @@ export default function NewPartsRequestPage() {
         <button onClick={() => router.back()} className="text-gray-500">← กลับ</button>
         <div>
           <h1 className="text-lg font-bold text-gray-800">ขอซื้ออะไหล่</h1>
-          <p className="text-xs text-gray-500">Broadcast ไปยังร้านอื่น</p>
+          <p className="text-xs text-gray-500">กระจายคำขอ (Broadcast) ไปยังร้านอื่น</p>
         </div>
       </div>
 

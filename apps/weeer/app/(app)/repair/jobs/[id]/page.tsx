@@ -134,7 +134,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
       {/* Timeline */}
       <div className="bg-white border border-gray-100 rounded-xl p-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ไทม์ไลน์ (Timeline)</p>
         <div className="space-y-3">
           {TIMELINE_STATES.map((step, i) => {
             const done = i < currentStep;

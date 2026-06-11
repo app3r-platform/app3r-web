@@ -60,7 +60,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
 
       {order.trackingNumber && (
         <p className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-1.5">
-          📦 Tracking: <span className="font-mono font-medium text-gray-700">{order.trackingNumber}</span>
+          📦 เลขพัสดุ (Tracking): <span className="font-mono font-medium text-gray-700">{order.trackingNumber}</span>
         </p>
       )}
 

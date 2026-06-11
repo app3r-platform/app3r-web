@@ -214,7 +214,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
 
         {/* ── แกน 4: No-show ── */}
         <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-3">
-          <p className="text-sm font-semibold text-gray-800">🚫 แกน 4 — No-show fee</p>
+          <p className="text-sm font-semibold text-gray-800">🚫 แกน 4 — ค่าปรับไม่มาตามนัด (No-show fee)</p>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-gray-500 mb-1">ค่า No-show (pts)</label>

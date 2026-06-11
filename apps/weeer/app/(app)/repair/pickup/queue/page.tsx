@@ -40,7 +40,7 @@ export default function PickupQueuePage() {
           <h1 className="text-xl font-bold text-gray-900">คิวงานรับถึงที่ (Pickup Queue)</h1>
           <p className="text-xs text-gray-500 mt-0.5">งานรับ-ส่งเครื่องถึงบ้าน — มอบหมายช่าง ติดตาม ซ่อม ส่งคืน</p>
         </div>
-        <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
+        <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← แดชบอร์ด (Dashboard)</Link>
       </div>
 
       {/* Summary */}
@@ -66,7 +66,7 @@ export default function PickupQueuePage() {
       {!loading && !error && data?.items.length === 0 && (
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🚛</span>
-          <p className="text-sm">ไม่มีงาน Pickup ในขณะนี้</p>
+          <p className="text-sm">ไม่มีงานรับถึงที่ (Pickup) ในขณะนี้</p>
         </div>
       )}
 

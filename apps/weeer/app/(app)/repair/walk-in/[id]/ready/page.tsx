@@ -65,7 +65,7 @@ export default function WalkInReadyPage({ params }: { params: Promise<{ id: stri
 
       {/* Receipt banner */}
       <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5 text-center">
-        <p className="text-xs text-teal-600 mb-1">Receipt Code</p>
+        <p className="text-xs text-teal-600 mb-1">รหัสใบรับเครื่อง (Receipt Code)</p>
         <p className="text-3xl font-mono font-bold text-teal-800 tracking-widest">{job.receipt_code}</p>
         <p className="text-sm text-teal-600 mt-2 font-medium">{job.appliance_name} — ✅ ซ่อมเสร็จแล้ว</p>
       </div>

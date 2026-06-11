@@ -96,7 +96,7 @@ function RepairJobsContent() {
                   </div>
                 )}
                 <div className="mt-1.5">
-                  <span className="text-xs text-[#F04E20] font-medium">📊 ดู Progress</span>
+                  <span className="text-xs text-[#F04E20] font-medium">📊 ดูความคืบหน้า (Progress)</span>
                 </div>
               </div>
             </div>
