@@ -1,66 +1,21 @@
 // TODO: REMOVE BEFORE PROD — dev auth bypass (TD-04)
-// Phase C-1.1.5 Step 2 — test JWT for local backend development only
+// CMD #115-Y Phase 3 — converge to shared Mock-First Runtime util (createDevTokenProvider)
+// Behavior เดิม (guard dev-only · mock-mode bypass · fetch fallback · cache) ย้ายไป
+// packages/shared/src/mock-runtime/dev-token.ts (extract จาก Admin pilot 99bf696)
 
 import { saveToken, removeToken } from "./auth";
+import { createDevTokenProvider } from "@app3r/shared/src/mock-runtime";
 
-let cachedToken: string | null = null;
-
-/**
- * Fetches a test JWT from backend dev endpoint and caches it.
- * Also persists to localStorage so isAuthenticated() works in dev mode.
- * Guard: throws if NODE_ENV !== 'development'.
- */
-export async function getDevTestToken(): Promise<string> {
-  // TODO: REMOVE BEFORE PROD — guard: dev only
-  if (process.env.NODE_ENV !== "development") {
-    throw new Error("Dev auth bypass disabled in non-dev environment");
-  }
-
-  if (cachedToken) return cachedToken;
-
-  // RC1 (CMD #115-V) — Mock-First: dev-nav mode ไม่มี backend → ใช้ bypass token
-  // ❌ ห้ามยิง /api/v1/_dev/get-test-token (ไม่มี route = 404 รก console)
-  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
-    cachedToken = "dev-jwt-bypass";
-    saveToken(cachedToken);
-    return cachedToken;
-  }
-
-  try {
-    const response = await fetch("/api/v1/_dev/get-test-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: 1,
-        role: "admin",
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to get test token: ${response.status}`);
-    }
-
-    const data = await response.json();
-    cachedToken = data.token as string;
-
-    // TODO: REMOVE BEFORE PROD — persist to localStorage so isAuthenticated() works
-    saveToken(cachedToken);
-
-    return cachedToken;
-  } catch {
-    // mock-first: token fetch ล้มเหลว → ใช้ bypass แทน (ไม่ throw ให้ caller พัง)
-    cachedToken = "dev-jwt-bypass";
-    saveToken(cachedToken);
-    return cachedToken;
-  }
-}
+const provider = createDevTokenProvider({
+  saveToken,
+  removeToken,
+  payload: { user_id: 1, role: "admin" },
+});
 
 /**
- * Clears cached dev token from memory and localStorage.
- * Call on logout in dev mode.
+ * Fetches a test JWT (dev only) — mock-mode/failure → bypass token. Persists via saveToken.
  */
-export function clearDevToken(): void {
-  // TODO: REMOVE BEFORE PROD
-  cachedToken = null;
-  removeToken();
-}
+export const getDevTestToken = provider.getDevTestToken;
+
+/** Clears cached dev token from memory and localStorage. Call on logout in dev mode. */
+export const clearDevToken = provider.clearDevToken;
