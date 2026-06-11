@@ -10,20 +10,24 @@
  *   3. network ล่ม / ไม่มี backend → BACKEND_UNAVAILABLE (caller fallback mock)
  *   4. 401 จริงเท่านั้น → UNAUTHORIZED (caller redirect login) · 404/500/อื่น → BACKEND_UNAVAILABLE
  *
- * App-specific (inject ผ่าน config): base path + token provider (dev vs prod)
+ * App-specific (inject ผ่าน config): base path + token provider (dev vs prod) + mockMode
+ *
+ * ⚠️ mockMode = REQUIRED (CMD #115-AG/AH · config injection): app ต้อง inject เสมอ
+ *    shared ไม่อ่าน process.env เอง — env inline deterministic เฉพาะใน app code (build เต็ม)
+ *    ข้าม package boundary Next ไม่ inline → DEV browser ได้ false (= BUG-3 regression Phase2)
  *
  * Usage (Phase 3 ต่อแอพ):
  *   import { createMockFirstApi } from '@app3r/shared/src/mock-runtime'
  *   import { getToken } from './auth'
  *   import { getDevTestToken } from './dev-auth'
  *   export const api = createMockFirstApi({
+ *     mockMode: process.env.NEXT_PUBLIC_DEV_NAV === 'true',
  *     getToken: () =>
  *       process.env.NODE_ENV === 'development' ? getDevTestToken().catch(() => null) : getToken(),
  *   })
  */
 
 import { ERR_BACKEND_UNAVAILABLE, ERR_UNAUTHORIZED } from './errors'
-import { isMockMode } from './mock-mode'
 
 export interface MockFirstApiConfig {
   /** Base URL prefix ของทุก request (default '/api/v1') */
@@ -33,21 +37,24 @@ export interface MockFirstApiConfig {
    * ต้องไม่ throw: ถ้า throw factory จะกลืน error แล้วไปต่อแบบไม่มี token
    */
   getToken?: () => Promise<string | null> | string | null
-  /** override mock mode (default อ่านจาก NEXT_PUBLIC_DEV_NAV) — ใช้ในเทสต์ */
-  mockMode?: boolean
+  /**
+   * mock mode flag — app ต้อง inject (`process.env.NEXT_PUBLIC_DEV_NAV === 'true'`)
+   * REQUIRED (CMD #115-AG/AH): shared ไม่อ่าน env เอง → inline ใน app chunk = deterministic
+   */
+  mockMode: boolean
 }
 
 interface ErrorBody {
   detail?: string
 }
 
-export function createMockFirstApi(config: MockFirstApiConfig = {}) {
+export function createMockFirstApi(config: MockFirstApiConfig) {
   const base = config.base ?? '/api/v1'
 
   async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     // (1) mock mode: ห้ามยิง backend → โยน BACKEND_UNAVAILABLE → หน้าเพจ fallback mock
-    const mockMode = config.mockMode ?? isMockMode()
-    if (mockMode) {
+    //     mockMode = inject จาก app (config injection · ไม่อ่าน env ใน shared = กัน BUG-3)
+    if (config.mockMode) {
       throw new Error(ERR_BACKEND_UNAVAILABLE)
     }
 
