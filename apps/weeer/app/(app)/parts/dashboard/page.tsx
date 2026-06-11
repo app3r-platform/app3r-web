@@ -57,7 +57,7 @@ export default function PartsDashboardPage() {
             </div>
             <div className="bg-blue-50 rounded-xl p-4 text-center">
               <p className="text-2xl font-bold text-blue-700">{data.total_stock_value.toLocaleString()}</p>
-              <p className="text-xs text-gray-500 mt-0.5">มูลค่าคงคลัง (pts)</p>
+              <p className="text-xs text-gray-500 mt-0.5">มูลค่าคงคลัง (พอยต์)</p>
             </div>
           </div>
 

@@ -80,7 +80,7 @@ export default function ParcelDispatchTechPage({ params }: { params: Promise<{ i
         {totalCost > 0 && (
           <div className="flex items-center gap-1.5 mt-1">
             <span className="text-xs text-[#FF663A]">💰 ประมาณการ:</span>
-            <span className="text-xs font-bold text-[#D63B12]">{totalCost.toLocaleString()} pts</span>
+            <span className="text-xs font-bold text-[#D63B12]">{totalCost.toLocaleString()} พอยต์</span>
           </div>
         )}
         {job.condition_notes && (

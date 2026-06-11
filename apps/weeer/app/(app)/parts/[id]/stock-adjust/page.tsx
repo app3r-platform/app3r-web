@@ -101,7 +101,7 @@ export default function PartsStockAdjustPage({ params }: { params: Promise<{ id:
 
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 flex items-start gap-2">
           <span>⚠️</span>
-          <p className="text-xs text-amber-700">การปรับ Manual จะถูกบันทึกเป็น STOCK_ADJUSTMENT พร้อมชื่อผู้ทำรายการ</p>
+          <p className="text-xs text-amber-700">การปรับด้วยมือ (Manual) จะถูกบันทึกเป็น STOCK_ADJUSTMENT พร้อมชื่อผู้ทำรายการ</p>
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}

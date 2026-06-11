@@ -98,18 +98,18 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
           {job.estimated_price !== undefined && (
             <div className="flex justify-between text-sm text-gray-700">
               <span>ค่าแรง + บริการ</span>
-              <span>{job.estimated_price.toLocaleString()} pts</span>
+              <span>{job.estimated_price.toLocaleString()} พอยต์</span>
             </div>
           )}
           {(job.parts_added ?? []).map((p, i) => (
             <div key={i} className="flex justify-between text-xs text-gray-600">
               <span>{p.name} × {p.qty}</span>
-              <span>{(p.price * p.qty).toLocaleString()} pts</span>
+              <span>{(p.price * p.qty).toLocaleString()} พอยต์</span>
             </div>
           ))}
           <div className="flex justify-between text-sm font-bold text-[#D63B12] pt-2 border-t border-gray-100">
             <span>รวม</span>
-            <span>{totalCost.toLocaleString()} pts</span>
+            <span>{totalCost.toLocaleString()} พอยต์</span>
           </div>
         </div>
       )}

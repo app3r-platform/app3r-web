@@ -135,19 +135,19 @@ export default function RepairJobProgressPage({
         </div>
         <div className="flex justify-between text-gray-600">
           <span>ราคาเริ่มต้น</span>
-          <span className="font-medium text-[#D63B12]">{job.original_price.toLocaleString()} pts</span>
+          <span className="font-medium text-[#D63B12]">{job.original_price.toLocaleString()} พอยต์</span>
         </div>
         {job.final_price && (
           <div className="flex justify-between text-gray-600">
             <span>ราคาสุดท้าย</span>
-            <span className="font-bold text-[#D63B12]">{job.final_price.toLocaleString()} pts</span>
+            <span className="font-bold text-[#D63B12]">{job.final_price.toLocaleString()} พอยต์</span>
           </div>
         )}
         {job.source?.type === "purchased_scrap" && (
           <div className="flex justify-between text-gray-600">
             <span>ที่มา</span>
             <span className="text-xs bg-lime-100 text-lime-700 px-2 py-0.5 rounded-full font-medium">
-              🔄 จาก Scrap #{job.source.refId}
+              🔄 จากซาก (Scrap) #{job.source.refId}
             </span>
           </div>
         )}

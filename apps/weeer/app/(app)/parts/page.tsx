@@ -154,7 +154,7 @@ export default function PartsListPage() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right text-gray-700">
-                    {p.unitPrice.toLocaleString()} pts
+                    {p.unitPrice.toLocaleString()} พอยต์
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/parts/${p.id}`}

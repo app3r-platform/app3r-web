@@ -230,7 +230,7 @@ export default function ResellInventoryNewPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              ราคาทุน (pts) <span className="text-red-500">*</span>
+              ราคาทุน (พอยต์) <span className="text-red-500">*</span>
             </label>
             <input type="number" min={0} value={costPrice}
               onChange={e => { setCostPrice(e.target.value); setFormErrors(f => ({ ...f, costPrice: "" })); }}
@@ -239,7 +239,7 @@ export default function ResellInventoryNewPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              ราคาขาย (pts) <span className="text-red-500">*</span>
+              ราคาขาย (พอยต์) <span className="text-red-500">*</span>
             </label>
             <input type="number" min={0} value={suggestedPrice}
               onChange={e => { setSuggestedPrice(e.target.value); setFormErrors(f => ({ ...f, suggestedPrice: "" })); }}

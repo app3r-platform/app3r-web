@@ -7,10 +7,10 @@ import JobListPlaceholder from "@/components/JobListPlaceholder";
 export const metadata: Metadata = { title: "Dashboard — WeeeR" };
 
 const STATS = [
-  { label: "พอยต์เงิน",   value: "350",    suffix: "point", icon: "🪙",  bg: "bg-gray-50",   text: "text-gray-700" },
-  { label: "พอยต์ทอง",   value: "2,055",  suffix: "point", icon: "⭐",  bg: "bg-yellow-50",  text: "text-yellow-700" },
+  { label: "พอยต์เงิน",   value: "350",    suffix: "พอยต์", icon: "🪙",  bg: "bg-gray-50",   text: "text-gray-700" },
+  { label: "พอยต์ทอง",   value: "2,055",  suffix: "พอยต์", icon: "⭐",  bg: "bg-yellow-50",  text: "text-yellow-700" },
   { label: "งานเดือนนี้",  value: "37",     suffix: "งาน",  icon: "📋",  bg: "bg-blue-50",    text: "text-blue-700" },
-  { label: "WeeeT Active", value: "3",      suffix: "คน",   icon: "👷",  bg: "bg-[#FFF1ED]",   text: "text-[#D63B12]" },
+  { label: "WeeeT ใช้งาน", value: "3",      suffix: "คน",   icon: "👷",  bg: "bg-[#FFF1ED]",   text: "text-[#D63B12]" },
 ];
 
 // RECENT_JOBS / STATUS_STYLE / STATUS_LABEL ย้ายไป components/JobListPlaceholder.tsx (Wave1)
@@ -88,7 +88,7 @@ export default function DashboardPage() {
       {/* Gold warning for WeeeT hire */}
       {SHOP.gold < 200 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700 flex items-center gap-2">
-          <span>⚠️</span> Gold เหลือน้อย — ต้องมีอย่างน้อย 100 Gold เพื่อจ้าง WeeeT เพิ่ม
+          <span>⚠️</span> พอยต์ทอง (Gold) เหลือน้อย — ต้องมีอย่างน้อย 100 พอยต์ทอง เพื่อจ้าง WeeeT เพิ่ม
         </div>
       )}
 

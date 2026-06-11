@@ -219,7 +219,7 @@ export default function PartsOrderDetailPage({
           <div>
             <p className="text-sm font-semibold text-green-700">ยืนยันรับของเรียบร้อย</p>
             <p className="text-xs text-green-600 mt-0.5">
-              คะแนนพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว (สุทธิ {netToSeller.toLocaleString()} pts)
+              คะแนนพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว (สุทธิ {netToSeller.toLocaleString()} พอยต์)
             </p>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function PartsOrderDetailPage({
           <div>
             <p className="text-sm font-semibold text-gray-700">ยกเลิกคำสั่งซื้อแล้ว</p>
             <p className="text-xs text-gray-500 mt-0.5">
-              คะแนน {order.totalThb.toLocaleString()} pts คืนเข้ากระเป๋าคุณแล้ว
+              คะแนน {order.totalThb.toLocaleString()} พอยต์ คืนเข้ากระเป๋าคุณแล้ว
             </p>
           </div>
         </div>
@@ -241,7 +241,7 @@ export default function PartsOrderDetailPage({
           <div>
             <p className="text-sm font-semibold text-orange-700">ปฏิเสธออเดอร์แล้ว (P9)</p>
             <p className="text-xs text-orange-600 mt-0.5">
-              พักเงินกลาง (Escrow) {order.totalThb.toLocaleString()} pts คืนผู้ซื้อแล้ว
+              พักเงินกลาง (Escrow) {order.totalThb.toLocaleString()} พอยต์ คืนผู้ซื้อแล้ว
             </p>
           </div>
         </div>
@@ -278,11 +278,11 @@ export default function PartsOrderDetailPage({
             </div>
             <div>
               <p className="text-xs text-gray-400">ราคา/ชิ้น</p>
-              <p className="text-sm font-bold text-gray-900">{order.unitPriceThb.toLocaleString()} pts</p>
+              <p className="text-sm font-bold text-gray-900">{order.unitPriceThb.toLocaleString()} พอยต์</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">รวม</p>
-              <p className="text-sm font-bold text-[#D63B12]">{order.totalThb.toLocaleString()} pts</p>
+              <p className="text-sm font-bold text-[#D63B12]">{order.totalThb.toLocaleString()} พอยต์</p>
             </div>
           </div>
 
@@ -290,16 +290,16 @@ export default function PartsOrderDetailPage({
           <div className="space-y-1.5 text-xs">
             <div className="flex justify-between text-gray-500">
               <span>ค่าบริการแพลตฟอร์ม (3%)</span>
-              <span>{fee.toLocaleString()} pts</span>
+              <span>{fee.toLocaleString()} พอยต์</span>
             </div>
             <div className="flex justify-between font-medium text-gray-700 border-t border-gray-100 pt-1.5">
               <span>ผู้ขายได้รับ (สุทธิ)</span>
-              <span className="text-[#D63B12]">{netToSeller.toLocaleString()} pts</span>
+              <span className="text-[#D63B12]">{netToSeller.toLocaleString()} พอยต์</span>
             </div>
             {order.escrowHeldThb > 0 && (
               <div className="flex justify-between text-blue-600 bg-blue-50 rounded-lg px-2 py-1.5 mt-1">
                 <span>🔒 พอยต์ทอง (Gold) พักเงินกลาง (Escrow)</span>
-                <span className="font-semibold">{order.escrowHeldThb.toLocaleString()} pts</span>
+                <span className="font-semibold">{order.escrowHeldThb.toLocaleString()} พอยต์</span>
               </div>
             )}
           </div>
@@ -431,7 +431,7 @@ export default function PartsOrderDetailPage({
               <div>
                 <p className="text-sm font-bold text-gray-900">ปฏิเสธออเดอร์นี้?</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  พักเงินกลาง (Escrow) {order.totalThb.toLocaleString()} pts จะถูกคืนผู้ซื้อทันที
+                  พักเงินกลาง (Escrow) {order.totalThb.toLocaleString()} พอยต์ จะถูกคืนผู้ซื้อทันที
                 </p>
               </div>
             </div>
@@ -475,7 +475,7 @@ export default function PartsOrderDetailPage({
               <div>
                 <p className="text-sm font-bold text-gray-900">ยืนยันยกเลิกคำสั่งซื้อ?</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  คะแนน {order.totalThb.toLocaleString()} pts จะถูกคืนเข้ากระเป๋าของคุณ
+                  คะแนน {order.totalThb.toLocaleString()} พอยต์ จะถูกคืนเข้ากระเป๋าของคุณ
                 </p>
               </div>
             </div>

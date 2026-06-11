@@ -201,7 +201,7 @@ export default function ScrapJobsPage() {
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="text-sm font-bold text-[#FF663A]">
-                    {job.isFree ? "ฟรี" : `${(job.offerPrice ?? 0).toLocaleString()} pts`}
+                    {job.isFree ? "ฟรี" : `${(job.offerPrice ?? 0).toLocaleString()} พอยต์`}
                   </p>
                   {/* Escrow status */}
                   {job.escrowStatus === "locked" && (

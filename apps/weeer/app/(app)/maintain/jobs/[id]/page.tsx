@@ -144,7 +144,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
               <p className="text-xs font-semibold text-orange-700 uppercase tracking-wider">settle ตาม offer</p>
               <div className="flex justify-between text-gray-700">
                 <span>ค่า No-show</span>
-                <span className="font-bold text-orange-700">{job.offerData.noShow.fee.toLocaleString()} pts</span>
+                <span className="font-bold text-orange-700">{job.offerData.noShow.fee.toLocaleString()} พอยต์</span>
               </div>
               <p className="text-xs text-gray-400">{job.offerData.noShow.condition}</p>
             </div>
@@ -248,7 +248,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
           </div>
           <div>
             <p className="text-xs text-gray-400">ราคารวม</p>
-            <p className="font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</p>
+            <p className="font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} พอยต์</p>
           </div>
         </div>
       </div>
@@ -261,13 +261,13 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
             {job.offerData.deposit.required && (
               <div className="flex justify-between">
                 <span className="text-gray-600">พอยต์ทองพักเงินกลาง (Escrow)</span>
-                <span className="font-medium text-gray-800">{job.offerData.deposit.amount?.toLocaleString()} pts</span>
+                <span className="font-medium text-gray-800">{job.offerData.deposit.amount?.toLocaleString()} พอยต์</span>
               </div>
             )}
             {job.offerData.travelFee.required && (
               <div className="flex justify-between">
                 <span className="text-gray-600">ค่าเดินทาง</span>
-                <span className="font-medium text-gray-800">{job.offerData.travelFee.amount?.toLocaleString()} pts</span>
+                <span className="font-medium text-gray-800">{job.offerData.travelFee.amount?.toLocaleString()} พอยต์</span>
               </div>
             )}
             <div className="flex justify-between">
@@ -276,7 +276,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">ค่าปรับไม่มาตามนัด (No-show fee)</span>
-              <span className="font-medium text-gray-800">{job.offerData.noShow.fee.toLocaleString()} pts</span>
+              <span className="font-medium text-gray-800">{job.offerData.noShow.fee.toLocaleString()} พอยต์</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">ความรับผิดเสียหาย</span>

@@ -304,7 +304,7 @@ export default function ManageTechniciansPage() {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-xl font-bold text-gray-900">จัดการ WeeeT</h1>
-          <p className="text-sm text-gray-500">ช่างทั้งหมด: {weeetList.length} คน · Gold: {goldBalance} pts</p>
+          <p className="text-sm text-gray-500">ช่างทั้งหมด: {weeetList.length} คน · พอยต์ทอง: {goldBalance}</p>
         </div>
         <button
           onClick={() => setShowAdd(true)}

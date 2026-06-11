@@ -156,7 +156,7 @@ export default function MaintainJobsPage() {
                 <p className="text-xs text-[#FF663A] mt-1 font-medium">📊 ดูความคืบหน้า (Progress)</p>
               </div>
               <div className="shrink-0 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</p>
+                <p className="text-sm font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} พอยต์</p>
                 <p className="text-xs text-gray-400">{job.estimatedDuration} ชม.</p>
               </div>
             </div>

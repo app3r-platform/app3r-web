@@ -156,7 +156,7 @@ export default function ResellBuyPage() {
           <div className="text-center py-6 space-y-3">
             <span className="text-4xl">✅</span>
             <p className="text-base font-bold text-gray-800">เพิ่มเข้าสต๊อกแล้ว</p>
-            <p className="text-sm text-gray-500">{model} · รับซื้อ {offerPrice?.toLocaleString()} pts</p>
+            <p className="text-sm text-gray-500">{model} · รับซื้อ {offerPrice?.toLocaleString()} พอยต์</p>
             <div className="flex gap-2 justify-center mt-2">
               <Link href="/resell/inventory"
                 className="text-xs bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold px-4 py-2 rounded-lg transition-colors">
@@ -251,7 +251,7 @@ export default function ResellBuyPage() {
                   <p className="text-xs text-gray-400 mb-3">สภาพ: {CONDITION_OPTS.find(c=>c.value===condition)?.label}</p>
                   <p className="text-4xl font-bold text-[#FF663A]">{estimatedBuy.toLocaleString()}</p>
                   <p className="text-sm text-[#FF9C80] mt-1">pts (ราคาตีรับซื้อ)</p>
-                  <p className="text-xs text-gray-400 mt-2">ราคาตลาด ~{basePrice.toLocaleString()} pts · {Math.round(condMult*100)}%</p>
+                  <p className="text-xs text-gray-400 mt-2">ราคาตลาด ~{basePrice.toLocaleString()} พอยต์ · {Math.round(condMult*100)}%</p>
                 </div>
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">ปรับราคาเอง (ถ้าต้องการ)</label>
@@ -292,7 +292,7 @@ export default function ResellBuyPage() {
                   {notes && <div className="flex justify-between"><span className="text-gray-500">หมายเหตุ</span><span className="font-medium">{notes}</span></div>}
                   <div className="flex justify-between border-t border-gray-200 pt-2 mt-2">
                     <span className="text-gray-700 font-semibold">ราคาตีรับซื้อ</span>
-                    <span className="font-bold text-[#FF663A] text-lg">{(offerPrice ?? estimatedBuy).toLocaleString()} pts</span>
+                    <span className="font-bold text-[#FF663A] text-lg">{(offerPrice ?? estimatedBuy).toLocaleString()} พอยต์</span>
                   </div>
                 </div>
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
@@ -345,7 +345,7 @@ export default function ResellBuyPage() {
               <div><p className="text-xs text-gray-400">ชื่อ</p><p className="font-medium">{barcodeResult.name}</p></div>
               <div><p className="text-xs text-gray-400">ยี่ห้อ</p><p className="font-medium">{barcodeResult.brand}</p></div>
               <div><p className="text-xs text-gray-400">SKU</p><p className="font-medium font-mono">{barcodeResult.sku}</p></div>
-              <div><p className="text-xs text-gray-400">ราคาแนะนำ</p><p className="font-bold text-[#FF663A]">{barcodeResult.suggestedPrice.toLocaleString()} pts</p></div>
+              <div><p className="text-xs text-gray-400">ราคาแนะนำ</p><p className="font-bold text-[#FF663A]">{barcodeResult.suggestedPrice.toLocaleString()} พอยต์</p></div>
             </div>
             <button onClick={() => setBarcodeDone(true)}
               className="w-full bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">

@@ -53,7 +53,7 @@ export default function WalkInQueuePage() {
           </div>
           <div className="bg-yellow-50 rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-yellow-700">{data.storage_fee_total.toLocaleString()}</p>
-            <p className="text-xs text-gray-500 mt-0.5">ค่าฝากเก็บ (Storage fee) (pts)</p>
+            <p className="text-xs text-gray-500 mt-0.5">ค่าฝากเก็บ (Storage fee) (พอยต์)</p>
           </div>
         </div>
       )}
@@ -85,14 +85,14 @@ export default function WalkInQueuePage() {
                   <span className="text-xs text-gray-400">👤 {job.customer_name}</span>
                   <span className="text-xs text-gray-400">📞 {job.customer_phone}</span>
                   {job.estimated_price && (
-                    <span className="text-xs text-[#D63B12] font-medium">{job.estimated_price.toLocaleString()} pts</span>
+                    <span className="text-xs text-[#D63B12] font-medium">{job.estimated_price.toLocaleString()} พอยต์</span>
                   )}
                 </div>
                 {job.status === "ready" && job.storage_fee_accrued && job.storage_fee_accrued > 0 && (
                   <div className="mt-2 flex items-center gap-1.5 bg-yellow-50 rounded-lg px-2.5 py-1.5">
                     <span className="text-xs">🕐</span>
                     <span className="text-xs font-medium text-yellow-700">
-                      Storage fee: {job.storage_fee_accrued.toLocaleString()} pts ({job.storage_fee_days} วัน)
+                      ค่าฝากเก็บ (Storage fee): {job.storage_fee_accrued.toLocaleString()} พอยต์ ({job.storage_fee_days} วัน)
                     </span>
                   </div>
                 )}

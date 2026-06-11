@@ -123,7 +123,7 @@ export default function ScrapBrowsePage() {
                 {item.workingParts.length > 0 && (
                   <p className="text-xs text-gray-400 truncate mt-0.5">ชิ้นส่วนใช้ได้: {item.workingParts.join(", ")}</p>
                 )}
-                <p className="text-lg font-bold text-[#D63B12] mt-1">{item.price.toLocaleString()} pts</p>
+                <p className="text-lg font-bold text-[#D63B12] mt-1">{item.price.toLocaleString()} พอยต์</p>
               </div>
             </Link>
           ))}

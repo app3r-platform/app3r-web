@@ -95,17 +95,17 @@ export default function WalkInReadyPage({ params }: { params: Promise<{ id: stri
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">สรุปค่าใช้จ่าย</p>
         <div className="flex justify-between text-sm text-gray-700">
           <span>ค่าซ่อม</span>
-          <span>{basePrice.toLocaleString()} pts</span>
+          <span>{basePrice.toLocaleString()} พอยต์</span>
         </div>
         {storageFee && storageFee.fee_accrued > 0 && (
           <div className="flex justify-between text-sm text-yellow-700">
-            <span>Storage fee ({storageFee.days} วัน × {storageFee.rate} pts/วัน)</span>
-            <span>{storageFee.fee_accrued.toLocaleString()} pts</span>
+            <span>ค่าฝากเก็บ (Storage fee) ({storageFee.days} วัน × {storageFee.rate} พอยต์/วัน)</span>
+            <span>{storageFee.fee_accrued.toLocaleString()} พอยต์</span>
           </div>
         )}
         <div className="flex justify-between text-base font-bold text-[#D63B12] pt-2 border-t border-gray-100">
           <span>รวมทั้งหมด</span>
-          <span>{totalDue.toLocaleString()} pts</span>
+          <span>{totalDue.toLocaleString()} พอยต์</span>
         </div>
       </div>
 
@@ -116,8 +116,8 @@ export default function WalkInReadyPage({ params }: { params: Promise<{ id: stri
           <div>
             <p className="text-sm font-semibold text-orange-800">เครื่องค้างอยู่ {storageFee.days} วัน</p>
             <p className="text-xs text-orange-600 mt-0.5">
-              กำลังสะสม storage fee — แจ้งลูกค้ามารับโดยด่วน
-              {storageFee.days >= 30 && " · พิจารณา Abandoned Protocol"}
+              กำลังสะสมค่าฝากเก็บ (storage fee) — แจ้งลูกค้ามารับโดยด่วน
+              {storageFee.days >= 30 && " · พิจารณาขั้นตอนจัดการเครื่องที่ถูกทิ้ง (Abandoned Protocol)"}
             </p>
           </div>
         </div>

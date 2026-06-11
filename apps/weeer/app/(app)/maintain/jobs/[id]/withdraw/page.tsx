@@ -172,7 +172,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
             <Row label="เครื่อง"   value={`${APPLIANCE_LABEL[job.applianceType]} — ${CLEANING_LABEL[job.cleaningType]}`} />
             <Row label="วันนัด"    value={fmt(job.scheduledAt)} />
             <Row label="ที่อยู่"   value={job.address.address} />
-            <Row label="ราคารวม"  value={`${job.totalPrice.toLocaleString()} pts`} />
+            <Row label="ราคารวม"  value={`${job.totalPrice.toLocaleString()} พอยต์`} />
             {job.technicianId && (
               <Row label="ช่าง"   value={job.technicianId} />
             )}

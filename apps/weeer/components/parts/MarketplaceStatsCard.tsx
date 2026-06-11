@@ -14,7 +14,7 @@ export function MarketplaceStatsCard({
     { icon: "📦", label: "รายการขาย",   value: totalListings,             suffix: "รายการ" },
     { icon: "🏪", label: "ร้านค้า",       value: totalShops,                suffix: "ร้าน" },
     { icon: "🔄", label: "คำสั่งซื้อ",    value: ordersActive,              suffix: "รายการ" },
-    { icon: "💰", label: "ยอดวันนี้",     value: volumeToday.toLocaleString(), suffix: "pts" },
+    { icon: "💰", label: "ยอดวันนี้",     value: volumeToday.toLocaleString(), suffix: "พอยต์" },
   ];
   return (
     <div className="grid grid-cols-2 gap-2">

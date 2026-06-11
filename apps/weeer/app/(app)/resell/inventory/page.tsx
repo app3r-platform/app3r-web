@@ -136,7 +136,7 @@ export default function ResellInventoryPage() {
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="text-sm font-bold text-[#FF663A]">{item.suggestedPrice.toLocaleString()} pts</p>
+                  <p className="text-sm font-bold text-[#FF663A]">{item.suggestedPrice.toLocaleString()} พอยต์</p>
                   <p className="text-xs text-gray-400">ทุน {item.costPrice.toLocaleString()}</p>
                 </div>
               </Link>

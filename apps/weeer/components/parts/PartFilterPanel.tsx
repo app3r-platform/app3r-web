@@ -74,7 +74,7 @@ export function PartFilterPanel({ filters, onChange, onReset }: PartFilterPanelP
 
       {/* ราคา */}
       <div>
-        <p className="text-xs text-gray-500 mb-1.5">ราคา (pts)</p>
+        <p className="text-xs text-gray-500 mb-1.5">ราคา (พอยต์)</p>
         <div className="flex gap-2 items-center">
           <input type="number" value={filters.minPrice} onChange={(e) => set("minPrice", e.target.value)} placeholder="ต่ำสุด" className="flex-1 text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#FF663A]" />
           <span className="text-gray-400 text-xs">–</span>

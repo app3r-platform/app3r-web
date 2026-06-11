@@ -92,8 +92,8 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
         <p className="text-xs text-gray-500">👤 {job.customer_name} · 📞 {job.customer_phone}</p>
         {storageFee && (
           <div className="bg-yellow-50 rounded-lg p-2 flex justify-between text-xs">
-            <span className="text-yellow-700">Storage fee สะสม ({storageFee.days} วัน)</span>
-            <span className="font-bold text-yellow-800">{storageFee.fee_accrued.toLocaleString()} pts</span>
+            <span className="text-yellow-700">ค่าฝากเก็บ (Storage fee) สะสม ({storageFee.days} วัน)</span>
+            <span className="font-bold text-yellow-800">{storageFee.fee_accrued.toLocaleString()} พอยต์</span>
           </div>
         )}
       </div>

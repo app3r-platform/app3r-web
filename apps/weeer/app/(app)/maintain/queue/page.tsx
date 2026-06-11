@@ -180,7 +180,7 @@ export default function MaintainQueuePage() {
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1.5">
                   <span className="text-xs text-gray-400">📍 {job.address.address}</span>
                   <span className="text-xs text-gray-400">⏱ {job.estimatedDuration} ชม.</span>
-                  <span className="text-xs text-gray-400">💰 {job.totalPrice.toLocaleString()} pts</span>
+                  <span className="text-xs text-gray-400">💰 {job.totalPrice.toLocaleString()} พอยต์</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
                   🗓 {new Date(job.scheduledAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}

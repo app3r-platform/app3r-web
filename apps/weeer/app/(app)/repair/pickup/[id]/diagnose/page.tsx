@@ -134,7 +134,7 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
             <div key={i} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2 mb-1.5">
               <span className="text-xs text-gray-700">{p.name} × {p.qty}</span>
               <div className="flex items-center gap-3">
-                <span className="text-xs font-medium text-gray-700">{(p.price * p.qty).toLocaleString()} pts</span>
+                <span className="text-xs font-medium text-gray-700">{(p.price * p.qty).toLocaleString()} พอยต์</span>
                 <button onClick={() => removePart(i)} className="text-red-400 hover:text-red-600 text-xs">✕</button>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
               className="w-14 border border-gray-200 rounded-xl px-3 py-2 text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <input type="number" min="0" value={newPart.price}
               onChange={(e) => setNewPart(p => ({ ...p, price: e.target.value }))}
-              placeholder="pts"
+              placeholder="พอยต์"
               className="w-20 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             <button onClick={addPart}
               className="bg-[#FFE0D6] hover:bg-[#FFD0BF] text-[#D63B12] text-xs font-medium px-3 py-2 rounded-xl transition-colors">
@@ -162,7 +162,7 @@ export default function PickupDiagnosePage({ params }: { params: Promise<{ id: s
         {totalCost > 0 && (
           <div className="bg-[#FFF1ED] rounded-xl px-4 py-3 flex justify-between items-center">
             <span className="text-sm font-semibold text-gray-700">รวมทั้งหมด</span>
-            <span className="text-lg font-bold text-[#D63B12]">{totalCost.toLocaleString()} pts</span>
+            <span className="text-lg font-bold text-[#D63B12]">{totalCost.toLocaleString()} พอยต์</span>
           </div>
         )}
 

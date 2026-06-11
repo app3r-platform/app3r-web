@@ -30,7 +30,7 @@ export function PartDetailHeader({ listing, isOwn }: PartDetailHeaderProps) {
       </p>
       <div className="flex items-center justify-between">
         {listing.pricePoints > 0 ? (
-          <p className="text-2xl font-bold text-[#D63B12]">{listing.pricePoints.toLocaleString()} pts</p>
+          <p className="text-2xl font-bold text-[#D63B12]">{listing.pricePoints.toLocaleString()} พอยต์</p>
         ) : listing.unitPriceThb != null ? (
           <p className="text-2xl font-bold text-gray-800">
             ฿{listing.unitPriceThb.toLocaleString()}

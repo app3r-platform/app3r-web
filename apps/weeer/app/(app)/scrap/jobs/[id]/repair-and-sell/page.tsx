@@ -166,7 +166,7 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
         </div>
 
         <div>
-          <label className="block text-xs text-gray-500 mb-1">ราคาขายเป้าหมาย (pts) <span className="text-red-400">*</span></label>
+          <label className="block text-xs text-gray-500 mb-1">ราคาขายเป้าหมาย (พอยต์) <span className="text-red-400">*</span></label>
           <input
             type="number" min="1"
             value={originalPrice}

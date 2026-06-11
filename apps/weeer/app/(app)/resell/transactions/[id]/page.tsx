@@ -131,7 +131,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
         <div className="grid grid-cols-2 gap-3">
           <div><p className="text-xs text-gray-400">ผู้ขาย</p><p className="font-medium">{tx.sellerName}</p></div>
           <div><p className="text-xs text-gray-400">ผู้ซื้อ</p><p className="font-medium">{tx.buyerName}</p></div>
-          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-xl font-bold text-[#FF663A]">{tx.price.toLocaleString()} pts</p></div>
+          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-xl font-bold text-[#FF663A]">{tx.price.toLocaleString()} พอยต์</p></div>
           <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{tx.deliveryMethod}</p></div>
           {tx.trackingNumber && <div className="col-span-2"><p className="text-xs text-gray-400">การติดตามพัสดุ (Tracking)</p><p className="font-medium font-mono">{tx.trackingNumber}</p></div>}
           {tx.disputeReason && (

@@ -29,7 +29,7 @@ export function CancelOrderConfirm({ order, onConfirm, onClose }: CancelOrderCon
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2 text-sm">
           <p className="text-xs font-semibold text-red-700">เมื่อยกเลิก ระบบจะ:</p>
           <ul className="text-xs text-gray-600 space-y-1">
-            <li>💸 คืนพักเงินกลาง (Escrow) <strong>{order.totalPoints.toLocaleString()} pts</strong> ให้คุณ</li>
+            <li>💸 คืนพักเงินกลาง (Escrow) <strong>{order.totalPoints.toLocaleString()} พอยต์</strong> ให้คุณ</li>
             <li>📦 คืนสต็อกให้ผู้ขาย +{order.quantity} ชิ้น</li>
           </ul>
           <p className="text-xs text-red-600 mt-1">⚠️ ยกเลิกได้เฉพาะขั้น &quot;สั่งซื้อแล้ว&quot; เท่านั้น</p>

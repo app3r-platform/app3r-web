@@ -59,7 +59,7 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
             <p className="text-xs text-gray-500 mt-0.5">{listing.brand}</p>
           </div>
           <p className="text-lg font-bold text-[#D63B12] flex-shrink-0">
-            {listing.pricePoints.toLocaleString()} pts
+            {listing.pricePoints.toLocaleString()} พอยต์
           </p>
         </div>
 

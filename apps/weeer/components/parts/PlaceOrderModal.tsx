@@ -68,7 +68,7 @@ export function PlaceOrderModal({ listing, buyerBalance, onConfirm, onClose }: P
         <div className="flex justify-between text-xs text-gray-500">
           <span>คะแนนของคุณ</span>
           <span className={enough ? "text-green-700 font-medium" : "text-red-600 font-medium"}>
-            {buyerBalance.toLocaleString()} pts {!enough && "⚠️ ไม่พอ"}
+            {buyerBalance.toLocaleString()} พอยต์ {!enough && "⚠️ ไม่พอ"}
           </span>
         </div>
 
@@ -77,7 +77,7 @@ export function PlaceOrderModal({ listing, buyerBalance, onConfirm, onClose }: P
           disabled={!enough || qty < 1 || loading}
           className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
         >
-          {loading ? "กำลังสั่งซื้อ…" : `ยืนยันสั่งซื้อ ${total.toLocaleString()} pts`}
+          {loading ? "กำลังสั่งซื้อ…" : `ยืนยันสั่งซื้อ ${total.toLocaleString()} พอยต์`}
         </button>
       </div>
     </div>

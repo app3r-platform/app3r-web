@@ -98,7 +98,7 @@ export default function ScrapFeedPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">🔩 ตลาดซาก</h1>
         <Link href="/resell" className="text-xs text-gray-400 hover:text-gray-600">
-          ← กลับ Resell
+          ← กลับขายต่อ (Resell)
         </Link>
       </div>
 
@@ -156,7 +156,7 @@ export default function ScrapFeedPage() {
                     {/* S12: Repair badge */}
                     {item.fromRepairJobId && (
                       <span className="text-xs bg-orange-100 text-orange-700 font-medium px-1.5 py-0.5 rounded">
-                        🔧 จาก Repair #{item.fromRepairJobId}
+                        🔧 จากซ่อม (Repair) #{item.fromRepairJobId}
                       </span>
                     )}
                     {item.isFree && (
@@ -182,7 +182,7 @@ export default function ScrapFeedPage() {
                     {CONDITION_GRADE_LABEL[item.conditionGrade]}
                   </span>
                   <p className="text-base font-bold text-[#FF663A] mt-1.5">
-                    {item.isFree ? "ฟรี" : `${item.price.toLocaleString()} pts`}
+                    {item.isFree ? "ฟรี" : `${item.price.toLocaleString()} พอยต์`}
                   </p>
                 </div>
               </div>

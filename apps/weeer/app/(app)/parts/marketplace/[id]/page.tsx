@@ -177,7 +177,7 @@ export default function MarketplaceDetailPage({
       {/* คะแนนของร้าน */}
       <div className="flex justify-between text-xs text-gray-500 bg-gray-50 rounded-xl px-3 py-2">
         <span>คะแนนของร้านคุณ</span>
-        <span className="font-medium text-gray-700">{balance.toLocaleString()} pts</span>
+        <span className="font-medium text-gray-700">{balance.toLocaleString()} พอยต์</span>
       </div>
 
       {/* P4 แจ้งเตือนสั่งซื้อสำเร็จ */}
@@ -266,10 +266,10 @@ export default function MarketplaceDetailPage({
             }`}>
               <span>
                 {balance >= listing.pricePoints
-                  ? "✅ Gold เพียงพอ"
-                  : "⚠️ P11: Gold ไม่เพียงพอ (ต้องการ " + listing.pricePoints.toLocaleString() + " pts)"}
+                  ? "✅ พอยต์ทองเพียงพอ"
+                  : "⚠️ P11: พอยต์ทองไม่เพียงพอ (ต้องการ " + listing.pricePoints.toLocaleString() + " พอยต์)"}
               </span>
-              <span className="font-medium">คงเหลือ {balance.toLocaleString()} pts</span>
+              <span className="font-medium">คงเหลือ {balance.toLocaleString()} พอยต์</span>
             </div>
           )}
 
@@ -283,7 +283,7 @@ export default function MarketplaceDetailPage({
               {ordering
                 ? "กำลังสั่งซื้อ…"
                 : listing.pricePoints > 0
-                  ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
+                  ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} พอยต์/ชิ้น`
                   : listing.unitPriceThb != null
                     ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
                     : "🛒 สั่งซื้อ"}

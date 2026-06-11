@@ -13,7 +13,7 @@ export function PointsBalanceCard({ balance, escrowHeld, shopName }: PointsBalan
       <p className="text-xs opacity-75">{shopName}</p>
       <div>
         <p className="text-3xl font-bold">{balance.toLocaleString()}</p>
-        <p className="text-xs opacity-75 mt-0.5">คะแนนทั้งหมด (pts)</p>
+        <p className="text-xs opacity-75 mt-0.5">คะแนนทั้งหมด (พอยต์)</p>
       </div>
       <div className="flex gap-4 pt-1 border-t border-white/20">
         <div>

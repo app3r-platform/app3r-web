@@ -222,7 +222,7 @@ export default function ServicesPage() {
                 <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-2">
                   {svc.pointAmount && (
                     <span className="text-xs font-medium text-[#D63B12]">
-                      💰 {Number(svc.pointAmount).toLocaleString()} pts
+                      💰 {Number(svc.pointAmount).toLocaleString()} พอยต์
                     </span>
                   )}
                   <span className="text-xs text-gray-400">

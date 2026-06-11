@@ -123,7 +123,7 @@ export default function PartsNewPage() {
         {/* Price */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            ราคาต่อหน่วย (pts) <span className="text-red-500">*</span>
+            ราคาต่อหน่วย (พอยต์) <span className="text-red-500">*</span>
           </label>
           <input type="number" min={0} value={unitPrice}
             onChange={e => { setUnitPrice(e.target.value); setFormErrors(f => ({ ...f, price: "" })); }}

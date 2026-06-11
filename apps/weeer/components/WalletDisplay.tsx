@@ -36,7 +36,7 @@ export default function WalletDisplay() {
     >
       <span>⭐</span>
       <span className="text-sm font-semibold text-[#D63B12]">
-        {wallet.gold.toLocaleString()} Gold
+        {wallet.gold.toLocaleString()} พอยต์ทอง
       </span>
     </Link>
   );

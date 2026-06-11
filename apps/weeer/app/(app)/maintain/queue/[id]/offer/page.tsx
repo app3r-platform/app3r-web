@@ -120,7 +120,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
           <p className="text-xs text-[#FF663A]">📍 {job.address.address}</p>
           <p className="text-xs text-[#FF9C80]">
             🗓 {new Date(job.scheduledAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
-            · 💰 {job.totalPrice.toLocaleString()} pts
+            · 💰 {job.totalPrice.toLocaleString()} พอยต์
           </p>
         </div>
       )}
@@ -143,7 +143,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
           {depositRequired && (
             <div className="space-y-2 pt-1">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">จำนวน (pts) <span className="text-red-400">*</span></label>
+                <label className="block text-xs text-gray-500 mb-1">จำนวน (พอยต์) <span className="text-red-400">*</span></label>
                 <input type="number" min={0} value={depositAmount} onChange={e => setDepositAmount(e.target.value)}
                   placeholder="0"
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
@@ -177,7 +177,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
           {travelRequired && (
             <div className="space-y-2 pt-1">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">จำนวน (pts) <span className="text-red-400">*</span></label>
+                <label className="block text-xs text-gray-500 mb-1">จำนวน (พอยต์) <span className="text-red-400">*</span></label>
                 <input type="number" min={0} value={travelAmount} onChange={e => setTravelAmount(e.target.value)}
                   placeholder="0"
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
@@ -217,7 +217,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
           <p className="text-sm font-semibold text-gray-800">🚫 แกน 4 — ค่าปรับไม่มาตามนัด (No-show fee)</p>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-gray-500 mb-1">ค่า No-show (pts)</label>
+              <label className="block text-xs text-gray-500 mb-1">ค่า No-show (พอยต์)</label>
               <input type="number" min={0} value={noShowFee} onChange={e => setNoShowFee(e.target.value)}
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             </div>
@@ -272,8 +272,8 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
               <p className="text-xs text-yellow-800 font-medium">⚠️ ตรวจสอบก่อนส่ง</p>
               <ul className="text-xs text-yellow-700 mt-1.5 space-y-0.5 list-disc pl-4">
-                <li>พอยต์ทองที่ล็อก: {depositRequired ? `${depositAmount || "0"} pts` : "ไม่เรียก"}</li>
-                <li>ค่าเดินทาง: {travelRequired ? `${travelAmount || "0"} pts` : "ไม่เรียก"}</li>
+                <li>พอยต์ทองที่ล็อก: {depositRequired ? `${depositAmount || "0"} พอยต์` : "ไม่เรียก"}</li>
+                <li>ค่าเดินทาง: {travelRequired ? `${travelAmount || "0"} พอยต์` : "ไม่เรียก"}</li>
                 <li>ไม่ระบุ = ไม่มีสิทธิเรียกภายหลัง</li>
               </ul>
             </div>

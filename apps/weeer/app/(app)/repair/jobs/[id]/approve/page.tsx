@@ -145,7 +145,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
         <p className="text-xs text-blue-600">ลูกค้า: {job.customer_name}</p>
         <p className="text-xs text-blue-500">WeeeT: {job.weeet_name}</p>
         {job.original_price > 0 && (
-          <p className="text-xs text-blue-500 font-medium">ราคาเสนอเดิม: {job.original_price.toLocaleString()} pts</p>
+          <p className="text-xs text-blue-500 font-medium">ราคาเสนอเดิม: {job.original_price.toLocaleString()} พอยต์</p>
         )}
       </div>
 
@@ -166,19 +166,19 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
               {job.parts_added.map((p, i) => (
                 <div key={i} className="flex justify-between text-xs text-gray-600 bg-gray-50 rounded-lg px-3 py-2">
                   <span>{p.name} × {p.qty}</span>
-                  <span className="font-medium">{p.price.toLocaleString()} pts</span>
+                  <span className="font-medium">{p.price.toLocaleString()} พอยต์</span>
                 </div>
               ))}
               {job.proposed_price && (
                 <div className="flex justify-between text-xs font-bold text-[#D63B12] pt-2 border-t border-gray-100 px-1">
                   <span>ราคารวมที่ WeeeT เสนอ</span>
-                  <span>{job.proposed_price.toLocaleString()} pts</span>
+                  <span>{job.proposed_price.toLocaleString()} พอยต์</span>
                 </div>
               )}
             </div>
           )}
           {job.scrap_agreed_price && (
-            <p className="text-xs font-medium text-[#D63B12]">ราคาซากที่ WeeeT เสนอ: {job.scrap_agreed_price.toLocaleString()} pts</p>
+            <p className="text-xs font-medium text-[#D63B12]">ราคาซากที่ WeeeT เสนอ: {job.scrap_agreed_price.toLocaleString()} พอยต์</p>
           )}
         </div>
       )}
@@ -260,7 +260,7 @@ export default function ApprovePage({ params }: { params: Promise<{ id: string }
       {selectedBranch === "B2.1" && job.deposit_amount && (
         <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
           <p className="text-xs font-semibold text-orange-700 mb-1">นโยบายพอยต์ทองที่ล็อก</p>
-          <p className="text-sm text-orange-800">พอยต์ทองที่ล็อก {job.deposit_amount.toLocaleString()} pts —{" "}
+          <p className="text-sm text-orange-800">พอยต์ทองที่ล็อก {job.deposit_amount.toLocaleString()} พอยต์ —{" "}
             {job.deposit_policy_unrepairable === "forfeit" ? "ยึดพอยต์ทองที่ล็อก (ตามเงื่อนไขที่ตกลง)" :
              job.deposit_policy_unrepairable === "refund" ? "คืนพอยต์ทองที่ล็อกให้ WeeeU" : "ฟรี (ไม่มีค่าใช้จ่าย)"}
           </p>

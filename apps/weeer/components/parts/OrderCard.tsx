@@ -50,7 +50,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
         </div>
         <div>
           <p className="text-gray-400">รวม</p>
-          <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} pts</p>
+          <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} พอยต์</p>
         </div>
         <div>
           <p className="text-gray-400">จัดส่ง</p>

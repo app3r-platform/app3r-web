@@ -173,7 +173,7 @@ export default function ResellMarketplacePage() {
               <div className="p-3">
                 <p className="text-sm font-semibold text-gray-800 truncate">{l.applianceName ?? "ไม่ระบุ"}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-lg font-bold text-[#D63B12]">{l.price.toLocaleString()} pts</p>
+                  <p className="text-lg font-bold text-[#D63B12]">{l.price.toLocaleString()} พอยต์</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>

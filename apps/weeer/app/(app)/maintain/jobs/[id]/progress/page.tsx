@@ -121,7 +121,7 @@ export default function MaintainJobProgressPage({
         </div>
         <div className="flex justify-between text-gray-600">
           <span>ราคา</span>
-          <span className="font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</span>
+          <span className="font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} พอยต์</span>
         </div>
         {job.recurring?.enabled && (
           <div className="flex justify-between text-gray-600">
