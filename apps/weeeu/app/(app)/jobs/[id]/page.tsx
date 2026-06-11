@@ -15,6 +15,20 @@ const SERVICE_TYPE_LABEL: Record<string, string> = {
   parcel: "📦 ส่งพัสดุ",
 };
 
+// WU-EN-3 fix: แปล subStage enum เป็นไทย
+const SUB_STAGE_LABEL: Record<string, string> = {
+  inspection_started:    "เริ่มตรวจสอบ",
+  inspection_logged:     "บันทึกผลตรวจสอบแล้ว",
+  in_shop_inspection:    "กำลังตรวจสอบที่ร้าน",
+  in_shop_repair:        "กำลังซ่อมที่ร้าน",
+  delivered_to_shop:     "ส่งถึงร้านแล้ว",
+  delivered:             "ส่งคืนแล้ว",
+  delivered_to_customer: "ส่งถึงลูกค้าแล้ว",
+  awaiting_pickup:       "รอรับเครื่อง",
+  parts_ordered:         "สั่งอะไหล่แล้ว",
+  parts_arrived:         "อะไหล่มาถึงแล้ว",
+};
+
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [job, setJob] = useState<ServiceProgress | null | undefined>(undefined);
@@ -65,7 +79,7 @@ export default function JobDetailPage() {
           <div className="bg-weeeu-surface rounded-xl px-3 py-2.5">
             <p className="text-xs text-weeeu-primary/70">ขั้นตอนปัจจุบัน</p>
             <p className="text-sm font-semibold text-weeeu-text">
-              {job.currentSubStage.replace(/_/g, " ")}
+              {SUB_STAGE_LABEL[job.currentSubStage] ?? job.currentSubStage.replace(/_/g, " ")}
             </p>
           </div>
         )}

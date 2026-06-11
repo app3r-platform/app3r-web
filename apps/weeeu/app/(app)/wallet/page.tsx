@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HelpTip } from "@app3r/ui";
 import { FileUpload } from "@/components/upload/FileUpload";
@@ -49,6 +49,9 @@ export default function WalletPage() {
   const [topUpSubmitting, setTopUpSubmitting] = useState(false);
   const [topUpSuccess, setTopUpSuccess] = useState(false);
   const [silverInfoOpen, setSilverInfoOpen] = useState(false); // U-57#5b ย่อเป็น icon
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
 
   const handleGoldTopUp = () => {
     const amount = Number(goldTopUpAmount);

@@ -8,7 +8,7 @@
  * S12: ซากจาก Repair C4 — badge "มาจากงานซ่อม"
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -103,6 +103,9 @@ export default function MyScrapListingsPage() {
   const router = useRouter();
   const [filterStatus, setFilterStatus] = useState<ListingStatus | "">("");
   const [renewing, setRenewing] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
 
   const filtered = filterStatus
     ? MOCK_LISTINGS.filter(l => l.status === filterStatus)
