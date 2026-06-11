@@ -202,10 +202,10 @@ export default function ListingDetailPage() {
           {listing.status === "disputed" && (
             <section className="bg-white rounded-xl border border-red-900/40 p-5">
               <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3">⚖️ มีข้อพิพาท</h2>
-              <p className="text-sm text-gray-500 mb-3">Listing นี้อยู่ในสถานะ DISPUTED — ต้องรอ Admin ตัดสิน</p>
+              <p className="text-sm text-gray-500 mb-3">รายการนี้อยู่ในสถานะข้อพิพาท — ต้องรอผู้ดูแลตัดสิน</p>
               <Link href="/resell/disputes"
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-red-800 hover:bg-red-50 text-red-700 border border-red-200 rounded-lg transition-colors">
-                ⚖️ ไปหน้า Disputes →
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg transition-colors">
+                ⚖️ ไปหน้าข้อพิพาท →
               </Link>
             </section>
           )}

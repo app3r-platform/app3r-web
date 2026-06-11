@@ -450,8 +450,8 @@ export default function StoragePage() {
                   </div>
                   {isSuper && (
                     <button
-                      className="self-end px-4 py-2 bg-red-900/50 hover:bg-red-900 border border-red-800 text-red-700 rounded-lg text-sm transition-colors">
-                      🗑️ Bulk Delete (Super Admin)
+                      className="self-end px-4 py-2 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 rounded-lg text-sm transition-colors">
+                      🗑️ ลบหลายรายการ (Super Admin)
                     </button>
                   )}
                 </div>

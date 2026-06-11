@@ -65,9 +65,9 @@ export default function BalancesPage() {
   const fmtS = (v: number) => `${v.toLocaleString()} S`;
 
   const recColor = {
-    BALANCED: "bg-green-900/40 text-green-600 border-green-800",
-    DISCREPANCY: "bg-red-900/40 text-red-600 border-red-800",
-    PENDING: "bg-yellow-900/40 text-yellow-700 border-yellow-800",
+    BALANCED: "bg-green-50 text-green-700 border-green-200",
+    DISCREPANCY: "bg-red-50 text-red-700 border-red-200",
+    PENDING: "bg-yellow-50 text-yellow-700 border-yellow-200",
   };
 
   return (
@@ -116,7 +116,7 @@ export default function BalancesPage() {
             {/* Reconciliation */}
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                🔍 Reconciliation Status
+                🔍 สถานะกระทบยอด (Reconciliation)
               </h2>
               <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center justify-between">
                 <div>
@@ -124,9 +124,9 @@ export default function BalancesPage() {
                   <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold border ${
                     recColor[data.reconciliation_status]
                   }`}>
-                    {data.reconciliation_status === "BALANCED" ? "✅ BALANCED" :
-                     data.reconciliation_status === "DISCREPANCY" ? "🚨 DISCREPANCY — ต้องตรวจสอบ" :
-                     "⏳ PENDING"}
+                    {data.reconciliation_status === "BALANCED" ? "✅ สมดุล" :
+                     data.reconciliation_status === "DISCREPANCY" ? "🚨 ไม่สอดคล้อง — ต้องตรวจสอบ" :
+                     "⏳ รอกระทบยอด"}
                   </div>
                   {data.last_reconciliation_at && (
                     <p className="text-xs text-gray-600 mt-2">

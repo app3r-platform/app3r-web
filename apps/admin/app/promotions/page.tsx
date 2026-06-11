@@ -412,7 +412,7 @@ export default function PromotionsPage() {
                       className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-200 transition-colors text-left border-b border-gray-300 last:border-0"
                     >
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        u.role === "weeeu" ? "bg-blue-900 text-blue-300" : "bg-green-900 text-green-700"
+                        u.role === "weeeu" ? "bg-blue-50 text-blue-700" : "bg-green-50 text-green-700"
                       }`}>
                         {u.role === "weeeu" ? "WeeeU" : "WeeeR"}
                       </span>

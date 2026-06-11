@@ -266,7 +266,7 @@ export default function TopupPage() {
                           <button
                             onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-xs bg-red-700 hover:bg-red-800 disabled:opacity-50 text-white rounded-lg transition-colors"
                           >
                             ✕ ปฏิเสธ
                           </button>
@@ -312,7 +312,7 @@ export default function TopupPage() {
           <div className="bg-white border border-gray-300 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <h3 className="text-lg font-bold mb-1">ปฏิเสธคำขอ</h3>
             <p className="text-sm text-gray-500 mb-4">
-              ผู้ใช้: <span className="text-white">{rejectModal.userName}</span>
+              ผู้ใช้: <span className="font-medium text-gray-900">{rejectModal.userName}</span>
             </p>
             <label className="block text-sm text-gray-500 mb-2">เหตุผลที่ปฏิเสธ <span className="text-red-600">*</span></label>
             <textarea
@@ -357,9 +357,9 @@ export default function TopupPage() {
 
 function PaymentMethodBadge({ method }: { method: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    bank_transfer: { label: "โอนธนาคาร", cls: "bg-blue-900 text-blue-300" },
+    bank_transfer: { label: "โอนธนาคาร", cls: "bg-blue-50 text-blue-700" },
     promptpay:     { label: "PromptPay",  cls: "bg-admin-primary/15 text-admin-primary" },
-    truemoney:     { label: "TrueMoney",  cls: "bg-orange-900 text-orange-700" },
+    truemoney:     { label: "TrueMoney",  cls: "bg-orange-50 text-orange-700" },
   };
   const m = map[method] ?? { label: method, cls: "bg-gray-100 text-gray-500" };
   return (
@@ -371,9 +371,9 @@ function PaymentMethodBadge({ method }: { method: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    pending:  { label: "รออนุมัติ",   cls: "bg-yellow-900 text-yellow-700" },
-    approved: { label: "อนุมัติแล้ว", cls: "bg-green-900 text-green-700" },
-    rejected: { label: "ปฏิเสธแล้ว", cls: "bg-red-900 text-red-700" },
+    pending:  { label: "รออนุมัติ",   cls: "bg-yellow-50 text-yellow-700" },
+    approved: { label: "อนุมัติแล้ว", cls: "bg-green-50 text-green-700" },
+    rejected: { label: "ปฏิเสธแล้ว", cls: "bg-red-50 text-red-700" },
   };
   const s = map[status] ?? { label: status, cls: "bg-gray-100 text-gray-500" };
   return (

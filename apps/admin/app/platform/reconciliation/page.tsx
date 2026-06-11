@@ -98,9 +98,9 @@ export default function ReconciliationPage() {
   const totalPages = Math.ceil(histTotal / 20);
 
   const statusConfig = {
-    BALANCED: { color: "bg-green-900/40 border-green-800 text-green-600", label: "✅ BALANCED", desc: "ยอดทุก bucket สมดุล" },
-    DISCREPANCY: { color: "bg-red-900/40 border-red-800 text-red-600", label: "🚨 DISCREPANCY", desc: "พบความไม่สอดคล้อง — ต้องตรวจสอบทันที" },
-    PENDING: { color: "bg-yellow-900/40 border-yellow-800 text-yellow-700", label: "⏳ PENDING", desc: "ยังไม่ได้รัน reconciliation" },
+    BALANCED: { color: "bg-green-50 border-green-200 text-green-700", label: "✅ สมดุล", desc: "ยอดทุก bucket สมดุล" },
+    DISCREPANCY: { color: "bg-red-50 border-red-200 text-red-700", label: "🚨 ไม่สอดคล้อง", desc: "พบความไม่สอดคล้อง — ต้องตรวจสอบทันที" },
+    PENDING: { color: "bg-yellow-50 border-yellow-200 text-yellow-700", label: "⏳ รอกระทบยอด", desc: "ยังไม่ได้รัน reconciliation" },
   };
 
   return (

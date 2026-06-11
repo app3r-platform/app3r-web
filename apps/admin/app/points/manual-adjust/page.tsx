@@ -74,7 +74,7 @@ export default function ManualAdjustPage() {
   const amountValid = !isNaN(amountNum) && amountNum !== 0 && Math.abs(amountNum) <= maxLimit;
 
   async function handleSubmit() {
-    if (confirmText !== "CONFIRM") return;
+    if (confirmText !== "ยืนยัน") return;
     setSubmitting(true);
     try {
       await api.post("/admin/platform/points/manual-adjust", {
@@ -233,17 +233,17 @@ export default function ManualAdjustPage() {
                 <p><span className="text-gray-500">เหตุผล:</span> {reason}</p>
               </div>
 
-              <p className="text-sm text-gray-500 mb-2">พิมพ์ <strong className="text-white">CONFIRM</strong> เพื่อยืนยัน:</p>
+              <p className="text-sm text-gray-500 mb-2">พิมพ์ <strong className="font-bold text-gray-900">ยืนยัน</strong> เพื่อดำเนินการ:</p>
               <input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)}
                 className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-gray-900 font-mono mb-4"
-                placeholder="CONFIRM" />
+                placeholder="ยืนยัน" />
 
               <div className="flex gap-3">
                 <button onClick={() => { setShowModal(false); setConfirmText(""); }}
                   className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
                   ยกเลิก
                 </button>
-                <button onClick={handleSubmit} disabled={confirmText !== "CONFIRM" || submitting}
+                <button onClick={handleSubmit} disabled={confirmText !== "ยืนยัน" || submitting}
                   className="flex-1 py-2.5 bg-red-700 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
                   {submitting ? "กำลังดำเนินการ..." : "ยืนยัน"}
                 </button>

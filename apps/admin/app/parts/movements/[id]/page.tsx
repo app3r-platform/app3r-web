@@ -87,7 +87,7 @@ export default function MovementDetailPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ยังไม่มีข้อมูล movement"}
         </div>
-        <Link href="/parts/movements" className="text-sm text-admin-primary hover:text-admin-dark">← Movements</Link>
+        <Link href="/parts/movements" className="text-sm text-admin-primary hover:text-admin-dark">← รายการเคลื่อนไหว</Link>
       </main>
     </div>
   );
@@ -113,7 +113,7 @@ export default function MovementDetailPage() {
           </div>
           <Link href="/parts/movements"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Movements
+            ← รายการเคลื่อนไหว
           </Link>
         </div>
 

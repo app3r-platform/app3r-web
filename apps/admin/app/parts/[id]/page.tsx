@@ -72,7 +72,7 @@ export default function PartDetailPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ยังไม่มีข้อมูลอะไหล่"}
         </div>
-        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← Inventory</Link>
+        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← คลังอะไหล่</Link>
       </main>
     </div>
   );
@@ -97,7 +97,7 @@ export default function PartDetailPage() {
           </div>
           <Link href="/parts"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Inventory
+            ← คลังอะไหล่
           </Link>
         </div>
 

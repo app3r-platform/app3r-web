@@ -152,7 +152,7 @@ export default function MaintainAnalyticsPage() {
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error ?? "ไม่พบข้อมูล"}</div>
-        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← Jobs</Link>
+        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← งานซ่อมบำรุง</Link>
       </main>
     </div>
   );

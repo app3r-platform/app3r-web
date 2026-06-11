@@ -176,7 +176,7 @@ export default function MaintainJobDetailPage() {
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error ?? "ไม่พบข้อมูล"}</div>
-        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← Jobs</Link>
+        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← งานซ่อมบำรุง</Link>
       </main>
     </div>
   );
@@ -209,7 +209,7 @@ export default function MaintainJobDetailPage() {
           </div>
           <Link href="/maintain/jobs"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Jobs
+            ← งานซ่อมบำรุง
           </Link>
         </div>
 

@@ -129,7 +129,7 @@ export default function PartsAnalyticsPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           ระบบอะไหล่กำลังพัฒนา — {error ?? "ไม่พบข้อมูล"}
         </div>
-        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← Inventory</Link>
+        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← คลังอะไหล่</Link>
       </main>
     </div>
   );

@@ -13,6 +13,8 @@ import {
 // data layer แบบ mock-first — base '/api/v1' (default ของ factory)
 // token: dev → dev test token (ไม่ throw) · prod → getToken()
 export const api = createMockFirstApi({
+  // CMD #115-AH §A: mockMode = REQUIRED (shared ไม่อ่าน env เอง) → inline ใน app chunk
+  mockMode: process.env.NEXT_PUBLIC_DEV_NAV === "true",
   getToken: () =>
     process.env.NODE_ENV === "development"
       ? getDevTestToken().catch(() => null)

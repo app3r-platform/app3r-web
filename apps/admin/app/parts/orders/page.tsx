@@ -84,12 +84,12 @@ export default function PartsOrdersPage() {
           <div>
             <h1 className="text-2xl font-bold">📦 คำสั่งซื้ออะไหล่</h1>
             <p className="text-gray-500 text-sm mt-1">
-              รายการสั่งซื้ออะไหล่ — B2B marketplace orders
+              รายการสั่งซื้ออะไหล่ — ตลาดกลาง B2B
             </p>
           </div>
           <Link href="/parts"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Inventory
+            ← คลังอะไหล่
           </Link>
         </div>
 

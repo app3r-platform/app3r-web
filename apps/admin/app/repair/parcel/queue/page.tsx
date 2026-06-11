@@ -139,17 +139,17 @@ const MOCK_PARCEL_JOBS: ParcelJob[] = [
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
   pending:               { label: "รอดำเนินการ",      color: "bg-gray-100 text-gray-500" },
-  label_created:         { label: "สร้าง label แล้ว", color: "bg-gray-700 text-gray-700" },
+  label_created:         { label: "สร้าง label แล้ว", color: "bg-gray-100 text-gray-600" },
   shipped_out:           { label: "ส่งออกแล้ว",       color: "bg-blue-50 text-blue-700" },
   in_transit_out:        { label: "กำลังส่งไปร้าน",  color: "bg-yellow-50 text-yellow-700" },
   at_shop:               { label: "อยู่ที่ร้าน",       color: "bg-admin-primary/15 text-admin-primary" },
   repaired:              { label: "ซ่อมเสร็จ",        color: "bg-brand-success/15 text-brand-success" },
   shipped_back:          { label: "ส่งคืนแล้ว",       color: "bg-brand-info/15 text-brand-info" },
-  in_transit_back:       { label: "กำลังส่งกลับ",     color: "bg-cyan-900/50 text-cyan-300" },
-  delivered:             { label: "ส่งถึงลูกค้า",     color: "bg-green-900/50 text-green-700" },
+  in_transit_back:       { label: "กำลังส่งกลับ",     color: "bg-cyan-50 text-cyan-700" },
+  delivered:             { label: "ส่งถึงลูกค้า",     color: "bg-green-50 text-green-700" },
   completed:             { label: "เสร็จสิ้น",        color: "bg-green-50 text-green-700" },
   failed:                { label: "ล้มเหลว",           color: "bg-red-50 text-red-700" },
-  lost:                  { label: "พัสดุหาย",         color: "bg-red-900/60 text-red-700 font-semibold" },
+  lost:                  { label: "พัสดุหาย",         color: "bg-red-50 text-red-700 font-semibold" },
   cancelled:             { label: "ยกเลิก",            color: "bg-gray-100 text-gray-500" },
 };
 

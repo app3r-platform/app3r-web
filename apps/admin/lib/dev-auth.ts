@@ -7,6 +7,8 @@ import { saveToken, removeToken } from "./auth";
 import { createDevTokenProvider } from "@app3r/shared/src/mock-runtime";
 
 const provider = createDevTokenProvider({
+  // CMD #115-AH §A: mockMode = REQUIRED (shared ไม่อ่าน env เอง) → inline ใน app chunk
+  mockMode: process.env.NEXT_PUBLIC_DEV_NAV === "true",
   saveToken,
   removeToken,
   payload: { user_id: 1, role: "admin" },
