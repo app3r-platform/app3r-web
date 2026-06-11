@@ -194,9 +194,9 @@ export default function MaintainAnalyticsPage() {
             sub={`เฉลี่ย ${data.avg_price.toLocaleString()} ฿/งาน`}
           />
           <StatCard
-            label="Recurring"
+            label="รายการซ้ำ"
             value={data.recurring_count.toLocaleString()}
-            sub={`Conversion ${(data.recurring_conversion_rate * 100).toFixed(1)}%`}
+            sub={`อัตราการแปลง ${(data.recurring_conversion_rate * 100).toFixed(1)}%`}
           />
           <StatCard
             label="ระยะเวลาเฉลี่ย"
@@ -330,7 +330,7 @@ export default function MaintainAnalyticsPage() {
               <span className="text-admin-primary font-mono">{data.recurring_count.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Conversion Rate</span>
+              <span className="text-gray-500">อัตราการแปลง</span>
               <span className={`font-mono font-bold ${
                 data.recurring_conversion_rate >= 0.3
                   ? "text-green-600"

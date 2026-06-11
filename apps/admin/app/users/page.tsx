@@ -81,9 +81,9 @@ export default function UsersPage() {
               <tr className="text-gray-500 text-left border-b border-gray-200">
                 <th className="px-4 py-3">ID</th>
                 <th className="px-4 py-3">ชื่อ</th>
-                <th className="px-4 py-3">Email</th>
+                <th className="px-4 py-3">อีเมล</th>
                 <th className="px-4 py-3">เบอร์โทร</th>
-                <th className="px-4 py-3">Role</th>
+                <th className="px-4 py-3">บทบาท</th>
                 <th className="px-4 py-3">สถานะ</th>
                 <th className="px-4 py-3">วันที่สมัคร</th>
               </tr>

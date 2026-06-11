@@ -203,7 +203,7 @@ export default function ParcelAnalyticsPage() {
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                <StatCard icon="📦" label="Jobs ทั้งหมด"  value={data.total_jobs.toLocaleString()} />
+                <StatCard icon="📦" label="งานทั้งหมด"  value={data.total_jobs.toLocaleString()} />
                 <StatCard icon="⚡" label="กำลังดำเนินการ" value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="เสร็จสิ้น"     value={data.completed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ล้มเหลว"       value={data.failed_jobs.toLocaleString()} accent="red" />
@@ -336,7 +336,7 @@ export default function ParcelAnalyticsPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-gray-500 text-left border-b border-gray-200">
-                      <th className="pb-2">Courier</th>
+                      <th className="pb-2">ขนส่ง</th>
                       <th className="pb-2 text-right">งาน</th>
                       <th className="pb-2 text-right">เวลาเฉลี่ย</th>
                       <th className="pb-2 text-right">ตรงเวลา</th>

@@ -241,10 +241,10 @@ export default function StoragePage() {
             {tab === "overview" && summary && (
               <div className="space-y-6">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <BigCard label="Total Storage" value={fmtBytes(summary.total_bytes)} />
-                  <BigCard label="Total Files" value={summary.total_files.toLocaleString()} />
-                  <BigCard label="Photos" value={summary.total_photos.toLocaleString()} />
-                  <BigCard label="Videos" value={summary.total_videos.toLocaleString()} />
+                  <BigCard label="พื้นที่ทั้งหมด" value={fmtBytes(summary.total_bytes)} />
+                  <BigCard label="ไฟล์ทั้งหมด" value={summary.total_files.toLocaleString()} />
+                  <BigCard label="รูปภาพ" value={summary.total_photos.toLocaleString()} />
+                  <BigCard label="วิดีโอ" value={summary.total_videos.toLocaleString()} />
                 </div>
 
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -254,9 +254,9 @@ export default function StoragePage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-gray-500 text-left">
-                        <th className="px-6 py-3">Entity</th>
+                        <th className="px-6 py-3">รายการ</th>
                         <th className="px-6 py-3 text-right">ไฟล์</th>
-                        <th className="px-6 py-3 text-right">Storage</th>
+                        <th className="px-6 py-3 text-right">พื้นที่</th>
                         <th className="px-6 py-3 text-right">%</th>
                       </tr>
                     </thead>
@@ -283,11 +283,11 @@ export default function StoragePage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-gray-500 text-left">
-                      <th className="px-6 py-3">Rank</th>
-                      <th className="px-6 py-3">User</th>
-                      <th className="px-6 py-3">Role</th>
+                      <th className="px-6 py-3">อันดับ</th>
+                      <th className="px-6 py-3">ผู้ใช้</th>
+                      <th className="px-6 py-3">บทบาท</th>
                       <th className="px-6 py-3 text-right">ไฟล์</th>
-                      <th className="px-6 py-3 text-right">Storage</th>
+                      <th className="px-6 py-3 text-right">พื้นที่</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -321,10 +321,10 @@ export default function StoragePage() {
                   <thead>
                     <tr className="text-gray-500 text-left">
                       <th className="px-6 py-3">เวลา</th>
-                      <th className="px-6 py-3">Appliance</th>
+                      <th className="px-6 py-3">เครื่องใช้ไฟฟ้า</th>
                       <th className="px-6 py-3">จาก → ถึง</th>
                       <th className="px-6 py-3 text-right">ราคา (G)</th>
-                      <th className="px-6 py-3">Announcement</th>
+                      <th className="px-6 py-3">ประกาศ</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -361,9 +361,9 @@ export default function StoragePage() {
                     <thead>
                       <tr className="text-gray-500 text-left">
                         <th className="px-6 py-3">ประเภทไฟล์</th>
-                        <th className="px-6 py-3">Retention</th>
+                        <th className="px-6 py-3">ระยะเวลาเก็บ</th>
                         <th className="px-6 py-3 text-right">รอลบ</th>
-                        <th className="px-6 py-3">Last Cleanup</th>
+                        <th className="px-6 py-3">ทำความสะอาดล่าสุด</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -419,7 +419,7 @@ export default function StoragePage() {
                 {/* Filters */}
                 <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap gap-3">
                   <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Role</label>
+                    <label className="text-xs text-gray-500 mb-1 block">บทบาท</label>
                     <select value={filterRole} onChange={(e) => { setFilterRole(e.target.value); setAuditPage(1); }}
                       className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
                       <option value="">ทั้งหมด</option>
@@ -429,7 +429,7 @@ export default function StoragePage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Entity Type</label>
+                    <label className="text-xs text-gray-500 mb-1 block">ประเภทรายการ</label>
                     <select value={filterEntity} onChange={(e) => { setFilterEntity(e.target.value); setAuditPage(1); }}
                       className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
                       <option value="">ทั้งหมด</option>
@@ -439,13 +439,13 @@ export default function StoragePage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Visibility</label>
+                    <label className="text-xs text-gray-500 mb-1 block">การมองเห็น</label>
                     <select value={filterVis} onChange={(e) => { setFilterVis(e.target.value); setAuditPage(1); }}
                       className="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none text-gray-900">
                       <option value="">ทั้งหมด</option>
-                      <option value="public">Public</option>
-                      <option value="private">Private</option>
-                      <option value="restricted">Restricted</option>
+                      <option value="public">สาธารณะ</option>
+                      <option value="private">ส่วนตัว</option>
+                      <option value="restricted">จำกัด</option>
                     </select>
                   </div>
                   {isSuper && (
@@ -472,11 +472,11 @@ export default function StoragePage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-gray-500 text-left">
-                        <th className="px-6 py-3">Path</th>
-                        <th className="px-6 py-3">Owner</th>
-                        <th className="px-6 py-3">Entity</th>
+                        <th className="px-6 py-3">พาธ</th>
+                        <th className="px-6 py-3">เจ้าของ</th>
+                        <th className="px-6 py-3">รายการ</th>
                         <th className="px-6 py-3 text-right">ขนาด</th>
-                        <th className="px-6 py-3">Visibility</th>
+                        <th className="px-6 py-3">การมองเห็น</th>
                         <th className="px-6 py-3"></th>
                       </tr>
                     </thead>

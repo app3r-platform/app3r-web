@@ -196,7 +196,7 @@ export default function ScrapListingsPage() {
             <option value="grade_B">Grade B</option>
             <option value="grade_C">Grade C</option>
           </select>
-          <input type="text" placeholder="Seller ID"
+          <input type="text" placeholder="รหัสผู้ขาย"
             value={filterSeller} onChange={e => { setFilterSeller(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-admin-primary"
           />
@@ -229,14 +229,14 @@ export default function ScrapListingsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-4 py-3">Seller</th>
+                  <th className="px-4 py-3">ผู้ขาย</th>
                   <th className="px-4 py-3">รายละเอียด</th>
                   <th className="px-4 py-3">เกรด</th>
                   <th className="px-4 py-3">Part ที่ใช้ได้</th>
                   <th className="px-4 py-3">ราคา</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">วันที่สร้าง</th>
-                  <th className="px-4 py-3">Flags</th>
+                  <th className="px-4 py-3">ธงแจ้งเตือน</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>

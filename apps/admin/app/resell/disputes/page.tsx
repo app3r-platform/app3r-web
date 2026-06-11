@@ -159,11 +159,11 @@ export default function ResellDisputesPage() {
           <p className="text-gray-600 font-semibold mb-3">กฎการตัดสิน Resell — 3 ทาง</p>
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <div className="font-semibold text-blue-700 mb-1">🛒 Buyer ชนะ</div>
+              <div className="font-semibold text-blue-700 mb-1">🛒 ผู้ซื้อชนะ</div>
               <div className="text-xs text-gray-500">คืนพักเงินกลางเต็มจำนวนให้ buyer · listing → CANCELLED</div>
             </div>
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-              <div className="font-semibold text-green-700 mb-1">🧑‍💼 Seller ชนะ</div>
+              <div className="font-semibold text-green-700 mb-1">🧑‍💼 ผู้ขายชนะ</div>
               <div className="text-xs text-gray-500">โอนพักเงินกลางให้ seller · listing → COMPLETED</div>
             </div>
             <div className="bg-admin-surface border border-admin-primary/30 rounded-lg p-3">
@@ -190,8 +190,8 @@ export default function ResellDisputesPage() {
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3">ประกาศ</th>
-                  <th className="px-5 py-3">Buyer</th>
-                  <th className="px-5 py-3">Seller</th>
+                  <th className="px-5 py-3">ผู้ซื้อ</th>
+                  <th className="px-5 py-3">ผู้ขาย</th>
                   <th className="px-5 py-3">เงินพักกลาง (Escrow)</th>
                   <th className="px-5 py-3">เวลาที่พิพาท</th>
                   <th className="px-5 py-3 text-right">จัดการ</th>
@@ -278,11 +278,11 @@ export default function ResellDisputesPage() {
             {/* Parties + Escrow */}
             <div className="bg-gray-50 rounded-xl p-4 mb-5 grid grid-cols-2 gap-3 text-sm border border-gray-200">
               <div>
-                <div className="text-xs text-gray-500 mb-1">🛒 Buyer</div>
+                <div className="text-xs text-gray-500 mb-1">🛒 ผู้ซื้อ</div>
                 <div className="text-blue-700 font-medium">{resolveModal.buyer_name}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500 mb-1">🧑‍💼 Seller</div>
+                <div className="text-xs text-gray-500 mb-1">🧑‍💼 ผู้ขาย</div>
                 <div className="text-green-700 font-medium">{resolveModal.seller_name}</div>
               </div>
               <div className="col-span-2">
@@ -304,8 +304,8 @@ export default function ResellDisputesPage() {
                       : "border-admin-primary bg-admin-surface text-admin-primary"
                       : "border-gray-200 bg-white text-gray-500 hover:border-gray-300"
                   }`}>
-                  {r === "to_buyer"  ? "🛒 Buyer\nชนะ"
-                   : r === "to_seller" ? "🧑‍💼 Seller\nชนะ"
+                  {r === "to_buyer"  ? "🛒 ผู้ซื้อ\nชนะ"
+                   : r === "to_seller" ? "🧑‍💼 ผู้ขาย\nชนะ"
                    : "⚡ แบ่ง\nSplit"}
                 </button>
               ))}
@@ -316,9 +316,9 @@ export default function ResellDisputesPage() {
               <div className="bg-admin-surface border border-admin-primary/30 rounded-xl p-4 mb-4 space-y-2">
                 <p className="text-xs font-semibold text-admin-primary mb-2">⚡ กำหนด Split %</p>
                 <p className="text-xs text-gray-600">
-                  Buyer ได้ <strong>{splitPct}%</strong> = {buyerSplit.toLocaleString()} G
+                  ผู้ซื้อได้ <strong>{splitPct}%</strong> = {buyerSplit.toLocaleString()} G
                   &nbsp;·&nbsp;
-                  Seller ได้ <strong>{100 - splitPct}%</strong> = {sellerSplit.toLocaleString()} G
+                  ผู้ขายได้ <strong>{100 - splitPct}%</strong> = {sellerSplit.toLocaleString()} G
                 </p>
                 <input type="range" min={0} max={100} step={5}
                   value={splitPct}
@@ -326,9 +326,9 @@ export default function ResellDisputesPage() {
                   className="w-full accent-[#2C5E8C]"
                 />
                 <div className="flex justify-between text-xs text-gray-400">
-                  <span>Buyer 100%</span>
+                  <span>ผู้ซื้อ 100%</span>
                   <span>50/50</span>
-                  <span>Seller 100%</span>
+                  <span>ผู้ขาย 100%</span>
                 </div>
               </div>
             )}
@@ -356,8 +356,8 @@ export default function ResellDisputesPage() {
                   : "bg-gray-400"
                 }`}>
                 {actionLoading !== null ? "กำลังดำเนินการ..."
-                  : resolution === "to_buyer"  ? "✓ Buyer ชนะ"
-                  : resolution === "to_seller" ? "✓ Seller ชนะ"
+                  : resolution === "to_buyer"  ? "✓ ผู้ซื้อชนะ"
+                  : resolution === "to_seller" ? "✓ ผู้ขายชนะ"
                   : resolution === "split"     ? `✓ แบ่ง ${splitPct}/${100 - splitPct}`
                   : "เลือกการตัดสินก่อน"}
               </button>

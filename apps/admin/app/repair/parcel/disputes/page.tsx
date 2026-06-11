@@ -328,7 +328,7 @@ export default function ParcelDisputesPage() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3">Job #</th>
                   <th className="px-5 py-3">ประเภท</th>
-                  <th className="px-5 py-3">Courier</th>
+                  <th className="px-5 py-3">ขนส่ง</th>
                   <th className="px-5 py-3">ลูกค้า</th>
                   <th className="px-5 py-3">ร้าน</th>
                   <th className="px-5 py-3">อุปกรณ์</th>

@@ -119,7 +119,7 @@ export default function KYCQueuePage() {
                   <th className="px-6 py-3">สถานะ</th>
                   <th className="px-6 py-3">เอกสาร</th>
                   <th className="px-6 py-3">ส่งเมื่อ</th>
-                  <th className="px-6 py-3">WeeeT Created</th>
+                  <th className="px-6 py-3">WeeeT สร้างเมื่อ</th>
                   <th className="px-6 py-3"></th>
                 </tr>
               </thead>

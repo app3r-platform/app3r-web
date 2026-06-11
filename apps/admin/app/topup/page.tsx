@@ -211,7 +211,7 @@ export default function TopupPage() {
                       <span className="text-lg font-bold text-gray-900">
                         {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </span>
-                      <span className="text-xs text-gray-500 ml-1">Points</span>
+                      <span className="text-xs text-gray-500 ml-1">พอยต์</span>
                     </td>
 
                     <td className="px-5 py-3.5">

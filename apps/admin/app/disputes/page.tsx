@@ -486,7 +486,7 @@ export default function DisputesPage() {
                   <th className="px-4 py-3 font-medium">บริการ</th>
                   <th className="px-4 py-3 font-medium">คู่กรณี</th>
                   <th className="px-4 py-3 font-medium">เงินพักกลาง (Escrow)</th>
-                  <th className="px-4 py-3 font-medium">Layer hint</th>
+                  <th className="px-4 py-3 font-medium">คำใบ้เลเยอร์</th>
                   <th className="px-4 py-3 font-medium">สถานะ</th>
                   <th className="px-4 py-3 font-medium">เปิดเมื่อ</th>
                   <th className="px-4 py-3" />

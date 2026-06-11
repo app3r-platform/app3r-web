@@ -117,7 +117,7 @@ export default function PartsPage() {
 
         {/* Filters */}
         <div className="flex gap-3 flex-wrap items-center">
-          <input type="text" placeholder="Shop ID"
+          <input type="text" placeholder="รหัสร้าน"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
@@ -177,7 +177,7 @@ export default function PartsPage() {
                   <th className="px-4 py-3">ชื่ออะไหล่</th>
                   <th className="px-4 py-3">หมวด</th>
                   <th className="px-4 py-3">สภาพ</th>
-                  <th className="px-4 py-3">Shop</th>
+                  <th className="px-4 py-3">ร้าน</th>
                   <th className="px-4 py-3">คงเหลือ</th>
                   <th className="px-4 py-3">จอง</th>
                   <th className="px-4 py-3">ราคา/หน่วย</th>

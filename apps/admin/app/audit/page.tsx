@@ -61,7 +61,7 @@ export default function AuditPage() {
       <Sidebar />
       <main className="flex-1 min-w-0">
         <AdminListPage
-          title="Audit Log"
+          title="บันทึก Audit"
           totalCount={items.length}
           page={pagination.page}
           pageSize={pagination.pageSize}
@@ -93,10 +93,10 @@ export default function AuditPage() {
             <thead>
               <tr className="text-gray-500 text-left border-b border-gray-200">
                 <th className="px-4 py-3">ID</th>
-                <th className="px-4 py-3">Actor</th>
-                <th className="px-4 py-3">Module</th>
-                <th className="px-4 py-3">Action</th>
-                <th className="px-4 py-3">Entity ID</th>
+                <th className="px-4 py-3">ผู้กระทำ</th>
+                <th className="px-4 py-3">โมดูล</th>
+                <th className="px-4 py-3">การกระทำ</th>
+                <th className="px-4 py-3">รหัสรายการ</th>
                 <th className="px-4 py-3">เวลา</th>
               </tr>
             </thead>

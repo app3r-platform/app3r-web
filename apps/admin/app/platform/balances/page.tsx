@@ -94,12 +94,12 @@ export default function BalancesPage() {
                 🥇 พอยต์ทอง (Gold Point) — 3 กลุ่ม
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <BucketCard label="Listing Offer Fee Pool" value={fmtG(data.listing_offer_fee_pool)} accent="yellow" />
-                <BucketCard label="Platform Fee Pool" value={fmtG(data.platform_fee_pool)} accent="yellow" />
-                <BucketCard label="Advertising Pool" value={fmtG(data.advertising_pool)} accent="admin-primary" />
+                <BucketCard label="กองทุนค่าธรรมเนียมประกาศ" value={fmtG(data.listing_offer_fee_pool)} accent="yellow" />
+                <BucketCard label="กองทุนค่าธรรมเนียมแพลตฟอร์ม" value={fmtG(data.platform_fee_pool)} accent="yellow" />
+                <BucketCard label="กองทุนโฆษณา" value={fmtG(data.advertising_pool)} accent="admin-primary" />
                 <BucketCard label="พักเงินกลาง (Escrow) Pool" value={fmtG(data.escrow_pool)} accent="blue" />
-                <BucketCard label="Reserve Pool" value={fmtG(data.reserve_pool)} accent="green" />
-                <BucketCard label="Written-Off" value={fmtG(data.written_off)} accent="red" />
+                <BucketCard label="กองทุนสำรอง" value={fmtG(data.reserve_pool)} accent="green" />
+                <BucketCard label="ตัดจำหน่าย" value={fmtG(data.written_off)} accent="red" />
               </div>
             </section>
 

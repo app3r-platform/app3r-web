@@ -76,7 +76,7 @@ function generateCertHtml(cert: EWasteCertificate): string {
       <div class="row"><span class="label">เลขที่ใบรับรอง</span><span class="value">${cert.certNumber}</span></div>
       <div class="row"><span class="label">วันที่ออก</span><span class="value">${issuedDate}</span></div>
       <div class="row"><span class="label">ออกโดย</span><span class="value">${cert.issuedById}</span></div>
-      <div class="row"><span class="label">Scrap Job</span><span class="value">${cert.scrapJobId}</span></div>
+      <div class="row"><span class="label">งาน Scrap</span><span class="value">${cert.scrapJobId}</span></div>
     </div>
 
     <div class="section">
@@ -215,7 +215,7 @@ export default function CertificateDetailPage() {
         <section className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลใบรับรอง</h2>
           <InfoRow label="เลขที่ใบรับรอง" value={<span className="font-mono text-admin-primary">{cert.certNumber}</span>} />
-          <InfoRow label="Scrap Job" value={
+          <InfoRow label="งาน Scrap" value={
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
               className="font-mono text-xs text-admin-primary hover:text-admin-dark">
               {cert.scrapJobId} ↗

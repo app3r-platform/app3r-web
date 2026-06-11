@@ -138,7 +138,7 @@ export default function TransferWithdrawalsPage() {
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-6 py-3">ผู้ใช้</th>
-                  <th className="px-6 py-3">Gold Point</th>
+                  <th className="px-6 py-3">พอยต์ทอง</th>
                   <th className="px-6 py-3">จำนวนเงิน (฿)</th>
                   <th className="px-6 py-3">บัญชีปลายทาง</th>
                   <th className="px-6 py-3">เวลา</th>

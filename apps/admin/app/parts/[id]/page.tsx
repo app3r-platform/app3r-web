@@ -112,7 +112,7 @@ export default function PartDetailPage() {
             <InfoRow label="สภาพ" value={
               <span className={`text-xs px-2 py-0.5 rounded-full ${cm.color}`}>{cm.label}</span>
             } />
-            <InfoRow label="Shop ID" value={<span className="font-mono text-xs">{part.shopId}</span>} />
+            <InfoRow label="รหัสร้าน" value={<span className="font-mono text-xs">{part.shopId}</span>} />
             {part.source && (
               <InfoRow label="แหล่งที่มา" value={
                 <span>
@@ -164,7 +164,7 @@ export default function PartDetailPage() {
 
           {/* Timestamps */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Audit Info</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Audit</h2>
             <InfoRow label="สร้างเมื่อ" value={new Date(part.createdAt).toLocaleString("th-TH")} />
             <InfoRow label="อัพเดตล่าสุด" value={new Date(part.updatedAt).toLocaleString("th-TH")} />
           </section>

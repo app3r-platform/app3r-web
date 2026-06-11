@@ -131,7 +131,7 @@ export default function PartsOrdersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-gray-500 text-left border-b border-gray-200">
-                <th className="px-4 py-3">Order ID</th>
+                <th className="px-4 py-3">รหัสคำสั่งซื้อ</th>
                 <th className="px-4 py-3">อะไหล่</th>
                 <th className="px-4 py-3">ผู้ซื้อ (WeeeR)</th>
                 <th className="px-4 py-3">จำนวน</th>

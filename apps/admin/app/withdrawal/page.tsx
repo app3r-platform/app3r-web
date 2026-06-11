@@ -225,7 +225,7 @@ export default function WithdrawalPage() {
 
         {/* Filter — Role (D91) */}
         <div className="flex gap-2 mb-5 items-center">
-          <span className="text-xs text-gray-500">กรอง Role:</span>
+          <span className="text-xs text-gray-500">กรอง บทบาท:</span>
           {([
             { val: "" as RoleFilter,       label: "ทั้งหมด" },
             { val: "WeeeU" as RoleFilter,  label: "🙋 WeeeU" },
@@ -264,7 +264,7 @@ export default function WithdrawalPage() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3 w-12">ID</th>
                   <th className="px-5 py-3">ผู้ใช้</th>
-                  <th className="px-5 py-3">Role</th>
+                  <th className="px-5 py-3">บทบาท</th>
                   <th className="px-5 py-3">จำนวน</th>
                   <th className="px-5 py-3">บัญชีธนาคาร</th>
                   <th className="px-5 py-3">สถานะ</th>
@@ -295,7 +295,7 @@ export default function WithdrawalPage() {
                         <span className="text-lg font-bold text-gray-900">
                           {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                         </span>
-                        <span className="text-xs text-gray-500 ml-1">Gold</span>
+                        <span className="text-xs text-gray-500 ml-1">พอยต์ทอง</span>
                       </td>
 
                       <td className="px-5 py-3.5">

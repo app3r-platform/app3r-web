@@ -162,7 +162,7 @@ export default function TestimonialForm({ id }: { id?: string }) {
         </Field>
 
         <div className="grid grid-cols-3 gap-4">
-          <Field label="Avatar (emoji/URL) *">
+          <Field label="รูปโปรไฟล์ (emoji/URL) *">
             <input
               type="text"
               value={form.avatar}

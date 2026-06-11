@@ -122,10 +122,10 @@ export default function PlatformConfigPage() {
             📋 Wave2 Scope (ยังไม่ implement)
           </h3>
           <ul className="text-xs text-blue-700 space-y-1 list-disc list-inside">
-            <li>แก้ไข config values ผ่าน PUT /admin/config</li>
-            <li>Audit log — ใครแก้/เมื่อไหร่/เก่า→ใหม่</li>
-            <li>Maintenance mode toggle</li>
-            <li>Fee matrix management (Platform fee per module)</li>
+            <li>แก้ไขค่าตั้งค่าผ่าน PUT /admin/config</li>
+            <li>บันทึกตรวจสอบ — ใครแก้/เมื่อไหร่/เก่า→ใหม่</li>
+            <li>สลับโหมดปิดปรับปรุงระบบ</li>
+            <li>จัดการตารางค่าธรรมเนียม (ค่าธรรมเนียมแพลตฟอร์มต่อโมดูล)</li>
           </ul>
         </div>
       </main>

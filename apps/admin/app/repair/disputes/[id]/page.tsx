@@ -12,13 +12,13 @@ export default function RepairDisputeDetailPage({ params }: { params: Promise<{ 
     <div className="max-w-4xl mx-auto py-8 px-6">
       {/* Back link */}
       <Link href="/repair/disputes" className="text-gray-400 hover:text-gray-600 text-sm">
-        &larr; กลับรายการ Repair Disputes
+        &larr; กลับรายการข้อพิพาทงานซ่อม
       </Link>
 
       {/* Header */}
       <div className="flex items-center gap-4 mt-4 mb-6">
         <h1 className="text-2xl font-bold text-gray-800">
-          🔧 Repair Dispute — C9 Intervene #{id}
+          🔧 ตัดสินข้อพิพาทงานซ่อม — C9 #{id}
         </h1>
         <span className="inline-flex items-center gap-1.5 bg-red-50 text-red-600 border border-red-200 text-xs font-semibold px-3 py-1.5 rounded-full">
           🚨 Admin Intervene

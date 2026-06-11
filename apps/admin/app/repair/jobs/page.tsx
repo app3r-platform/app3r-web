@@ -188,7 +188,7 @@ export default function RepairJobsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-6 py-3">Job ID</th>
+                  <th className="px-6 py-3">รหัสงาน</th>
                   <th className="px-6 py-3">WeeeU (ลูกค้า)</th>
                   <th className="px-6 py-3">WeeeR (ร้าน)</th>
                   <th className="px-6 py-3">WeeeT (ช่าง)</th>

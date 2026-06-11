@@ -138,11 +138,11 @@ export default function ScrapDisputesPage() {
           <p className="text-gray-500 mb-2 font-medium">กฎการตัดสิน (Scrap):</p>
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-blue-950 border border-blue-800 rounded-lg p-3">
-              <div className="font-semibold text-blue-300 mb-1">ตัดสินให้ Buyer ชนะ</div>
+              <div className="font-semibold text-blue-300 mb-1">ตัดสินให้ผู้ซื้อชนะ</div>
               <div className="text-xs text-gray-500">คืนพักเงินกลางเต็มจำนวนให้ buyer · Scrap Job → CANCELLED</div>
             </div>
             <div className="bg-green-950 border border-green-800 rounded-lg p-3">
-              <div className="font-semibold text-green-700 mb-1">ตัดสินให้ Seller ชนะ</div>
+              <div className="font-semibold text-green-700 mb-1">ตัดสินให้ผู้ขายชนะ</div>
               <div className="text-xs text-gray-500">โอนพักเงินกลางให้ seller · ไม่หัก platform fee · Scrap Job → COMPLETED</div>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function ScrapDisputesPage() {
                       <div className="text-lg font-bold text-yellow-700">
                         {item.escrow_amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </div>
-                      <div className="text-xs text-gray-500">Points ค้างอยู่</div>
+                      <div className="text-xs text-gray-500">พอยต์ค้างอยู่</div>
                     </td>
                     <td className="px-5 py-4 text-gray-500 text-xs">
                       {new Date(item.disputed_at).toLocaleDateString("th-TH", {
@@ -261,7 +261,7 @@ export default function ScrapDisputesPage() {
               <div className="col-span-2">
                 <div className="text-xs text-gray-500 mb-1">ระบบพักเงินกลาง (Escrow) ที่ค้างอยู่</div>
                 <div className="text-yellow-700 font-bold text-lg">
-                  {resolveModal.escrow_amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })} Points
+                  {resolveModal.escrow_amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })} พอยต์
                 </div>
               </div>
             </div>
@@ -270,7 +270,7 @@ export default function ScrapDisputesPage() {
                 className={`p-4 rounded-xl border-2 transition-all text-left ${
                   resolution === "to_buyer" ? "border-blue-500 bg-blue-950" : "border-gray-300 bg-gray-100 hover:border-gray-600"
                 }`}>
-                <div className="font-semibold text-blue-300 mb-1">Buyer ชนะ</div>
+                <div className="font-semibold text-blue-300 mb-1">ผู้ซื้อชนะ</div>
                 <div className="text-xs text-gray-500">คืนพักเงินกลางให้ {resolveModal.buyer_name}</div>
                 <div className="text-xs text-gray-600 mt-1">→ CANCELLED</div>
               </button>
@@ -278,7 +278,7 @@ export default function ScrapDisputesPage() {
                 className={`p-4 rounded-xl border-2 transition-all text-left ${
                   resolution === "to_seller" ? "border-green-500 bg-green-950" : "border-gray-300 bg-gray-100 hover:border-gray-600"
                 }`}>
-                <div className="font-semibold text-green-700 mb-1">Seller ชนะ</div>
+                <div className="font-semibold text-green-700 mb-1">ผู้ขายชนะ</div>
                 <div className="text-xs text-gray-500">โอนพักเงินกลางให้ {resolveModal.seller_name}</div>
                 <div className="text-xs text-gray-600 mt-1">→ COMPLETED</div>
               </button>
@@ -302,8 +302,8 @@ export default function ScrapDisputesPage() {
                     : "bg-gray-700"
                 }`}>
                 {actionLoading !== null ? "กำลังดำเนินการ..."
-                  : resolution === "to_buyer" ? "✓ Buyer ชนะ"
-                  : resolution === "to_seller" ? "✓ Seller ชนะ"
+                  : resolution === "to_buyer" ? "✓ ผู้ซื้อชนะ"
+                  : resolution === "to_seller" ? "✓ ผู้ขายชนะ"
                   : "เลือกฝ่ายที่ชนะก่อน"}
               </button>
             </div>

@@ -210,7 +210,7 @@ export default function SilverPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-gray-500 text-left">
-                        <th className="px-6 py-3">Trigger</th>
+                        <th className="px-6 py-3">เงื่อนไขทริกเกอร์</th>
                         <th className="px-6 py-3">จำนวนพอยต์</th>
                         <th className="px-6 py-3">สถานะ</th>
                         <th className="px-6 py-3">บันทึก</th>
@@ -237,7 +237,7 @@ export default function SilverPage() {
                     </label>
                     {signupBonus && (
                       <div className="flex items-center gap-2">
-                        <label className="text-sm text-gray-500">Points:</label>
+                        <label className="text-sm text-gray-500">พอยต์:</label>
                         <input type="number" value={signupPoints} onChange={(e) => setSignupPoints(Number(e.target.value))}
                           className="w-24 bg-gray-100 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none" />
                       </div>
@@ -274,7 +274,7 @@ export default function SilverPage() {
                         <p className="font-bold text-gray-900">{expiryResult.expired_count.toLocaleString()}</p>
                       </div>
                       <div>
-                        <p className="text-gray-500">Points หมดอายุ</p>
+                        <p className="text-gray-500">พอยต์หมดอายุ</p>
                         <p className="font-bold text-gray-900">{expiryResult.total_points_expired.toLocaleString()} S</p>
                       </div>
                     </div>

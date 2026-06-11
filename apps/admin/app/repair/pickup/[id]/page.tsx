@@ -258,7 +258,7 @@ export default function PickupDetailPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
-            <InfoRow label="Serial" value={job.device_serial ?? "—"} />
+            <InfoRow label="ซีเรียล" value={job.device_serial ?? "—"} />
           </section>
 
           {/* WeeeT */}
@@ -293,7 +293,7 @@ export default function PickupDetailPage() {
 
         {/* Timestamps */}
         <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Timestamps</h2>
+          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">เวลาบันทึก</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: "กำหนดการ", ts: job.scheduled_at },
@@ -357,7 +357,7 @@ export default function PickupDetailPage() {
         {/* Timeline */}
         {job.timeline?.length > 0 && (
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ลำดับเหตุการณ์</h2>
             <div className="space-y-3">
               {job.timeline.map((t, i) => {
                 const tMeta = STATUS_META[t.status];
@@ -448,7 +448,7 @@ export default function PickupDetailPage() {
               disabled={!overrideConfirm || overrideReason.trim().length < 10 || overrideLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
             >
-              {overrideLoading ? "กำลังดำเนินการ..." : "Execute Override"}
+              {overrideLoading ? "กำลังดำเนินการ..." : "ดำเนินการ Override"}
             </button>
           </section>
         )}

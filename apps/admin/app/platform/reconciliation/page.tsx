@@ -147,16 +147,16 @@ export default function ReconciliationPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
               <h2 className="font-semibold mb-4">📐 รายละเอียด (ดุลคงค้างพอยต์ทอง)</h2>
               <div className="space-y-3">
-                <BreakdownRow label="Total Minted (A)" value={fmtG(status.total_minted)} highlight />
+                <BreakdownRow label="ยอด Minted รวม (A)" value={fmtG(status.total_minted)} highlight />
                 <div className="border-t border-gray-200 pt-3 space-y-2.5">
-                  <BreakdownRow label="Reserve Pool" value={fmtG(status.reserve_pool)} />
-                  <BreakdownRow label="Fee Pools (รวม)" value={fmtG(status.fee_pools_total)} />
+                  <BreakdownRow label="กองทุนสำรอง" value={fmtG(status.reserve_pool)} />
+                  <BreakdownRow label="กองทุนค่าธรรมเนียม (รวม)" value={fmtG(status.fee_pools_total)} />
                   <BreakdownRow label="พักเงินกลาง (Escrow) Pool" value={fmtG(status.escrow_pool)} />
-                  <BreakdownRow label="Written-Off" value={fmtG(status.written_off)} />
+                  <BreakdownRow label="ตัดจำหน่าย" value={fmtG(status.written_off)} />
                 </div>
                 <div className="border-t border-gray-200 pt-3">
                   <BreakdownRow
-                    label="Sum of Buckets (B)"
+                    label="ผลรวมกองทุน (B)"
                     value={fmtG(status.reserve_pool + status.fee_pools_total + status.escrow_pool + status.written_off)}
                     highlight
                   />

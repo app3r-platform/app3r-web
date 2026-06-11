@@ -132,7 +132,7 @@ export default function ManualAdjustPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8 max-w-lg">
           <div className="space-y-4">
             <div>
-              <label className="text-sm text-gray-500 mb-1 block">User ID *</label>
+              <label className="text-sm text-gray-500 mb-1 block">รหัสผู้ใช้ *</label>
               <input type="number" value={userId} onChange={(e) => setUserId(e.target.value)}
                 className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 text-gray-900"
                 placeholder="เช่น 12345" />
@@ -185,7 +185,7 @@ export default function ManualAdjustPage() {
             <thead>
               <tr className="text-gray-500 text-left">
                 <th className="px-6 py-3">เวลา</th>
-                <th className="px-6 py-3">User</th>
+                <th className="px-6 py-3">ผู้ใช้</th>
                 <th className="px-6 py-3">สกุลเงิน</th>
                 <th className="px-6 py-3 text-right">จำนวน</th>
                 <th className="px-6 py-3">เหตุผล</th>
@@ -222,7 +222,7 @@ export default function ManualAdjustPage() {
             <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-md">
               <h3 className="text-lg font-bold mb-4 text-orange-700">⚠️ ยืนยันการปรับยอด</h3>
               <div className="bg-gray-100 rounded-xl p-4 mb-4 space-y-2 text-sm">
-                <p><span className="text-gray-500">User ID:</span> <span className="font-mono">{userId}</span></p>
+                <p><span className="text-gray-500">รหัสผู้ใช้:</span> <span className="font-mono">{userId}</span></p>
                 <p><span className="text-gray-500">สกุล:</span> {currency === "gold" ? "🥇 Gold" : "🥈 Silver"}</p>
                 <p>
                   <span className="text-gray-500">จำนวน:</span>{" "}

@@ -142,10 +142,10 @@ export default function ScrapListingDetailPage() {
           {/* Item info */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลซาก</h2>
-            <InfoRow label="Seller ID" value={<span className="font-mono text-xs">{item.sellerId}</span>} />
-            <InfoRow label="Seller Type" value={item.sellerType} />
+            <InfoRow label="รหัสผู้ขาย" value={<span className="font-mono text-xs">{item.sellerId}</span>} />
+            <InfoRow label="ประเภทผู้ขาย" value={item.sellerType} />
             {item.applianceId && (
-              <InfoRow label="Appliance ID" value={<span className="font-mono text-xs">{item.applianceId}</span>} />
+              <InfoRow label="รหัสเครื่องใช้ไฟฟ้า" value={<span className="font-mono text-xs">{item.applianceId}</span>} />
             )}
             <InfoRow label="เกรด" value={
               <span className={`text-xs px-2 py-0.5 rounded-full ${gm.color}`}>{gm.label}</span>

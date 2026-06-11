@@ -308,7 +308,7 @@ function FeeSettlePanel({ job, superAdmin }: FeeSettlePanelProps) {
         {/* Decision branch */}
         {job.decision_branch && (
           <div className="mt-4 bg-admin-surface rounded-xl px-4 py-3 border border-admin-primary/20">
-            <p className="text-xs text-gray-500 mb-1">Decision Branch</p>
+            <p className="text-xs text-gray-500 mb-1">สาขาการตัดสิน</p>
             <p className="text-sm font-bold text-admin-primary font-mono">{job.decision_branch}</p>
             {job.decision_notes && <p className="text-xs text-gray-600 mt-1">{job.decision_notes}</p>}
           </div>
@@ -451,7 +451,7 @@ export default function RepairJobDetailPage() {
         {/* Job Info */}
         <Section title="รายละเอียดงาน">
           <InfoRow label="ประเภทบริการ" value={<span className="font-mono text-admin-primary">{job.service_type}</span>} />
-          <InfoRow label="Decision Branch" value={job.decision_branch
+          <InfoRow label="สาขาการตัดสิน" value={job.decision_branch
             ? <span className="font-mono font-bold text-admin-primary">{job.decision_branch}</span>
             : null} />
           <InfoRow label="หมายเหตุ Branch" value={job.decision_notes} />
@@ -473,7 +473,7 @@ export default function RepairJobDetailPage() {
         </Section>
 
         {/* Timeline */}
-        <Section title="Timeline (State Machine)">
+        <Section title="ลำดับเหตุการณ์ (State Machine)">
           <div className="space-y-1">
             {[
               { label: "T0 นัดหมาย",       at: job.scheduled_at },
@@ -572,7 +572,7 @@ export default function RepairJobDetailPage() {
 
         {/* Audit Log */}
         {job.audit_log?.length > 0 && (
-          <Section title="Audit Log">
+          <Section title="บันทึก Audit">
             <div className="space-y-1">
               {job.audit_log.map((ev) => (
                 <div key={ev.id} className="flex items-start gap-3 text-xs py-1.5 border-b border-gray-200/40 last:border-0">

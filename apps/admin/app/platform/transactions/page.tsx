@@ -173,8 +173,8 @@ export default function TransactionsPage() {
                   <th className="px-6 py-3">เวลา</th>
                   <th className="px-6 py-3">ประเภท</th>
                   <th className="px-6 py-3 text-right">จำนวน</th>
-                  <th className="px-6 py-3">Actor</th>
-                  <th className="px-6 py-3">Note</th>
+                  <th className="px-6 py-3">ผู้กระทำ</th>
+                  <th className="px-6 py-3">หมายเหตุ</th>
                   <th className="px-6 py-3"></th>
                 </tr>
               </thead>
@@ -222,14 +222,14 @@ export default function TransactionsPage() {
               <div className="space-y-3 text-sm">
                 {[
                   ["ID", selected.id],
-                  ["Type", selected.tx_type],
-                  ["Amount", `${selected.amount >= 0 ? "+" : ""}${selected.amount.toLocaleString()} ${selected.currency === "gold" ? "G" : "S"}`],
-                  ["Actor ID", String(selected.actor_id ?? "—")],
-                  ["Actor Role", selected.actor_role ?? "—"],
-                  ["Target User", String(selected.target_user_id ?? "—")],
-                  ["Reference", selected.reference_id ?? "—"],
-                  ["Note", selected.note ?? "—"],
-                  ["Created At", new Date(selected.created_at).toLocaleString("th-TH")],
+                  ["ประเภท", selected.tx_type],
+                  ["จำนวน", `${selected.amount >= 0 ? "+" : ""}${selected.amount.toLocaleString()} ${selected.currency === "gold" ? "G" : "S"}`],
+                  ["รหัสผู้กระทำ", String(selected.actor_id ?? "—")],
+                  ["บทบาทผู้กระทำ", selected.actor_role ?? "—"],
+                  ["ผู้ใช้เป้าหมาย", String(selected.target_user_id ?? "—")],
+                  ["อ้างอิง", selected.reference_id ?? "—"],
+                  ["หมายเหตุ", selected.note ?? "—"],
+                  ["สร้างเมื่อ", new Date(selected.created_at).toLocaleString("th-TH")],
                 ].map(([k, v]) => (
                   <div key={k} className="flex gap-4">
                     <span className="text-gray-500 w-28 shrink-0">{k}</span>

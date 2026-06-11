@@ -255,7 +255,7 @@ export default function ParcelQueuePage() {
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
           />
-          <input type="text" placeholder="Courier (Kerry / Flash…)"
+          <input type="text" placeholder="ขนส่ง (Kerry / Flash…)"
             value={filterCourier} onChange={e => { setFilterCourier(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-52 focus:outline-none focus:border-blue-500"
           />
@@ -296,8 +296,8 @@ export default function ParcelQueuePage() {
                   <th className="px-4 py-3">ร้านซ่อม</th>
                   <th className="px-4 py-3">อุปกรณ์</th>
                   <th className="px-4 py-3">ลูกค้า</th>
-                  <th className="px-4 py-3">Courier</th>
-                  <th className="px-4 py-3">Tracking</th>
+                  <th className="px-4 py-3">ขนส่ง</th>
+                  <th className="px-4 py-3">เลขติดตาม</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">ค่าส่ง</th>
                   <th className="px-4 py-3">ข้อพิพาท</th>

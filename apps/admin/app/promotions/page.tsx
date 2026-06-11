@@ -163,7 +163,7 @@ export default function PromotionsPage() {
     try {
       await api.put("/admin/config/signup_bonus_points", { value: String(val) });
       setConfig((prev) => ({ ...prev, signup_bonus_points: String(val) }));
-      showToast(`บันทึกแล้ว: ${val} Points ต่อการสมัคร`, "ok");
+      showToast(`บันทึกแล้ว: ${val} พอยต์ ต่อการสมัคร`, "ok");
     } catch (e: unknown) {
       if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
       showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
@@ -209,8 +209,8 @@ export default function PromotionsPage() {
         }
       );
       showToast(
-        `${adjustDirection === "credit" ? "เพิ่ม" : "หัก"} ${amt.toLocaleString("th-TH")} Points ` +
-        `สำหรับ ${selectedUser.full_name} สำเร็จ ✓  (ยอดใหม่: ${res.balance_after.toLocaleString("th-TH")} Points)`,
+        `${adjustDirection === "credit" ? "เพิ่ม" : "หัก"} ${amt.toLocaleString("th-TH")} พอยต์ ` +
+        `สำหรับ ${selectedUser.full_name} สำเร็จ ✓  (ยอดใหม่: ${res.balance_after.toLocaleString("th-TH")} พอยต์)`,
         "ok"
       );
       // Reset form
@@ -309,7 +309,7 @@ export default function PromotionsPage() {
 
         {/* ══ Section 2: Signup Bonus ════════════════════════════════════════ */}
         <div className="mb-10">
-          <h2 className="text-xl font-bold mb-1">Signup Bonus</h2>
+          <h2 className="text-xl font-bold mb-1">โบนัสสมัคร</h2>
           <p className="text-gray-500 text-sm mb-5">
             เติม Point อัตโนมัติให้ WeeeU และ WeeeR ทุกคนที่สมัครใหม่
           </p>
@@ -324,7 +324,7 @@ export default function PromotionsPage() {
                 </div>
                 <div className="text-xs text-gray-500 mt-0.5">
                   {signupBonusOn
-                    ? `เปิดอยู่ — สมัครใหม่ได้รับ ${config["signup_bonus_points"] ?? "0"} Points ทันที`
+                    ? `เปิดอยู่ — สมัครใหม่ได้รับ ${config["signup_bonus_points"] ?? "0"} พอยต์ ทันที`
                     : "ปิดอยู่ — ผู้สมัครใหม่ไม่ได้รับ Point พิเศษ"}
                 </div>
               </div>
@@ -357,7 +357,7 @@ export default function PromotionsPage() {
                     onChange={(e) => setBonusPoints(e.target.value)}
                     className="w-40 bg-gray-100 border border-gray-300 text-gray-900 text-lg font-bold rounded-lg px-4 py-2.5 focus:outline-none focus:outline-none focus:border-admin-primary"
                   />
-                  <span className="text-gray-500 text-sm">Points</span>
+                  <span className="text-gray-500 text-sm">พอยต์</span>
                 </div>
               </div>
               <button
@@ -548,7 +548,7 @@ export default function PromotionsPage() {
                   <div>
                     ประเภท:{" "}
                     <span className={adjustDirection === "credit" ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
-                      {adjustDirection === "credit" ? `+${parseFloat(adjustAmount || "0").toLocaleString("th-TH")}` : `-${parseFloat(adjustAmount || "0").toLocaleString("th-TH")}`} Points
+                      {adjustDirection === "credit" ? `+${parseFloat(adjustAmount || "0").toLocaleString("th-TH")}` : `-${parseFloat(adjustAmount || "0").toLocaleString("th-TH")}`} พอยต์
                     </span>
                   </div>
                   <div>เหตุผล: <span className="text-white">[{adjustCategory}] {adjustDetail.trim()}</span></div>

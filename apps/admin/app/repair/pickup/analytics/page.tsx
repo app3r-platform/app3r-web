@@ -191,7 +191,7 @@ export default function PickupAnalyticsPage() {
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                <StatCard icon="📋" label="Jobs ทั้งหมด"  value={data.total_jobs.toLocaleString()} />
+                <StatCard icon="📋" label="งานทั้งหมด"  value={data.total_jobs.toLocaleString()} />
                 <StatCard icon="⚡" label="กำลังดำเนิน"    value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="เสร็จสิ้น"      value={data.completed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ล้มเหลว"        value={data.failed_jobs.toLocaleString()} accent="red" />

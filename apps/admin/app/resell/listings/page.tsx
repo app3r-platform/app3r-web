@@ -12,7 +12,7 @@ const STATUS_META: Record<Listing["status"], { label: string; color: string }> =
   announced:        { label: "ประกาศ",          color: "bg-gray-100 text-gray-500" },
   receiving_offers: { label: "รับ Offer",        color: "bg-blue-50 text-blue-700" },
   offer_selected:   { label: "เลือก Offer แล้ว", color: "bg-brand-info/15 text-brand-info" },
-  buyer_confirmed:  { label: "Buyer ยืนยัน",     color: "bg-cyan-900/50 text-cyan-300" },
+  buyer_confirmed:  { label: "ผู้ซื้อยืนยัน",     color: "bg-cyan-900/50 text-cyan-300" },
   in_progress:      { label: "กำลังดำเนินการ",   color: "bg-yellow-50 text-yellow-700" },
   delivered:        { label: "ส่งแล้ว",          color: "bg-brand-success/15 text-brand-success" },
   inspection_period:{ label: "ช่วงตรวจสอบ",      color: "bg-admin-primary/15 text-admin-primary" },
@@ -139,7 +139,7 @@ export default function ResellListingsPage() {
           <select value={filterSellerType}
             onChange={e => { setFilterSellerType(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
-            <option value="">ทุก Seller</option>
+            <option value="">ทุกผู้ขาย</option>
             <option value="WeeeU">WeeeU</option>
             <option value="WeeeR">WeeeR</option>
           </select>

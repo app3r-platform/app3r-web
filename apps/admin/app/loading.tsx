@@ -10,7 +10,7 @@ export default function Loading() {
   return (
     <LoadingScreen
       roleTheme={ADMIN_THEME}
-      label="กำลังโหลด... (Loading)"
+      label="กำลังโหลด..."
     />
   );
 }

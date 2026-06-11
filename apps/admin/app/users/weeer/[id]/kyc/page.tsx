@@ -567,7 +567,7 @@ export default function KYCReviewPage() {
                       <span className="text-gray-500">[เหมือน WeeeR]</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Mode</span>
+                      <span className="text-gray-500">โหมด</span>
                       <span>1 ตัวฟรี (auto)</span>
                     </div>
                   </div>

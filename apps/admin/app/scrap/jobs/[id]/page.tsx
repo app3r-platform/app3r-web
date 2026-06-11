@@ -174,14 +174,14 @@ export default function ScrapJobDetailPage() {
           {/* Job info */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Job</h2>
-            <InfoRow label="Scrap Item" value={
+            <InfoRow label="รายการซาก" value={
               <Link href={`/scrap/listings/${job.scrapItemId}`}
                 className="font-mono text-xs text-admin-primary hover:text-admin-dark">
                 {job.scrapItemId} ↗
               </Link>
             } />
-            <InfoRow label="Buyer" value={<span className="font-mono text-xs">{job.buyerId}</span>} />
-            <InfoRow label="Buyer Type" value={job.buyerType} />
+            <InfoRow label="ผู้ซื้อ" value={<span className="font-mono text-xs">{job.buyerId}</span>} />
+            <InfoRow label="ประเภทผู้ซื้อ" value={job.buyerType} />
             <InfoRow label="สร้างเมื่อ" value={new Date(job.createdAt).toLocaleString("th-TH")} />
             <InfoRow label="อัพเดตล่าสุด" value={new Date(job.updatedAt).toLocaleString("th-TH")} />
           </section>
@@ -257,7 +257,7 @@ export default function ScrapJobDetailPage() {
 
           {/* Output refs */}
           <section className="bg-white rounded-xl border border-gray-200 p-5 lg:col-span-2">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Output References</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ผลลัพธ์อ้างอิง</h2>
 
             {job.partsCreatedIds && job.partsCreatedIds.length > 0 && (
               <div className="mb-3">
@@ -285,7 +285,7 @@ export default function ScrapJobDetailPage() {
 
             {job.repairJobId && (
               <div className="mb-3">
-                <p className="text-xs text-gray-500 mb-1">Repair Job</p>
+                <p className="text-xs text-gray-500 mb-1">งาน Repair</p>
                 <Link href={`/repair/jobs/${job.repairJobId}`}
                   className="text-xs font-mono text-admin-primary hover:text-admin-dark">
                   {job.repairJobId} ↗

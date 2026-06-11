@@ -115,9 +115,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-center text-gray-500 text-xs mt-6">
-          App3R Platform — Admin Only
-          <br />
-          <span className="text-gray-400">Wave1 shell · endpoint: POST /auth/signin (d2)</span>
+          App3R · สำหรับผู้ดูแลระบบเท่านั้น
         </p>
       </div>
     </main>

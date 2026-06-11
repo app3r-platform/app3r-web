@@ -183,7 +183,7 @@ export default function RepairDisputesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-6 py-3">Dispute ID</th>
+                  <th className="px-6 py-3">รหัสข้อพิพาท</th>
                   <th className="px-6 py-3">งานซ่อม</th>
                   <th className="px-6 py-3">WeeeU</th>
                   <th className="px-6 py-3">WeeeR</th>

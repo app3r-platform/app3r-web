@@ -243,7 +243,7 @@ export default function MaintainJobDetailPage() {
           {job.recurring?.enabled && (
             <section className="bg-white rounded-xl border border-admin-primary/30 p-5">
               <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-3">🔁 Recurring</h2>
-              <InfoRow label="Interval" value={job.recurring.interval.replace("_months", " เดือน")} />
+              <InfoRow label="ช่วงเวลา" value={job.recurring.interval.replace("_months", " เดือน")} />
               <InfoRow label="นัดถัดไป" value={new Date(job.recurring.nextScheduledAt).toLocaleString("th-TH")} />
             </section>
           )}
@@ -290,7 +290,7 @@ export default function MaintainJobDetailPage() {
         {/* Timeline */}
         {job.timeline?.length > 0 && (
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ลำดับเหตุการณ์</h2>
             <div className="space-y-3">
               {job.timeline.map((t, i) => {
                 const tMeta = STATUS_META[t.status];
@@ -578,7 +578,7 @@ export default function MaintainJobDetailPage() {
             <button onClick={handleForceCancel}
               disabled={!cancelConfirm || cancelReason.trim().length < 10 || cancelLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors">
-              {cancelLoading ? "กำลังดำเนินการ..." : "Force Cancel"}
+              {cancelLoading ? "กำลังดำเนินการ..." : "ยกเลิกบังคับ"}
             </button>
           </section>
         )}

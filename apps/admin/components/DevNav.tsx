@@ -82,7 +82,7 @@ export function DevNav() {
       {/* Toggle button — fixed bottom-right */}
       <button
         onClick={() => setOpen(o => !o)}
-        title="Dev Navigator"
+        title="นักนำทาง Dev"
         className="fixed bottom-4 right-4 z-[9999] w-10 h-10 rounded-full bg-admin-primary text-white shadow-lg
                    flex items-center justify-center text-lg hover:bg-admin-dark transition-colors"
       >
@@ -96,7 +96,7 @@ export function DevNav() {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-admin-surface rounded-t-2xl">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-admin-primary">🧭 Dev Navigator</span>
+              <span className="text-sm font-bold text-admin-primary">🧭 นักนำทาง Dev</span>
               <span className="text-xs bg-admin-primary text-white px-1.5 py-0.5 rounded font-mono">Admin</span>
             </div>
             <div className="flex items-center gap-2">

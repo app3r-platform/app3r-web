@@ -20,7 +20,7 @@ export default function ContentPreview({ page }: ContentPreviewProps) {
     <div className="border rounded-lg overflow-hidden bg-white">
       {/* preview header */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b">
-        <span className="text-sm font-medium text-gray-700">Preview</span>
+        <span className="text-sm font-medium text-gray-700">ตัวอย่าง</span>
         <div className="flex gap-2 text-xs text-gray-500">
           <span>slug: <code className="bg-gray-100 px-1 rounded">{page.slug}</code></span>
           <span>type: <code className="bg-gray-100 px-1 rounded">{page.type}</code></span>

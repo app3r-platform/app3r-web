@@ -123,7 +123,7 @@ const STATUS_LABEL: Record<string, string> = {
   receiving_offers:  "รับ Offer",
   offer_selected:    "เลือก Offer",
   awaiting_payment:  "รอชำระ",
-  buyer_confirmed:   "Buyer ยืนยัน",
+  buyer_confirmed:   "ผู้ซื้อยืนยัน",
   in_progress:       "กำลังดำเนิน",
   delivered:         "ส่งแล้ว",
   inspection_period: "ตรวจสอบ",
@@ -180,7 +180,7 @@ export default function ResellAnalyticsPage() {
         {/* KPI Row 1 */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            label="Listings ทั้งหมด"
+            label="ประกาศทั้งหมด"
             value={d.total_listings.toLocaleString()}
             sub={`Active ${d.active_listings} | ยกเลิก ${d.cancelled_count}`}
           />

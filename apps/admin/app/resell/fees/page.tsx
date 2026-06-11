@@ -197,7 +197,7 @@ export default function ResellFeesPage() {
                 <th className="px-4 py-3">คู่</th>
                 <th className="px-4 py-3">ผู้ขาย</th>
                 <th className="px-4 py-3">ผู้ซื้อ</th>
-                <th className="px-4 py-3 text-right">Platform Fee</th>
+                <th className="px-4 py-3 text-right">ค่าธรรมเนียมแพลตฟอร์ม</th>
                 <th className="px-4 py-3 text-right">VAT</th>
                 <th className="px-4 py-3">หมายเหตุ</th>
               </tr>

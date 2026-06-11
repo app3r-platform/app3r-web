@@ -179,7 +179,7 @@ export default function CertificatesPage() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">เลขที่ใบรับรอง</th>
                   <th className="px-4 py-3">คำอธิบาย</th>
-                  <th className="px-4 py-3">Scrap Job</th>
+                  <th className="px-4 py-3">งาน Scrap</th>
                   <th className="px-4 py-3">ออกโดย</th>
                   <th className="px-4 py-3">วันที่ออก</th>
                   <th className="px-4 py-3">สถานะ</th>

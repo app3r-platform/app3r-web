@@ -109,11 +109,11 @@ function OffersInner() {
           <select value={filterBuyerType}
             onChange={e => { setFilterBuyerType(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-36 focus:outline-none focus:border-blue-500">
-            <option value="">ทุก Buyer</option>
+            <option value="">ทุกผู้ซื้อ</option>
             <option value="WeeeU">WeeeU</option>
             <option value="WeeeR">WeeeR</option>
           </select>
-          <input type="text" placeholder="Listing ID"
+          <input type="text" placeholder="รหัสประกาศ"
             value={filterListingId} onChange={e => { setFilterListingId(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-52 focus:outline-none focus:border-blue-500"
           />
@@ -148,8 +148,8 @@ function OffersInner() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-4 py-3">Offer ID</th>
-                  <th className="px-4 py-3">Listing ID</th>
+                  <th className="px-4 py-3">รหัส Offer</th>
+                  <th className="px-4 py-3">รหัสประกาศ</th>
                   <th className="px-4 py-3">ผู้ซื้อ</th>
                   <th className="px-4 py-3">ราคา Offer</th>
                   <th className="px-4 py-3">การจัดส่ง</th>

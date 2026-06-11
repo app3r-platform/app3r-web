@@ -660,7 +660,7 @@ function Tab3Pricing() {
           ) : (
             <table className="w-full text-sm">
               <thead><tr className="text-xs text-gray-500 border-b border-gray-100 text-left">
-                <th className="px-5 py-2">ลำดับ</th><th className="px-5 py-2">Key</th><th className="px-5 py-2">Label</th><th className="px-5 py-2">ประเภท</th><th className="px-5 py-2">Options</th><th className="px-5 py-2"></th>
+                <th className="px-5 py-2">ลำดับ</th><th className="px-5 py-2">Key</th><th className="px-5 py-2">ป้ายกำกับ</th><th className="px-5 py-2">ประเภท</th><th className="px-5 py-2">ตัวเลือก</th><th className="px-5 py-2"></th>
               </tr></thead>
               <tbody className="divide-y divide-gray-100">
                 {catDims.map(d => (
@@ -860,17 +860,17 @@ function Tab4Images() {
           <span className="text-sm text-gray-500">
             📁 /assets/{folderTab}/ — {folderImages.length} รูป
           </span>
-          <button onClick={() => setShowAdd(true)} className="text-xs px-3 py-1.5 bg-admin-surface text-admin-primary rounded-lg hover:bg-blue-100">+ Register รูป</button>
+          <button onClick={() => setShowAdd(true)} className="text-xs px-3 py-1.5 bg-admin-surface text-admin-primary rounded-lg hover:bg-blue-100">+ เพิ่มรูป</button>
         </div>
 
         {folderImages.length === 0 ? (
           <p className="px-5 py-10 text-center text-sm text-gray-400">
-            ยังไม่มีรูปใน /assets/{folderTab}/ — กด &quot;Register รูป&quot;
+            ยังไม่มีรูปใน /assets/{folderTab}/ — กด &quot;เพิ่มรูป&quot;
           </p>
         ) : (
           <table className="w-full text-sm">
             <thead><tr className="text-xs text-gray-500 border-b border-gray-100 text-left">
-              <th className="px-5 py-2">Path</th><th className="px-5 py-2">Alt Text</th><th className="px-5 py-2">Appliance</th><th className="px-5 py-2">Linked Entity</th><th className="px-5 py-2">Sort</th><th className="px-5 py-2">สถานะ</th><th className="px-5 py-2"></th>
+              <th className="px-5 py-2">พาธ</th><th className="px-5 py-2">ข้อความแทนภาพ</th><th className="px-5 py-2">เครื่องใช้ไฟฟ้า</th><th className="px-5 py-2">รายการที่เชื่อม</th><th className="px-5 py-2">ลำดับ</th><th className="px-5 py-2">สถานะ</th><th className="px-5 py-2"></th>
             </tr></thead>
             <tbody className="divide-y divide-gray-100">
               {folderImages.map(img => (
@@ -900,23 +900,23 @@ function Tab4Images() {
       {showAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-2xl border border-gray-200 p-6 w-96 shadow-xl">
-            <h4 className="font-semibold text-gray-800 mb-1">Register รูปภาพ</h4>
+            <h4 className="font-semibold text-gray-800 mb-1">เพิ่มรูปภาพ</h4>
             <p className="text-xs text-gray-500 mb-4">Folder: /assets/{folderTab}/</p>
 
-            <label className="block text-xs text-gray-500 mb-1">Local Path *</label>
+            <label className="block text-xs text-gray-500 mb-1">พาธในระบบ *</label>
             <input value={formImg.local_path} onChange={e => setFormImg(f => ({ ...f, local_path: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-admin-primary"
               placeholder={`/assets/${folderTab}/ac-01-xxx.jpeg`} />
 
-            <label className="block text-xs text-gray-500 mb-1">Alt Text *</label>
+            <label className="block text-xs text-gray-500 mb-1">ข้อความแทนภาพ *</label>
             <input value={formImg.alt_text} onChange={e => setFormImg(f => ({ ...f, alt_text: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-admin-primary" placeholder="คำอธิบายรูป" />
 
-            <label className="block text-xs text-gray-500 mb-1">Appliance Category</label>
+            <label className="block text-xs text-gray-500 mb-1">หมวดเครื่องใช้ไฟฟ้า</label>
             <input value={formImg.appliance_category} onChange={e => setFormImg(f => ({ ...f, appliance_category: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-admin-primary" placeholder="ac / fridge / washer / computer / tv / NULL" />
 
-            <label className="block text-xs text-gray-500 mb-1">Linked Entity Type</label>
+            <label className="block text-xs text-gray-500 mb-1">ประเภทรายการที่เชื่อม</label>
             <select value={formImg.linked_entity_type} onChange={e => setFormImg(f => ({ ...f, linked_entity_type: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-admin-primary">
               <option value="">— ไม่ผูก —</option>
@@ -927,18 +927,18 @@ function Tab4Images() {
             </select>
 
             {formImg.linked_entity_type && (<>
-              <label className="block text-xs text-gray-500 mb-1">Linked Entity ID</label>
+              <label className="block text-xs text-gray-500 mb-1">รหัสรายการที่เชื่อม</label>
               <input type="number" value={formImg.linked_entity_id} onChange={e => setFormImg(f => ({ ...f, linked_entity_id: e.target.value }))}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-admin-primary" />
             </>)}
 
-            <label className="block text-xs text-gray-500 mb-1">Sort Order</label>
+            <label className="block text-xs text-gray-500 mb-1">ลำดับการแสดง</label>
             <input type="number" value={formImg.sort_order} onChange={e => setFormImg(f => ({ ...f, sort_order: e.target.value }))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:border-admin-primary" />
 
             <div className="flex gap-2">
               <button onClick={() => setShowAdd(false)} className="flex-1 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">ยกเลิก</button>
-              <button onClick={addImage} className="flex-1 py-2 text-sm bg-admin-primary text-white rounded-lg hover:bg-admin-dark">Register</button>
+              <button onClick={addImage} className="flex-1 py-2 text-sm bg-admin-primary text-white rounded-lg hover:bg-admin-dark">เพิ่ม</button>
             </div>
           </div>
         </div>

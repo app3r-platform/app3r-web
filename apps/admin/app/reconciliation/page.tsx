@@ -119,7 +119,7 @@ function ResolveModal({
         <div className="space-y-3 mb-4">
           <div className="bg-gray-100 rounded-lg p-3 text-sm space-y-1">
             <div className="flex justify-between">
-              <span className="text-gray-500">Job</span>
+              <span className="text-gray-500">งาน</span>
               <span className="font-mono text-xs">{settlement.job_id.slice(0, 8)}… ({JOB_TYPE_LABELS[settlement.job_type] ?? settlement.job_type})</span>
             </div>
             <div className="flex justify-between">
@@ -305,9 +305,9 @@ export default function SettlementReconciliationPage() {
             {/* Summary Cards */}
             <div className="grid grid-cols-4 gap-4">
               <SummaryCard label="ค้างทั้งหมด" value={report.total_stuck} color="text-yellow-700" />
-              <SummaryCard label="Pending" value={report.total_pending} color="text-yellow-700" />
-              <SummaryCard label="Processing" value={report.total_processing} color="text-blue-400" />
-              <SummaryCard label="Failed" value={report.total_failed} color="text-red-600" />
+              <SummaryCard label="รอดำเนินการ" value={report.total_pending} color="text-yellow-700" />
+              <SummaryCard label="กำลังดำเนินการ" value={report.total_processing} color="text-blue-400" />
+              <SummaryCard label="ล้มเหลว" value={report.total_failed} color="text-red-600" />
             </div>
 
             {/* Filter */}
@@ -332,8 +332,8 @@ export default function SettlementReconciliationPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-gray-500 text-left border-b border-gray-200">
-                    <th className="px-6 py-3">Settlement ID</th>
-                    <th className="px-6 py-3">งาน (Job)</th>
+                    <th className="px-6 py-3">รหัส Settlement</th>
+                    <th className="px-6 py-3">งาน</th>
                     <th className="px-6 py-3">จำนวน (G)</th>
                     <th className="px-6 py-3">สถานะ</th>
                     <th className="px-6 py-3">ค้างมา (ชม.)</th>
