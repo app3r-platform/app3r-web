@@ -250,7 +250,7 @@ export default function ResellBuyPage() {
                   <p className="text-xs text-gray-500 mb-1">{model}</p>
                   <p className="text-xs text-gray-400 mb-3">สภาพ: {CONDITION_OPTS.find(c=>c.value===condition)?.label}</p>
                   <p className="text-4xl font-bold text-[#FF663A]">{estimatedBuy.toLocaleString()}</p>
-                  <p className="text-sm text-[#FF9C80] mt-1">pts (ราคาตีรับซื้อ)</p>
+                  <p className="text-sm text-[#FF9C80] mt-1">พอยต์ (ราคาตีรับซื้อ)</p>
                   <p className="text-xs text-gray-400 mt-2">ราคาตลาด ~{basePrice.toLocaleString()} พอยต์ · {Math.round(condMult*100)}%</p>
                 </div>
                 <div>
