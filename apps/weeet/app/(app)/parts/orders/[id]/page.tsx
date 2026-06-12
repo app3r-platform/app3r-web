@@ -228,7 +228,7 @@ export default function PartsOrderDetailPage({
 
               {order.trackingNumber && (
                 <div className="border-t border-gray-700 pt-3">
-                  <p className="text-xs text-gray-500 mb-0.5">Tracking</p>
+                  <p className="text-xs text-gray-500 mb-0.5">หมายเลขติดตาม</p>
                   <p className="text-sm text-white font-mono">{order.trackingNumber}</p>
                 </div>
               )}

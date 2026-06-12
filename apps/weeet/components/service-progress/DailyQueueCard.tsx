@@ -4,10 +4,10 @@ import { ProgressStatusBadge } from "./ProgressStatusBadge";
 import { SUB_STAGE_LABELS } from "@/lib/types/service-progress";
 
 const SERVICE_TYPE_LABEL: Record<string, string> = {
-  on_site: "🔧 On-site",
-  pickup: "🚛 Pickup",
-  walk_in: "🏪 Walk-in",
-  parcel: "📦 Parcel",
+  on_site: "🔧 ออนไซต์",
+  pickup: "🚛 รับเครื่อง",
+  walk_in: "🏪 หน้าร้าน",
+  parcel: "📦 พัสดุ",
 };
 
 interface Props {
