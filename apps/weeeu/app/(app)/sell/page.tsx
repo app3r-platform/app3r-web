@@ -190,7 +190,7 @@ export default function SellPage() {
 
           <div className="bg-white rounded-xl p-3 space-y-1">
             <p className="text-xs text-gray-600 font-medium">📋 พอยต์ทองค่าประกาศจะคืนถ้าคุณยกเลิก</p>
-            <p className="text-xs text-gray-500">แก้ไข+ประกาศใหม่ = Listing v2 (พอยต์ทองถูก HOLD ใหม่)</p>
+            <p className="text-xs text-gray-500">แก้ไข+ประกาศใหม่ = ประกาศฉบับที่ 2 (พอยต์ทองถูกล็อคใหม่)</p>
           </div>
 
           <div className="flex gap-2">

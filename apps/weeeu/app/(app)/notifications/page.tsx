@@ -1,7 +1,7 @@
 "use client";
 // ─── การแจ้งเตือน (/notifications) — FIX-3: use client + filter tabs + card links
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 // U-36 — ครอบทุกเคสแจ้งเตือน (repair/maintain/resell/scrap/wallet/system · ทุก state)
@@ -117,6 +117,9 @@ const FILTER_TABS = [
 export default function NotificationsPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
 
   const markAllRead = () => setReadIds(new Set(notifications.map(n => n.id)));
 

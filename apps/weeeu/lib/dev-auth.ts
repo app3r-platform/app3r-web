@@ -1,34 +1,19 @@
 // TODO: REMOVE BEFORE PROD — dev auth bypass
+import { createDevTokenProvider } from "@app3r/shared/src/mock-runtime";
 
-let cachedToken: string | null = null;
+// BUG-3 fix (CMD #115-AK-U · #115-AG): config injection — app injects mockMode,
+// shared util ไม่อ่าน env เอง (กัน cross-package env inline failure)
+const { getDevTestToken, clearDevToken } = createDevTokenProvider({
+  mockMode: process.env.NEXT_PUBLIC_DEV_NAV === "true",
+  saveToken: (token) => {
+    if (typeof window !== "undefined") localStorage.setItem("access_token", token);
+  },
+  removeToken: () => {
+    if (typeof window !== "undefined") localStorage.removeItem("access_token");
+  },
+  endpoint: "/api/v1/_dev/get-test-token",
+  payload: { user_id: 1, role: "weeeu", phone: "+66812345678" },
+  bypassToken: "dev-jwt-bypass",
+});
 
-export async function getDevTestToken(): Promise<string> {
-  // Guard: เฉพาะ development mode เท่านั้น
-  if (process.env.NODE_ENV !== "development") {
-    throw new Error("Dev auth bypass disabled in non-dev environment");
-  }
-
-  if (cachedToken) return cachedToken;
-
-  const response = await fetch("/api/v1/_dev/get-test-token", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: 1,
-      role: "weeeu",
-      phone: "+66812345678",
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to get test token: ${response.status}`);
-  }
-
-  const data = await response.json();
-  cachedToken = data.token;
-  return cachedToken!;
-}
-
-export function clearDevToken() {
-  cachedToken = null;
-}
+export { getDevTestToken, clearDevToken };

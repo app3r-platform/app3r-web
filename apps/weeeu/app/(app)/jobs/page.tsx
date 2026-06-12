@@ -14,6 +14,20 @@ const SERVICE_TYPE_LABEL: Record<string, string> = {
   parcel: "📦 ส่งพัสดุ",
 };
 
+// WU-EN-3 fix: แปล subStage enum เป็นไทย (กัน raw EN render ที่ runtime)
+const SUB_STAGE_LABEL: Record<string, string> = {
+  inspection_started:    "เริ่มตรวจสอบ",
+  inspection_logged:     "บันทึกผลตรวจสอบแล้ว",
+  in_shop_inspection:    "กำลังตรวจสอบที่ร้าน",
+  in_shop_repair:        "กำลังซ่อมที่ร้าน",
+  delivered_to_shop:     "ส่งถึงร้านแล้ว",
+  delivered:             "ส่งคืนแล้ว",
+  delivered_to_customer: "ส่งถึงลูกค้าแล้ว",
+  awaiting_pickup:       "รอรับเครื่อง",
+  parts_ordered:         "สั่งอะไหล่แล้ว",
+  parts_arrived:         "อะไหล่มาถึงแล้ว",
+};
+
 // U-50a — งานขาย/ซากติดตามคนละ flow (ServiceProgress type = Backend-mirror · ห้ามเพิ่ม serviceType นอก spec/F1)
 // → cross-link เข้า flow จริง (display-only mockup) ให้ jobs ครอบทุกบริการ
 const OTHER_FLOWS = [
@@ -98,7 +112,7 @@ export default function JobsPage() {
 
               {job.currentSubStage && (
                 <p className="mt-2 text-xs text-weeeu-primary font-medium">
-                  → {job.currentSubStage.replace(/_/g, " ")}
+                  → {SUB_STAGE_LABEL[job.currentSubStage] ?? job.currentSubStage.replace(/_/g, " ")}
                 </p>
               )}
 

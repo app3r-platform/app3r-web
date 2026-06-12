@@ -2,5 +2,5 @@
 import { LoadingScreen } from "@app3r/ui";
 
 export default function Loading() {
-  return <LoadingScreen roleTheme={{ primary: "#0DC36C" }} label="กำลังโหลด... (Loading)" />;
+  return <LoadingScreen roleTheme={{ primary: "#0DC36C" }} label="กำลังโหลด..." />;
 }

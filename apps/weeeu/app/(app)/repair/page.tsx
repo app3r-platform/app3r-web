@@ -45,7 +45,7 @@ type RepairJob = {
 
 const STATUS_LABEL: Record<RepairStatus, string> = {
   draft: "ร่าง",
-  open: "รอข้อเสนอ (Offer)",
+  open: "รอข้อเสนอ",
   matching: "กำลังจับคู่",
   assigned: "มอบหมายแล้ว",
   traveling: "ช่างกำลังเดินทาง",
