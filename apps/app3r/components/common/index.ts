@@ -31,3 +31,6 @@ export type { ConditionalSectionProps } from "./ConditionalSection";
 // P2 Mockup Completeness — mock-anno annotation components (grep `mock-anno` ลบตอนโค้ดจริง)
 export { MockAnnoOrigin, MockAnnoNav, MockAnnoXapp } from "./MockAnno";
 export type { } from "./MockAnno";
+
+// SocialIcon — platform SVG icons (no EN letter text)
+export { SocialIcon } from "./SocialIcon";

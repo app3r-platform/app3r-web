@@ -2,6 +2,7 @@ import Link from "next/link";
 import { footerContent } from "@/lib/content/footer";
 import { getSocialLinks } from "@/lib/content-api";
 import { crossAppUrls } from "@/lib/config/urls";
+import { SocialIcon } from "@/components/common";
 
 const footerLinks = {
   ประกาศ: [
@@ -26,11 +27,6 @@ const footerLinks = {
   ],
 };
 
-const socialIcons: Record<string, string> = {
-  facebook: 'f',
-  line: 'L',
-  instagram: 'ig',
-};
 
 export default async function Footer() {
   const year = new Date().getFullYear();
@@ -68,7 +64,7 @@ export default async function Footer() {
                     aria-label={s.label}
                     className="bg-gray-800 hover:bg-gray-700 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition"
                   >
-                    {socialIcons[s.platform] ?? s.platform[0].toUpperCase()}
+                    <SocialIcon platform={s.platform} />
                   </a>
                 ))}
               </div>
