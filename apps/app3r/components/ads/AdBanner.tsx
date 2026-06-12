@@ -40,15 +40,20 @@ interface AdBannerProps {
 }
 
 async function fetchPublicAd(position: AdPosition): Promise<PublicAdDto | null> {
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 5000);
   try {
     const res = await fetch(`${BACKEND_URL}/api/v1/ads/public?position=${position}`, {
       next: { revalidate: REVALIDATE_ADS },
       headers: { Accept: "application/json" },
+      signal: controller.signal,
     });
+    clearTimeout(tid);
     if (!res.ok) return null;
     const data = (await res.json()) as { items: PublicAdDto[] };
     return data.items?.[0] ?? null;
   } catch {
+    clearTimeout(tid);
     return null;
   }
 }

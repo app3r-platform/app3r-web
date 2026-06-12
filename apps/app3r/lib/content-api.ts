@@ -30,6 +30,8 @@ async function fetchContentPage(
   type: string,
   slug?: string,
 ): Promise<ContentPageDetailDto | null> {
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 5000);
   try {
     const path = slug
       ? `/api/content/${type}/${slug}`
@@ -37,7 +39,9 @@ async function fetchContentPage(
     // W-3-E-1 fix: เรียก Hono CMS API ตรง (:8787) ไม่ใช่ Python backend (:8000)
     const res = await fetch(`${CMS_BACKEND_URL}${path}`, {
       next: { revalidate: REVALIDATE },
+      signal: controller.signal,
     });
+    clearTimeout(tid);
     if (!res.ok) return null;
     // คาดว่า API คืน array สำหรับ /type หรือ single object สำหรับ /type/slug
     const data: unknown = await res.json();
@@ -50,6 +54,7 @@ async function fetchContentPage(
     }
     return data as ContentPageDetailDto;
   } catch {
+    clearTimeout(tid);
     return null;
   }
 }
