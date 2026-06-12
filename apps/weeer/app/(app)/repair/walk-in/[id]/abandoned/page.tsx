@@ -59,8 +59,8 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
   if (success) return (
     <div className="flex flex-col items-center justify-center h-48 text-center">
       <span className="text-4xl mb-3">📋</span>
-      <p className="text-sm font-semibold text-gray-800">เปิด Abandoned Protocol สำเร็จ</p>
-      <p className="text-xs text-gray-400 mt-1">ระบบจะแจ้งลูกค้าและติดตาม grace period</p>
+      <p className="text-sm font-semibold text-gray-800">เปิดขั้นตอนจัดการเครื่องที่ถูกทิ้ง (Abandoned Protocol) สำเร็จ</p>
+      <p className="text-xs text-gray-400 mt-1">ระบบจะแจ้งลูกค้าและติดตามระยะผ่อนผัน (grace period)</p>
     </div>
   );
   if (!job) return null;
@@ -69,7 +69,7 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
     <div className="space-y-5 max-w-xl">
       <div className="flex items-center gap-3">
         <Link href={`/repair/walk-in/${id}/ready`} className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">Abandoned Device Protocol</h1>
+        <h1 className="text-xl font-bold text-gray-900">เครื่องที่ลูกค้าทิ้งไว้ (Abandoned Device)</h1>
       </div>
 
       {/* Warning */}
@@ -92,8 +92,8 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
         <p className="text-xs text-gray-500">👤 {job.customer_name} · 📞 {job.customer_phone}</p>
         {storageFee && (
           <div className="bg-yellow-50 rounded-lg p-2 flex justify-between text-xs">
-            <span className="text-yellow-700">Storage fee สะสม ({storageFee.days} วัน)</span>
-            <span className="font-bold text-yellow-800">{storageFee.fee_accrued.toLocaleString()} pts</span>
+            <span className="text-yellow-700">ค่าฝากเก็บ (Storage fee) สะสม ({storageFee.days} วัน)</span>
+            <span className="font-bold text-yellow-800">{storageFee.fee_accrued.toLocaleString()} พอยต์</span>
           </div>
         )}
       </div>
@@ -101,7 +101,7 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
       <div className="bg-white border border-gray-100 rounded-2xl p-5 space-y-5">
         {/* Grace period */}
         <div>
-          <p className="text-sm font-medium text-gray-700 mb-2">Grace Period ก่อนดำเนินการ</p>
+          <p className="text-sm font-medium text-gray-700 mb-2">ระยะผ่อนผัน (Grace Period) ก่อนดำเนินการ</p>
           <div className="space-y-2">
             {GRACE_OPTIONS.map((opt) => (
               <label key={opt.days} className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
@@ -121,7 +121,7 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
 
         {/* Action after grace period */}
         <div>
-          <p className="text-sm font-medium text-gray-700 mb-2">หลัง Grace Period — ดำเนินการ</p>
+          <p className="text-sm font-medium text-gray-700 mb-2">หลังระยะผ่อนผัน (Grace Period) — ดำเนินการ</p>
           <div className="grid grid-cols-2 gap-2">
             <label className={`flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all
               ${action === "scrap" ? "border-[#FF8B66] bg-[#FFF1ED]" : "border-gray-100 hover:border-gray-200"}`}>
@@ -130,8 +130,8 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
                 onChange={() => setAction("scrap")}
                 className="text-[#F04E20]" />
               <div>
-                <p className="text-sm font-semibold text-gray-800">♻️ ส่ง Scrap</p>
-                <p className="text-xs text-gray-500">โอนไป Scrap module</p>
+                <p className="text-sm font-semibold text-gray-800">♻️ ส่งซาก (Scrap)</p>
+                <p className="text-xs text-gray-500">โอนไปโมดูลซาก (Scrap)</p>
               </div>
             </label>
             <label className={`flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all
@@ -161,9 +161,9 @@ export default function WalkInAbandonedPage({ params }: { params: Promise<{ id: 
         <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-600 space-y-1">
           <p className="font-semibold text-gray-700">ขั้นตอนที่จะเกิดขึ้น:</p>
           <p>1. ระบบส่ง SMS/notification แจ้ง {job.customer_name}</p>
-          <p>2. นับ Grace Period {graceDays} วัน</p>
-          <p>3. ถ้าไม่มารับ → {action === "scrap" ? "โอนไป Scrap module" : "กำจัดตามกฎหมาย"}</p>
-          <p>4. Storage fee สะสมต่อจนถึงวันที่ดำเนินการ</p>
+          <p>2. นับระยะผ่อนผัน (Grace Period) {graceDays} วัน</p>
+          <p>3. ถ้าไม่มารับ → {action === "scrap" ? "โอนไปโมดูลซาก (Scrap)" : "กำจัดตามกฎหมาย"}</p>
+          <p>4. ค่าฝากเก็บ (Storage fee) สะสมต่อจนถึงวันที่ดำเนินการ</p>
         </div>
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}

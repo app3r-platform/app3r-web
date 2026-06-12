@@ -114,7 +114,7 @@ export default function ResellListingsNewPage() {
         {/* Price */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            ราคาขาย (pts) <span className="text-red-500">*</span>
+            ราคาขาย (พอยต์) <span className="text-red-500">*</span>
           </label>
           <input type="number" min={0} value={price}
             onChange={e => { setPrice(e.target.value); setFormErrors(f => ({ ...f, price: "" })); }}

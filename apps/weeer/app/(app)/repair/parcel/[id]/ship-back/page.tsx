@@ -32,7 +32,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!returnTracking.trim()) e.tracking = "กรุณากรอกเลข Tracking ขาออก";
+    if (!returnTracking.trim()) e.tracking = "กรุณากรอกเลขพัสดุขาออก (Tracking)";
     if (!postPhotoGate) e.postPhoto = "กรุณายืนยันถ่ายรูปหลังซ่อม";
     if (!packPhotoGate) e.packPhoto = "กรุณายืนยันถ่ายรูปการแพ็ค";
     return e;
@@ -98,18 +98,18 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
           {job.estimated_price !== undefined && (
             <div className="flex justify-between text-sm text-gray-700">
               <span>ค่าแรง + บริการ</span>
-              <span>{job.estimated_price.toLocaleString()} pts</span>
+              <span>{job.estimated_price.toLocaleString()} พอยต์</span>
             </div>
           )}
           {(job.parts_added ?? []).map((p, i) => (
             <div key={i} className="flex justify-between text-xs text-gray-600">
               <span>{p.name} × {p.qty}</span>
-              <span>{(p.price * p.qty).toLocaleString()} pts</span>
+              <span>{(p.price * p.qty).toLocaleString()} พอยต์</span>
             </div>
           ))}
           <div className="flex justify-between text-sm font-bold text-[#D63B12] pt-2 border-t border-gray-100">
             <span>รวม</span>
-            <span>{totalCost.toLocaleString()} pts</span>
+            <span>{totalCost.toLocaleString()} พอยต์</span>
           </div>
         </div>
       )}
@@ -156,7 +156,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
         {/* Return tracking */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            เลข Tracking ขาออก <span className="text-red-500">*</span>
+            เลขพัสดุขาออก (Tracking) <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -171,7 +171,7 @@ export default function ParcelShipBackPage({ params }: { params: Promise<{ id: s
         <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 flex items-start gap-2">
           <span className="text-base">🚀</span>
           <p className="text-xs text-[#D63B12]">
-            เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>กำลังส่งคืน</strong> ลูกค้าจะได้รับแจ้งเลข Tracking โดยอัตโนมัติ
+            เมื่อยืนยัน สถานะจะเปลี่ยนเป็น <strong>กำลังส่งคืน</strong> ลูกค้าจะได้รับแจ้งเลขพัสดุ (Tracking) โดยอัตโนมัติ
           </p>
         </div>
 

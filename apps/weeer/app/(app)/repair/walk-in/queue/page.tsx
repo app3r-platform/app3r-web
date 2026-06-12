@@ -34,10 +34,10 @@ export default function WalkInQueuePage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Walk-in Queue</h1>
+          <h1 className="text-xl font-bold text-gray-900">คิวลูกค้าหน้าร้าน (Walk-in)</h1>
           <p className="text-xs text-gray-500 mt-0.5">ลูกค้าเดินมาหน้าร้าน — รับเครื่อง ตรวจ ซ่อม</p>
         </div>
-        <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
+        <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← แดชบอร์ด (Dashboard)</Link>
       </div>
 
       {/* Summary cards */}
@@ -53,7 +53,7 @@ export default function WalkInQueuePage() {
           </div>
           <div className="bg-yellow-50 rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-yellow-700">{data.storage_fee_total.toLocaleString()}</p>
-            <p className="text-xs text-gray-500 mt-0.5">Storage fee (pts)</p>
+            <p className="text-xs text-gray-500 mt-0.5">ค่าฝากเก็บ (Storage fee) (พอยต์)</p>
           </div>
         </div>
       )}
@@ -64,7 +64,7 @@ export default function WalkInQueuePage() {
       {!loading && !error && data?.items.length === 0 && (
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🚶</span>
-          <p className="text-sm">ไม่มีลูกค้า Walk-in ในขณะนี้</p>
+          <p className="text-sm">ไม่มีลูกค้าหน้าร้าน (Walk-in) ในขณะนี้</p>
         </div>
       )}
 
@@ -85,14 +85,14 @@ export default function WalkInQueuePage() {
                   <span className="text-xs text-gray-400">👤 {job.customer_name}</span>
                   <span className="text-xs text-gray-400">📞 {job.customer_phone}</span>
                   {job.estimated_price && (
-                    <span className="text-xs text-[#D63B12] font-medium">{job.estimated_price.toLocaleString()} pts</span>
+                    <span className="text-xs text-[#D63B12] font-medium">{job.estimated_price.toLocaleString()} พอยต์</span>
                   )}
                 </div>
                 {job.status === "ready" && job.storage_fee_accrued && job.storage_fee_accrued > 0 && (
                   <div className="mt-2 flex items-center gap-1.5 bg-yellow-50 rounded-lg px-2.5 py-1.5">
                     <span className="text-xs">🕐</span>
                     <span className="text-xs font-medium text-yellow-700">
-                      Storage fee: {job.storage_fee_accrued.toLocaleString()} pts ({job.storage_fee_days} วัน)
+                      ค่าฝากเก็บ (Storage fee): {job.storage_fee_accrued.toLocaleString()} พอยต์ ({job.storage_fee_days} วัน)
                     </span>
                   </div>
                 )}

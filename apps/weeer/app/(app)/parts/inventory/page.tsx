@@ -373,7 +373,7 @@ export default function InventoryPage() {
                     <p className="font-bold text-[#D63B12]">{avail(item)}</p>
                   </div>
                 </div>
-                <p className="text-xs font-semibold text-[#D63B12]">{item.pricePerUnit.toLocaleString()} pts/ชิ้น</p>
+                <p className="text-xs font-semibold text-[#D63B12]">{item.pricePerUnit.toLocaleString()} พอยต์/ชิ้น</p>
                 {item.scrapJobId && (
                   <p className="text-xs text-emerald-600 bg-emerald-50 rounded-lg px-2 py-0.5 truncate">
                     ♻️ จากซาก: {item.scrapJobId}
@@ -422,7 +422,7 @@ export default function InventoryPage() {
                   <th className="text-right px-4 py-3">จอง</th>
                   <th className="text-right px-4 py-3">ใช้ได้</th>
                   <th className="text-right px-4 py-3">ราคา</th>
-                  <th className="px-4 py-3 text-center">Actions</th>
+                  <th className="px-4 py-3 text-center">การดำเนินการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -453,7 +453,7 @@ export default function InventoryPage() {
                     <td className="px-4 py-3 text-right text-orange-500 font-medium">{item.stockReserved}</td>
                     <td className="px-4 py-3 text-right text-[#D63B12] font-semibold">{avail(item)}</td>
                     <td className="px-4 py-3 text-right text-[#D63B12] font-semibold text-xs">
-                      {item.pricePerUnit.toLocaleString()} pts
+                      {item.pricePerUnit.toLocaleString()} พอยต์
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1 justify-center">
@@ -526,13 +526,13 @@ export default function InventoryPage() {
                 </div>
               )}
               <div>
-                <label className="text-xs font-medium text-gray-600 block mb-1">ราคา/หน่วย (pts)</label>
+                <label className="text-xs font-medium text-gray-600 block mb-1">ราคา/หน่วย (พอยต์)</label>
                 <input type="number" min={0} value={form.pricePerUnit}
                   onChange={(e) => setForm((f) => ({ ...f, pricePerUnit: Number(e.target.value) }))}
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 block mb-1">Low-stock threshold</label>
+                <label className="text-xs font-medium text-gray-600 block mb-1">ระดับสต็อกต่ำ (Low-stock threshold)</label>
                 <input type="number" min={1} value={form.lowStockThreshold}
                   onChange={(e) => setForm((f) => ({ ...f, lowStockThreshold: Number(e.target.value) }))}
                   className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
@@ -699,9 +699,9 @@ export default function InventoryPage() {
       {marketTarget && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-md p-5 space-y-4">
-            <h2 className="font-bold text-gray-900">🛒 ลงขายใน Parts Marketplace</h2>
+            <h2 className="font-bold text-gray-900">🛒 ลงขายในตลาดอะไหล่ (Parts Marketplace)</h2>
             <p className="text-sm text-gray-600">
-              ต้องการลงขาย <span className="font-semibold">{marketTarget.name}</span> ใน Parts B2B Marketplace?
+              ต้องการลงขาย <span className="font-semibold">{marketTarget.name}</span> ในตลาดอะไหล่ B2B (Parts Marketplace)?
             </p>
             <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3 space-y-1.5 text-xs">
               <div className="flex justify-between">
@@ -710,7 +710,7 @@ export default function InventoryPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">ราคาแนะนำ</span>
-                <span className="font-bold text-[#D63B12]">{marketTarget.pricePerUnit.toLocaleString()} pts/ชิ้น</span>
+                <span className="font-bold text-[#D63B12]">{marketTarget.pricePerUnit.toLocaleString()} พอยต์/ชิ้น</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">แหล่งที่มา</span>

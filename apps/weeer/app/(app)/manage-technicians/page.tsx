@@ -38,7 +38,7 @@ function StatusBadge({ status }: { status: WeeeT["status"] }) {
 function TypeBadge({ type }: { type: WeeeT["type"] }) {
   return (
     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${type === "default" ? "bg-green-100 text-green-700" : "bg-[#FFE0D6] text-[#D63B12]"}`}>
-      {type === "default" ? "Default" : "Rented"}
+      {type === "default" ? "ประจำ" : "เช่า"}
     </span>
   );
 }
@@ -246,8 +246,8 @@ function SwitchWeeeTModal({ weeet, onClose }: { weeet: WeeeT; onClose: () => voi
         </p>
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700 space-y-1">
           <div className="font-semibold">⚠️ หมายเหตุ</div>
-          <div>• Session ชั่วคราว 30 นาที — หมดเวลาแล้ว logout อัตโนมัติ</div>
-          <div>• ระบบจะออก JWT sub_account context ใหม่ (HQ-7)</div>
+          <div>• เซสชัน (Session) ชั่วคราว 30 นาที — หมดเวลาแล้วออกจากระบบ (logout) อัตโนมัติ</div>
+          <div>• ระบบจะออกโทเคน JWT (sub_account) ใหม่ (HQ-7)</div>
           <div>• คุณจะถูก redirect ไปยัง WeeeT app</div>
         </div>
         <div className="flex gap-3">
@@ -304,7 +304,7 @@ export default function ManageTechniciansPage() {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-xl font-bold text-gray-900">จัดการ WeeeT</h1>
-          <p className="text-sm text-gray-500">ช่างทั้งหมด: {weeetList.length} คน · Gold: {goldBalance} pts</p>
+          <p className="text-sm text-gray-500">ช่างทั้งหมด: {weeetList.length} คน · พอยต์ทอง: {goldBalance}</p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
@@ -392,10 +392,10 @@ export default function ManageTechniciansPage() {
       {/* Info box */}
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-600 space-y-1">
         <div className="font-semibold text-blue-700">ℹ️ ข้อมูลบัญชี WeeeT</div>
-        <div>• Default WeeeT: สร้างอัตโนมัติเมื่อได้รับอนุมัติ — ไม่มีค่าใช้จ่าย{/* PHASE-4: D15 */}</div>
-        <div>• Rented WeeeT: หัก {GOLD_PER_WEEET} Gold/ปี — ต้องต่ออายุทุกปี</div>
-        <div>• สลับเข้าใช้: redirect ไป WeeeT app พร้อม session ชั่วคราว</div>
-        <div>• Password: ระบบสุ่มให้ — WeeeR ส่งให้ช่างเองทาง LINE หรือโทร (ไม่มี SMS){/* PHASE-4: D16 */}</div>
+        <div>• WeeeT ประจำ (Default): สร้างอัตโนมัติเมื่อได้รับอนุมัติ — ไม่มีค่าใช้จ่าย{/* PHASE-4: D15 */}</div>
+        <div>• WeeeT เช่า (Rented): หัก {GOLD_PER_WEEET} พอยต์ทอง (Gold)/ปี — ต้องต่ออายุทุกปี</div>
+        <div>• สลับเข้าใช้: นำทาง (redirect) ไปแอป WeeeT พร้อมเซสชัน (session) ชั่วคราว</div>
+        <div>• รหัสผ่าน (Password): ระบบสุ่มให้ — WeeeR ส่งให้ช่างเองทาง LINE หรือโทร (ไม่มี SMS){/* PHASE-4: D16 */}</div>
       </div>
 
       {/* Modals */}

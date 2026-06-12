@@ -122,7 +122,7 @@ export default async function RepairDetailPage({ params }: Props) {
           </div>
           <div className="bg-blue-50 rounded-xl p-3 text-center">
             <div className="text-xs text-gray-500 mb-1">ค่าบริการ App3R (5%)</div>
-            <div className="text-xl font-bold text-blue-700">{job.feePreview} pts</div>
+            <div className="text-xl font-bold text-blue-700">{job.feePreview} พอยต์</div>
           </div>
         </div>
       </div>

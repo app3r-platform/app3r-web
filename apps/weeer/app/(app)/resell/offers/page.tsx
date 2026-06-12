@@ -135,7 +135,7 @@ export default function ResellOffersPage() {
                   {o.message && <p className="text-xs text-gray-500 italic mt-0.5">"{o.message}"</p>}
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="text-sm font-bold text-[#FF663A]">{o.offerPrice.toLocaleString()} pts</p>
+                  <p className="text-sm font-bold text-[#FF663A]">{o.offerPrice.toLocaleString()} พอยต์</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${OFFER_STATUS_COLOR[o.status]}`}>
                     {OFFER_STATUS_LABEL[o.status]}
                   </span>
@@ -147,8 +147,8 @@ export default function ResellOffersPage() {
                 <div className="mt-2 bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl px-3 py-2">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-[#D63B12]">⭐ ข้อเสนอถูกเลือก — ต้องเติม Gold</p>
-                      <p className="text-xs text-[#F04E20] mt-0.5">เติม Gold ≤24ชม. ไม่งั้น offer ถูกปลดอัตโนมัติ</p>
+                      <p className="text-xs font-bold text-[#D63B12]">⭐ ข้อเสนอถูกเลือก — ต้องเติมพอยต์ทอง</p>
+                      <p className="text-xs text-[#F04E20] mt-0.5">เติมพอยต์ทอง ≤24ชม. ไม่งั้นข้อเสนอ (offer) ถูกปลดอัตโนมัติ</p>
                     </div>
                     <EscrowBadge />
                   </div>

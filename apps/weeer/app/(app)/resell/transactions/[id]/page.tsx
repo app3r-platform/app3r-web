@@ -131,9 +131,9 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
         <div className="grid grid-cols-2 gap-3">
           <div><p className="text-xs text-gray-400">ผู้ขาย</p><p className="font-medium">{tx.sellerName}</p></div>
           <div><p className="text-xs text-gray-400">ผู้ซื้อ</p><p className="font-medium">{tx.buyerName}</p></div>
-          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-xl font-bold text-[#FF663A]">{tx.price.toLocaleString()} pts</p></div>
+          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-xl font-bold text-[#FF663A]">{tx.price.toLocaleString()} พอยต์</p></div>
           <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{tx.deliveryMethod}</p></div>
-          {tx.trackingNumber && <div className="col-span-2"><p className="text-xs text-gray-400">Tracking</p><p className="font-medium font-mono">{tx.trackingNumber}</p></div>}
+          {tx.trackingNumber && <div className="col-span-2"><p className="text-xs text-gray-400">การติดตามพัสดุ (Tracking)</p><p className="font-medium font-mono">{tx.trackingNumber}</p></div>}
           {tx.disputeReason && (
             <div className="col-span-2">
               <p className="text-xs text-gray-400">สาเหตุพิพาท</p>
@@ -238,7 +238,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
           </button>
           <button onClick={() => setShowDisputeModal(true)}
             className="w-full bg-red-50 hover:bg-red-100 text-red-700 font-semibold py-3 rounded-xl transition-colors border border-red-200">
-            ⚠️ R8: ปฏิเสธ — เปิด Dispute
+            ⚠️ R8: ปฏิเสธ — เปิดข้อพิพาท (Dispute)
           </button>
         </div>
       )}
@@ -247,7 +247,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
       {!isTerminal && STEP_ORDER[effectiveStatus] >= 4 && (
         <button onClick={() => setShowDisputeModal(true)}
           className="w-full border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium py-2.5 rounded-xl transition-colors">
-          🚨 R10: เปิด Dispute
+          🚨 R10: เปิดข้อพิพาท (Dispute)
         </button>
       )}
 
@@ -278,7 +278,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
                   </div>
                 </>
               ) : (
-                <p className="text-sm text-orange-700 font-medium">✅ ส่ง Claim แล้ว — Admin กำลังตรวจสอบ</p>
+                <p className="text-sm text-orange-700 font-medium">✅ ส่งเคลม (Claim) แล้ว — Admin กำลังตรวจสอบ</p>
               )}
             </div>
           )}
@@ -311,7 +311,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
               <button onClick={() => { setMockStatus("disputed"); setShowDisputeModal(false); }}
                 disabled={!disputeNote}
                 className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-sm disabled:opacity-60">
-                ยืนยันเปิด Dispute
+                ยืนยันเปิดข้อพิพาท (Dispute)
               </button>
             </div>
           </div>

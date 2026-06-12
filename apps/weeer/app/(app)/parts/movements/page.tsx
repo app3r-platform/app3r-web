@@ -11,7 +11,7 @@ const TYPE_FILTERS = [
   { value: "", label: "ทั้งหมด" },
   { value: "STOCK_IN", label: "รับเข้า" },
   { value: "STOCK_OUT", label: "จ่ายออก" },
-  { value: "STOCK_ADJUSTMENT", label: "ปรับ Manual" },
+  { value: "STOCK_ADJUSTMENT", label: "ปรับด้วยมือ (Manual)" },
 ] as const;
 
 export default function PartsMovementsPage() {
@@ -74,7 +74,7 @@ export default function PartsMovementsPage() {
                 <div className="min-w-0">
                   <p className="text-xs text-gray-600 truncate">{REASON_LABEL[m.reason]}</p>
                   {m.note && <p className="text-xs text-gray-400 truncate max-w-48">{m.note}</p>}
-                  {m.refId && <p className="text-xs text-gray-400 font-mono truncate max-w-48">ref: {m.refId}</p>}
+                  {m.refId && <p className="text-xs text-gray-400 font-mono truncate max-w-48">อ้างอิง: {m.refId}</p>}
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0 ml-2">

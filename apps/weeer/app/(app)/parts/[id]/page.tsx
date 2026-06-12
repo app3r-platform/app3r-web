@@ -60,7 +60,7 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
         </div>
         <div>
           <p className="text-xs text-gray-400">ราคาต่อหน่วย</p>
-          <p className="font-bold text-[#D63B12]">{part.unitPrice.toLocaleString()} pts</p>
+          <p className="font-bold text-[#D63B12]">{part.unitPrice.toLocaleString()} พอยต์</p>
         </div>
         <div>
           <p className="text-xs text-gray-400">แหล่งที่มา</p>

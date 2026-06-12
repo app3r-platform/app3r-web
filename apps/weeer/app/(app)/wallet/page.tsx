@@ -80,7 +80,7 @@ export default function WalletPage() {
           >
             <div className="text-2xl mb-1">📤</div>
             <div className="text-xs font-semibold text-gray-800">ถอนแต้ม</div>
-            <div className="text-xs text-gray-500 mt-0.5">Settlement</div>
+            <div className="text-xs text-gray-500 mt-0.5">การชำระบัญชี</div>
           </Link>
         </MockAnnoNav>
         <MockAnnoNav to="R-76">
@@ -90,7 +90,7 @@ export default function WalletPage() {
           >
             <div className="text-2xl mb-1">💸</div>
             <div className="text-xs font-semibold text-gray-800">ประวัติถอน</div>
-            <div className="text-xs text-gray-500 mt-0.5">Settlements</div>
+            <div className="text-xs text-gray-500 mt-0.5">รายการชำระบัญชี</div>
           </Link>
         </MockAnnoNav>
       </div>

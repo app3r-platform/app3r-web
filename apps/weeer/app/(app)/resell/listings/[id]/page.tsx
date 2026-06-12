@@ -199,8 +199,8 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติม Gold เข้าพักเงินกลาง (Escrow)</p>
-              <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
+              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติมพอยต์ทอง เข้าพักเงินกลาง (Escrow)</p>
+              <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติมพอยต์ทอง ≤24ชม. มิฉะนั้นข้อเสนอ (offer) จะถูกปลด</p>
             </div>
             <EscrowCountdown />
           </div>
@@ -248,7 +248,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ราคา</p>
-            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} pts</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} พอยต์</p>
           </div>
           <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{listing.deliveryMethods.join(", ")}</p></div>
           {listing.warranty && (
@@ -290,7 +290,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
               <div key={o.id} className="border border-gray-100 rounded-xl p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="text-sm font-bold text-gray-800">{o.offerPrice.toLocaleString()} pts</p>
+                    <p className="text-sm font-bold text-gray-800">{o.offerPrice.toLocaleString()} พอยต์</p>
                     <p className="text-xs text-gray-500">{o.buyerName ?? o.buyerId} · {o.buyerType}</p>
                     <p className="text-xs text-gray-400">{o.deliveryMethod}</p>
                     {o.message && <p className="text-xs text-gray-500 mt-1 italic">"{o.message}"</p>}

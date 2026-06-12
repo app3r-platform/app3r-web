@@ -117,14 +117,14 @@ export default function MaintainQueuePage() {
       <MockAnnoOrigin from="R-47" />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">คิวงาน Maintain</h1>
+          <h1 className="text-xl font-bold text-gray-900">คิวงานบำรุงรักษา (Maintain)</h1>
           <p className="text-xs text-gray-500 mt-0.5">งานล้างเครื่องใช้ไฟฟ้าในรัศมี — ดูรายละเอียด → ยื่นข้อเสนอ</p>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/maintain/jobs" className="text-sm text-[#FF663A] hover:text-[#D8491F] font-medium">
             งานที่รับแล้ว →
           </Link>
-          <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
+          <Link href="/repair/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← แดชบอร์ด (Dashboard)</Link>
         </div>
       </div>
 
@@ -156,7 +156,7 @@ export default function MaintainQueuePage() {
       {!loading && !error && pendingJobs.length === 0 && (
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🛁</span>
-          <p className="text-sm">ไม่มีงาน Maintain ใหม่ในขณะนี้</p>
+          <p className="text-sm">ไม่มีงานบำรุงรักษา (Maintain) ใหม่ในขณะนี้</p>
         </div>
       )}
 
@@ -180,7 +180,7 @@ export default function MaintainQueuePage() {
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1.5">
                   <span className="text-xs text-gray-400">📍 {job.address.address}</span>
                   <span className="text-xs text-gray-400">⏱ {job.estimatedDuration} ชม.</span>
-                  <span className="text-xs text-gray-400">💰 {job.totalPrice.toLocaleString()} pts</span>
+                  <span className="text-xs text-gray-400">💰 {job.totalPrice.toLocaleString()} พอยต์</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
                   🗓 {new Date(job.scheduledAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}

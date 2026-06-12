@@ -86,7 +86,7 @@ function RepairJobsContent() {
                     นัด: {new Date(job.scheduled_at).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                   </span>
                   {job.final_price && (
-                    <span className="text-xs font-medium text-[#D63B12]">{job.final_price.toLocaleString()} pts</span>
+                    <span className="text-xs font-medium text-[#D63B12]">{job.final_price.toLocaleString()} พอยต์</span>
                   )}
                 </div>
                 {job.status === "awaiting_decision" && (
@@ -96,7 +96,7 @@ function RepairJobsContent() {
                   </div>
                 )}
                 <div className="mt-1.5">
-                  <span className="text-xs text-[#F04E20] font-medium">📊 ดู Progress</span>
+                  <span className="text-xs text-[#F04E20] font-medium">📊 ดูความคืบหน้า (Progress)</span>
                 </div>
               </div>
             </div>

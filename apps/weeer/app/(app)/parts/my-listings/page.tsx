@@ -209,7 +209,7 @@ export default function MyListingsPage() {
             <h2 className="font-bold text-gray-900">☑️ รับออเดอร์</h2>
             <p className="text-sm text-gray-600">
               ยืนยันรับออเดอร์ <span className="font-semibold">{confirmOrder.partName}</span>{" "}
-              จาก {confirmOrder.buyerShopName} — {confirmOrder.quantity} ชิ้น · {confirmOrder.totalPoints.toLocaleString()} pts
+              จาก {confirmOrder.buyerShopName} — {confirmOrder.quantity} ชิ้น · {confirmOrder.totalPoints.toLocaleString()} พอยต์
             </p>
             <p className="text-xs text-gray-400">เมื่อรับแล้ว จะเปลี่ยนเป็น "ผู้ขายรับแล้ว" รอขั้นตอนส่ง</p>
             <div className="flex gap-2">

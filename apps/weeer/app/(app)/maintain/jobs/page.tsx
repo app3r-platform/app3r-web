@@ -82,7 +82,7 @@ export default function MaintainJobsPage() {
       <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">งาน Maintain</h1>
+          <h1 className="text-xl font-bold text-gray-900">งานบำรุงรักษา (Maintain)</h1>
           <p className="text-xs text-gray-500 mt-0.5">งานล้างเครื่องที่ร้านรับแล้ว</p>
         </div>
         <Link href="/maintain/queue" className="text-sm text-[#FF663A] hover:text-[#D8491F] font-medium">
@@ -153,10 +153,10 @@ export default function MaintainJobsPage() {
                 {job.status === "closed_for_repair" && (
                   <p className="text-xs text-gray-600 bg-gray-50 rounded-lg px-2 py-1 mt-1">🔧 ปิดงานนี้แล้ว — ส่งต่อซ่อม</p>
                 )}
-                <p className="text-xs text-[#FF663A] mt-1 font-medium">📊 ดู Progress</p>
+                <p className="text-xs text-[#FF663A] mt-1 font-medium">📊 ดูความคืบหน้า (Progress)</p>
               </div>
               <div className="shrink-0 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} pts</p>
+                <p className="text-sm font-bold text-[#FF663A]">{job.totalPrice.toLocaleString()} พอยต์</p>
                 <p className="text-xs text-gray-400">{job.estimatedDuration} ชม.</p>
               </div>
             </div>

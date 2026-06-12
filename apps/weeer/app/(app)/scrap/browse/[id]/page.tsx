@@ -112,7 +112,7 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
 
         <div className="border-t border-gray-50 pt-3 flex items-center justify-between">
           <p className="text-xs text-gray-400">ราคา</p>
-          <p className="text-2xl font-bold text-[#D63B12]">{item.price.toLocaleString()} pts</p>
+          <p className="text-2xl font-bold text-[#D63B12]">{item.price.toLocaleString()} พอยต์</p>
         </div>
       </div>
 

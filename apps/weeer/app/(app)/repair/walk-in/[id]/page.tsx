@@ -28,7 +28,7 @@ export default function RepairWalkInDetailPage({ params }: { params: Promise<{ i
         <Link href="/repair/walk-in/queue" className="text-gray-400 hover:text-gray-600">←</Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900">Walk-in #{id}</h1>
+            <h1 className="text-xl font-bold text-gray-900">ลูกค้าหน้าร้าน (Walk-in) #{id}</h1>
             <span className="shrink-0 text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-700">
               🟢 กำลังดำเนินการ
             </span>

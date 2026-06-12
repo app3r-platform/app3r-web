@@ -121,7 +121,7 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ราคา</p>
-            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} pts</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} พอยต์</p>
           </div>
           <div>
             <p className="text-xs text-gray-400">ผู้ขาย</p>
@@ -181,7 +181,7 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
             <form onSubmit={handleOffer} className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-[#4A1B0C]">ยื่นข้อเสนอ</p>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">ราคาที่เสนอ (pts)</label>
+                <label className="block text-xs text-gray-600 mb-1">ราคาที่เสนอ (พอยต์)</label>
                 <input type="number" min={1} value={offerPrice} onChange={e => setOfferPrice(e.target.value)}
                   required
                   className="w-full border border-[#FFD5C4] rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]/30" />

@@ -107,7 +107,7 @@ export default function DisposePage({ params }: { params: Promise<{ id: string }
       {!cert ? (
         <>
           <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
-            <p className="text-xs text-gray-500 font-medium">ข้อมูลสำหรับออกใบรับรอง e-Waste</p>
+            <p className="text-xs text-gray-500 font-medium">ข้อมูลสำหรับออกใบรับรองขยะอิเล็กทรอนิกส์ (e-Waste)</p>
             <div>
               <label className="block text-xs text-gray-500 mb-1">รายละเอียดสิ่งของ <span className="text-red-400">*</span></label>
               <textarea value={itemDescription} onChange={e => setItemDescription(e.target.value)} rows={3}
@@ -200,7 +200,7 @@ function generateCertHtml(cert: EWasteCertificate): string {
   <div class="header">
     <div style="font-size:32px">♻️</div>
     <div class="title">ใบรับรองการทำลายซากอิเล็กทรอนิกส์</div>
-    <div class="sub">App3R Platform — WeeeR e-Waste Certificate</div>
+    <div class="sub">App3R Platform — WeeeR ใบรับรองขยะอิเล็กทรอนิกส์ (e-Waste Certificate)</div>
     <div class="cert-no">เลขที่: ${cert.certNumber}</div>
     <div class="badge">✅ ออกแล้ว</div>
   </div>
@@ -211,7 +211,7 @@ function generateCertHtml(cert: EWasteCertificate): string {
       <div class="value">${issuedDate}</div>
     </div>
     <div class="col">
-      <div class="label">ScrapJob ID</div>
+      <div class="label">รหัสงานซาก (ScrapJob ID)</div>
       <div class="value" style="font-family:monospace;font-size:12px">${cert.scrapJobId}</div>
     </div>
   </div>

@@ -171,7 +171,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
         {/* Estimated price */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            ค่าแรง/ค่าบริการ (pts) <span className="text-red-500">*</span>
+            ค่าแรง/ค่าบริการ (พอยต์) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -193,7 +193,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
                 <div key={i} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
                   <span className="text-sm text-gray-700">{p.name} × {p.qty}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-700">{(p.price * p.qty).toLocaleString()} pts</span>
+                    <span className="text-sm font-medium text-gray-700">{(p.price * p.qty).toLocaleString()} พอยต์</span>
                     <button type="button" onClick={() => removePart(i)} className="text-red-400 hover:text-red-600 text-xs">✕</button>
                   </div>
                 </div>
@@ -219,15 +219,15 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
         {grandTotal > 0 && (
           <div className="bg-[#FFF1ED] border border-[#FFE0D6] rounded-xl p-3">
             <div className="flex justify-between text-sm text-gray-700">
-              <span>ค่าแรง</span><span>{laborCost.toLocaleString()} pts</span>
+              <span>ค่าแรง</span><span>{laborCost.toLocaleString()} พอยต์</span>
             </div>
             {parts.length > 0 && (
               <div className="flex justify-between text-sm text-gray-700 mt-1">
-                <span>อะไหล่รวม</span><span>{partsTotal.toLocaleString()} pts</span>
+                <span>อะไหล่รวม</span><span>{partsTotal.toLocaleString()} พอยต์</span>
               </div>
             )}
             <div className="flex justify-between text-sm font-bold text-[#D63B12] mt-2 pt-2 border-t border-[#FFE0D6]">
-              <span>รวมทั้งหมด</span><span>{grandTotal.toLocaleString()} pts</span>
+              <span>รวมทั้งหมด</span><span>{grandTotal.toLocaleString()} พอยต์</span>
             </div>
           </div>
         )}
@@ -236,7 +236,7 @@ export default function ParcelInspectPage({ params }: { params: Promise<{ id: st
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
             <span className="text-base">⚠️</span>
             <p className="text-xs text-amber-700">
-              ราคาเปลี่ยนจากเดิม <strong>{job.estimated_price.toLocaleString()} pts</strong> → <strong>{grandTotal.toLocaleString()} pts</strong> — ระบบจะแจ้ง WeeeU เพื่อขออนุมัติอัตโนมัติ
+              ราคาเปลี่ยนจากเดิม <strong>{job.estimated_price.toLocaleString()} พอยต์</strong> → <strong>{grandTotal.toLocaleString()} พอยต์</strong> — ระบบจะแจ้ง WeeeU เพื่อขออนุมัติอัตโนมัติ
             </p>
           </div>
         )}

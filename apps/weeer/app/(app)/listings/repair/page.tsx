@@ -141,7 +141,7 @@ export default function RepairListingsPage() {
                 <div className="text-right shrink-0">
                   <div className="text-xs text-gray-400">งบประมาณ</div>
                   <div className="text-sm font-bold text-[#D63B12]">{job.estimatedBudget.toLocaleString()} ฿</div>
-                  <div className="text-xs text-gray-400">ค่าบริการ {job.feePreview} pts</div>
+                  <div className="text-xs text-gray-400">ค่าบริการ {job.feePreview} พอยต์</div>
                 </div>
               </div>
             </Link>

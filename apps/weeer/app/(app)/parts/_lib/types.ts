@@ -52,7 +52,7 @@ export interface PartsUsedItem {
 export const CONDITION_LABEL: Record<Part["condition"], string> = {
   new:         "ใหม่",
   used:        "มือสอง",
-  refurbished: "Refurb",
+  refurbished: "ปรับสภาพ",
 };
 
 export const CONDITION_COLOR: Record<Part["condition"], string> = {

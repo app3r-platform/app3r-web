@@ -50,7 +50,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
         </div>
         <div>
           <p className="text-gray-400">รวม</p>
-          <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} pts</p>
+          <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} พอยต์</p>
         </div>
         <div>
           <p className="text-gray-400">จัดส่ง</p>
@@ -60,7 +60,7 @@ export function OrderCard({ order, role, onAction }: OrderCardProps) {
 
       {order.trackingNumber && (
         <p className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-1.5">
-          📦 Tracking: <span className="font-mono font-medium text-gray-700">{order.trackingNumber}</span>
+          📦 เลขพัสดุ (Tracking): <span className="font-mono font-medium text-gray-700">{order.trackingNumber}</span>
         </p>
       )}
 

@@ -54,7 +54,7 @@ export function PartCard({ listing, currentShopId }: PartCardProps) {
         </div>
         <div className="flex items-center justify-between pt-0.5">
           {listing.pricePoints > 0 ? (
-            <p className="text-sm font-bold text-[#D63B12]">{listing.pricePoints.toLocaleString()} pts</p>
+            <p className="text-sm font-bold text-[#D63B12]">{listing.pricePoints.toLocaleString()} พอยต์</p>
           ) : listing.unitPriceThb != null ? (
             <p className="text-sm font-bold text-gray-700">
               ฿{listing.unitPriceThb.toLocaleString()}

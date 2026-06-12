@@ -119,7 +119,7 @@ export default function ResellTransactionsPage() {
                 </span>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{tx.price.toLocaleString()} pts</p>
+                <p className="text-sm font-bold text-[#FF663A]">{tx.price.toLocaleString()} พอยต์</p>
                 <p className="text-xs text-gray-400">
                   {new Date(tx.updatedAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
                 </p>

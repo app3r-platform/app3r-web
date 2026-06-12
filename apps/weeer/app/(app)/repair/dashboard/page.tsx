@@ -26,7 +26,7 @@ export default function RepairDashboardPage() {
   const kpis = [
     { label: "งานที่กำลังดำเนิน", value: data.active_jobs, icon: "🔧", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
     { label: "งานเดือนนี้", value: data.jobs_this_month, icon: "📋", color: "text-blue-700", bg: "bg-blue-50" },
-    { label: "รายได้เดือนนี้", value: `${data.earnings_this_month.toLocaleString()} pts`, icon: "🪙", color: "text-yellow-700", bg: "bg-yellow-50" },
+    { label: "รายได้เดือนนี้", value: `${data.earnings_this_month.toLocaleString()} พอยต์`, icon: "🪙", color: "text-yellow-700", bg: "bg-yellow-50" },
     { label: "รออนุมัติ", value: data.pending_approvals, icon: "⚠️", color: "text-orange-700", bg: "bg-orange-50" },
     { label: "คะแนนเฉลี่ย", value: data.avg_rating.toFixed(1), icon: "⭐", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
     { label: "WeeeT ใช้งาน %", value: `${data.weeet_utilization}%`, icon: "👷", color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
@@ -37,7 +37,7 @@ export default function RepairDashboardPage() {
       <MockAnnoOrigin from="R-64" />
       <MockAnnoXApp entries={[{ app: "WeeeU", screen: "Dashboard", url: "http://localhost:3002/dashboard" }]} />
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">ซ่อม — Dashboard</h1>
+        <h1 className="text-xl font-bold text-gray-900">ซ่อม — แดชบอร์ด (Dashboard)</h1>
         <Link href="/repair/jobs" className="text-sm text-[#D63B12] hover:underline font-medium">ดูงานทั้งหมด →</Link>
       </div>
 

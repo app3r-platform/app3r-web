@@ -97,7 +97,7 @@ export default function SettlementsPage() {
           <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-sm">← กลับ</Link>
           <div>
             <h1 className="text-xl font-bold text-gray-900">ประวัติการถอนเงิน</h1>
-            <p className="text-xs text-gray-500 mt-0.5">Settlement records — Sub-CMD-6</p>
+            <p className="text-xs text-gray-500 mt-0.5">รายการชำระบัญชี (Settlement records) — Sub-CMD-6</p>
           </div>
         </div>
         <Link
@@ -169,11 +169,11 @@ export default function SettlementsPage() {
                 </div>
 
                 <div className="text-xs text-gray-500">
-                  Service: <span className="font-mono">{stl.serviceId.slice(0, 8)}…</span>
+                  รหัสบริการ (Service): <span className="font-mono">{stl.serviceId.slice(0, 8)}…</span>
                 </div>
                 {stl.bankRef && (
                   <div className="text-xs text-gray-400">
-                    Bank Ref: <span className="font-mono">{stl.bankRef}</span>
+                    อ้างอิงธนาคาร (Bank Ref): <span className="font-mono">{stl.bankRef}</span>
                   </div>
                 )}
                 <div className="text-xs text-gray-300 mt-1">

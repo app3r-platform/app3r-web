@@ -13,7 +13,7 @@ const CONDITIONS: { label: string; value: Part["condition"] | "all" }[] = [
   { label: "ทั้งหมด", value: "all" },
   { label: "ใหม่", value: "new" },
   { label: "มือสอง", value: "used" },
-  { label: "Refurb", value: "refurbished" },
+  { label: "ปรับสภาพ", value: "refurbished" },
 ];
 
 export default function PartsListPage() {
@@ -58,7 +58,7 @@ export default function PartsListPage() {
         </div>
         <div className="flex items-center gap-2">
           <MockAnnoNav to="R-52" label="Dashboard" style={{ display: "contents" }}>
-            <Link href="/parts/dashboard" className="text-xs text-gray-500 hover:text-gray-700">📊 Dashboard</Link>
+            <Link href="/parts/dashboard" className="text-xs text-gray-500 hover:text-gray-700">📊 แดชบอร์ด (Dashboard)</Link>
           </MockAnnoNav>
           <MockAnnoNav to="R-57" label="+ เพิ่มอะไหล่" style={{ display: "contents" }}>
             <Link href="/parts/new"
@@ -154,7 +154,7 @@ export default function PartsListPage() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right text-gray-700">
-                    {p.unitPrice.toLocaleString()} pts
+                    {p.unitPrice.toLocaleString()} พอยต์
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/parts/${p.id}`}

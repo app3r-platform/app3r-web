@@ -165,12 +165,12 @@ export default function WithdrawPage() {
             </div>
             {settlement.bankRef && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Bank Ref</span>
+                <span className="text-gray-500">อ้างอิงธนาคาร (Bank Ref)</span>
                 <span className="text-gray-700 font-mono text-xs">{settlement.bankRef}</span>
               </div>
             )}
             <div className="border-t border-gray-100 pt-2 flex justify-between text-xs">
-              <span className="text-gray-400">Settlement ID</span>
+              <span className="text-gray-400">รหัสการชำระบัญชี (Settlement ID)</span>
               <span className="text-gray-600 font-mono">{settlement.id.slice(0, 8)}…</span>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function WithdrawPage() {
           {/* Audit log summary */}
           {settlement.auditLog.length > 0 && (
             <div className="bg-gray-50 rounded-xl px-4 py-3 text-left space-y-1">
-              <p className="text-xs font-semibold text-gray-600 mb-1.5">Audit Trail</p>
+              <p className="text-xs font-semibold text-gray-600 mb-1.5">ประวัติการตรวจสอบ (Audit Trail)</p>
               {settlement.auditLog.slice(0, 3).map((log) => (
                 <div key={log.id} className="flex items-center gap-2 text-xs text-gray-500">
                   <span className="w-1.5 h-1.5 bg-gray-300 rounded-full shrink-0" />
@@ -220,11 +220,11 @@ export default function WithdrawPage() {
       {/* Info note */}
       <div className="bg-amber-50 rounded-2xl border border-amber-100 p-4">
         <div className="text-xs text-amber-700 space-y-1">
-          <div className="font-semibold text-amber-800">⚡ Settlement API — Sub-CMD-6</div>
+          <div className="font-semibold text-amber-800">⚡ ระบบชำระบัญชี (Settlement API) — Sub-CMD-6</div>
           <div>• ถอนขั้นต่ำ {MIN_AMOUNT_THB.toLocaleString()} บาท</div>
           <div>• ต้องระบุ Service ID ของงานที่ชำระเงินเสร็จแล้ว</div>
           <div>• ระบบโอนเงินผ่าน Mock bank adapter (Sub-6) — real bank ใน Sub-7+</div>
-          <div>• ทุกรายการมี Audit Log (Security Rule #5)</div>
+          <div>• ทุกรายการมีบันทึกตรวจสอบ (Audit Log) — กฎความปลอดภัยข้อ 5</div>
         </div>
       </div>
 

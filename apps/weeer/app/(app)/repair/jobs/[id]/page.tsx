@@ -79,13 +79,13 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
           {job.original_price > 0 && (
             <div>
               <p className="text-xs text-gray-400">ราคาข้อเสนอ</p>
-              <p className="font-medium text-[#D63B12]">{job.original_price.toLocaleString()} pts</p>
+              <p className="font-medium text-[#D63B12]">{job.original_price.toLocaleString()} พอยต์</p>
             </div>
           )}
           {job.final_price && (
             <div>
               <p className="text-xs text-gray-400">ราคาสุดท้าย</p>
-              <p className="font-bold text-[#D63B12]">{job.final_price.toLocaleString()} pts</p>
+              <p className="font-bold text-[#D63B12]">{job.final_price.toLocaleString()} พอยต์</p>
             </div>
           )}
         </div>
@@ -115,26 +115,26 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               {job.parts_added.map((p, i) => (
                 <div key={i} className="flex justify-between text-xs text-gray-600">
                   <span>{p.name} × {p.qty}</span>
-                  <span className="font-medium">{p.price.toLocaleString()} pts</span>
+                  <span className="font-medium">{p.price.toLocaleString()} พอยต์</span>
                 </div>
               ))}
               {job.proposed_price && (
                 <div className="flex justify-between text-xs font-bold text-green-700 pt-1 border-t border-green-100">
                   <span>ราคาใหม่รวม</span>
-                  <span>{job.proposed_price.toLocaleString()} pts</span>
+                  <span>{job.proposed_price.toLocaleString()} พอยต์</span>
                 </div>
               )}
             </div>
           )}
           {job.scrap_agreed_price && (
-            <p className="text-xs font-medium text-red-700 mt-1">ราคารับซาก: {job.scrap_agreed_price.toLocaleString()} pts</p>
+            <p className="text-xs font-medium text-red-700 mt-1">ราคารับซาก: {job.scrap_agreed_price.toLocaleString()} พอยต์</p>
           )}
         </div>
       )}
 
       {/* Timeline */}
       <div className="bg-white border border-gray-100 rounded-xl p-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ไทม์ไลน์ (Timeline)</p>
         <div className="space-y-3">
           {TIMELINE_STATES.map((step, i) => {
             const done = i < currentStep;

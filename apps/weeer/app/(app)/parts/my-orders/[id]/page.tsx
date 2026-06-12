@@ -252,20 +252,20 @@ export default function MyOrderDetailPage({
           <div>
             <p className="text-gray-400">จำนวน</p>
             <p className="font-medium text-gray-700">
-              {order.quantity} ชิ้น · {order.pricePoints.toLocaleString()} pts/ชิ้น
+              {order.quantity} ชิ้น · {order.pricePoints.toLocaleString()} พอยต์/ชิ้น
             </p>
           </div>
           <div>
             <p className="text-gray-400">รวม</p>
-            <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} pts</p>
+            <p className="font-bold text-[#D63B12]">{order.totalPoints.toLocaleString()} พอยต์</p>
           </div>
           <div>
             <p className="text-gray-400">ค่าธรรมเนียม (3%)</p>
-            <p className="font-medium text-gray-500">{order.platformFee.toLocaleString()} pts</p>
+            <p className="font-medium text-gray-500">{order.platformFee.toLocaleString()} พอยต์</p>
           </div>
           <div>
             <p className="text-gray-400">ผู้ขายได้รับ</p>
-            <p className="font-medium text-gray-700">{order.netToSeller.toLocaleString()} pts</p>
+            <p className="font-medium text-gray-700">{order.netToSeller.toLocaleString()} พอยต์</p>
           </div>
           <div>
             <p className="text-gray-400">การจัดส่ง</p>
@@ -282,7 +282,7 @@ export default function MyOrderDetailPage({
         {/* Tracking */}
         {order.trackingNumber && (
           <div className="bg-orange-50 rounded-lg px-3 py-2 text-xs">
-            📦 Tracking:{" "}
+            📦 เลขพัสดุ (Tracking):{" "}
             <span className="font-mono font-medium text-gray-800">{order.trackingNumber}</span>
           </div>
         )}
@@ -310,8 +310,8 @@ export default function MyOrderDetailPage({
             ✅ ยืนยันรับของสำเร็จ — ปลดพักเงินกลาง (Escrow) แล้ว
           </p>
           <p className="text-xs text-emerald-600">
-            ผู้ขายได้รับ {receiveResult.netToSeller.toLocaleString()} pts
-            (หักค่าธรรมเนียม {receiveResult.fee.toLocaleString()} pts)
+            ผู้ขายได้รับ {receiveResult.netToSeller.toLocaleString()} พอยต์
+            (หักค่าธรรมเนียม {receiveResult.fee.toLocaleString()} พอยต์)
           </p>
         </div>
       )}
@@ -321,7 +321,7 @@ export default function MyOrderDetailPage({
         <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 space-y-1">
           <p className="text-sm font-semibold text-red-700">🚫 ยกเลิกคำสั่งซื้อแล้ว</p>
           <p className="text-xs text-red-500">
-            คะแนน {order.totalPoints.toLocaleString()} pts ถูกคืนให้ผู้ซื้อแล้ว
+            คะแนน {order.totalPoints.toLocaleString()} พอยต์ ถูกคืนให้ผู้ซื้อแล้ว
           </p>
         </div>
       )}
@@ -422,9 +422,9 @@ export default function MyOrderDetailPage({
 
             {/* Escrow info */}
             <div className="bg-blue-50 rounded-lg px-3 py-2 text-xs text-blue-700">
-              💰 พักเงินกลาง (Escrow) {order.totalPoints.toLocaleString()} pts จะถูกปล่อยให้ผู้ขายทันที
-              (หักค่าธรรมเนียม {order.platformFee.toLocaleString()} pts · ผู้ขายได้{" "}
-              {order.netToSeller.toLocaleString()} pts)
+              💰 พักเงินกลาง (Escrow) {order.totalPoints.toLocaleString()} พอยต์ จะถูกปล่อยให้ผู้ขายทันที
+              (หักค่าธรรมเนียม {order.platformFee.toLocaleString()} พอยต์ · ผู้ขายได้{" "}
+              {order.netToSeller.toLocaleString()} พอยต์)
             </div>
 
             <div className="flex gap-2">
@@ -489,7 +489,7 @@ export default function MyOrderDetailPage({
             </p>
 
             <div className="bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-700">
-              💰 คะแนน {order.totalPoints.toLocaleString()} pts
+              💰 คะแนน {order.totalPoints.toLocaleString()} พอยต์
               จะถูกคืนให้ผู้ซื้อ ({order.buyerShopName}) ทันที
             </div>
 

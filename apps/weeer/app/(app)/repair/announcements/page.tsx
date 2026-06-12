@@ -57,7 +57,7 @@ export default function RepairAnnouncementsPage() {
                     📅 {new Date(item.preferred_datetime).toLocaleDateString("th-TH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                   </span>
                   {item.budget_max && (
-                    <span className="text-xs text-[#F04E20] font-medium">งบ ≤ {item.budget_max.toLocaleString()} pts</span>
+                    <span className="text-xs text-[#F04E20] font-medium">งบ ≤ {item.budget_max.toLocaleString()} พอยต์</span>
                   )}
                 </div>
               </div>

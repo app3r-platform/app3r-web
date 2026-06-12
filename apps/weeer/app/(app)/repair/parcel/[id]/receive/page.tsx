@@ -88,7 +88,7 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
         <p className="text-xs text-[#F04E20]">{job.problem_description}</p>
         <p className="text-xs text-[#F04E20]">👤 {job.customer_name} · 🚚 {job.courier ?? "ไม่ระบุขนส่ง"}</p>
         {job.inbound_tracking && (
-          <p className="text-xs text-[#F04E20]">Tracking: <span className="font-mono">{job.inbound_tracking}</span></p>
+          <p className="text-xs text-[#F04E20]">เลขพัสดุ (Tracking): <span className="font-mono">{job.inbound_tracking}</span></p>
         )}
       </div>
 
@@ -96,7 +96,7 @@ export default function ParcelReceivePage({ params }: { params: Promise<{ id: st
         {/* Inbound tracking */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            เลข Tracking ขาเข้า (ถ้ามี)
+            เลขพัสดุขาเข้า (Tracking) (ถ้ามี)
           </label>
           <input
             type="text"

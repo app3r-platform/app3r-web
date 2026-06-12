@@ -124,7 +124,7 @@ export default function ResellListingsPage() {
                 </div>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{l.price.toLocaleString()} pts</p>
+                <p className="text-sm font-bold text-[#FF663A]">{l.price.toLocaleString()} พอยต์</p>
                 <p className="text-xs text-gray-400">
                   {new Date(l.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
                 </p>

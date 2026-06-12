@@ -105,7 +105,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <div className="flex gap-4 mt-1">
             <span className="text-xs text-blue-500">📍 {announcement.address}</span>
             {announcement.budget_max && (
-              <span className="text-xs text-blue-500 font-medium">งบ ≤ {announcement.budget_max.toLocaleString()} pts</span>
+              <span className="text-xs text-blue-500 font-medium">งบ ≤ {announcement.budget_max.toLocaleString()} พอยต์</span>
             )}
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function OfferPage({ params }: { params: Promise<{ id: string }> 
           <label className="block text-sm font-medium text-gray-700 mb-2">ค่าตรวจสภาพ (บริการถึงบ้าน)</label>
           <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-2.5">
             <span className="text-sm text-gray-600 flex-1">ค่าธรรมเนียม (Fee) ตรวจสภาพมาตรฐาน</span>
-            <span className="text-sm font-semibold text-[#D63B12]">100 pts</span>
+            <span className="text-sm font-semibold text-[#D63B12]">100 พอยต์</span>
           </div>
           <p className="text-xs text-gray-400 mt-1">ไม่คืน แม้ซ่อมไม่ได้ — WeeeU รับทราบเมื่อยืนยันข้อเสนอ</p>
         </div>

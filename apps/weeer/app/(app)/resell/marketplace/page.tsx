@@ -102,7 +102,7 @@ export default function ResellMarketplacePage() {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <Link href="/resell" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">🛒 Marketplace</h1>
+        <h1 className="text-xl font-bold text-gray-900">🛒 ตลาดซื้อขาย (Marketplace)</h1>
         <span className="ml-auto text-xs text-gray-400">{listings.length} รายการ</span>
       </div>
 
@@ -173,7 +173,7 @@ export default function ResellMarketplacePage() {
               <div className="p-3">
                 <p className="text-sm font-semibold text-gray-800 truncate">{l.applianceName ?? "ไม่ระบุ"}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-lg font-bold text-[#D63B12]">{l.price.toLocaleString()} pts</p>
+                  <p className="text-lg font-bold text-[#D63B12]">{l.price.toLocaleString()} พอยต์</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>

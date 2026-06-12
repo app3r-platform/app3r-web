@@ -56,7 +56,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
         <span className="text-4xl">🧾</span>
         <p className="text-lg font-bold text-green-800">รับเครื่องสำเร็จ</p>
         <div className="bg-white rounded-xl px-6 py-4 border border-green-200">
-          <p className="text-xs text-gray-400 mb-1">Receipt Code — แจ้งลูกค้าเก็บไว้</p>
+          <p className="text-xs text-gray-400 mb-1">รหัสใบรับเครื่อง (Receipt Code) — แจ้งลูกค้าเก็บไว้</p>
           <p className="text-3xl font-mono font-bold text-gray-900 tracking-widest">{success.receipt_code}</p>
         </div>
         <p className="text-xs text-gray-500">ลูกค้าใช้โค้ดนี้ตรวจสอบสถานะงานได้</p>
@@ -78,7 +78,7 @@ export default function WalkInReceivePage({ params }: { params: Promise<{ id: st
     <div className="space-y-5 max-w-xl">
       <div className="flex items-center gap-3">
         <Link href="/repair/walk-in/queue" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">รับเครื่อง Walk-in</h1>
+        <h1 className="text-xl font-bold text-gray-900">รับเครื่องลูกค้าหน้าร้าน (Walk-in)</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 bg-white border border-gray-100 rounded-2xl p-5">

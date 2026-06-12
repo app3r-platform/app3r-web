@@ -95,7 +95,7 @@ export default function ResellPurchaseInspectPage({ params }: { params: Promise<
           href={`/resell/purchases/${id}/dispute`}
           className="w-full block text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
-          ⚠️ พบปัญหา → แจ้ง Dispute
+          ⚠️ พบปัญหา → แจ้งข้อพิพาท (Dispute)
         </Link>
       </div>
     </div>

@@ -114,7 +114,7 @@ export default function PartsNewPage() {
                 className={`flex-1 text-center py-2 rounded-xl border-2 cursor-pointer transition-all text-xs font-medium
                   ${condition === c ? "border-[#FF8B66] bg-[#FFF1ED] text-[#B8300E]" : "border-gray-100 text-gray-600"}`}>
                 <input type="radio" className="sr-only" checked={condition === c} onChange={() => setCondition(c)} />
-                {c === "new" ? "ใหม่" : c === "used" ? "มือสอง" : "Refurb"}
+                {c === "new" ? "ใหม่" : c === "used" ? "มือสอง" : "ปรับสภาพ"}
               </label>
             ))}
           </div>
@@ -123,7 +123,7 @@ export default function PartsNewPage() {
         {/* Price */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            ราคาต่อหน่วย (pts) <span className="text-red-500">*</span>
+            ราคาต่อหน่วย (พอยต์) <span className="text-red-500">*</span>
           </label>
           <input type="number" min={0} value={unitPrice}
             onChange={e => { setUnitPrice(e.target.value); setFormErrors(f => ({ ...f, price: "" })); }}

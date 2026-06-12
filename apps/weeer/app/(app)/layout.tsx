@@ -3,6 +3,7 @@ import Link from "next/link";
 import Footer from "../../components/Footer";
 import DevNav, { type DevNavLink } from "../../components/DevNav";
 import { ScreenBadge } from "../../components/ScreenBadge";
+import SidebarNav from "../../components/SidebarNav";
 import WalletDisplay from "../../components/WalletDisplay";
 import AuthUserInfo from "../../components/AuthUserInfo";
 import LogoutButton from "../../components/LogoutButton";
@@ -88,42 +89,6 @@ const devNavLinks: DevNavLink[] = [
   { label: "🔗 [ผู้ซื้อ] WeeeR ผู้ขาย ดู order", href: "http://localhost:3001/parts/orders/p001",  type: "cross-app", forPath: "/parts/my-orders/p001" },
 ];
 
-const navItems = [
-  { href: "/dashboard",      icon: "🏠", label: "Dashboard" },
-  { href: "/staff",          icon: "👷", label: "จัดการ WeeeT" },
-  { href: "/jobs/queue",     icon: "📋", label: "คิวงาน" },
-  { href: "/jobs/listings",  icon: "📌", label: "ประกาศ / Listings" },
-  { href: "/notifications",  icon: "🔔", label: "แจ้งเตือน", badge: 2 },
-  { href: "/wallet",         icon: "💰", label: "กระเป๋าเงิน" },
-  { href: "/profile",        icon: "⚙️", label: "โปรไฟล์" },
-  // ── Module placeholders (Phase 2b) ──
-  { type: "divider", label: "โมดูล" },
-  { href: "/resell",           icon: "💸", label: "ขายต่อ (A)",     module: true },
-  { href: "/resell/inventory", icon: "📦", label: "  คลังสินค้า",   module: true, sub: true },
-  { href: "/resell/listings",  icon: "📢", label: "  ประกาศของฉัน", module: true, sub: true },
-  { href: "/resell/marketplace", icon: "🛒", label: "  Marketplace", module: true, sub: true },
-  { href: "/resell/transactions", icon: "🔄", label: "  ซื้อขาย",   module: true, sub: true },
-  { href: "/scrap",           icon: "♻️", label: "ซาก (B)",        module: true },
-  { href: "/scrap/browse",    icon: "🔍", label: "  เลือกซื้อซาก",  module: true, sub: true },
-  { href: "/scrap/jobs",      icon: "🔧", label: "  งานซาก",         module: true, sub: true },
-  { href: "/repair/dashboard", icon: "🔧", label: "ซ่อม (C)",      module: true },
-  { href: "/repair/jobs",      icon: "📋", label: "  งานซ่อม",      module: true, sub: true },
-  { href: "/repair/announcements", icon: "📢", label: "  ประกาศรับงาน", module: true, sub: true },
-  { href: "/repair/walk-in/queue",  icon: "🚶", label: "  Walk-in Queue",  module: true, sub: true },
-  { href: "/repair/pickup/queue",   icon: "🚛", label: "  Pickup Queue",   module: true, sub: true },
-  { href: "/repair/parcel/queue",   icon: "📦", label: "  Parcel Queue",   module: true, sub: true },
-  { href: "/maintain/queue",   icon: "🛠️", label: "บำรุง (D)",     module: true },
-  { href: "/maintain/queue",   icon: "🗓", label: "  คิวงานใหม่",   module: true, sub: true },
-  { href: "/maintain/jobs",    icon: "📋", label: "  งานของฉัน",    module: true, sub: true },
-  { href: "/parts/dashboard",    icon: "🔩", label: "อะไหล่ (E)",       module: true },
-  { href: "/parts",              icon: "📦", label: "  คลังอะไหล่",     module: true, sub: true },
-  { href: "/parts/inventory",    icon: "🗃️", label: "  จัดการคลัง B5",  module: true, sub: true },
-  { href: "/parts/marketplace",  icon: "🛒", label: "  ตลาด B2B",        module: true, sub: true },
-  { href: "/parts/my-listings",  icon: "📢", label: "  ขายของฉัน",       module: true, sub: true },
-  { href: "/parts/my-orders",    icon: "🔄", label: "  คำสั่งซื้อ",       module: true, sub: true },
-  { href: "/parts/movements",    icon: "📊", label: "  ความเคลื่อนไหว",   module: true, sub: true },
-];
-
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -143,33 +108,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <AuthUserInfo />
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
-          {navItems.map((item, i) => {
-            if ("type" in item && item.type === "divider") {
-              return (
-                <div key={i} className="pt-3 pb-1 px-2">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{item.label}</p>
-                </div>
-              );
-            }
-            const isSub = "sub" in item && item.sub;
-            return (
-              <Link key={item.href} href={item.href as string}
-                className={`flex items-center gap-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#FFF1ED] hover:text-[#B8300E] transition-all duration-150
-                  ${isSub ? "px-3 py-1.5 ml-2 text-xs" : "px-3 py-2.5"}`}>
-                <span className={isSub ? "text-sm" : "text-base"}>{item.icon}</span>
-                <span className="flex-1">{item.label}</span>
-                {"badge" in item && item.badge ? (
-                  <span className="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">{item.badge}</span>
-                ) : null}
-                {"module" in item && item.module && !isSub ? (
-                  <span className="text-xs text-gray-300">›</span>
-                ) : null}
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Nav — grouped collapsible (INSERT-1 · CMD #115-AJ-WR) */}
+        <SidebarNav />
 
         {/* Logout — Wave1: clears auth + redirects to /login */}
         <div className="px-3 py-4 border-t border-gray-100">

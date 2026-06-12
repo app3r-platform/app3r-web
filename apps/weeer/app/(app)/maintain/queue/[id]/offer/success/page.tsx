@@ -31,7 +31,7 @@ export default function MaintainOfferSuccessPage({
 
       {/* Heading */}
       <div className="space-y-1">
-        <h1 className="text-xl font-bold text-gray-900">รับงาน Maintain สำเร็จ</h1>
+        <h1 className="text-xl font-bold text-gray-900">รับงานบำรุงรักษา (Maintain) สำเร็จ</h1>
         <p className="text-sm font-medium text-green-700">ดำเนินการสำเร็จ</p>
       </div>
 

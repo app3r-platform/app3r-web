@@ -73,7 +73,7 @@ export function PartListingForm({ shopId, shopName, onSubmit, onClose }: PartLis
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ราคา (pts) *</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">ราคา (พอยต์) *</label>
             <input type="number" min="1" value={form.pricePoints} onChange={(e) => set("pricePoints", e.target.value)} placeholder="0" className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
           </div>
           <div>

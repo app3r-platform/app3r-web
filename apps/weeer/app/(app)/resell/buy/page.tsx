@@ -14,7 +14,7 @@ type Condition = "like_new" | "good" | "fair" | "broken";
 
 const DEVICE_TYPES: { value: DeviceType; label: string; icon: string }[] = [
   { value: "iphone", label: "iPhone",      icon: "📱" },
-  { value: "notebook", label: "Notebook",  icon: "💻" },
+  { value: "notebook", label: "โน้ตบุ๊ก",  icon: "💻" },
   { value: "washing_machine", label: "เครื่องซักผ้า", icon: "🫧" },
   { value: "ac", label: "แอร์",           icon: "❄️" },
 ];
@@ -124,7 +124,7 @@ export default function ResellBuyPage() {
         <div>
           {/* §7 เคส B6 */}
           <h1 className="text-xl font-bold text-gray-900">📥 รับซื้อมือสอง</h1>
-          <p className="text-xs text-gray-500 mt-0.5">ตีราคารับซื้อ + สแกน Barcode เพิ่มเข้าสต๊อก</p>
+          <p className="text-xs text-gray-500 mt-0.5">ตีราคารับซื้อ + สแกนบาร์โค้ด (Barcode) เพิ่มเข้าสต๊อก</p>
         </div>
       </div>
 
@@ -132,8 +132,8 @@ export default function ResellBuyPage() {
       <Link href="/resell/buy/wizard"
         className="flex items-center justify-between bg-[#FCEAE3] border border-[#FFD5C4] rounded-2xl p-5 hover:bg-[#FAD9CB] transition-colors group">
         <div className="space-y-1">
-          <p className="text-sm font-bold text-[#4A1B0C]">🧮 ประเมินราคารับซื้อ (Generic Wizard)</p>
-          <p className="text-xs text-[#7A3A20]">5 ขั้น · Generic-First · รองรับทุกประเภทสินค้า</p>
+          <p className="text-sm font-bold text-[#4A1B0C]">🧮 ประเมินราคารับซื้อ — ตัวช่วยทั่วไป (Generic Wizard)</p>
+          <p className="text-xs text-[#7A3A20]">5 ขั้น · แบบทั่วไปก่อน (Generic-First) · รองรับทุกประเภทสินค้า</p>
           <p className="text-xs text-[#AA5030]">applies_when · reject_rules ทำงานอัตโนมัติ</p>
         </div>
         <span className="text-[#FF663A] text-2xl group-hover:translate-x-1 transition-transform">→</span>
@@ -142,7 +142,7 @@ export default function ResellBuyPage() {
       {/* ────────────── B6 WIZARD (Legacy 4-step Hardcoded) ─────────────── */}
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-sm font-bold text-[#FF663A]">B6 Wizard</span>
+          <span className="text-sm font-bold text-[#FF663A]">ตัวช่วย B6 (Wizard)</span>
           <span className="text-xs text-gray-400">— ตีราคารับซื้อ U→R</span>
           {[1,2,3,4].map(s => (
             <div key={s} className={`w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold
@@ -156,7 +156,7 @@ export default function ResellBuyPage() {
           <div className="text-center py-6 space-y-3">
             <span className="text-4xl">✅</span>
             <p className="text-base font-bold text-gray-800">เพิ่มเข้าสต๊อกแล้ว</p>
-            <p className="text-sm text-gray-500">{model} · รับซื้อ {offerPrice?.toLocaleString()} pts</p>
+            <p className="text-sm text-gray-500">{model} · รับซื้อ {offerPrice?.toLocaleString()} พอยต์</p>
             <div className="flex gap-2 justify-center mt-2">
               <Link href="/resell/inventory"
                 className="text-xs bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold px-4 py-2 rounded-lg transition-colors">
@@ -250,8 +250,8 @@ export default function ResellBuyPage() {
                   <p className="text-xs text-gray-500 mb-1">{model}</p>
                   <p className="text-xs text-gray-400 mb-3">สภาพ: {CONDITION_OPTS.find(c=>c.value===condition)?.label}</p>
                   <p className="text-4xl font-bold text-[#FF663A]">{estimatedBuy.toLocaleString()}</p>
-                  <p className="text-sm text-[#FF9C80] mt-1">pts (ราคาตีรับซื้อ)</p>
-                  <p className="text-xs text-gray-400 mt-2">ราคาตลาด ~{basePrice.toLocaleString()} pts · {Math.round(condMult*100)}%</p>
+                  <p className="text-sm text-[#FF9C80] mt-1">พอยต์ (ราคาตีรับซื้อ)</p>
+                  <p className="text-xs text-gray-400 mt-2">ราคาตลาด ~{basePrice.toLocaleString()} พอยต์ · {Math.round(condMult*100)}%</p>
                 </div>
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">ปรับราคาเอง (ถ้าต้องการ)</label>
@@ -292,7 +292,7 @@ export default function ResellBuyPage() {
                   {notes && <div className="flex justify-between"><span className="text-gray-500">หมายเหตุ</span><span className="font-medium">{notes}</span></div>}
                   <div className="flex justify-between border-t border-gray-200 pt-2 mt-2">
                     <span className="text-gray-700 font-semibold">ราคาตีรับซื้อ</span>
-                    <span className="font-bold text-[#FF663A] text-lg">{(offerPrice ?? estimatedBuy).toLocaleString()} pts</span>
+                    <span className="font-bold text-[#FF663A] text-lg">{(offerPrice ?? estimatedBuy).toLocaleString()} พอยต์</span>
                   </div>
                 </div>
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
@@ -316,8 +316,8 @@ export default function ResellBuyPage() {
 
       {/* ────────────── BARCODE SCANNER ───────────────────────────────────── */}
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
-        <p className="text-sm font-bold text-gray-800 mb-1">📷 สแกน Barcode / SKU</p>
-        <p className="text-xs text-gray-400 mb-4">พิมพ์ barcode หรือ SKU เพื่อค้นหาและเพิ่มเข้า inventory</p>
+        <p className="text-sm font-bold text-gray-800 mb-1">📷 สแกนบาร์โค้ด (Barcode) / SKU</p>
+        <p className="text-xs text-gray-400 mb-4">พิมพ์บาร์โค้ด (barcode) หรือ SKU เพื่อค้นหาและเพิ่มเข้าคลัง (inventory)</p>
 
         <div className="flex gap-2 mb-4">
           <input type="text" value={barcodeInput} onChange={e => setBarcodeInput(e.target.value)}
@@ -334,7 +334,7 @@ export default function ResellBuyPage() {
 
         {barcodeNotFound && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-            <p className="text-sm text-red-700">❌ ไม่พบสินค้าในระบบ — เพิ่มด้วย B6 Wizard หรือ <Link href="/resell/inventory/new" className="underline">เพิ่มด้วยตนเอง</Link></p>
+            <p className="text-sm text-red-700">❌ ไม่พบสินค้าในระบบ — เพิ่มด้วยตัวช่วย B6 (Wizard) หรือ <Link href="/resell/inventory/new" className="underline">เพิ่มด้วยตนเอง</Link></p>
           </div>
         )}
 
@@ -345,7 +345,7 @@ export default function ResellBuyPage() {
               <div><p className="text-xs text-gray-400">ชื่อ</p><p className="font-medium">{barcodeResult.name}</p></div>
               <div><p className="text-xs text-gray-400">ยี่ห้อ</p><p className="font-medium">{barcodeResult.brand}</p></div>
               <div><p className="text-xs text-gray-400">SKU</p><p className="font-medium font-mono">{barcodeResult.sku}</p></div>
-              <div><p className="text-xs text-gray-400">ราคาแนะนำ</p><p className="font-bold text-[#FF663A]">{barcodeResult.suggestedPrice.toLocaleString()} pts</p></div>
+              <div><p className="text-xs text-gray-400">ราคาแนะนำ</p><p className="font-bold text-[#FF663A]">{barcodeResult.suggestedPrice.toLocaleString()} พอยต์</p></div>
             </div>
             <button onClick={() => setBarcodeDone(true)}
               className="w-full bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
@@ -356,7 +356,7 @@ export default function ResellBuyPage() {
 
         {barcodeDone && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-            <p className="text-base font-bold text-green-700">✅ เพิ่มเข้า Inventory แล้ว</p>
+            <p className="text-base font-bold text-green-700">✅ เพิ่มเข้าคลังสินค้า (Inventory) แล้ว</p>
             <p className="text-xs text-gray-500 mt-1">{barcodeResult?.name}</p>
             <button onClick={() => { setBarcodeDone(false); setBarcodeResult(null); setBarcodeInput(""); }}
               className="mt-3 text-xs text-[#FF663A] hover:underline">สแกนชิ้นต่อไป</button>

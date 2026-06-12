@@ -183,11 +183,11 @@ export default function NewServicePage() {
               className={`w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]
                 ${errors.pointAmount ? "border-red-400" : "border-gray-200"}`}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400">pts</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400">พอยต์</span>
           </div>
           {errors.pointAmount
             ? <p className="text-xs text-red-500 mt-1">{errors.pointAmount}</p>
-            : <p className="text-xs text-gray-400 mt-1">ใช้สำหรับ Sub-5 Progress Tracker + billing</p>
+            : <p className="text-xs text-gray-400 mt-1">ใช้สำหรับติดตามความคืบหน้า Sub-5 (Progress Tracker) + การเรียกเก็บเงิน (billing)</p>
           }
         </div>
 
@@ -219,7 +219,7 @@ export default function NewServicePage() {
         {/* Info note */}
         <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
           <p className="text-xs text-blue-700">
-            💡 บันทึกเป็น <strong>draft</strong> ก่อน — กลับมาเผยแพร่ได้ที่หน้า "บริการของฉัน"
+            💡 บันทึกเป็น <strong>ฉบับร่าง (draft)</strong> ก่อน — กลับมาเผยแพร่ได้ที่หน้า "บริการของฉัน"
           </p>
         </div>
 

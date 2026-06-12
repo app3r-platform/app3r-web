@@ -146,7 +146,7 @@ export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: s
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-xs text-gray-400">ScrapItem ID</p>
+            <p className="text-xs text-gray-400">รหัสรายการซาก (ScrapItem ID)</p>
             <p className="text-xs text-gray-600 font-mono truncate">{job.scrapItemId}</p>
           </div>
           <div>

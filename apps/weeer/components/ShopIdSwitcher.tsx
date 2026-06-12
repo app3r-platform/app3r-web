@@ -56,7 +56,7 @@ export function ShopIdSwitcher({ onShopChange, disabled = false }: ShopIdSwitche
       </div>
       {currentShop && (
         <div className="shrink-0 text-right">
-          <p className="text-xs text-[#D63B12] font-medium">{currentShop.pointsBalance.toLocaleString()} pts</p>
+          <p className="text-xs text-[#D63B12] font-medium">{currentShop.pointsBalance.toLocaleString()} พอยต์</p>
           <p className="text-xs text-gray-400">{currentShop.address}</p>
         </div>
       )}

@@ -32,8 +32,8 @@ export function ConfirmReceiveModal({ order, onConfirm, onClose }: ConfirmReceiv
         <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4 space-y-2 text-sm">
           <p className="text-xs font-semibold text-[#D63B12]">เมื่อยืนยันรับของ ระบบจะ:</p>
           <ul className="text-xs text-gray-600 space-y-1">
-            <li>✅ โอน <strong>{netToSeller.toLocaleString()} pts</strong> ให้ผู้ขาย</li>
-            <li>💰 หักค่าธรรมเนียม <strong>{roundedFee.toLocaleString()} pts</strong> (3% ปัดเศษ){/* PHASE-4: D75 */}</li>
+            <li>✅ โอน <strong>{netToSeller.toLocaleString()} พอยต์</strong> ให้ผู้ขาย</li>
+            <li>💰 หักค่าธรรมเนียม <strong>{roundedFee.toLocaleString()} พอยต์</strong> (3% ปัดเศษ){/* PHASE-4: D75 */}</li>
             <li>🔓 ปลดพักเงินกลาง (Escrow) ทั้งหมด</li>
           </ul>
         </div>
