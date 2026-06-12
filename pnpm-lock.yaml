@@ -315,6 +315,9 @@ importers:
 
   apps/weeet:
     dependencies:
+      '@app3r/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@app3r/ui':
         specifier: workspace:*
         version: link:../../packages/ui

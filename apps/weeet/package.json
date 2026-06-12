@@ -15,6 +15,7 @@
     "test:e2e:ci": "playwright test --reporter=github"
   },
   "dependencies": {
+    "@app3r/shared": "workspace:*",
     "@app3r/ui": "workspace:*",
     "next": "^15.3.1",
     "react": "^19",
