@@ -16,7 +16,7 @@ export interface LoadingScreenProps {
 
 export function LoadingScreen({
   roleTheme = { primary: "#1E9E5A" },
-  label = "กำลังโหลด... (Loading)",
+  label = "กำลังโหลด...",
 }: LoadingScreenProps) {
   const ringStyle: React.CSSProperties = {
     borderColor: `${roleTheme.primary}33`, // 20% opacity ring
