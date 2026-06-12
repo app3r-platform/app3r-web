@@ -2,7 +2,7 @@
 // ─── เครื่องใช้ไฟฟ้าของฉัน (/appliances) — FIX-3: ปุ่มมี action ─────────────
 // 🔧→/repair/new?appliance={id} · 💰→/sell/new?appliance={id} · ✏️/🗑️→modal
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 // U-34 — รูปจริง (mockup placeholder photo · pattern เดียวกับ marketplace · รูปสินค้าจริง = BE/upload)
@@ -36,6 +36,9 @@ export default function AppliancesPage() {
   const [deleteTarget, setDeleteTarget] = useState<Appliance | null>(null);
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
   const [toastMsg, setToastMsg] = useState("");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
 
   const showToast = (msg: string) => {
     setToastMsg(msg);

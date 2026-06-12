@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { NearMeFilter, type NearbyTambonDto } from "@app3r/ui";
 
@@ -39,6 +39,9 @@ export default function MarketplacePage() {
   const [priceRange, setPriceRange] = useState(0); // index into PRICE_RANGES
   const [searchText, setSearchText] = useState("");
   const [pageSize, setPageSize] = useState<number | "all">(20); // (c) pagination
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
 
   return (
     <div className="bg-gray-50 min-h-screen">

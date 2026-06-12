@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import AddressAutoFill, { AddressData } from "@/components/shared/AddressAutoFill";
 import OtpInput from "@/components/shared/OtpInput";
@@ -78,6 +78,9 @@ export default function ProfilePage() {
   const [newEmail, setNewEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
 
   const showSaved = () => { setSaved(true); setTimeout(() => setSaved(false), 2500); };
 
