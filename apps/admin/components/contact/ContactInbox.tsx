@@ -76,7 +76,7 @@ export default function ContactInbox() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">กล่องข้อความติดต่อ (Inbox)</h1>
+        <h1 className="text-2xl font-bold text-gray-900">กล่องข้อความติดต่อ</h1>
         <Link
           href="/contact/info"
           className="bg-admin-surface text-admin-primary px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"

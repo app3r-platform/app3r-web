@@ -32,6 +32,20 @@ interface PaginatedWithdrawal {
   pages: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_WITHDRAWAL: PaginatedWithdrawal = {
+  items: [
+    { id: 301, user_id: 101, user_name: "สมหญิง พงษ์ไพร", user_role: "WeeeU", amount: 500, bank_code: "KTB", bank_name: "ธนาคารกรุงไทย", account_no: "123-4-56789-0", account_name: "สมหญิง พงษ์ไพร", status: "pending", reject_reason: null, transfer_ref: null, created_at: "2026-06-10T07:00:00Z", reviewed_at: null },
+    { id: 302, user_id: 102, user_name: "วิชัย ช่างซ่อม", user_role: "WeeeR", amount: 1200, bank_code: "SCB", bank_name: "ธนาคารไทยพาณิชย์", account_no: "098-7-65432-1", account_name: "วิชัย ช่างซ่อม", status: "pending", reject_reason: null, transfer_ref: null, created_at: "2026-06-10T08:45:00Z", reviewed_at: null },
+    { id: 303, user_id: 103, user_name: "ดารณี สุขใส", user_role: "WeeeU", amount: 300, bank_code: "BBL", bank_name: "ธนาคารกรุงเทพ", account_no: "456-7-89012-3", account_name: "ดารณี สุขใส", status: "approved", reject_reason: null, transfer_ref: null, created_at: "2026-06-09T13:00:00Z", reviewed_at: "2026-06-09T14:00:00Z" },
+    { id: 304, user_id: 104, user_name: "มานพ แก้วใส", user_role: "WeeeR", amount: 850, bank_code: "KBANK", bank_name: "ธนาคารกสิกรไทย", account_no: "789-1-23456-7", account_name: "มานพ แก้วใส", status: "transferred", reject_reason: null, transfer_ref: "TXN20260609001", created_at: "2026-06-08T10:00:00Z", reviewed_at: "2026-06-09T09:00:00Z" },
+    { id: 305, user_id: 105, user_name: "ลลิตา มีสุข", user_role: "WeeeU", amount: 200, bank_code: "TMB", bank_name: "ธนาคารทหารไทย", account_no: "321-6-54987-0", account_name: "ลลิตา มีสุข", status: "rejected", reject_reason: "บัญชีไม่ถูกต้อง", transfer_ref: null, created_at: "2026-06-07T15:30:00Z", reviewed_at: "2026-06-07T16:00:00Z" },
+  ],
+  total: 5,
+  page: 1,
+  pages: 1,
+};
+
 /* D91 — role filter options */
 type RoleFilter = "" | "WeeeU" | "WeeeR";
 
@@ -73,8 +87,10 @@ export default function WithdrawalPage() {
       if (roleFilter)   params.set("role", roleFilter);   /* D91 */
       const result = await api.get<PaginatedWithdrawal>(`/admin/withdrawal/requests?${params}`);
       setData(result);
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_WITHDRAWAL);
     } finally {
       setLoading(false);
     }
@@ -94,7 +110,8 @@ export default function WithdrawalPage() {
       showToast("อนุมัติแล้ว — กรุณาโอนเงินและยืนยัน Transfer", "ok");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -117,7 +134,8 @@ export default function WithdrawalPage() {
       setTransferRef("");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -140,7 +158,8 @@ export default function WithdrawalPage() {
       setRejectReason("");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -174,9 +193,9 @@ export default function WithdrawalPage() {
         <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5 text-sm">
           <span className="text-gray-700 font-medium">ขั้นตอน: </span>
           <span className="text-yellow-700">pending</span>
-          <span className="mx-2 text-gray-500">→ กด Approve →</span>
+          <span className="mx-2 text-gray-500">→ กด อนุมัติ →</span>
           <span className="text-blue-700">approved</span>
-          <span className="mx-2 text-gray-500">→ โอนเงินจริง → กด Confirm Transfer →</span>
+          <span className="mx-2 text-gray-500">→ โอนเงินจริง → กด ยืนยันโอน →</span>
           <span className="text-green-700">transferred</span>
           <span className="text-gray-500 ml-2">(Point หักถาวร)</span>
         </div>
@@ -206,7 +225,7 @@ export default function WithdrawalPage() {
 
         {/* Filter — Role (D91) */}
         <div className="flex gap-2 mb-5 items-center">
-          <span className="text-xs text-gray-500">กรอง Role:</span>
+          <span className="text-xs text-gray-500">กรอง บทบาท:</span>
           {([
             { val: "" as RoleFilter,       label: "ทั้งหมด" },
             { val: "WeeeU" as RoleFilter,  label: "🙋 WeeeU" },
@@ -245,7 +264,7 @@ export default function WithdrawalPage() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3 w-12">ID</th>
                   <th className="px-5 py-3">ผู้ใช้</th>
-                  <th className="px-5 py-3">Role</th>
+                  <th className="px-5 py-3">บทบาท</th>
                   <th className="px-5 py-3">จำนวน</th>
                   <th className="px-5 py-3">บัญชีธนาคาร</th>
                   <th className="px-5 py-3">สถานะ</th>
@@ -276,7 +295,7 @@ export default function WithdrawalPage() {
                         <span className="text-lg font-bold text-gray-900">
                           {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                         </span>
-                        <span className="text-xs text-gray-500 ml-1">Gold</span>
+                        <span className="text-xs text-gray-500 ml-1">พอยต์ทอง</span>
                       </td>
 
                       <td className="px-5 py-3.5">
@@ -315,7 +334,7 @@ export default function WithdrawalPage() {
                                 disabled={actionLoading === req.id}
                                 className="px-3 py-1.5 text-xs bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors"
                               >
-                                {actionLoading === req.id ? "..." : "✓ Approve"}
+                                {actionLoading === req.id ? "..." : "✓ อนุมัติ"}
                               </button>
                               <button
                                 onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
@@ -339,7 +358,7 @@ export default function WithdrawalPage() {
                                 disabled={actionLoading === req.id}
                                 className="px-3 py-1.5 text-xs bg-brand-success hover:bg-brand-success/90 disabled:opacity-50 text-white rounded-lg transition-colors"
                               >
-                                {actionLoading === req.id ? "..." : "💸 Confirm Transfer"}
+                                {actionLoading === req.id ? "..." : "💸 ยืนยันโอนเงิน"}
                               </button>
                               <button
                                 onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}

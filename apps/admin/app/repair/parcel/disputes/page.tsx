@@ -27,6 +27,86 @@ interface ParcelDispute {
   insurance_value: number | null;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_PARCEL_DISPUTES: ParcelDispute[] = [
+  {
+    id: "pd-001",
+    parcel_job_id: "pj-005",
+    job_number: "PJ-2026-0005",
+    courier_name: "Thailand Post EMS",
+    tracking_number: "EMS7777888899TH",
+    customer_name: "อรุณ ดีงาม",
+    shop_name: "TechFix เซ็นทรัล",
+    device_model: "Sony PlayStation 5",
+    type: "lost",
+    status: "open",
+    description: "พัสดุถูก scan ครั้งสุดท้ายที่คลัง EMS หนองจอก เมื่อ 22 พ.ค. 2026 หลังจากนั้นไม่มีการอัปเดต tracking",
+    photos: [],
+    opened_at: "2026-05-25T10:00:00Z",
+    resolved_at: null,
+    resolution: null,
+    refund_amount: null,
+    insurance_value: 25000,
+  },
+  {
+    id: "pd-002",
+    parcel_job_id: "pj-003",
+    job_number: "PJ-2026-0003",
+    courier_name: "J&T Express",
+    tracking_number: "JT5555666677TH",
+    customer_name: "ประสิทธิ์ มีสุข",
+    shop_name: "ร้านซ่อม iCare สยาม",
+    device_model: "MacBook Air M2",
+    type: "damaged_arrival",
+    status: "in_review",
+    description: "กล่องพัสดุบุบเสียหายเมื่อถึงร้าน หน้าจอ MacBook Air มีรอยแตกร้าวซึ่งไม่ได้มีก่อนส่ง",
+    photos: [],
+    opened_at: "2026-06-09T14:00:00Z",
+    resolved_at: null,
+    resolution: null,
+    refund_amount: null,
+    insurance_value: 45000,
+  },
+  {
+    id: "pd-003",
+    parcel_job_id: "pj-006",
+    job_number: "PJ-2026-0006",
+    courier_name: "Flash Express",
+    tracking_number: "FL3333444455TH",
+    customer_name: "กาญจนา ทองดี",
+    shop_name: "GadgetDoc ลาดพร้าว",
+    device_model: "Samsung Galaxy Z Fold5",
+    type: "wrong_item",
+    status: "resolved",
+    description: "ลูกค้าได้รับกล่องถูกต้องแต่มีอุปกรณ์ผิดชิ้น — ได้รับ Galaxy S23 แทน Z Fold5",
+    photos: [],
+    opened_at: "2026-05-15T09:00:00Z",
+    resolved_at: "2026-05-18T16:00:00Z",
+    resolution: "ประสานงาน Flash Express ส่งคืนอุปกรณ์ถูกต้องให้ลูกค้าภายใน 3 วัน และชดเชยค่าส่งคืน 200 ฿",
+    refund_amount: 200,
+    insurance_value: 30000,
+  },
+  {
+    id: "pd-004",
+    parcel_job_id: "pj-007",
+    job_number: "PJ-2026-0007",
+    courier_name: "Kerry Express",
+    tracking_number: "KE8888999900TH",
+    customer_name: "ธนาคม วิชัย",
+    shop_name: "TechFix เซ็นทรัล",
+    device_model: "iPhone 15 Plus",
+    type: "damaged_return",
+    status: "closed",
+    description: "อุปกรณ์เสียหายระหว่างขนส่งขาคืน — หลังแก้ไขปัญหาประกัน Kerry ชดเชย 5,000 ฿",
+    photos: [],
+    opened_at: "2026-05-05T11:00:00Z",
+    resolved_at: "2026-05-12T15:00:00Z",
+    resolution: "Kerry Express ยืนยันความรับผิดชอบ ชดเชย 5,000 ฿ ผ่านระบบ App3R",
+    refund_amount: 5000,
+    insurance_value: 20000,
+  },
+];
+
 const DISPUTE_TYPE_META: Record<string, { label: string; color: string; icon: string }> = {
   lost:             { label: "พัสดุหาย",          color: "bg-red-900/60 text-red-700",    icon: "🔍" },
   damaged_arrival:  { label: "เสียหายเมื่อถึงร้าน", color: "bg-orange-50 text-orange-700", icon: "💥" },
@@ -48,9 +128,9 @@ export default function ParcelDisputesPage() {
   const [items, setItems] = useState<ParcelDispute[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("open");
   const [page, setPage] = useState(1);
+  const [toast, setToast] = useState<string | null>(null);
 
   // Resolve panel state
   const [resolveId, setResolveId] = useState<string | null>(null);
@@ -60,6 +140,8 @@ export default function ParcelDisputesPage() {
   const [resolveMsg, setResolveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const superAdmin = isSuperAdmin();
+
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -74,13 +156,18 @@ export default function ParcelDisputesPage() {
       );
       setItems(d.items);
       setTotal(d.total);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      const filtered = filterStatus
+        ? MOCK_PARCEL_DISPUTES.filter(d => d.status === filterStatus)
+        : MOCK_PARCEL_DISPUTES;
+      setItems(filtered);
+      setTotal(filtered.length);
     } finally {
       setLoading(false);
     }
-  }, [page, filterStatus]);
+  }, [page, filterStatus, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -97,13 +184,15 @@ export default function ParcelDisputesPage() {
         body.refund_amount = Number(refundAmount);
       }
       await api.post(`/admin/repair/parcel/disputes/${id}/resolve`, body);
-      setResolveMsg({ type: "success", text: "แก้ไข Dispute สำเร็จ" });
+      setResolveMsg({ type: "success", text: "แก้ไขข้อพิพาทสำเร็จ" });
       setResolveId(null);
       setResolution("");
       setRefundAmount("");
       fetchData();
-    } catch (e) {
-      setResolveMsg({ type: "error", text: (e as Error).message });
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
+      setResolveMsg(null);
     } finally {
       setResolveLoading(false);
     }
@@ -120,14 +209,14 @@ export default function ParcelDisputesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">⚠️ Parcel Disputes</h1>
+            <h1 className="text-2xl font-bold">⚠️ ข้อพิพาทพัสดุ</h1>
             <p className="text-gray-500 text-sm mt-1">
-              พัสดุหาย / เสียหาย / ส่งผิด — admin action panel
+              พัสดุหาย / เสียหาย / ส่งผิด — แผงจัดการ admin
             </p>
           </div>
           <Link href="/repair/parcel/queue"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Parcel Queue
+            ← คิวพัสดุ
           </Link>
         </div>
 
@@ -165,7 +254,7 @@ export default function ParcelDisputesPage() {
         {resolveId && resolveDispute && (
           <section className="bg-white rounded-xl border border-orange-900/60 p-5">
             <h2 className="text-sm font-semibold text-orange-700 mb-3">
-              🔧 แก้ไข Dispute: {resolveDispute.job_number} —{" "}
+              🔧 แก้ไขข้อพิพาท: {resolveDispute.job_number} —{" "}
               {DISPUTE_TYPE_META[resolveDispute.type]?.label ?? resolveDispute.type}
             </h2>
             <div className="grid grid-cols-2 gap-4 mb-3">
@@ -181,7 +270,7 @@ export default function ParcelDisputesPage() {
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">
-                  คืนเงิน (฿) <span className="text-gray-600">— optional</span>
+                  คืนเงิน (฿) <span className="text-gray-600">— ไม่บังคับ</span>
                 </label>
                 <input
                   type="number"
@@ -202,7 +291,7 @@ export default function ParcelDisputesPage() {
               <button
                 onClick={() => handleResolve(resolveId)}
                 disabled={resolution.trim().length < 10 || resolveLoading}
-                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
               >
                 {resolveLoading ? "กำลังบันทึก..." : "บันทึกการแก้ไข"}
               </button>
@@ -231,9 +320,7 @@ export default function ParcelDisputesPage() {
             )}
           </div>
 
-          {error ? (
-            <div className="px-6 py-8 text-red-600">{error}</div>
-          ) : loading ? (
+          {loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
             <table className="w-full text-sm">
@@ -241,14 +328,14 @@ export default function ParcelDisputesPage() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-5 py-3">Job #</th>
                   <th className="px-5 py-3">ประเภท</th>
-                  <th className="px-5 py-3">Courier</th>
+                  <th className="px-5 py-3">ขนส่ง</th>
                   <th className="px-5 py-3">ลูกค้า</th>
                   <th className="px-5 py-3">ร้าน</th>
                   <th className="px-5 py-3">อุปกรณ์</th>
                   <th className="px-5 py-3">สถานะ</th>
                   <th className="px-5 py-3">คืนเงิน</th>
                   <th className="px-5 py-3">วันที่เปิด</th>
-                  <th className="px-5 py-3">Action</th>
+                  <th className="px-5 py-3">จัดการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -304,6 +391,12 @@ export default function ParcelDisputesPage() {
           )}
         </div>
       </main>
+
+      {toast && (
+        <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }

@@ -30,6 +30,41 @@ const ABANDONED_STATUS: Record<string, { label: string; color: string }> = {
   disposed: { label: "ทำลายแล้ว",   color: "bg-gray-100 text-gray-500" },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_ABANDONED: { items: AbandonedDevice[]; total: number } = {
+  total: 4,
+  items: [
+    {
+      id: "abd-001", job_id: "wij-010", job_number: "WI-2026-0010",
+      store_name: "ร้านซ่อมสุขุมวิท", device_model: "Galaxy A53", device_brand: "Samsung",
+      customer_name: "นายธนาวุฒิ ศรีใส", customer_phone: "081-999-1122",
+      completed_at: "2026-05-10T12:00:00.000Z", days_stored: 31,
+      storage_fee_accumulated: 3100, last_contact_at: "2026-05-20T09:00:00.000Z", status: "contacted",
+    },
+    {
+      id: "abd-002", job_id: "wij-011", job_number: "WI-2026-0011",
+      store_name: "ร้านซ่อมรัชดา", device_model: "Huawei Nova 11i", device_brand: "Huawei",
+      customer_name: "นางสาวพิมพ์ใจ สาระ", customer_phone: "098-333-4455",
+      completed_at: "2026-05-15T15:00:00.000Z", days_stored: 26,
+      storage_fee_accumulated: 2600, last_contact_at: null, status: "waiting",
+    },
+    {
+      id: "abd-003", job_id: "wij-012", job_number: "WI-2026-0012",
+      store_name: "ร้านซ่อมเชียงใหม่", device_model: "OPPO A78", device_brand: "OPPO",
+      customer_name: "นายเกรียงไกร นาดี", customer_phone: "065-777-8899",
+      completed_at: "2026-04-20T10:00:00.000Z", days_stored: 51,
+      storage_fee_accumulated: 5100, last_contact_at: "2026-05-01T08:00:00.000Z", status: "scrapped",
+    },
+    {
+      id: "abd-004", job_id: "wij-013", job_number: "WI-2026-0013",
+      store_name: "ร้านซ่อมสุขุมวิท", device_model: "Realme C35", device_brand: "Realme",
+      customer_name: "นางสุนีย์ มีชัย", customer_phone: "092-000-5566",
+      completed_at: "2026-04-01T11:00:00.000Z", days_stored: 70,
+      storage_fee_accumulated: 7000, last_contact_at: "2026-04-15T10:00:00.000Z", status: "disposed",
+    },
+  ],
+};
+
 const PAGE_SIZE = 20;
 
 export default function AbandonedDevicesPage() {
@@ -61,7 +96,10 @@ export default function AbandonedDevicesPage() {
       setTotal(d.total);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_ABANDONED.items);
+      setTotal(MOCK_ABANDONED.total);
     } finally {
       setLoading(false);
     }
@@ -81,7 +119,8 @@ export default function AbandonedDevicesPage() {
       setScrapId(null);
       fetchData();
     } catch (e) {
-      setScrapMsg({ id, type: "error", text: (e as Error).message });
+      const msg = (e as Error).message;
+      setScrapMsg({ id, type: "error", text: msg === "BACKEND_UNAVAILABLE" ? "โหมดสาธิต: backend ยังไม่พร้อม" : msg });
     } finally {
       setScrapLoading(false);
     }
@@ -97,7 +136,7 @@ export default function AbandonedDevicesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📦 Abandoned Devices</h1>
+            <h1 className="text-2xl font-bold">📦 เครื่องตกค้าง</h1>
             <p className="text-gray-500 text-sm mt-1">
               เครื่องที่ลูกค้าไม่มารับ — action: ติดต่อ / ส่งขายซาก / ทำลาย
             </p>
@@ -166,10 +205,10 @@ export default function AbandonedDevicesPage() {
                   <th className="px-5 py-3">อุปกรณ์</th>
                   <th className="px-5 py-3">ลูกค้า</th>
                   <th className="px-5 py-3">เก็บ (วัน)</th>
-                  <th className="px-5 py-3">Storage Fee</th>
+                  <th className="px-5 py-3">ค่าฝากเก็บ</th>
                   <th className="px-5 py-3">ติดต่อล่าสุด</th>
                   <th className="px-5 py-3">สถานะ</th>
-                  <th className="px-5 py-3">Actions</th>
+                  <th className="px-5 py-3">ดำเนินการ</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">

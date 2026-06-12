@@ -82,14 +82,14 @@ export default function PartsOrdersPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📦 Parts Orders</h1>
+            <h1 className="text-2xl font-bold">📦 คำสั่งซื้ออะไหล่</h1>
             <p className="text-gray-500 text-sm mt-1">
-              รายการสั่งซื้ออะไหล่ — B2B marketplace orders
+              รายการสั่งซื้ออะไหล่ — ตลาดกลาง B2B
             </p>
           </div>
           <Link href="/parts"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Inventory
+            ← คลังอะไหล่
           </Link>
         </div>
 
@@ -131,7 +131,7 @@ export default function PartsOrdersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-gray-500 text-left border-b border-gray-200">
-                <th className="px-4 py-3">Order ID</th>
+                <th className="px-4 py-3">รหัสคำสั่งซื้อ</th>
                 <th className="px-4 py-3">อะไหล่</th>
                 <th className="px-4 py-3">ผู้ซื้อ (WeeeR)</th>
                 <th className="px-4 py-3">จำนวน</th>

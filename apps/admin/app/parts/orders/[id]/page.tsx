@@ -13,7 +13,7 @@ export default async function PartsOrderDetailPage({ params }: { params: Promise
 
       {/* Header */}
       <div className="flex items-center gap-4 mt-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Parts Order #{id}</h1>
+        <h1 className="text-2xl font-bold text-gray-800">คำสั่งซื้ออะไหล่ #{id}</h1>
         <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-600 border border-blue-200 text-xs font-semibold px-3 py-1.5 rounded-full">
           ⏳ รอยืนยัน
         </span>
@@ -66,7 +66,7 @@ export default async function PartsOrderDetailPage({ params }: { params: Promise
       {/* Dispute */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-          Dispute
+          ข้อพิพาท
         </p>
         {hasDispute ? (
           <Link href={`/disputes/p001`} className="text-sm text-red-500 hover:underline font-medium">

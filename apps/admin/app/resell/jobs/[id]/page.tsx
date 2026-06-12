@@ -412,7 +412,7 @@ export default function ResellJobDetailPage() {
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-400">
-          <Link href="/resell/jobs" className="hover:text-gray-600">Resell Jobs</Link>
+          <Link href="/resell/jobs" className="hover:text-gray-600">งาน Resell</Link>
           <span>/</span>
           <span className="text-gray-700 font-medium">{job.listing_code}</span>
         </div>
@@ -449,7 +449,7 @@ export default function ResellJobDetailPage() {
         {/* Job info */}
         <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-1">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">รายละเอียด</p>
-          <InfoRow label="Listing Code" value={<span className="font-mono text-xs text-admin-primary">{job.listing_code}</span>} />
+          <InfoRow label="รหัสประกาศ" value={<span className="font-mono text-xs text-admin-primary">{job.listing_code}</span>} />
           <InfoRow label="ผู้ขาย" value={
             <div className="flex items-center gap-1">
               <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${

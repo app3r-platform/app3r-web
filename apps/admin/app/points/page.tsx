@@ -47,7 +47,7 @@ export default function PointsPage() {
       <Sidebar />
       <main className="flex-1 min-w-0">
         <AdminListPage
-          title="Point Transactions"
+          title="ธุรกรรม Point"
           totalCount={items.length}
           page={pagination.page}
           pageSize={pagination.pageSize}

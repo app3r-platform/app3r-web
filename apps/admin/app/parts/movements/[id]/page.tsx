@@ -87,7 +87,7 @@ export default function MovementDetailPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ยังไม่มีข้อมูล movement"}
         </div>
-        <Link href="/parts/movements" className="text-sm text-admin-primary hover:text-admin-dark">← Movements</Link>
+        <Link href="/parts/movements" className="text-sm text-admin-primary hover:text-admin-dark">← รายการเคลื่อนไหว</Link>
       </main>
     </div>
   );
@@ -106,14 +106,14 @@ export default function MovementDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">📦 Movement Detail</h1>
+              <h1 className="text-2xl font-bold">📦 รายละเอียดความเคลื่อนไหว</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${tm.color}`}>{tm.label}</span>
             </div>
             <p className="text-gray-500 text-sm font-mono">{movement.id}</p>
           </div>
           <Link href="/parts/movements"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Movements
+            ← รายการเคลื่อนไหว
           </Link>
         </div>
 
@@ -122,7 +122,7 @@ export default function MovementDetailPage() {
           <InfoRow label="ประเภท" value={
             <span className={`text-xs px-2 py-0.5 rounded-full ${tm.color}`}>{tm.label}</span>
           } />
-          <InfoRow label="Part ID" value={
+          <InfoRow label="รหัสอะไหล่" value={
             <Link href={`/parts/${movement.partId}`}
               className="font-mono text-xs text-admin-primary hover:text-admin-dark">
               {movement.partId}

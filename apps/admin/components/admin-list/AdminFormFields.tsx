@@ -91,8 +91,8 @@ export const formFieldsRegistry: Record<ModuleKey, FormFieldsConfig> = {
     fields: [
       { name: 'userName', label: 'ผู้ใช้', type: 'text', required: true },
       { name: 'type', label: 'ประเภท', type: 'select', required: true, options: [
-        { value: 'gold', label: 'Gold' },
-        { value: 'silver', label: 'Silver' },
+        { value: 'gold', label: 'พอยต์ทอง' },
+        { value: 'silver', label: 'พอยต์เงิน' },
       ] },
       { name: 'amount', label: 'จำนวน', type: 'number', required: true },
       { name: 'status', label: 'สถานะ', type: 'select', required: true, options: [

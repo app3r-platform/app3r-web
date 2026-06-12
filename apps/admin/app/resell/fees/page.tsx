@@ -96,7 +96,7 @@ function FeeCalculator() {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-      <h2 className="text-sm font-bold text-gray-700">🧮 Fee Calculator (Mock)</h2>
+      <h2 className="text-sm font-bold text-gray-700">🧮 คำนวณค่าธรรมเนียม (Mock)</h2>
       <div className="grid grid-cols-3 gap-3">
         <div>
           <label className="text-xs text-gray-500 block mb-1">ราคาขาย (G)</label>
@@ -165,7 +165,7 @@ export default function ResellFeesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">💰 Resell Fees</h1>
+            <h1 className="text-2xl font-bold">💰 ค่าธรรมเนียมขายต่อ</h1>
             <p className="text-gray-500 text-sm mt-1">
               Fee matrix 4 คู่ (U↔U/U→R/R→U/R↔R) + Refund Tiers T1–T4
             </p>
@@ -197,7 +197,7 @@ export default function ResellFeesPage() {
                 <th className="px-4 py-3">คู่</th>
                 <th className="px-4 py-3">ผู้ขาย</th>
                 <th className="px-4 py-3">ผู้ซื้อ</th>
-                <th className="px-4 py-3 text-right">Platform Fee</th>
+                <th className="px-4 py-3 text-right">ค่าธรรมเนียมแพลตฟอร์ม</th>
                 <th className="px-4 py-3 text-right">VAT</th>
                 <th className="px-4 py-3">หมายเหตุ</th>
               </tr>

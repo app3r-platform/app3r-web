@@ -80,6 +80,39 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_JOB_DETAIL: MaintainJobDetail = {
+  id: "mjd-001", serviceCode: "M-2026-014", customerId: "u-103", shopId: "shop-11",
+  technicianId: "tech-22", status: "completed", applianceType: "AC", cleaningType: "sanitize",
+  serviceMethod: "on_site", scheduledAt: "2026-06-01T14:00:00Z", estimatedDuration: 2,
+  address: { lat: 13.7308, lng: 100.5235, address: "45 ถ.พระรามสี่ แขวงสีลม เขตบางรัก กรุงเทพฯ 10500" },
+  recurring: { enabled: true, interval: "6_months", nextScheduledAt: "2026-12-01T14:00:00Z" },
+  parts_used: [{ name: "น้ำยาล้างแอร์", qty: 2 }, { name: "ผ้ากั้นน้ำ", qty: 1 }],
+  totalPrice: 1500, createdAt: "2026-05-20T07:00:00Z", updatedAt: "2026-06-01T16:30:00Z",
+  customerName: "คุณสมศรี วงษ์ดี", customerPhone: "081-234-5678",
+  technicianName: "ช่างวิชัย เก่งล้าง", shopName: "ร้านล้างแอร์สยาม",
+  timeline: [
+    { status: "pending",     actor: "ระบบ",             note: null,                lat: null, lng: null, timestamp: "2026-05-20T07:00:00Z" },
+    { status: "assigned",    actor: "admin@app3r.co",   note: "มอบหมายให้ช่างวิชัย", lat: null, lng: null, timestamp: "2026-05-21T09:00:00Z" },
+    { status: "departed",    actor: "ช่างวิชัย เก่งล้าง", note: null,              lat: 13.740, lng: 100.510, timestamp: "2026-06-01T13:30:00Z" },
+    { status: "arrived",     actor: "ช่างวิชัย เก่งล้าง", note: "ถึงที่แล้ว",       lat: 13.7308, lng: 100.5235, timestamp: "2026-06-01T13:55:00Z" },
+    { status: "in_progress", actor: "ช่างวิชัย เก่งล้าง", note: "เริ่มล้าง+ฆ่าเชื้อ", lat: null, lng: null, timestamp: "2026-06-01T14:05:00Z" },
+    { status: "completed",   actor: "ช่างวิชัย เก่งล้าง", note: "ล้างเสร็จสมบูรณ์",  lat: null, lng: null, timestamp: "2026-06-01T16:10:00Z" },
+  ],
+  photos: [
+    { type: "before", url: "https://placehold.co/400x300?text=before-1", takenAt: "2026-06-01T14:00:00Z" },
+    { type: "after",  url: "https://placehold.co/400x300?text=after-1",  takenAt: "2026-06-01T16:05:00Z" },
+  ],
+  risk_flag: false, risk_note: null,
+  cross_module_ref: null,
+  no_show_flag: false, no_show_evidence_url: null, no_show_settled_at: null,
+  dispute_flag: false, dispute: null,
+};
+
+function buildJobDetailMock(jobId: string): MaintainJobDetail {
+  return { ...MOCK_JOB_DETAIL, id: jobId, serviceCode: `M-DEMO-${jobId.slice(-3).toUpperCase()}` };
+}
+
 export default function MaintainJobDetailPage() {
   const router = useRouter();
   const { id } = useParams() as { id: string };
@@ -98,12 +131,15 @@ export default function MaintainJobDetailPage() {
       const d = await api.get<MaintainJobDetail>(`/maintain/jobs/${id}/`);
       setJob(d);
       setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(buildJobDetailMock(id));
+      setError(null);
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -120,8 +156,8 @@ export default function MaintainJobDetailPage() {
       setCancelReason("");
       setCancelConfirm(false);
       fetchJob();
-    } catch (e) {
-      setCancelMsg({ type: "error", text: (e as Error).message });
+    } catch {
+      setCancelMsg({ type: "error", text: "โหมดสาธิต: backend ยังไม่พร้อม" });
     } finally {
       setCancelLoading(false);
     }
@@ -140,7 +176,7 @@ export default function MaintainJobDetailPage() {
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">{error ?? "ไม่พบข้อมูล"}</div>
-        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← Jobs</Link>
+        <Link href="/maintain/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← งานซ่อมบำรุง</Link>
       </main>
     </div>
   );
@@ -157,7 +193,7 @@ export default function MaintainJobDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">🛁 {job.serviceCode}</h1>
+              <h1 className="text-2xl font-bold">🛁 รายละเอียดงานซ่อมบำรุง {job.serviceCode}</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               {job.recurring?.enabled && (
                 <span className="text-xs px-2 py-0.5 rounded-full bg-admin-primary/15 text-admin-primary">
@@ -167,12 +203,13 @@ export default function MaintainJobDetailPage() {
             </div>
             <p className="text-gray-500 text-sm">
               {job.applianceType === "AC" ? "แอร์" : "เครื่องซักผ้า"} —{" "}
-              {job.cleaningType === "general" ? "ล้างทั่วไป" : job.cleaningType === "deep" ? "ล้างลึก" : "ล้าง+ฆ่าเชื้อ"}
+              {job.cleaningType === "general" ? "ล้างทั่วไป" : job.cleaningType === "deep" ? "ล้างลึก" : "ล้าง+ฆ่าเชื้อ"}{" "}
+              — ตรวจสอบสถานะ timeline และข้อมูลงานทั้งหมด
             </p>
           </div>
           <Link href="/maintain/jobs"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Jobs
+            ← งานซ่อมบำรุง
           </Link>
         </div>
 
@@ -206,7 +243,7 @@ export default function MaintainJobDetailPage() {
           {job.recurring?.enabled && (
             <section className="bg-white rounded-xl border border-admin-primary/30 p-5">
               <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-3">🔁 Recurring</h2>
-              <InfoRow label="Interval" value={job.recurring.interval.replace("_months", " เดือน")} />
+              <InfoRow label="ช่วงเวลา" value={job.recurring.interval.replace("_months", " เดือน")} />
               <InfoRow label="นัดถัดไป" value={new Date(job.recurring.nextScheduledAt).toLocaleString("th-TH")} />
             </section>
           )}
@@ -253,7 +290,7 @@ export default function MaintainJobDetailPage() {
         {/* Timeline */}
         {job.timeline?.length > 0 && (
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ลำดับเหตุการณ์</h2>
             <div className="space-y-3">
               {job.timeline.map((t, i) => {
                 const tMeta = STATUS_META[t.status];
@@ -541,7 +578,7 @@ export default function MaintainJobDetailPage() {
             <button onClick={handleForceCancel}
               disabled={!cancelConfirm || cancelReason.trim().length < 10 || cancelLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors">
-              {cancelLoading ? "กำลังดำเนินการ..." : "Force Cancel"}
+              {cancelLoading ? "กำลังดำเนินการ..." : "ยกเลิกบังคับ"}
             </button>
           </section>
         )}

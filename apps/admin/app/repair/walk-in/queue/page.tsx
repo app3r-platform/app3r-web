@@ -44,6 +44,55 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   cancelled:         { label: "ยกเลิก",          color: "bg-gray-100 text-gray-500" },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_WALKIN_QUEUE: { items: WalkInJob[]; total: number } = {
+  total: 6,
+  items: [
+    {
+      id: "wij-001", job_number: "WI-2026-0001", store_id: "store-bkk-01", store_name: "ร้านซ่อมสุขุมวิท",
+      device_model: "iPhone 14 Pro", device_issue: "หน้าจอแตก แสดงผลไม่ได้", customer_name: "นายสมชาย ใจดี",
+      customer_phone: "081-234-5678", status: "in_progress", checked_in_at: "2026-06-08T09:30:00.000Z",
+      estimated_completion: "2026-06-10T17:00:00.000Z", completed_at: null,
+      storage_fee: 0, quote_price: 3500, final_price: null, technician_name: "ช่างวีระ",
+    },
+    {
+      id: "wij-002", job_number: "WI-2026-0002", store_id: "store-bkk-02", store_name: "ร้านซ่อมรัชดา",
+      device_model: "Samsung Galaxy S23", device_issue: "แบตเตอรี่เสื่อม ชาร์จไม่ติด", customer_name: "นางสาวมณี ทองคำ",
+      customer_phone: "089-876-5432", status: "awaiting_decision", checked_in_at: "2026-06-09T11:00:00.000Z",
+      estimated_completion: null, completed_at: null,
+      storage_fee: 0, quote_price: 1800, final_price: null, technician_name: "ช่างสมศักดิ์",
+    },
+    {
+      id: "wij-003", job_number: "WI-2026-0003", store_id: "store-bkk-01", store_name: "ร้านซ่อมสุขุมวิท",
+      device_model: "OPPO Reno 10", device_issue: "เปิดไม่ติด หลังตกน้ำ", customer_name: "นายประเสริฐ วงศ์ดี",
+      customer_phone: "092-111-3344", status: "awaiting_parts", checked_in_at: "2026-06-07T14:00:00.000Z",
+      estimated_completion: "2026-06-12T12:00:00.000Z", completed_at: null,
+      storage_fee: 200, quote_price: 2200, final_price: null, technician_name: "ช่างวีระ",
+    },
+    {
+      id: "wij-004", job_number: "WI-2026-0004", store_id: "store-cnx-01", store_name: "ร้านซ่อมเชียงใหม่",
+      device_model: "Xiaomi Redmi Note 12", device_issue: "เสียงไม่ออก ลำโพงเสีย", customer_name: "นางสาวสุดา พรรณา",
+      customer_phone: "063-555-7890", status: "awaiting_pickup", checked_in_at: "2026-06-05T10:00:00.000Z",
+      estimated_completion: "2026-06-09T16:00:00.000Z", completed_at: "2026-06-09T15:30:00.000Z",
+      storage_fee: 300, quote_price: 900, final_price: 900, technician_name: "ช่างบุญมี",
+    },
+    {
+      id: "wij-005", job_number: "WI-2026-0005", store_id: "store-bkk-02", store_name: "ร้านซ่อมรัชดา",
+      device_model: "Apple iPad Air 5", device_issue: "ปุ่ม Home ค้าง ใช้ไม่ได้", customer_name: "นายกิตติพงษ์ แก้วใส",
+      customer_phone: "098-222-6655", status: "closed", checked_in_at: "2026-06-03T08:00:00.000Z",
+      estimated_completion: "2026-06-06T17:00:00.000Z", completed_at: "2026-06-06T16:00:00.000Z",
+      storage_fee: 0, quote_price: 1500, final_price: 1500, technician_name: "ช่างสมศักดิ์",
+    },
+    {
+      id: "wij-006", job_number: "WI-2026-0006", store_id: "store-cnx-01", store_name: "ร้านซ่อมเชียงใหม่",
+      device_model: "Vivo V27e", device_issue: "กล้องหน้าเบลอ โฟกัสไม่ได้", customer_name: "นางวิไล สุขสันต์",
+      customer_phone: "065-444-2211", status: "checked_in", checked_in_at: "2026-06-10T08:15:00.000Z",
+      estimated_completion: null, completed_at: null,
+      storage_fee: 0, quote_price: null, final_price: null, technician_name: null,
+    },
+  ],
+};
+
 const PAGE_SIZE = 20;
 
 const STATUS_TABS = [
@@ -85,7 +134,10 @@ export default function WalkInQueuePage() {
       setTotal(d.total);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_WALKIN_QUEUE.items);
+      setTotal(MOCK_WALKIN_QUEUE.total);
     } finally {
       setLoading(false);
     }
@@ -113,7 +165,7 @@ export default function WalkInQueuePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🚶 Walk-in Queue</h1>
+            <h1 className="text-2xl font-bold">🚶 คิวงานซ่อมหน้าร้าน</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตารางรวม walk-in queue ทุกร้าน — filter ร้าน / วัน / สถานะ
             </p>
@@ -189,7 +241,7 @@ export default function WalkInQueuePage() {
                   <th className="px-4 py-3">ลูกค้า</th>
                   <th className="px-4 py-3">ช่าง</th>
                   <th className="px-4 py-3">สถานะ</th>
-                  <th className="px-4 py-3">Storage Fee</th>
+                  <th className="px-4 py-3">ค่าฝากเก็บ</th>
                   <th className="px-4 py-3">ราคา</th>
                   <th className="px-4 py-3">เช็คอิน</th>
                   <th className="px-4 py-3"></th>

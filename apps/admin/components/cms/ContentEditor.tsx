@@ -27,26 +27,26 @@ const STRUCTURED_FIELDS: Partial<Record<ContentType, StructuredField[]>> = {
     { key: 'phone',         label: 'เบอร์โทรศัพท์', inputType: 'text',  required: true  },
     { key: 'email',         label: 'อีเมล',          inputType: 'email', required: true  },
     { key: 'address',       label: 'ที่อยู่',         inputType: 'text',  required: false },
-    { key: 'line_id',       label: 'Line ID',         inputType: 'text',  required: false },
+    { key: 'line_id',       label: 'ไลน์ไอดี',         inputType: 'text',  required: false },
     { key: 'opening_hours', label: 'เวลาทำการ',       inputType: 'text',  required: false },
   ],
   social_links: [
-    { key: 'facebook',  label: 'Facebook URL',  inputType: 'text', required: false },
-    { key: 'line',      label: 'Line ID / URL', inputType: 'text', required: false },
-    { key: 'instagram', label: 'Instagram URL', inputType: 'text', required: false },
+    { key: 'facebook',  label: 'ลิงก์ Facebook',  inputType: 'text', required: false },
+    { key: 'line',      label: 'ไลน์ไอดี / ลิงก์', inputType: 'text', required: false },
+    { key: 'instagram', label: 'ลิงก์ Instagram', inputType: 'text', required: false },
   ],
 }
 
 // ─── TipTap toolbar config ────────────────────────────────────────────────────
 
 const menuButtons = [
-  { label: 'B',  title: 'Bold',            action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleBold().run(),                   isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('bold') },
-  { label: 'I',  title: 'Italic',          action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleItalic().run(),                 isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('italic') },
-  { label: 'H1', title: 'Heading 1',       action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleHeading({ level: 1 }).run(),    isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('heading', { level: 1 }) },
-  { label: 'H2', title: 'Heading 2',       action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleHeading({ level: 2 }).run(),    isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('heading', { level: 2 }) },
-  { label: 'UL', title: 'Bullet List',     action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleBulletList().run(),             isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('bulletList') },
-  { label: 'OL', title: 'Ordered List',    action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleOrderedList().run(),            isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('orderedList') },
-  { label: '—',  title: 'Horizontal Rule', action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().setHorizontalRule().run(),            isActive: () => false },
+  { label: 'B',  title: 'ตัวหนา',        action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleBold().run(),                   isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('bold') },
+  { label: 'I',  title: 'ตัวเอียง',       action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleItalic().run(),                 isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('italic') },
+  { label: 'H1', title: 'หัวข้อ 1',        action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleHeading({ level: 1 }).run(),    isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('heading', { level: 1 }) },
+  { label: 'H2', title: 'หัวข้อ 2',        action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleHeading({ level: 2 }).run(),    isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('heading', { level: 2 }) },
+  { label: 'UL', title: 'รายการจุด',      action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleBulletList().run(),             isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('bulletList') },
+  { label: 'OL', title: 'รายการลำดับ',    action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().toggleOrderedList().run(),            isActive: (e: ReturnType<typeof useEditor>) => e?.isActive('orderedList') },
+  { label: '—',  title: 'เส้นคั่น',        action: (e: ReturnType<typeof useEditor>) => e?.chain().focus().setHorizontalRule().run(),            isActive: () => false },
 ]
 
 // ─── Main component ───────────────────────────────────────────────────────────

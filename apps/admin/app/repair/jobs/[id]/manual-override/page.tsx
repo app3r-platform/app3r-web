@@ -20,7 +20,7 @@ const ACTION_CONFIG: Record<OverrideAction, {
   axes:    { key: string; icon: string; implication: string }[];
 }> = {
   cancel: {
-    label:    "Cancel Job",
+    label:    "ยกเลิกงาน",
     desc:     "ยกเลิกงานและคืนเงินตามนโยบายเงินค้ำประกัน (Deposit)",
     color:    "border-orange-300 bg-orange-50 text-orange-700",
     btnColor: "bg-orange-600 hover:bg-orange-700 text-white",
@@ -32,7 +32,7 @@ const ACTION_CONFIG: Record<OverrideAction, {
     ],
   },
   refund: {
-    label:    "Force Refund",
+    label:    "คืนเงินทั้งหมด (Force Refund)",
     desc:     "คืนเงินให้ WeeeU ทั้งหมด — override นโยบายเงินค้ำประกัน (Deposit)",
     color:    "border-blue-300 bg-blue-50 text-blue-700",
     btnColor: "bg-admin-primary hover:bg-admin-dark text-white",
@@ -68,6 +68,18 @@ interface JobSummary {
   deposit_action?: string | null;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_JOB_SUMMARY: JobSummary = {
+  id: "rj-001aabbcc-ddee-ffgg-hh11-iijjkkllmmnn",
+  weeeu_name: "สมชาย ใจดี",
+  weeer_name: "ร้าน iCare สยาม",
+  weeet_name: "ช่างวิชัย รักษ์มือถือ",
+  status: "awaiting_user",
+  deposit_amount: 500,
+  final_price: null,
+  deposit_action: "pending",
+};
+
 /* ─────────────────────────────────────────────
    Main Page
 ───────────────────────────────────────────── */
@@ -83,15 +95,22 @@ export default function ManualOverridePage() {
   const [reason,    setReason]    = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [result,    setResult]    = useState<{ ok: boolean; message: string } | null>(null);
+  const [toast,     setToast]     = useState<string | null>(null);
+
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
   const fetchJob = useCallback(async () => {
     try {
       const d = await api.get<JobSummary>(`/admin/repair/jobs/${jobId}`);
       setJob(d);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(MOCK_JOB_SUMMARY);
     } finally {
       setLoading(false);
     }
-  }, [jobId]);
+  }, [jobId, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -105,8 +124,9 @@ export default function ManualOverridePage() {
     try {
       await api.post(`/admin/repair/jobs/${jobId}/override`, { action, reason });
       setResult({ ok: true, message: `Override "${action}" สำเร็จ — งานถูก update แล้ว` });
-    } catch (e) {
-      setResult({ ok: false, message: (e as Error).message });
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setSubmitting(false);
     }
@@ -127,18 +147,18 @@ export default function ManualOverridePage() {
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-2 text-sm text-gray-400">
-          <Link href="/repair/jobs" className="hover:text-gray-600">Repair Jobs</Link>
+          <Link href="/repair/jobs" className="hover:text-gray-600">รายการงานซ่อม</Link>
           <span>/</span>
-          <Link href={`/repair/jobs/${jobId}`} className="hover:text-gray-600">Job Detail</Link>
+          <Link href={`/repair/jobs/${jobId}`} className="hover:text-gray-600">รายละเอียดงาน</Link>
           <span>/</span>
-          <span className="text-gray-700 font-medium">Manual Override</span>
+          <span className="text-gray-700 font-medium">แทรกแซงด้วยมือ</span>
         </div>
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">⚙️ Manual Override</h1>
+          <h1 className="text-2xl font-bold text-gray-900">⚙️ แทรกแซงด้วยมือ (Super Admin)</h1>
           <span className="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200">
-            🔒 Super Admin Only
+            🔒 Super Admin เท่านั้น
           </span>
         </div>
 
@@ -153,7 +173,7 @@ export default function ManualOverridePage() {
         {/* Job summary */}
         {job && (
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6">
-            <p className="text-xs text-gray-500 mb-2">Job</p>
+            <p className="text-xs text-gray-500 mb-2">งาน</p>
             <p className="font-mono text-xs text-gray-500 mb-3">{job.id}</p>
             <div className="grid grid-cols-3 gap-3 text-sm">
               <div>
@@ -178,7 +198,7 @@ export default function ManualOverridePage() {
                 </div>
                 {job.final_price != null && (
                   <div>
-                    <span className="text-gray-500">Final Price: </span>
+                    <span className="text-gray-500">ราคาสุดท้าย: </span>
                     <span className="font-semibold text-gray-700">{job.final_price.toLocaleString()} G</span>
                   </div>
                 )}
@@ -197,7 +217,7 @@ export default function ManualOverridePage() {
             <p className="text-sm">{result.message}</p>
             <Link href={`/repair/jobs/${jobId}`}
               className="mt-4 inline-block text-sm text-admin-primary hover:text-admin-dark font-medium">
-              ← กลับ Job Detail
+              ← กลับรายละเอียดงาน
             </Link>
           </div>
         ) : (
@@ -283,6 +303,12 @@ export default function ManualOverridePage() {
           </div>
         )}
       </main>
+
+      {toast && (
+        <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }

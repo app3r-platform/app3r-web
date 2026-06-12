@@ -129,7 +129,7 @@ export default function PartsAnalyticsPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           ระบบอะไหล่กำลังพัฒนา — {error ?? "ไม่พบข้อมูล"}
         </div>
-        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← Inventory</Link>
+        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← คลังอะไหล่</Link>
       </main>
     </div>
   );
@@ -146,7 +146,7 @@ export default function PartsAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📊 Parts Analytics</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติอะไหล่</h1>
             <p className="text-gray-500 text-sm mt-1">
               สรุปภาพรวมอะไหล่ระดับระบบ — low-stock / top moving / stock value / disassembly
             </p>
@@ -170,13 +170,13 @@ export default function PartsAnalyticsPage() {
             sub="ทุก shop"
           />
           <StatCard
-            label="Low Stock"
+            label="สต็อกต่ำ"
             value={data.low_stock_count.toLocaleString()}
             sub="อะไหล่ที่เหลือน้อย"
             warn={data.low_stock_count > 0}
           />
           <StatCard
-            label="Disassembly Conversion"
+            label="อัตราแปลงซาก"
             value={`${(data.disassembly_conversion_rate * 100).toFixed(1)}%`}
             sub="ซาก → อะไหล่"
           />
@@ -250,7 +250,7 @@ export default function PartsAnalyticsPage() {
         <section className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              🔥 Top Moving Parts
+              🔥 อะไหล่เคลื่อนไหวสูง
             </h2>
             <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
               {(["top_moving_7d", "top_moving_30d", "top_moving_90d"] as PeriodKey[]).map(k => (
@@ -298,7 +298,7 @@ export default function PartsAnalyticsPage() {
           </h2>
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Conversion Rate</span>
+              <span className="text-gray-500">อัตราการแปลง</span>
               <span className={`font-mono font-bold ${
                 data.disassembly_conversion_rate >= 0.2
                   ? "text-green-600"

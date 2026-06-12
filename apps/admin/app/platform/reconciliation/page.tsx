@@ -98,9 +98,9 @@ export default function ReconciliationPage() {
   const totalPages = Math.ceil(histTotal / 20);
 
   const statusConfig = {
-    BALANCED: { color: "bg-green-900/40 border-green-800 text-green-600", label: "✅ BALANCED", desc: "ยอดทุก bucket สมดุล" },
-    DISCREPANCY: { color: "bg-red-900/40 border-red-800 text-red-600", label: "🚨 DISCREPANCY", desc: "พบความไม่สอดคล้อง — ต้องตรวจสอบทันที" },
-    PENDING: { color: "bg-yellow-900/40 border-yellow-800 text-yellow-700", label: "⏳ PENDING", desc: "ยังไม่ได้รัน reconciliation" },
+    BALANCED: { color: "bg-green-50 border-green-200 text-green-700", label: "✅ สมดุล", desc: "ยอดทุก bucket สมดุล" },
+    DISCREPANCY: { color: "bg-red-50 border-red-200 text-red-700", label: "🚨 ไม่สอดคล้อง", desc: "พบความไม่สอดคล้อง — ต้องตรวจสอบทันที" },
+    PENDING: { color: "bg-yellow-50 border-yellow-200 text-yellow-700", label: "⏳ รอกระทบยอด", desc: "ยังไม่ได้รัน reconciliation" },
   };
 
   return (
@@ -108,7 +108,7 @@ export default function ReconciliationPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">Reconciliation</h1>
+          <h1 className="text-2xl font-bold">กระทบยอด Point ทอง</h1>
           {isSuper && (
             <button onClick={runReconciliation} disabled={running}
               className="px-5 py-2.5 bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors">
@@ -136,7 +136,7 @@ export default function ReconciliationPage() {
                 </div>
                 {status.status === "DISCREPANCY" && (
                   <div className="text-right">
-                    <p className="text-xs opacity-70">Difference</p>
+                    <p className="text-xs opacity-70">ส่วนต่าง</p>
                     <p className="text-2xl font-bold font-mono">{status.difference.toLocaleString()} G</p>
                   </div>
                 )}
@@ -147,16 +147,16 @@ export default function ReconciliationPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
               <h2 className="font-semibold mb-4">📐 รายละเอียด (ดุลคงค้างพอยต์ทอง)</h2>
               <div className="space-y-3">
-                <BreakdownRow label="Total Minted (A)" value={fmtG(status.total_minted)} highlight />
+                <BreakdownRow label="ยอด Minted รวม (A)" value={fmtG(status.total_minted)} highlight />
                 <div className="border-t border-gray-200 pt-3 space-y-2.5">
-                  <BreakdownRow label="Reserve Pool" value={fmtG(status.reserve_pool)} />
-                  <BreakdownRow label="Fee Pools (รวม)" value={fmtG(status.fee_pools_total)} />
+                  <BreakdownRow label="กองทุนสำรอง" value={fmtG(status.reserve_pool)} />
+                  <BreakdownRow label="กองทุนค่าธรรมเนียม (รวม)" value={fmtG(status.fee_pools_total)} />
                   <BreakdownRow label="พักเงินกลาง (Escrow) Pool" value={fmtG(status.escrow_pool)} />
-                  <BreakdownRow label="Written-Off" value={fmtG(status.written_off)} />
+                  <BreakdownRow label="ตัดจำหน่าย" value={fmtG(status.written_off)} />
                 </div>
                 <div className="border-t border-gray-200 pt-3">
                   <BreakdownRow
-                    label="Sum of Buckets (B)"
+                    label="ผลรวมกองทุน (B)"
                     value={fmtG(status.reserve_pool + status.fee_pools_total + status.escrow_pool + status.written_off)}
                     highlight
                   />
@@ -193,7 +193,7 @@ export default function ReconciliationPage() {
                   <tr className="text-gray-500 text-left">
                     <th className="px-6 py-3">เวลา</th>
                     <th className="px-6 py-3">สถานะ</th>
-                    <th className="px-6 py-3 text-right">Difference</th>
+                    <th className="px-6 py-3 text-right">ส่วนต่าง</th>
                     <th className="px-6 py-3">รันโดย</th>
                   </tr>
                 </thead>

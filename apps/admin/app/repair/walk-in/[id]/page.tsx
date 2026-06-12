@@ -68,6 +68,49 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   cancelled:         { label: "ยกเลิก",          color: "bg-gray-100 text-gray-500" },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_WALKIN_DETAIL: WalkInJobDetail = {
+  id: "wij-001",
+  job_number: "WI-2026-0001",
+  store_id: "store-bkk-01",
+  store_name: "ร้านซ่อมสุขุมวิท",
+  store_address: "123 ถ.สุขุมวิท แขวงคลองตัน เขตคลองเตย กรุงเทพฯ 10110",
+  device_model: "iPhone 14 Pro",
+  device_brand: "Apple",
+  device_serial: "F2LXQ9XXXX",
+  device_issue: "หน้าจอแตก แสดงผลไม่ได้",
+  device_photos: [],
+  customer_name: "นายสมชาย ใจดี",
+  customer_phone: "081-234-5678",
+  customer_email: "somchai.j@example.com",
+  technician_id: "tech-001",
+  technician_name: "ช่างวีระ",
+  status: "in_progress",
+  checked_in_at: "2026-06-08T09:30:00.000Z",
+  inspected_at: "2026-06-08T10:15:00.000Z",
+  started_at: "2026-06-08T11:00:00.000Z",
+  completed_at: null,
+  closed_at: null,
+  estimated_completion: "2026-06-10T17:00:00.000Z",
+  quote_price: 3500,
+  final_price: null,
+  storage_fee: 0,
+  storage_fee_per_day: 100,
+  storage_days: 0,
+  diagnosis: "หน้าจอ OLED แตกร้าว ต้องเปลี่ยนชุด display ใหม่",
+  repair_notes: "อุปกรณ์อยู่ในสภาพดี ไม่มีความเสียหายอื่น",
+  parts_used: [
+    { name: "iPhone 14 Pro Display Assembly (OEM)", qty: 1, price: 2800 },
+    { name: "กาวซีลกันน้ำ", qty: 1, price: 150 },
+  ],
+  timeline: [
+    { status: "checked_in",  actor: "พนักงาน — รัชนี", note: "ลูกค้าเดินเข้ามาพร้อมเครื่อง", timestamp: "2026-06-08T09:30:00.000Z" },
+    { status: "inspecting",  actor: "ช่างวีระ", note: null, timestamp: "2026-06-08T10:00:00.000Z" },
+    { status: "awaiting_decision", actor: "ช่างวีระ", note: "แจ้งราคา 3,500 บาท รอลูกค้าอนุมัติ", timestamp: "2026-06-08T10:15:00.000Z" },
+    { status: "in_progress", actor: "ช่างวีระ", note: "ลูกค้าอนุมัติแล้ว เริ่มซ่อม", timestamp: "2026-06-08T11:00:00.000Z" },
+  ],
+};
+
 const OVERRIDE_ACTIONS = [
   { value: "cancel",  label: "Cancel Job",   desc: "ยกเลิกงาน — คืนค่าใช้จ่ายถ้ามี" },
   { value: "refund",  label: "Force Refund", desc: "คืนเงินลูกค้า — bypass ขั้นตอนปกติ" },
@@ -105,7 +148,9 @@ export default function WalkInDetailPage() {
       setJob(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(MOCK_WALKIN_DETAIL);
     } finally {
       setLoading(false);
     }
@@ -130,7 +175,8 @@ export default function WalkInDetailPage() {
       setOverrideConfirm(false);
       fetchJob();
     } catch (e) {
-      setOverrideMsg({ type: "error", text: (e as Error).message });
+      const msg = (e as Error).message;
+      setOverrideMsg({ type: "error", text: msg === "BACKEND_UNAVAILABLE" ? "โหมดสาธิต: backend ยังไม่พร้อม" : msg });
     } finally {
       setOverrideLoading(false);
     }
@@ -192,7 +238,7 @@ export default function WalkInDetailPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
-            <InfoRow label="Serial" value={job.device_serial ?? "—"} />
+            <InfoRow label="ซีเรียล" value={job.device_serial ?? "—"} />
             <InfoRow label="อาการ" value={job.device_issue} />
             {job.diagnosis && <InfoRow label="วินิจฉัย" value={job.diagnosis} />}
             {job.repair_notes && <InfoRow label="หมายเหตุซ่อม" value={job.repair_notes} />}
@@ -212,7 +258,7 @@ export default function WalkInDetailPage() {
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ราคา & Storage</h2>
             <InfoRow label="ราคา Quote" value={job.quote_price != null ? `${job.quote_price.toLocaleString()} ฿` : "—"} />
             <InfoRow label="ราคา Final" value={job.final_price != null ? `${job.final_price.toLocaleString()} ฿` : "—"} />
-            <InfoRow label="Storage Fee" value={
+            <InfoRow label="ค่าฝากเก็บ" value={
               <span className="text-yellow-700 font-mono">
                 {job.storage_fee.toLocaleString()} ฿
                 <span className="text-gray-500 ml-1 font-normal">
@@ -224,7 +270,7 @@ export default function WalkInDetailPage() {
 
           {/* Timestamps */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Timestamps</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">เวลาบันทึก</h2>
             <InfoRow label="เช็คอิน" value={new Date(job.checked_in_at).toLocaleString("th-TH")} />
             <InfoRow label="ตรวจสภาพ" value={job.inspected_at ? new Date(job.inspected_at).toLocaleString("th-TH") : "—"} />
             <InfoRow label="เริ่มซ่อม" value={job.started_at ? new Date(job.started_at).toLocaleString("th-TH") : "—"} />
@@ -281,7 +327,7 @@ export default function WalkInDetailPage() {
         {/* Timeline */}
         {job.timeline?.length > 0 && (
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Timeline</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ลำดับเหตุการณ์</h2>
             <div className="space-y-3">
               {job.timeline.map((t, i) => {
                 const tMeta = STATUS_META[t.status];
@@ -370,7 +416,7 @@ export default function WalkInDetailPage() {
               disabled={!overrideConfirm || overrideReason.trim().length < 10 || overrideLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
             >
-              {overrideLoading ? "กำลังดำเนินการ..." : "Execute Override"}
+              {overrideLoading ? "กำลังดำเนินการ..." : "ดำเนินการ Override"}
             </button>
           </section>
         )}

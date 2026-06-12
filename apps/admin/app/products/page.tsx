@@ -158,7 +158,7 @@ export default function ProductsCuratePage() {
                 <th className="px-4 py-3">ผู้ขาย</th>
                 <th className="px-4 py-3">ราคา</th>
                 <th className="px-4 py-3">วิว</th>
-                <th className="px-4 py-3">Flag</th>
+                <th className="px-4 py-3">ธงแจ้งเตือน</th>
                 <th className="px-4 py-3">สถานะ</th>
                 <th className="px-4 py-3 text-right">จัดการ</th>
               </tr>

@@ -63,7 +63,7 @@ export default function Dashboard() {
         <div className="flex items-start justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold mb-1">ภาพรวมระบบ</h1>
-            <p className="text-gray-500 text-sm">App3R Platform · Wave1 Shell</p>
+            <p className="text-gray-500 text-sm">ระบบจัดการแพลตฟอร์ม App3R</p>
           </div>
           {/* Wallet display (read-only, from api-client + mock-fixtures D6) */}
           <WalletDisplay />
@@ -99,7 +99,7 @@ export default function Dashboard() {
                     <th className="px-6 py-3">ชื่อ</th>
                     <th className="px-6 py-3">อีเมล</th>
                     <th className="px-6 py-3">บทบาท</th>
-                    <th className="px-6 py-3 text-right">Gold</th>
+                    <th className="px-6 py-3 text-right">พอยต์ทอง</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">

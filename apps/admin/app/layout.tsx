@@ -6,8 +6,8 @@ import { MockAnno } from "@/components/MockAnno";
 import { DevAuthInit } from "@/components/DevAuthInit";
 
 export const metadata: Metadata = {
-  title: "App3R Admin",
-  description: "Admin Dashboard — App3R Platform",
+  title: "App3R แอดมิน",
+  description: "แดชบอร์ดผู้ดูแลระบบ App3R",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -71,36 +71,36 @@ describe('ContentEditor', () => {
 
   it('shows toolbar buttons when not readOnly', () => {
     render(<ContentEditor readOnly={false} />)
-    expect(screen.getByTitle('Bold')).toBeInTheDocument()
-    expect(screen.getByTitle('Italic')).toBeInTheDocument()
-    expect(screen.getByTitle('Heading 1')).toBeInTheDocument()
-    expect(screen.getByTitle('Heading 2')).toBeInTheDocument()
-    expect(screen.getByTitle('Bullet List')).toBeInTheDocument()
-    expect(screen.getByTitle('Ordered List')).toBeInTheDocument()
-    expect(screen.getByTitle('Horizontal Rule')).toBeInTheDocument()
+    expect(screen.getByTitle('ตัวหนา')).toBeInTheDocument()
+    expect(screen.getByTitle('ตัวเอียง')).toBeInTheDocument()
+    expect(screen.getByTitle('หัวข้อ 1')).toBeInTheDocument()
+    expect(screen.getByTitle('หัวข้อ 2')).toBeInTheDocument()
+    expect(screen.getByTitle('รายการจุด')).toBeInTheDocument()
+    expect(screen.getByTitle('รายการลำดับ')).toBeInTheDocument()
+    expect(screen.getByTitle('เส้นคั่น')).toBeInTheDocument()
   })
 
   it('hides toolbar when readOnly=true', () => {
     render(<ContentEditor readOnly={true} />)
-    expect(screen.queryByTitle('Bold')).not.toBeInTheDocument()
+    expect(screen.queryByTitle('ตัวหนา')).not.toBeInTheDocument()
   })
 
   it('calls chain().toggleBold().run() on Bold button click', () => {
     render(<ContentEditor />)
-    fireEvent.click(screen.getByTitle('Bold'))
+    fireEvent.click(screen.getByTitle('ตัวหนา'))
     expect(mockChain).toHaveBeenCalled()
   })
 
   it('calls chain().toggleHeading() on H1 click', () => {
     render(<ContentEditor />)
-    fireEvent.click(screen.getByTitle('Heading 1'))
+    fireEvent.click(screen.getByTitle('หัวข้อ 1'))
     expect(mockChain).toHaveBeenCalled()
   })
 
   it('highlights active button when isActive returns true', () => {
     mockIsActive.mockReturnValue(true)
     render(<ContentEditor />)
-    const boldBtn = screen.getByTitle('Bold')
+    const boldBtn = screen.getByTitle('ตัวหนา')
     expect(boldBtn.className).toContain('bg-admin-surface')
   })
 

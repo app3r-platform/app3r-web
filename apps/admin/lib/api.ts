@@ -1,32 +1,25 @@
+// CMD #115-Y Phase 3 — converge to shared Mock-First Runtime util
+// (reference usage สำหรับ 5 แอพ · กัน divergence · Gen 54 union lesson)
+// Behavior/contract เดิมทั้งหมดย้ายไป packages/shared/src/mock-runtime (extract จาก Admin pilot 99bf696)
 import { getToken } from "./auth";
 // TODO: REMOVE BEFORE PROD — TD-04 dev auth bypass
 import { getDevTestToken } from "./dev-auth";
+import {
+  createMockFirstApi,
+  ERR_BACKEND_UNAVAILABLE,
+  ERR_UNAUTHORIZED,
+} from "@app3r/shared/src/mock-runtime";
 
-const BASE = "/api/v1";
+// data layer แบบ mock-first — base '/api/v1' (default ของ factory)
+// token: dev → dev test token (ไม่ throw) · prod → getToken()
+export const api = createMockFirstApi({
+  // CMD #115-AH §A: mockMode = REQUIRED (shared ไม่อ่าน env เอง) → inline ใน app chunk
+  mockMode: process.env.NEXT_PUBLIC_DEV_NAV === "true",
+  getToken: () =>
+    process.env.NODE_ENV === "development"
+      ? getDevTestToken().catch(() => null)
+      : getToken(),
+});
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  // TODO: REMOVE BEFORE PROD — use dev test token in development mode
-  const token = process.env.NODE_ENV === "development"
-    ? await getDevTestToken()
-    : getToken();
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(options.headers as Record<string, string>),
-  };
-  if (token) headers["Authorization"] = `Bearer ${token}`;
-
-  const res = await fetch(`${BASE}${path}`, { ...options, headers });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: "เกิดข้อผิดพลาด" }));
-    throw new Error(err.detail ?? "เกิดข้อผิดพลาด");
-  }
-  return res.json() as Promise<T>;
-}
-
-export const api = {
-  get:   <T>(path: string)                  => request<T>(path),
-  post:  <T>(path: string, body: unknown)   => request<T>(path, { method: "POST",  body: JSON.stringify(body) }),
-  patch: <T>(path: string, body?: unknown)  => request<T>(path, { method: "PATCH", body: body ? JSON.stringify(body) : undefined }),
-  put:   <T>(path: string, body: unknown)   => request<T>(path, { method: "PUT",   body: JSON.stringify(body) }),
-};
+// คง public surface เดิมครบ 3 ตัว (api + error constants ที่หน้าเพจ import ใช้)
+export { ERR_BACKEND_UNAVAILABLE, ERR_UNAUTHORIZED };

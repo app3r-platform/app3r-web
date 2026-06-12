@@ -126,7 +126,7 @@ export default function DownloadNotifyPage() {
                   className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary" />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Download URL</label>
+                <label className="block text-xs text-gray-500 mb-1">ลิงก์ดาวน์โหลด</label>
                 <input type="text" value={form.downloadUrl} onChange={e => setForm(f => ({ ...f, downloadUrl: e.target.value }))}
                   placeholder="https://..."
                   className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary" />
@@ -157,7 +157,7 @@ export default function DownloadNotifyPage() {
                     <div className="flex gap-4 mt-2 text-xs text-gray-400">
                       {n.sentAt && <span>📅 ส่งเมื่อ {n.sentAt}</span>}
                       {n.recipientCount > 0 && <span>👥 {n.recipientCount.toLocaleString()} คน</span>}
-                      {n.downloadUrl && <a href={n.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-admin-primary hover:underline">🔗 Download Link</a>}
+                      {n.downloadUrl && <a href={n.downloadUrl} target="_blank" rel="noopener noreferrer" className="text-admin-primary hover:underline">🔗 ลิงก์ดาวน์โหลด</a>}
                     </div>
                   </div>
                   {n.status === 'pending' && (

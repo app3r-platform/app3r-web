@@ -147,7 +147,7 @@ export default function ArticlesPage() {
             <thead>
               <tr className="text-gray-500 text-left border-b border-gray-200 bg-gray-50">
                 <th className="px-4 py-3">บทความ</th>
-                <th className="px-4 py-3">Slug</th>
+                <th className="px-4 py-3">Slug (ตัวระบุ)</th>
                 <th className="px-4 py-3">คำ</th>
                 <th className="px-4 py-3">แก้ล่าสุด</th>
                 <th className="px-4 py-3">สถานะ</th>

@@ -23,6 +23,17 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_CERTIFICATE: EWasteCertificate = {
+  id: "CERT-0002",
+  scrapJobId: "SJ-2026-0038",
+  issuedById: "ADM-001",
+  issuedAt: "2026-05-12T14:00:00Z",
+  certNumber: "EW-2026-0002",
+  itemDescription: "ตู้เย็น Hitachi 2 ประตู ปี 2018 — ระบบทำความเย็นเสีย กำจัดตามมาตรฐาน E-Waste",
+  status: "pending",
+};
+
 function generateCertHtml(cert: EWasteCertificate): string {
   const issuedDate = new Date(cert.issuedAt).toLocaleDateString("th-TH", {
     year: "numeric", month: "long", day: "numeric",
@@ -65,7 +76,7 @@ function generateCertHtml(cert: EWasteCertificate): string {
       <div class="row"><span class="label">เลขที่ใบรับรอง</span><span class="value">${cert.certNumber}</span></div>
       <div class="row"><span class="label">วันที่ออก</span><span class="value">${issuedDate}</span></div>
       <div class="row"><span class="label">ออกโดย</span><span class="value">${cert.issuedById}</span></div>
-      <div class="row"><span class="label">Scrap Job</span><span class="value">${cert.scrapJobId}</span></div>
+      <div class="row"><span class="label">งาน Scrap</span><span class="value">${cert.scrapJobId}</span></div>
     </div>
 
     <div class="section">
@@ -95,8 +106,10 @@ export default function CertificateDetailPage() {
   const { id } = useParams() as { id: string };
   const [cert, setCert] = useState<EWasteCertificate | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<"issue" | "reject" | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
   const [rejectNote, setRejectNote] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
 
@@ -104,13 +117,14 @@ export default function CertificateDetailPage() {
     try {
       const d = await api.get<EWasteCertificate>(`/admin/scrap/certificates/${id}/`);
       setCert(d);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setCert(MOCK_CERTIFICATE);
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -122,8 +136,8 @@ export default function CertificateDetailPage() {
     try {
       await api.patch(`/admin/scrap/certificates/${id}/issue/`, {});
       await fetchCert();
-    } catch (e) {
-      setError((e as Error).message);
+    } catch {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
     } finally {
       setActionLoading(null);
     }
@@ -136,8 +150,9 @@ export default function CertificateDetailPage() {
       setShowRejectForm(false);
       setRejectNote("");
       await fetchCert();
-    } catch (e) {
-      setError((e as Error).message);
+    } catch {
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม");
+      setShowRejectForm(false);
     } finally {
       setActionLoading(null);
     }
@@ -163,14 +178,12 @@ export default function CertificateDetailPage() {
     </div>
   );
 
-  if (error || !cert) return (
+  if (!cert) return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
-          {error ?? "ยังไม่มีข้อมูลใบรับรอง"}
-        </div>
-        <Link href="/scrap/certificates" className="text-sm text-admin-primary hover:text-admin-dark">← Certificates</Link>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">ยังไม่มีข้อมูลใบรับรอง</div>
+        <Link href="/scrap/certificates" className="text-sm text-admin-primary hover:text-admin-dark">← ใบรับรอง</Link>
       </main>
     </div>
   );
@@ -186,10 +199,11 @@ export default function CertificateDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">📜 Certificate</h1>
+              <h1 className="text-2xl font-bold">📜 รายละเอียดใบรับรอง</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
             </div>
-            <p className="text-admin-primary text-sm font-mono font-bold">{cert.certNumber}</p>
+            <p className="text-gray-500 text-xs mt-0.5">ตรวจสอบและออกใบรับรองการกำจัดซากอิเล็กทรอนิกส์</p>
+            <p className="text-admin-primary text-sm font-mono font-bold mt-0.5">{cert.certNumber}</p>
           </div>
           <Link href="/scrap/certificates"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
@@ -201,7 +215,7 @@ export default function CertificateDetailPage() {
         <section className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลใบรับรอง</h2>
           <InfoRow label="เลขที่ใบรับรอง" value={<span className="font-mono text-admin-primary">{cert.certNumber}</span>} />
-          <InfoRow label="Scrap Job" value={
+          <InfoRow label="งาน Scrap" value={
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
               className="font-mono text-xs text-admin-primary hover:text-admin-dark">
               {cert.scrapJobId} ↗
@@ -277,7 +291,6 @@ export default function CertificateDetailPage() {
                 </div>
               </div>
             )}
-            {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
           </section>
         )}
 
@@ -295,6 +308,11 @@ export default function CertificateDetailPage() {
           </div>
         )}
 
+        {toast && (
+          <div className="fixed bottom-6 right-6 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
+            {toast}
+          </div>
+        )}
       </main>
     </div>
   );

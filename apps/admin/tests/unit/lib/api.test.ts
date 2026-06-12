@@ -82,11 +82,21 @@ describe('api — HTTP methods', () => {
     await expect(api.get('/admin/notfound')).rejects.toThrow('ไม่พบข้อมูล')
   })
 
-  it('โยน fallback error เมื่อ response body parse ไม่ได้', async () => {
+  it('โยน fallback error (BACKEND_UNAVAILABLE) เมื่อ response body parse ไม่ได้', async () => {
+    // RC1 (CMD #115-V): non-ok + parse fail → BACKEND_UNAVAILABLE → หน้าเพจ fallback mock
     mockFetch.mockResolvedValueOnce({
       ok: false,
       json: () => Promise.reject(new Error('parse error')),
     })
-    await expect(api.get('/admin/broken')).rejects.toThrow('เกิดข้อผิดพลาด')
+    await expect(api.get('/admin/broken')).rejects.toThrow('BACKEND_UNAVAILABLE')
+  })
+
+  it('โยน UNAUTHORIZED เมื่อ response status 401 (RC2 — redirect login เฉพาะ 401)', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+      json: () => Promise.resolve({ detail: 'unauthorized' }),
+    })
+    await expect(api.get('/admin/secure')).rejects.toThrow('UNAUTHORIZED')
   })
 })

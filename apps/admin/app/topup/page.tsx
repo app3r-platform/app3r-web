@@ -29,6 +29,20 @@ interface PaginatedTopup {
   pages: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_TOPUP: PaginatedTopup = {
+  items: [
+    { id: 1001, user_id: 201, user_name: "สมชาย ใจดี", amount: 500, payment_method: "promptpay", slip_url: null, reference_no: "PP20260610001", status: "pending", reject_reason: null, created_at: "2026-06-10T08:15:00Z", reviewed_at: null },
+    { id: 1002, user_id: 202, user_name: "วิไลพร มั่นคง", amount: 1000, payment_method: "bank_transfer", slip_url: "https://example.com/slip1.jpg", reference_no: "KTB20260610042", status: "pending", reject_reason: null, created_at: "2026-06-10T09:30:00Z", reviewed_at: null },
+    { id: 1003, user_id: 203, user_name: "ประเสริฐ รักชาติ", amount: 250, payment_method: "truemoney", slip_url: null, reference_no: "TM20260609177", status: "approved", reject_reason: null, created_at: "2026-06-09T14:20:00Z", reviewed_at: "2026-06-09T15:00:00Z" },
+    { id: 1004, user_id: 204, user_name: "นภาพร ทองดี", amount: 750, payment_method: "promptpay", slip_url: "https://example.com/slip2.jpg", reference_no: "PP20260609088", status: "rejected", reject_reason: "สลิปไม่ชัดเจน", created_at: "2026-06-09T11:00:00Z", reviewed_at: "2026-06-09T12:30:00Z" },
+    { id: 1005, user_id: 205, user_name: "เอกชัย สุขสันต์", amount: 2000, payment_method: "bank_transfer", slip_url: "https://example.com/slip3.jpg", reference_no: "SCB20260608211", status: "pending", reject_reason: null, created_at: "2026-06-08T16:45:00Z", reviewed_at: null },
+  ],
+  total: 5,
+  page: 1,
+  pages: 1,
+};
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TopupPage() {
@@ -54,8 +68,10 @@ export default function TopupPage() {
       if (statusFilter) params.set("status", statusFilter);
       const result = await api.get<PaginatedTopup>(`/admin/topup/requests?${params}`);
       setData(result);
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_TOPUP);
     } finally {
       setLoading(false);
     }
@@ -75,7 +91,8 @@ export default function TopupPage() {
       showToast("อนุมัติเติม Point สำเร็จ ✓", "ok");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -98,7 +115,8 @@ export default function TopupPage() {
       setRejectReason("");
       fetchData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -193,7 +211,7 @@ export default function TopupPage() {
                       <span className="text-lg font-bold text-gray-900">
                         {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </span>
-                      <span className="text-xs text-gray-500 ml-1">Points</span>
+                      <span className="text-xs text-gray-500 ml-1">พอยต์</span>
                     </td>
 
                     <td className="px-5 py-3.5">
@@ -248,7 +266,7 @@ export default function TopupPage() {
                           <button
                             onClick={() => setRejectModal({ id: req.id, userName: req.user_name })}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-red-800 disabled:opacity-50 text-gray-700 hover:text-gray-900 rounded-lg transition-colors"
+                            className="px-3 py-1.5 text-xs bg-red-700 hover:bg-red-800 disabled:opacity-50 text-white rounded-lg transition-colors"
                           >
                             ✕ ปฏิเสธ
                           </button>
@@ -294,7 +312,7 @@ export default function TopupPage() {
           <div className="bg-white border border-gray-300 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <h3 className="text-lg font-bold mb-1">ปฏิเสธคำขอ</h3>
             <p className="text-sm text-gray-500 mb-4">
-              ผู้ใช้: <span className="text-white">{rejectModal.userName}</span>
+              ผู้ใช้: <span className="font-medium text-gray-900">{rejectModal.userName}</span>
             </p>
             <label className="block text-sm text-gray-500 mb-2">เหตุผลที่ปฏิเสธ <span className="text-red-600">*</span></label>
             <textarea
@@ -339,9 +357,9 @@ export default function TopupPage() {
 
 function PaymentMethodBadge({ method }: { method: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    bank_transfer: { label: "โอนธนาคาร", cls: "bg-blue-900 text-blue-300" },
+    bank_transfer: { label: "โอนธนาคาร", cls: "bg-blue-50 text-blue-700" },
     promptpay:     { label: "PromptPay",  cls: "bg-admin-primary/15 text-admin-primary" },
-    truemoney:     { label: "TrueMoney",  cls: "bg-orange-900 text-orange-700" },
+    truemoney:     { label: "TrueMoney",  cls: "bg-orange-50 text-orange-700" },
   };
   const m = map[method] ?? { label: method, cls: "bg-gray-100 text-gray-500" };
   return (
@@ -353,9 +371,9 @@ function PaymentMethodBadge({ method }: { method: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; cls: string }> = {
-    pending:  { label: "รออนุมัติ",   cls: "bg-yellow-900 text-yellow-700" },
-    approved: { label: "อนุมัติแล้ว", cls: "bg-green-900 text-green-700" },
-    rejected: { label: "ปฏิเสธแล้ว", cls: "bg-red-900 text-red-700" },
+    pending:  { label: "รออนุมัติ",   cls: "bg-yellow-50 text-yellow-700" },
+    approved: { label: "อนุมัติแล้ว", cls: "bg-green-50 text-green-700" },
+    rejected: { label: "ปฏิเสธแล้ว", cls: "bg-red-50 text-red-700" },
   };
   const s = map[status] ?? { label: status, cls: "bg-gray-100 text-gray-500" };
   return (

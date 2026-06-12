@@ -140,7 +140,7 @@ function MovementsInner() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📦 Stock Movements</h1>
+            <h1 className="text-2xl font-bold">📦 ความเคลื่อนไหวสต็อก</h1>
             <p className="text-gray-500 text-sm mt-1">
               ประวัติการเคลื่อนไหวสต็อกข้าม shop — filter ประเภท / ร้าน / อะไหล่ / วันที่
             </p>
@@ -172,11 +172,11 @@ function MovementsInner() {
 
         {/* Secondary filters */}
         <div className="flex gap-3 flex-wrap">
-          <input type="text" placeholder="Shop ID"
+          <input type="text" placeholder="รหัสร้าน"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
-          <input type="text" placeholder="Part ID"
+          <input type="text" placeholder="รหัสอะไหล่"
             value={filterPartId} onChange={e => { setFilterPartId(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-blue-500"
           />
@@ -219,11 +219,11 @@ function MovementsInner() {
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">ประเภท</th>
-                  <th className="px-4 py-3">Part ID</th>
+                  <th className="px-4 py-3">รหัสอะไหล่</th>
                   <th className="px-4 py-3">จำนวน</th>
                   <th className="px-4 py-3">เหตุผล</th>
                   <th className="px-4 py-3">คงเหลือหลัง</th>
-                  <th className="px-4 py-3">Ref</th>
+                  <th className="px-4 py-3">อ้างอิง</th>
                   <th className="px-4 py-3">หมายเหตุ</th>
                   <th className="px-4 py-3">ผู้ดำเนินการ</th>
                   <th className="px-4 py-3">วันที่</th>

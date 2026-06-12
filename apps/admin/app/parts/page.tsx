@@ -98,7 +98,7 @@ export default function PartsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🔩 Parts Inventory</h1>
+            <h1 className="text-2xl font-bold">🔩 คลังอะไหล่</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการอะไหล่ข้าม shop — filter ร้าน / หมวด / สภาพ
             </p>
@@ -117,7 +117,7 @@ export default function PartsPage() {
 
         {/* Filters */}
         <div className="flex gap-3 flex-wrap items-center">
-          <input type="text" placeholder="Shop ID"
+          <input type="text" placeholder="รหัสร้าน"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-blue-500"
           />
@@ -138,7 +138,7 @@ export default function PartsPage() {
             <input type="checkbox" checked={filterLowStock}
               onChange={e => { setFilterLowStock(e.target.checked); setPage(1); }}
               className="accent-red-500" />
-            Low stock only
+            สต็อกน้อยเท่านั้น
           </label>
           {hasFilters && (
             <button onClick={clearFilters}
@@ -177,7 +177,7 @@ export default function PartsPage() {
                   <th className="px-4 py-3">ชื่ออะไหล่</th>
                   <th className="px-4 py-3">หมวด</th>
                   <th className="px-4 py-3">สภาพ</th>
-                  <th className="px-4 py-3">Shop</th>
+                  <th className="px-4 py-3">ร้าน</th>
                   <th className="px-4 py-3">คงเหลือ</th>
                   <th className="px-4 py-3">จอง</th>
                   <th className="px-4 py-3">ราคา/หน่วย</th>

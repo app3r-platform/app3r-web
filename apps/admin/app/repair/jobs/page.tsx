@@ -25,7 +25,7 @@ const JOB_STATUS: Record<string, { label: string; color: string }> = {
 
 const FILTER_GROUPS = [
   { label: "ทั้งหมด", value: "" },
-  { label: "Active", value: "active" },
+  { label: "กำลังดำเนินการ", value: "active" },
   { label: "มอบหมายแล้ว", value: "assigned" },
   { label: "เดินทาง", value: "traveling" },
   { label: "รอเข้าบ้าน", value: "awaiting_entry" },
@@ -63,7 +63,7 @@ const MOCK_REPAIR_JOBS: RepairJob[] = [
   { id: "job-001", weeeu_name: "สมชาย ใจดี",   weeer_name: "ร้านซ่อม A+",  weeet_name: "ช่าง สมศักดิ์",  service_type: "on_site", status: "in_progress", decision_branch: null, scheduled_at: "2026-05-26T09:00:00Z", created_at: "2026-05-25T10:00:00Z" },
   { id: "job-002", weeeu_name: "สมหญิง รักดี",  weeer_name: "ร้านซ่อม B+",  weeet_name: "ช่าง วิชัย",    service_type: "on_site", status: "assigned",    decision_branch: null, scheduled_at: "2026-05-26T13:00:00Z", created_at: "2026-05-25T11:00:00Z" },
   { id: "job-003", weeeu_name: "มานะ ดีงาม",    weeer_name: "ร้านซ่อม C+",  weeet_name: "ช่าง ประสิทธิ์", service_type: "on_site", status: "completed",   decision_branch: "B1", scheduled_at: "2026-05-24T09:00:00Z", created_at: "2026-05-23T08:00:00Z" },
-  { id: "job-004", weeeu_name: "วิไล สวยงาม",   weeer_name: "ร้านซ่อม A+",  weeet_name: "ช่าง สมศักดิ์",  service_type: "on_site", status: "travelling",  decision_branch: null, scheduled_at: "2026-05-27T10:00:00Z", created_at: "2026-05-26T09:00:00Z", source: { type: "purchased_scrap" } },
+  { id: "job-004", weeeu_name: "วิไล สวยงาม",   weeer_name: "ร้านซ่อม A+",  weeet_name: "ช่าง สมศักดิ์",  service_type: "on_site", status: "traveling",   decision_branch: null, scheduled_at: "2026-05-27T10:00:00Z", created_at: "2026-05-26T09:00:00Z", source: { type: "purchased_scrap" } },
   { id: "job-005", weeeu_name: "ธนา มั่งมี",    weeer_name: "ร้านซ่อม D+",  weeet_name: "ช่าง ณรงค์",    service_type: "on_site", status: "cancelled",   decision_branch: null, scheduled_at: "2026-05-23T14:00:00Z", created_at: "2026-05-22T10:00:00Z" },
 ];
 
@@ -120,20 +120,20 @@ export default function RepairJobsPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">🔧 Repair Jobs — On-site</h1>
+          <h1 className="text-2xl font-bold">🔧 งานซ่อมหน้าร้าน</h1>
           <div className="flex gap-2">
             <Link href="/repair/analytics"
               className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-              📊 Analytics
+              📊 วิเคราะห์
             </Link>
             <Link href="/repair/disputes"
               className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-              ⚖️ Disputes
+              ⚖️ ข้อพิพาท
             </Link>
           </div>
         </div>
         <p className="text-gray-500 text-sm mb-6">
-          ดูและ oversight งานซ่อม On-site ทั้งหมด — filter ตาม state machine
+          กำกับดูแลงานซ่อมหน้าร้านทั้งหมด — กรองตามสถานะงาน
         </p>
 
         {/* Source filter (D64) */}
@@ -188,13 +188,13 @@ export default function RepairJobsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-6 py-3">Job ID</th>
+                  <th className="px-6 py-3">รหัสงาน</th>
                   <th className="px-6 py-3">WeeeU (ลูกค้า)</th>
                   <th className="px-6 py-3">WeeeR (ร้าน)</th>
                   <th className="px-6 py-3">WeeeT (ช่าง)</th>
                   <th className="px-6 py-3">สถานะ</th>
                   <th className="px-6 py-3">แหล่งที่มา</th>
-                  <th className="px-6 py-3">Branch</th>
+                  <th className="px-6 py-3">สาขา</th>
                   <th className="px-6 py-3">นัดหมาย</th>
                   <th className="px-6 py-3"></th>
                 </tr>

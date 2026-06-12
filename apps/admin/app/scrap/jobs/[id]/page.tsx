@@ -39,6 +39,36 @@ const OPTION_META: Record<ScrapJobOption, { label: string; desc: string; color: 
   dispose:         { label: "ทิ้ง/E-Waste",      desc: "กำจัดอย่างถูกต้อง ออก E-Waste Certificate",   color: "text-admin-primary", available: true },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_SCRAP_JOB: ScrapJobExtended = {
+  id: "SJ-2026-0041",
+  scrapItemId: "SCR-001",
+  buyerId: "WR-3001",
+  buyerType: "WeeeR",
+  decision: "resell_parts",
+  decisionAt: "2026-05-11T09:00:00Z",
+  status: "completed",
+  partsCreatedIds: ["PRT-7001", "PRT-7002"],
+  newListingId: undefined,
+  certificateId: undefined,
+  repairJobId: undefined,
+  createdAt: "2026-05-10T10:00:00Z",
+  updatedAt: "2026-05-11T09:30:00Z",
+  cancelled_reason: null,
+  no_show_flag: false,
+  no_show_settled_at: null,
+  price_revisions: [
+    {
+      revised_at: "2026-05-10T15:00:00Z",
+      old_price: 3500,
+      new_price: 3200,
+      revised_by: "WeeeR",
+      reason: "ตรวจสภาพจริงพบคอมเพรสเซอร์มีรอยสนิม",
+    },
+  ],
+  source_repair_job_id: null,
+};
+
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex gap-2 py-1.5 border-b border-gray-200/60 last:border-0">
@@ -53,19 +83,19 @@ export default function ScrapJobDetailPage() {
   const { id } = useParams() as { id: string };
   const [job, setJob] = useState<ScrapJobExtended | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchJob = useCallback(async () => {
     try {
       const d = await api.get<ScrapJobExtended>(`/admin/scrap/jobs/${id}/`);
       setJob(d);
-      setError(null);
-    } catch (e) {
-      setError((e as Error).message);
+    } catch (e: unknown) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setJob(MOCK_SCRAP_JOB);
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -78,14 +108,12 @@ export default function ScrapJobDetailPage() {
     </div>
   );
 
-  if (error || !job) return (
+  if (!job) return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8 space-y-4">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
-          {error ?? "ยังไม่มีข้อมูล Scrap Job"}
-        </div>
-        <Link href="/scrap/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← Jobs</Link>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">ยังไม่มีข้อมูล Scrap Job</div>
+        <Link href="/scrap/jobs" className="text-sm text-admin-primary hover:text-admin-dark">← งาน</Link>
       </main>
     </div>
   );
@@ -102,7 +130,7 @@ export default function ScrapJobDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">🔨 Scrap Job</h1>
+              <h1 className="text-2xl font-bold">🔨 งานรับซากจาก WeeeR</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               {/* S9 */}
               {job.no_show_flag && (
@@ -132,7 +160,8 @@ export default function ScrapJobDetailPage() {
                 </Link>
               )}
             </div>
-            <p className="text-gray-500 text-sm font-mono">{job.id}</p>
+            <p className="text-gray-500 text-xs mt-0.5">รายละเอียดการตัดสินใจและ output ของงานรับซาก</p>
+            <p className="text-gray-400 text-xs font-mono mt-0.5">{job.id}</p>
           </div>
           <Link href="/scrap/jobs"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
@@ -145,14 +174,14 @@ export default function ScrapJobDetailPage() {
           {/* Job info */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Job</h2>
-            <InfoRow label="Scrap Item" value={
+            <InfoRow label="รายการซาก" value={
               <Link href={`/scrap/listings/${job.scrapItemId}`}
                 className="font-mono text-xs text-admin-primary hover:text-admin-dark">
                 {job.scrapItemId} ↗
               </Link>
             } />
-            <InfoRow label="Buyer" value={<span className="font-mono text-xs">{job.buyerId}</span>} />
-            <InfoRow label="Buyer Type" value={job.buyerType} />
+            <InfoRow label="ผู้ซื้อ" value={<span className="font-mono text-xs">{job.buyerId}</span>} />
+            <InfoRow label="ประเภทผู้ซื้อ" value={job.buyerType} />
             <InfoRow label="สร้างเมื่อ" value={new Date(job.createdAt).toLocaleString("th-TH")} />
             <InfoRow label="อัพเดตล่าสุด" value={new Date(job.updatedAt).toLocaleString("th-TH")} />
           </section>
@@ -228,7 +257,7 @@ export default function ScrapJobDetailPage() {
 
           {/* Output refs */}
           <section className="bg-white rounded-xl border border-gray-200 p-5 lg:col-span-2">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Output References</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ผลลัพธ์อ้างอิง</h2>
 
             {job.partsCreatedIds && job.partsCreatedIds.length > 0 && (
               <div className="mb-3">
@@ -256,7 +285,7 @@ export default function ScrapJobDetailPage() {
 
             {job.repairJobId && (
               <div className="mb-3">
-                <p className="text-xs text-gray-500 mb-1">Repair Job</p>
+                <p className="text-xs text-gray-500 mb-1">งาน Repair</p>
                 <Link href={`/repair/jobs/${job.repairJobId}`}
                   className="text-xs font-mono text-admin-primary hover:text-admin-dark">
                   {job.repairJobId} ↗

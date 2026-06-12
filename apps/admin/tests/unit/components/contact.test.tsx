@@ -86,7 +86,7 @@ describe('ContactInbox', () => {
     mList.mockResolvedValue([])
     render(<ContactInbox />)
     expect(
-      screen.getByText('กล่องข้อความติดต่อ (Inbox)'),
+      screen.getByText('กล่องข้อความติดต่อ'),
     ).toBeInTheDocument()
     await waitFor(() =>
       expect(screen.getByText('ไม่พบข้อความ')).toBeInTheDocument(),

@@ -27,7 +27,7 @@ describe('AuditDetailView', () => {
     expect(screen.getByText('การกระทำ')).toBeInTheDocument()
     expect(screen.getByText('โมดูล')).toBeInTheDocument()
     expect(screen.getByText('ผู้กระทำ')).toBeInTheDocument()
-    expect(screen.getByText('Entity ID')).toBeInTheDocument()
+    expect(screen.getByText('รหัสรายการ')).toBeInTheDocument()
     expect(screen.getByText('เวลา')).toBeInTheDocument()
     expect(screen.getByText('ID')).toBeInTheDocument()
     expect(screen.getByText('admin@app3r.th')).toBeInTheDocument()

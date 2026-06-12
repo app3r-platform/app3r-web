@@ -28,6 +28,53 @@ interface WalkInAnalytics {
   top_issues: { issue: string; count: number }[];
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_WALKIN_ANALYTICS: WalkInAnalytics = {
+  total_jobs: 148,
+  active_jobs: 23,
+  completed_jobs: 89,
+  closed_jobs: 82,
+  abandoned_jobs: 12,
+  cancelled_jobs: 5,
+  storage_fee_total: 47800,
+  storage_fee_this_month: 8400,
+  abandoned_rate: 0.081,
+  avg_repair_hours: 14.3,
+  avg_storage_days: 3.2,
+  by_status: [
+    { status: "checked_in",        count: 4 },
+    { status: "inspecting",        count: 3 },
+    { status: "awaiting_decision", count: 6 },
+    { status: "awaiting_parts",    count: 5 },
+    { status: "in_progress",       count: 10 },
+    { status: "completed",         count: 5 },
+    { status: "awaiting_pickup",   count: 7 },
+    { status: "closed",            count: 82 },
+    { status: "abandoned",         count: 12 },
+    { status: "cancelled",         count: 5 },
+  ],
+  by_store: [
+    { store_name: "ร้านซ่อมสุขุมวิท", count: 61, storage_fee: 22300 },
+    { store_name: "ร้านซ่อมรัชดา",    count: 55, storage_fee: 18200 },
+    { store_name: "ร้านซ่อมเชียงใหม่", count: 32, storage_fee: 7300 },
+  ],
+  monthly_storage_fee: [
+    { month: "2026-01", fee: 5200 },
+    { month: "2026-02", fee: 6100 },
+    { month: "2026-03", fee: 7800 },
+    { month: "2026-04", fee: 9300 },
+    { month: "2026-05", fee: 11000 },
+    { month: "2026-06", fee: 8400 },
+  ],
+  top_issues: [
+    { issue: "หน้าจอแตก / แสดงผลไม่ได้", count: 38 },
+    { issue: "แบตเตอรี่เสื่อม ชาร์จไม่ติด", count: 27 },
+    { issue: "เปิดไม่ติด หลังตกน้ำ", count: 19 },
+    { issue: "กล้องไม่ทำงาน", count: 14 },
+    { issue: "เสียงไม่ออก", count: 11 },
+  ],
+};
+
 const STATUS_LABELS: Record<string, string> = {
   checked_in:        "เช็คอิน",
   inspecting:        "ตรวจสภาพ",
@@ -77,7 +124,9 @@ export default function WalkInAnalyticsPage() {
       setData(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setData(MOCK_WALKIN_ANALYTICS);
     } finally {
       setLoading(false);
     }
@@ -96,7 +145,7 @@ export default function WalkInAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📊 Walk-in Analytics</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติงานหน้าร้าน</h1>
             <p className="text-gray-500 text-sm mt-1">
               Storage fee revenue + abandoned rate + ภาพรวม walk-in jobs
             </p>
@@ -117,10 +166,10 @@ export default function WalkInAnalyticsPage() {
             <section>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-                <StatCard icon="📋" label="Jobs ทั้งหมด"   value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active"         value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="📋" label="งานทั้งหมด"   value={data.total_jobs.toLocaleString()} />
+                <StatCard icon="⚡" label="กำลังดำเนินการ"  value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="ปิดงานแล้ว"     value={data.closed_jobs.toLocaleString()} accent="green" />
-                <StatCard icon="📦" label="Abandoned"      value={data.abandoned_jobs.toLocaleString()} accent="orange" />
+                <StatCard icon="📦" label="ทิ้งงาน"         value={data.abandoned_jobs.toLocaleString()} accent="orange" />
                 <StatCard icon="❌" label="ยกเลิก"          value={data.cancelled_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="🔧" label="ซ่อมเสร็จ"      value={data.completed_jobs.toLocaleString()} accent="admin-primary" />
               </div>
@@ -128,24 +177,24 @@ export default function WalkInAnalyticsPage() {
 
             {/* Storage Fee KPIs */}
             <section>
-              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Storage Fee & KPI</h2>
+              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ค่าฝากเก็บ & KPI</h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                   icon="💰"
-                  label="Storage Fee รวม"
+                  label="ค่าฝากเก็บรวม"
                   value={`${data.storage_fee_total.toLocaleString()} ฿`}
                   sub="ตลอดช่วงเวลา"
                   accent="yellow"
                 />
                 <StatCard
                   icon="📅"
-                  label="Storage Fee เดือนนี้"
+                  label="ค่าฝากเก็บเดือนนี้"
                   value={`${data.storage_fee_this_month.toLocaleString()} ฿`}
                   accent="yellow"
                 />
                 <StatCard
                   icon="📦"
-                  label="Abandoned Rate"
+                  label="อัตราตกค้าง"
                   value={data.abandoned_rate != null
                     ? `${(data.abandoned_rate * 100).toFixed(1)}%`
                     : "—"}
@@ -154,7 +203,7 @@ export default function WalkInAnalyticsPage() {
                 />
                 <StatCard
                   icon="⏱️"
-                  label="Avg Repair Time"
+                  label="เวลาซ่อมเฉลี่ย"
                   value={data.avg_repair_hours != null
                     ? `${data.avg_repair_hours.toFixed(1)} ชม.`
                     : "—"}
@@ -168,7 +217,7 @@ export default function WalkInAnalyticsPage() {
             {data.monthly_storage_fee?.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                  Storage Fee รายเดือน
+                  ค่าฝากเก็บรายเดือน
                 </h2>
                 <div className="space-y-2.5">
                   {(() => {
@@ -196,7 +245,7 @@ export default function WalkInAnalyticsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* By Status */}
               <section className="bg-white rounded-xl border border-gray-200 p-5">
-                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Jobs by Status</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">งานตามสถานะ</h2>
                 <div className="space-y-2">
                   {data.by_status.map(row => {
                     const pct = data.total_jobs > 0 ? (row.count / data.total_jobs) * 100 : 0;
@@ -256,8 +305,8 @@ export default function WalkInAnalyticsPage() {
                   <thead>
                     <tr className="text-gray-500 text-left border-b border-gray-200">
                       <th className="pb-2">ร้าน</th>
-                      <th className="pb-2 text-right">Jobs</th>
-                      <th className="pb-2 text-right">Storage Fee</th>
+                      <th className="pb-2 text-right">งาน</th>
+                      <th className="pb-2 text-right">ค่าฝากเก็บ</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">

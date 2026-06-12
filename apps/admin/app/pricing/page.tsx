@@ -285,7 +285,7 @@ function Tab1Categories({ cats, setCats }: { cats: UPCategory[]; setCats: (c: UP
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr className="text-xs text-gray-500 text-left">
-              <th className="px-4 py-3">Code</th>
+              <th className="px-4 py-3">รหัส</th>
               <th className="px-4 py-3">ชื่อ (ไทย)</th>
               <th className="px-4 py-3">ชื่อ (EN)</th>
               <th className="px-4 py-3">ผูก appliance_category</th>
@@ -456,7 +456,7 @@ function Tab2Dimensions({ cats, dims, setDims, dimVals, setDimVals }: {
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h3 className="text-base font-semibold text-gray-800 mb-4">{editDim ? "แก้ไขมิติ" : "เพิ่มมิติ"}</h3>
             <div className="space-y-3">
-              {[{ key: "code", label: "Code" }, { key: "label_th", label: "ชื่อ (ไทย)" }, { key: "label_en", label: "ชื่อ (EN)" }].map(f => (
+              {[{ key: "code", label: "รหัส" }, { key: "label_th", label: "ชื่อ (ไทย)" }, { key: "label_en", label: "ชื่อ (EN)" }].map(f => (
                 <div key={f.key}>
                   <label className="text-xs font-medium text-gray-600">{f.label}</label>
                   <input value={(dimForm as Record<string, unknown>)[f.key] as string}
@@ -490,7 +490,7 @@ function Tab2Dimensions({ cats, dims, setDims, dimVals, setDimVals }: {
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h3 className="text-base font-semibold text-gray-800 mb-4">{editVal ? "แก้ไขค่า" : "เพิ่มค่า"}</h3>
             <div className="space-y-3">
-              {[{ key: "code", label: "Code" }, { key: "label_th", label: "ชื่อ (ไทย)" }, { key: "label_en", label: "ชื่อ (EN)" }].map(f => (
+              {[{ key: "code", label: "รหัส" }, { key: "label_th", label: "ชื่อ (ไทย)" }, { key: "label_en", label: "ชื่อ (EN)" }].map(f => (
                 <div key={f.key}>
                   <label className="text-xs font-medium text-gray-600">{f.label}</label>
                   <input value={(valForm as Record<string, string>)[f.key]}
@@ -621,7 +621,7 @@ function Tab3Models({ cats, dims, dimVals, models, setModels, pricePoints, setPr
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr className="text-xs text-gray-500 text-left">
                     <th className="px-3 py-2">มิติที่ใช้</th>
-                    <th className="px-3 py-2">Multi-issue</th>
+                    <th className="px-3 py-2">หลายอาการ</th>
                     <th className="px-3 py-2">ราคา</th>
                     <th className="px-3 py-2"></th>
                   </tr>
@@ -664,7 +664,7 @@ function Tab3Models({ cats, dims, dimVals, models, setModels, pricePoints, setPr
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h3 className="text-base font-semibold text-gray-800 mb-4">{editModel ? "แก้ไขรุ่น" : "เพิ่มรุ่นใหม่"}</h3>
             <div className="space-y-3">
-              {[{ key: "code", label: "Code" }, { key: "label_th", label: "ชื่อ (ไทย)" }, { key: "label_en", label: "ชื่อ (EN)" }, { key: "brand", label: "แบรนด์" }].map(f => (
+              {[{ key: "code", label: "รหัส" }, { key: "label_th", label: "ชื่อ (ไทย)" }, { key: "label_en", label: "ชื่อ (EN)" }, { key: "brand", label: "แบรนด์" }].map(f => (
                 <div key={f.key}>
                   <label className="text-xs font-medium text-gray-600">{f.label}</label>
                   <input value={(mForm as Record<string, string>)[f.key]}
@@ -831,7 +831,7 @@ function Tab4Deductions({ cats, dims, dimVals, deductions, setDeductions, models
                   <td className="px-4 py-3"><KindBadge kind={d.kind} /></td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${d.deduction_type === "FIXED" ? "bg-blue-50 text-blue-700" : d.deduction_type === "PERCENT" ? "bg-orange-50 text-orange-700" : "bg-admin-surface text-admin-primary"}`}>
-                      {d.deduction_type}
+                      {d.deduction_type === "FIXED" ? "คงที่" : d.deduction_type === "PERCENT" ? "เปอร์เซ็นต์" : "ช่วง"}
                     </span>
                   </td>
                   <td className="px-4 py-3"><DeductionAmountDisplay d={d} /></td>
@@ -884,9 +884,9 @@ function Tab4Deductions({ cats, dims, dimVals, deductions, setDeductions, models
                 <label className="text-xs font-medium text-gray-600">วิธีคิดส่วนหัก (Deduction Type)</label>
                 <select value={form.deduction_type} onChange={e => setForm({ ...form, deduction_type: e.target.value as DeductionType })}
                   className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-900">
-                  <option value="FIXED">FIXED — หักจำนวนคงที่ (฿)</option>
-                  <option value="PERCENT">PERCENT — หักเป็น %</option>
-                  <option value="RANGE">RANGE — หักในช่วง min–max (฿)</option>
+                  <option value="FIXED">คงที่ — หักจำนวนคงที่ (฿)</option>
+                  <option value="PERCENT">เปอร์เซ็นต์ — หักเป็น %</option>
+                  <option value="RANGE">ช่วง — หักในช่วง min–max (฿)</option>
                 </select>
               </div>
               {form.deduction_type === "FIXED" && (

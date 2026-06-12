@@ -34,6 +34,18 @@ const STATUS_META: Record<WithdrawalRequest["status"], { label: string; color: s
   rejected:    { label: "ปฏิเสธ",      color: "bg-red-50 text-red-700" },
 };
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_WITHDRAWALS: PaginatedWithdrawals = {
+  items: [
+    { id: "WD-2026-0401", user_id: 601, user_name: "พิมพ์ใจ สุขดี", gold_points: 500, thb_amount: 500, bank_name: "ธนาคารกรุงไทย", bank_account_number: "123-4-56789-0", bank_account_name: "พิมพ์ใจ สุขดี", requested_at: "2026-06-10T07:00:00Z", status: "pending", note: null },
+    { id: "WD-2026-0402", user_id: 602, user_name: "ณรงค์ชัย ดีมาก", gold_points: 1000, thb_amount: 1000, bank_name: "ธนาคารกสิกรไทย", bank_account_number: "098-7-65432-1", bank_account_name: "ณรงค์ชัย ดีมาก", requested_at: "2026-06-10T09:30:00Z", status: "pending", note: null },
+    { id: "WD-2026-0403", user_id: 603, user_name: "อรทัย งามเจริญ", gold_points: 300, thb_amount: 300, bank_name: "ธนาคารไทยพาณิชย์", bank_account_number: "456-7-89012-3", bank_account_name: "อรทัย งามเจริญ", requested_at: "2026-06-09T13:00:00Z", status: "transferred", note: null },
+    { id: "WD-2026-0404", user_id: 604, user_name: "กมลทิพย์ แสงจันทร์", gold_points: 750, thb_amount: 750, bank_name: "ธนาคารกรุงเทพ", bank_account_number: "789-1-23456-7", bank_account_name: "กมลทิพย์ แสงจันทร์", requested_at: "2026-06-08T10:00:00Z", status: "rejected", note: "ข้อมูลบัญชีไม่ถูกต้อง" },
+    { id: "WD-2026-0405", user_id: 605, user_name: "ปริญญา มีทอง", gold_points: 2000, thb_amount: 2000, bank_name: "ธนาคารทหารไทย", bank_account_number: "321-6-54987-0", bank_account_name: "ปริญญา มีทอง", requested_at: "2026-06-08T15:45:00Z", status: "pending", note: null },
+  ],
+  total: 5,
+};
+
 export default function TransferWithdrawalsPage() {
   const router = useRouter();
   const [items, setItems] = useState<WithdrawalRequest[]>([]);
@@ -56,10 +68,15 @@ export default function TransferWithdrawalsPage() {
       const d = await api.get<PaginatedWithdrawals>(`/admin/transfers/withdrawals?${params}`);
       setItems(d.items);
       setTotal(d.total);
+    } catch (e) {
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      console.warn("[mock fallback]", e);
+      setItems(MOCK_WITHDRAWALS.items);
+      setTotal(MOCK_WITHDRAWALS.total);
     } finally {
       setLoading(false);
     }
-  }, [filterStatus]);
+  }, [filterStatus, router]);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
@@ -78,7 +95,8 @@ export default function TransferWithdrawalsPage() {
       showToast("✅ ยืนยันการโอนเงินสำเร็จ — พอยต์ทอง (Gold Point) ถูกหักแล้ว", "ok");
       fetchData();
     } catch (e) {
-      showToast(`❌ ${(e as Error).message}`, "err");
+      if ((e as Error).message === "UNAUTHORIZED") { router.push("/login"); return; }
+      showToast("โหมดสาธิต: backend ยังไม่พร้อม", "err");
     } finally {
       setActionLoading(null);
     }
@@ -120,7 +138,7 @@ export default function TransferWithdrawalsPage() {
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-6 py-3">ผู้ใช้</th>
-                  <th className="px-6 py-3">Gold Point</th>
+                  <th className="px-6 py-3">พอยต์ทอง</th>
                   <th className="px-6 py-3">จำนวนเงิน (฿)</th>
                   <th className="px-6 py-3">บัญชีปลายทาง</th>
                   <th className="px-6 py-3">เวลา</th>

@@ -72,7 +72,7 @@ export default function PartDetailPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           {error ?? "ยังไม่มีข้อมูลอะไหล่"}
         </div>
-        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← Inventory</Link>
+        <Link href="/parts" className="text-sm text-admin-primary hover:text-admin-dark">← คลังอะไหล่</Link>
       </main>
     </div>
   );
@@ -97,7 +97,7 @@ export default function PartDetailPage() {
           </div>
           <Link href="/parts"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Inventory
+            ← คลังอะไหล่
           </Link>
         </div>
 
@@ -112,7 +112,7 @@ export default function PartDetailPage() {
             <InfoRow label="สภาพ" value={
               <span className={`text-xs px-2 py-0.5 rounded-full ${cm.color}`}>{cm.label}</span>
             } />
-            <InfoRow label="Shop ID" value={<span className="font-mono text-xs">{part.shopId}</span>} />
+            <InfoRow label="รหัสร้าน" value={<span className="font-mono text-xs">{part.shopId}</span>} />
             {part.source && (
               <InfoRow label="แหล่งที่มา" value={
                 <span>
@@ -164,7 +164,7 @@ export default function PartDetailPage() {
 
           {/* Timestamps */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Audit Info</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Audit</h2>
             <InfoRow label="สร้างเมื่อ" value={new Date(part.createdAt).toLocaleString("th-TH")} />
             <InfoRow label="อัพเดตล่าสุด" value={new Date(part.updatedAt).toLocaleString("th-TH")} />
           </section>

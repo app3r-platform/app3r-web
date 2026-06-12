@@ -133,7 +133,7 @@ export default function M9CancelledAdminMockupPage() {
             {/* Audit log */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="px-5 py-3 bg-gray-50 border-b border-gray-200">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Audit Log</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">บันทึก Audit</p>
               </div>
               <div className="p-5 space-y-3">
                 {AUDIT_LOG.map((entry, i) => (
@@ -161,7 +161,7 @@ export default function M9CancelledAdminMockupPage() {
             {/* Settle breakdown */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Settle Audit</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ตรวจสอบการ Settle</p>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                   settleStatus === "approved"  ? "bg-green-50 text-green-700"
                   : settleStatus === "disputed" ? "bg-red-50 text-red-700"
@@ -218,7 +218,7 @@ export default function M9CancelledAdminMockupPage() {
             {/* Admin actions */}
             {settleStatus === "pending_approval" && (
               <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Admin Actions</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">การดำเนินการ Admin</p>
 
                 {confirming === "approve" && (
                   <div className="bg-green-50 border border-green-200 rounded-xl p-3 space-y-3 text-sm">

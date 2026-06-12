@@ -121,7 +121,7 @@ export default function MaintainJobsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🛁 Maintain Jobs — Audit</h1>
+            <h1 className="text-2xl font-bold">🛁 งานบำรุงรักษา (ตรวจสอบ)</h1>
             <p className="text-gray-500 text-sm mt-1">
               รายการงานทั้งหมด — filter สถานะ / ประเภทล้าง / ร้าน / วันที่
             </p>
@@ -161,7 +161,7 @@ export default function MaintainJobsPage() {
             <option value="deep">ล้างลึก</option>
             <option value="sanitize">ล้าง+ฆ่าเชื้อ</option>
           </select>
-          <input type="text" placeholder="Shop ID"
+          <input type="text" placeholder="รหัสร้าน"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-admin-primary"
           />
@@ -203,15 +203,15 @@ export default function MaintainJobsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-4 py-3">Service Code</th>
+                  <th className="px-4 py-3">รหัสบริการ</th>
                   <th className="px-4 py-3">เครื่อง</th>
                   <th className="px-4 py-3">ประเภทล้าง</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">นัดหมาย</th>
                   <th className="px-4 py-3">ราคา</th>
-                  <th className="px-4 py-3">Recurring</th>
+                  <th className="px-4 py-3">ประจำ</th>
                   <th className="px-4 py-3">ช่าง</th>
-                  <th className="px-4 py-3">Flags</th>
+                  <th className="px-4 py-3">ธงแจ้งเตือน</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>

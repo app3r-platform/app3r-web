@@ -33,53 +33,52 @@ describe('Sidebar — render', () => {
     expect(screen.getByText('ออกจากระบบ')).toBeInTheDocument()
   })
 
-  it('แสดง nav link "Dashboard"', () => {
+  it('แสดง nav link "แดชบอร์ด" (RC4 — i18n ไทย)', () => {
     mockUsePathname.mockReturnValue('/')
     render(<Sidebar />)
-    // Dashboard ปรากฏ 2 ครั้ง (logo subtitle + nav link) — ใช้ getAllByText
-    const dashboardItems = screen.getAllByText('Dashboard')
+    const dashboardItems = screen.getAllByText('แดชบอร์ด')
     expect(dashboardItems.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('แสดง nav group "Repair"', () => {
+  it('แสดง nav group "ซ่อม" (RC4 — i18n ไทย)', () => {
     mockUsePathname.mockReturnValue('/repair/jobs')
     render(<Sidebar />)
-    expect(screen.getByText('Repair')).toBeInTheDocument()
+    expect(screen.getByText('ซ่อม')).toBeInTheDocument()
   })
 
-  it('แสดง nav group "Scrap"', () => {
+  it('แสดง nav group "รับซาก" (RC4 — i18n ไทย)', () => {
     mockUsePathname.mockReturnValue('/scrap/jobs')
     render(<Sidebar />)
-    expect(screen.getByText('Scrap')).toBeInTheDocument()
+    expect(screen.getByText('รับซาก')).toBeInTheDocument()
   })
 })
 
 describe('Sidebar — active state (สถานะ active)', () => {
-  it('Dashboard มี active class เมื่อ pathname = "/"', () => {
+  it('แดชบอร์ด มี active class เมื่อ pathname = "/"', () => {
     mockUsePathname.mockReturnValue('/')
     render(<Sidebar />)
-    const dashboardLink = screen.getByRole('link', { name: /dashboard/i })
+    const dashboardLink = screen.getByRole('link', { name: /แดชบอร์ด/ })
     expect(dashboardLink).toHaveClass('bg-admin-surface')
   })
 
-  it('Dashboard ไม่มี active class เมื่อ pathname ≠ "/"', () => {
+  it('แดชบอร์ด ไม่มี active class เมื่อ pathname ≠ "/"', () => {
     mockUsePathname.mockReturnValue('/users')
     render(<Sidebar />)
-    const dashboardLink = screen.getByRole('link', { name: /dashboard/i })
+    const dashboardLink = screen.getByRole('link', { name: /แดชบอร์ด/ })
     expect(dashboardLink).not.toHaveClass('bg-admin-surface')
   })
 
-  it('Repair Jobs มี active class เมื่ออยู่หน้า repair/jobs', () => {
+  it('งานซ่อม มี active class เมื่ออยู่หน้า repair/jobs', () => {
     mockUsePathname.mockReturnValue('/repair/jobs')
     render(<Sidebar />)
-    const repairLink = screen.getByRole('link', { name: /repair jobs/i })
+    const repairLink = screen.getByRole('link', { name: /งานซ่อม/ })
     expect(repairLink).toHaveClass('bg-admin-surface')
   })
 
-  it('Repair Jobs มี active class เมื่ออยู่หน้า repair/jobs/{id} (startsWith)', () => {
+  it('งานซ่อม มี active class เมื่ออยู่หน้า repair/jobs/{id} (startsWith)', () => {
     mockUsePathname.mockReturnValue('/repair/jobs/abc-123')
     render(<Sidebar />)
-    const repairLink = screen.getByRole('link', { name: /repair jobs/i })
+    const repairLink = screen.getByRole('link', { name: /งานซ่อม/ })
     expect(repairLink).toHaveClass('bg-admin-surface')
   })
 })

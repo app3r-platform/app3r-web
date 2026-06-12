@@ -61,7 +61,7 @@ export default function PlatformConfigPage() {
 
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold">⚙️ Platform Config</h1>
+          <h1 className="text-2xl font-bold">⚙️ ตั้งค่าแพลตฟอร์ม</h1>
           <p className="text-gray-500 text-sm mt-1">
             ค่าตั้งระดับแพลตฟอร์ม — Wave2 implementation
           </p>
@@ -73,7 +73,7 @@ export default function PlatformConfigPage() {
         {/* Config table */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-5 py-3 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-            <h2 className="text-sm font-bold text-gray-700">🔑 Config Keys</h2>
+            <h2 className="text-sm font-bold text-gray-700">🔑 รายการตั้งค่า</h2>
             <span className="text-xs text-gray-400">
               {loading ? 'กำลังโหลด…' : `${items.length} entries (mock)`}
             </span>
@@ -87,9 +87,9 @@ export default function PlatformConfigPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200 bg-gray-50">
-                  <th className="px-5 py-3">Key</th>
-                  <th className="px-5 py-3">Value</th>
-                  <th className="px-5 py-3 text-right">Updated</th>
+                  <th className="px-5 py-3">คีย์</th>
+                  <th className="px-5 py-3">ค่า</th>
+                  <th className="px-5 py-3 text-right">อัพเดตเมื่อ</th>
                 </tr>
               </thead>
               <tbody>
@@ -122,10 +122,10 @@ export default function PlatformConfigPage() {
             📋 Wave2 Scope (ยังไม่ implement)
           </h3>
           <ul className="text-xs text-blue-700 space-y-1 list-disc list-inside">
-            <li>แก้ไข config values ผ่าน PUT /admin/config</li>
-            <li>Audit log — ใครแก้/เมื่อไหร่/เก่า→ใหม่</li>
-            <li>Maintenance mode toggle</li>
-            <li>Fee matrix management (Platform fee per module)</li>
+            <li>แก้ไขค่าตั้งค่าผ่าน PUT /admin/config</li>
+            <li>บันทึกตรวจสอบ — ใครแก้/เมื่อไหร่/เก่า→ใหม่</li>
+            <li>สลับโหมดปิดปรับปรุงระบบ</li>
+            <li>จัดการตารางค่าธรรมเนียม (ค่าธรรมเนียมแพลตฟอร์มต่อโมดูล)</li>
           </ul>
         </div>
       </main>

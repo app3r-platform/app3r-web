@@ -10,10 +10,10 @@ export default function NotFound() {
   return (
     <NotFoundScreen
       roleTheme={ADMIN_THEME}
-      title="ไม่พบหน้านี้ (Not Found)"
+      title="ไม่พบหน้านี้"
       message="หน้าที่คุณมองหาอาจถูกย้ายหรือลบออกจากระบบ"
       ctaHref="/"
-      ctaLabel="กลับหน้า Dashboard"
+      ctaLabel="กลับหน้าแดชบอร์ด"
     />
   );
 }
