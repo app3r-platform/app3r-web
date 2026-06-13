@@ -130,6 +130,10 @@ export default function TransactionPage() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelRequested, setCancelRequested] = useState(false);
 
+  // U-SHIPPING-TRACK: Seller tracking input
+  const [trackingInput, setTrackingInput] = useState("");
+  const [trackingSubmitted, setTrackingSubmitted] = useState(false);
+
   const load = () => {
     apiFetch(`/api/v1/transactions/${id}`)
       .then(r => r.ok ? r.json() : null)
@@ -333,6 +337,40 @@ export default function TransactionPage() {
           })}
         </div>
       </div>
+
+      {/* U-SHIPPING-TRACK: Seller enter tracking number (in_progress + parcel) */}
+      {tx.status === "in_progress" && isSeller && tx.delivery_method === "parcel" && (
+        <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-5 space-y-3">
+          <p className="text-sm font-semibold text-gray-800">🚚 กรอกเลขติดตามพัสดุ (Tracking)</p>
+          {trackingSubmitted ? (
+            <div className="bg-green-50 border border-green-100 rounded-xl p-3 flex items-center gap-2">
+              <span className="text-green-600">✅</span>
+              <p className="text-xs text-green-700 font-medium">บันทึกเลข Tracking: <span className="font-mono">{trackingInput}</span></p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={trackingInput}
+                  onChange={e => setTrackingInput(e.target.value)}
+                  placeholder="เช่น TH1234567890"
+                  className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+                <button
+                  type="button"
+                  disabled={!trackingInput.trim()}
+                  onClick={() => setTrackingSubmitted(true)}
+                  className="shrink-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-colors"
+                >
+                  บันทึก
+                </button>
+              </div>
+              <p className="text-xs text-gray-400">กรอกเลข Tracking หลังส่งพัสดุให้บริษัทขนส่ง — ผู้ซื้อจะได้รับแจ้ง</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* R6: Seller evidence upload (in_progress) — Mockup FLAG-3 placeholder */}
       {tx.status === "in_progress" && isSeller && (

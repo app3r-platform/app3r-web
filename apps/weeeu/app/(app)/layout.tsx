@@ -91,6 +91,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           <div className="flex-1" />
 
+          {/* 🏅 Member tier badge (U-PROFILE-NAV) */}
+          {(() => {
+            const gold = user?.goldBalance ?? 350;
+            const tier = gold >= 5000 ? "Gold" : "Silver";
+            const tierCls = tier === "Gold" ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-500";
+            const tierIcon = tier === "Gold" ? "🥇" : "💎";
+            return (
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${tierCls} hidden sm:inline-flex items-center gap-0.5`}>
+                {tierIcon} {tier}
+              </span>
+            );
+          })()}
+
           {/* 💎🥇 Point summary chips — ย้ายจากการ์ดใหญ่ใน dashboard มา top-bar (U-01 · แยกประเภท แสดงเฉพาะคงเหลือ) */}
           <Link
             href="/wallet?tab=silver"

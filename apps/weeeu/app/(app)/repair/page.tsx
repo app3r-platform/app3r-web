@@ -96,6 +96,16 @@ const MOCK_LISTINGS: RepairListing[] = [
     issue_summary: "เสียงดังผิดปกติ — คาดว่าคอมเพรสเซอร์เสื่อม",
     status: "open", offer_count: 3, created_at: new Date(Date.now() - 86400000).toISOString(),
   },
+  {
+    id: "listing-002", appliance_name: "เครื่องซักผ้า Panasonic 10kg",
+    issue_summary: "น้ำไม่ระบาย — ท่อตัน / ปั๊มเสีย",
+    status: "matching", offer_count: 1, created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
+  },
+  {
+    id: "listing-003", appliance_name: "ตู้เย็น Hitachi 2 ประตู",
+    issue_summary: "ช่องแช่แข็งไม่แข็ง น้ำแข็งก้อนเล็ก",
+    status: "assigned", offer_count: 5, created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+  },
 ];
 
 const MOCK_JOBS: RepairJob[] = [

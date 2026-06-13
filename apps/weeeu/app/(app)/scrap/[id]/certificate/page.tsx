@@ -1,3 +1,6 @@
+"use client";
+
+import { use, useState } from "react";
 import Link from "next/link";
 import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
 
@@ -8,8 +11,27 @@ const MOCK_CERT = {
   shop: "ร้านรับซากดีเจริญ",
 };
 
-export default async function ScrapCertificatePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function ScrapCertificatePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const [shared, setShared] = useState(false);
+
+  const handleDownload = () => {
+    window.print();
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({
+        title: `ใบรับรอง E-Waste ${MOCK_CERT.number}`,
+        text: `ใบรับรองการทิ้งซาก ${MOCK_CERT.item} — ${MOCK_CERT.date}`,
+        url: window.location.href,
+      }).catch(() => {});
+    } else {
+      await navigator.clipboard.writeText(window.location.href).catch(() => {});
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -66,21 +88,47 @@ export default async function ScrapCertificatePage({ params }: { params: Promise
             </div>
           </div>
 
-          {/* QR placeholder */}
+          {/* QR mockup */}
           <div className="flex justify-center pt-2">
-            <div className="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center">
-              <p className="text-xs text-gray-400 text-center leading-tight">QR<br/>(ตัวอย่าง)</p>
+            <div className="w-24 h-24 bg-white border-2 border-green-300 rounded-xl flex items-center justify-center p-1.5">
+              <svg viewBox="0 0 50 50" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <rect width="50" height="50" fill="white"/>
+                <rect x="2" y="2" width="16" height="16" fill="none" stroke="#16a34a" strokeWidth="2.5"/>
+                <rect x="6" y="6" width="8" height="8" fill="#16a34a"/>
+                <rect x="32" y="2" width="16" height="16" fill="none" stroke="#16a34a" strokeWidth="2.5"/>
+                <rect x="36" y="6" width="8" height="8" fill="#16a34a"/>
+                <rect x="2" y="32" width="16" height="16" fill="none" stroke="#16a34a" strokeWidth="2.5"/>
+                <rect x="6" y="36" width="8" height="8" fill="#16a34a"/>
+                <rect x="22" y="2" width="2" height="2" fill="#16a34a"/>
+                <rect x="26" y="6" width="2" height="2" fill="#16a34a"/>
+                <rect x="24" y="10" width="2" height="2" fill="#16a34a"/>
+                <rect x="28" y="14" width="2" height="2" fill="#16a34a"/>
+                <rect x="22" y="22" width="2" height="2" fill="#16a34a"/>
+                <rect x="26" y="22" width="2" height="2" fill="#16a34a"/>
+                <rect x="30" y="26" width="2" height="2" fill="#16a34a"/>
+                <rect x="34" y="30" width="2" height="2" fill="#16a34a"/>
+                <rect x="38" y="34" width="2" height="2" fill="#16a34a"/>
+                <rect x="22" y="38" width="2" height="2" fill="#16a34a"/>
+                <rect x="26" y="34" width="2" height="2" fill="#16a34a"/>
+              </svg>
             </div>
           </div>
+          <p className="text-[10px] text-gray-400 text-center">สแกน QR เพื่อตรวจสอบใบรับรอง (Mockup)</p>
         </div>
 
         {/* Action buttons */}
         <div className="space-y-3 pt-2">
-          <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
-            ⬇️ ดาวน์โหลด PDF (Mockup)
+          <button
+            onClick={handleDownload}
+            className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+          >
+            ⬇️ ดาวน์โหลด / พิมพ์ (Mockup)
           </button>
-          <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
-            แชร์ใบรับรอง
+          <button
+            onClick={handleShare}
+            className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors"
+          >
+            {shared ? "✅ คัดลอกลิงก์แล้ว" : "แชร์ใบรับรอง"}
           </button>
         </div>
       </div>

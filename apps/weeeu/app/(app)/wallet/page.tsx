@@ -169,12 +169,23 @@ export default function WalletPage() {
           <div className="text-center">
             <p className="text-xs text-weeeu-primary mb-1">PromptPay / โอนผ่านบัญชี</p>
             <p className="text-lg font-bold text-weeeu-text tracking-wider">{PLATFORM_BANK_INFO.promptPayId}</p>
-            {/* QR placeholder — Phase D-2 */}
-            <div className="mt-2 mx-auto w-28 h-28 bg-white border-2 border-weeeu-primary/20 rounded-xl flex flex-col items-center justify-center text-weeeu-primary/40">
-              <p className="text-2xl">📱</p>
-              <p className="text-[10px] mt-0.5">QR Code</p>
-              {/* PHASE-4: Phase D-2 */}
-              <p className="text-[10px]">(เร็วๆ นี้)</p>
+            {/* QR mockup — Phase D-2 (QR จริง = BE prompt-pay generate) */}
+            <div className="mt-2 mx-auto w-28 h-28 bg-white border-2 border-weeeu-primary/20 rounded-xl flex items-center justify-center p-2">
+              <svg viewBox="0 0 50 50" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <rect width="50" height="50" fill="white"/>
+                <rect x="2" y="2" width="16" height="16" fill="none" stroke="#1a7a4a" strokeWidth="2.5"/>
+                <rect x="6" y="6" width="8" height="8" fill="#1a7a4a"/>
+                <rect x="32" y="2" width="16" height="16" fill="none" stroke="#1a7a4a" strokeWidth="2.5"/>
+                <rect x="36" y="6" width="8" height="8" fill="#1a7a4a"/>
+                <rect x="2" y="32" width="16" height="16" fill="none" stroke="#1a7a4a" strokeWidth="2.5"/>
+                <rect x="6" y="36" width="8" height="8" fill="#1a7a4a"/>
+                <rect x="22" y="2" width="2" height="2" fill="#1a7a4a"/><rect x="24" y="6" width="2" height="2" fill="#1a7a4a"/>
+                <rect x="26" y="10" width="2" height="2" fill="#1a7a4a"/><rect x="28" y="14" width="2" height="2" fill="#1a7a4a"/>
+                <rect x="22" y="22" width="2" height="2" fill="#1a7a4a"/><rect x="26" y="22" width="2" height="2" fill="#1a7a4a"/>
+                <rect x="22" y="26" width="2" height="2" fill="#1a7a4a"/><rect x="26" y="30" width="2" height="2" fill="#1a7a4a"/>
+                <rect x="30" y="26" width="2" height="2" fill="#1a7a4a"/><rect x="34" y="30" width="2" height="2" fill="#1a7a4a"/>
+                <rect x="38" y="34" width="2" height="2" fill="#1a7a4a"/><rect x="30" y="38" width="2" height="2" fill="#1a7a4a"/>
+              </svg>
             </div>
           </div>
           <div className="border-t border-weeeu-primary/10 pt-2.5 space-y-1 text-xs">

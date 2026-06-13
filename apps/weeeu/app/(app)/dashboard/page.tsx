@@ -154,6 +154,20 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* 📢 Ad placeholders — 2 การ์ดตามแนว A1 · Phase D-2 feed API จริง */}
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { title: "ล้างแอร์ราคาพิเศษ", sub: "WeeeR ใกล้บ้านคุณ", tag: "🎯 โปรโมชัน", bg: "bg-weeeu-surface", text: "text-weeeu-primary", href: "/maintain/book" },
+          { title: "ขายเครื่องใช้ไฟฟ้า", sub: "เปลี่ยนเครื่องเก่าเป็นเงิน", tag: "💰 รับซื้อ", bg: "bg-green-50", text: "text-green-700", href: "/sell/new" },
+        ].map(ad => (
+          <Link key={ad.title} href={ad.href} className={`rounded-2xl ${ad.bg} border border-gray-100 p-4 hover:shadow-sm transition-shadow`}>
+            <span className={`text-xs font-semibold ${ad.text} bg-white/60 px-2 py-0.5 rounded-full`}>{ad.tag}</span>
+            <p className={`text-sm font-bold ${ad.text} mt-2`}>{ad.title}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{ad.sub}</p>
+          </Link>
+        ))}
+      </div>
+
       {/* สินค้าน่าสนใจ — ใต้กิจกรรมล่าสุด (U-01#3 · เหมือน website · คลิก→รายละเอียดสินค้ามือสอง) */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <div className="flex justify-between items-center mb-4">

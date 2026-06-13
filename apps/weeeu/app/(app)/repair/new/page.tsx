@@ -128,6 +128,7 @@ export default function RepairNewPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [serviceInfoType, setServiceInfoType] = useState<ServiceType | null>(null);
 
   useEffect(() => {
     apiFetch("/api/v1/appliances")
@@ -147,6 +148,16 @@ export default function RepairNewPage() {
     // appliance pre-select from /appliances
     const aid = params.get("appliance");
     if (aid) setForm(f => ({ ...f, appliance_id: aid }));
+    // U-BACK-STATELOSS: restore form from sessionStorage
+    try {
+      const saved = sessionStorage.getItem("repair_new_form");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.form) setForm(f => ({ ...f, ...parsed.form }));
+        if (parsed.serviceType) setServiceType(parsed.serviceType);
+        if (parsed.serviceAddress) setServiceAddress(parsed.serviceAddress);
+      }
+    } catch { /* ignore */ }
   }, []);
 
   // ── D1: DEV mock attach — pre-fill 3 photos so on_site validation passes ──────
@@ -356,21 +367,38 @@ export default function RepairNewPage() {
           <div className="grid grid-cols-2 gap-2">
             {(["on_site", "walk_in", "pickup", "parcel"] as ServiceType[]).map(type => {
               const conf = {
-                on_site: { icon: "🏠", label: "บริการถึงบ้าน",           active: "bg-weeeu-primary border-weeeu-primary text-white" },
-                walk_in: { icon: "🚶", label: "นำไปร้าน",                active: "bg-green-600 border-green-600 text-white" },
-                pickup:  { icon: "🚛", label: "นัดรับ",                  active: "bg-weeeu-primary border-weeeu-primary text-white" },
-                parcel:  { icon: "📦", label: "ส่งพัสดุ",                active: "bg-orange-500 border-orange-500 text-white" },
+                on_site: { icon: "🏠", label: "บริการถึงบ้าน",  info: "ช่างมาที่บ้านคุณ · เหมาะสำหรับเครื่องใหญ่/ติดตั้ง",   active: "bg-weeeu-primary border-weeeu-primary text-white" },
+                walk_in: { icon: "🚶", label: "นำไปร้าน",        info: "นำเครื่องไปซ่อมที่ร้านเอง · ราคาถูกกว่าและเห็นการซ่อม",  active: "bg-green-600 border-green-600 text-white" },
+                pickup:  { icon: "🚛", label: "นัดรับ",           info: "ช่างนัดรับเครื่องที่บ้านและนำกลับมาส่ง",               active: "bg-weeeu-primary border-weeeu-primary text-white" },
+                parcel:  { icon: "📦", label: "ส่งพัสดุ",         info: "ส่งพัสดุไปซ่อม · ประหยัดแต่ใช้เวลานานกว่า",            active: "bg-orange-500 border-orange-500 text-white" },
               }[type];
+              const showInfo = serviceInfoType === type;
               return (
-                <button key={type} type="button"
-                  onClick={() => { setServiceType(type); setErrors({}); }}
-                  className={`py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
-                    serviceType === type ? conf.active : "border-gray-200 text-gray-500 hover:border-gray-300"
-                  }`}
-                >
-                  <span className="text-lg">{conf.icon}</span>
-                  <span className="text-xs text-center leading-tight whitespace-pre-line">{conf.label}</span>
-                </button>
+                <div key={type} className="relative">
+                  <button type="button"
+                    onClick={() => { setServiceType(type); setErrors({}); sessionStorage.setItem("repair_new_form", JSON.stringify({ serviceType: type })); }}
+                    className={`w-full py-3 rounded-xl border text-sm font-medium transition-colors flex flex-col items-center gap-1 ${
+                      serviceType === type ? conf.active : "border-gray-200 text-gray-500 hover:border-gray-300"
+                    }`}
+                  >
+                    <span className="text-lg">{conf.icon}</span>
+                    <span className="text-xs text-center leading-tight whitespace-pre-line">{conf.label}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); setServiceInfoType(showInfo ? null : type); }}
+                    className={`absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors ${serviceType === type ? "bg-white/30 text-white" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}
+                    aria-label={`ข้อมูล ${conf.label}`}
+                  >
+                    ⓘ
+                  </button>
+                  {showInfo && (
+                    <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-gray-800 text-white text-xs rounded-xl px-3 py-2 shadow-lg">
+                      {conf.info}
+                      <button type="button" onClick={() => setServiceInfoType(null)} className="ml-2 text-gray-400 hover:text-white">✕</button>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>

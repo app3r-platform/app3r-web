@@ -15,8 +15,9 @@ export default function PurchaseDisputePage({ params }: { params: Promise<{ id: 
   const [selectedReason, setSelectedReason] = useState("");
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  // D3: dev mock — minimal state for evidence file (UI placeholder only)
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [clipFile, setClipFile] = useState<File | null>(null);
+  const [hasWarranty, setHasWarranty] = useState(false);
 
   // ── D3: DEV mock attach — pre-select reason + attach mock evidence ────────────
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function PurchaseDisputePage({ params }: { params: Promise<{ id: 
     } catch { /* ignore — dev only */ }
   }, []);
 
-  const canSubmit = selectedReason !== "" && !submitted;
+  const canSubmit = selectedReason !== "" && description.trim() !== "" && photoFiles.length >= 3 && !submitted;
 
   const handleSubmit = () => {
     if (!canSubmit) return;
@@ -66,6 +67,15 @@ export default function PurchaseDisputePage({ params }: { params: Promise<{ id: 
           </div>
         ) : (
           <>
+            {/* 7-day rule notice */}
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
+              <span className="text-amber-500 text-lg leading-none">⏱️</span>
+              <div>
+                <p className="text-sm font-semibold text-amber-800">แจ้งปัญหาได้ภายใน 7 วันนับจากรับสินค้า</p>
+                <p className="text-xs text-amber-700 mt-0.5">หลังพ้นกำหนด ระบบจะปล่อยพอยต์ทองให้ผู้ขายอัตโนมัติ</p>
+              </div>
+            </div>
+
             {/* Reason selector */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
               <p className="text-sm font-semibold text-weeeu-dark">เหตุผลที่แจ้งปัญหา</p>
@@ -101,17 +111,66 @@ export default function PurchaseDisputePage({ params }: { params: Promise<{ id: 
               />
             </div>
 
-            {/* Photo upload placeholder */}
-            <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-5 flex flex-col items-center justify-center gap-2">
-              <p className="text-2xl">📎</p>
-              <p className="text-sm text-gray-500 font-medium">แนบรูปหลักฐาน</p>
-              {photoFiles.length > 0
-                ? <p className="text-xs text-weeeu-primary font-medium">✅ {photoFiles.length} ไฟล์ (mock)</p>
-                : <p className="text-xs text-gray-300">รูปภาพสินค้า / หลักฐานปัญหา</p>
-              }
-              <button className="mt-1 border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm px-4 py-2 rounded-xl transition-colors">
-                เลือกรูป
-              </button>
+            {/* Photo upload — ≥3 required */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-weeeu-dark">รูปหลักฐาน <span className="text-red-500">*</span></p>
+                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${photoFiles.length >= 3 ? "bg-green-100 text-green-700" : "bg-red-50 text-red-600"}`}>
+                  {photoFiles.length}/3 ขั้นต่ำ (สูงสุด 5)
+                </span>
+              </div>
+              <label className="flex flex-col items-center gap-2 border-2 border-dashed border-gray-200 rounded-xl p-4 cursor-pointer hover:border-weeeu-primary/40 transition-colors">
+                <span className="text-2xl">📷</span>
+                <p className="text-xs text-gray-500">เลือกรูปสินค้า / หลักฐานปัญหา (JPG/PNG)</p>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => {
+                    const files = Array.from(e.target.files ?? []);
+                    setPhotoFiles(prev => [...prev, ...files].slice(0, 5));
+                    e.target.value = "";
+                  }}
+                />
+                <span className="border border-gray-200 text-gray-600 text-xs px-3 py-1.5 rounded-lg">เลือกรูป</span>
+              </label>
+              {photoFiles.length > 0 && (
+                <p className="text-xs text-weeeu-primary font-medium">✅ {photoFiles.length} ไฟล์แนบแล้ว</p>
+              )}
+              {photoFiles.length < 3 && photoFiles.length > 0 && (
+                <p className="text-xs text-red-500">ต้องแนบอย่างน้อย 3 รูป (เหลืออีก {3 - photoFiles.length} รูป)</p>
+              )}
+            </div>
+
+            {/* Clip / video placeholder */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-2">
+              <p className="text-sm font-semibold text-weeeu-dark">วิดีโอ/คลิปหลักฐาน (ถ้ามี)</p>
+              <label className="flex items-center gap-3 border border-dashed border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-weeeu-primary/40 transition-colors">
+                <span className="text-xl">🎥</span>
+                <div>
+                  <p className="text-xs text-gray-600">แนบคลิปแสดงปัญหา (ไม่บังคับ)</p>
+                  <p className="text-xs text-gray-400">MP4 · สูงสุด 30 วินาที</p>
+                </div>
+                <input type="file" accept="video/*" className="hidden" onChange={e => setClipFile(e.target.files?.[0] ?? null)} />
+              </label>
+              {clipFile && <p className="text-xs text-weeeu-primary">✅ {clipFile.name}</p>}
+            </div>
+
+            {/* Warranty checkbox */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <div
+                  onClick={() => setHasWarranty(v => !v)}
+                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0 ${hasWarranty ? "bg-weeeu-primary border-weeeu-primary" : "border-gray-300"}`}
+                >
+                  {hasWarranty && <span className="text-white text-xs font-bold">✓</span>}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-700">สินค้าอยู่ในช่วงรับประกัน</p>
+                  <p className="text-xs text-gray-400 mt-0.5">เพิ่มน้ำหนักข้อพิพาท — Admin ตรวจสอบกับผู้ขาย</p>
+                </div>
+              </label>
             </div>
 
             {/* Submit button */}

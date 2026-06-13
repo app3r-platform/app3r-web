@@ -59,6 +59,8 @@ export default function SelectShopPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [sortByDist, setSortByDist] = useState(false);
+  const [gpsLoading, setGpsLoading] = useState(false);
 
   useEffect(() => {
     apiFetch("/api/v1/repair/shops?service=walk_in")
@@ -74,10 +76,25 @@ export default function SelectShopPage() {
     );
   };
 
-  const filtered = shops.filter(s =>
-    s.name.toLowerCase().includes(search.toLowerCase()) ||
-    s.address.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleSortByGPS = () => {
+    if (!navigator.geolocation) { setError("เบราว์เซอร์ไม่รองรับ GPS"); return; }
+    setGpsLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      () => { setSortByDist(true); setGpsLoading(false); },
+      () => { setError("ไม่สามารถรับตำแหน่ง GPS ได้"); setGpsLoading(false); },
+      { timeout: 8000 }
+    );
+  };
+
+  const filtered = shops
+    .filter(s =>
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.address.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => sortByDist
+      ? (a.distance_km ?? 999) - (b.distance_km ?? 999)
+      : 0
+    );
 
   if (loading) return <div className="text-center py-16 text-gray-400">กำลังโหลด...</div>;
 
@@ -93,17 +110,29 @@ export default function SelectShopPage() {
         <p className="text-xs text-green-600 mt-1">เลือกร้านที่สะดวก — จะได้รับ Receipt code หลังยืนยันคำขอ</p>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="ค้นหาร้าน หรือที่อยู่..."
-          className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-        />
+      {/* Search + ใกล้ฉัน */}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="ค้นหาร้าน หรือที่อยู่..."
+            className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleSortByGPS}
+          disabled={gpsLoading}
+          className={`shrink-0 flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-medium border transition-colors disabled:opacity-50 ${sortByDist ? "bg-green-600 border-green-600 text-white" : "border-green-300 text-green-700 hover:bg-green-50"}`}
+        >
+          {gpsLoading ? <span className="animate-spin">⟳</span> : "📍"}
+          ใกล้ฉัน
+        </button>
       </div>
+      {sortByDist && <p className="text-xs text-green-600">เรียงตามระยะทางจากตำแหน่งของคุณ</p>}
 
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3">
