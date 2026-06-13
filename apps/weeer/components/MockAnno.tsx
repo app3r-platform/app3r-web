@@ -196,17 +196,23 @@ export function MockAnnoOrigin({ from, screenId }: OriginProps) {
       <div
         className="mock-anno mock-anno-origin"
         style={{
+          // ย้ายจาก inline-flow → fixed มุมบน top-center (เลี่ยงทับ ScreenBadge R-79 แดง top-left)
+          position: "fixed",
+          top: 8,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 60,
           display: "inline-flex",
           alignItems: "center",
           gap: 6,
-          background: "rgba(255,102,58,0.08)",
+          background: "rgba(255,241,237,0.96)",
           border: "1px dashed #FF663A",
           borderRadius: 6,
           padding: "2px 10px",
           fontSize: 11,
           color: "#D63B12",
           fontFamily: "ui-monospace, monospace",
-          marginBottom: 8,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
         }}
       >
         ◀ มาจาก: {ids.join(" | ")}

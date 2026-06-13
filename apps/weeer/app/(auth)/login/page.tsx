@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,12 +9,20 @@ import { loginWithCredentials } from "@/lib/auth-shell";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "" });
+  // MOCKUP prefill — เอาออกตอนต่อ backend จริง
+  const [form, setForm] = useState({ email: "company@example.com", password: "demo1234" });
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [lockout, setLockout] = useState(false);
   const [attempts, setAttempts] = useState(0);
+  const [remember, setRemember] = useState(true);
+
+  // remember-me: อ่านค่าที่ persist ไว้ตอนเปิดหน้า (login ค้างไว้)
+  useEffect(() => {
+    const v = typeof window !== "undefined" ? localStorage.getItem("weeer_remember") : null;
+    if (v !== null) setRemember(v === "1");
+  }, []);
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -30,6 +38,8 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result.ok) {
+      // persist remember-me flag (mock — login ค้างไว้)
+      if (typeof window !== "undefined") localStorage.setItem("weeer_remember", remember ? "1" : "0");
       router.push("/dashboard");
       return;
     }
@@ -101,6 +111,17 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+                disabled={lockout}
+                className="accent-[#FF663A] w-4 h-4"
+              />
+              จดจำการเข้าสู่ระบบ
+            </label>
 
             {error && !lockout && <p className="text-sm text-red-500 text-center">{error}</p>}
 
