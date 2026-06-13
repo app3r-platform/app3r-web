@@ -88,9 +88,48 @@ const products = [
     badgeColor: "bg-green-100 text-green-700",
     desc: "ไมโครเวฟ 25 ลิตร 900W ใช้งานง่าย ทำความสะอาดง่าย",
   },
+  {
+    id: "prod007",
+    name: "พัดลม Panasonic F-MX405",
+    brand: "Panasonic",
+    category: "พัดลม",
+    priceRange: "1,490 – 1,890 บาท",
+    rating: 4.4,
+    reviewCount: 112,
+    emoji: "🌀",
+    badge: "ขายดี",
+    badgeColor: "bg-red-100 text-red-700",
+    desc: "พัดลมตั้งพื้น 16 นิ้ว 3 ระดับความเร็ว ทนทาน ประหยัดไฟ",
+  },
+  {
+    id: "prod008",
+    name: "เครื่องฟอกอากาศ Xiaomi Smart Air Purifier 4",
+    brand: "Xiaomi",
+    category: "เครื่องฟอกอากาศ",
+    priceRange: "4,990 – 5,500 บาท",
+    rating: 4.6,
+    reviewCount: 88,
+    emoji: "🌬️",
+    badge: "แนะนำ",
+    badgeColor: "bg-website-brand-100 text-website-brand-700",
+    desc: "HEPA 13 กรองฝุ่น PM2.5 เชื่อมต่อ WiFi ควบคุมผ่านแอป",
+  },
+  {
+    id: "prod009",
+    name: "เตาอบ Panasonic NN-ST34H",
+    brand: "Panasonic",
+    category: "เตาอบ",
+    priceRange: "3,290 – 3,800 บาท",
+    rating: 4.3,
+    reviewCount: 54,
+    emoji: "🔥",
+    badge: "ราคาดี",
+    badgeColor: "bg-green-100 text-green-700",
+    desc: "ไมโครเวฟพร้อมฟังก์ชันอบด้วยคลื่นความร้อน 25 ลิตร 800W",
+  },
 ];
 
-const categories = ["ทั้งหมด", "แอร์", "เครื่องซักผ้า", "ตู้เย็น", "ทีวี", "เครื่องดูดฝุ่น", "ไมโครเวฟ"];
+const categories = ["ทั้งหมด", "แอร์", "เครื่องซักผ้า", "ตู้เย็น", "ทีวี", "เครื่องดูดฝุ่น", "ไมโครเวฟ", "พัดลม", "เครื่องฟอกอากาศ", "เตาอบ"];
 
 export default function ProductsPage() {
   return (

@@ -14,6 +14,10 @@ export default function ArticlesPage() {
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* §5 mock-anno-origin: มาจาก W-01 HOME (header nav / footer) */}
       <MockAnnoOrigin from="W-01" />
+      {/* W-ADMIN-CMS: บทความดึงจาก mock+CMS — จัดการโดย Admin + BE */}
+      <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-xs text-amber-800">
+        🔒 บทความ (W-15) ดึงจากระบบ CMS อัตโนมัติ — เพิ่ม/แก้ไขโดยผู้ดูแลผ่าน Admin + ระบบหลังบ้านในจังหวะถัดไป
+      </div>
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

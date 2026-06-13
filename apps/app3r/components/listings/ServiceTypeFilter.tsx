@@ -42,7 +42,17 @@ export default function ServiceTypeFilter({
 
   return (
     <div>
-      <div className="text-xs font-medium text-gray-500 mb-2">ประเภทบริการ</div>
+      <div className="flex items-center gap-1 text-xs font-medium text-gray-500 mb-2">
+        ประเภทบริการ
+        <button
+          type="button"
+          title="ประเภทบริการ: ซ่อมทันที (1) = แก้เร่งด่วน · ตรวจวินิจฉัย (2) = หาสาเหตุก่อนซ่อม · บำรุงรักษา (3) = ป้องกันก่อนเสีย"
+          aria-label="อธิบายประเภทบริการ"
+          className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-gray-400 text-[10px] font-bold text-gray-500 hover:bg-gray-100 cursor-help"
+        >
+          ?
+        </button>
+      </div>
       <div className="flex flex-wrap gap-2">
         {/* "ทั้งหมด" button */}
         <button

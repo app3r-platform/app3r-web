@@ -5,7 +5,7 @@
 // ============================================================
 export default function GroupSkeleton() {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
+    <section className="w-full px-4 py-10 border-b border-gray-100">
       <div className="flex items-end justify-between mb-6">
         <div className="space-y-2">
           <div className="h-7 w-64 bg-gray-200 rounded animate-pulse" />

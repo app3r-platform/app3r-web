@@ -35,6 +35,10 @@ export default async function FAQPage() {
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* §5 mock-anno-origin: มาจาก W-01 Footer */}
       <MockAnnoOrigin from="W-01" />
+      {/* W-ADMIN-CMS: เนื้อหา FAQ ดึงจาก CMS ISR — จัดการโดย Admin + BE */}
+      <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-xs text-amber-800">
+        🔒 คำถาม-คำตอบ (W-05) ดึงจากระบบ CMS อัตโนมัติ — เพิ่ม/แก้ไขโดยผู้ดูแลผ่าน Admin + ระบบหลังบ้านในจังหวะถัดไป
+      </div>
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-website-brand-700">หน้าหลัก</Link>

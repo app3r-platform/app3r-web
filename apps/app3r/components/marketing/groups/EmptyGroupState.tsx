@@ -31,7 +31,7 @@ export default function EmptyGroupState({
   isOwner,
 }: EmptyGroupStateProps) {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
+    <section className="w-full px-4 py-10 border-b border-gray-100">
       {/* หัวข้อโมดูล — แยกโมดูลชัดเจนแม้ยังไม่มีรายการ */}
       <div className="flex items-center gap-2 mb-5">
         <span className="text-2xl">{icon}</span>

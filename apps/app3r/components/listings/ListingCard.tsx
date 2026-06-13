@@ -21,7 +21,7 @@ export default function ListingCard({ listing, sponsored }: Props) {
   // Advisor: การ์ดต้องลงลึกระดับตำบล/แขวง ก่อนอำเภอ ก่อนจังหวัด
   const tambon = getMockTambon(listing.id);
   const district = getMockDistrict(listing.id);
-  const { viewCount, offerCount } = getMockEngagement(listing.id, listing.viewCount);
+  const { viewCount, offerCount, remainingDays } = getMockEngagement(listing.id, listing.viewCount);
 
   const href = `/listings/${listing.type}/${listing.id}`;
   const imageUrl = listing.images[0];
@@ -76,7 +76,7 @@ export default function ListingCard({ listing, sponsored }: Props) {
           <span>{listing.postedAt}</span>
         </div>
 
-        {/* Engagement metadata — อำเภอ/ผู้ยื่นข้อเสนอ/ผู้เข้าชม (MOCKUP) */}
+        {/* Engagement metadata — ผู้ยื่นข้อเสนอ/ผู้เข้าชม/วันคงเหลือ (MOCKUP) */}
         <div className="flex items-center gap-3 text-xs text-gray-500">
           <span className="flex items-center gap-1">
             <span aria-hidden>📨</span>
@@ -86,6 +86,12 @@ export default function ListingCard({ listing, sponsored }: Props) {
             <span aria-hidden>👁️</span>
             {viewCount} เข้าชม
           </span>
+          {offerCount === 0 && (
+            <span className="flex items-center gap-1 text-amber-600">
+              <span aria-hidden>⏳</span>
+              {remainingDays} วันคงเหลือ
+            </span>
+          )}
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">

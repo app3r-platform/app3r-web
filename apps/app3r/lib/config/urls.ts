@@ -41,6 +41,10 @@ export const crossAppUrls = {
     login: `${WEEER_BASE}/login`,
     /** หน้าตลาดมือสองฝั่ง WeeeR (ยื่นข้อเสนอซื้อ) — navigate-only mockup */
     resell: `${WEEER_BASE}/resell`,
+    /** หน้าลงขาย/สินค้า WeeeR — deep-link navigate-only */
+    sell: `${WEEER_BASE}/sell`,
+    /** หน้างานซ่อม/บำรุงรักษาที่รับข้อเสนอ — deep-link navigate-only */
+    jobs: `${WEEER_BASE}/jobs`,
   },
   weeet: {
     base: WEEET_BASE,

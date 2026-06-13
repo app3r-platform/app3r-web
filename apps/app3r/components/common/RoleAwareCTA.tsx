@@ -53,16 +53,15 @@ const intentLabel: Record<CTAIntent, string> = {
 };
 
 // ปลายทาง default ตาม role + intent (mockup · deep-link navigate-only — ลิงก์จริง ไม่ dead)
-// intent="interest" (สนใจ/ยื่นข้อเสนอซื้อ) → ส่งไปหน้าซื้อของแต่ละบริการ:
-//   weeeu → /listings (ดู/ซื้อมือสองฝั่ง WeeeU)
-//   weeer → /resell (ตลาดมือสองฝั่ง WeeeR เพื่อยื่นข้อเสนอซื้อ — หน้าจริง · เดิมชี้
-//           /buy-offers/new ที่ยังไม่มี → 404; เปลี่ยนปลายทางจริงเมื่อ BE สร้าง phase ถัดไป)
 function defaultTarget(role: MockRole, intent: CTAIntent): string {
   switch (role) {
     case "weeeu":
       return intent === "interest" ? crossAppUrls.weeeu.listings : WEEEU_URL;
     case "weeer":
-      return intent === "interest" ? crossAppUrls.weeer.resell : WEEER_URL;
+      if (intent === "interest") return crossAppUrls.weeer.resell;
+      if (intent === "sell" || intent === "post-resell") return crossAppUrls.weeer.sell;
+      if (intent === "post-repair") return crossAppUrls.weeer.jobs;
+      return WEEER_URL;
     default:
       return "#";
   }
@@ -105,9 +104,19 @@ export default function RoleAwareCTA({
 
   // anonymous — เสนอทางเลือกสมัคร/เข้าสู่ระบบ (WeeeU vs WeeeR)
   if (effectiveRole === "anonymous") {
-    // WeeeU สมัคร → /signup/email (canonical · เดิมชี้ /register = 404)
-    const weeeuTarget = ov?.target ?? crossAppUrls.weeeu.signup;
-    const weeerTarget = "/register/weeer"; // internal
+    // ถ้า caller กำหนด anonymous override label → render single button (บริบทเฉพาะ เช่น service box)
+    if (ov?.label) {
+      const target = ov.target ?? crossAppUrls.weeeu.signup;
+      const isInternal = target.startsWith("/");
+      return isInternal ? (
+        <Link href={target} className={`${btnClass} ${className}`}>{ov.label}</Link>
+      ) : (
+        <a href={target} className={`${btnClass} ${className}`}>{ov.label}</a>
+      );
+    }
+    // fallback 2-button generic signup
+    const weeeuTarget = crossAppUrls.weeeu.signup;
+    const weeerTarget = "/register/weeer";
     return (
       <div className={`flex flex-col sm:flex-row gap-2 ${className}`}>
         <Link href={weeerTarget} className={primaryBtn}>

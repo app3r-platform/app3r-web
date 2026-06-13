@@ -45,6 +45,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
   // W-2-D (D5): filters ใหม่ 5 อย่าง
   const [applianceType, setApplianceType] = useState(searchParams.get("applianceType") ?? "");
   const [condition, setCondition] = useState(searchParams.get("condition") ?? "");
+  const [deliveryType, setDeliveryType] = useState(searchParams.get("deliveryType") ?? "");
   const [dateFrom, setDateFrom] = useState(searchParams.get("dateFrom") ?? "");
   const [dateTo, setDateTo] = useState(searchParams.get("dateTo") ?? "");
   const [warranty, setWarranty] = useState(searchParams.get("warranty") ?? "all");
@@ -58,6 +59,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
     if (material) params.set("material", material);
     if (applianceType) params.set("applianceType", applianceType);
     if (condition) params.set("condition", condition);
+    if (deliveryType) params.set("deliveryType", deliveryType);
     if (dateFrom) params.set("dateFrom", dateFrom);
     if (dateTo) params.set("dateTo", dateTo);
     if (warranty && warranty !== "all") params.set("warranty", warranty);
@@ -74,6 +76,7 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
     setMaterial("");
     setApplianceType("");
     setCondition("");
+    setDeliveryType("");
     setDateFrom("");
     setDateTo("");
     setWarranty("all");
@@ -218,6 +221,23 @@ export default function FilterSidebar({ mode, baseHref }: FilterSidebarProps) {
             {CONDITIONS.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
             ))}
+          </select>
+        </div>
+      )}
+
+      {/* W-RESELL-SERVICETYPE: ประเภทการรับสินค้า — เฉพาะ resell mode */}
+      {mode === "resell" && (
+        <div>
+          <label className="block text-sm text-gray-700 font-medium mb-2">ประเภทการรับสินค้า</label>
+          <select
+            value={deliveryType}
+            onChange={(e) => setDeliveryType(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-website-brand-500"
+          >
+            <option value="">ทุกประเภท</option>
+            <option value="self-pickup">🏠 ผู้ซื้อมารับเอง</option>
+            <option value="seller-delivery">🚚 ผู้ขายส่งเอง</option>
+            <option value="postal">📦 ส่งไปรษณีย์/ขนส่ง</option>
           </select>
         </div>
       )}

@@ -69,6 +69,7 @@ export default function HomeActionCTA() {
               variant="primary"
               className="flex-1"
               overrides={{
+                anonymous: { label: "🏢 เสนอให้บริการ (ร้าน/บริษัท)", target: "/register/weeer" },
                 weeeu: { label: "🔧 แจ้งงานซ่อม" },
                 weeer: { label: "🔧 ดูงานที่ยื่นข้อเสนอให้บริการซ่อม" },
               }}
@@ -78,6 +79,7 @@ export default function HomeActionCTA() {
               variant="outline"
               className="flex-1"
               overrides={{
+                anonymous: { label: "🛒 แจ้งความต้องการใช้บริการ (ทั่วไป)" },
                 weeeu: { label: "🛡️ แจ้งงานบำรุงรักษา" },
                 weeer: { label: "🛡️ ดูงานบำรุงรักษาที่ประกาศ" },
               }}

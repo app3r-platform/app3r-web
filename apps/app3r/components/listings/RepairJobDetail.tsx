@@ -8,7 +8,7 @@ import TypeBadge from './TypeBadge';
 import LocationMapMock from './LocationMapMock';
 import QnASection from './QnASection';
 import EngagementCounters from './EngagementCounters';
-import { AdSlot, CopyShareButton } from '../common';
+import { AdSlot, CopyShareButton, TermTooltip } from '../common';
 import type { AuthenticatedJobProjection } from '../../lib/types/listings-customer-jobs';
 import { getServiceTypeLabel } from '../../lib/constants/service-types';
 import { getMockEngagement } from '../../lib/mock/listing-engagement';
@@ -93,9 +93,17 @@ export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetai
             </p>
           </div>
 
-          {/* Customer info (Phase D placeholder) */}
+          {/* Customer info — ข้อมูลผู้ลงประกาศ + ลิงก์ประวัติ */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
-            <h2 className="font-semibold text-gray-900">ข้อมูลผู้ลงประกาศ</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-gray-900">ข้อมูลผู้ลงประกาศ</h2>
+              <Link
+                href={`/owners/${job.id}`}
+                className="text-xs text-website-brand-700 hover:underline font-medium"
+              >
+                ดูประวัติ/ความน่าเชื่อถือ →
+              </Link>
+            </div>
             <div className="text-sm text-gray-600 space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-gray-400">ชื่อ:</span>
@@ -138,9 +146,12 @@ export default function RepairJobDetail({ job, isAdmin = false }: RepairJobDetai
             >
               ยื่นข้อเสนอ (เร็วๆ นี้)
             </button>
-            {/* PHASE-4: offer+escrow (Phase D) */}
-            <p className="text-xs text-gray-400 text-center">
-              ระบบยื่น offer และพักเงินกลาง (Escrow) เปิดใช้งานเร็วๆ นี้
+            <p className="text-xs text-gray-400 text-center inline-flex flex-wrap items-center justify-center gap-1">
+              ระบบยื่น
+              <TermTooltip term="offer" />
+              และ
+              <TermTooltip term="escrow" />
+              เปิดใช้งานเร็วๆ นี้
             </p>
           </div>
 

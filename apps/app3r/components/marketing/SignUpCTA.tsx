@@ -27,7 +27,7 @@ export default function SignUpCTA() {
           </Link>
         </div>
         <p className="text-website-brand-300 text-sm">
-          ช่างสมัครผ่านร้านซ่อมที่อนุมัติแล้ว
+          ช่างมืออาชีพ? สมัครเข้าร่วมผ่านร้านซ่อมที่ได้รับการรับรองบน App3R
         </p>
       </div>
     </section>

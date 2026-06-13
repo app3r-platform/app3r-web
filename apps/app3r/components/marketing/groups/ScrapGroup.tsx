@@ -68,7 +68,7 @@ export default async function ScrapGroup() {
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-10 border-b border-gray-100">
+    <section className="w-full px-4 py-10 border-b border-gray-100">
       <div className="flex items-end justify-between mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
