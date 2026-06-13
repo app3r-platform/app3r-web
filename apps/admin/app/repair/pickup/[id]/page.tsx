@@ -122,9 +122,9 @@ const MOCK_PICKUP_DETAIL: PickupJobDetail = {
 };
 
 const OVERRIDE_ACTIONS = [
-  { value: "cancel",   label: "Cancel Job",    desc: "ยกเลิก pickup job" },
-  { value: "reassign", label: "Force Reassign", desc: "มอบหมาย WeeeT ใหม่" },
-  { value: "complete", label: "Force Complete", desc: "ปิดงานโดยไม่ต้องรอ signature" },
+  { value: "cancel",   label: "ยกเลิกงาน",         desc: "ยกเลิกงานรับเครื่อง" },
+  { value: "reassign", label: "บังคับมอบหมายใหม่",  desc: "มอบหมาย WeeeT ใหม่" },
+  { value: "complete", label: "บังคับปิดงาน",       desc: "ปิดงานโดยไม่ต้องรอลายเซ็น" },
 ];
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {

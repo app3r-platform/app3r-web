@@ -144,8 +144,8 @@ export default function RepairJobsPage() {
             onChange={e => { setFilterSource(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 w-48 focus:outline-none focus:border-blue-500">
             <option value="all">ทั้งหมด</option>
-            <option value="customer">ลูกค้า (customer)</option>
-            <option value="purchased_scrap">ซื้อจากซาก (purchased_scrap)</option>
+            <option value="customer">ลูกค้า</option>
+            <option value="purchased_scrap">ซื้อจากซาก</option>
           </select>
           {filterSource !== "all" && (
             <button onClick={() => setFilterSource("all")}

@@ -8,6 +8,9 @@ import { DeleteConfirmDialog } from '@/components/admin-list/DeleteConfirmDialog
 import { useAdminListingsStore } from '@/lib/stores/listings.store'
 import type { ListingRecord } from '@/lib/mocks/listings.seed'
 
+const LISTING_TYPE_LABEL: Record<string, string> = {
+  repair: 'ซ่อม', maintain: 'บำรุงรักษา', resell: 'ขายต่อ', scrap: 'ซาก', parts: 'อะไหล่',
+}
 const STATUS_OPTIONS = [
   { value: 'draft',   label: 'ร่าง' },
   { value: 'active',  label: 'ประกาศอยู่' },
@@ -90,10 +93,10 @@ export default function ListingsPage() {
                     <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
                     <td className="px-4 py-3 max-w-[200px] truncate">{row.title}</td>
                     <td className="px-4 py-3 text-gray-500">{row.sellerName}</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{row.listingType}</td>
+                    <td className="px-4 py-3 text-gray-500 text-xs">{LISTING_TYPE_LABEL[row.listingType] ?? row.listingType}</td>
                     <td className="px-4 py-3">
                       <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                        {row.status}
+                        {STATUS_OPTIONS.find(o => o.value === row.status)?.label ?? row.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">

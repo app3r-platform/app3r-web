@@ -180,7 +180,8 @@ function KindBadge({ kind }: { kind: DeductionKind }) {
 }
 function DimKindBadge({ kind }: { kind: UPDimension["kind"] }) {
   const m = { ENUM: "bg-blue-50 text-blue-700", NUMERIC: "bg-orange-50 text-orange-700", BOOLEAN: "bg-green-50 text-green-700", TEXT: "bg-gray-100 text-gray-600" };
-  return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${m[kind]}`}>{kind}</span>;
+  const l: Record<UPDimension["kind"], string> = { ENUM: "รายการ", NUMERIC: "ตัวเลข", BOOLEAN: "ใช่/ไม่", TEXT: "ข้อความ" };
+  return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${m[kind]}`}>{l[kind]}</span>;
 }
 function DeductionAmountDisplay({ d }: { d: UPDeduction }) {
   if (d.deduction_type === "FIXED")   return <span className="font-mono text-sm">-{d.fixed_amount?.toLocaleString()} ฿</span>;
@@ -321,7 +322,7 @@ function Tab1Categories({ cats, setCats }: { cats: UPCategory[]; setCats: (c: UP
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h3 className="text-base font-semibold text-gray-800 mb-4">{editing ? "แก้ไขประเภท" : "เพิ่มประเภทใหม่"}</h3>
             <div className="space-y-3">
-              {[{ key: "code", label: "Code (ภาษาอังกฤษ, ไม่มีช่องว่าง)" }, { key: "label_th", label: "ชื่อภาษาไทย" }, { key: "label_en", label: "ชื่อภาษาอังกฤษ" }].map(f => (
+              {[{ key: "code", label: "รหัส (ภาษาอังกฤษ, ไม่มีช่องว่าง)" }, { key: "label_th", label: "ชื่อภาษาไทย" }, { key: "label_en", label: "ชื่อภาษาอังกฤษ" }].map(f => (
                 <div key={f.key}>
                   <label className="text-xs font-medium text-gray-600">{f.label}</label>
                   <input value={(form as Record<string, string | number>)[f.key] as string}

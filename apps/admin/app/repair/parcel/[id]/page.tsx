@@ -140,7 +140,7 @@ const DISPUTE_STATUS_META: Record<string, { label: string; color: string }> = {
 
 const PHOTO_TYPE_LABEL: Record<string, string> = {
   packaging:         "บรรจุภัณฑ์",
-  shipping_label:    "Shipping Label",
+  shipping_label:    "ใบปะหน้าพัสดุ",
   received_at_shop:  "รับที่ร้าน",
   return_packaging:  "บรรจุภัณฑ์ขาคืน",
   delivery_proof:    "หลักฐานส่ง",

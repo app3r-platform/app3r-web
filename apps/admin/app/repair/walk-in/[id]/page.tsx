@@ -112,9 +112,9 @@ const MOCK_WALKIN_DETAIL: WalkInJobDetail = {
 };
 
 const OVERRIDE_ACTIONS = [
-  { value: "cancel",  label: "Cancel Job",   desc: "ยกเลิกงาน — คืนค่าใช้จ่ายถ้ามี" },
-  { value: "refund",  label: "Force Refund", desc: "คืนเงินลูกค้า — bypass ขั้นตอนปกติ" },
-  { value: "forfeit", label: "Forfeit",      desc: "ริบเครื่อง / mark abandoned อย่างเป็นทางการ" },
+  { value: "cancel",  label: "ยกเลิกงาน",      desc: "ยกเลิกงาน — คืนค่าใช้จ่ายถ้ามี" },
+  { value: "refund",  label: "บังคับคืนเงิน",   desc: "คืนเงินลูกค้า — ข้ามขั้นตอนปกติ" },
+  { value: "forfeit", label: "ริบเครื่อง",      desc: "ริบเครื่อง / ทำเครื่องหมายว่าถูกทิ้งอย่างเป็นทางการ" },
 ];
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {

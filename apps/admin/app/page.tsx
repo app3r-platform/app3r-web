@@ -159,13 +159,16 @@ function RoleBadge({ role }: { role: string }) {
     weeeu:  "bg-pink-100 text-pink-800",
     weeet:  "bg-orange-100 text-orange-800",
   };
+  const labels: Record<string, string> = {
+    admin: "แอดมิน", weeer: "WeeeR", weeeu: "WeeeU", weeet: "WeeeT",
+  };
   return (
     <span
       className={`px-2 py-0.5 rounded-full text-xs font-medium ${
         colors[role] ?? "bg-gray-100 text-gray-600"
       }`}
     >
-      {role}
+      {labels[role] ?? role}
     </span>
   );
 }

@@ -44,11 +44,22 @@ const MOCK_TRIGGERS: TriggerSetting[] = [
   { key: "silver_reward_review",       label: "รีวิว",             points: 10,  enabled: true  },
   { key: "silver_reward_referral",     label: "แนะนำเพื่อน",       points: 50,  enabled: true  },
   { key: "silver_reward_firsttime",    label: "ครั้งแรก",           points: 20,  enabled: true  },
-  { key: "silver_reward_milestone_5",  label: "Milestone 5 งาน",   points: 100, enabled: true  },
-  { key: "silver_reward_milestone_10", label: "Milestone 10 งาน",  points: 200, enabled: true  },
-  { key: "silver_reward_milestone_20", label: "Milestone 20 งาน",  points: 400, enabled: false },
+  { key: "silver_reward_milestone_5",  label: "ครบ 5 งาน",   points: 100, enabled: true  },
+  { key: "silver_reward_milestone_10", label: "ครบ 10 งาน",  points: 200, enabled: true  },
+  { key: "silver_reward_milestone_20", label: "ครบ 20 งาน",  points: 400, enabled: false },
   { key: "silver_reward_birthday",     label: "วันเกิด",           points: 25,  enabled: true  },
 ];
+const TX_TYPE_LABEL: Record<string, string> = {
+  silver_reward_scrap:       "งานซาก",
+  silver_reward_referral:    "แนะนำเพื่อน",
+  silver_reward_review:      "รีวิว",
+  silver_reward_milestone_5: "ครบ 5 งาน",
+  silver_reward_milestone_10:"ครบ 10 งาน",
+  silver_reward_milestone_20:"ครบ 20 งาน",
+  silver_reward_firsttime:   "ครั้งแรก",
+  silver_reward_birthday:    "วันเกิด",
+  "platform.silver.expired": "หมดอายุ",
+};
 const MOCK_RECENT: RecentTx[] = [
   { id: "STX-1001", user_id: 42,  user_name: "สมชาย มีสุข",    type: "silver_reward_scrap",       amount: 30,   created_at: "2026-06-08T10:15:00Z" },
   { id: "STX-1002", user_id: 87,  user_name: "วิไลวรรณ ทองดี", type: "silver_reward_referral",    amount: 50,   created_at: "2026-06-07T14:30:00Z" },
@@ -309,7 +320,7 @@ export default function SilverPage() {
                         </td>
                         <td className="px-6 py-3">{tx.user_name}</td>
                         <td className="px-6 py-3">
-                          <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">{tx.type}</span>
+                          <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">{TX_TYPE_LABEL[tx.type] ?? tx.type}</span>
                         </td>
                         <td className={`px-6 py-3 text-right font-mono font-semibold ${tx.amount >= 0 ? "text-green-600" : "text-red-600"}`}>
                           {tx.amount >= 0 ? "+" : ""}{tx.amount.toLocaleString()} S

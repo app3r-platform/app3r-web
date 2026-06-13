@@ -30,7 +30,7 @@ const navGroups: NavGroup[] = [
     label: "การเงิน",
     desc: "อนุมัติเติม/ถอน และตรวจสลิป",
     items: [
-      { href: "/topup",                 label: "อนุมัติเติม Point", icon: "💳", desc: "อนุมัติคำขอเติม Point" },
+      { href: "/topup",                 label: "อนุมัติเติมพอยต์", icon: "💳", desc: "อนุมัติคำขอเติมพอยต์" },
       { href: "/withdrawal",            label: "อนุมัติถอนเงิน",    icon: "🏦", desc: "อนุมัติคำขอถอนเงินออกจากระบบ" },
       { href: "/transfers/deposits",    label: "ตรวจสลิปโอนเงิน",  icon: "🧾", desc: "ตรวจสลิปโอนเงินเข้า (Manual)" },
       { href: "/transfers/withdrawals", label: "คำขอถอนเงิน",       icon: "💸", desc: "รายการคำขอถอนเงินรอดำเนินการ" },
@@ -42,18 +42,18 @@ const navGroups: NavGroup[] = [
     desc: "ดุลพอยต์ระดับแพลตฟอร์มและการกระทบยอด",
     items: [
       { href: "/platform/balances",       label: "ยอดคงเหลือแพลตฟอร์ม", icon: "⚖️", desc: "ยอด Gold/Silver/Escrow ของแพลตฟอร์ม" },
-      { href: "/platform/gold-management", label: "จัดการ Gold",         icon: "🥇", desc: "Reserve pool และ fee pools (Gold)" },
-      { href: "/platform/silver",          label: "จัดการ Silver",       icon: "🥈", desc: "Silver Point: trigger/หมดอายุ/ประวัติ" },
+      { href: "/platform/gold-management", label: "จัดการพอยต์ทอง",      icon: "🥇", desc: "Reserve pool และ fee pools (Gold)" },
+      { href: "/platform/silver",          label: "จัดการพอยต์เงิน",     icon: "🥈", desc: "พอยต์เงิน: trigger/หมดอายุ/ประวัติ" },
       { href: "/platform/transactions",    label: "บันทึกตรวจสอบ",       icon: "📋", desc: "Audit trail ธุรกรรมพอยต์ทั้งหมด" },
-      { href: "/platform/reconciliation",  label: "กระทบยอด Point",      icon: "🔍", desc: "ตรวจดุลพอยต์ทอง (Total Minted)" },
-      { href: "/reconciliation",           label: "กระทบยอด Settlement", icon: "⚙️", desc: "ตรวจสอบ settlement worker" },
+      { href: "/platform/reconciliation",  label: "กระทบยอดพอยต์",       icon: "🔍", desc: "ตรวจดุลพอยต์ทอง (Total Minted)" },
+      { href: "/reconciliation",           label: "กระทบยอดชำระบัญชี",   icon: "⚙️", desc: "ตรวจสอบ settlement worker" },
     ],
   },
   {
     label: "พอยต์",
     desc: "บัญชีพอยต์และโปรโมชัน",
     items: [
-      { href: "/points",               label: "บัญชี Point",   icon: "💰", desc: "Ledger รายการเดิน Point" },
+      { href: "/points",               label: "บัญชีพอยต์",   icon: "💰", desc: "รายการเดินพอยต์ (Ledger)" },
       { href: "/points/manual-adjust", label: "ปรับยอดด้วยมือ", icon: "✏️", desc: "Super Admin: ปรับ Gold พร้อม audit log" },
       { href: "/promotions",           label: "โปรโมชัน",        icon: "🎁", desc: "ตั้งค่าโบนัสสมัครและโปรโมชัน" },
     ],
@@ -126,7 +126,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/content",                label: "จัดการเนื้อหา",      icon: "📝", desc: "เนื้อหาหน้าเว็บไซต์สาธารณะ" },
       { href: "/testimonials",           label: "รีวิวลูกค้า",        icon: "⭐", desc: "จัดการรีวิว/คำชมจากลูกค้า" },
-      { href: "/articles",               label: "บทความ (AI Assist)", icon: "✍️", desc: "เขียนบทความด้วยตัวช่วย AI" },
+      { href: "/articles",               label: "บทความ (ผู้ช่วย AI)", icon: "✍️", desc: "เขียนบทความด้วยตัวช่วย AI" },
       { href: "/products",               label: "จัดการสินค้า (C10)", icon: "📦", desc: "สินค้าโชว์เคสบนเว็บไซต์" },
       { href: "/ads",                    label: "โฆษณา (C12)",        icon: "📢", desc: "จัดการแบนเนอร์โฆษณา" },
       { href: "/notifications/download", label: "แจ้งเตือนดาวน์โหลด",  icon: "📲", desc: "แบนเนอร์ชวนดาวน์โหลดแอป" },

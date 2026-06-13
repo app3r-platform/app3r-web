@@ -68,21 +68,21 @@ const LAYER_GUIDE = [
   },
   {
     layer: "L2",
-    label: "ใครเป็นต้นเหตุ (Fault Analysis)",
+    label: "ใครเป็นต้นเหตุ (วิเคราะห์ต้นเหตุ)",
     color: "bg-orange-50 border-l-4 border-orange-400",
     textColor: "text-orange-700",
     desc: "วิเคราะห์ว่า WeeeU / WeeeR / WeeeT / ระบบ เป็นต้นเหตุของปัญหา",
   },
   {
     layer: "L3",
-    label: "Default Rule (คืนลูกค้าเต็ม)",
+    label: "กฎปริยาย (คืนลูกค้าเต็ม)",
     color: "bg-green-50 border-l-4 border-brand-success",
     textColor: "text-green-700",
     desc: "หากไม่สามารถระบุต้นเหตุชัด → Default คืนเงินให้ WeeeU เต็มจำนวนพักเงินกลาง",
   },
   {
     layer: "L4",
-    label: "บันทึก Precedent",
+    label: "บันทึกแนวเทียบ",
     color: "bg-admin-surface border-l-4 border-admin-primary",
     textColor: "text-admin-primary",
     desc: "บันทึกผลตัดสินเป็น precedent สำหรับกรณีคล้ายกันในอนาคต",
@@ -95,22 +95,22 @@ const LAYER_GUIDE = [
 const STATUS_CONFIG: Record<DisputeStatus, { label: string; color: string; dot: string }> = {
   open:       { label: "รับเรื่อง",       color: "bg-blue-50 text-blue-700 border border-blue-200",   dot: "bg-blue-500" },
   in_review:  { label: "กำลังพิจารณา",   color: "bg-yellow-50 text-yellow-700 border border-yellow-200", dot: "bg-yellow-500" },
-  escalated:  { label: "Escalate ✋",     color: "bg-red-50 text-red-700 border border-red-200",       dot: "bg-red-500" },
+  escalated:  { label: "ส่งต่อ ✋",       color: "bg-red-50 text-red-700 border border-red-200",       dot: "bg-red-500" },
   resolved:   { label: "ตัดสินแล้ว ✓",   color: "bg-green-50 text-green-700 border border-green-200", dot: "bg-green-500" },
 };
 
 const SERVICE_BADGE: Record<ServiceType, { label: string; color: string }> = {
-  repair:   { label: "🔧 Repair",   color: "bg-admin-surface text-admin-primary border border-admin-primary/30" },
-  resell:   { label: "🛍️ Resell",   color: "bg-blue-50 text-blue-700 border border-blue-200" },
-  scrap:    { label: "♻️ Scrap",    color: "bg-gray-100 text-gray-600 border border-gray-300" },
-  maintain: { label: "🛁 Maintain", color: "bg-teal-50 text-teal-700 border border-teal-200" },
+  repair:   { label: "🔧 ซ่อม",      color: "bg-admin-surface text-admin-primary border border-admin-primary/30" },
+  resell:   { label: "🛍️ ขายต่อ",    color: "bg-blue-50 text-blue-700 border border-blue-200" },
+  scrap:    { label: "♻️ ซาก",       color: "bg-gray-100 text-gray-600 border border-gray-300" },
+  maintain: { label: "🛁 บำรุงรักษา", color: "bg-teal-50 text-teal-700 border border-teal-200" },
 };
 
 const FAULT_LABEL: Record<string, string> = {
   weeeu:    "👤 WeeeU",
   weeer:    "🏪 WeeeR",
   weeet:    "🔧 WeeeT",
-  platform: "⚙️ Platform",
+  platform: "⚙️ ระบบ",
 };
 
 /* ─────────────────────────────────────────────
@@ -307,7 +307,7 @@ function ResolveModal({ dispute, onClose, onDone }: ResolveModalProps) {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={savePrecedent} onChange={e => setSavePrecedent(e.target.checked)}
                   className="w-4 h-4 accent-[#2C5E8C]" />
-                <span className="text-sm text-gray-700">บันทึกเป็น Precedent สำหรับกรณีนี้</span>
+                <span className="text-sm text-gray-700">บันทึกเป็นแนวเทียบสำหรับกรณีนี้</span>
               </label>
               {savePrecedent && (
                 <textarea value={precedentNote} onChange={e => setPrecedentNote(e.target.value)}
@@ -358,8 +358,9 @@ const MOCK_DISPUTES_DATA: PaginatedDisputes = {
     { id: "DSP-001", service_type: "repair", job_id: "JOB-R-001", title: "ช่างซ่อมไม่ส่งคืนอะไหล่", weeeu_name: "WeeeU ธนา", weeer_name: "ร้านซ่อมดี", escrow_amount: 3500, status: "open", opened_at: "2026-05-20T10:00:00Z" },
     { id: "DSP-002", service_type: "resell", listing_id: "LST-001", title: "สินค้าไม่ตรงกับรูป", buyer_name: "WeeeU สมใจ", seller_name: "ร้านไอที", escrow_amount: 12000, status: "in_review", opened_at: "2026-05-18T09:00:00Z" },
     { id: "DSP-003", service_type: "scrap", listing_id: "LST-002", title: "น้ำหนักซากไม่ตรง", weeeu_name: "WeeeU กิตติ", weeer_name: "WeeeR ซากดี", escrow_amount: 800, status: "resolved", opened_at: "2026-05-10T08:00:00Z", resolved_at: "2026-05-15T14:00:00Z", fault_party: "platform" },
+    { id: "DSP-004", service_type: "maintain", job_id: "JOB-M-001", title: "ล้างแอร์ไม่สะอาด — น้ำรั่วหลังบริการ", weeeu_name: "WeeeU ปรียา", weeer_name: "ร้านบำรุงรักษาดี", escrow_amount: 1500, status: "in_review", opened_at: "2026-05-22T11:00:00Z" },
   ],
-  total: 3, page: 1, limit: 20,
+  total: 4, page: 1, limit: 20,
 };
 
 /* ─────────────────────────────────────────────
@@ -417,8 +418,8 @@ export default function DisputesPage() {
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">⚖️ ข้อพิพาท (Disputes)</h1>
-            <p className="text-sm text-gray-500 mt-1">จัดการข้อพิพาทโดยใช้ 4-Layer Decision Framework</p>
+            <h1 className="text-2xl font-bold text-gray-900">⚖️ ข้อพิพาท</h1>
+            <p className="text-sm text-gray-500 mt-1">จัดการข้อพิพาทโดยใช้กรอบตัดสิน 4 ชั้น</p>
           </div>
           <div className="flex gap-3">
             <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-center shadow-sm">
@@ -502,7 +503,7 @@ export default function DisputesPage() {
                         <p className="font-medium text-gray-900 line-clamp-1">{d.title}</p>
                         <p className="text-xs text-gray-400 font-mono mt-0.5">{d.id.slice(0, 8)}…</p>
                         {d.precedent_id && (
-                          <span className="text-xs text-admin-primary">📌 Precedent</span>
+                          <span className="text-xs text-admin-primary">📌 แนวเทียบ</span>
                         )}
                       </td>
                       <td className="px-4 py-3">
@@ -548,7 +549,7 @@ export default function DisputesPage() {
                           {d.service_type === "repair" && d.job_id && (
                             <Link href={`/repair/jobs/${d.job_id}`}
                               className="text-xs px-2 py-1 bg-admin-surface text-admin-primary rounded-lg hover:bg-admin-primary/20 transition-colors">
-                              Job →
+                              งาน →
                             </Link>
                           )}
                           {d.status !== "resolved" && superAdmin && (

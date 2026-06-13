@@ -207,7 +207,7 @@ export default function ReconciliationPage() {
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
                           h.status === "BALANCED" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
                         }`}>
-                          {h.status}
+                          {h.status === "BALANCED" ? "สมดุล" : h.status === "DISCREPANCY" ? "ไม่สอดคล้อง" : "รอกระทบยอด"}
                         </span>
                       </td>
                       <td className={`px-6 py-3 text-right font-mono text-xs ${h.difference === 0 ? "text-gray-500" : "text-red-600 font-bold"}`}>

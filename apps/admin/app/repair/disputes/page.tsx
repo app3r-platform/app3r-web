@@ -82,7 +82,7 @@ const DISPUTE_STATUS: Record<string, { label: string; color: string }> = {
   open:       { label: "เปิด",         color: "bg-red-50 text-red-700" },
   in_review:  { label: "กำลังตรวจ",   color: "bg-yellow-50 text-yellow-700" },
   resolved:   { label: "แก้ไขแล้ว",   color: "bg-green-50 text-green-700" },
-  escalated:  { label: "Escalated",    color: "bg-orange-50 text-orange-700" },
+  escalated:  { label: "ส่งต่อแล้ว",   color: "bg-orange-50 text-orange-700" },
 };
 
 const PAGE_SIZE = 20;
@@ -150,7 +150,7 @@ export default function RepairDisputesPage() {
             { label: "ทั้งหมด", value: "" },
             { label: "เปิด", value: "open" },
             { label: "กำลังตรวจ", value: "in_review" },
-            { label: "Escalated", value: "escalated" },
+            { label: "ส่งต่อแล้ว", value: "escalated" },
             { label: "แก้ไขแล้ว", value: "resolved" },
           ].map(f => (
             <button key={f.value}

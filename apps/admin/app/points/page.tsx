@@ -14,6 +14,10 @@ import { DeleteConfirmDialog } from '@/components/admin-list/DeleteConfirmDialog
 import { useAdminPointsStore } from '@/lib/stores/points.store'
 import type { PointRecord } from '@/lib/mocks/points.seed'
 
+const TYPE_LABELS: Record<string, string> = {
+  gold: 'พอยต์ทอง', silver: 'พอยต์เงิน',
+  topup: 'เติมพอยต์', withdraw: 'ถอนพอยต์', adjust: 'ปรับยอด', transfer: 'โอน',
+}
 const STATUS_OPTIONS = [
   { value: 'pending',   label: 'รอดำเนินการ' },
   { value: 'completed', label: 'เสร็จแล้ว' },
@@ -47,7 +51,7 @@ export default function PointsPage() {
       <Sidebar />
       <main className="flex-1 min-w-0">
         <AdminListPage
-          title="ธุรกรรม Point"
+          title="ธุรกรรมพอยต์"
           totalCount={items.length}
           page={pagination.page}
           pageSize={pagination.pageSize}
@@ -94,13 +98,13 @@ export default function PointsPage() {
                   >
                     <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
                     <td className="px-4 py-3">{row.userName}</td>
-                    <td className="px-4 py-3 text-xs text-gray-500">{row.type}</td>
+                    <td className="px-4 py-3 text-xs text-gray-500">{TYPE_LABELS[row.type] ?? row.type}</td>
                     <td className="px-4 py-3 text-right font-mono">
                       {row.amount.toLocaleString()}
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                        {row.status}
+                        {STATUS_OPTIONS.find(o => o.value === row.status)?.label ?? row.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">

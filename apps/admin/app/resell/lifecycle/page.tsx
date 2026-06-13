@@ -22,27 +22,27 @@ interface LifecycleConfig {
 /* ─── Mock config — D14 per-module ─── */
 const MOCK_LIFECYCLE: LifecycleConfig[] = [
   {
-    module: "repair", label: "Repair", icon: "🔧",
+    module: "repair", label: "ซ่อม", icon: "🔧",
     listing_days: 30, offer_window_hrs: 48, inspection_hrs: 0, escrow_lock_hrs: 24,
     suspended: false,
   },
   {
-    module: "maintain", label: "Maintain", icon: "🛁",
+    module: "maintain", label: "บำรุงรักษา", icon: "🛁",
     listing_days: 60, offer_window_hrs: 72, inspection_hrs: 0, escrow_lock_hrs: 24,
     suspended: false,
   },
   {
-    module: "resell", label: "Resell", icon: "🔄",
+    module: "resell", label: "ขายต่อ", icon: "🔄",
     listing_days: 45, offer_window_hrs: 24, inspection_hrs: 48, escrow_lock_hrs: 24,
     suspended: false,
   },
   {
-    module: "scrap", label: "Scrap", icon: "♻️",
+    module: "scrap", label: "ซาก", icon: "♻️",
     listing_days: 14, offer_window_hrs: 24, inspection_hrs: 0, escrow_lock_hrs: 12,
     suspended: true, suspended_reason: "R2 — โมดูล Scrap อยู่ระหว่างพัฒนา", // PHASE-4: Phase E
   },
   {
-    module: "parts", label: "Parts (อะไหล่)", icon: "⚙️",
+    module: "parts", label: "อะไหล่", icon: "⚙️",
     listing_days: 30, offer_window_hrs: 48, inspection_hrs: 24, escrow_lock_hrs: 24,
     suspended: true, suspended_reason: "R3 — โมดูล Parts/D81 อยู่ระหว่างพัฒนา", // PHASE-4: Phase E
   },
@@ -166,8 +166,8 @@ export default function ResellLifecyclePage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {[
                     { label: "อายุประกาศ",       value: `${cfg.listing_days} วัน`,    icon: "📅" },
-                    { label: "Offer Window",      value: `${cfg.offer_window_hrs} ชม.`, icon: "📨" },
-                    { label: "Inspection Period", value: cfg.inspection_hrs > 0 ? `${cfg.inspection_hrs} ชม.` : "—", icon: "🔍" },
+                    { label: "ช่วงรับข้อเสนอ",     value: `${cfg.offer_window_hrs} ชม.`, icon: "📨" },
+                    { label: "ช่วงตรวจรับ",        value: cfg.inspection_hrs > 0 ? `${cfg.inspection_hrs} ชม.` : "—", icon: "🔍" },
                     { label: "พักเงินกลาง Lock",  value: `${cfg.escrow_lock_hrs} ชม.`, icon: "🔒" },
                   ].map(item => (
                     <div key={item.label} className="bg-white rounded-lg border border-gray-200 p-3 text-center">

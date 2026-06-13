@@ -100,7 +100,7 @@ export default function ContentPage() {
                     <td className="px-4 py-3 text-gray-500">{row.author}</td>
                     <td className="px-4 py-3">
                       <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                        {row.status}
+                        {STATUS_OPTIONS.find(o => o.value === row.status)?.label ?? row.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">
