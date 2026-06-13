@@ -5,27 +5,31 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-// U-34 — รูปจริง (mockup placeholder photo · pattern เดียวกับ marketplace · รูปสินค้าจริง = BE/upload)
+// U-34 — รูปจริง + category (filter) + offerCount (จำนวนผู้ยื่นข้อเสนอ)
 const appliances = [
   {
     id: "1", icon: "❄️", image: "https://picsum.photos/seed/weeeu-air-bedroom/200/200", name: "แอร์ห้องนอน", brand: "Mitsubishi Electric",
     model: "MSY-GN13VF", capacity: "13,000 BTU", installDate: "ม.ค. 65",
     status: "ปกติ", statusColor: "text-green-600 bg-green-50",
+    category: "แอร์", offerCount: 0,
   },
   {
     id: "2", icon: "❄️", image: "https://picsum.photos/seed/weeeu-air-guest/200/200", name: "แอร์ห้องแขก", brand: "Daikin",
     model: "FTKQ25SV2S", capacity: "9,000 BTU", installDate: "มี.ค. 66",
     status: "แจ้งซ่อมแล้ว", statusColor: "text-orange-600 bg-orange-50",
+    category: "แอร์", offerCount: 0,
   },
   {
     id: "3", icon: "🫧", image: "https://picsum.photos/seed/weeeu-washer-lg/200/200", name: "เครื่องซักผ้า", brand: "LG",
     model: "T2108VSAM", capacity: "8 KG", installDate: "ก.พ. 64",
     status: "ปกติ", statusColor: "text-green-600 bg-green-50",
+    category: "เครื่องซักผ้า", offerCount: 0,
   },
   {
     id: "4", icon: "🧊", image: "https://picsum.photos/seed/weeeu-fridge-sharp/200/200", name: "ตู้เย็น Sharp", brand: "Sharp",
     model: "SJ-X420TP-SL", capacity: "420 ลิตร", installDate: "ธ.ค. 63",
     status: "ประกาศขาย", statusColor: "text-weeeu-primary bg-weeeu-surface",
+    category: "ตู้เย็น", offerCount: 2,
   },
 ];
 
@@ -36,6 +40,7 @@ export default function AppliancesPage() {
   const [deleteTarget, setDeleteTarget] = useState<Appliance | null>(null);
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
   const [toastMsg, setToastMsg] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
   if (!mounted) return null;
@@ -51,7 +56,10 @@ export default function AppliancesPage() {
     showToast(`ลบ "${app.name}" แล้ว (Mockup)`);
   };
 
-  const visible = appliances.filter(a => !deletedIds.has(a.id));
+  const visible = appliances.filter(a =>
+    !deletedIds.has(a.id) &&
+    (!categoryFilter || categoryFilter === "ทุกประเภท" || a.category === categoryFilter)
+  );
 
   return (
     <div className="space-y-6">
@@ -95,12 +103,16 @@ export default function AppliancesPage() {
           placeholder="ค้นหาเครื่องใช้ไฟฟ้า..."
           className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
         />
-        <select className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30">
-          <option>ทุกประเภท</option>
-          <option>แอร์</option>
-          <option>ตู้เย็น</option>
-          <option>เครื่องซักผ้า</option>
-          <option>อื่นๆ</option>
+        <select
+          value={categoryFilter}
+          onChange={e => setCategoryFilter(e.target.value)}
+          className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
+        >
+          <option value="">ทุกประเภท</option>
+          <option value="แอร์">แอร์</option>
+          <option value="ตู้เย็น">ตู้เย็น</option>
+          <option value="เครื่องซักผ้า">เครื่องซักผ้า</option>
+          <option value="อื่นๆ">อื่นๆ</option>
         </select>
       </div>
 
@@ -140,7 +152,7 @@ export default function AppliancesPage() {
               </div>
 
               {/* Actions — FIX-3: มี href + onClick */}
-              <div className="flex gap-2 mt-3 flex-wrap">
+              <div className="flex gap-2 mt-3 flex-wrap items-center">
                 <Link
                   href={`/repair/new?appliance=${app.id}`}
                   className="text-xs px-3 py-1.5 border border-weeeu-primary/30 text-weeeu-primary hover:bg-weeeu-surface rounded-lg transition-colors"
@@ -165,7 +177,15 @@ export default function AppliancesPage() {
                 >
                   🗑️ ลบ
                 </button>
+                {app.offerCount > 0 && (
+                  <span className="text-xs text-weeeu-primary font-medium ml-1">
+                    👥 {app.offerCount} ข้อเสนอ
+                  </span>
+                )}
               </div>
+              <p className="text-[10px] text-gray-300 mt-2">
+                แก้ไขได้จนกว่าจะมีผู้ยื่นข้อเสนอ · ลบได้เมื่อไม่มีงานค้าง
+              </p>
             </div>
           </div>
         ))}

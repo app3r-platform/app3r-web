@@ -89,6 +89,8 @@ export default function ListingsPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [page, setPage] = useState(1);
+  const [province, setProvince] = useState("");
+  const [deliveryFilter, setDeliveryFilter] = useState("");
 
   const load = (p = 1) => {
     setLoading(true);
@@ -185,6 +187,33 @@ export default function ListingsPage() {
         </button>
       </div>
 
+      {/* Province + delivery method filters */}
+      <div className="flex gap-2">
+        <select
+          value={province}
+          onChange={e => setProvince(e.target.value)}
+          className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+        >
+          <option value="">ทุกจังหวัด</option>
+          <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+          <option value="นนทบุรี">นนทบุรี</option>
+          <option value="ปทุมธานี">ปทุมธานี</option>
+          <option value="สมุทรปราการ">สมุทรปราการ</option>
+          <option value="เชียงใหม่">เชียงใหม่</option>
+          <option value="อุบลราชธานี">อุบลราชธานี</option>
+          <option value="ขอนแก่น">ขอนแก่น</option>
+        </select>
+        <select
+          value={deliveryFilter}
+          onChange={e => setDeliveryFilter(e.target.value)}
+          className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+        >
+          <option value="">ทุกวิธีจัดส่ง</option>
+          <option value="parcel">🚚 ส่งพัสดุ</option>
+          <option value="on_site">🏠 รับที่บ้าน / On-site</option>
+        </select>
+      </div>
+
       {loading ? (
         <div className="text-center py-12 text-gray-400">กำลังโหลด...</div>
       ) : filtered.length === 0 ? (
@@ -196,8 +225,10 @@ export default function ListingsPage() {
       ) : (
         <>
           <p className="text-xs text-gray-400">{total} รายการ</p>
-          <div className="space-y-3">
-            {filtered.map(l => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {filtered.filter(l =>
+              (!deliveryFilter || l.deliveryMethods.includes(deliveryFilter))
+            ).map(l => (
               <Link
                 key={l.id}
                 href={`/listings/${l.id}`}

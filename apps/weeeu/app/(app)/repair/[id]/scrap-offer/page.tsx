@@ -158,7 +158,7 @@ export default function RepairScrapOfferPage({
 
         {/* CTA */}
         <div className="space-y-2 pt-2">
-          <Link href={`/scrap/new`}>
+          <Link href={selected ? (MOCK_SCRAP_OFFERS.find(o => o.id === selected)?.type === "buy" ? `/scrap/new?price=${MOCK_SCRAP_OFFERS.find(o => o.id === selected)?.price ?? 0}` : "/scrap/new") : "/scrap/new"}>
             <button
               disabled={!selected}
               className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"

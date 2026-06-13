@@ -94,6 +94,10 @@ export default function SellNewPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  // U-SELL-FORM: GPS pickup coords
+  const [pickupCoords, setPickupCoords] = useState("");
+  const [gpsPickupLoading, setGpsPickupLoading] = useState(false);
+
   // #2 ค่าลงประกาศ — เลือกชนิดพอยต์จ่าย (used_appliance) · scrap = ฟรี
   const [feePointType, setFeePointType] = useState<"gold" | "silver">("silver");
   // #5 OTP ประกาศ
@@ -483,6 +487,44 @@ export default function SellNewPage() {
           ))}
         </div>
       </div>
+
+      {/* U-SELL-FORM: GPS สถานที่รับสินค้า (on_site / นัดส่ง) */}
+      {deliveryMethods.includes("on_site") && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">📍 พิกัดสถานที่รับสินค้า</p>
+          <p className="text-xs text-gray-400">ใช้สำหรับผู้ซื้อนัดรับ / ส่งเอง (on_site)</p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={pickupCoords}
+              onChange={e => setPickupCoords(e.target.value)}
+              placeholder="เช่น 13.7563, 100.5018"
+              className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
+            />
+            <button
+              type="button"
+              disabled={gpsPickupLoading}
+              onClick={() => {
+                if (!navigator.geolocation) return;
+                setGpsPickupLoading(true);
+                navigator.geolocation.getCurrentPosition(
+                  (pos) => {
+                    setPickupCoords(`${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`);
+                    setGpsPickupLoading(false);
+                  },
+                  () => setGpsPickupLoading(false),
+                  { timeout: 8000 }
+                );
+              }}
+              className="shrink-0 flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-medium border border-weeeu-primary/40 text-weeeu-primary hover:bg-weeeu-surface transition-colors disabled:opacity-50"
+            >
+              {gpsPickupLoading ? <span className="animate-spin">⟳</span> : "📍"}
+              GPS
+            </button>
+          </div>
+          {pickupCoords && <p className="text-xs text-weeeu-primary">✅ พิกัด: {pickupCoords}</p>}
+        </div>
+      )}
 
       {/* เช็คลิสต์ อุปกรณ์ที่แถมมา — used_appliance only (A3 แทน warranty-months ซ้ำ) */}
       {listingType === "used_appliance" && (

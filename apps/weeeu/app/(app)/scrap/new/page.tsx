@@ -45,7 +45,7 @@ function NewScrapForm() {
     repairData ? repairData.diagnosis : ""
   );
   const [price, setPrice] = useState(
-    repairData ? String(repairData.weeetAssessedPrice) : ""
+    repairData ? String(repairData.weeetAssessedPrice) : "200"
   );
   const [grade, setGrade] = useState(
     repairData ? repairData.grade : "grade_B" as "grade_A" | "grade_B" | "grade_C"
@@ -53,8 +53,24 @@ function NewScrapForm() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  // U-SCRAP-SELECT: saved appliance pre-select
+  const MOCK_MY_APPLIANCES = [
+    { id: "", name: "— ไม่ระบุเครื่อง / ป้อนเอง —" },
+    { id: "my-ap-001", name: "ตู้เย็น Samsung 2 ประตู 14 คิว" },
+    { id: "my-ap-002", name: "แอร์ Mitsubishi 12000 BTU" },
+    { id: "my-ap-003", name: "เครื่องซักผ้า LG 8 กก." },
+  ];
+  const [selectedAppliance, setSelectedAppliance] = useState("");
+
+  // U-SCRAP-SELECT: photo files (required ≥1)
+  const [scrapPhotos, setScrapPhotos] = useState<File[]>([]);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (scrapPhotos.length === 0) {
+      alert("กรุณาแนบรูปซากอย่างน้อย 1 รูป");
+      return;
+    }
     setSubmitting(true);
     setTimeout(() => {
       alert("✅ ประกาศซากเรียบร้อย — ระบบจะแจ้งเตือนเมื่อมีร้านยื่นข้อเสนอ");
@@ -108,6 +124,21 @@ function NewScrapForm() {
       )}
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-5">
+
+        {/* U-SCRAP-SELECT: เลือกเครื่องจากรายการของฉัน */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">เลือกเครื่องใช้ไฟฟ้า (จากรายการของฉัน)</label>
+          <select
+            value={selectedAppliance}
+            onChange={e => setSelectedAppliance(e.target.value)}
+            className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-green-400"
+          >
+            {MOCK_MY_APPLIANCES.map(a => (
+              <option key={a.id} value={a.id}>{a.name}</option>
+            ))}
+          </select>
+          <p className="text-[10px] text-gray-400 mt-1">เลือกจากเครื่องที่ลงทะเบียนไว้ หรือป้อนเองในช่องรายละเอียด (จริง = BE)</p>
+        </div>
 
         {/* ประเภท: ขาย / ทิ้ง */}
         <div>
@@ -202,6 +233,27 @@ function NewScrapForm() {
           </div>
         )}
 
+        {/* U-SCRAP-SELECT: price slider (sell only) */}
+        {listingType === "sell" && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              ปรับราคาด้วย Slider (พอยต์ทอง)
+            </label>
+            <input
+              type="range"
+              min={50}
+              max={5000}
+              step={50}
+              value={Number(price) || 200}
+              onChange={e => setPrice(e.target.value)}
+              className="w-full accent-green-600"
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>50</span><span className="text-green-700 font-semibold">{Number(price) || 200} พอยต์ทอง</span><span>5,000</span>
+            </div>
+          </div>
+        )}
+
         {/* หมายเหตุ */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">หมายเหตุเพิ่มเติม (ไม่บังคับ)</label>
@@ -214,29 +266,47 @@ function NewScrapForm() {
           />
         </div>
 
-        {/* Upload photos placeholder */}
+        {/* U-SCRAP-SELECT: รูปภาพซาก (บังคับ ≥1) */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">รูปภาพ</label>
-          {repairData?.photos && repairData.photos.length > 0 ? (
-            <div className="space-y-1">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            รูปภาพซาก <span className="text-red-500">*</span>
+            <span className="ml-1 text-xs font-normal text-gray-400">(บังคับอย่างน้อย 1 รูป)</span>
+          </label>
+          {repairData?.photos && repairData.photos.length > 0 && (
+            <div className="space-y-1 mb-2">
               <p className="text-xs text-orange-500">📷 รูปจากงานซ่อม (ใช้ได้ทันที)</p>
               <div className="flex gap-2 flex-wrap">
-                {repairData.photos.map((url, i) => (
+                {repairData.photos.map((_, i) => (
                   <div key={i} className="w-16 h-16 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-400 text-xs">
                     📷 {i + 1}
                   </div>
                 ))}
-                <div className="w-16 h-16 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs cursor-pointer hover:bg-gray-100">
-                  ➕
-                </div>
               </div>
             </div>
-          ) : (
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
-              <p className="text-3xl mb-2">📷</p>
-              <p className="text-sm text-gray-500">คลิกเพื่อเพิ่มรูปภาพ</p>
-              <p className="text-xs text-gray-400 mt-1">รองรับ JPG/PNG · สูงสุด 5 รูป</p>
-            </div>
+          )}
+          <label className="block border-2 border-dashed border-gray-300 rounded-xl p-5 text-center cursor-pointer hover:border-green-400 hover:bg-green-50 transition-colors">
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={e => {
+                const files = Array.from(e.target.files ?? []).slice(0, 5);
+                setScrapPhotos(files);
+              }}
+            />
+            <p className="text-2xl mb-1">📷</p>
+            {scrapPhotos.length > 0 ? (
+              <p className="text-sm text-green-700 font-medium">✅ เลือกแล้ว {scrapPhotos.length} รูป</p>
+            ) : (
+              <>
+                <p className="text-sm text-gray-500">แตะเพื่อเพิ่มรูปภาพ</p>
+                <p className="text-xs text-gray-400 mt-0.5">JPG/PNG · สูงสุด 5 รูป · บังคับ ≥1</p>
+              </>
+            )}
+          </label>
+          {scrapPhotos.length === 0 && (
+            <p className="text-xs text-red-500 mt-1">กรุณาแนบรูปซากอย่างน้อย 1 รูป</p>
           )}
         </div>
 

@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
 
-type ApplianceType = "AC" | "WashingMachine";
-type CleaningType = "general" | "deep" | "sanitize";
-type RecurringInterval = "3_months" | "6_months" | "12_months";
-
-const APPLIANCE_OPTIONS: { value: ApplianceType; label: string; icon: string }[] = [
-  { value: "AC", label: "แอร์", icon: "🌡️" },
-  { value: "WashingMachine", label: "เครื่องซักผ้า", icon: "🫧" },
+// U-MAINTAIN-APPLIANCE: เปลี่ยนจากประเภทคงที่ → checklist เครื่องของผู้ใช้จริง
+// ตัด "นัดซ้ำอัตโนมัติ" → เพิ่ม "แจ้งเตือนปีถัดไป"
+const MOCK_USER_APPLIANCES = [
+  { id: "1", icon: "❄️", name: "แอร์ห้องนอน", brand: "Mitsubishi Electric", category: "แอร์" },
+  { id: "2", icon: "❄️", name: "แอร์ห้องแขก", brand: "Daikin", category: "แอร์" },
+  { id: "3", icon: "🫧", name: "เครื่องซักผ้า", brand: "LG", category: "เครื่องซักผ้า" },
+  { id: "4", icon: "🧊", name: "ตู้เย็น Sharp", brand: "Sharp", category: "ตู้เย็น" },
 ];
+
+type CleaningType = "general" | "deep" | "sanitize";
 
 const CLEANING_OPTIONS: { value: CleaningType; label: string; icon: string; desc: string }[] = [
   { value: "general", label: "ล้างทั่วไป", icon: "🧼", desc: "ล้างทำความสะอาดปกติ 2 ชม." },
@@ -21,23 +23,16 @@ const CLEANING_OPTIONS: { value: CleaningType; label: string; icon: string; desc
   { value: "sanitize", label: "ล้าง+ฆ่าเชื้อ", icon: "🦠", desc: "ล้างลึก + สเปรย์ฆ่าเชื้อโรค 4 ชม." },
 ];
 
-const RECURRING_OPTIONS: { value: RecurringInterval; label: string }[] = [
-  { value: "3_months", label: "ทุก 3 เดือน" },
-  { value: "6_months", label: "ทุก 6 เดือน" },
-  { value: "12_months", label: "ทุกปี (12 เดือน)" },
-];
-
 export default function MaintainBookPage() {
   const router = useRouter();
-  const [applianceType, setApplianceType] = useState<ApplianceType>("AC");
+  const [selectedAppliances, setSelectedAppliances] = useState<string[]>([]);
   const [cleaningType, setCleaningType] = useState<CleaningType>("general");
   const [scheduledAt, setScheduledAt] = useState("");
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [gpsLoading, setGpsLoading] = useState(false);
-  const [recurringEnabled, setRecurringEnabled] = useState(false);
-  const [recurringInterval, setRecurringInterval] = useState<RecurringInterval>("3_months");
+  const [notifyNextYear, setNotifyNextYear] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [mockBooked, setMockBooked] = useState(false);
@@ -48,6 +43,13 @@ export default function MaintainBookPage() {
 
   const clearErr = (key: string) =>
     setErrors(e => { const c = { ...e }; delete c[key]; return c; });
+
+  const toggleAppliance = (id: string) => {
+    setSelectedAppliances(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+    clearErr("appliances");
+  };
 
   const handleGPS = () => {
     if (!navigator.geolocation) { setErrors(e => ({ ...e, address: "เบราว์เซอร์ไม่รองรับ GPS" })); return; }
@@ -66,6 +68,7 @@ export default function MaintainBookPage() {
 
   const validate = () => {
     const e: Record<string, string> = {};
+    if (selectedAppliances.length === 0) e.appliances = "กรุณาเลือกเครื่องใช้ไฟฟ้าอย่างน้อย 1 รายการ";
     if (!scheduledAt) e.scheduledAt = "กรุณาเลือกวันและเวลานัด";
     if (!address.trim()) e.address = "กรุณาระบุที่อยู่";
     return e;
@@ -82,18 +85,17 @@ export default function MaintainBookPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          applianceType,
+          selectedAppliances,
           cleaningType,
           scheduledAt: new Date(scheduledAt).toISOString(),
           address: { lat: lat ?? 0, lng: lng ?? 0, address: address.trim() },
-          ...(recurringEnabled && { recurring: { enabled: true, interval: recurringInterval } }),
+          notifyNextYear,
         }),
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       router.push(`/maintain/jobs/${data.id}`);
     } catch {
-      // Mock fallback: แสดงข้อความจองสำเร็จ (Mockup) แทน redirect
       setTimeout(() => {
         setMockBooked(true);
         setSubmitting(false);
@@ -103,6 +105,8 @@ export default function MaintainBookPage() {
       setSubmitting(false);
     }
   };
+
+  const hasAppliances = MOCK_USER_APPLIANCES.length > 0;
 
   return (
     <div className="max-w-xl space-y-6">
@@ -130,26 +134,58 @@ export default function MaintainBookPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-        {/* Appliance type */}
+        {/* Appliance checklist */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ประเภทเครื่อง</p>
-          <div className="grid grid-cols-2 gap-2">
-            {APPLIANCE_OPTIONS.map(opt => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setApplianceType(opt.value)}
-                className={`py-4 rounded-xl border text-sm font-medium flex flex-col items-center gap-2 transition-colors ${
-                  applianceType === opt.value
-                    ? "bg-weeeu-primary border-weeeu-primary text-white"
-                    : "border-gray-200 text-gray-500 hover:border-weeeu-primary"
-                }`}
-              >
-                <span className="text-2xl">{opt.icon}</span>
-                <span>{opt.label}</span>
-              </button>
-            ))}
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">เลือกเครื่องที่ต้องการล้าง</p>
+            {hasAppliances && (
+              <Link href="/appliances/add" className="text-xs text-weeeu-primary hover:underline">+ เพิ่มเครื่อง</Link>
+            )}
           </div>
+
+          {!hasAppliances ? (
+            <div className="text-center py-6 space-y-3">
+              <p className="text-3xl">🔌</p>
+              <p className="text-sm text-gray-500">ยังไม่มีเครื่องใช้ไฟฟ้าในระบบ</p>
+              <Link
+                href="/appliances/add"
+                className="inline-block text-sm font-semibold text-white bg-weeeu-primary hover:bg-weeeu-dark px-4 py-2 rounded-xl transition-colors"
+              >
+                + เพิ่มเครื่องใช้ไฟฟ้า
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {MOCK_USER_APPLIANCES.map(app => {
+                const checked = selectedAppliances.includes(app.id);
+                return (
+                  <button
+                    key={app.id}
+                    type="button"
+                    onClick={() => toggleAppliance(app.id)}
+                    className={`w-full text-left px-4 py-3 rounded-xl border transition-colors flex items-center gap-3 ${
+                      checked
+                        ? "bg-weeeu-surface border-weeeu-primary"
+                        : "border-gray-200 hover:border-weeeu-primary/40"
+                    }`}
+                  >
+                    <span className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                      checked ? "bg-weeeu-primary border-weeeu-primary" : "border-gray-300"
+                    }`}>
+                      {checked && <span className="text-white text-xs font-bold">✓</span>}
+                    </span>
+                    <span className="text-xl">{app.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-medium ${checked ? "text-weeeu-text" : "text-gray-700"}`}>{app.name}</p>
+                      <p className="text-xs text-gray-400">{app.brand} · {app.category}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {errors.appliances && <p className="text-red-500 text-xs">{errors.appliances}</p>}
         </div>
 
         {/* Cleaning type */}
@@ -223,45 +259,21 @@ export default function MaintainBookPage() {
           {errors.address && <p className="text-red-500 text-xs">{errors.address}</p>}
         </div>
 
-        {/* Recurring */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+        {/* แจ้งเตือนปีถัดไป (แทน นัดซ้ำอัตโนมัติ) */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold text-gray-800">นัดซ้ำอัตโนมัติ</p>
-              <p className="text-xs text-gray-400 mt-0.5">รับส่วนลด 10% สำหรับการนัดซ้ำ</p>
+              <p className="text-sm font-semibold text-gray-800">แจ้งเตือนปีถัดไป</p>
+              <p className="text-xs text-gray-400 mt-0.5">WeeeR จะแจ้งเตือนให้นัดล้างอีกครั้งในปีหน้า</p>
             </div>
             <button
               type="button"
-              onClick={() => setRecurringEnabled(v => !v)}
-              className={`relative w-12 h-6 rounded-full transition-colors ${recurringEnabled ? "bg-weeeu-primary" : "bg-gray-200"}`}
+              onClick={() => setNotifyNextYear(v => !v)}
+              className={`relative w-12 h-6 rounded-full transition-colors flex-shrink-0 ${notifyNextYear ? "bg-weeeu-primary" : "bg-gray-200"}`}
             >
-              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${recurringEnabled ? "translate-x-6" : ""}`} />
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${notifyNextYear ? "translate-x-6" : ""}`} />
             </button>
           </div>
-
-          {recurringEnabled && (
-            <div className="space-y-2 border-t border-gray-100 pt-3">
-              {RECURRING_OPTIONS.map(opt => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setRecurringInterval(opt.value)}
-                  className={`w-full text-left px-4 py-2.5 rounded-xl border text-sm transition-colors flex items-center justify-between ${
-                    recurringInterval === opt.value
-                      ? "bg-weeeu-surface border-weeeu-primary text-weeeu-text font-medium"
-                      : "border-gray-200 text-gray-600 hover:border-weeeu-primary/40"
-                  }`}
-                >
-                  <span>{opt.label}</span>
-                  {recurringInterval === opt.value && <span className="text-weeeu-primary text-sm">✓</span>}
-                </button>
-              ))}
-              <div className="bg-weeeu-surface rounded-xl px-4 py-2.5 flex items-center gap-2">
-                <span className="text-weeeu-primary">🎉</span>
-                <p className="text-xs text-weeeu-dark font-medium">ส่วนลด 10% ทุกครั้งที่นัดซ้ำ</p>
-              </div>
-            </div>
-          )}
         </div>
 
         <button

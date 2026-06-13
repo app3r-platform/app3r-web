@@ -30,6 +30,9 @@ export default function AccountSettingsPage() {
   const [addressLine, setAddressLine] = useState("123/45 หมู่ 6");
   const [postcode, setPostcode] = useState("34000");
   const [coords, setCoords] = useState("15.2287, 104.8564");
+  // U-ADDRESS-MAP: preferred service time slots (2 windows)
+  const [timeSlotMorning, setTimeSlotMorning] = useState(true);
+  const [timeSlotAfternoon, setTimeSlotAfternoon] = useState(false);
   const [bankName, setBankName] = useState("ธนาคารกสิกรไทย (KBank)");
   const [bankAccount, setBankAccount] = useState("123-4-56789-0");
   const [accountHolder, setAccountHolder] = useState("สมชาย ใจดี");
@@ -148,12 +151,40 @@ export default function AccountSettingsPage() {
             placeholder="เช่น 15.2287, 104.8564"
             className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
           />
+          {/* GPS accuracy warning */}
+          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+            ⚠️ พิกัด GPS อาจคลาดเคลื่อน 10–50 เมตร — กรุณาตรวจสอบก่อนบันทึก
+          </p>
           {/* Google Map placeholder — Phase D-2 (พิกัดจริง = BE) */}
           <div className="mt-2 h-32 bg-gray-50 border border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400">
             <span className="text-2xl">🗺️</span>
             {/* PHASE-4: Phase D-2 */}
             <span className="text-xs mt-1">แผนที่ (Google Map) — เร็วๆ นี้</span>
           </div>
+        </div>
+
+        {/* U-ADDRESS-MAP: ช่วงเวลาที่สะดวกรับบริการ (2 windows) */}
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-2">⏰ ช่วงเวลาที่สะดวกรับบริการ (ช่างเข้าบ้าน)</label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setTimeSlotMorning(v => !v)}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-colors ${timeSlotMorning ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}
+            >
+              🌅 ช่วงเช้า<br /><span className="text-xs font-normal">08:00–12:00</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setTimeSlotAfternoon(v => !v)}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-colors ${timeSlotAfternoon ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}
+            >
+              ☀️ ช่วงบ่าย<br /><span className="text-xs font-normal">13:00–17:00</span>
+            </button>
+          </div>
+          {!timeSlotMorning && !timeSlotAfternoon && (
+            <p className="text-xs text-red-500 mt-1">กรุณาเลือกช่วงเวลาอย่างน้อย 1 ช่วง</p>
+          )}
         </div>
       </section>
 
