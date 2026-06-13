@@ -459,7 +459,7 @@ export default function RepairJobDetailPage() {
           <InfoRow label="ราคาต้น" value={job.original_price != null ? `${job.original_price.toLocaleString()} G` : null} />
           <InfoRow label="ราคาเสนอ" value={job.proposed_price != null ? `${job.proposed_price.toLocaleString()} G` : null} />
           <InfoRow label="ราคาสุดท้าย" value={job.final_price != null ? `${job.final_price.toLocaleString()} G` : null} />
-          <InfoRow label="เงินค้ำประกัน (Deposit)" value={job.deposit_amount != null
+          <InfoRow label="พอยต์ทองที่ล็อก (point-lock)" value={job.deposit_amount != null
             ? `${job.deposit_amount.toLocaleString()} G — action: ${job.deposit_action ?? "—"}`
             : null} />
           <InfoRow label="ค่าตรวจสภาพ" value={job.inspection_fee_charged != null

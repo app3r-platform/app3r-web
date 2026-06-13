@@ -156,7 +156,7 @@ function RoleBadge({ role }: { role: string }) {
   const colors: Record<string, string> = {
     admin:  "bg-blue-100 text-blue-800",
     weeer:  "bg-green-100 text-green-800",
-    weeeu:  "bg-purple-100 text-purple-800",
+    weeeu:  "bg-pink-100 text-pink-800",
     weeet:  "bg-orange-100 text-orange-800",
   };
   return (
