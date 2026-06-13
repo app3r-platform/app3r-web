@@ -173,7 +173,6 @@ const ABORT_REASONS = [
   { value: "changed_mind",       label: "เปลี่ยนใจ / ไม่ซ่อมแล้ว" },
   { value: "too_expensive",      label: "ราคาสูงกว่าที่คาดไว้" },
   { value: "taking_too_long",    label: "ใช้เวลานานเกินไป" },
-  { value: "found_other_shop",   label: "พบร้านอื่นที่ถูกกว่า" },
   { value: "appliance_totaled",  label: "เครื่องเสียหายเพิ่มระหว่างซ่อม" },
   { value: "other",              label: "เหตุผลอื่น" },
 ] as const;
