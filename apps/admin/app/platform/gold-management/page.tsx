@@ -39,7 +39,8 @@ export default function GoldManagementPage() {
   const [confirm2, setConfirm2] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const isSuper = isSuperAdmin();
+  const [isSuper, setIsSuper] = useState(false);
+  useEffect(() => { setIsSuper(isSuperAdmin()); }, []);
 
   const fetchData = useCallback(async () => {
     try {
@@ -91,8 +92,8 @@ export default function GoldManagementPage() {
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-1">Gold Management</h1>
-        <p className="text-gray-500 text-sm mb-6">จัดการ พอยต์ทอง (Gold Point) Reserve Pool และ Fee Pools</p>
+        <h1 className="text-2xl font-bold mb-1">จัดการพอยต์ทอง (Gold Management)</h1>
+        <p className="text-gray-500 text-sm mb-6">จัดการพอยต์ทอง (Gold Point) กองทุนสำรอง และกองทุนค่าธรรมเนียม</p>
 
         {/* Super Admin Notice */}
         {!isSuper && (
@@ -108,7 +109,7 @@ export default function GoldManagementPage() {
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tab === t ? "bg-admin-surface text-admin-primary" : "text-gray-500 hover:text-gray-900"
               }`}>
-              {t === "reserve" ? "🏦 Reserve Pool" : "💰 Fee Pools"}
+              {t === "reserve" ? "🏦 กองทุนสำรอง" : "💰 กองทุนค่าธรรมเนียม"}
             </button>
           ))}
         </div>
@@ -129,7 +130,7 @@ export default function GoldManagementPage() {
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-500">
                   <p className="font-semibold text-gray-700 mb-1">📐 ดุลคงค้างพอยต์ทอง</p>
                   <code className="text-xs text-green-600">
-                    Total Minted = Reserve + Fee Pools + พักเงินกลาง (Escrow) + Written-Off (ต้องสมดุลเสมอ)
+                    พอยต์ที่ผลิต (Minted) = กองทุนสำรอง + กองทุนค่าธรรมเนียม + พักเงินกลาง (Escrow) + ตัดจำหน่าย — ต้องสมดุลเสมอ
                   </code>
                 </div>
 
@@ -138,15 +139,15 @@ export default function GoldManagementPage() {
                   <div className="flex flex-wrap gap-3">
                     <button onClick={() => setModal("mint")}
                       className="px-5 py-2.5 bg-brand-success hover:bg-brand-success/90 rounded-lg text-sm font-medium transition-colors">
-                      ➕ Mint Gold
+                      ➕ เพิ่มพอยต์ทอง (Mint)
                     </button>
                     <button onClick={() => setModal("destroy")}
                       className="px-5 py-2.5 bg-red-700 hover:bg-red-600 rounded-lg text-sm font-medium transition-colors">
-                      🔥 Destroy Gold
+                      🔥 ทำลาย (Destroy)
                     </button>
                     <button onClick={() => setModal("writeoff")}
                       className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium transition-colors">
-                      📝 Write-Off
+                      📝 ตัดจำหน่าย (Write-Off)
                     </button>
                   </div>
                 )}
@@ -169,7 +170,7 @@ export default function GoldManagementPage() {
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={closeModal}>
             <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-lg font-bold mb-4">
-                {modal === "mint" ? "➕ Mint Gold" : modal === "destroy" ? "🔥 Destroy Gold" : "📝 Write-Off Gold"}
+                {modal === "mint" ? "➕ เพิ่มพอยต์ทอง (Mint)" : modal === "destroy" ? "🔥 ทำลายพอยต์ทอง (Destroy)" : "📝 ตัดจำหน่ายพอยต์ทอง (Write-Off)"}
               </h3>
 
               <div className="space-y-4">

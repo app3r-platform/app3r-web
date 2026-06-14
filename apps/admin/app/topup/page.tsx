@@ -78,11 +78,11 @@ export default function TopupPage() {
 
   // ── Actions ────────────────────────────────────────────────────────────────
   async function handleApprove(id: number) {
-    if (!confirm("ยืนยันอนุมัติการเติม Point?")) return;
+    if (!confirm("ยืนยันอนุมัติการเติมพอยต์?")) return;
     setActionLoading(id);
     try {
       await api.patch(`/admin/topup/requests/${id}/review`, { action: "approve" });
-      showToast("อนุมัติเติม Point สำเร็จ ✓", "ok");
+      showToast("อนุมัติเติมพอยต์สำเร็จ ✓", "ok");
       fetchData();
     } catch (e: unknown) {
       showToast(e instanceof Error ? e.message : "เกิดข้อผิดพลาด", "err");
@@ -130,7 +130,7 @@ export default function TopupPage() {
       <main className="flex-1 p-8 min-w-0">
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-bold">อนุมัติการเติม Point</h1>
+          <h1 className="text-2xl font-bold">อนุมัติการเติมพอยต์</h1>
           {statusFilter === "pending" && data && (
             <span className="bg-yellow-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
               รออนุมัติ {data.total} รายการ
@@ -138,7 +138,7 @@ export default function TopupPage() {
           )}
         </div>
         <p className="text-gray-500 text-sm mb-6">
-          ตรวจสอบสลิปและอนุมัติ/ปฏิเสธคำขอเติม Point ของผู้ใช้
+          ตรวจสอบสลิปและอนุมัติ/ปฏิเสธคำขอเติมพอยต์ของผู้ใช้
         </p>
 
         {/* Filter Tabs */}
@@ -203,7 +203,7 @@ export default function TopupPage() {
                       <span className="text-lg font-bold text-gray-900">
                         {req.amount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
                       </span>
-                      <span className="text-xs text-gray-500 ml-1">Points</span>
+                      <span className="text-xs text-gray-500 ml-1">พอยต์</span>
                     </td>
 
                     <td className="px-5 py-3.5">
