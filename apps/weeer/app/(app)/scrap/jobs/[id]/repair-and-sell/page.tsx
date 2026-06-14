@@ -36,13 +36,19 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
   const { id } = use(params);
   const router = useRouter();
 
-  const [job, setJob] = useState<ScrapJob | null>(null);
-  const [staff, setStaff] = useState<WeeeTStaff[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<ScrapJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_JOB : null
+  );
+  const [staff, setStaff] = useState<WeeeTStaff[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_STAFF : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   // Form state
-  const [applianceName, setApplianceName] = useState("");
+  const [applianceName, setApplianceName] = useState(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_JOB.scrapItemDescription ?? "") : ""
+  );
   const [weeetId, setWeeetId] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
@@ -51,6 +57,7 @@ export default function RepairAndSellPage({ params }: { params: Promise<{ id: st
   const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     Promise.all([
       scrapApi.getJob(id),
       repairApi.getAvailableStaff(),

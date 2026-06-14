@@ -53,9 +53,13 @@ function filterMockServices(
 }
 
 export default function ServicesPage() {
-  const [items, setItems] = useState<ServiceRecord[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<ServiceRecord[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? filterMockServices("all", "all") : []
+  );
+  const [total, setTotal] = useState(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? filterMockServices("all", "all").length : 0
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<ServiceStatus | "all">("all");
   const [typeFilter, setTypeFilter] = useState<ServiceType | "all">("all");
   const [actionId, setActionId] = useState<string | null>(null); // สำหรับ loading state ของ action
@@ -80,7 +84,10 @@ export default function ServicesPage() {
     }
   }
 
-  useEffect(() => { void load(); }, [statusFilter, typeFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    void load();
+  }, [statusFilter, typeFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handlePublish(id: string) {
     setActionId(id);

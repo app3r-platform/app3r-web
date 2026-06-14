@@ -1,9 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { repairApi } from "../_lib/api";
+import { MOCK_REPAIR_JOBS } from "../_lib/mock";
 import type { RepairJob, RepairJobStatus } from "../_lib/types";
 import { STATUS_LABEL, STATUS_COLOR } from "../_lib/types";
 import { MockAnnoOrigin } from "@/components/MockAnno";
@@ -17,19 +17,36 @@ const FILTER_STATUSES: { value: string; label: string }[] = [
   { value: "cancelled", label: "ยกเลิก" },
 ];
 
-function RepairJobsContent() {
-  const searchParams = useSearchParams();
-  const [jobs, setJobs] = useState<RepairJob[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function RepairJobsPage() {
+  const [jobs, setJobs] = useState<RepairJob[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_REPAIR_JOBS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
-  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") ?? "");
+  const [statusFilter, setStatusFilter] = useState("");
+
+  // Read URL ?status= after mount — avoids useSearchParams() which causes Next.js 15 to
+  // keep the route-level Suspense (loading.tsx) pending indefinitely for dynamic segments.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get("status") ?? "";
+    if (s) setStatusFilter(s);
+  }, []);
 
   useEffect(() => {
-    setLoading(true);
-    repairApi.getJobs(statusFilter ? { status: statusFilter } : undefined)
-      .then(setJobs)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await repairApi.getJobs(statusFilter ? { status: statusFilter } : undefined);
+        setJobs(result);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [statusFilter]);
 
   return (
@@ -104,13 +121,5 @@ function RepairJobsContent() {
         ))}
       </div>
     </div>
-  );
-}
-
-export default function RepairJobsPage() {
-  return (
-    <Suspense fallback={<div className="flex items-center justify-center h-40 text-gray-400">กำลังโหลด…</div>}>
-      <RepairJobsContent />
-    </Suspense>
   );
 }

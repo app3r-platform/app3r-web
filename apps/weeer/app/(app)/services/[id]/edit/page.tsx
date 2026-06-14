@@ -32,13 +32,32 @@ function toDatetimeLocal(iso: string | null): string {
 export default function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [service, setService] = useState<ServiceRecord | null>(null);
-  const [form, setForm] = useState<FormState>({ title: "", description: "", pointAmount: "", deadline: "" });
+  const MOCK_SERVICE: ServiceRecord = {
+    id, ownerId: "shop-weeer-001", serviceType: "repair", status: "draft",
+    title: "ซ่อมแอร์ Daikin ไม่เย็น", description: "ตรวจเช็คน้ำยา + ล้างคอยล์",
+    pointAmount: "1500", deadline: "2026-06-20T10:00:00Z",
+    createdAt: "2026-06-01T08:00:00Z", updatedAt: "2026-06-05T09:00:00Z",
+  };
+  const [service, setService] = useState<ServiceRecord | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_SERVICE : null
+  );
+  const [form, setForm] = useState<FormState>(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+      return {
+        title: MOCK_SERVICE.title ?? "",
+        description: MOCK_SERVICE.description ?? "",
+        pointAmount: MOCK_SERVICE.pointAmount ? String(Number(MOCK_SERVICE.pointAmount)) : "",
+        deadline: toDatetimeLocal(MOCK_SERVICE.deadline),
+      };
+    }
+    return { title: "", description: "", pointAmount: "", deadline: "" };
+  });
   const [errors, setErrors] = useState<Partial<FormState>>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     function prefill(svc: ServiceRecord) {
       setService(svc);
       setForm({

@@ -28,8 +28,10 @@ type PartRow = { name: string; qty: string };
 export default function ResellPartsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<ScrapJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<ScrapJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_JOB : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [rows, setRows] = useState<PartRow[]>([{ name: "", qty: "1" }]);
   const [notes, setNotes] = useState("");
@@ -37,6 +39,7 @@ export default function ResellPartsPage({ params }: { params: Promise<{ id: stri
   const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     scrapApi.getJob(id)
       .then(setJob)
       .catch(() => {

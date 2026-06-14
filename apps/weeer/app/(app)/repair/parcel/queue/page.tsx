@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../../_lib/api";
+import { MOCK_PARCEL_QUEUE } from "../../_lib/mock";
 import type { ParcelJob, ParcelQueue } from "../../_lib/types";
 import { PARCEL_STATUS_LABEL, PARCEL_STATUS_COLOR } from "../../_lib/types";
 
@@ -19,15 +20,26 @@ function getActionHref(job: ParcelJob): { href: string; label: string } {
 }
 
 export default function ParcelQueuePage() {
-  const [data, setData] = useState<ParcelQueue | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<ParcelQueue | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_PARCEL_QUEUE : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.getParcelQueue()
-      .then(setData)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await repairApi.getParcelQueue();
+        setData(result);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, []);
 
   return (

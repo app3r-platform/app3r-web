@@ -72,12 +72,15 @@ const OPTIONS: {
 export default function ScrapJobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<ScrapJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<ScrapJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_JOB : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [deciding, setDeciding] = useState<ScrapJobOption | null>(null);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     scrapApi.getJob(id)
       .then(d => {
         // RC-F: ใช้ field จาก API response ตามจริง (ไม่ inject ทุก record)

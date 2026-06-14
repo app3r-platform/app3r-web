@@ -16,10 +16,11 @@ interface DashboardData {
 
 export default function PartsDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     partsApi.dashboard()
       .then(setData)
       .catch((e: Error) => setError(e.message))

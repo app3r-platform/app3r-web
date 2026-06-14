@@ -108,10 +108,10 @@ export default function M6WithdrawWeeeRMockupPage() {
             <div>
               <p className="font-semibold text-gray-700">ถอนรับงานเรียบร้อย</p>
               <p className="text-sm text-gray-500">
-                แจ้ง WeeeU แล้ว · พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) {JOB.offerLock.depositAmount} Point จะคืนลูกค้าภายใน 1-3 วัน
+                แจ้ง WeeeU แล้ว · พอยต์ทองที่ล็อก (ระบบพักเงินกลาง / Escrow) {JOB.offerLock.depositAmount} พอยต์ จะคืนลูกค้าภายใน 1-3 วัน
               </p>
               <p className="text-xs text-[#FF663A] mt-1">
-                ⚠️ ค่าเดินทาง {JOB.offerLock.travelFee} Point — ไม่ได้รับ (WeeeR เป็นผู้ถอน)
+                ⚠️ ค่าเดินทาง {JOB.offerLock.travelFee} พอยต์ —ไม่ได้รับ (WeeeR เป็นผู้ถอน)
               </p>
             </div>
           </div>
@@ -135,15 +135,15 @@ export default function M6WithdrawWeeeRMockupPage() {
         <div className="space-y-2.5">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">พอยต์ทองที่ล็อก (รับไว้)</span>
-            <span className="font-semibold text-gray-800">{JOB.offerLock.depositAmount} Point</span>
+            <span className="font-semibold text-gray-800">{JOB.offerLock.depositAmount} พอยต์</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">ค่าเดินทาง</span>
-            <span className="font-semibold text-gray-800">{JOB.offerLock.travelFee} Point</span>
+            <span className="font-semibold text-gray-800">{JOB.offerLock.travelFee} พอยต์</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">ค่าปรับ (ถอนล่วงหน้า &lt;2 ชม.)</span>
-            <span className="font-semibold text-[#FF663A]">{JOB.offerLock.penalty} Point</span>
+            <span className="font-semibold text-[#FF663A]">{JOB.offerLock.penalty} พอยต์</span>
           </div>
         </div>
       </div>
@@ -177,15 +177,15 @@ export default function M6WithdrawWeeeRMockupPage() {
             <div className="space-y-1 text-xs text-gray-600">
               <div className="flex justify-between">
                 <span>พอยต์ทองที่ล็อก — คืนให้ WeeeU</span>
-                <span className="font-medium text-[#FF663A]">−{JOB.offerLock.depositAmount} Point</span>
+                <span className="font-medium text-[#FF663A]">−{JOB.offerLock.depositAmount} พอยต์</span>
               </div>
               <div className="flex justify-between">
                 <span>ค่าเดินทาง — ไม่ได้รับ</span>
-                <span className="font-medium text-[#FF663A]">−{JOB.offerLock.travelFee} Point</span>
+                <span className="font-medium text-[#FF663A]">−{JOB.offerLock.travelFee} พอยต์</span>
               </div>
               <div className="flex justify-between">
                 <span>ค่าปรับ (ถ้าแจ้งล่าช้า)</span>
-                <span className="font-medium text-[#FF663A]">−{JOB.offerLock.penalty} Point</span>
+                <span className="font-medium text-[#FF663A]">−{JOB.offerLock.penalty} พอยต์</span>
               </div>
             </div>
           </div>

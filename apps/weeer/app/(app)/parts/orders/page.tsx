@@ -80,11 +80,13 @@ type Tab = "buyer" | "seller";
 
 export default function PartsOrdersPage() {
   const [tab, setTab]           = useState<Tab>("buyer");
-  const [orders, setOrders]     = useState<PartsOrderDto[]>([]);
-  const [loading, setLoading]   = useState(true);
+  const [orders, setOrders]     = useState<PartsOrderDto[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_ORDERS.filter(o => o.buyerId === "usr-buyer-0001") : []
+  );
+  const [loading, setLoading]   = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [actionId, setActionId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [useMock, setUseMock]   = useState(false);
+  const [useMock, setUseMock]   = useState(() => process.env.NEXT_PUBLIC_DEV_NAV === "true");
 
   const loadOrders = useCallback(async (currentTab: Tab) => {
     setLoading(true);
@@ -113,6 +115,7 @@ export default function PartsOrdersPage() {
   }, []);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     void loadOrders(tab);
   }, [tab, loadOrders]);
 

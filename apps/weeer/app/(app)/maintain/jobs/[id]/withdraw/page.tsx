@@ -56,7 +56,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
   const router    = useRouter();
 
   const [job,        setJob]        = useState<MaintainJob | null>(null);
-  const [loading,    setLoading]    = useState(true);
+  const [loading,    setLoading]    = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const [showModal,  setShowModal]  = useState(false);
@@ -69,6 +69,7 @@ export default function MaintainWithdrawPage({ params }: { params: Promise<{ id:
   const [withdrawn,  setWithdrawn]  = useState(false);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     maintainApi.getJob(id)
       .then(setJob)
       .catch((e: Error) => setFetchError(e.message))

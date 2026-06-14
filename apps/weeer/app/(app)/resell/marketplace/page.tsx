@@ -62,9 +62,11 @@ const FALLBACK_MOCK_LISTINGS: Listing[] = [
 ];
 
 export default function ResellMarketplacePage() {
-  const [listings, setListings] = useState<Listing[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [usingMock, setUsingMock] = useState(false);
+  const [listings, setListings] = useState<Listing[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? FALLBACK_MOCK_LISTINGS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
+  const [usingMock, setUsingMock] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV === "true");
   const [category, setCategory] = useState("");
   const [sellerType, setSellerType] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -73,6 +75,7 @@ export default function ResellMarketplacePage() {
   const [nearby, setNearby] = useState<NearbyTambonDto[] | null>(null);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     setLoading(true);
     resellApi.marketplaceList({
       category: category || undefined,

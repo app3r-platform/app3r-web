@@ -11,10 +11,11 @@ export default function PartDetailPage({ params }: { params: Promise<{ id: strin
   const { id } = use(params);
   const [part, setPart] = useState<Part | null>(null);
   const [movements, setMovements] = useState<StockMovement[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     Promise.all([
       partsApi.get(id),
       partsApi.movements({ partId: id }),

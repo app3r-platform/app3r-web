@@ -342,7 +342,7 @@ export default function InventoryPage() {
                   <img src={item.imageUrl} alt={item.name} className="w-full h-28 object-cover" />
                   {isLow(item) && (
                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                      ⚠️ Low
+                      ⚠️ สต๊อกน้อย
                     </span>
                   )}
                 </div>

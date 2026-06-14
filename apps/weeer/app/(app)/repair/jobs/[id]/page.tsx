@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../../_lib/api";
+import { MOCK_REPAIR_JOBS } from "../../_lib/mock";
 import type { RepairJob } from "../../_lib/types";
 import { STATUS_LABEL, STATUS_COLOR, BRANCH_LABEL } from "../../_lib/types";
 import { MockAnnoOrigin } from "@/components/MockAnno";
@@ -26,15 +27,28 @@ function timelineStep(job: RepairJob) {
 
 export default function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [job, setJob] = useState<RepairJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<RepairJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_REPAIR_JOBS.find(j => j.id === id) ?? MOCK_REPAIR_JOBS[0])
+      : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.getJob(id)
-      .then(setJob)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getJob(id);
+        setJob(j);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;

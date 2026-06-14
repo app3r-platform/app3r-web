@@ -61,6 +61,7 @@ export default function WarrantyPage({ params }: { params: Promise<{ id: string 
   if (!order) {
     return (
       <div className="px-4 pt-10 text-center text-gray-400">
+        <button onClick={() => router.back()} className="text-sm text-gray-500 mb-4 block mx-auto">← กลับ</button>
         <p>ไม่พบออเดอร์ #{id}</p>
       </div>
     );

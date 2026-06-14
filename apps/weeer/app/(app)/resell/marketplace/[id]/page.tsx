@@ -47,8 +47,12 @@ const MOCK_RESELL_ITEMS: Listing[] = [
 
 export default function MarketplaceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [listing, setListing] = useState<Listing | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [listing, setListing] = useState<Listing | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_RESELL_ITEMS.find(l => l.id === id) ?? MOCK_RESELL_ITEMS[0])
+      : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   // Offer form
@@ -61,6 +65,7 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
   const [offerError, setOfferError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.marketplaceGet(id)
       .then(setListing)
       .catch(() => {

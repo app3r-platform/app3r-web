@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_REPAIR_JOBS } from "../../../_lib/mock";
 import type { RepairJob, DecisionBranch } from "../../../_lib/types";
 import { BRANCH_LABEL } from "../../../_lib/types";
 
@@ -64,28 +65,41 @@ const BRANCH_CONFIG: Record<ApproveAction, {
 export default function ApprovePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<RepairJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const mockJob = process.env.NEXT_PUBLIC_DEV_NAV === "true"
+    ? (MOCK_REPAIR_JOBS.find(r => r.id === id) ?? MOCK_REPAIR_JOBS[0])
+    : null;
+  const [job, setJob] = useState<RepairJob | null>(() => mockJob);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const [selectedBranch, setSelectedBranch] = useState<ApproveAction | null>(null);
-  const [adjustedPrice, setAdjustedPrice] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState<ApproveAction | null>(() =>
+    mockJob?.decision_branch ? mockJob.decision_branch as ApproveAction : null
+  );
+  const [adjustedPrice, setAdjustedPrice] = useState(() =>
+    mockJob?.proposed_price ? String(mockJob.proposed_price) :
+    mockJob?.scrap_agreed_price ? String(mockJob.scrap_agreed_price) : ""
+  );
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
-    repairApi.getJob(id)
-      .then((j) => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getJob(id);
         setJob(j);
-        if (j.decision_branch) {
-          setSelectedBranch(j.decision_branch as ApproveAction);
-        }
+        if (j.decision_branch) setSelectedBranch(j.decision_branch as ApproveAction);
         if (j.proposed_price) setAdjustedPrice(String(j.proposed_price));
         else if (j.scrap_agreed_price) setAdjustedPrice(String(j.scrap_agreed_price));
-      })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   async function handleSubmit() {

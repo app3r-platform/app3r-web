@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_REPAIR_JOBS } from "../../../_lib/mock";
 import type { RepairJob } from "../../../_lib/types";
 
 const DISPUTE_REASONS = [
@@ -18,8 +19,12 @@ const DISPUTE_REASONS = [
 export default function DisputePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<RepairJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<RepairJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_REPAIR_JOBS.find(j => j.id === id) ?? MOCK_REPAIR_JOBS[0])
+      : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -30,10 +35,19 @@ export default function DisputePage({ params }: { params: Promise<{ id: string }
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
-    repairApi.getJob(id)
-      .then(setJob)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getJob(id);
+        setJob(j);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   async function handleSubmit(e: React.FormEvent) {

@@ -27,8 +27,10 @@ const MOCK_JOB: ScrapJob = {
 export default function ResellAsScrapPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<ScrapJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<ScrapJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_JOB : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -36,6 +38,7 @@ export default function ResellAsScrapPage({ params }: { params: Promise<{ id: st
   const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     scrapApi.getJob(id)
       .then(setJob)
       .catch(() => {

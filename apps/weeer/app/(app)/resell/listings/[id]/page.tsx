@@ -86,9 +86,13 @@ function EscrowCountdown() {
 
 export default function ResellListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [listing, setListing] = useState<Listing | null>(null);
-  const [offers, setOffers] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [listing, setListing] = useState<Listing | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_LISTINGS[id] ?? null) : null
+  );
+  const [offers, setOffers] = useState<Offer[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_LISTINGS[id]?.offers ?? []) : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -122,6 +126,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   }
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     const mock = MOCK_LISTINGS[id];
     Promise.all([
       resellApi.listingsGet(id).catch(() => mock ?? null),

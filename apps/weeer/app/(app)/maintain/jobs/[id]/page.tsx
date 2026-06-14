@@ -29,7 +29,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
   const { id } = use(params);
   const router = useRouter();
   const [job, setJob] = useState<MaintainJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   // M7: No-show settle
@@ -49,7 +49,10 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { reload(); }, [id]);
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    reload();
+  }, [id]);
 
   // M7: confirm no-show
   async function handleConfirmNoShow() {

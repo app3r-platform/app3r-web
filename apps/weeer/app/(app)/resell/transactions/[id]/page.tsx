@@ -68,8 +68,10 @@ const MOCK_TRANSACTIONS: Record<string, ResellTransaction> = {
 
 export default function ResellTransactionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [tx, setTx] = useState<ResellTransaction | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [tx, setTx] = useState<ResellTransaction | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_TRANSACTIONS[id] ?? null) : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
 
   // Mock local state (Mockup)
   const [mockStatus, setMockStatus] = useState<ListingStatus | null>(null);
@@ -81,9 +83,15 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [claimNote, setClaimNote] = useState("");
   const [claimSubmitted, setClaimSubmitted] = useState(false);
-  const [role, setRole] = useState<"seller" | "buyer">("seller");
+  const [role, setRole] = useState<"seller" | "buyer">(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+      return (MOCK_TRANSACTIONS[id]?.role ?? "seller");
+    }
+    return "seller";
+  });
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     const mock = MOCK_TRANSACTIONS[id];
     resellApi.transactionsGet(id)
       .then(t => { setTx(t); setRole(t.role ?? "seller"); })

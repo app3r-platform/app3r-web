@@ -26,7 +26,7 @@ export default function MaintainJobProgressPage({
 }) {
   const { id } = use(params);
   const [job, setJob] = useState<MaintainJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   const loadJob = () => {
@@ -38,7 +38,10 @@ export default function MaintainJobProgressPage({
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { loadJob(); }, [id]);
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    loadJob();
+  }, [id]);
 
   // Sync: refresh on cross-tab update
   useServiceProgressSync((event) => {

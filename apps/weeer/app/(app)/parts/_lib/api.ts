@@ -7,6 +7,8 @@ import { getDevTestToken } from "../../../../lib/dev-auth";
 const BASE = "/api/v1";
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  // Mock mode: ไม่มี backend → throw ทันที ให้ caller .catch() ใช้ mock fallback
+  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") throw new Error("[mock-mode]");
   // TODO: REMOVE BEFORE PROD — dev auth bypass
   const token =
     process.env.NODE_ENV === "development"

@@ -95,7 +95,7 @@ export default function MaintainListingsPage() {
       {/* Info: maintain always serviceType 1 */}
       {!showAll && registeredTypes.includes(1) && (
         <div className="text-xs text-blue-600 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
-          ℹ️ งานบำรุงทั้งหมดเป็น on-site เท่านั้น — ร้านของคุณลงทะเบียนรับ on-site ✅
+          ℹ️ งานบำรุงทั้งหมดเป็นออนไซต์เท่านั้น — ร้านของคุณลงทะเบียนรับออนไซต์ ✅
         </div>
       )}
 

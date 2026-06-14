@@ -73,12 +73,15 @@ function EscrowBadge() {
 }
 
 export default function ResellOffersPage() {
-  const [offers, setOffers] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [offers, setOffers] = useState<Offer[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_OFFERS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<OfferStatus | "">("");
   const [withdrawing, setWithdrawing] = useState<string | null>(null);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.myOffers({ status: statusFilter || undefined })
       .then(setOffers)
       .catch(() => setOffers(MOCK_OFFERS))  // Mockup fallback

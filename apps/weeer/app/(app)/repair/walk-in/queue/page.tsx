@@ -3,19 +3,31 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../../_lib/api";
+import { MOCK_WALKIN_QUEUE } from "../../_lib/mock";
 import type { WalkInJob, WalkInQueue } from "../../_lib/types";
 import { WALKIN_STATUS_LABEL, WALKIN_STATUS_COLOR } from "../../_lib/types";
 
 export default function WalkInQueuePage() {
-  const [data, setData] = useState<WalkInQueue | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<WalkInQueue | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_WALKIN_QUEUE : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.getWalkInQueue()
-      .then(setData)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await repairApi.getWalkInQueue();
+        setData(result);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, []);
 
   function getActionHref(job: WalkInJob): string {

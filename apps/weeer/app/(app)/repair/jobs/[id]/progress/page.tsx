@@ -5,6 +5,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_REPAIR_JOBS } from "../../../_lib/mock";
 import type { RepairJob } from "../../../_lib/types";
 import { STATUS_COLOR, STATUS_LABEL } from "../../../_lib/types";
 import { REPAIR_STAGES, REPAIR_STAGE_ORDER, WEEER_ADVANCEABLE_STAGES } from "../../../_lib/service-progress";
@@ -20,20 +21,28 @@ export default function RepairJobProgressPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const [job, setJob] = useState<RepairJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<RepairJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_REPAIR_JOBS.find(j => j.id === id) ?? MOCK_REPAIR_JOBS[0])
+      : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
-  const loadJob = () => {
+  const loadJob = async () => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return; // already initialized
     setLoading(true);
-    repairApi
-      .getJob(id)
-      .then(setJob)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    try {
+      const j = await repairApi.getJob(id);
+      setJob(j);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { loadJob(); }, [id]);
+  useEffect(() => { void loadJob(); }, [id]);
 
   // Sync: refresh on cross-tab update
   useServiceProgressSync((event) => {

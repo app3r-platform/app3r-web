@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_PICKUP_QUEUE } from "../../../_lib/mock";
 import type { PickupJob } from "../../../_lib/types";
 
 interface Part { name: string; qty: number; price: number }
@@ -11,28 +12,38 @@ interface Part { name: string; qty: number; price: number }
 export default function PickupDiagnosePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<PickupJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const mockPickup = process.env.NEXT_PUBLIC_DEV_NAV === "true"
+    ? (MOCK_PICKUP_QUEUE.items.find(p => p.id === id) ?? MOCK_PICKUP_QUEUE.items[0])
+    : null;
+  const [job, setJob] = useState<PickupJob | null>(() => mockPickup);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const [diagnosisNotes, setDiagnosisNotes] = useState("");
-  const [laborCost, setLaborCost] = useState("");
-  const [parts, setParts] = useState<Part[]>([]);
+  const [diagnosisNotes, setDiagnosisNotes] = useState(() => mockPickup?.diagnosis_notes ?? "");
+  const [laborCost, setLaborCost] = useState(() => mockPickup?.estimated_price ? String(mockPickup.estimated_price) : "");
+  const [parts, setParts] = useState<Part[]>(() => mockPickup?.parts_added ?? []);
   const [newPart, setNewPart] = useState({ name: "", qty: "1", price: "" });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    repairApi.getPickupJob(id)
-      .then((j) => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getPickupJob(id);
         setJob(j);
         if (j.diagnosis_notes) setDiagnosisNotes(j.diagnosis_notes);
         if (j.parts_added) setParts(j.parts_added);
         if (j.estimated_price) setLaborCost(String(j.estimated_price));
-      })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   function addPart() {

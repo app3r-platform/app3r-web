@@ -48,11 +48,14 @@ const MOCK_LISTINGS: Listing[] = [
 ];
 
 export default function ResellListingsPage() {
-  const [listings, setListings] = useState<Listing[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [listings, setListings] = useState<Listing[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_LISTINGS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<ListingStatus | "">("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.listingsList({ status: statusFilter || undefined })
       .then(setListings)
       .catch(() => setListings(MOCK_LISTINGS))  // Mockup fallback

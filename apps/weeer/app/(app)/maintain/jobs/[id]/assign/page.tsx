@@ -14,7 +14,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
   const router = useRouter();
   const [job, setJob] = useState<MaintainJob | null>(null);
   const [staff, setStaff] = useState<WeeeTStaff[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -22,6 +22,7 @@ export default function MaintainAssignPage({ params }: { params: Promise<{ id: s
   const [techError, setTechError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     Promise.all([
       maintainApi.getJob(id),
       repairApi.getAvailableStaff(),   // reuse Repair endpoint — same staff pool

@@ -24,15 +24,20 @@ const MOCK_JOB: ScrapJob = {
 
 export default function DisposePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [job, setJob] = useState<ScrapJob | null>(null);
+  const [job, setJob] = useState<ScrapJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_JOB : null
+  );
   const [cert, setCert] = useState<EWasteCertificate | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
-  const [itemDescription, setItemDescription] = useState("");
+  const [itemDescription, setItemDescription] = useState(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_JOB.scrapItemDescription ?? "") : ""
+  );
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     scrapApi.getJob(id)
       .then(j => {
         setJob(j);

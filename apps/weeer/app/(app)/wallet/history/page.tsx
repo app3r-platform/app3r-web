@@ -54,18 +54,20 @@ function formatDate(iso: string): string {
 }
 
 export default function TransferHistoryPage() {
-  const [records, setRecords]   = useState<TransferRecord[]>([]);
-  const [loading, setLoading]   = useState(true);
+  const [records, setRecords]   = useState<TransferRecord[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_HISTORY : []
+  );
+  const [loading, setLoading]   = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError]       = useState<string | null>(null);
   const [filter, setFilter]     = useState<"all" | TransferType>("all");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     async function load() {
       setLoading(true);
       setError(null);
       try {
         // @needs-backend-sync GET /api/v1/transfers/history/
-        // ใช้ mock data จนกว่า backend Sub-CMD-P1 จะพร้อม
         const res = await apiFetch("/api/v1/transfers/history/");
         if (res.ok) {
           const data = (await res.json()) as TransferRecord[];

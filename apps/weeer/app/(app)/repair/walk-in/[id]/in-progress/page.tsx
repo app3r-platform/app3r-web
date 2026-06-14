@@ -4,22 +4,36 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_WALKIN_QUEUE } from "../../../_lib/mock";
 import type { WalkInJob } from "../../../_lib/types";
 
 export default function WalkInInProgressPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<WalkInJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<WalkInJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_WALKIN_QUEUE.items.find(w => w.id === id) ?? MOCK_WALKIN_QUEUE.items[0])
+      : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    repairApi.getWalkIn(id)
-      .then(setJob)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getWalkIn(id);
+        setJob(j);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   async function handleReady() {

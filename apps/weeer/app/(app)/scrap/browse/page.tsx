@@ -38,14 +38,17 @@ const MOCK_ITEMS: ScrapItem[] = [
 const GRADES = ["", "grade_A", "grade_B", "grade_C"] as const;
 
 export default function ScrapBrowsePage() {
-  const [items, setItems] = useState<ScrapItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<ScrapItem[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_ITEMS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [grade, setGrade] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     setLoading(true);
     scrapApi.browseList({
       conditionGrade: grade || undefined,

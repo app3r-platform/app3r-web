@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_PICKUP_QUEUE } from "../../../_lib/mock";
 import type { PickupJob } from "../../../_lib/types";
 import { PICKUP_STATUS_LABEL, PICKUP_STATUS_COLOR } from "../../../_lib/types";
 
@@ -28,16 +29,32 @@ const STATUS_ICON: Record<string, string> = {
 
 export default function PickupTrackPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [job, setJob] = useState<PickupJob | null>(null);
-  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const mockPickupTrack = process.env.NEXT_PUBLIC_DEV_NAV === "true"
+    ? (MOCK_PICKUP_QUEUE.items.find(p => p.id === id) ?? MOCK_PICKUP_QUEUE.items[0])
+    : null;
+  const [job, setJob] = useState<PickupJob | null>(() => mockPickupTrack);
+  const [timeline, setTimeline] = useState<TimelineEvent[]>(() =>
+    mockPickupTrack
+      ? [{ status: mockPickupTrack.status, timestamp: mockPickupTrack.created_at, note: "mock" }]
+      : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.trackPickup(id)
-      .then(({ job: j, timeline: t }) => { setJob(j); setTimeline(t); })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const { job: j, timeline: t } = await repairApi.trackPickup(id);
+        setJob(j); setTimeline(t);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;

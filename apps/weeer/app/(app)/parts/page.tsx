@@ -18,13 +18,15 @@ const CONDITIONS: { label: string; value: Part["condition"] | "all" }[] = [
 
 export default function PartsListPage() {
   const [parts, setParts] = useState<Part[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ทั้งหมด");
   const [condition, setCondition] = useState<Part["condition"] | "all">("all");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    setLoading(true);
     partsApi.list({
       ...(category !== "ทั้งหมด" ? { category } : {}),
       ...(condition !== "all" ? { condition } : {}),

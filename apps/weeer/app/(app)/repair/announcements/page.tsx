@@ -3,19 +3,31 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../_lib/api";
+import { MOCK_REPAIR_ANNOUNCEMENTS } from "../_lib/mock";
 import type { RepairAnnouncement } from "../_lib/types";
 import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 
 export default function RepairAnnouncementsPage() {
-  const [items, setItems] = useState<RepairAnnouncement[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<RepairAnnouncement[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_REPAIR_ANNOUNCEMENTS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.getAnnouncements()
-      .then(setItems)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await repairApi.getAnnouncements();
+        setItems(result);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, []);
 
   return (

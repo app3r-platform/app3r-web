@@ -83,6 +83,11 @@ export default function Footer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+      setInfo(FOOTER_FALLBACK);
+      setLoading(false);
+      return;
+    }
     apiFetch("/api/contact-info")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);

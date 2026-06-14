@@ -4,14 +4,21 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_PICKUP_QUEUE, MOCK_WEEET_STAFF } from "../../../_lib/mock";
 import type { PickupJob, WeeeTStaff } from "../../../_lib/types";
 
 export default function PickupDispatchPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<PickupJob | null>(null);
-  const [staff, setStaff] = useState<WeeeTStaff[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<PickupJob | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_PICKUP_QUEUE.items.find(p => p.id === id) ?? MOCK_PICKUP_QUEUE.items[0])
+      : null
+  );
+  const [staff, setStaff] = useState<WeeeTStaff[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_WEEET_STAFF : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -21,13 +28,19 @@ export default function PickupDispatchPage({ params }: { params: Promise<{ id: s
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    Promise.all([
-      repairApi.getPickupJob(id),
-      repairApi.getAvailableStaff(),
-    ])
-      .then(([j, s]) => { setJob(j); setStaff(s); })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const [j, s] = await Promise.all([repairApi.getPickupJob(id), repairApi.getAvailableStaff()]);
+        setJob(j); setStaff(s);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   function validate() {

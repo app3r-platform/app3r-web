@@ -16,7 +16,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
   const router = useRouter();
 
   const [job, setJob] = useState<MaintainJob | null>(null);
-  const [loadingJob, setLoadingJob] = useState(true);
+  const [loadingJob, setLoadingJob] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [jobError, setJobError] = useState("");
 
   // ── แกน 1: พอยต์ทองที่ล็อก (Escrow) ─────────────────────────────────────────────────────────
@@ -47,6 +47,7 @@ export default function MaintainOfferPage({ params }: { params: Promise<{ id: st
   const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     maintainApi.getJob(id)
       .then(setJob)
       .catch((e: Error) => setJobError(e.message))

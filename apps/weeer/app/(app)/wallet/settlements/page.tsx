@@ -59,12 +59,20 @@ const MOCK_SETTLEMENTS: SettlementDto[] = [
 ];
 
 export default function SettlementsPage() {
-  const [items, setItems]               = useState<SettlementDto[]>([]);
-  const [total, setTotal]               = useState(0);
-  const [loading, setLoading]           = useState(true);
+  const [items, setItems]               = useState<SettlementDto[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_SETTLEMENTS : []
+  );
+  const [total, setTotal]               = useState(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_SETTLEMENTS.length : 0
+  );
+  const [loading, setLoading]           = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<SettlementStatus | "all">("all");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+      const filtered = statusFilter === "all" ? MOCK_SETTLEMENTS : MOCK_SETTLEMENTS.filter((s) => s.status === statusFilter);
+      setItems(filtered); setTotal(filtered.length); return;
+    }
     async function load() {
       setLoading(true);
       try {

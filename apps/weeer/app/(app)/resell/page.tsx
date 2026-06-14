@@ -44,10 +44,13 @@ const MOCK_DASHBOARD: Dashboard = {
 };
 
 export default function ResellDashboardPage() {
-  const [data, setData] = useState<Dashboard | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Dashboard | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_DASHBOARD : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.dashboard()
       .then(setData)
       .catch(() => setData(MOCK_DASHBOARD))  // Mockup fallback

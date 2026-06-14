@@ -30,13 +30,16 @@ const MOCK_ITEM: ScrapItem = {
 export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [item, setItem] = useState<ScrapItem | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [item, setItem] = useState<ScrapItem | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_ITEM : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [buying, setBuying] = useState(false);
   const [buyError, setBuyError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     scrapApi.getItem(id)
       .then(setItem)
       .catch(() => {

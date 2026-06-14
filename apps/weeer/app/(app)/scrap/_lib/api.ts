@@ -8,6 +8,8 @@ import type { ScrapItem, ScrapJob, ScrapJobOption, EWasteCertificate } from "./t
 import { MOCK_SCRAP_ITEMS, MOCK_SCRAP_JOBS, MOCK_SCRAP_DASHBOARD, MOCK_EWASTE_CERTIFICATE } from "./mock";
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+  // Mock mode: ไม่มี backend → throw ทันที ให้ caller .catch() ใช้ mock fallback
+  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") throw new Error("[mock-mode]");
   const token = await getDevTestToken();
   const res = await fetch(`/api/v1${path}`, {
     ...options,

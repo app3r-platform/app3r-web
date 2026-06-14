@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_PARCEL_QUEUE } from "../../../_lib/mock";
 import type { ParcelJob } from "../../../_lib/types";
 
 // 3.2 — cascade address data (mock, forward: จังหวัด→อำเภอ→ตำบล→postcode auto)
@@ -60,33 +61,45 @@ const COST_SPLIT_OPTIONS: { value: "customer" | "shop" | "split"; label: string;
 export default function ParcelShippingDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<ParcelJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const mockParcelShippingDet = process.env.NEXT_PUBLIC_DEV_NAV === "true"
+    ? (MOCK_PARCEL_QUEUE.items.find(p => p.id === id) ?? MOCK_PARCEL_QUEUE.items[0]) as ParcelJob
+    : null;
+  const [job, setJob] = useState<ParcelJob | null>(() => mockParcelShippingDet);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   // 3.2: cascade address fields (จังหวัด→อำเภอ→ตำบล→postcode auto)
-  const [addressLine, setAddressLine] = useState("");
+  const [addressLine, setAddressLine] = useState(() => (mockParcelShippingDet?.shop_address as string | undefined) ?? "");
   const [province, setProvince]       = useState("");
   const [district, setDistrict]       = useState("");
   const [subdistrict, setSubdistrict] = useState("");
   const [postcode, setPostcode]       = useState("");
-  const [courier, setCourier] = useState("");
-  const [costSplit, setCostSplit] = useState<"customer" | "shop" | "split">("customer");
+  const [courier, setCourier] = useState(() => (mockParcelShippingDet?.courier as string | undefined) ?? "");
+  const [costSplit, setCostSplit] = useState<"customer" | "shop" | "split">(() =>
+    (mockParcelShippingDet?.cost_split as "customer" | "shop" | "split" | undefined) ?? "customer"
+  );
   const [notes, setNotes] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    repairApi.getParcelJob(id)
-      .then((j) => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getParcelJob(id);
         setJob(j as ParcelJob);
         if (j.shop_address) setAddressLine(j.shop_address as string);
         if (j.courier) setCourier(j.courier as string);
         if (j.cost_split) setCostSplit(j.cost_split as "customer" | "shop" | "split");
-      })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   // cascade helpers

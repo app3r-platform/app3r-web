@@ -7,16 +7,16 @@
 export type ServiceTypeId = 1 | 2 | 3 | 4;
 
 export const SERVICE_TYPE_LABEL: Record<ServiceTypeId, string> = {
-  1: 'on-site (ช่างออกบ้าน)',
+  1: 'ออนไซต์ (ช่างออกบ้าน)',
   2: 'รับ-ส่ง',
-  3: 'นำมาที่ร้าน',
+  3: 'นำมาที่ร้าน (Walk-in)',
   4: 'ส่งพัสดุ',
 };
 
 export const SERVICE_TYPE_SHORT: Record<ServiceTypeId, string> = {
-  1: 'on-site',
+  1: 'ออนไซต์',
   2: 'รับ-ส่ง',
-  3: 'walk-in',
+  3: 'หน้าร้าน',
   4: 'พัสดุ',
 };
 

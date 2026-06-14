@@ -3,20 +3,32 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../_lib/api";
+import { MOCK_REPAIR_DASHBOARD } from "../_lib/mock";
 import type { RepairDashboard } from "../_lib/types";
 import { STATUS_LABEL, STATUS_COLOR } from "../_lib/types";
 import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
 
 export default function RepairDashboardPage() {
-  const [data, setData] = useState<RepairDashboard | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<RepairDashboard | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_REPAIR_DASHBOARD : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.getDashboard()
-      .then(setData)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await repairApi.getDashboard();
+        setData(result);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, []);
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;

@@ -4,31 +4,42 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { repairApi } from "../../../_lib/api";
+import { MOCK_PARCEL_QUEUE } from "../../../_lib/mock";
 import type { ParcelJob } from "../../../_lib/types";
 import { PARCEL_STATUS_LABEL, PARCEL_STATUS_COLOR } from "../../../_lib/types";
 
 export default function ParcelReceivePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [job, setJob] = useState<ParcelJob | null>(null);
-  const [loading, setLoading] = useState(true);
+  const mockParcelRec = process.env.NEXT_PUBLIC_DEV_NAV === "true"
+    ? (MOCK_PARCEL_QUEUE.items.find(p => p.id === id) ?? MOCK_PARCEL_QUEUE.items[0]) as ParcelJob
+    : null;
+  const [job, setJob] = useState<ParcelJob | null>(() => mockParcelRec);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const [inboundTracking, setInboundTracking] = useState("");
+  const [inboundTracking, setInboundTracking] = useState(() => (mockParcelRec?.inbound_tracking as string | undefined) ?? "");
   const [conditionNotes, setConditionNotes] = useState("");
   const [photoGate, setPhotoGate] = useState(false);  // simulate photo capture confirmed
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    repairApi.getParcelJob(id)
-      .then((j) => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const j = await repairApi.getParcelJob(id);
         setJob(j as ParcelJob);
         if (j.inbound_tracking) setInboundTracking(j.inbound_tracking as string);
-      })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, [id]);
 
   function validate() {

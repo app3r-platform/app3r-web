@@ -45,12 +45,15 @@ const MOCK_ITEMS: UsedAppliance[] = [
 ];
 
 export default function ResellInventoryPage() {
-  const [items, setItems] = useState<UsedAppliance[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<UsedAppliance[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_ITEMS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<ApplianceStatus | "">("");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.inventoryList({ status: statusFilter || undefined, search: search || undefined })
       .then(setItems)
       .catch(() => setItems(MOCK_ITEMS))  // Mockup fallback

@@ -63,12 +63,15 @@ const FILTER_TABS: { label: string; value: MaintainStatus | "all" }[] = [
 ];
 
 export default function MaintainJobsPage() {
-  const [jobs, setJobs] = useState<MaintainJob[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [jobs, setJobs] = useState<MaintainJob[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? freshMockShopJobs() : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<MaintainStatus | "all">("all");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     maintainApi.getShopJobs()
       .then(setJobs)
       .catch(() => setJobs(freshMockShopJobs()))  // D-T4-01: seed sample data on API unavailable

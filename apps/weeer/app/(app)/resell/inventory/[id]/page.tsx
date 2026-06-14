@@ -10,10 +10,11 @@ import { MockAnnoOrigin } from "@/components/MockAnno";
 export default function ResellInventoryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [item, setItem] = useState<UsedAppliance | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.inventoryGet(id)
       .then(setItem)
       .catch((e: Error) => setError(e.message))

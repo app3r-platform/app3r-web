@@ -98,11 +98,14 @@ function OfferCountdown({ job }: { job: MaintainJob }) {
 }
 
 export default function MaintainQueuePage() {
-  const [jobs, setJobs] = useState<MaintainJob[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [jobs, setJobs] = useState<MaintainJob[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? freshMockQueueJobs() : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     maintainApi.getQueue()
       .then(setJobs)
       .catch(() => setJobs(freshMockQueueJobs()))  // D-T4-02: seed sample data on API unavailable

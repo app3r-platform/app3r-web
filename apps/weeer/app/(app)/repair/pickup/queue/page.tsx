@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { repairApi } from "../../_lib/api";
+import { MOCK_PICKUP_QUEUE } from "../../_lib/mock";
 import type { PickupJob, PickupQueue } from "../../_lib/types";
 import { PICKUP_STATUS_LABEL, PICKUP_STATUS_COLOR } from "../../_lib/types";
 
@@ -22,15 +23,28 @@ function getActionHref(job: PickupJob): { href: string; label: string } {
 }
 
 export default function PickupQueuePage() {
-  const [data, setData] = useState<PickupQueue | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<PickupQueue | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_PICKUP_QUEUE : null
+  );
+  const [loading, setLoading] = useState(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV !== "true"
+  );
   const [error, setError] = useState("");
 
   useEffect(() => {
-    repairApi.getPickupQueue()
-      .then(setData)
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await repairApi.getPickupQueue();
+        setData(result);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "เกิดข้อผิดพลาด");
+      } finally {
+        setLoading(false);
+      }
+    }
+    void load();
   }, []);
 
   return (
