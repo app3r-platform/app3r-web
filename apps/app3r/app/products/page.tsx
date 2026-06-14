@@ -71,7 +71,7 @@ const products = [
     rating: 4.8,
     reviewCount: 98,
     emoji: "🌀",
-    badge: "Premium",
+    badge: "พรีเมียม",
     badgeColor: "bg-yellow-100 text-yellow-700",
     desc: "Cordless Vacuum with Laser Dust Detection พร้อมอุปกรณ์ครบชุด",
   },

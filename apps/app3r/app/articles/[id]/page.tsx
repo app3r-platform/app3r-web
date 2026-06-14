@@ -11,7 +11,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const article = getArticleById(id)
-  if (!article) return { title: 'Not Found' }
+  if (!article) return { title: 'ไม่พบบทความ' }
   return {
     title: article.title + ' — App3R',
     description: article.excerpt,

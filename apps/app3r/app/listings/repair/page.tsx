@@ -149,7 +149,7 @@ export default async function RepairListingsPage({ searchParams }: PageProps) {
 
             {/* W2 · GR-10 NearMeFilter — geolocation-based nearby tambons */}
             <div className="border-t pt-4">
-              <label className="block text-sm text-gray-700 font-medium mb-2">ใกล้ฉัน (Near me)</label>
+              <label className="block text-sm text-gray-700 font-medium mb-2">ใกล้ฉัน</label>
               <NearbyTambonsPanel />
             </div>
           </div>

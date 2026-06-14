@@ -242,7 +242,7 @@ export default async function PreviewPage({ params }: Props) {
 
             {/* หมายเหตุ: ไม่มีส่วนถาม-ตอบ (Q&A) ในโหมดพรีวิว */}
             <div className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-xs text-gray-500 text-center">
-              ส่วนถาม–ตอบ (Q&amp;A) จะเปิดให้ใช้งานหลังประกาศถูกเผยแพร่
+              ส่วนถาม–ตอบ จะเปิดให้ใช้งานหลังประกาศถูกเผยแพร่
             </div>
           </div>
         </div>

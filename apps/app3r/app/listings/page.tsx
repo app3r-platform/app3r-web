@@ -125,7 +125,7 @@ export default async function AllListingsPage({ searchParams }: PageProps) {
       <section className="mt-14">
         <div className="flex items-center gap-3 mb-4">
           <h2 className="text-lg font-bold text-gray-900">ข้อมูลตัวอย่าง (Wave0)</h2>
-          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Placeholder</span>
+          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">ตัวอย่าง</span>
         </div>
         <p className="text-sm text-gray-500 mb-4">ข้อมูลตัวอย่างจาก mock-fixtures — จะถูกแทนด้วย API จริงเมื่อ Wave1 พร้อม</p>
         <ListingPlaceholderGrid listings={WAVE0_LISTINGS} />

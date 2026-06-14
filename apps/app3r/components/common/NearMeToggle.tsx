@@ -45,7 +45,7 @@ export default function NearMeToggle({
         }`}
       >
         <span aria-hidden>📍</span>
-        ใกล้ฉัน (Near me){on ? " · เปิด" : ""}
+        ใกล้ฉัน{on ? " · เปิด" : ""}
       </button>
       {!hideMockNote && (
         <p className="mt-1 text-xs text-gray-400 italic">

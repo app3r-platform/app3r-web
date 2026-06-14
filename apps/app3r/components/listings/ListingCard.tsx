@@ -35,7 +35,7 @@ export default function ListingCard({ listing, sponsored }: Props) {
       {/* Sponsored ribbon */}
       {(sponsored || listing.sponsored) && (
         <div className="absolute top-2 left-2 z-10 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full">
-          Sponsored
+          โฆษณา
         </div>
       )}
 

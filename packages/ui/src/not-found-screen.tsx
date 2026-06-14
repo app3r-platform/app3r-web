@@ -22,7 +22,7 @@ export interface NotFoundScreenProps {
 
 export function NotFoundScreen({
   roleTheme = { primary: "#1E9E5A" },
-  title = "ไม่พบหน้านี้ (Not Found)",
+  title = "ไม่พบหน้านี้",
   message = "ขออภัย หน้าที่คุณมองหาอาจถูกย้ายหรือลบ",
   ctaHref = "/",
   ctaLabel = "กลับหน้าหลัก",

@@ -17,7 +17,7 @@ export default function SponsoredListing({ listing }: SponsoredListingProps) {
     <div className="relative bg-yellow-50 border border-yellow-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow group">
       {/* Sponsored ribbon */}
       <div className="absolute top-2 left-2 z-10 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full">
-        Sponsored
+        โฆษณา
       </div>
 
       {/* Image */}
