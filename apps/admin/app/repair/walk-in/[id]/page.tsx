@@ -69,9 +69,9 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
 };
 
 const OVERRIDE_ACTIONS = [
-  { value: "cancel",  label: "Cancel Job",   desc: "ยกเลิกงาน — คืนค่าใช้จ่ายถ้ามี" },
-  { value: "refund",  label: "Force Refund", desc: "คืนเงินลูกค้า — bypass ขั้นตอนปกติ" },
-  { value: "forfeit", label: "Forfeit",      desc: "ริบเครื่อง / mark abandoned อย่างเป็นทางการ" },
+  { value: "cancel",  label: "ยกเลิกงาน",    desc: "ยกเลิกงาน — คืนค่าใช้จ่ายถ้ามี" },
+  { value: "refund",  label: "บังคับคืนเงิน", desc: "คืนเงินลูกค้า — bypass ขั้นตอนปกติ" },
+  { value: "forfeit", label: "ริบเครื่อง",    desc: "ริบเครื่อง / mark abandoned อย่างเป็นทางการ" },
 ];
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -192,7 +192,7 @@ export default function WalkInDetailPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
-            <InfoRow label="Serial" value={job.device_serial ?? "—"} />
+            <InfoRow label="ซีเรียล" value={job.device_serial ?? "—"} />
             <InfoRow label="อาการ" value={job.device_issue} />
             {job.diagnosis && <InfoRow label="วินิจฉัย" value={job.diagnosis} />}
             {job.repair_notes && <InfoRow label="หมายเหตุซ่อม" value={job.repair_notes} />}
@@ -209,10 +209,10 @@ export default function WalkInDetailPage() {
 
           {/* Pricing */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ราคา & Storage</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ราคา & การจัดเก็บ</h2>
             <InfoRow label="ราคา Quote" value={job.quote_price != null ? `${job.quote_price.toLocaleString()} ฿` : "—"} />
             <InfoRow label="ราคา Final" value={job.final_price != null ? `${job.final_price.toLocaleString()} ฿` : "—"} />
-            <InfoRow label="Storage Fee" value={
+            <InfoRow label="ค่าจัดเก็บ" value={
               <span className="text-yellow-700 font-mono">
                 {job.storage_fee.toLocaleString()} ฿
                 <span className="text-gray-500 ml-1 font-normal">
@@ -370,7 +370,7 @@ export default function WalkInDetailPage() {
               disabled={!overrideConfirm || overrideReason.trim().length < 10 || overrideLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
             >
-              {overrideLoading ? "กำลังดำเนินการ..." : "Execute Override"}
+              {overrideLoading ? "กำลังดำเนินการ..." : "ดำเนินการ Override"}
             </button>
           </section>
         )}

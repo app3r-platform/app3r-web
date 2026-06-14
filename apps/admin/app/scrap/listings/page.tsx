@@ -149,7 +149,7 @@ export default function ScrapListingsPage() {
             <option value="grade_B">Grade B</option>
             <option value="grade_C">Grade C</option>
           </select>
-          <input type="text" placeholder="Seller ID"
+          <input type="text" placeholder="รหัสผู้ขาย"
             value={filterSeller} onChange={e => { setFilterSeller(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-admin-primary"
           />

@@ -112,7 +112,7 @@ export default function PartDetailPage() {
             <InfoRow label="สภาพ" value={
               <span className={`text-xs px-2 py-0.5 rounded-full ${cm.color}`}>{cm.label}</span>
             } />
-            <InfoRow label="Shop ID" value={<span className="font-mono text-xs">{part.shopId}</span>} />
+            <InfoRow label="รหัสร้าน" value={<span className="font-mono text-xs">{part.shopId}</span>} />
             {part.source && (
               <InfoRow label="แหล่งที่มา" value={
                 <span>

@@ -216,12 +216,12 @@ export default function ResellAnalyticsPage() {
             accent="border-red-200"
           />
           <StatCard
-            label="Offer Acceptance"
+            label="อัตรารับ Offer"
             value={`${(d.offer_acceptance_rate * 100).toFixed(1)}%`}
             sub="offer → selected"
           />
           <StatCard
-            label="Sales Conversion"
+            label="อัตราปิดการขาย"
             value={`${(d.conversion_rate * 100).toFixed(1)}%`}
             sub="listings → completed"
           />

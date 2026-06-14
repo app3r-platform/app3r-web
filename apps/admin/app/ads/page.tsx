@@ -41,7 +41,7 @@ const DEFAULT_RATES: AdRates = { home_first_row: 5, module_first_row: 3, sidebar
 const POSITION_LABEL: Record<AdPosition, string> = {
   home_first_row:   'แถวแรกหน้าแรก',
   module_first_row: 'แถวแรกของโมดูล',
-  sidebar:          'Sidebar',
+  sidebar:          'แถบข้าง',
 }
 const AD_TYPE_LABEL: Record<AdType, { label: string; color: string }> = {
   own_listing:    { label: 'ดันประกาศ',    color: 'bg-blue-50 text-blue-700' },

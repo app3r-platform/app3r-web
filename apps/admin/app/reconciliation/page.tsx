@@ -284,9 +284,9 @@ export default function SettlementReconciliationPage() {
             {/* Summary Cards */}
             <div className="grid grid-cols-4 gap-4">
               <SummaryCard label="ค้างทั้งหมด" value={report.total_stuck} color="text-yellow-700" />
-              <SummaryCard label="Pending" value={report.total_pending} color="text-yellow-700" />
-              <SummaryCard label="Processing" value={report.total_processing} color="text-blue-400" />
-              <SummaryCard label="Failed" value={report.total_failed} color="text-red-600" />
+              <SummaryCard label="รอดำเนินการ" value={report.total_pending} color="text-yellow-700" />
+              <SummaryCard label="กำลังดำเนินการ" value={report.total_processing} color="text-blue-400" />
+              <SummaryCard label="ล้มเหลว" value={report.total_failed} color="text-red-600" />
             </div>
 
             {/* Filter */}

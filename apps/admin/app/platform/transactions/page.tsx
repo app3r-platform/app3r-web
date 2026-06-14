@@ -203,20 +203,20 @@ export default function TransactionsPage() {
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={() => setSelected(null)}>
             <div className="bg-white rounded-2xl border border-gray-300 p-6 w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold">Transaction Detail</h3>
+                <h3 className="font-bold">รายละเอียดธุรกรรม</h3>
                 <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-900">✕</button>
               </div>
               <div className="space-y-3 text-sm">
                 {[
-                  ["ID", selected.id],
-                  ["Type", selected.tx_type],
-                  ["Amount", `${selected.amount >= 0 ? "+" : ""}${selected.amount.toLocaleString()} ${selected.currency === "gold" ? "G" : "S"}`],
-                  ["Actor ID", String(selected.actor_id ?? "—")],
-                  ["Actor Role", selected.actor_role ?? "—"],
-                  ["Target User", String(selected.target_user_id ?? "—")],
-                  ["Reference", selected.reference_id ?? "—"],
-                  ["Note", selected.note ?? "—"],
-                  ["Created At", new Date(selected.created_at).toLocaleString("th-TH")],
+                  ["รหัส", selected.id],
+                  ["ประเภท", selected.tx_type],
+                  ["จำนวน", `${selected.amount >= 0 ? "+" : ""}${selected.amount.toLocaleString()} ${selected.currency === "gold" ? "G" : "S"}`],
+                  ["ผู้ดำเนินการ ID", String(selected.actor_id ?? "—")],
+                  ["บทบาท", selected.actor_role ?? "—"],
+                  ["ผู้ใช้เป้าหมาย", String(selected.target_user_id ?? "—")],
+                  ["อ้างอิง", selected.reference_id ?? "—"],
+                  ["หมายเหตุ", selected.note ?? "—"],
+                  ["สร้างเมื่อ", new Date(selected.created_at).toLocaleString("th-TH")],
                 ].map(([k, v]) => (
                   <div key={k} className="flex gap-4">
                     <span className="text-gray-500 w-28 shrink-0">{k}</span>

@@ -159,7 +159,7 @@ export default function MaintainAnalyticsPage() {
             sub={`เฉลี่ย ${data.avg_price.toLocaleString()} ฿/งาน`}
           />
           <StatCard
-            label="Recurring"
+            label="งานประจำ"
             value={data.recurring_count.toLocaleString()}
             sub={`Conversion ${(data.recurring_conversion_rate * 100).toFixed(1)}%`}
           />

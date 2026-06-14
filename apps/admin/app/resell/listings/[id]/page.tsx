@@ -141,20 +141,20 @@ export default function ListingDetailPage() {
           {/* Listing info */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Listing</h2>
-            <InfoRow label="Seller ID" value={
+            <InfoRow label="รหัสผู้ขาย" value={
               <span className="font-mono text-xs">{listing.sellerId}</span>
             } />
-            <InfoRow label="Seller Type" value={
+            <InfoRow label="ประเภทผู้ขาย" value={
               <span className={listing.sellerType === "WeeeU" ? "text-sky-400" : "text-green-600"}>
                 {listing.sellerType}
               </span>
             } />
-            {listing.sellerName && <InfoRow label="ชื่อ Seller" value={listing.sellerName} />}
+            {listing.sellerName && <InfoRow label="ชื่อผู้ขาย" value={listing.sellerName} />}
             <InfoRow label="ประเภท" value={tm} />
             <InfoRow label="ราคา" value={
               <span className="font-mono text-green-600 font-bold">{listing.price.toLocaleString()} ฿</span>
             } />
-            <InfoRow label="Delivery" value={listing.deliveryMethods.join(", ") || "—"} />
+            <InfoRow label="วิธีจัดส่ง" value={listing.deliveryMethods.join(", ") || "—"} />
             {listing.viewCount != null && (
               <InfoRow label="จำนวนดู" value={`${listing.viewCount.toLocaleString()} ครั้ง`} />
             )}
@@ -166,7 +166,7 @@ export default function ListingDetailPage() {
               เครื่องใช้ไฟฟ้า + Warranty
             </h2>
             {listing.applianceId ? (
-              <InfoRow label="Appliance ID" value={
+              <InfoRow label="รหัสเครื่องใช้ไฟฟ้า" value={
                 <span className="font-mono text-xs text-blue-400">{listing.applianceId}</span>
               } />
             ) : (
@@ -192,7 +192,7 @@ export default function ListingDetailPage() {
             <InfoRow label="อัพเดตล่าสุด" value={new Date(listing.updatedAt).toLocaleString("th-TH")} />
             <InfoRow label="หมดอายุ" value={new Date(listing.expiresAt).toLocaleString("th-TH")} />
             {listing.transactionId && (
-              <InfoRow label="Transaction ID" value={
+              <InfoRow label="รหัสธุรกรรม" value={
                 <span className="font-mono text-xs text-admin-primary">{listing.transactionId}</span>
               } />
             )}

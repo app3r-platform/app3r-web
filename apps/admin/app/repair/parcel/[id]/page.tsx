@@ -97,7 +97,7 @@ const DISPUTE_STATUS_META: Record<string, { label: string; color: string }> = {
 
 const PHOTO_TYPE_LABEL: Record<string, string> = {
   packaging:         "บรรจุภัณฑ์",
-  shipping_label:    "Shipping Label",
+  shipping_label:    "ฉลากจัดส่ง",
   received_at_shop:  "รับที่ร้าน",
   return_packaging:  "บรรจุภัณฑ์ขาคืน",
   delivery_proof:    "หลักฐานส่ง",
@@ -201,7 +201,7 @@ export default function ParcelDetailPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
-            <InfoRow label="Serial" value={job.device_serial ?? "—"} />
+            <InfoRow label="ซีเรียล" value={job.device_serial ?? "—"} />
           </section>
 
           <section className="bg-white rounded-xl border border-gray-200 p-5">

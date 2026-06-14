@@ -449,7 +449,7 @@ export default function ResellJobDetailPage() {
         {/* Job info */}
         <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-1">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">รายละเอียด</p>
-          <InfoRow label="Listing Code" value={<span className="font-mono text-xs text-admin-primary">{job.listing_code}</span>} />
+          <InfoRow label="รหัสประกาศ" value={<span className="font-mono text-xs text-admin-primary">{job.listing_code}</span>} />
           <InfoRow label="ผู้ขาย" value={
             <div className="flex items-center gap-1">
               <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${

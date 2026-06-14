@@ -161,7 +161,7 @@ export default function MaintainJobsPage() {
             <option value="deep">ล้างลึก</option>
             <option value="sanitize">ล้าง+ฆ่าเชื้อ</option>
           </select>
-          <input type="text" placeholder="Shop ID"
+          <input type="text" placeholder="รหัสร้าน"
             value={filterShop} onChange={e => { setFilterShop(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-40 focus:outline-none focus:border-admin-primary"
           />

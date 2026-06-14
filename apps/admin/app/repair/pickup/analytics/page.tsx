@@ -144,7 +144,7 @@ export default function PickupAnalyticsPage() {
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard icon="📋" label="Jobs ทั้งหมด"  value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active"        value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="⚡" label="ใช้งานอยู่"     value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="เสร็จสิ้น"      value={data.completed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ล้มเหลว"        value={data.failed_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="🚫" label="ยกเลิก"         value={data.cancelled_jobs.toLocaleString()} accent="orange" />
@@ -195,14 +195,14 @@ export default function PickupAnalyticsPage() {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                   icon="⏰"
-                  label="On-time Rate"
+                  label="อัตราตรงเวลา"
                   value={data.on_time_rate != null ? `${(data.on_time_rate * 100).toFixed(1)}%` : "—"}
                   sub="ส่งทันกำหนด"
                   accent={data.on_time_rate != null && data.on_time_rate >= 0.9 ? "green" : "orange"}
                 />
                 <StatCard
                   icon="✅"
-                  label="Success Rate"
+                  label="อัตราสำเร็จ"
                   value={data.success_rate != null ? `${(data.success_rate * 100).toFixed(1)}%` : "—"}
                   sub="completed / total"
                   accent="green"

@@ -113,7 +113,7 @@ function OffersInner() {
             <option value="WeeeU">WeeeU</option>
             <option value="WeeeR">WeeeR</option>
           </select>
-          <input type="text" placeholder="Listing ID"
+          <input type="text" placeholder="รหัสประกาศ"
             value={filterListingId} onChange={e => { setFilterListingId(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-52 focus:outline-none focus:border-blue-500"
           />

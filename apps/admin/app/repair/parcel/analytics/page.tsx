@@ -162,7 +162,7 @@ export default function ParcelAnalyticsPage() {
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard icon="📦" label="Jobs ทั้งหมด"  value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active"        value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="⚡" label="ใช้งานอยู่"     value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="เสร็จสิ้น"     value={data.completed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ล้มเหลว"       value={data.failed_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="🔍" label="พัสดุหาย"     value={data.lost_jobs.toLocaleString()} accent="orange" />
@@ -193,13 +193,13 @@ export default function ParcelAnalyticsPage() {
                 KPI — Rate
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard icon="✅" label="Success Rate"
+                <StatCard icon="✅" label="อัตราสำเร็จ"
                   value={data.success_rate != null ? `${(data.success_rate * 100).toFixed(1)}%` : "—"}
                   sub="completed / total" accent="green" />
-                <StatCard icon="↩️" label="Return Rate"
+                <StatCard icon="↩️" label="อัตราส่งคืน"
                   value={data.return_rate != null ? `${(data.return_rate * 100).toFixed(1)}%` : "—"}
                   sub="ส่งคืนจาก total" accent="orange" />
-                <StatCard icon="⚠️" label="Dispute Rate"
+                <StatCard icon="⚠️" label="อัตราข้อพิพาท"
                   value={data.dispute_rate != null ? `${(data.dispute_rate * 100).toFixed(1)}%` : "—"}
                   sub="dispute / total" accent={data.dispute_rate != null && data.dispute_rate > 0.05 ? "red" : "orange"} />
                 <StatCard icon="💵" label="ค่าส่งรวม"

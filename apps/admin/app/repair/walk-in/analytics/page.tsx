@@ -118,9 +118,9 @@ export default function WalkInAnalyticsPage() {
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <StatCard icon="📋" label="Jobs ทั้งหมด"   value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active"         value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="⚡" label="ใช้งานอยู่"      value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="ปิดงานแล้ว"     value={data.closed_jobs.toLocaleString()} accent="green" />
-                <StatCard icon="📦" label="Abandoned"      value={data.abandoned_jobs.toLocaleString()} accent="orange" />
+                <StatCard icon="📦" label="ทิ้งเครื่อง"    value={data.abandoned_jobs.toLocaleString()} accent="orange" />
                 <StatCard icon="❌" label="ยกเลิก"          value={data.cancelled_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="🔧" label="ซ่อมเสร็จ"      value={data.completed_jobs.toLocaleString()} accent="admin-primary" />
               </div>
@@ -145,7 +145,7 @@ export default function WalkInAnalyticsPage() {
                 />
                 <StatCard
                   icon="📦"
-                  label="Abandoned Rate"
+                  label="อัตราทิ้งเครื่อง"
                   value={data.abandoned_rate != null
                     ? `${(data.abandoned_rate * 100).toFixed(1)}%`
                     : "—"}
@@ -154,7 +154,7 @@ export default function WalkInAnalyticsPage() {
                 />
                 <StatCard
                   icon="⏱️"
-                  label="Avg Repair Time"
+                  label="เวลาเฉลี่ยซ่อม"
                   value={data.avg_repair_hours != null
                     ? `${data.avg_repair_hours.toFixed(1)} ชม.`
                     : "—"}

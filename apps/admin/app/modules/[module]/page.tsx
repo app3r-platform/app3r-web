@@ -50,12 +50,12 @@ interface ModuleConfig {
 
 const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
   repair: {
-    label: "Repair", labelEn: "Repair Jobs", icon: "🔧", totalLabel: "งานซ่อมทั้งหมด",
+    label: "ซ่อม", labelEn: "Repair Jobs", icon: "🔧", totalLabel: "งานซ่อมทั้งหมด",
     stats: [
-      { label: "งานใหม่วันนี้", value: "14", color: "text-blue-600" },
-      { label: "กำลังซ่อม",     value: "38", color: "text-orange-600" },
-      { label: "เสร็จวันนี้",    value: "9",  color: "text-green-600" },
-      { label: "Dispute เปิด",  value: "3",  color: "text-red-600" },
+      { label: "งานใหม่วันนี้",   value: "14", color: "text-blue-600" },
+      { label: "กำลังซ่อม",       value: "38", color: "text-orange-600" },
+      { label: "เสร็จวันนี้",      value: "9",  color: "text-green-600" },
+      { label: "ข้อพิพาทเปิด",    value: "3",  color: "text-red-600" },
     ],
     tabs: [
       { key: "",            label: "ทั้งหมด",     count: 142, color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
@@ -64,7 +64,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
       { key: "assigned",    label: "รับงาน",      count: 22,  color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
       { key: "in_progress", label: "กำลังซ่อม",  count: 38,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
       { key: "completed",   label: "เสร็จแล้ว",  count: 36,  color: "bg-green-50 text-green-700",  activeColor: "bg-green-600 text-white" },
-      { key: "dispute",     label: "Dispute",     count: 3,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
+      { key: "dispute",     label: "ข้อพิพาท",   count: 3,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
     ],
     columns: [
       { key: "code",   label: "รหัสงาน" },
@@ -86,20 +86,20 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
   },
 
   maintain: {
-    label: "Maintain", labelEn: "Maintenance Jobs", icon: "🛁", totalLabel: "งานบำรุงรักษาทั้งหมด",
+    label: "บำรุง", labelEn: "Maintenance Jobs", icon: "🛁", totalLabel: "งานบำรุงรักษาทั้งหมด",
     stats: [
-      { label: "รอช่างวันนี้",    value: "7",  color: "text-blue-600" },
-      { label: "กำลังทำความสะอาด", value: "12", color: "text-orange-600" },
-      { label: "เสร็จวันนี้",      value: "5",  color: "text-green-600" },
-      { label: "Recurring active", value: "23", color: "text-admin-primary" },
+      { label: "รอช่างวันนี้",      value: "7",  color: "text-blue-600" },
+      { label: "กำลังทำความสะอาด",   value: "12", color: "text-orange-600" },
+      { label: "เสร็จวันนี้",        value: "5",  color: "text-green-600" },
+      { label: "งานประจำที่ใช้งาน",  value: "23", color: "text-admin-primary" },
     ],
     tabs: [
-      { key: "",           label: "ทั้งหมด",         count: 89,  color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
-      { key: "pending",    label: "รอช่าง",          count: 7,   color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
-      { key: "in_progress",label: "กำลังล้าง",       count: 12,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
-      { key: "completed",  label: "เสร็จแล้ว",       count: 47,  color: "bg-green-50 text-green-700",  activeColor: "bg-green-600 text-white" },
-      { key: "cancelled",  label: "ยุติ",             count: 9,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
-      { key: "recurring",  label: "Recurring",        count: 23,  color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
+      { key: "",           label: "ทั้งหมด",   count: 89,  color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
+      { key: "pending",    label: "รอช่าง",    count: 7,   color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
+      { key: "in_progress",label: "กำลังล้าง", count: 12,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
+      { key: "completed",  label: "เสร็จแล้ว", count: 47,  color: "bg-green-50 text-green-700",  activeColor: "bg-green-600 text-white" },
+      { key: "cancelled",  label: "ยุติ",       count: 9,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
+      { key: "recurring",  label: "งานประจำ",  count: 23,  color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
     ],
     columns: [
       { key: "code",   label: "รหัสงาน" },
@@ -121,20 +121,20 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
   },
 
   resell: {
-    label: "Resell", labelEn: "Resell Listings", icon: "🛍️", totalLabel: "รายการขายทั้งหมด",
+    label: "ขายต่อ", labelEn: "Resell Listings", icon: "🛍️", totalLabel: "รายการขายทั้งหมด",
     stats: [
-      { label: "ประกาศใหม่วันนี้", value: "19", color: "text-blue-600" },
-      { label: "คำสั่งซื้อ active",  value: "31", color: "text-orange-600" },
-      { label: "พักเงินกลาง รอโอน", value: "8",  color: "text-yellow-600" },
-      { label: "Dispute เปิด",     value: "2",  color: "text-red-600" },
+      { label: "ประกาศใหม่วันนี้",   value: "19", color: "text-blue-600" },
+      { label: "คำสั่งซื้อที่ใช้งาน", value: "31", color: "text-orange-600" },
+      { label: "พักเงินกลาง รอโอน",  value: "8",  color: "text-yellow-600" },
+      { label: "ข้อพิพาทเปิด",       value: "2",  color: "text-red-600" },
     ],
     tabs: [
-      { key: "",          label: "ทั้งหมด",    count: 215, color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
+      { key: "",          label: "ทั้งหมด",   count: 215, color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
       { key: "available", label: "ประกาศ",    count: 91,  color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
       { key: "offered",   label: "มีข้อเสนอ", count: 24,  color: "bg-yellow-50 text-yellow-700", activeColor: "bg-yellow-500 text-white" },
       { key: "ordered",   label: "คำสั่งซื้อ", count: 31,  color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
-      { key: "escrow",    label: "ระบบพักเงินกลาง (Escrow)",    count: 8,   color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
-      { key: "dispute",   label: "Dispute",   count: 2,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
+      { key: "escrow",    label: "ระบบพักเงินกลาง", count: 8, color: "bg-admin-surface text-admin-primary", activeColor: "bg-admin-primary text-white" },
+      { key: "dispute",   label: "ข้อพิพาท", count: 2,   color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
     ],
     columns: [
       { key: "code",   label: "รหัสประกาศ" },
@@ -156,7 +156,7 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
   },
 
   scrap: {
-    label: "Scrap", labelEn: "Scrap Listings & Jobs", icon: "♻️", totalLabel: "รายการรับซื้อทั้งหมด",
+    label: "รับซาก", labelEn: "Scrap Listings & Jobs", icon: "♻️", totalLabel: "รายการรับซื้อทั้งหมด",
     stats: [
       { label: "ประกาศขายใหม่",  value: "11", color: "text-blue-600" },
       { label: "งานรับซื้อ active", value: "8", color: "text-orange-600" },
@@ -189,22 +189,22 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
   },
 
   parts: {
-    label: "Parts", labelEn: "Parts Inventory", icon: "🔩", totalLabel: "รายการอะไหล่ทั้งหมด",
+    label: "อะไหล่", labelEn: "Parts Inventory", icon: "🔩", totalLabel: "รายการอะไหล่ทั้งหมด",
     stats: [
-      { label: "รายการทั้งหมด",    value: "1,240", color: "text-blue-600" },
-      { label: "คำสั่งซื้อ B2B",    value: "18",    color: "text-orange-600" },
-      { label: "สต็อกใกล้หมด",      value: "7",     color: "text-red-600" },
-      { label: "เพิ่มใหม่วันนี้",    value: "4",     color: "text-green-600" },
+      { label: "รายการทั้งหมด",  value: "1,240", color: "text-blue-600" },
+      { label: "คำสั่งซื้อ B2B", value: "18",    color: "text-orange-600" },
+      { label: "สต็อกใกล้หมด",   value: "7",     color: "text-red-600" },
+      { label: "เพิ่มใหม่วันนี้", value: "4",     color: "text-green-600" },
     ],
     tabs: [
-      { key: "",        label: "ทั้งหมด",    count: 1240, color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
-      { key: "active",  label: "Listing",   count: 1190, color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
-      { key: "b2b",     label: "B2B Order", count: 18,   color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
-      { key: "low",     label: "สต็อกต่ำ", count: 7,    color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
+      { key: "",        label: "ทั้งหมด",   count: 1240, color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
+      { key: "active",  label: "รายการ",    count: 1190, color: "bg-blue-50 text-blue-700",   activeColor: "bg-blue-600 text-white" },
+      { key: "b2b",     label: "คำสั่ง B2B",count: 18,   color: "bg-orange-50 text-orange-700", activeColor: "bg-orange-500 text-white" },
+      { key: "low",     label: "สต็อกต่ำ",  count: 7,    color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
       { key: "inactive",label: "ปิด",       count: 50,   color: "bg-gray-100 text-gray-500",  activeColor: "bg-gray-600 text-white" },
     ],
     columns: [
-      { key: "code",   label: "Part Number" },
+      { key: "code",   label: "รหัสอะไหล่" },
       { key: "user",   label: "ชื่ออะไหล่" },
       { key: "type",   label: "ประเภท" },
       { key: "status", label: "สต็อก" },
@@ -223,23 +223,23 @@ const MODULE_CONFIGS: Record<ModuleKey, ModuleConfig> = {
   },
 
   withdraw: {
-    label: "Withdraw", labelEn: "Withdrawal Requests", icon: "🏦", totalLabel: "คำขอถอนเงินทั้งหมด",
+    label: "ถอนเงิน", labelEn: "Withdrawal Requests", icon: "🏦", totalLabel: "คำขอถอนเงินทั้งหมด",
     stats: [
-      { label: "รอ approve",    value: "6",  color: "text-yellow-600" },
+      { label: "รออนุมัติ",     value: "6",  color: "text-yellow-600" },
       { label: "อนุมัติวันนี้",  value: "11", color: "text-green-600" },
       { label: "ปฏิเสธวันนี้",  value: "1",  color: "text-red-600" },
       { label: "ยอดรวมรอโอน",  value: "42,500 ฿", color: "text-blue-600" },
     ],
     tabs: [
       { key: "",          label: "ทั้งหมด",     count: 84,  color: "bg-gray-100 text-gray-700",   activeColor: "bg-admin-primary text-white" },
-      { key: "pending",   label: "รอ Approve",  count: 6,   color: "bg-yellow-50 text-yellow-700", activeColor: "bg-yellow-500 text-white" },
+      { key: "pending",   label: "รออนุมัติ",    count: 6,   color: "bg-yellow-50 text-yellow-700", activeColor: "bg-yellow-500 text-white" },
       { key: "approved",  label: "อนุมัติแล้ว", count: 61,  color: "bg-green-50 text-green-700",  activeColor: "bg-green-600 text-white" },
       { key: "rejected",  label: "ปฏิเสธ",      count: 17,  color: "bg-red-50 text-red-700",     activeColor: "bg-red-600 text-white" },
     ],
     columns: [
       { key: "code",   label: "รหัสคำขอ" },
       { key: "user",   label: "ผู้ขอถอน" },
-      { key: "type",   label: "Role" },
+      { key: "type",   label: "บทบาท" },
       { key: "status", label: "สถานะ" },
       { key: "amount", label: "จำนวน" },
       { key: "date",   label: "วันที่" },
@@ -263,13 +263,13 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   in_progress: { label: "กำลังซ่อม",    color: "bg-orange-50 text-orange-700" },
   completed:   { label: "เสร็จแล้ว",    color: "bg-green-50 text-green-700" },
   assigned:    { label: "รับงานแล้ว",   color: "bg-admin-surface text-admin-primary" },
-  dispute:     { label: "Dispute",       color: "bg-red-50 text-red-700" },
+  dispute:     { label: "ข้อพิพาท",      color: "bg-red-50 text-red-700" },
   offered:     { label: "มีข้อเสนอ",    color: "bg-yellow-50 text-yellow-700" },
   posted:      { label: "ประกาศ",        color: "bg-blue-50 text-blue-700" },
   // Maintain
   pending:     { label: "รอช่าง",       color: "bg-blue-50 text-blue-700" },
   cancelled:   { label: "ยุติ",          color: "bg-gray-100 text-gray-500" },
-  recurring:   { label: "Recurring",     color: "bg-admin-surface text-admin-primary" },
+  recurring:   { label: "งานประจำ",      color: "bg-admin-surface text-admin-primary" },
   // Resell
   available:   { label: "ประกาศอยู่",   color: "bg-blue-50 text-blue-700" },
   ordered:     { label: "คำสั่งซื้อ",   color: "bg-orange-50 text-orange-700" },
@@ -279,10 +279,10 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   job:         { label: "งานทิ้ง",      color: "bg-orange-50 text-orange-700" },
   cert:        { label: "E-Cert ออกแล้ว",color: "bg-green-50 text-green-700" },
   // Parts
-  active:      { label: "Active",        color: "bg-green-50 text-green-700" },
+  active:      { label: "ใช้งานได้",     color: "bg-green-50 text-green-700" },
   low:         { label: "สต็อกต่ำ",     color: "bg-red-50 text-red-700" },
   inactive:    { label: "ปิด",           color: "bg-gray-100 text-gray-500" },
-  b2b:         { label: "B2B Order",     color: "bg-orange-50 text-orange-700" },
+  b2b:         { label: "คำสั่ง B2B",    color: "bg-orange-50 text-orange-700" },
   // Withdraw
   approved:    { label: "อนุมัติแล้ว",  color: "bg-green-50 text-green-700" },
   rejected:    { label: "ปฏิเสธ",       color: "bg-red-50 text-red-700" },

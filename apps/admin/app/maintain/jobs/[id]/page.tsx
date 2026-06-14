@@ -205,8 +205,8 @@ export default function MaintainJobDetailPage() {
 
           {job.recurring?.enabled && (
             <section className="bg-white rounded-xl border border-admin-primary/30 p-5">
-              <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-3">🔁 Recurring</h2>
-              <InfoRow label="Interval" value={job.recurring.interval.replace("_months", " เดือน")} />
+              <h2 className="text-xs font-semibold text-admin-primary uppercase tracking-wider mb-3">🔁 งานประจำ</h2>
+              <InfoRow label="ความถี่" value={job.recurring.interval.replace("_months", " เดือน")} />
               <InfoRow label="นัดถัดไป" value={new Date(job.recurring.nextScheduledAt).toLocaleString("th-TH")} />
             </section>
           )}
@@ -541,7 +541,7 @@ export default function MaintainJobDetailPage() {
             <button onClick={handleForceCancel}
               disabled={!cancelConfirm || cancelReason.trim().length < 10 || cancelLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors">
-              {cancelLoading ? "กำลังดำเนินการ..." : "Force Cancel"}
+              {cancelLoading ? "กำลังดำเนินการ..." : "บังคับยกเลิก"}
             </button>
           </section>
         )}

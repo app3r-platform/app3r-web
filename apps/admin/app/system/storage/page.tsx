@@ -176,10 +176,10 @@ export default function StoragePage() {
             {tab === "overview" && summary && (
               <div className="space-y-6">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <BigCard label="Total Storage" value={fmtBytes(summary.total_bytes)} />
-                  <BigCard label="Total Files" value={summary.total_files.toLocaleString()} />
-                  <BigCard label="Photos" value={summary.total_photos.toLocaleString()} />
-                  <BigCard label="Videos" value={summary.total_videos.toLocaleString()} />
+                  <BigCard label="พื้นที่รวม" value={fmtBytes(summary.total_bytes)} />
+                  <BigCard label="ไฟล์รวม" value={summary.total_files.toLocaleString()} />
+                  <BigCard label="ภาพ" value={summary.total_photos.toLocaleString()} />
+                  <BigCard label="วิดีโอ" value={summary.total_videos.toLocaleString()} />
                 </div>
 
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">

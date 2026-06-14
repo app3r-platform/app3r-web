@@ -111,10 +111,10 @@ export default function GoldManagementPage() {
             {tab === "reserve" && (
               <div className="space-y-6">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <InfoCard label="Reserve Pool" value={fmtG(data.reserve.reserve_pool)} accent="green" />
-                  <InfoCard label="Total Minted" value={fmtG(data.reserve.total_minted)} accent="blue" />
-                  <InfoCard label="Total Destroyed" value={fmtG(data.reserve.total_destroyed)} accent="red" />
-                  <InfoCard label="Written-Off" value={fmtG(data.reserve.total_written_off)} accent="gray" />
+                  <InfoCard label="กองทุนสำรอง" value={fmtG(data.reserve.reserve_pool)} accent="green" />
+                  <InfoCard label="พอยต์ทองที่ผลิต" value={fmtG(data.reserve.total_minted)} accent="blue" />
+                  <InfoCard label="พอยต์ทองที่ทำลาย" value={fmtG(data.reserve.total_destroyed)} accent="red" />
+                  <InfoCard label="ตัดจำหน่าย" value={fmtG(data.reserve.total_written_off)} accent="gray" />
                 </div>
 
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-500">
@@ -146,10 +146,10 @@ export default function GoldManagementPage() {
 
             {tab === "fee" && (
               <div className="grid grid-cols-2 gap-4">
-                <InfoCard label="Listing Offer Fee Pool" value={fmtG(data.fee_pools.listing_offer_fee_pool)} accent="yellow" />
-                <InfoCard label="Platform Fee Pool" value={fmtG(data.fee_pools.platform_fee_pool)} accent="yellow" />
-                <InfoCard label="Advertising Pool" value={fmtG(data.fee_pools.advertising_pool)} accent="admin-primary" />
-                <InfoCard label="พักเงินกลาง (Escrow) Pool" value={fmtG(data.fee_pools.escrow_pool)} accent="blue" />
+                <InfoCard label="กองทุนค่าประกาศ" value={fmtG(data.fee_pools.listing_offer_fee_pool)} accent="yellow" />
+                <InfoCard label="กองทุนค่าแพลตฟอร์ม" value={fmtG(data.fee_pools.platform_fee_pool)} accent="yellow" />
+                <InfoCard label="กองทุนโฆษณา" value={fmtG(data.fee_pools.advertising_pool)} accent="admin-primary" />
+                <InfoCard label="พักเงินกลาง (Escrow)" value={fmtG(data.fee_pools.escrow_pool)} accent="blue" />
               </div>
             )}
           </>

@@ -152,10 +152,10 @@ export default function SilverPage() {
             {/* Summary Tab */}
             {tab === "summary" && summary && (
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <SCard label="Total Supply" value={summary.total_supply.toLocaleString() + " S"} color="gray" />
-                <SCard label="Total Distributed" value={summary.total_distributed.toLocaleString() + " S"} color="blue" />
-                <SCard label="Total Expired" value={summary.total_expired.toLocaleString() + " S"} color="red" />
-                <SCard label="Active Holders" value={summary.active_holders.toLocaleString()} color="green" />
+                <SCard label="Supply รวม" value={summary.total_supply.toLocaleString() + " S"} color="gray" />
+                <SCard label="แจกไปแล้ว" value={summary.total_distributed.toLocaleString() + " S"} color="blue" />
+                <SCard label="หมดอายุแล้ว" value={summary.total_expired.toLocaleString() + " S"} color="red" />
+                <SCard label="ผู้ถือที่ใช้งาน" value={summary.active_holders.toLocaleString()} color="green" />
               </div>
             )}
 

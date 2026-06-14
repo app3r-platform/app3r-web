@@ -25,7 +25,7 @@ const JOB_STATUS: Record<string, { label: string; color: string }> = {
 
 const FILTER_GROUPS = [
   { label: "ทั้งหมด", value: "" },
-  { label: "Active", value: "active" },
+  { label: "ใช้งานอยู่", value: "active" },
   { label: "มอบหมายแล้ว", value: "assigned" },
   { label: "เดินทาง", value: "traveling" },
   { label: "รอเข้าบ้าน", value: "awaiting_entry" },

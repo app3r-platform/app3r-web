@@ -170,13 +170,13 @@ export default function PartsAnalyticsPage() {
             sub="ทุก shop"
           />
           <StatCard
-            label="Low Stock"
+            label="สต็อกต่ำ"
             value={data.low_stock_count.toLocaleString()}
             sub="อะไหล่ที่เหลือน้อย"
             warn={data.low_stock_count > 0}
           />
           <StatCard
-            label="Disassembly Conversion"
+            label="การแปลงซาก"
             value={`${(data.disassembly_conversion_rate * 100).toFixed(1)}%`}
             sub="ซาก → อะไหล่"
           />

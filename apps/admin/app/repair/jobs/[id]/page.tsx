@@ -343,9 +343,9 @@ export default function RepairJobDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <Link href="/repair/jobs" className="text-sm text-gray-500 hover:text-gray-700">← Repair Jobs</Link>
+              <Link href="/repair/jobs" className="text-sm text-gray-500 hover:text-gray-700">← งานซ่อม</Link>
             </div>
-            <h1 className="text-2xl font-bold">🔧 Job Detail</h1>
+            <h1 className="text-2xl font-bold">🔧 รายละเอียดงาน</h1>
             <p className="text-xs font-mono text-gray-500 mt-1">{job.id}</p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
@@ -391,23 +391,23 @@ export default function RepairJobDetailPage() {
 
         {/* Job Info */}
         <Section title="รายละเอียดงาน">
-          <InfoRow label="Service Type" value={<span className="font-mono text-admin-primary">{job.service_type}</span>} />
-          <InfoRow label="Decision Branch" value={job.decision_branch
+          <InfoRow label="ประเภทบริการ" value={<span className="font-mono text-admin-primary">{job.service_type}</span>} />
+          <InfoRow label="สาขาการตัดสินใจ" value={job.decision_branch
             ? <span className="font-mono font-bold text-admin-primary">{job.decision_branch}</span>
             : null} />
-          <InfoRow label="Decision Notes" value={job.decision_notes} />
+          <InfoRow label="บันทึกการตัดสินใจ" value={job.decision_notes} />
           <InfoRow label="นัดหมาย" value={fmt(job.scheduled_at)} />
-          <InfoRow label="Original Price" value={job.original_price != null ? `${job.original_price.toLocaleString()} G` : null} />
-          <InfoRow label="Proposed Price" value={job.proposed_price != null ? `${job.proposed_price.toLocaleString()} G` : null} />
-          <InfoRow label="Final Price" value={job.final_price != null ? `${job.final_price.toLocaleString()} G` : null} />
-          <InfoRow label="เงินค้ำประกัน (Deposit)" value={job.deposit_amount != null
-            ? `${job.deposit_amount.toLocaleString()} G — action: ${job.deposit_action ?? "—"}`
+          <InfoRow label="ราคาเริ่มต้น" value={job.original_price != null ? `${job.original_price.toLocaleString()} G` : null} />
+          <InfoRow label="ราคาที่เสนอ" value={job.proposed_price != null ? `${job.proposed_price.toLocaleString()} G` : null} />
+          <InfoRow label="ราคาสุดท้าย" value={job.final_price != null ? `${job.final_price.toLocaleString()} G` : null} />
+          <InfoRow label="พอยต์ทองที่ล็อก" value={job.deposit_amount != null
+            ? `${job.deposit_amount.toLocaleString()} G — การดำเนินการ: ${job.deposit_action ?? "—"}`
             : null} />
-          <InfoRow label="Inspection Fee" value={job.inspection_fee_charged != null
+          <InfoRow label="ค่าตรวจสภาพ" value={job.inspection_fee_charged != null
             ? `${job.inspection_fee_charged.toLocaleString()} G`
             : null} />
           {job.scrap_announcement_id && (
-            <InfoRow label="Scrap Job" value={
+            <InfoRow label="งานซาก" value={
               <span className="text-gray-500 font-mono text-xs">{job.scrap_announcement_id} — {job.scrap_agreed_price?.toLocaleString()} G</span>
             } />
           )}
@@ -493,7 +493,7 @@ export default function RepairJobDetailPage() {
 
         {/* State History */}
         {job.state_history?.length > 0 && (
-          <Section title="State History">
+          <Section title="ประวัติสถานะ">
             <div className="space-y-1">
               {job.state_history.map((ev, i) => {
                 const s = JOB_STATUS[ev.state];
@@ -513,7 +513,7 @@ export default function RepairJobDetailPage() {
 
         {/* Audit Log */}
         {job.audit_log?.length > 0 && (
-          <Section title="Audit Log">
+          <Section title="บันทึกการตรวจสอบ">
             <div className="space-y-1">
               {job.audit_log.map((ev) => (
                 <div key={ev.id} className="flex items-start gap-3 text-xs py-1.5 border-b border-gray-200/40 last:border-0">

@@ -21,7 +21,7 @@ const REASON_LABEL: Record<string, string> = {
   use_for_repair:         "ใช้ซ่อม",
   use_for_maintain:       "ใช้ล้าง",
   scrap:                  "ทิ้ง",
-  manual:                 "Manual",
+  manual:                 "ปรับด้วยตนเอง",
 };
 
 // mock fallback — ลบตอน Phase 4 (TD-06)
@@ -122,7 +122,7 @@ export default function MovementDetailPage() {
           <InfoRow label="ประเภท" value={
             <span className={`text-xs px-2 py-0.5 rounded-full ${tm.color}`}>{tm.label}</span>
           } />
-          <InfoRow label="Part ID" value={
+          <InfoRow label="รหัสอะไหล่" value={
             <Link href={`/parts/${movement.partId}`}
               className="font-mono text-xs text-admin-primary hover:text-admin-dark">
               {movement.partId}

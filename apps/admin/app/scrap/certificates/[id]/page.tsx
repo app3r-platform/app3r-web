@@ -201,7 +201,7 @@ export default function CertificateDetailPage() {
         <section className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลใบรับรอง</h2>
           <InfoRow label="เลขที่ใบรับรอง" value={<span className="font-mono text-admin-primary">{cert.certNumber}</span>} />
-          <InfoRow label="Scrap Job" value={
+          <InfoRow label="งานรับซาก" value={
             <Link href={`/scrap/jobs/${cert.scrapJobId}`}
               className="font-mono text-xs text-admin-primary hover:text-admin-dark">
               {cert.scrapJobId} ↗

@@ -114,7 +114,7 @@ export default function RepairAnalyticsPage() {
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">ภาพรวม</h2>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard icon="📋" label="Jobs ทั้งหมด" value={data.total_jobs.toLocaleString()} />
-                <StatCard icon="⚡" label="Active" value={data.active_jobs.toLocaleString()} accent="blue" />
+                <StatCard icon="⚡" label="ใช้งานอยู่" value={data.active_jobs.toLocaleString()} accent="blue" />
                 <StatCard icon="✅" label="ปิดงานแล้ว" value={data.closed_jobs.toLocaleString()} accent="green" />
                 <StatCard icon="❌" label="ยกเลิก" value={data.cancelled_jobs.toLocaleString()} accent="red" />
                 <StatCard icon="♻️" label="→ ซาก (B2.2)" value={data.converted_scrap_jobs.toLocaleString()} accent="orange" />
@@ -127,7 +127,7 @@ export default function RepairAnalyticsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <StatCard
                   icon="⏱️"
-                  label="Avg Completion Time"
+                  label="เวลาเฉลี่ยซ่อมเสร็จ"
                   value={data.avg_completion_hours != null
                     ? `${data.avg_completion_hours.toFixed(1)} ชั่วโมง`
                     : "—"}

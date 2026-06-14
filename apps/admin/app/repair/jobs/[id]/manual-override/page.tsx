@@ -20,8 +20,8 @@ const ACTION_CONFIG: Record<OverrideAction, {
   axes:    { key: string; icon: string; implication: string }[];
 }> = {
   cancel: {
-    label:    "Cancel Job",
-    desc:     "ยกเลิกงานและคืนเงินตามนโยบายเงินค้ำประกัน (Deposit)",
+    label:    "ยกเลิกงาน",
+    desc:     "ยกเลิกงานและคืนเงินตามนโยบายพอยต์ทองที่ล็อก",
     color:    "border-orange-300 bg-orange-50 text-orange-700",
     btnColor: "bg-orange-600 hover:bg-orange-700 text-white",
     axes: [
@@ -32,8 +32,8 @@ const ACTION_CONFIG: Record<OverrideAction, {
     ],
   },
   refund: {
-    label:    "Force Refund",
-    desc:     "คืนเงินให้ WeeeU ทั้งหมด — override นโยบายเงินค้ำประกัน (Deposit)",
+    label:    "บังคับคืนเงิน",
+    desc:     "คืนเงินให้ WeeeU ทั้งหมด — override นโยบายพอยต์ทองที่ล็อก",
     color:    "border-blue-300 bg-blue-50 text-blue-700",
     btnColor: "bg-admin-primary hover:bg-admin-dark text-white",
     axes: [

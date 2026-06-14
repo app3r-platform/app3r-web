@@ -9,7 +9,7 @@ import type { ContentType } from '@/lib/types/content'
 const ContentEditor = dynamic(() => import('@/components/cms/ContentEditor'), { ssr: false })
 
 const TYPE_OPTIONS: { value: ContentType; label: string }[] = [
-  { value: 'hero',         label: 'Hero Banner' },
+  { value: 'hero',         label: 'แบนเนอร์หลัก' },
   { value: 'about',        label: 'เกี่ยวกับเรา' },
   { value: 'faq',          label: 'คำถามที่พบบ่อย' },
   { value: 'static',       label: 'หน้าคงที่' },

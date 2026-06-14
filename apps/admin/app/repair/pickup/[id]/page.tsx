@@ -82,9 +82,9 @@ const PHOTO_TYPE_LABEL: Record<string, string> = {
 };
 
 const OVERRIDE_ACTIONS = [
-  { value: "cancel",   label: "Cancel Job",    desc: "ยกเลิก pickup job" },
-  { value: "reassign", label: "Force Reassign", desc: "มอบหมาย WeeeT ใหม่" },
-  { value: "complete", label: "Force Complete", desc: "ปิดงานโดยไม่ต้องรอ signature" },
+  { value: "cancel",   label: "ยกเลิกงาน",        desc: "ยกเลิก pickup job" },
+  { value: "reassign", label: "บังคับมอบหมายใหม่", desc: "มอบหมาย WeeeT ใหม่" },
+  { value: "complete", label: "บังคับปิดงาน",      desc: "ปิดงานโดยไม่ต้องรอ signature" },
 ];
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -197,7 +197,7 @@ export default function PickupDetailPage() {
               </span>
             </div>
             <p className="text-gray-500 text-sm">
-              Repair Job: <Link href={`/repair/jobs/${job.repair_job_id}`}
+              งานซ่อม: <Link href={`/repair/jobs/${job.repair_job_id}`}
                 className="text-admin-primary hover:text-admin-dark font-mono text-xs">
                 {job.repair_job_id.slice(0, 8)}…
               </Link>
@@ -215,7 +215,7 @@ export default function PickupDetailPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">อุปกรณ์</h2>
             <InfoRow label="แบรนด์ / รุ่น" value={`${job.device_brand} ${job.device_model}`} />
-            <InfoRow label="Serial" value={job.device_serial ?? "—"} />
+            <InfoRow label="ซีเรียล" value={job.device_serial ?? "—"} />
           </section>
 
           {/* WeeeT */}
@@ -405,7 +405,7 @@ export default function PickupDetailPage() {
               disabled={!overrideConfirm || overrideReason.trim().length < 10 || overrideLoading}
               className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
             >
-              {overrideLoading ? "กำลังดำเนินการ..." : "Execute Override"}
+              {overrideLoading ? "กำลังดำเนินการ..." : "ดำเนินการ Override"}
             </button>
           </section>
         )}

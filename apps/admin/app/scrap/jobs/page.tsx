@@ -161,7 +161,7 @@ export default function ScrapJobsPage() {
             <option value="resell_as_scrap">ขายเป็นซาก</option>
             <option value="dispose">ทิ้ง/E-Waste</option>
           </select>
-          <input type="text" placeholder="Buyer ID"
+          <input type="text" placeholder="รหัสผู้ซื้อ"
             value={filterBuyer} onChange={e => { setFilterBuyer(e.target.value); setPage(1); }}
             className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 w-44 focus:outline-none focus:border-admin-primary"
           />
