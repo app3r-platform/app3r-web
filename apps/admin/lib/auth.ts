@@ -18,23 +18,15 @@ export function removeToken(): void {
 
 export function isAuthenticated(): boolean {
   if (typeof window === "undefined") return false;
-  // TODO: REMOVE BEFORE PROD — dev bypass: NEXT_PUBLIC_DEV_NAV=true seeds this key
-  if (
-    process.env.NEXT_PUBLIC_DEV_NAV === "true" &&
-    localStorage.getItem(DEV_BYPASS_KEY) === DEV_BYPASS_VALUE
-  )
-    return true;
+  // TODO: REMOVE BEFORE PROD — Mockup auto-auth (Wave 1 · TD-Wave1)
+  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return true;
   return !!getToken();
 }
 
 export function isSuperAdmin(): boolean {
   if (typeof window === "undefined") return false;
-  // TODO: REMOVE BEFORE PROD — dev bypass → treat as super_admin
-  if (
-    process.env.NEXT_PUBLIC_DEV_NAV === "true" &&
-    localStorage.getItem(DEV_BYPASS_KEY) === DEV_BYPASS_VALUE
-  )
-    return true;
+  // TODO: REMOVE BEFORE PROD — Mockup auto super_admin (Wave 1 · TD-Wave1)
+  if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return true;
   const token = getToken();
   if (!token) return false;
   try {

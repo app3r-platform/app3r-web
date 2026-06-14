@@ -10,7 +10,7 @@ import { isAuthenticated } from '@/lib/auth'
 import { api } from '@/lib/api'
 import { Sidebar } from '@/components/sidebar'
 
-// ── Types (camelCase — mirrors Backend ads.ts response) ───────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 type AdStatus   = 'pending' | 'active' | 'rejected' | 'cancelled' | 'expired'
 type AdType     = 'own_listing' | 'banner_shop' | 'banner_company'
@@ -35,6 +35,29 @@ interface AdsListResponse { items: AdItem[] }
 // ad_rates: admin_config key='ad_rates', value=JSONB { home_first_row:n, module_first_row:n, sidebar:n }
 type AdRates = Record<AdPosition, number>
 const DEFAULT_RATES: AdRates = { home_first_row: 5, module_first_row: 3, sidebar: 3 }
+
+// mock fallback — ใช้เมื่อ API ไม่พร้อม (Wave 1 · TD-06)
+const MOCK_ADS: AdItem[] = [
+  { id: 'mock-001', adType: 'own_listing',    listingId: 'LST-001', position: 'home_first_row',   goldCost: 35, durationDays: 7,  status: 'pending',  rejectReason: null, startDate: null, endDate: null, cancelledAt: null, createdAt: '2026-06-14T08:00:00Z' },
+  { id: 'mock-002', adType: 'banner_shop',    listingId: null,       position: 'module_first_row', goldCost: 21, durationDays: 7,  status: 'active',   rejectReason: null, startDate: '2026-06-10T00:00:00Z', endDate: '2026-06-17T00:00:00Z', cancelledAt: null, createdAt: '2026-06-09T10:00:00Z' },
+  { id: 'mock-003', adType: 'banner_company', listingId: null,       position: 'sidebar',          goldCost: 90, durationDays: 30, status: 'active',   rejectReason: null, startDate: '2026-06-01T00:00:00Z', endDate: '2026-07-01T00:00:00Z', cancelledAt: null, createdAt: '2026-05-31T12:00:00Z' },
+  { id: 'mock-004', adType: 'own_listing',    listingId: 'LST-002', position: 'home_first_row',   goldCost: 35, durationDays: 7,  status: 'pending',  rejectReason: null, startDate: null, endDate: null, cancelledAt: null, createdAt: '2026-06-14T09:00:00Z' },
+]
+
+// ── Admin-created Ad (CRUD mock) ──────────────────────────────────────────────
+interface AdminAd {
+  id: string
+  name: string
+  adType: AdType
+  position: AdPosition
+  goldCostPerDay: number
+  durationDays: number
+  note: string
+}
+const DEFAULT_ADMIN_ADS: AdminAd[] = [
+  { id: 'adm-001', name: 'Banner หน้าแรก (ตัวอย่าง)', adType: 'banner_company', position: 'home_first_row',   goldCostPerDay: 5,  durationDays: 14, note: 'โฆษณาเปิดตัว platform' },
+  { id: 'adm-002', name: 'Banner ซ่อมรถ (ตัวอย่าง)', adType: 'banner_shop',    position: 'module_first_row', goldCostPerDay: 3,  durationDays: 7,  note: 'โปรโมต WeeeR ซ่อมรถ' },
+]
 
 // ── Labels ────────────────────────────────────────────────────────────────────
 
@@ -64,12 +87,16 @@ export default function AdsConfigPage() {
   const [rates,        setRates]       = useState<AdRates>(DEFAULT_RATES)
   const [loading,      setLoading]     = useState(true)
   const [actionId,     setActionId]    = useState<string | null>(null)
-  const [activeTab,    setActiveTab]   = useState<'queue' | 'active' | 'rates'>('queue')
+  const [activeTab,    setActiveTab]   = useState<'queue' | 'active' | 'rates' | 'manage'>('queue')
   const [toast,        setToast]       = useState<{ msg: string; type: 'ok' | 'err' } | null>(null)
   const [rejectModal,  setRejectModal] = useState<AdItem | null>(null)
   const [rejectReason, setRejectReason]= useState('')
   const [editingPos,   setEditingPos]  = useState<AdPosition | null>(null)
   const [rateInput,    setRateInput]   = useState('')
+  // Admin CRUD state
+  const [adminAds,     setAdminAds]    = useState<AdminAd[]>(DEFAULT_ADMIN_ADS)
+  const [adForm,       setAdForm]      = useState<Partial<AdminAd> | null>(null)
+  const [editAdId,     setEditAdId]    = useState<string | null>(null)
 
   function showToast(msg: string, type: 'ok' | 'err' = 'ok') {
     setToast({ msg, type })
@@ -89,7 +116,8 @@ export default function AdsConfigPage() {
         }
       } catch { /* key not set yet → use DEFAULT_RATES */ }
     } catch {
-      router.push('/login')
+      console.warn('[mock fallback] ads page — using MOCK_ADS')
+      setAds(MOCK_ADS)
     } finally {
       setLoading(false)
     }
@@ -170,6 +198,7 @@ export default function AdsConfigPage() {
           {([
             { key: 'queue',  label: `คิวรออนุมัติ (${loading ? '…' : pendingAds.length})` },
             { key: 'active', label: `กำลังแสดง (${loading ? '…' : activeAds.length})` },
+            { key: 'manage', label: `จัดการโฆษณา (${adminAds.length})` },
             { key: 'rates',  label: 'อัตราค่าโฆษณา' },
           ] as const).map(tab => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
@@ -258,6 +287,117 @@ export default function AdsConfigPage() {
                     </tbody>
                   </table>
                 )}
+              </div>
+            )}
+
+            {/* Manage (Admin CRUD) */}
+            {activeTab === 'manage' && (
+              <div className="space-y-4 max-w-2xl">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-gray-600">โฆษณาที่ Admin สร้างเอง (Wave 1 mock) · ซาก 1 รายการมีหลายชิ้นได้</p>
+                  <button
+                    onClick={() => { setAdForm({ adType: 'banner_shop', position: 'home_first_row', goldCostPerDay: 5, durationDays: 7, note: '' }); setEditAdId(null); }}
+                    className="px-4 py-2 text-sm bg-admin-primary hover:bg-admin-dark text-white rounded-lg transition-colors"
+                  >
+                    + เพิ่มโฆษณา
+                  </button>
+                </div>
+
+                {adForm !== null && (
+                  <div className="bg-white rounded-xl border border-admin-primary/30 p-5 space-y-3">
+                    <h3 className="text-sm font-semibold text-admin-primary">{editAdId ? 'แก้ไขโฆษณา' : 'เพิ่มโฆษณาใหม่'}</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="col-span-2">
+                        <label className="text-xs text-gray-500 block mb-1">ชื่อโฆษณา</label>
+                        <input type="text" value={adForm.name ?? ''} onChange={e => setAdForm(f => ({ ...f, name: e.target.value }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary"
+                          placeholder="ระบุชื่อโฆษณา..." />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 block mb-1">ประเภท</label>
+                        <select value={adForm.adType ?? 'banner_shop'} onChange={e => setAdForm(f => ({ ...f, adType: e.target.value as AdType }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary">
+                          {(Object.entries(AD_TYPE_LABEL) as [AdType, {label:string}][]).map(([k,v]) => <option key={k} value={k}>{v.label}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 block mb-1">ตำแหน่ง</label>
+                        <select value={adForm.position ?? 'home_first_row'} onChange={e => setAdForm(f => ({ ...f, position: e.target.value as AdPosition }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary">
+                          {(Object.entries(POSITION_LABEL) as [AdPosition, string][]).map(([k,v]) => <option key={k} value={k}>{v}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 block mb-1">อัตรา (pt/วัน)</label>
+                        <input type="number" min={1} value={adForm.goldCostPerDay ?? 5} onChange={e => setAdForm(f => ({ ...f, goldCostPerDay: Number(e.target.value) }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-right focus:outline-none focus:border-admin-primary" />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 block mb-1">ระยะเวลา (วัน)</label>
+                        <input type="number" min={1} value={adForm.durationDays ?? 7} onChange={e => setAdForm(f => ({ ...f, durationDays: Number(e.target.value) }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-right focus:outline-none focus:border-admin-primary" />
+                      </div>
+                      <div className="col-span-2">
+                        <label className="text-xs text-gray-500 block mb-1">หมายเหตุ</label>
+                        <input type="text" value={adForm.note ?? ''} onChange={e => setAdForm(f => ({ ...f, note: e.target.value }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary"
+                          placeholder="หมายเหตุ (ไม่บังคับ)" />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => {
+                        const name = (adForm.name ?? '').trim();
+                        if (!name) { showToast('กรุณาระบุชื่อโฆษณา', 'err'); return; }
+                        if (editAdId) {
+                          setAdminAds(prev => prev.map(a => a.id === editAdId ? { ...a, ...adForm, name } as AdminAd : a));
+                          showToast('แก้ไขโฆษณาสำเร็จ ✓');
+                        } else {
+                          setAdminAds(prev => [...prev, { id: `adm-${Date.now()}`, ...adForm, name } as AdminAd]);
+                          showToast('เพิ่มโฆษณาสำเร็จ ✓');
+                        }
+                        setAdForm(null); setEditAdId(null);
+                      }} className="px-4 py-2 text-sm bg-admin-primary hover:bg-admin-dark text-white rounded-lg transition-colors">
+                        {editAdId ? 'บันทึก' : 'เพิ่ม'}
+                      </button>
+                      <button onClick={() => { setAdForm(null); setEditAdId(null); }}
+                        className="px-4 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
+                        ยกเลิก
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  {adminAds.length === 0 ? (
+                    <div className="py-12 text-center text-gray-400"><div className="text-3xl mb-2">📢</div><p>ยังไม่มีโฆษณา Admin</p></div>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <thead><tr className="text-gray-500 text-left border-b border-gray-200 bg-gray-50 text-xs">
+                        <th className="px-4 py-3">ชื่อโฆษณา</th><th className="px-4 py-3">ประเภท</th>
+                        <th className="px-4 py-3">ตำแหน่ง</th><th className="px-4 py-3">ต้นทุน</th><th className="px-4 py-3"></th>
+                      </tr></thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {adminAds.map(ad => (
+                          <tr key={ad.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3 font-medium text-gray-800">{ad.name}<br/><span className="text-xs text-gray-400 font-normal">{ad.note}</span></td>
+                            <td className="px-4 py-3"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${AD_TYPE_LABEL[ad.adType].color}`}>{AD_TYPE_LABEL[ad.adType].label}</span></td>
+                            <td className="px-4 py-3 text-gray-600 text-xs">{POSITION_LABEL[ad.position]}</td>
+                            <td className="px-4 py-3 text-gray-600 text-xs">{ad.goldCostPerDay} pt/วัน × {ad.durationDays} วัน = {ad.goldCostPerDay * ad.durationDays} pt</td>
+                            <td className="px-4 py-3">
+                              <div className="flex gap-2">
+                                <button onClick={() => { setAdForm({ ...ad }); setEditAdId(ad.id); }}
+                                  className="text-xs text-admin-primary hover:text-admin-dark px-2 py-1">แก้ไข</button>
+                                <button onClick={() => { setAdminAds(prev => prev.filter(a => a.id !== ad.id)); showToast('ลบโฆษณาแล้ว'); }}
+                                  className="text-xs text-red-600 hover:text-red-700 px-2 py-1">ลบ</button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400">⚠️ Wave 1: ข้อมูลอยู่ใน memory — รีโหลดจะรีเซ็ต (Phase 4 = เชื่อมต่อ Backend)</p>
               </div>
             )}
 
