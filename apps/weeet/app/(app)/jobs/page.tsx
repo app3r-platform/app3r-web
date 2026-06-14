@@ -290,7 +290,7 @@ export default function JobsPage() {
                     {/* Sub-4: แสดง point_amount ถ้ามี */}
                     {job.point_amount != null && (
                       <p className="text-weeet-primary text-xs mt-0.5">
-                        💰 {job.point_amount.toLocaleString()} pts
+                        💰 {job.point_amount.toLocaleString()} พอยต์ทอง
                       </p>
                     )}
                     {/* Source badge — D64 */}

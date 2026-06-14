@@ -7,7 +7,7 @@ import { JunctionPopup } from "@/components/JunctionPopup";
 
 export const metadata: Metadata = {
   title: "WeeeT — แอปช่าง",
-  description: "WeeeT — แอปสำหรับช่างในร้านซ่อม | App3R Platform",
+  description: "WeeeT — แอปสำหรับช่างในร้านซ่อม · แพลตฟอร์ม App3R",
   manifest: "/manifest.json",
   icons: {
     icon: "/logo/WeeeT.png",

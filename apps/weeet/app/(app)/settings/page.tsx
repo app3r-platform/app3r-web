@@ -162,8 +162,8 @@ export default function SettingsPage() {
       {/* About */}
       <SettingSection title="เกี่ยวกับแอป">
         <SettingRow icon="ℹ️" label="เวอร์ชัน" value="v1.0.0 (R-02)" />
-        <SettingRow icon="🏢" label="แพลตฟอร์ม" value="App3R Platform" />
-        <SettingRow icon="📋" label="Layer" value="WeeeT — ช่าง" />
+        <SettingRow icon="🏢" label="แพลตฟอร์ม" value="แพลตฟอร์ม App3R" />
+        <SettingRow icon="📋" label="ส่วนระบบ" value="WeeeT — ช่าง" />
         {auth.accountType && (
           <SettingRow
             icon="👤"

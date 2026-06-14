@@ -125,7 +125,7 @@ export function Footer() {
   if (!info) {
     return (
       <footer className="bg-gray-900 border-t border-gray-800 px-4 py-4 text-center">
-        <p className="text-xs text-gray-600">App3R Platform</p>
+        <p className="text-xs text-gray-600">แพลตฟอร์ม App3R</p>
       </footer>
     );
   }

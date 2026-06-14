@@ -105,7 +105,7 @@ export default function ChangePasswordFirstPage() {
       <div className="px-4 pt-5">
         <div className="bg-amber-950/40 border border-amber-700 rounded-xl p-4 text-sm text-amber-200 space-y-1">
           <p className="font-semibold flex items-center gap-2">
-            <span>⚠️</span> บัญชีประเภท Rented
+            <span>⚠️</span> บัญชีประเภทเช่า (Rented)
           </p>
           <p className="text-xs text-amber-300/80">
             บัญชีนี้ถูกสร้างโดยร้านของคุณ คุณต้องเปลี่ยนรหัสผ่านก่อนเข้าใช้งานครั้งแรก

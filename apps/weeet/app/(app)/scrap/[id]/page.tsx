@@ -172,7 +172,7 @@ export default function WeeeTScrapJobDetailPage({
             <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
             {job.sourceRepairJobId && (
               <span className="text-xs bg-orange-50 text-orange-600 border border-orange-200 px-1.5 py-0.5 rounded-full">
-                🔧 Repair
+                🔧 จากงานซ่อม
               </span>
             )}
           </div>

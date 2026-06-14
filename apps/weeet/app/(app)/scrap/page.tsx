@@ -183,7 +183,7 @@ export default function WeeeTScrapJobsPage() {
                     {/* S12 badge */}
                     {job.sourceRepairJobId && (
                       <span className="text-xs bg-orange-50 text-orange-600 border border-orange-200 px-1.5 py-0.5 rounded-full whitespace-nowrap">
-                        🔧 Repair
+                        🔧 จากงานซ่อม
                       </span>
                     )}
                   </div>

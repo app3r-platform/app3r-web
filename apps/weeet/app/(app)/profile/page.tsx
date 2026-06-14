@@ -431,7 +431,7 @@ export default function ProfilePage() {
       {auth.isImpersonated && (
         <div className="bg-amber-950/50 border border-amber-800 rounded-xl p-4 text-sm text-amber-200">
           <p className="font-semibold flex items-center gap-2">
-            <span>👤</span> โหมด Impersonation
+            <span>👤</span> โหมดเข้าใช้งานแทน
           </p>
           <p className="text-xs text-amber-300/70 mt-1">
             บัญชีนี้ถูกเข้าใช้งานโดย {auth.impersonatedByShop ?? "WeeeR"}

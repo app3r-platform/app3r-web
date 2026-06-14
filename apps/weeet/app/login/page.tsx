@@ -152,10 +152,10 @@ function LoginForm() {
               priority
             />
             <h1 className="text-3xl font-bold text-white">WeeeT</h1>
-            <p className="text-gray-400 text-sm">แอปสำหรับช่าง | App3R Platform</p>
+            <p className="text-gray-400 text-sm">แอปสำหรับช่าง · แพลตฟอร์ม App3R</p>
             {isImpersonation && (
               <span className="inline-block bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full text-xs">
-                🔑 Impersonation Mode
+                🔑 โหมดเข้าใช้งานแทน
               </span>
             )}
           </div>
@@ -251,11 +251,11 @@ function LoginForm() {
 
           {/* Demo hint */}
           <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-3 text-xs text-gray-400 space-y-1">
-            <p className="font-medium text-gray-300 mb-1">🧪 Demo Mode</p>
+            <p className="font-medium text-gray-300 mb-1">🧪 โหมดทดลอง (Demo)</p>
             <p>กรอกอีเมลใดก็ได้ + รหัสผ่านใดก็ได้ เพื่อทดสอบ</p>
-            <p className="text-weeet-primary">ใช้รหัส <code className="bg-gray-700 px-1 rounded">changeme123</code> เพื่อจำลอง Rented WeeeT (บังคับเปลี่ยนรหัส)</p>
+            <p className="text-weeet-primary">ใช้รหัส <code className="bg-gray-700 px-1 rounded">changeme123</code> เพื่อจำลองบัญชีเช่า (Rented) (บังคับเปลี่ยนรหัส)</p>
             {isImpersonation && (
-              <p className="text-amber-400">⚡ Impersonation: จาก {shopName}</p>
+              <p className="text-amber-400">⚡ เข้าใช้งานแทน: จาก {shopName}</p>
             )}
           </div>
         </div>

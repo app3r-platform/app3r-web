@@ -2,7 +2,7 @@ import type { JobStatus } from "@/lib/types";
 
 const STATUS_CONFIG: Record<JobStatus, { label: string; classes: string }> = {
   assigned: { label: "รอดำเนินการ", classes: "bg-blue-900 text-blue-200" },
-  in_progress: { label: "กำลังทำ", classes: "bg-weeet-surface/40 text-weeet-primary" },
+  in_progress: { label: "กำลังทำ", classes: "bg-sky-900 text-sky-200" },
   completed: { label: "เสร็จสิ้น", classes: "bg-green-900 text-green-200" },
   cancelled: { label: "ยกเลิก", classes: "bg-gray-700 text-gray-300" },
 };

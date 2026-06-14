@@ -99,10 +99,10 @@ export const SUB_STAGE_LABELS: Record<string, string> = {
   ready_for_pickup: "พร้อมให้มารับ",
   picked_up_by_customer: "ลูกค้ามารับแล้ว",
   // Parcel
-  courier_to_pickup: "ขนส่งออกไปรับ (tracking #1)",
+  courier_to_pickup: "ขนส่งออกไปรับ (เลขติดตาม #1)",
   courier_pickup_done: "ขนส่งรับแล้ว กำลังส่งมาร้าน",
   arrived_at_shop: "ถึงร้านแล้ว",
-  courier_to_delivery: "ขนส่งออกไปส่งคืน (tracking #2)",
+  courier_to_delivery: "ขนส่งออกไปส่งคืน (เลขติดตาม #2)",
   delivered_to_customer: "ส่งถึงลูกค้าแล้ว",
 };
 

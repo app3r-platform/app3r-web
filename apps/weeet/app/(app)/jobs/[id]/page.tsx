@@ -391,7 +391,7 @@ export default function JobDetailPage({
             <InfoRow label="ชื่องาน" value={job.title} />
             <InfoRow label="รายละเอียด" value={job.description} />
             {job.point_amount != null && (
-              <InfoRow label="มูลค่า" value={`${job.point_amount.toLocaleString()} pts`} />
+              <InfoRow label="มูลค่า" value={`${job.point_amount.toLocaleString()} พอยต์ทอง`} />
             )}
             {job.deadline && (
               <InfoRow
