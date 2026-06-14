@@ -11,7 +11,7 @@ import ListingCard from "@/components/listings/ListingCard";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import EmptyGroupState from "./EmptyGroupState";
-import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
+import { getMockRoleFromCookie } from "@/lib/auth/mock-role";
 import type { ResellListing } from "@/lib/types";
 
 /**
@@ -33,14 +33,8 @@ export default async function ResellGroup() {
   const cookieStore = await cookies();
   const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
-  // กรอง active เท่านั้น
-  let activeListings = mockResellListings.filter((l) => l.status === "active");
-
-  // D1 role-based filter: WeeeU เห็นเฉพาะของตัวเอง
-  if (role === "weeeu") {
-    const myId = MOCK_USERS.weeeu.id;
-    activeListings = activeListings.filter((l) => l.seller.id === myId);
-  }
+  // กรอง active เท่านั้น — WeeeU เห็นทุก listing (browsing to buy)
+  const activeListings = mockResellListings.filter((l) => l.status === "active");
 
   const grouped = groupByCategory(activeListings);
   const categories = Object.keys(grouped);

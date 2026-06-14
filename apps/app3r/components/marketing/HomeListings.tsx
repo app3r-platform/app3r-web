@@ -4,11 +4,14 @@
 // Fix-Wave A (W-01):
 //  - module selector (anchor chips) ลด scroll (Visitor #4)
 //  - ปุ่ม "สินค้าแนะนำ" → /products (Visitor #3)
-//  - เรียงใหม่: ซ่อม → บำรุงรักษา → ซาก → ขายมือสอง (resell ท้ายสุด · WeeeU #5)
+//  - เรียงใหม่: ขายมือสอง → ซาก → ซ่อม → บำรุงรักษา (resell ขึ้นอันดับ 1 · แพลตฟอร์มเน้นซื้อ-ขายมือสอง)
+//  - Visitor (anonymous) เห็นเฉพาะ 2 โมดูล: ขายมือสอง + ซาก
 //  - แต่ละโมดูลมี id anchor + scroll-mt กัน sticky navbar บัง
 // ============================================================
 import { Suspense } from "react";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { getMockRoleFromCookie } from "@/lib/auth/mock-role";
 import HomeActionCTA from "./HomeActionCTA";
 import ResellGroup from "./groups/ResellGroup";
 import ScrapGroup from "./groups/ScrapGroup";
@@ -16,14 +19,20 @@ import RepairRequestGroup from "./groups/RepairRequestGroup";
 import MaintainRequestGroup from "./groups/MaintainRequestGroup";
 import GroupSkeleton from "./groups/GroupSkeleton";
 
-const MODULES = [
-  { id: "module-repair", label: "🔧 ซ่อม" },
-  { id: "module-maintain", label: "🛡️ บำรุงรักษา" },
-  { id: "module-scrap", label: "♻️ ซาก" },
-  { id: "module-resell", label: "📦 ขายมือสอง" },
-];
+export default async function HomeListings() {
+  const cookieStore = await cookies();
+  const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
+  const isVisitor = role === "anonymous";
 
-export default function HomeListings() {
+  const MODULES = [
+    { id: "module-resell", label: "📦 ขายมือสอง" },
+    { id: "module-scrap", label: "♻️ ซาก" },
+    ...(!isVisitor ? [
+      { id: "module-repair", label: "🔧 ซ่อม" },
+      { id: "module-maintain", label: "🛡️ บำรุงรักษา" },
+    ] : []),
+  ];
+
   return (
     <div className="bg-gray-50">
       {/* W-2-B D2: CTA block (sell split · repair/maintain) */}
@@ -50,15 +59,10 @@ export default function HomeListings() {
         </div>
       </nav>
 
-      {/* เรียงโมดูล: ซ่อม → บำรุงรักษา → ซาก → ขายมือสอง (resell ท้ายสุด · WeeeU #5) */}
-      <div id="module-repair" className="scroll-mt-32">
+      {/* เรียงโมดูล: ขายมือสอง → ซาก → ซ่อม → บำรุงรักษา */}
+      <div id="module-resell" className="scroll-mt-32">
         <Suspense fallback={<GroupSkeleton />}>
-          <RepairRequestGroup />
-        </Suspense>
-      </div>
-      <div id="module-maintain" className="scroll-mt-32">
-        <Suspense fallback={<GroupSkeleton />}>
-          <MaintainRequestGroup />
+          <ResellGroup />
         </Suspense>
       </div>
       <div id="module-scrap" className="scroll-mt-32">
@@ -66,11 +70,21 @@ export default function HomeListings() {
           <ScrapGroup />
         </Suspense>
       </div>
-      <div id="module-resell" className="scroll-mt-32">
-        <Suspense fallback={<GroupSkeleton />}>
-          <ResellGroup />
-        </Suspense>
-      </div>
+      {/* Visitor: ซ่อน Repair + Maintain */}
+      {!isVisitor && (
+        <>
+          <div id="module-repair" className="scroll-mt-32">
+            <Suspense fallback={<GroupSkeleton />}>
+              <RepairRequestGroup />
+            </Suspense>
+          </div>
+          <div id="module-maintain" className="scroll-mt-32">
+            <Suspense fallback={<GroupSkeleton />}>
+              <MaintainRequestGroup />
+            </Suspense>
+          </div>
+        </>
+      )}
     </div>
   );
 }

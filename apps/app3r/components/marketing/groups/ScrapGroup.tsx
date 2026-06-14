@@ -10,7 +10,7 @@ import ListingCard from "@/components/listings/ListingCard";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import EmptyGroupState from "./EmptyGroupState";
-import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
+import { getMockRoleFromCookie } from "@/lib/auth/mock-role";
 import type { ScrapListing } from "@/lib/types";
 
 // Scrap ไม่มี postedDaysAgo ใน type — ใช้ลำดับใน array แทน (assume sorted newest first ใน mock)
@@ -27,13 +27,8 @@ export default async function ScrapGroup() {
   const cookieStore = await cookies();
   const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
-  let activeListings = mockScrapListings.filter((l) => l.status === "active");
-
-  // D1 role-based filter: WeeeU เห็นเฉพาะของตัวเอง
-  if (role === "weeeu") {
-    const myId = MOCK_USERS.weeeu.id;
-    activeListings = activeListings.filter((l) => l.seller.id === myId);
-  }
+  // WeeeU เห็นทุก listing (browsing/selling scrap)
+  const activeListings = mockScrapListings.filter((l) => l.status === "active");
 
   const grouped = groupByMaterial(activeListings);
   const materials = Object.keys(grouped);
