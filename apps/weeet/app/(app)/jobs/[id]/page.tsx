@@ -37,7 +37,7 @@ const STATUS_COLOR: Record<RepairJobStatus, string> = {
   inspecting: "bg-blue-900/60 text-blue-300",
   awaiting_decision: "bg-amber-900/60 text-amber-300",
   awaiting_user: "bg-amber-900/60 text-amber-300",
-  in_progress: "bg-weeet-surface/60 text-weeet-primary",
+  in_progress: "bg-sky-900/60 text-sky-300",
   completed: "bg-green-900/60 text-green-300",
   awaiting_review: "bg-amber-900/60 text-amber-300",
   closed: "bg-green-900/60 text-green-300",
@@ -46,7 +46,7 @@ const STATUS_COLOR: Record<RepairJobStatus, string> = {
   // Pickup states
   en_route_pickup: "bg-blue-900/60 text-blue-300",
   picked_up: "bg-blue-900/60 text-blue-300",
-  appliance_at_shop: "bg-weeet-surface/60 text-weeet-primary",
+  appliance_at_shop: "bg-sky-900/60 text-sky-300",
   tested_ok: "bg-green-900/60 text-green-300",
   en_route_delivery: "bg-blue-900/60 text-blue-300",
   delivered: "bg-green-900/60 text-green-300",
@@ -338,7 +338,7 @@ export default function JobDetailPage({
           <div className="bg-gray-800/60 border border-gray-700/60 rounded-xl px-4 py-2.5 flex items-center gap-2">
             <span className="text-gray-400 text-xs shrink-0">แหล่งที่มาของเครื่อง:</span>
             {job.source.type === "purchased_scrap" ? (
-              <span className="bg-weeet-surface/40 border border-weeet-dark text-weeet-primary text-xs px-2 py-0.5 rounded">
+              <span className="bg-sky-900/40 border border-sky-700 text-sky-300 text-xs px-2 py-0.5 rounded">
                 ซื้อจากซาก{job.source.refId ? ` (${job.source.refId})` : ""}
               </span>
             ) : (

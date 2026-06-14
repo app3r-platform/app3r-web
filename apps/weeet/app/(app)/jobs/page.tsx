@@ -295,7 +295,7 @@ export default function JobsPage() {
                     )}
                     {/* Source badge — D64 */}
                     {job.source?.type === "purchased_scrap" ? (
-                      <span className="inline-block mt-1 bg-weeet-surface/40 border border-weeet-dark text-weeet-primary text-xs px-2 py-0.5 rounded">
+                      <span className="inline-block mt-1 bg-sky-900/40 border border-sky-700 text-sky-300 text-xs px-2 py-0.5 rounded">
                         ซื้อจากซาก{job.source.refId ? `: ${job.source.refId}` : ""}
                       </span>
                     ) : (

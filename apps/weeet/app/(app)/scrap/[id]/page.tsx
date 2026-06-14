@@ -65,9 +65,9 @@ function getMockJob(id: string): ScrapPickupJobDetail {
 }
 
 const GRADE_META: Record<string, { label: string; color: string }> = {
-  grade_A: { label: "Grade A", color: "bg-green-100 text-green-700" },
-  grade_B: { label: "Grade B", color: "bg-yellow-100 text-yellow-700" },
-  grade_C: { label: "Grade C", color: "bg-red-100 text-red-500" },
+  grade_A: { label: "เกรด A", color: "bg-green-100 text-green-700" },
+  grade_B: { label: "เกรด B", color: "bg-yellow-100 text-yellow-700" },
+  grade_C: { label: "เกรด C", color: "bg-red-100 text-red-500" },
 };
 
 const STATUS_META: Record<JobStatus, { label: string; color: string }> = {

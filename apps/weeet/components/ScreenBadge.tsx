@@ -63,14 +63,14 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/scrap",                       num: "T-22" },
   // ── Parts (B2B จัดซื้ออะไหล่) ──────────────────────────────────────────────────
   { pattern: "/parts/catalog/[id]",          num: "T-27", label: "รายละเอียด" },
-  { pattern: "/parts/catalog",               num: "T-26", label: "Catalog" },
-  { pattern: "/parts/orders/[id]",           num: "T-31", label: "Order Detail" },
+  { pattern: "/parts/catalog",               num: "T-26", label: "แคตตาล็อก" },
+  { pattern: "/parts/orders/[id]",           num: "T-31", label: "รายละเอียดออเดอร์" },
   { pattern: "/parts/orders",                num: "T-30", label: "ออเดอร์" },
   { pattern: "/parts/requests",              num: "T-32", label: "คำขออะไหล่" },
   { pattern: "/parts/cart",                  num: "T-28", label: "ตะกร้า" },
-  { pattern: "/parts/checkout",              num: "T-29", label: "Checkout" },
+  { pattern: "/parts/checkout",              num: "T-29", label: "ชำระเงิน" },
   { pattern: "/parts/[id]",                  num: "T-25", label: "อะไหล่ชิ้น" },
-  { pattern: "/parts",                       num: "T-24", label: "Parts Hub" },
+  { pattern: "/parts",                       num: "T-24", label: "ศูนย์อะไหล่" },
   // ── Main / standalone ─────────────────────────────────────────────────────────
   { pattern: "/dashboard",                   num: "T-18" },
   { pattern: "/today",                       num: "T-19" },

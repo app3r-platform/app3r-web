@@ -1,5 +1,5 @@
 import type { RepairJob, DiagnosePayload } from "./types";
-import { createDevTokenProvider, ERR_BACKEND_UNAVAILABLE } from "@app3r/shared/src/mock-runtime";
+import { createDevTokenProvider } from "@app3r/shared/src/mock-runtime";
 
 export const API_BASE = "/api/v1";
 
@@ -26,7 +26,8 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   // BUG-3 fix: mock mode → ห้ามยิง backend · page .catch() → fallback mock
   //   MOCK_MODE = inline ใน app chunk (ไม่ผ่าน shared isMockMode = กัน BUG-3)
   if (MOCK_MODE) {
-    throw new Error(ERR_BACKEND_UNAVAILABLE);
+    // EN-leak fix: แสดงข้อความไทยแทน error code ดิบ (โหมดทดลองยังไม่เชื่อมต่อ backend)
+    throw new Error("เซิร์ฟเวอร์ยังไม่พร้อม (โหมดทดลอง)");
   }
 
   let token: string | null = null;

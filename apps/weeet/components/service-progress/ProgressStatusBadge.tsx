@@ -4,7 +4,7 @@ import { MAIN_STAGE_LABELS } from "@/lib/types/service-progress";
 const STAGE_COLORS: Record<MainStage, string> = {
   posted: "bg-gray-700 text-gray-300",
   offer_accepted: "bg-blue-900/60 text-blue-300",
-  in_progress: "bg-weeet-surface/60 text-weeet-primary",
+  in_progress: "bg-sky-900/60 text-sky-300",
   completed: "bg-green-900/60 text-green-300",
   reviewed: "bg-blue-900/60 text-blue-300",
 };

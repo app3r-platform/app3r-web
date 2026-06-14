@@ -29,6 +29,15 @@ interface PaginatedTopup {
   pages: number;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_TOPUP: PaginatedTopup = {
+  items: [
+    { id: 1, user_id: 101, user_name: "สมชาย ท.", amount: 500, payment_method: "promptpay", slip_url: null, reference_no: "REF-001", status: "pending", reject_reason: null, created_at: "2026-06-14T08:00:00Z", reviewed_at: null },
+    { id: 2, user_id: 102, user_name: "ร้านซ่อมดี",  amount: 1000, payment_method: "bank_transfer", slip_url: null, reference_no: "REF-002", status: "pending", reject_reason: null, created_at: "2026-06-14T09:00:00Z", reviewed_at: null },
+  ],
+  total: 2, page: 1, pages: 1,
+};
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TopupPage() {
@@ -54,8 +63,9 @@ export default function TopupPage() {
       if (statusFilter) params.set("status", statusFilter);
       const result = await api.get<PaginatedTopup>(`/admin/topup/requests?${params}`);
       setData(result);
-    } catch {
-      router.push("/login");
+    } catch (e) {
+      console.warn("[mock fallback] topup:", e);
+      setData(MOCK_TOPUP);
     } finally {
       setLoading(false);
     }

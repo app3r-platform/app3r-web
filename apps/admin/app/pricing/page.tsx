@@ -180,7 +180,8 @@ function KindBadge({ kind }: { kind: DeductionKind }) {
 }
 function DimKindBadge({ kind }: { kind: UPDimension["kind"] }) {
   const m = { ENUM: "bg-blue-50 text-blue-700", NUMERIC: "bg-orange-50 text-orange-700", BOOLEAN: "bg-green-50 text-green-700", TEXT: "bg-gray-100 text-gray-600" };
-  return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${m[kind]}`}>{kind}</span>;
+  const l: Record<UPDimension["kind"], string> = { ENUM: "รายการ", NUMERIC: "ตัวเลข", BOOLEAN: "ใช่/ไม่", TEXT: "ข้อความ" };
+  return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${m[kind]}`}>{l[kind]}</span>;
 }
 function DeductionAmountDisplay({ d }: { d: UPDeduction }) {
   if (d.deduction_type === "FIXED")   return <span className="font-mono text-sm">-{d.fixed_amount?.toLocaleString()} ฿</span>;
@@ -468,7 +469,7 @@ function Tab2Dimensions({ cats, dims, setDims, dimVals, setDimVals }: {
                 <label className="text-xs font-medium text-gray-600">ประเภท (Kind)</label>
                 <select value={dimForm.kind} onChange={e => setDimForm({ ...dimForm, kind: e.target.value as UPDimension["kind"] })}
                   className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-900">
-                  {(["ENUM", "NUMERIC", "BOOLEAN", "TEXT"] as const).map(k => <option key={k} value={k}>{k}</option>)}
+                  {(["ENUM", "NUMERIC", "BOOLEAN", "TEXT"] as const).map(k => <option key={k} value={k}>{{ ENUM: "รายการ", NUMERIC: "ตัวเลข", BOOLEAN: "ใช่/ไม่", TEXT: "ข้อความ" }[k]}</option>)}
                 </select>
               </div>
               <label className="flex items-center gap-2 cursor-pointer">

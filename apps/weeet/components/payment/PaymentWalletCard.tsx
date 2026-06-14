@@ -17,11 +17,13 @@ export function PaymentWalletCard() {
 
   useEffect(() => {
     const dal = getAdapter();
-    Promise.all([dal.payment.getWalletBalance(), dal.payment.getTransactions(10)]).then(([b, t]) => {
-      if (b.ok) setBalance(b.data); else setError(b.error);
-      if (t.ok) setTransactions(t.data);
-      setLoading(false);
-    });
+    Promise.all([dal.payment.getWalletBalance(), dal.payment.getTransactions(10)])
+      .then(([b, t]) => {
+        if (b.ok) setBalance(b.data); else setError(b.error);
+        if (t.ok) setTransactions(t.data);
+      })
+      .catch(() => setError("โหลดข้อมูลกระเป๋าเงินไม่สำเร็จ"))
+      .finally(() => setLoading(false));
   }, []);
 
   const fmt = (n: number) => n.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });

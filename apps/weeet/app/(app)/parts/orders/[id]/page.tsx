@@ -24,7 +24,7 @@ const STATUS_COLORS: Record<PartsOrderStatus, string> = {
   closed:    "bg-green-900/40 border-green-700 text-green-300",
   disputed:  "bg-red-900/40 border-red-700 text-red-300",
   resolved:  "bg-blue-900/40 border-blue-700 text-blue-300",
-  refunded:  "bg-weeet-surface/60 border-weeet-primary/50 text-weeet-primary",
+  refunded:  "bg-sky-900/40 border-sky-700 text-sky-300",
   cancelled: "bg-gray-900/40 border-gray-700 text-gray-500",
 };
 

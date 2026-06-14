@@ -27,7 +27,7 @@ const STATE_BADGE: Record<ListingState, string> = {
   draft: "bg-gray-800 border-gray-600 text-gray-300",
   published: "bg-blue-900/40 border-blue-700 text-blue-300",
   has_offer: "bg-yellow-900/40 border-yellow-700 text-yellow-300",
-  matched: "bg-weeet-surface/20 border-weeet-primary/60 text-weeet-primary",
+  matched: "bg-sky-900/40 border-sky-700 text-sky-300",
   completed: "bg-green-900/40 border-green-700 text-green-300",
   cancelled: "bg-red-900/40 border-red-700 text-red-300",
 };

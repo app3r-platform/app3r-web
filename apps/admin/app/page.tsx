@@ -165,7 +165,7 @@ function RoleBadge({ role }: { role: string }) {
         colors[role] ?? "bg-gray-100 text-gray-600"
       }`}
     >
-      {role}
+      {({ admin: "แอดมิน", weeer: "WeeeR", weeeu: "WeeeU", weeet: "WeeeT" } as Record<string,string>)[role] ?? role}
     </span>
   );
 }

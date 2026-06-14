@@ -20,6 +20,12 @@ interface FeePools {
 }
 interface GoldData { reserve: GoldReserve; fee_pools: FeePools; }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_GOLD: GoldData = {
+  reserve:   { reserve_pool: 50000, total_minted: 100000, total_destroyed: 5000, total_written_off: 500 },
+  fee_pools: { listing_offer_fee_pool: 2000, platform_fee_pool: 3000, advertising_pool: 1500, escrow_pool: 38000 },
+};
+
 type ModalAction = "mint" | "destroy" | "writeoff" | null;
 
 export default function GoldManagementPage() {
@@ -39,6 +45,9 @@ export default function GoldManagementPage() {
     try {
       const d = await api.get<GoldData>("/admin/platform/gold");
       setData(d);
+    } catch (e) {
+      console.warn("[mock fallback] gold-management:", e);
+      setData(MOCK_GOLD);
     } finally {
       setLoading(false);
     }
