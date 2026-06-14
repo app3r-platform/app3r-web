@@ -8,7 +8,7 @@
  * cron daily 02:00 → flag status='pending'|'authorized' นาน >24h → status='stale' + alert admin
  * settlement report API (2C2P/TrueMoney/Stripe) เลื่อนไป D-5
  *
- * NOTE-D89-2: D-2 ไม่มี withdrawal UI — WeeeR/WeeeT ถอนเงิน = manual process Phase D-5
+ * NOTE-D89-2: D-2 ไม่มี withdrawal UI — WeeeR ถอนเงิน = manual process Phase D-5 (WeeeT ไม่ถือ wallet · ไม่ถอนพอยต์ — D117-F)
  *
  * payment_intents ↔ wallets/point_ledger sync: @needs-point-review
  * (Backend ส่ง consultation ให้ Point chat ผ่าน HUB ก่อน finalize logic)

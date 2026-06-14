@@ -29,7 +29,7 @@ export const services = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
 
-    // เจ้าของ service (ผู้รับงาน: WeeeR | WeeeT | WeeeU)
+    // เจ้าของ service (ผู้รับงาน: WeeeR | WeeeU — WeeeT ไม่ถือ wallet · ค่าบริการเข้า WeeeR เสมอ · D117-F)
     ownerId: uuid('owner_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
