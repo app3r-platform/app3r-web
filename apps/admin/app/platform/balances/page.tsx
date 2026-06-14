@@ -19,6 +19,13 @@ interface PlatformBalances {
   last_reconciliation_at: string | null;
 }
 
+// mock fallback — ลบตอน Phase 4 (TD-06)
+const MOCK_BALANCES: PlatformBalances = {
+  listing_offer_fee_pool: 2000, platform_fee_pool: 3000, advertising_pool: 1500,
+  escrow_pool: 38000, reserve_pool: 50000, written_off: 500, silver_pool: 15000,
+  reconciliation_status: "BALANCED", last_reconciliation_at: "2026-06-14T00:00:00Z",
+};
+
 export default function BalancesPage() {
   const router = useRouter();
   const [data, setData] = useState<PlatformBalances | null>(null);
@@ -31,7 +38,9 @@ export default function BalancesPage() {
       setData(d);
       setError(null);
     } catch (e) {
-      setError((e as Error).message);
+      console.warn("[mock fallback] balances:", e);
+      setData(MOCK_BALANCES);
+      setError(null);
     } finally {
       setLoading(false);
     }
