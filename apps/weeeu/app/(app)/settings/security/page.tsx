@@ -223,7 +223,7 @@ export default function SecuritySettingsPage() {
           <ul className="text-xs text-gray-500 space-y-1 list-disc list-inside">
             <li>ข้อมูลส่วนตัวและที่อยู่</li>
             <li>ประวัติการซ่อม / ซื้อขาย / บำรุงรักษา</li>
-            <li>Silver Point และ Gold Point คงเหลือจะหมดอายุ</li>
+            <li>พอยต์เงินและพอยต์ทองคงเหลือจะหมดอายุ</li>
             <li>ดำเนินการไม่ได้เมื่อมีงานที่ยังไม่เสร็จ</li>
           </ul>
 

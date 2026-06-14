@@ -40,7 +40,7 @@ export default function VerifyEmailPage() {
           ✉️
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">ตรวจสอบ Email ของคุณ</h2>
+          <h2 className="text-xl font-bold text-gray-900">ตรวจสอบอีเมลของคุณ</h2>
           <p className="text-gray-500 text-sm mt-2">
             เราส่งลิงก์ยืนยันไปที่
           </p>
@@ -50,11 +50,11 @@ export default function VerifyEmailPage() {
 
       {/* Instructions */}
       <div className="bg-weeeu-surface rounded-2xl p-4 space-y-2">
-        <p className="text-sm font-semibold text-weeeu-dark">วิธียืนยัน Email:</p>
+        <p className="text-sm font-semibold text-weeeu-dark">วิธียืนยันอีเมล:</p>
         <ol className="space-y-1 text-sm text-weeeu-primary">
-          <li className="flex items-start gap-2"><span className="font-bold">1.</span> เปิด inbox Email ของคุณ</li>
+          <li className="flex items-start gap-2"><span className="font-bold">1.</span> เปิด inbox อีเมลของคุณ</li>
           <li className="flex items-start gap-2"><span className="font-bold">2.</span> หาอีเมลจาก WeeeU</li>
-          <li className="flex items-start gap-2"><span className="font-bold">3.</span> คลิกลิงก์ "ยืนยัน Email" ในอีเมล</li>
+          <li className="flex items-start gap-2"><span className="font-bold">3.</span> คลิกลิงก์ "ยืนยันอีเมล" ในอีเมล</li>
           <li className="flex items-start gap-2"><span className="font-bold">4.</span> กลับมายืนยันที่นี่</li>
         </ol>
       </div>
@@ -87,13 +87,13 @@ export default function VerifyEmailPage() {
           href="/signup/personal"
           className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-center transition-colors text-sm"
         >
-          ยืนยัน Email แล้ว → ถัดไป
+          ยืนยันอีเมลแล้ว → ถัดไป
         </Link>
       </div>
 
       <div className="text-center space-y-2">
         <p className="text-xs text-gray-400">
-          ไม่พบ Email? ตรวจสอบโฟลเดอร์ Spam/Junk
+          ไม่พบอีเมล? ตรวจสอบโฟลเดอร์ Spam/Junk
         </p>
         <div className="flex justify-center">
           <Link href="/signup/otp" className="text-sm text-gray-400 hover:text-gray-600">

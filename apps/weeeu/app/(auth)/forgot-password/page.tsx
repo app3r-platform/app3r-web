@@ -23,10 +23,10 @@ const MAX_RESEND      = 5;      // max sends/hr
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function validateIdentifier(val: string): string | null {
   const trimmed = val.trim();
-  if (!trimmed) return "กรุณากรอกเบอร์โทรหรือ Email";
+  if (!trimmed) return "กรุณากรอกเบอร์โทรหรืออีเมล";
   const isPhone = /^\d{9,10}$/.test(trimmed.replace(/\D/g, ""));
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
-  if (!isPhone && !isEmail) return "รูปแบบเบอร์โทร (10 หลัก) หรือ Email ไม่ถูกต้อง";
+  if (!isPhone && !isEmail) return "รูปแบบเบอร์โทร (10 หลัก) หรืออีเมลไม่ถูกต้อง";
   return null;
 }
 
@@ -219,13 +219,13 @@ export default function ForgotPasswordPage() {
         <>
           <div>
             <h2 className="text-2xl font-bold text-gray-900">ลืมรหัสผ่าน</h2>
-            <p className="text-gray-500 text-sm mt-1">กรอกเบอร์โทรหรือ Email ที่ใช้สมัคร — เราจะส่ง OTP ให้</p>
+            <p className="text-gray-500 text-sm mt-1">กรอกเบอร์โทรหรืออีเมลที่ใช้สมัคร — เราจะส่ง OTP ให้</p>
           </div>
 
           <form onSubmit={handleSendOtp} className="space-y-4" noValidate>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                เบอร์โทรศัพท์ หรือ Email <span className="text-red-500">*</span>
+                เบอร์โทรศัพท์ หรืออีเมล <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -249,7 +249,7 @@ export default function ForgotPasswordPage() {
 
           <div className="bg-weeeu-surface rounded-xl p-4">
             <p className="text-sm text-weeeu-primary">
-              💡 ถ้าเบอร์/Email ตรงกับบัญชีในระบบ คุณจะได้รับ OTP ภายใน 2 นาที
+              💡 ถ้าเบอร์/อีเมลตรงกับบัญชีในระบบ คุณจะได้รับ OTP ภายใน 2 นาที
             </p>
           </div>
 
@@ -311,7 +311,7 @@ export default function ForgotPasswordPage() {
               onClick={() => { setPhase("identifier"); setOtp(""); setOtpError(null); }}
               className="text-xs text-gray-400 hover:text-gray-600"
             >
-              เปลี่ยนเบอร์/Email
+              เปลี่ยนเบอร์/อีเมล
             </button>
           </div>
         </>

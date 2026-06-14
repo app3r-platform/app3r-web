@@ -86,8 +86,8 @@ function TransferItem({ transfer }: { transfer: Transfer }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function WalletHistoryPage() {
-  const [transfers, setTransfers] = useState<Transfer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [transfers, setTransfers] = useState<Transfer[]>(MOCK_TRANSFERS);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<TransferType | "all">("all");
 
@@ -147,7 +147,7 @@ export default function WalletHistoryPage() {
         {filterTabs.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => { setFilter(tab.value); setLoading(true); setError(""); }}
+            onClick={() => { setFilter(tab.value); setError(""); }}
             className={`flex-1 py-2 text-xs font-medium rounded-lg transition-colors ${
               filter === tab.value
                 ? "bg-white text-weeeu-primary shadow-sm"

@@ -31,7 +31,7 @@ export default function WelcomePage() {
       <div className="grid grid-cols-2 gap-3 text-left">
         {[
           { icon: "🔧", label: "แจ้งซ่อมออนไลน์", desc: "รับข้อเสนอ (Offer) ราคาทันที" },
-          { icon: "💰", label: "ซื้อ/ขายมือสอง", desc: "ได้ Silver Point" },
+          { icon: "💰", label: "ซื้อ/ขายมือสอง", desc: "ได้พอยต์เงิน" },
           { icon: "♻️", label: "ทิ้งซากถูกวิธี", desc: "ตามมาตรฐาน WEEE" },
           { icon: "🛠️", label: "ล้างแอร์/ซักผ้า", desc: "จองออนไลน์ได้เลย" },
         ].map((f) => (

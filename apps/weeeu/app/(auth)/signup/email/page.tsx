@@ -17,7 +17,7 @@ function validatePassword(pw: string): string | null {
 }
 
 function validateEmail(email: string): string | null {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : "รูปแบบ Email ไม่ถูกต้อง";
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : "รูปแบบอีเมลไม่ถูกต้อง";
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -92,14 +92,14 @@ export default function SignupEmailPage() {
 
       <div>
         <h2 className="text-2xl font-bold text-gray-900">สร้างบัญชี</h2>
-        <p className="text-gray-500 text-sm mt-1">กรอก Email และตั้งรหัสผ่าน</p>
+        <p className="text-gray-500 text-sm mt-1">กรอกอีเมลและตั้งรหัสผ่าน</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email <span className="text-red-500">*</span>
+            อีเมล <span className="text-red-500">*</span>
           </label>
           <input
             type="email"
@@ -112,7 +112,7 @@ export default function SignupEmailPage() {
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           {duplicateEmail && (
             <p className="text-amber-600 text-xs mt-1">
-              Email นี้มีผู้ใช้แล้ว —{" "}
+              อีเมลนี้มีผู้ใช้แล้ว —{" "}
               <Link href="/login" className="font-semibold underline">เข้าสู่ระบบแทน</Link>
             </p>
           )}

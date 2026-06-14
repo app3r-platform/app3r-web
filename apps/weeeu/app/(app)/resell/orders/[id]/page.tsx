@@ -559,7 +559,7 @@ export default function ResellOrderPage() {
             <p className="text-sm text-green-700 font-medium">
               💰 ระบบพักเงินกลาง (Escrow) ปลดล็อก
               <br />
-              <span className="text-green-800 font-bold">{order.agreed_price.toLocaleString()} Gold</span> โอนให้ผู้ขายแล้ว
+              <span className="text-green-800 font-bold">{order.agreed_price.toLocaleString()} พอยต์ทอง</span> โอนให้ผู้ขายแล้ว
             </p>
             <p className="text-sm text-green-600">ขอบคุณที่ใช้บริการ WeeeU</p>
           </div>

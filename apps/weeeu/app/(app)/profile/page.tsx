@@ -159,7 +159,7 @@ export default function ProfilePage() {
   // ─── Email change ─────────────────────────────────────────────────────────────
   const changeEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { setEmailError("รูปแบบ Email ไม่ถูกต้อง"); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { setEmailError("รูปแบบอีเมลไม่ถูกต้อง"); return; }
     setEmailError(""); setSaving(true);
     await new Promise((r) => setTimeout(r, 700));
     setSaving(false); setEmailSent(true);
@@ -460,26 +460,26 @@ export default function ProfilePage() {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
         <button onClick={() => { setSection("view"); setEmailSent(false); setNewEmail(""); setEmailError(""); }} className="text-gray-500 hover:text-gray-800 text-xl">‹</button>
-        <h1 className="text-xl font-bold text-gray-900">เปลี่ยน Email</h1>
+        <h1 className="text-xl font-bold text-gray-900">เปลี่ยนอีเมล</h1>
       </div>
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-          <p className="text-xs text-amber-700">Email ปัจจุบัน: <strong>{user.email}</strong></p>
+          <p className="text-xs text-amber-700">อีเมลปัจจุบัน: <strong>{user.email}</strong></p>
         </div>
         {emailSent ? (
           <div className="text-center space-y-4 py-4">
             <div className="text-4xl">✉️</div>
             <p className="text-sm font-semibold text-gray-800">ส่งลิงก์ยืนยันแล้ว</p>
-            <p className="text-xs text-gray-500">ตรวจสอบ inbox ที่ <strong>{newEmail}</strong> และคลิกลิงก์เพื่อยืนยัน Email ใหม่</p>
+            <p className="text-xs text-gray-500">ตรวจสอบ inbox ที่ <strong>{newEmail}</strong> และคลิกลิงก์เพื่อยืนยันอีเมลใหม่</p>
             <button onClick={() => { setSection("view"); setEmailSent(false); setNewEmail(""); }} className="text-sm text-weeeu-primary hover:text-weeeu-dark font-medium">กลับโปรไฟล์</button>
           </div>
         ) : (
           <form onSubmit={changeEmail} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email ใหม่ <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">อีเมลใหม่ <span className="text-red-500">*</span></label>
               <input type="email" placeholder="newemail@example.com" value={newEmail} onChange={(e) => { setNewEmail(e.target.value); setEmailError(""); }} className={inputCls(emailError)} autoComplete="email" />
               {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
-              <p className="text-xs text-gray-400 mt-1">ระบบจะส่งลิงก์ยืนยันไปที่ Email ใหม่</p>
+              <p className="text-xs text-gray-400 mt-1">ระบบจะส่งลิงก์ยืนยันไปที่อีเมลใหม่</p>
             </div>
             <button type="submit" disabled={saving} className="w-full bg-weeeu-primary hover:bg-weeeu-primary disabled:bg-weeeu-dark text-white font-semibold py-3 rounded-2xl text-sm flex items-center justify-center gap-2">
               {saving ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</> : "ส่งลิงก์ยืนยัน"}

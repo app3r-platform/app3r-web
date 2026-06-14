@@ -486,7 +486,7 @@ function OfferCard({
               className="w-4 h-4 rounded border-gray-300 text-weeeu-primary focus:ring-weeeu-primary/40"
             />
             <span className="text-xs text-gray-700 font-medium">
-              รับทราบว่า <span className="text-weeeu-primary font-semibold">{goldAmount.toLocaleString()} Gold</span> จะถูกล็อกเมื่อยืนยัน
+              รับทราบว่า <span className="text-weeeu-primary font-semibold">{goldAmount.toLocaleString()} พอยต์ทอง</span> จะถูกล็อกเมื่อยืนยัน
             </span>
           </label>
         </div>
@@ -498,12 +498,12 @@ function OfferCard({
           disabled={!!selecting || !goldAcknowledged}
           onClick={() => onSelect(offer.id)}
           className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
-          title={!goldAcknowledged ? "กรุณารับทราบการล็อก Gold ก่อน" : undefined}
+          title={!goldAcknowledged ? "กรุณารับทราบการล็อกพอยต์ทองก่อน" : undefined}
         >
           {selecting === offer.id ? (
             <><span className="animate-spin">⟳</span> กำลังเลือก...</>
           ) : !goldAcknowledged ? (
-            "🔒 รับทราบการล็อก Gold ก่อนเลือกร้าน"
+            "🔒 รับทราบการล็อกพอยต์ทองก่อนเลือกร้าน"
           ) : (
             "✅ เลือกร้านนี้"
           )}

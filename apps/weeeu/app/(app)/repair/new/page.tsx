@@ -495,21 +495,21 @@ export default function RepairNewPage() {
                 const cfg = PRIORITY_CONFIG[p];
                 const active = form.priority === p;
                 return (
-                  <button key={p} type="button" onClick={() => handlePriorityChange(p)}
-                    className={`flex-1 py-2 px-2 rounded-xl border text-xs font-medium transition-colors flex flex-col items-center gap-0.5 ${
-                      active ? `${cfg.cls} border-current ring-1 ring-current` : "border-gray-200 text-gray-500 hover:border-gray-300"
-                    }`}
-                  >
-                    <span className="text-base leading-none">{cfg.icon}</span>
-                    <span className="flex items-center gap-0.5">
-                      {cfg.label}
-                      {p === "vip" && (
-                        <span onClick={e => e.stopPropagation()}>
-                          <HelpTip content="บริการด่วนพิเศษ มีค่าบริการเพิ่ม ช่างมาเร็วกว่าปกติ (ไม่เกี่ยวกับสมาชิก VIP)" />
-                        </span>
-                      )}
-                    </span>
-                  </button>
+                  <div key={p} className="flex-1 relative">
+                    <button type="button" onClick={() => handlePriorityChange(p)}
+                      className={`w-full py-2 px-2 rounded-xl border text-xs font-medium transition-colors flex flex-col items-center gap-0.5 ${
+                        active ? `${cfg.cls} border-current ring-1 ring-current` : "border-gray-200 text-gray-500 hover:border-gray-300"
+                      }`}
+                    >
+                      <span className="text-base leading-none">{cfg.icon}</span>
+                      <span>{cfg.label}</span>
+                    </button>
+                    {p === "vip" && (
+                      <span className="absolute -top-1.5 -right-1.5 z-10">
+                        <HelpTip content="บริการด่วนพิเศษ มีค่าบริการเพิ่ม ช่างมาเร็วกว่าปกติ (ไม่เกี่ยวกับสมาชิก VIP)" />
+                      </span>
+                    )}
+                  </div>
                 );
               })}
             </div>

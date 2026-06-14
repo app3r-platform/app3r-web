@@ -26,7 +26,7 @@ const STATUS_LABEL: Record<string, string> = {
   selected: "ได้รับเลือก ✅",
   rejected: "ปฏิเสธ",
   withdrawn: "ถอนข้อเสนอแล้ว",
-  awaiting_payment: "รอเติม Gold ≤ 24ชม. 💰", // R4 mock
+  awaiting_payment: "รอเติมพอยต์ทอง ≤ 24ชม. 💰", // R4 mock
 };
 
 const STATUS_COLOR: Record<string, string> = {
@@ -203,7 +203,7 @@ function AwaitingPaymentCard({
     <div className="bg-orange-50 border-2 border-orange-300 rounded-2xl p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold — ล็อกระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /></p>
+          <p className="text-sm font-bold text-orange-900">💰 รอยืนยันพอยต์ทอง — ล็อกระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /></p>
           <p className="text-xs text-orange-700 mt-0.5">{offer.listing_title}</p>
           <p className="text-xs text-orange-600">ผู้ขาย: {offer.seller_name}</p>
         </div>
@@ -214,11 +214,11 @@ function AwaitingPaymentCard({
 
       <div className="flex items-center justify-between gap-2 text-sm">
         <span className="text-orange-700">ราคาที่เสนอ</span>
-        <span className="font-bold text-orange-900">{offer.offerPrice.toLocaleString()} Gold</span>
+        <span className="font-bold text-orange-900">{offer.offerPrice.toLocaleString()} พอยต์ทอง</span>
       </div>
 
       <div className="bg-orange-100 rounded-xl p-3 space-y-1">
-        <p className="text-xs font-semibold text-orange-900">⚠️ Gold ไม่เพียงพอ — ขาด {offer.gold_shortfall.toLocaleString()} Gold</p>
+        <p className="text-xs font-semibold text-orange-900">⚠️ พอยต์ทองไม่เพียงพอ — ขาด {offer.gold_shortfall.toLocaleString()} พอยต์ทอง</p>
         <p className="text-xs text-orange-700">ระบบจะปลดข้อเสนอนี้อัตโนมัติถ้าไม่เติมในเวลา</p>
       </div>
 
@@ -241,7 +241,7 @@ function AwaitingPaymentCard({
           href="/wallet"
           className="flex-1 text-center bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-semibold py-2.5 rounded-xl transition-colors"
         >
-          🥇 เติม Gold เดี๋ยวนี้
+          🥇 เติมพอยต์ทองเดี๋ยวนี้
         </Link>
         <button
           type="button"

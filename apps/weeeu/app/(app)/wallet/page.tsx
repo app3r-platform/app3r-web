@@ -10,7 +10,7 @@ type WalletTab = "all" | "gold" | "silver";
 
 // Mock data (Mockup — ไม่ fetch API จริง)
 const MOCK_GOLD_BALANCE = 350;
-const MOCK_SILVER_BALANCE = 1250;
+const MOCK_SILVER_BALANCE = 120;
 
 const MOCK_TRANSACTIONS = [
   { type: "credit",  icon: "🥇", label: "เติมพอยต์ทอง (admin อนุมัติ)", amount: "+500",   date: "23 พ.ค. 69", wallet: "gold"   },

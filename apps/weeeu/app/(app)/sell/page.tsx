@@ -204,7 +204,7 @@ export default function SellPage() {
               onClick={() => handleCancelSuspended(MOCK_SUSPENDED_LISTING.id)}
               className="flex-1 border border-red-200 text-red-500 text-xs font-semibold py-2.5 rounded-xl hover:bg-red-50 transition-colors"
             >
-              ❌ ยกเลิก (รับ Point คืน)
+              ❌ ยกเลิก (รับพอยต์ทองคืน)
             </button>
           </div>
         </div>

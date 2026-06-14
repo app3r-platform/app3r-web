@@ -8,8 +8,8 @@ const methods = [
   {
     id: "email",
     icon: "✉️",
-    label: "สมัครด้วย Email",
-    desc: "ใช้ Email และตั้งรหัสผ่านได้เลย",
+    label: "สมัครด้วยอีเมล",
+    desc: "ใช้อีเมลและตั้งรหัสผ่านได้เลย",
     href: "/signup/email",
     enabled: true,
   },

@@ -40,8 +40,8 @@ type TransactionData = {
 // Timeline 9 step (รวม awaiting_payment + escrow + evidence)
 const STEPS: { key: string; label: string; icon: string }[] = [
   { key: "offer_selected",   label: "เลือกข้อเสนอ",          icon: "🤝" },
-  { key: "awaiting_payment", label: "รอ Gold เข้าพักเงินกลาง (Escrow) ≤ 24ชม.", icon: "💰" }, // R4
-  { key: "buyer_confirmed",  label: "Gold ล็อกแล้ว",          icon: "🔒" },
+  { key: "awaiting_payment", label: "รอพอยต์ทองเข้าพักเงินกลาง (Escrow) ≤ 24ชม.", icon: "💰" }, // R4
+  { key: "buyer_confirmed",  label: "พอยต์ทองล็อกแล้ว",       icon: "🔒" },
   { key: "in_progress",      label: "ผู้ขายเตรียมส่ง",         icon: "📦" }, // R6 evidence
   { key: "delivered",        label: "ส่งถึงแล้ว",              icon: "🏠" },
   { key: "inspection_period",label: "ช่วงตรวจสอบ",            icon: "🔍" }, // R7/R8 evidence
@@ -229,7 +229,7 @@ export default function TransactionPage() {
       {tx.status === "disputed" && (
         <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-4 space-y-2">
           <p className="text-sm font-bold text-red-800">⚖️ มีข้อพิพาท — รอ Admin ตัดสิน (R10)</p>
-          <p className="text-xs text-red-600">Gold ในระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> ถูกล็อกไว้จนกว่า Admin จะตัดสิน</p>
+          <p className="text-xs text-red-600">พอยต์ทองในระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> ถูกล็อกไว้จนกว่า Admin จะตัดสิน</p>
           <p className="text-xs text-gray-500">เหตุผล: {disputeReason === "not_as_described" ? "สินค้าไม่ตรงปก" : "อื่นๆ"}</p>
         </div>
       )}
@@ -245,11 +245,11 @@ export default function TransactionPage() {
       {/* R4: awaiting_payment banner */}
       {tx.status === "awaiting_payment" && (
         <div className="bg-orange-50 border-2 border-orange-300 rounded-2xl p-4 space-y-3">
-          <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold พักเงินกลาง (Escrow) <EscrowInfoIcon /> (R4)</p>
+          <p className="text-sm font-bold text-orange-900">💰 รอยืนยันพอยต์ทอง พักเงินกลาง (Escrow) <EscrowInfoIcon /> (R4)</p>
           <p className="text-xs text-orange-700">
             {isBuyer
-              ? `Gold ของคุณขาดอีก ${mockR4Shortfall.toLocaleString()} — เติมให้ครบใน 24 ชม.`
-              : "รอผู้ซื้อยืนยัน Gold — ถ้าหมดเวลา ข้อเสนอจะถูกปลด"}
+              ? `พอยต์ทองของคุณขาดอีก ${mockR4Shortfall.toLocaleString()} — เติมให้ครบใน 24 ชม.`
+              : "รอผู้ซื้อยืนยันพอยต์ทอง — ถ้าหมดเวลา ข้อเสนอจะถูกปลด"}
           </p>
           {isBuyer && (
             <>
@@ -268,7 +268,7 @@ export default function TransactionPage() {
                 href="/wallet"
                 className="block w-full text-center bg-weeeu-primary hover:bg-weeeu-dark text-white text-sm font-semibold py-2.5 rounded-xl transition-colors"
               >
-                🥇 เติม Gold เดี๋ยวนี้
+                🥇 เติมพอยต์ทองเดี๋ยวนี้
               </Link>
             </>
           )}
@@ -281,7 +281,7 @@ export default function TransactionPage() {
         <InfoRow label="สินค้า" value={tx.appliance_name} />
         <InfoRow label="ผู้ขาย" value={tx.seller_name} />
         <InfoRow label="ผู้ซื้อ" value={tx.buyer_name} />
-        <InfoRow label="ราคาที่ตกลง" value={`${tx.agreed_price.toLocaleString()} Gold`} bold />
+        <InfoRow label="ราคาที่ตกลง" value={`${tx.agreed_price.toLocaleString()} พอยต์ทอง`} bold />
         <InfoRow label="จัดส่ง" value={DELIVERY_LABEL[tx.delivery_method] ?? tx.delivery_method} />
         {tx.courier && <InfoRow label="บริษัทขนส่ง" value={COURIER_LABEL[tx.courier] ?? tx.courier} />}
         {tx.tracking_number && (
@@ -293,7 +293,7 @@ export default function TransactionPage() {
         {isAfterEscrow && (
           <div className="flex items-center gap-1.5 pt-1 border-t border-gray-50">
             <span className="text-sm">🔒</span>
-            <p className="text-xs text-weeeu-primary font-medium">Gold {tx.agreed_price.toLocaleString()} ล็อกในระบบพักเงินกลาง <EscrowInfoIcon /> แล้ว</p>
+            <p className="text-xs text-weeeu-primary font-medium">พอยต์ทอง {tx.agreed_price.toLocaleString()} ล็อกในระบบพักเงินกลาง <EscrowInfoIcon /> แล้ว</p>
           </div>
         )}
       </div>
@@ -323,7 +323,7 @@ export default function TransactionPage() {
                   </p>
                   {/* Sub-labels สำหรับ step พิเศษ */}
                   {step.key === "awaiting_payment" && active && (
-                    <p className="text-xs text-orange-500 mt-0.5">รอผู้ซื้อยืนยัน Gold ≤ 24ชม.</p>
+                    <p className="text-xs text-orange-500 mt-0.5">รอผู้ซื้อยืนยันพอยต์ทอง ≤ 24ชม.</p>
                   )}
                   {step.key === "in_progress" && active && (
                     <p className="text-xs text-gray-400 mt-0.5">ผู้ขายต้องถ่ายรูป+คลิปก่อนส่ง</p>
@@ -478,7 +478,7 @@ export default function TransactionPage() {
         <div className="bg-weeeu-surface border border-weeeu-primary/30 rounded-2xl p-5 text-center space-y-2">
           <p className="text-4xl">🎉</p>
           <p className="text-sm font-semibold text-weeeu-text">ธุรกรรมเสร็จสมบูรณ์!</p>
-          <p className="text-xs text-weeeu-primary">Gold โอนให้ผู้ขายแล้ว — ขอบคุณที่ใช้งาน WeeeU</p>
+          <p className="text-xs text-weeeu-primary">พอยต์ทองโอนให้ผู้ขายแล้ว — ขอบคุณที่ใช้งาน WeeeU</p>
         </div>
       )}
 
@@ -498,7 +498,7 @@ export default function TransactionPage() {
       {parcelClaimSent && (
         <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
           <p className="text-sm font-semibold text-orange-800">📬 แจ้งเรื่องพัสดุเสียหายแล้ว (R11)</p>
-          <p className="text-xs text-orange-700 mt-1">Admin กำลังตรวจสอบ — Gold ในระบบพักเงินกลาง <EscrowInfoIcon /> ถูกล็อกไว้</p>
+          <p className="text-xs text-orange-700 mt-1">Admin กำลังตรวจสอบ — พอยต์ทองในระบบพักเงินกลาง <EscrowInfoIcon /> ถูกล็อกไว้</p>
         </div>
       )}
 
@@ -549,7 +549,7 @@ export default function TransactionPage() {
         <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4">
             <p className="text-base font-bold text-gray-900">⚖️ เปิดข้อพิพาท</p>
-            <p className="text-xs text-gray-500">Admin จะตรวจสอบหลักฐานและตัดสิน — Gold ในระบบพักเงินกลาง <EscrowInfoIcon /> ถูกล็อกระหว่างรอ</p>
+            <p className="text-xs text-gray-500">Admin จะตรวจสอบหลักฐานและตัดสิน — พอยต์ทองในระบบพักเงินกลาง <EscrowInfoIcon /> ถูกล็อกระหว่างรอ</p>
 
             <div className="space-y-1.5">
               {[

@@ -18,8 +18,8 @@ const MOCK_DEPOSIT_INFO: DepositInfo = {
 };
 
 export default function DepositPage() {
-  const [depositInfo, setDepositInfo] = useState<DepositInfo | null>(null);
-  const [loadingInfo, setLoadingInfo] = useState(true);
+  const [depositInfo, setDepositInfo] = useState<DepositInfo | null>(MOCK_DEPOSIT_INFO);
+  const [loadingInfo, setLoadingInfo] = useState(false);
 
   const [amount, setAmount] = useState("");
   const [transferAt, setTransferAt] = useState(""); // วันเวลาที่โอน (U-01#4)

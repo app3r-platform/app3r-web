@@ -268,7 +268,7 @@ export default function ListingDetailPage() {
       <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex items-start gap-2.5">
         <span className="text-lg">🥇</span>
         <div>
-          <p className="text-xs font-semibold text-yellow-800">ชำระด้วย Gold Point</p>
+          <p className="text-xs font-semibold text-yellow-800">ชำระด้วยพอยต์ทอง</p>
           <p className="text-xs text-yellow-700 mt-0.5">
             เมื่อข้อเสนอถูกเลือก ระบบล็อกพอยต์ทองในบัญชีคุณ — คุณมีเวลา 24 ชม. เติมพอยต์ทองถ้าไม่พอ
           </p>

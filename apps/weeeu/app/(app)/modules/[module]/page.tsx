@@ -101,7 +101,7 @@ export default async function ModulePage({ params }: Props) {
             "📸 ถ่ายรูป + ลงประกาศขาย",
             "💰 รับข้อเสนอ จากร้าน WeeeR",
             "🤝 ยืนยันข้อเสนอ + นัดรับสินค้า",
-            "💎 รับ Silver Point หลังขายสำเร็จ",
+            "💎 รับพอยต์เงินหลังขายสำเร็จ",
           ].map((item, i) => <li key={i} className="flex items-start gap-2"><span>•</span>{item}</li>)}
 
           {module === "scrap" && [

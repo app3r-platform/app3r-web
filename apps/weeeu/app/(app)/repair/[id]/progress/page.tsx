@@ -394,7 +394,7 @@ export default function RepairProgressPage() {
                 onClick={() => router.push(`/repair/${id}/fee-settle`)}
                 className="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium py-2.5 rounded-xl text-sm transition-colors"
               >
-                🔒 Gold ที่ล็อก
+                🔒 พอยต์ทองที่ล็อก
               </button>
             </div>
           )}

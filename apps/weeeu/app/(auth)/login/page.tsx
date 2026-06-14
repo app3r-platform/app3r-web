@@ -31,8 +31,8 @@ export default function LoginPage() {
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!form.email) e.email = "กรุณากรอก Email";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "รูปแบบ Email ไม่ถูกต้อง";
+    if (!form.email) e.email = "กรุณากรอกอีเมล";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "รูปแบบอีเมลไม่ถูกต้อง";
     if (!form.password) e.password = "กรุณากรอกรหัสผ่าน";
     return e;
   };
@@ -101,7 +101,7 @@ export default function LoginPage() {
         {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+            อีเมล
           </label>
           <input
             type="email"

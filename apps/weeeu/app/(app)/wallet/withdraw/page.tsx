@@ -193,7 +193,7 @@ export default function WithdrawPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link href="/wallet" className="text-gray-400 hover:text-gray-600 text-xl leading-none">←</Link>
-        <h1 className="text-xl font-bold text-gray-900">ถอน Gold Point</h1>
+        <h1 className="text-xl font-bold text-gray-900">ถอนพอยต์ทอง</h1>
       </div>
 
       {/* Gold balance banner */}

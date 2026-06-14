@@ -189,7 +189,7 @@ export default function C6OnsiteHappyPathPage() {
         <p><span className="text-gray-400 w-32 inline-block">งบประมาณ</span>{SAMPLE.budget.toLocaleString()} พอยต์ทอง</p>
         <p><span className="text-gray-400 w-32 inline-block">ร้านที่เลือก</span>{SAMPLE.weeer}</p>
         <p><span className="text-gray-400 w-32 inline-block">ราคาที่ตกลง</span>{SAMPLE.quotedPrice.toLocaleString()} พอยต์ทอง</p>
-        <p><span className="text-gray-400 w-32 inline-block">Gold ที่ lock</span>{SAMPLE.goldLocked.toLocaleString()} พอยต์ทอง (ราคา + deposit)</p>
+        <p><span className="text-gray-400 w-32 inline-block">พอยต์ทองที่ล็อก</span>{SAMPLE.goldLocked.toLocaleString()} พอยต์ทอง (ราคา + deposit)</p>
         <p><span className="text-gray-400 w-32 inline-block">นัดหมาย</span>{SAMPLE.scheduledAt}</p>
         <p><span className="text-gray-400 w-32 inline-block">สถานที่</span>{SAMPLE.location}</p>
       </div>
