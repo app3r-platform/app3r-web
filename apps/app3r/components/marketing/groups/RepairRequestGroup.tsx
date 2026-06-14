@@ -9,7 +9,7 @@ import { repairJobs } from "@/lib/mock/repair-jobs";
 import CategoryFilterRows, { type RenderedItem } from "./CategoryFilterRows";
 import RoleAwareCard from "@/components/listings/RoleAwareCard";
 import EmptyGroupState from "./EmptyGroupState";
-import { getMockRoleFromCookie, MOCK_USERS } from "@/lib/auth/mock-role";
+import { getMockRoleFromCookie } from "@/lib/auth/mock-role";
 import { getMockEngagement } from "@/lib/mock/listing-engagement";
 import type { AuthenticatedJobProjection } from "@/lib/types/listings-customer-jobs";
 
@@ -74,14 +74,8 @@ export default async function RepairRequestGroup() {
   const cookieStore = await cookies();
   const role = getMockRoleFromCookie(cookieStore.get("app3r-mock-role")?.value);
 
-  // กรอง ANNOUNCED status เท่านั้น (active)
-  let active = repairJobs.filter((j) => j.status === "ANNOUNCED");
-
-  // D1 role-based filter: WeeeU เห็นเฉพาะของตัวเอง
-  if (role === "weeeu") {
-    const myId = MOCK_USERS.weeeu.id;
-    active = active.filter((j) => j.ownerId === myId);
-  }
+  // กรอง ANNOUNCED status เท่านั้น (active) — home page แสดงทุกงาน
+  const active = repairJobs.filter((j) => j.status === "ANNOUNCED");
 
   const grouped = groupByApplianceType(active);
   const types = Object.keys(grouped);
@@ -135,7 +129,6 @@ export default async function RepairRequestGroup() {
 
       <CategoryFilterRows
         grouped={renderedGrouped}
-        rowsPerType={2}
         filterLabel="ประเภทเครื่อง"
       />
     </section>

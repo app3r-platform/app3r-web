@@ -88,7 +88,6 @@ export default async function ResellGroup() {
 
       <CategoryFilterRows
         grouped={renderedGrouped}
-        rowsPerType={2}
         filterLabel="ประเภทเครื่อง"
       />
     </section>

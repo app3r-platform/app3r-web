@@ -82,7 +82,6 @@ export default async function ScrapGroup() {
 
       <CategoryFilterRows
         grouped={renderedGrouped}
-        rowsPerType={1}
         filterLabel="วัสดุ"
       />
     </section>
