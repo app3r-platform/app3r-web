@@ -155,7 +155,7 @@ export default function ResellOffersPage() {
                   <div className="flex gap-2 mt-2">
                     <Link href="/wallet"
                       className="flex-1 text-center text-xs bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2 rounded-lg transition-colors">
-                      💰 ไป Wallet เติม Gold
+                      💰 ไปกระเป๋าเงิน เติมพอยต์ทอง
                     </Link>
                     <button onClick={() => handleWithdraw(o.id)} disabled={withdrawing === o.id}
                       className="text-xs text-gray-500 hover:underline disabled:opacity-50 px-2">

@@ -160,7 +160,7 @@ export default function ResellBuyPage() {
             <div className="flex gap-2 justify-center mt-2">
               <Link href="/resell/inventory"
                 className="text-xs bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold px-4 py-2 rounded-lg transition-colors">
-                ดู Inventory
+                ดูคลังสินค้า
               </Link>
               <button onClick={() => { setWizardStep(1); setModel(""); setWizardDone(false); setOfferPrice(null); }}
                 className="text-xs border border-gray-200 text-gray-600 font-medium px-4 py-2 rounded-lg hover:bg-gray-50">
@@ -349,7 +349,7 @@ export default function ResellBuyPage() {
             </div>
             <button onClick={() => setBarcodeDone(true)}
               className="w-full bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
-              ✅ ยืนยันรับซื้อ + เพิ่ม Inventory
+              ✅ ยืนยันรับซื้อ + เพิ่มคลังสินค้า
             </button>
           </div>
         )}

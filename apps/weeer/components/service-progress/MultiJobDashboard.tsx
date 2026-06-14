@@ -109,7 +109,7 @@ export function MultiJobDashboard({
           ดูงานซ่อม →
         </Link>
         <Link href="/maintain/jobs" className="flex-1 text-center text-xs text-[#D63B12] hover:text-[#B8300E] py-3 transition-colors">
-          ดูงาน Maintain →
+          ดูงานบำรุงรักษา →
         </Link>
       </div>
     </div>

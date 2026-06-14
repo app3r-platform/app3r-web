@@ -309,7 +309,7 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-[#FCEAE3] rounded-full flex items-center justify-center text-[#FF663A] font-bold text-sm">👷</div>
             <div>
-              <p className="text-sm font-semibold text-gray-800">Technician ID: {job.technicianId}</p>
+              <p className="text-sm font-semibold text-gray-800">ID ช่าง: {job.technicianId}</p>
               <p className="text-xs text-gray-400">มอบหมายแล้ว</p>
             </div>
           </div>

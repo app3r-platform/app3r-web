@@ -32,7 +32,7 @@ export default function NotificationsPage() {
       {/* Push Notification Subscribe Card */}
       <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
         <div className="text-sm font-medium text-gray-700 mb-3">
-          รับการแจ้งเตือนแบบ Real-time
+          รับการแจ้งเตือนแบบทันที (Real-time)
         </div>
         <PushSubscribeButton />
       </div>

@@ -307,7 +307,7 @@ export default function ParcelShippingDetailsPage({ params }: { params: Promise<
 
         <button type="submit" disabled={submitting}
           className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60">
-          {submitting ? "กำลังบันทึก…" : "📦 ยืนยัน Shipping Details"}
+          {submitting ? "กำลังบันทึก…" : "📦 ยืนยันรายละเอียดการจัดส่ง"}
         </button>
       </form>
     </div>

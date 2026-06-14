@@ -110,7 +110,7 @@ function AddWeeeTModal({ onClose, onAdd }: { onClose: () => void; onAdd: (name: 
                 <div>ชื่อช่าง: <strong>{form.weeet_full_name}</strong></div>
                 <div>เบอร์โทร: <strong>{form.weeet_phone}</strong></div>
                 <div className="border-t border-amber-200 pt-2 font-semibold text-amber-700">
-                  จะหัก {GOLD_PER_WEEET} Gold จาก wallet ของคุณ (ค่าบัญชีรายปี)
+                  จะหัก {GOLD_PER_WEEET} พอยต์ทอง จากกระเป๋าเงินของคุณ (ค่าบัญชีรายปี)
                 </div>
               </div>
               <p className="text-xs text-gray-500">
@@ -122,7 +122,7 @@ function AddWeeeTModal({ onClose, onAdd }: { onClose: () => void; onAdd: (name: 
                 </button>
                 <button onClick={() => onAdd(form.weeet_full_name, form.weeet_phone, form.weeet_skills)}
                   className="flex-1 bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
-                  ยืนยัน หัก {GOLD_PER_WEEET} Gold
+                  ยืนยัน หัก {GOLD_PER_WEEET} พอยต์ทอง
                 </button>
               </div>
             </div>
@@ -311,13 +311,13 @@ export default function ManageTechniciansPage() {
           disabled={!canAddMore}
           className="flex items-center gap-2 bg-[#FF663A] hover:bg-[#F04E20] disabled:bg-gray-200 disabled:text-gray-400 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
         >
-          ➕ เพิ่ม WeeeT ({GOLD_PER_WEEET} Gold)
+          ➕ เพิ่ม WeeeT ({GOLD_PER_WEEET} พอยต์ทอง)
         </button>
       </div>
 
       {!canAddMore && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
-          ⚠️ Gold ไม่เพียงพอ — ต้องการ {GOLD_PER_WEEET} Gold เพื่อเพิ่ม WeeeT
+          ⚠️ พอยต์ทองไม่เพียงพอ — ต้องการ {GOLD_PER_WEEET} พอยต์ทอง เพื่อเพิ่ม WeeeT
         </div>
       )}
 

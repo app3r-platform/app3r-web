@@ -8,7 +8,7 @@ import { PARCEL_STATUS_LABEL, PARCEL_STATUS_COLOR } from "../../_lib/types";
 
 function getActionHref(job: ParcelJob): { href: string; label: string } {
   switch (job.status) {
-    case "awaiting_shipping_details": return { href: `/repair/parcel/${job.id}/shipping-details`, label: "ตกลง Shipping" };
+    case "awaiting_shipping_details": return { href: `/repair/parcel/${job.id}/shipping-details`, label: "ตกลงการส่ง" };
     case "in_transit_to_shop":        return { href: `/repair/parcel/${job.id}/receive`,          label: "รอรับพัสดุ" };
     case "received":                  return { href: `/repair/parcel/${job.id}/inspect`,           label: "ตรวจสภาพ" };
     case "inspecting":                return { href: `/repair/parcel/${job.id}/inspect`,           label: "ดูการตรวจ" };
@@ -44,7 +44,7 @@ export default function ParcelQueuePage() {
       {data && (
         <div className="grid grid-cols-4 gap-2">
           {[
-            { label: "รอ Shipping",    value: data.awaiting_shipping, color: "text-orange-700", bg: "bg-orange-50" },
+            { label: "รอตกลงส่ง",      value: data.awaiting_shipping, color: "text-orange-700", bg: "bg-orange-50" },
             { label: "กำลังมา",        value: data.in_transit_in,     color: "text-[#D63B12]", bg: "bg-[#FFF1ED]" },
             { label: "ที่ร้าน",        value: data.at_shop,           color: "text-yellow-700", bg: "bg-yellow-50" },
             { label: "พร้อมส่งคืน",   value: data.ready_to_ship,     color: "text-[#D63B12]",   bg: "bg-[#FFF1ED]"   },

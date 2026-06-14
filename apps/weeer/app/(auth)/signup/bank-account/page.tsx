@@ -78,7 +78,7 @@ export default function BankAccountPage() {
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">♻️</div>
           <h1 className="text-2xl font-bold text-[#B8300E]">บัญชีธนาคาร</h1>
-          <p className="text-sm text-gray-500 mt-1">สำหรับรับเงินถอน Gold{/* PHASE-4: D17 */}</p>
+          <p className="text-sm text-gray-500 mt-1">สำหรับรับเงินถอนพอยต์ทอง{/* PHASE-4: D17 */}</p>
         </div>
 
         <SignupSteps current={6} />

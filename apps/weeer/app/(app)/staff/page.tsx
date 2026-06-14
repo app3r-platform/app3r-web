@@ -15,7 +15,7 @@ const STATUS_STYLE: Record<string, string> = {
   suspended_by_weeer:"bg-red-100 text-red-600",
 };
 const STATUS_LABEL: Record<string, string> = {
-  active: "Active", awaiting_approval: "รออนุมัติ", suspended_by_weeer: "ระงับแล้ว",
+  active: "ใช้งาน", awaiting_approval: "รออนุมัติ", suspended_by_weeer: "ระงับแล้ว",
 };
 
 export default function StaffPage() {

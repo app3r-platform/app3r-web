@@ -79,7 +79,7 @@ export default function ResellDashboardPage() {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           { label: "สินค้าในสต๊อก",   value: d.total_inventory,            color: "bg-[#FCEAE3]", text: "text-[#FF663A]" },
-          { label: "ประกาศ active",    value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
+          { label: "ประกาศใช้งาน",     value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
           { label: "ข้อเสนอรอตอบ",    value: d.total_offers_pending,        color: "bg-amber-50",  text: "text-amber-700" },
           { label: "รายได้รวม (พอยต์)", value: d.total_revenue.toLocaleString(), color: "bg-[#FFF1ED]", text: "text-[#D63B12]" },
         ].map(k => (
@@ -95,7 +95,7 @@ export default function ResellDashboardPage() {
         {[
           { href: "/resell/inventory",   icon: "📦", label: "คลังสินค้า" },
           { href: "/resell/listings",    icon: "📢", label: "ประกาศของฉัน" },
-          { href: "/resell/marketplace", icon: "🛒", label: "Marketplace" },
+          { href: "/resell/marketplace", icon: "🛒", label: "ตลาดซื้อขาย" },
           { href: "/resell/offers",      icon: "🤝", label: "ข้อเสนอ" },
           { href: "/resell/transactions",icon: "🔄", label: "รายการซื้อขาย" },
           { href: "/resell/buy",         icon: "📥", label: "รับซื้อ B6" },

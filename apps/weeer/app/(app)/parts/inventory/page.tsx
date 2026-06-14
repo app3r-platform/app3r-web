@@ -264,7 +264,7 @@ export default function InventoryPage() {
           <p className="text-xs text-gray-500 mt-0.5">
             {active.length} รายการ
             {lowStockCount > 0 && (
-              <span className="ml-2 text-red-500 font-semibold">· ⚠️ Low stock {lowStockCount} รายการ</span>
+              <span className="ml-2 text-red-500 font-semibold">· ⚠️ สต๊อกน้อย {lowStockCount} รายการ</span>
             )}
           </p>
         </div>
@@ -312,7 +312,7 @@ export default function InventoryPage() {
           ))}
           <button onClick={() => setLowStockOnly(!lowStockOnly)}
             className={`text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${lowStockOnly ? "bg-red-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
-            ⚠️ Low Stock
+            ⚠️ สต๊อกน้อย
           </button>
         </div>
       </div>
@@ -437,7 +437,7 @@ export default function InventoryPage() {
                         <div className="min-w-0">
                           <p className="font-medium text-gray-800 truncate">{item.name}</p>
                           <p className="text-xs text-gray-400 font-mono">{item.sku}</p>
-                          {isLow(item) && <span className="text-xs text-red-500 font-semibold">⚠️ Low stock</span>}
+                          {isLow(item) && <span className="text-xs text-red-500 font-semibold">⚠️ สต๊อกน้อย</span>}
                         </div>
                       </div>
                     </td>

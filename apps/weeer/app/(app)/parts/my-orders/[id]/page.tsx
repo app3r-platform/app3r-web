@@ -58,7 +58,7 @@ function InventoryImportPrompt({
         </div>
       </div>
       <p className="text-xs text-gray-500">
-        ระบบจะสร้าง Inventory Item + Stock Movement (purchase-in) โดยอัตโนมัติ
+        ระบบจะสร้างสินค้าในคลัง + ประวัติการรับเข้า (purchase-in) โดยอัตโนมัติ
       </p>
       <div className="flex gap-2">
         <button

@@ -197,7 +197,7 @@ export default function WithdrawPage() {
 
           <div className="flex gap-3 justify-center pt-2">
             <Link href="/wallet/settlements" className="text-sm text-green-700 underline">
-              ดูประวัติ Settlement
+              ดูประวัติการโอน
             </Link>
             <Link href="/wallet" className="text-sm text-gray-500 underline">
               กลับกระเป๋าเงิน

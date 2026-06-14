@@ -24,7 +24,7 @@ export default function ProfilePage() {
             { label: "ชื่อบริษัท / ร้าน", value: "บริษัท ช่างเย็น จำกัด",  icon: "🏢" },
             { label: "อีเมล",              value: "company@example.com",      icon: "📧" },
             { label: "เบอร์โทรศัพท์",     value: "081-234-5678",              icon: "📱" },
-            { label: "สถานะบัญชี",        value: "✅ Active",                 icon: "🔖" },
+            { label: "สถานะบัญชี",        value: "✅ ใช้งาน",                icon: "🔖" },
           ].map((r) => (
             <div key={r.label} className="flex items-start gap-3">
               <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center shrink-0 text-sm">

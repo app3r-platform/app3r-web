@@ -177,7 +177,7 @@ export default function ScrapJobsPage() {
                     {/* S12: Repair source */}
                     {job.fromRepairJobId && (
                       <span className="text-xs bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded">
-                        🔧 Repair #{job.fromRepairJobId}
+                        🔧 จากงานซ่อม #{job.fromRepairJobId}
                       </span>
                     )}
                   </div>

@@ -36,7 +36,7 @@ function RepairJobsContent() {
     <div className="space-y-5">
       <MockAnnoOrigin from="R-01" />
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">งานซ่อม (On-site)</h1>
+        <h1 className="text-xl font-bold text-gray-900">งานซ่อมออนไซต์</h1>
         <Link href="/repair/announcements"
           className="bg-[#FF663A] hover:bg-[#F04E20] text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
           + ยื่นข้อเสนอ

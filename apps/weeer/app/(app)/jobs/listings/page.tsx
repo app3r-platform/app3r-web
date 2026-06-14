@@ -32,7 +32,7 @@ export default function ListingsPage() {
             <div className="flex-1 min-w-0">
               <div className="font-medium text-gray-900 truncate">{l.title}</div>
               <div className="text-xs text-gray-500 mt-0.5">
-                ค่าลงประกาศ {l.fee} Silver{l.expiry && ` · หมดอายุ ${l.expiry}`}
+                ค่าลงประกาศ {l.fee} พอยต์เงิน{l.expiry && ` · หมดอายุ ${l.expiry}`}
               </div>
             </div>
             <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${STATUS_STYLE[l.status]}`}>
