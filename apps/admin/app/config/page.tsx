@@ -299,6 +299,8 @@ export default function ConfigPage() {
                 </div>
               )}
             </div>
+
+            <ScrapMaterialSection />
           </div>
         ) : (
           <p className="text-red-600 text-sm">โหลดนโยบายไม่สำเร็จ</p>
@@ -315,6 +317,147 @@ export default function ConfigPage() {
           }`}
         >
           {toast.msg}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Scrap Material Types ────────────────────────────────────────────────────
+
+interface ScrapMaterialType {
+  id: string
+  name: string
+  deletable: boolean
+}
+
+const DEFAULT_SCRAP_MATERIALS: ScrapMaterialType[] = [
+  { id: "metal",      name: "โลหะ",           deletable: true },
+  { id: "plastic",    name: "พลาสติก",         deletable: true },
+  { id: "electronic", name: "อิเล็กทรอนิกส์", deletable: true },
+  { id: "glass",      name: "แก้ว",            deletable: true },
+  { id: "rubber",     name: "ยาง",             deletable: true },
+  { id: "other",      name: "อื่นๆ",           deletable: false },
+]
+
+function ScrapMaterialSection() {
+  const [materials, setMaterials] = useState<ScrapMaterialType[]>(DEFAULT_SCRAP_MATERIALS)
+  const [newName, setNewName] = useState("")
+  const [editId, setEditId] = useState<string | null>(null)
+  const [editName, setEditName] = useState("")
+  const [toast, setToast] = useState<string | null>(null)
+
+  const showT = (msg: string) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 3000)
+  }
+
+  function handleAdd() {
+    const trimmed = newName.trim()
+    if (!trimmed) return
+    if (materials.some(m => m.name === trimmed)) { showT("ชื่อนี้มีอยู่แล้ว"); return }
+    const otherIdx = materials.findIndex(m => !m.deletable)
+    const next = [...materials]
+    next.splice(otherIdx === -1 ? next.length : otherIdx, 0, {
+      id: `mat_${Date.now()}`, name: trimmed, deletable: true,
+    })
+    setMaterials(next)
+    setNewName("")
+    showT("เพิ่มประเภทวัสดุสำเร็จ ✓")
+  }
+
+  function handleEditSave() {
+    const trimmed = editName.trim()
+    if (!trimmed) return
+    if (materials.some(m => m.id !== editId && m.name === trimmed)) { showT("ชื่อนี้มีอยู่แล้ว"); return }
+    setMaterials(prev => prev.map(m => m.id === editId ? { ...m, name: trimmed } : m))
+    setEditId(null)
+    showT("แก้ไขสำเร็จ ✓")
+  }
+
+  function handleDelete(id: string) {
+    setMaterials(prev => prev.filter(m => m.id !== id))
+    showT("ลบแล้ว")
+  }
+
+  return (
+    <div className="pt-6 border-t border-gray-200">
+      <h2 className="text-base font-semibold text-gray-800 mb-1">ประเภทวัสดุ (Scrap Material Types)</h2>
+      <p className="text-xs text-gray-500 mb-4">
+        กำหนดชนิดวัสดุที่ใช้ในระบบรับซาก · ซาก 1 รายการมีได้หลายวัสดุ · "อื่นๆ" ลบไม่ได้
+      </p>
+
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          value={newName}
+          onChange={e => setNewName(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && handleAdd()}
+          placeholder="ชื่อประเภทวัสดุใหม่..."
+          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-admin-primary"
+        />
+        <button
+          onClick={handleAdd}
+          disabled={!newName.trim()}
+          className="px-4 py-2 text-sm bg-admin-primary hover:bg-admin-dark disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+        >
+          + เพิ่ม
+        </button>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <ul className="divide-y divide-gray-100">
+          {materials.map(m => (
+            <li key={m.id} className="flex items-center gap-3 px-4 py-3">
+              {editId === m.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") handleEditSave(); if (e.key === "Escape") setEditId(null); }}
+                    autoFocus
+                    className="flex-1 border border-admin-primary rounded-lg px-3 py-1.5 text-sm focus:outline-none"
+                  />
+                  <button onClick={handleEditSave} className="text-xs px-3 py-1.5 bg-admin-primary text-white rounded-lg">บันทึก</button>
+                  <button onClick={() => setEditId(null)} className="text-xs px-3 py-1.5 border border-gray-300 text-gray-600 rounded-lg">ยกเลิก</button>
+                </>
+              ) : (
+                <>
+                  <span className="flex-1 text-sm text-gray-800">{m.name}</span>
+                  {!m.deletable && (
+                    <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">ค่าเริ่มต้น</span>
+                  )}
+                  {m.deletable && (
+                    <>
+                      <button
+                        onClick={() => { setEditId(m.id); setEditName(m.name); }}
+                        className="text-xs text-admin-primary hover:text-admin-dark px-2 py-1"
+                      >
+                        แก้ไข
+                      </button>
+                      <button
+                        onClick={() => handleDelete(m.id)}
+                        className="text-xs text-red-600 hover:text-red-700 px-2 py-1"
+                      >
+                        ลบ
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p className="text-xs text-gray-400 mt-2">
+        ⚠️ Wave 1: ข้อมูลอยู่ใน memory — รีโหลดหน้าจะรีเซ็ต (Phase 4 = เชื่อมต่อ Backend)
+      </p>
+
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-100 border border-gray-300 rounded-xl px-5 py-3 text-sm shadow-xl">
+          {toast}
         </div>
       )}
     </div>
