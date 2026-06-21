@@ -24,6 +24,7 @@ import { FEATURE_FLAGS } from "../../../../../lib/dal";
 import { catalogApi, mapCatalogToPartListing } from "../../_lib/catalog-api";
 import { ListingEngagement } from "../../../../../components/parts/ListingEngagement";
 import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
+import { useModalLock } from "../../layout";
 
 export default function MarketplaceDetailPage({
   params,
@@ -39,6 +40,9 @@ export default function MarketplaceDetailPage({
   const [orderError, setOrderError] = useState<string | null>(null);
   // P10: notify-when-back state (mock)
   const [notifySet, setNotifySet] = useState(false);
+
+  // P12 (Gen78): ล็อก ShopIdSwitcher ขณะ modal สั่งซื้อเปิดอยู่
+  useModalLock(showModal);
 
   useEffect(() => {
     setShopId(getCurrentShopId());
@@ -67,6 +71,13 @@ export default function MarketplaceDetailPage({
   // Sub-CMD-8: ส่ง order ผ่าน real Backend API (fallback → localStorage mock)
   const handleOrder = (qty: number, delivery: DeliveryMethod) => {
     if (!listing || ordering) return;
+    // P11 (Gen78): บล็อกการสั่งซื้อเมื่อ Gold ไม่พอ (short-circuit guard)
+    const shopBalance = SHOPS_MOCK.find((s) => s.id === shopId)?.pointsBalance ?? 0;
+    if (listing.pricePoints > 0 && shopBalance < qty * listing.pricePoints) {
+      setShowModal(false);
+      setOrderError("Gold ไม่เพียงพอสำหรับคำสั่งซื้อนี้ — กรุณาเติม Gold ก่อนสั่งซื้อ");
+      return;
+    }
     setOrdering(true);
     setOrderError(null);
 
@@ -131,6 +142,8 @@ export default function MarketplaceDetailPage({
   const isOwn = listing.shopId === shopId;
   const shop = SHOPS_MOCK.find((s) => s.id === shopId);
   const balance = shop?.pointsBalance ?? 0;
+  // P11 (Gen78): Gold ไม่พอสำหรับราคา/ชิ้น → บล็อกปุ่มซื้อ (เทียบ pattern stock===0)
+  const insufficientGold = listing.pricePoints > 0 && balance < listing.pricePoints;
 
   return (
     <div className="space-y-5">
@@ -269,16 +282,18 @@ export default function MarketplaceDetailPage({
           <MockAnnoNav to="R-33" style={{ display: "block" }}>
             <button
               onClick={() => setShowModal(true)}
-              disabled={ordering}
+              disabled={ordering || insufficientGold}
               className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
             >
               {ordering
                 ? "กำลังสั่งซื้อ…"
-                : listing.pricePoints > 0
-                  ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
-                  : listing.unitPriceThb != null
-                    ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
-                    : "🛒 สั่งซื้อ"}
+                : insufficientGold
+                  ? "🔒 Gold ไม่พอ — เติม Gold ก่อนสั่งซื้อ"
+                  : listing.pricePoints > 0
+                    ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
+                    : listing.unitPriceThb != null
+                      ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
+                      : "🛒 สั่งซื้อ"}
             </button>
           </MockAnnoNav>
         </div>

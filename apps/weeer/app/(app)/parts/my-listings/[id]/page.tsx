@@ -5,20 +5,36 @@
 // Screen: R-29c / PARTS-LISTING-DETAIL
 // §5 มาจาก: R-29 (My Listings) · §6 ← R-29 (back) · เคส P2
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getListings } from "../../../../../lib/utils/parts-sync";
+import { getListings, setListingStatus, partsSync } from "../../../../../lib/utils/parts-sync";
 import { PART_LISTINGS_MOCK } from "../../_lib/mock-data";
-import { B2B_CONDITION_LABEL } from "../../_lib/types";
+import type { PartListing } from "../../_lib/types";
+import {
+  B2B_CONDITION_LABEL, LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, isListingActive,
+} from "../../_lib/types";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
 export default function MyListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
 
-  const stored = getListings();
-  const all = stored.length > 0 ? stored : PART_LISTINGS_MOCK;
-  const listing = all.find((l) => l.id === id);
+  const [listing, setListing] = useState<PartListing | null>(null);
+
+  useEffect(() => {
+    const stored = getListings();
+    const all = stored.length > 0 ? stored : PART_LISTINGS_MOCK;
+    setListing(all.find((l) => l.id === id) ?? null);
+  }, [id]);
+
+  // P02 (Gen78): ปิดขาย / เปิดขายอีกครั้ง — toggle status active ⇄ paused
+  const handleToggleStatus = () => {
+    if (!listing) return;
+    const next = isListingActive(listing) ? "paused" : "active";
+    setListingStatus(listing.id, next);
+    partsSync.emit({ type: "listing_updated", partId: listing.id });
+    setListing({ ...listing, status: next });
+  };
 
   if (!listing) {
     return (
@@ -62,6 +78,16 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
           </p>
         </div>
 
+        {/* P02 (Gen78): สถานะการขาย */}
+        <div className="flex items-center gap-2">
+          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${LISTING_STATUS_COLOR[isListingActive(listing) ? "active" : "paused"]}`}>
+            {isListingActive(listing) ? "🟢" : "⏸️"} {LISTING_STATUS_LABEL[isListingActive(listing) ? "active" : "paused"]}
+          </span>
+          {!isListingActive(listing) && (
+            <span className="text-xs text-gray-400">— ไม่แสดงในตลาด B2B</span>
+          )}
+        </div>
+
         <div className="grid grid-cols-2 gap-y-2 text-sm">
           <div><p className="text-xs text-gray-400">สต็อก</p><p className="font-medium text-gray-800">{listing.stock} ชิ้น</p></div>
           <div><p className="text-xs text-gray-400">หมวด</p><p className="font-medium text-gray-800">{listing.category}</p></div>
@@ -72,6 +98,23 @@ export default function MyListingDetailPage({ params }: { params: Promise<{ id: 
           <p className="text-sm text-gray-600 border-t border-gray-100 pt-3">{listing.description}</p>
         )}
       </div>
+
+      {/* P02 (Gen78): ปิดขาย / เปิดขายอีกครั้ง */}
+      {isListingActive(listing) ? (
+        <button
+          onClick={handleToggleStatus}
+          className="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 rounded-xl text-sm transition-colors"
+        >
+          ⏸️ ปิดขายรายการนี้ (ซ่อนจากตลาด)
+        </button>
+      ) : (
+        <button
+          onClick={handleToggleStatus}
+          className="w-full bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+        >
+          🟢 เปิดขายอีกครั้ง
+        </button>
+      )}
     </div>
   );
 }

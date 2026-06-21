@@ -22,6 +22,7 @@ import {
 import { escrowRelease, escrowRefund, getEscrowHeldByShop } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
 import { MockAnnoOrigin, MockAnnoXApp } from "@/components/MockAnno";
+import { useModalLock } from "../layout";
 
 type SideTab = "buyer" | "seller";
 type StageFilter = PartOrder["stage"] | "all";
@@ -37,6 +38,9 @@ export default function MyOrdersPage() {
   const [shipOrder, setShipOrder] = useState<PartOrder | null>(null);
   const [cancelOrder, setCancelOrder] = useState<PartOrder | null>(null);
   const [escrowHeld, setEscrowHeld] = useState(0);
+
+  // P12 (Gen78): ล็อก ShopIdSwitcher ขณะ modal ใดๆ เปิดอยู่
+  useModalLock(Boolean(confirmOrder || receiveOrder || shipOrder || cancelOrder));
 
   const reload = () => {
     const id = getCurrentShopId();
