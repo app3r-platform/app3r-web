@@ -420,8 +420,8 @@ export default function ProfilePage() {
         </div>
       </Section>
 
-      {/* Payment Wallet (Phase D-2) */}
-      <Section title="กระเป๋าเงิน">
+      {/* ค่าบริการ & ธุรกรรม (view-only · CMD #117-F) — ช่างไม่ถือกระเป๋าเงิน */}
+      <Section title="ค่าบริการ &amp; ธุรกรรม">
         <div className="px-4 py-3">
           <PaymentWalletCard />
         </div>
