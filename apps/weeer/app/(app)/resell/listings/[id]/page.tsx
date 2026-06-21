@@ -407,6 +407,10 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
             <h2 className="text-base font-bold text-gray-900">ยืนยันถอนการเลือก (R5)</h2>
             <p className="text-sm text-gray-600">ถอนการเลือก — ประกาศจะกลับสู่ "รับข้อเสนอ" และผู้ซื้อรายนี้จะไม่ถูกเลือกอีก</p>
+            {/* RSL-R05: seller-fault penalty notice (mockup · aligns with Admin fees T2/T3) */}
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+              <p className="text-xs font-semibold text-red-700">⚠️ การถอนการเลือกหลังเลือกผู้ซื้อแล้ว ถือเป็นความผิดฝั่งผู้ขาย · มีค่าปรับ (seller-fault fee)</p>
+            </div>
             <div className="flex gap-3">
               <button onClick={() => setShowR5Confirm(false)}
                 className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50">
