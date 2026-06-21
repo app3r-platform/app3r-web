@@ -72,6 +72,13 @@ const RESOLUTION_LABEL: Record<Resolution, { label: string; color: string }> = {
   split: { label: "แบ่งเงินพักกลาง (Escrow) ตามสัดส่วน", color: "bg-admin-surface text-admin-primary" },
 };
 
+const BY_LABEL: Record<"system" | "seller" | "buyer" | "admin", string> = {
+  system: "ระบบ",
+  seller: "ผู้ขาย",
+  buyer: "ผู้ซื้อ",
+  admin: "ผู้ดูแล",
+};
+
 function TimelineDot({ by }: { by: "system" | "seller" | "buyer" | "admin" }) {
   const colors = {
     system: "bg-gray-400",
@@ -216,7 +223,7 @@ export default function AdminDisputeDetailPage() {
       {/* Evidence */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          หลักฐาน (Evidence)
+          หลักฐาน
         </p>
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -247,7 +254,7 @@ export default function AdminDisputeDetailPage() {
       {/* Timeline */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Timeline
+          ไทม์ไลน์
         </p>
         <div className="space-y-3">
           {c.timeline.map((t, i) => (
@@ -257,7 +264,7 @@ export default function AdminDisputeDetailPage() {
                 <p className="text-sm text-gray-800">{t.event}</p>
                 <p className="text-xs text-gray-400">{t.time}</p>
               </div>
-              <span className="text-xs text-gray-400 shrink-0 capitalize">{t.by}</span>
+              <span className="text-xs text-gray-400 shrink-0">{BY_LABEL[t.by]}</span>
             </div>
           ))}
         </div>

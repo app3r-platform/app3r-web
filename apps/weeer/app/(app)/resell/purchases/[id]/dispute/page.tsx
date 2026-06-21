@@ -10,7 +10,7 @@ export default async function ResellPurchaseDisputePage({ params }: { params: Pr
         <Link href={`/resell/purchases/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900">⚠️ Dispute R-08 — ไม่ตรงปก</h1>
+            <h1 className="text-xl font-bold text-gray-900">⚠️ ข้อพิพาท R-08 — ไม่ตรงปก</h1>
           </div>
         </div>
         <span className="shrink-0 text-xs font-medium px-2.5 py-1 rounded-full bg-yellow-100 text-yellow-700">

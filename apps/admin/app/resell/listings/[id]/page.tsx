@@ -12,13 +12,18 @@ const STATUS_META: Record<Listing["status"], { label: string; color: string }> =
   announced:        { label: "ประกาศ",          color: "bg-gray-100 text-gray-500" },
   receiving_offers: { label: "รับ Offer",        color: "bg-blue-50 text-blue-700" },
   offer_selected:   { label: "เลือก Offer แล้ว", color: "bg-brand-info/15 text-brand-info" },
-  buyer_confirmed:  { label: "Buyer ยืนยัน",     color: "bg-cyan-900/50 text-cyan-300" },
+  buyer_confirmed:  { label: "ผู้ซื้อยืนยัน",    color: "bg-cyan-900/50 text-cyan-300" },
   in_progress:      { label: "กำลังดำเนินการ",   color: "bg-yellow-50 text-yellow-700" },
   delivered:        { label: "ส่งแล้ว",          color: "bg-brand-success/15 text-brand-success" },
   inspection_period:{ label: "ช่วงตรวจสอบ",      color: "bg-admin-primary/15 text-admin-primary" },
   completed:        { label: "เสร็จสิ้น",        color: "bg-green-50 text-green-700" },
   cancelled:        { label: "ยกเลิก",           color: "bg-gray-100 text-gray-500" },
   disputed:         { label: "พิพาท",            color: "bg-red-50 text-red-700" },
+};
+
+const DELIVERY_LABEL: Record<string, string> = {
+  self_pickup: "รับสินค้าเอง",
+  shipping: "จัดส่งพัสดุ",
 };
 
 const OFFER_STATUS_META: Record<Offer["status"], { label: string; color: string }> = {
@@ -107,7 +112,7 @@ export default function ListingDetailPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
           ระบบ Resell กำลังพัฒนา — {error ?? "ไม่พบข้อมูล"}
         </div>
-        <Link href="/resell/listings" className="text-sm text-admin-primary hover:text-admin-dark">← Listings</Link>
+        <Link href="/resell/listings" className="text-sm text-admin-primary hover:text-admin-dark">← ประกาศ</Link>
       </main>
     </div>
   );
@@ -124,7 +129,7 @@ export default function ListingDetailPage() {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <h1 className="text-2xl font-bold">🛍️ Listing Detail</h1>
+              <h1 className="text-2xl font-bold">🛍️ รายละเอียดประกาศ</h1>
               <span className={`text-sm px-2.5 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-300">{tm}</span>
             </div>
@@ -132,7 +137,7 @@ export default function ListingDetailPage() {
           </div>
           <Link href="/resell/listings"
             className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-            ← Listings
+            ← ประกาศ
           </Link>
         </div>
 
@@ -140,21 +145,21 @@ export default function ListingDetailPage() {
 
           {/* Listing info */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูล Listing</h2>
-            <InfoRow label="Seller ID" value={
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ข้อมูลประกาศ</h2>
+            <InfoRow label="รหัสผู้ขาย" value={
               <span className="font-mono text-xs">{listing.sellerId}</span>
             } />
-            <InfoRow label="Seller Type" value={
+            <InfoRow label="ประเภทผู้ขาย" value={
               <span className={listing.sellerType === "WeeeU" ? "text-sky-400" : "text-green-600"}>
                 {listing.sellerType}
               </span>
             } />
-            {listing.sellerName && <InfoRow label="ชื่อ Seller" value={listing.sellerName} />}
+            {listing.sellerName && <InfoRow label="ชื่อผู้ขาย" value={listing.sellerName} />}
             <InfoRow label="ประเภท" value={tm} />
             <InfoRow label="ราคา" value={
               <span className="font-mono text-green-600 font-bold">{listing.price.toLocaleString()} ฿</span>
             } />
-            <InfoRow label="Delivery" value={listing.deliveryMethods.join(", ") || "—"} />
+            <InfoRow label="วิธีจัดส่ง" value={listing.deliveryMethods.map(m => DELIVERY_LABEL[m] ?? m).join(", ") || "—"} />
             {listing.viewCount != null && (
               <InfoRow label="จำนวนดู" value={`${listing.viewCount.toLocaleString()} ครั้ง`} />
             )}
@@ -163,7 +168,7 @@ export default function ListingDetailPage() {
           {/* Appliance + warranty */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              เครื่องใช้ไฟฟ้า + Warranty
+              เครื่องใช้ไฟฟ้า + ประกัน
             </h2>
             {listing.applianceId ? (
               <InfoRow label="Appliance ID" value={
@@ -187,7 +192,7 @@ export default function ListingDetailPage() {
 
           {/* Timeline */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Timeline</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ไทม์ไลน์</h2>
             <InfoRow label="สร้างเมื่อ" value={new Date(listing.createdAt).toLocaleString("th-TH")} />
             <InfoRow label="อัพเดตล่าสุด" value={new Date(listing.updatedAt).toLocaleString("th-TH")} />
             <InfoRow label="หมดอายุ" value={new Date(listing.expiresAt).toLocaleString("th-TH")} />
@@ -214,18 +219,18 @@ export default function ListingDetailPage() {
         {/* Offer history */}
         <section className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-            Offer History ({offers.length})
+            ประวัติข้อเสนอ ({offers.length})
           </h2>
           {offers.length === 0 ? (
-            <p className="text-sm text-gray-600">ยังไม่มี offers</p>
+            <p className="text-sm text-gray-600">ยังไม่มีข้อเสนอ</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-3 py-2">Offer ID</th>
-                  <th className="px-3 py-2">Buyer</th>
+                  <th className="px-3 py-2">ผู้ซื้อ</th>
                   <th className="px-3 py-2">ราคา Offer</th>
-                  <th className="px-3 py-2">Delivery</th>
+                  <th className="px-3 py-2">วิธีจัดส่ง</th>
                   <th className="px-3 py-2">สถานะ</th>
                   <th className="px-3 py-2">วันที่</th>
                 </tr>
@@ -245,7 +250,7 @@ export default function ListingDetailPage() {
                       <td className="px-3 py-2 text-xs font-mono text-green-600">
                         {offer.offerPrice.toLocaleString()} ฿
                       </td>
-                      <td className="px-3 py-2 text-xs text-gray-500">{offer.deliveryMethod}</td>
+                      <td className="px-3 py-2 text-xs text-gray-500">{DELIVERY_LABEL[offer.deliveryMethod] ?? offer.deliveryMethod}</td>
                       <td className="px-3 py-2">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${om.color}`}>{om.label}</span>
                       </td>

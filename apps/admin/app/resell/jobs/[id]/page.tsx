@@ -317,7 +317,7 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
               }`}>
               {r === "to_buyer"  ? "🛒 ผู้ซื้อชนะ\nคืนพักเงินกลาง"
                : r === "to_seller" ? "🧑‍💼 ผู้ขายชนะ\nโอนพักเงินกลาง"
-               : "⚡ แบ่ง\nsplit%"}
+               : "⚡ แบ่ง\nสัดส่วน"}
             </button>
           ))}
         </div>
@@ -376,7 +376,7 @@ function DisputePanel({ d, escrow, price }: { d: DisputeLayer; escrow: number; p
 
       {/* L4 — Precedent */}
       <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">L4 — Precedent</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">L4 — บรรทัดฐาน</p>
         {d.precedent_note ? (
           <p className="text-xs text-gray-600 bg-white rounded p-2 border border-gray-200">{d.precedent_note}</p>
         ) : (
@@ -412,7 +412,7 @@ export default function ResellJobDetailPage() {
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-400">
-          <Link href="/resell/jobs" className="hover:text-gray-600">Resell Jobs</Link>
+          <Link href="/resell/jobs" className="hover:text-gray-600">งาน Resell</Link>
           <span>/</span>
           <span className="text-gray-700 font-medium">{job.listing_code}</span>
         </div>

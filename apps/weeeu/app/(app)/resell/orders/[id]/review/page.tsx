@@ -128,7 +128,7 @@ export default function ResellOrderReviewPage() {
           {order.is_buyer ? "ผู้ขาย" : "ผู้ซื้อ"}: {order.counterparty_name}
         </p>
         <p className="text-lg font-bold text-green-700">
-          {order.agreed_price.toLocaleString()} Gold ✅ ปลดล็อก Escrow แล้ว
+          {order.agreed_price.toLocaleString()} พอยต์ทอง ✅ ปลดล็อกระบบพักเงินกลาง (Escrow) แล้ว
         </p>
       </div>
 

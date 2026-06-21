@@ -157,7 +157,7 @@ export default function ResellAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">📊 Resell Analytics</h1>
+            <h1 className="text-2xl font-bold">📊 สถิติ Resell</h1>
             <p className="text-gray-500 text-sm mt-1">
               ภาพรวม Resell — 12 เคส (R1-R12) / 4 คู่ / dispute 3-way
             </p>
@@ -180,9 +180,9 @@ export default function ResellAnalyticsPage() {
         {/* KPI Row 1 */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            label="Listings ทั้งหมด"
+            label="รายการประกาศทั้งหมด"
             value={d.total_listings.toLocaleString()}
-            sub={`Active ${d.active_listings} | ยกเลิก ${d.cancelled_count}`}
+            sub={`ใช้งาน ${d.active_listings} | ยกเลิก ${d.cancelled_count}`}
           />
           <StatCard
             label="ธุรกรรมเสร็จสิ้น"
@@ -197,7 +197,7 @@ export default function ResellAnalyticsPage() {
           <StatCard
             label="GP (Platform Fee)"
             value={`${d.total_gp.toLocaleString()} G`}
-            sub="~5% avg platform fee"
+            sub="~5% ค่าธรรมเนียมแพลตฟอร์มเฉลี่ย"
           />
         </div>
 
@@ -210,20 +210,20 @@ export default function ResellAnalyticsPage() {
             accent="border-blue-200"
           />
           <StatCard
-            label="⚖️ Dispute"
+            label="⚖️ ข้อพิพาท"
             value={d.disputed_count.toLocaleString()}
-            sub={`Dispute Rate ${(d.dispute_rate * 100).toFixed(1)}%`}
+            sub={`อัตราข้อพิพาท ${(d.dispute_rate * 100).toFixed(1)}%`}
             accent="border-red-200"
           />
           <StatCard
-            label="Offer Acceptance"
+            label="อัตรารับ Offer"
             value={`${(d.offer_acceptance_rate * 100).toFixed(1)}%`}
-            sub="offer → selected"
+            sub="offer → ถูกเลือก"
           />
           <StatCard
-            label="Sales Conversion"
+            label="อัตราแปลงเป็นการขาย"
             value={`${(d.conversion_rate * 100).toFixed(1)}%`}
-            sub="listings → completed"
+            sub="ประกาศ → เสร็จสิ้น"
           />
         </div>
 
@@ -251,7 +251,7 @@ export default function ResellAnalyticsPage() {
           <section className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
             <div>
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                Seller Type
+                ประเภทผู้ขาย
               </h2>
               <div className="space-y-2">
                 <BarRow label="WeeeU (บุคคล)" value={d.by_seller_type["WeeeU"] ?? 0} total={d.total_listings} color="bg-sky-500" />
@@ -311,7 +311,7 @@ export default function ResellAnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 Top Sellers</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 ผู้ขายสูงสุด</h2>
             <div className="space-y-2.5">
               {d.top_sellers.map((u, i) => (
                 <div key={u.id} className="flex items-center gap-3">
@@ -332,7 +332,7 @@ export default function ResellAnalyticsPage() {
           </section>
 
           <section className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 Top Buyers</h2>
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">🏆 ผู้ซื้อสูงสุด</h2>
             <div className="space-y-2.5">
               {d.top_buyers.map((u, i) => (
                 <div key={u.id} className="flex items-center gap-3">

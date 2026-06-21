@@ -110,7 +110,7 @@ export default function ResellMarketplaceOfferPage({ params }: { params: Promise
           <div className="flex gap-2">
             <Link href="/resell/marketplace"
               className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">
-              ← Marketplace
+              ← ตลาดซื้อขาย
             </Link>
             <Link href={`/resell/marketplace/${id}`}
               className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl text-sm transition-colors">

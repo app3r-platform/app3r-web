@@ -490,9 +490,9 @@ export default function SellNewPage() {
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">อุปกรณ์ที่แถมมาพร้อมสินค้า</p>
           <div className="space-y-2">
             {[
-              { key: "warranty_card", label: "📋 บัตรรับประกัน (Warranty Card)" },
-              { key: "manual",        label: "📖 คู่มือการใช้งาน (Manual)" },
-              { key: "original_box",  label: "📦 กล่องบรรจุภัณฑ์เดิม (Original Box)" },
+              { key: "warranty_card", label: "📋 บัตรรับประกัน" },
+              { key: "manual",        label: "📖 คู่มือการใช้งาน" },
+              { key: "original_box",  label: "📦 กล่องบรรจุภัณฑ์เดิม" },
             ].map(item => (
               <button
                 key={item.key}

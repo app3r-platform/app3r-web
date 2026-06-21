@@ -132,7 +132,7 @@ export default function ResellDisputesPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
           <div>
-            <h1 className="text-2xl font-bold">⚖️ Resell Disputes</h1>
+            <h1 className="text-2xl font-bold">⚖️ ข้อพิพาท Resell</h1>
             <p className="text-gray-500 text-sm mt-1">
               ข้อพิพาท Resell — service_type A · ตัดสิน 3 ทาง (buyer/seller/split)
             </p>
@@ -149,7 +149,7 @@ export default function ResellDisputesPage() {
             )}
             <Link href="/disputes"
               className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors">
-              ⚖️ All Disputes →
+              ⚖️ ดูข้อพิพาททั้งหมด →
             </Link>
           </div>
         </div>
@@ -189,9 +189,9 @@ export default function ResellDisputesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-gray-500 text-left border-b border-gray-200">
-                  <th className="px-5 py-3">Listing</th>
-                  <th className="px-5 py-3">Buyer</th>
-                  <th className="px-5 py-3">Seller</th>
+                  <th className="px-5 py-3">ประกาศขาย</th>
+                  <th className="px-5 py-3">ผู้ซื้อ</th>
+                  <th className="px-5 py-3">ผู้ขาย</th>
                   <th className="px-5 py-3">เงินพักกลาง (Escrow)</th>
                   <th className="px-5 py-3">เวลาที่พิพาท</th>
                   <th className="px-5 py-3 text-right">จัดการ</th>
@@ -304,9 +304,9 @@ export default function ResellDisputesPage() {
                       : "border-admin-primary bg-admin-surface text-admin-primary"
                       : "border-gray-200 bg-white text-gray-500 hover:border-gray-300"
                   }`}>
-                  {r === "to_buyer"  ? "🛒 Buyer\nชนะ"
-                   : r === "to_seller" ? "🧑‍💼 Seller\nชนะ"
-                   : "⚡ แบ่ง\nSplit"}
+                  {r === "to_buyer"  ? "🛒 ผู้ซื้อ\nชนะ"
+                   : r === "to_seller" ? "🧑‍💼 ผู้ขาย\nชนะ"
+                   : "⚡ แบ่ง\nสัดส่วน"}
                 </button>
               ))}
             </div>
@@ -316,9 +316,9 @@ export default function ResellDisputesPage() {
               <div className="bg-admin-surface border border-admin-primary/30 rounded-xl p-4 mb-4 space-y-2">
                 <p className="text-xs font-semibold text-admin-primary mb-2">⚡ กำหนด Split %</p>
                 <p className="text-xs text-gray-600">
-                  Buyer ได้ <strong>{splitPct}%</strong> = {buyerSplit.toLocaleString()} G
+                  ผู้ซื้อได้ <strong>{splitPct}%</strong> = {buyerSplit.toLocaleString()} G
                   &nbsp;·&nbsp;
-                  Seller ได้ <strong>{100 - splitPct}%</strong> = {sellerSplit.toLocaleString()} G
+                  ผู้ขายได้ <strong>{100 - splitPct}%</strong> = {sellerSplit.toLocaleString()} G
                 </p>
                 <input type="range" min={0} max={100} step={5}
                   value={splitPct}
@@ -326,9 +326,9 @@ export default function ResellDisputesPage() {
                   className="w-full accent-[#2C5E8C]"
                 />
                 <div className="flex justify-between text-xs text-gray-400">
-                  <span>Buyer 100%</span>
+                  <span>ผู้ซื้อ 100%</span>
                   <span>50/50</span>
-                  <span>Seller 100%</span>
+                  <span>ผู้ขาย 100%</span>
                 </div>
               </div>
             )}
@@ -356,8 +356,8 @@ export default function ResellDisputesPage() {
                   : "bg-gray-400"
                 }`}>
                 {actionLoading !== null ? "กำลังดำเนินการ..."
-                  : resolution === "to_buyer"  ? "✓ Buyer ชนะ"
-                  : resolution === "to_seller" ? "✓ Seller ชนะ"
+                  : resolution === "to_buyer"  ? "✓ ผู้ซื้อชนะ"
+                  : resolution === "to_seller" ? "✓ ผู้ขายชนะ"
                   : resolution === "split"     ? `✓ แบ่ง ${splitPct}/${100 - splitPct}`
                   : "เลือกการตัดสินก่อน"}
               </button>

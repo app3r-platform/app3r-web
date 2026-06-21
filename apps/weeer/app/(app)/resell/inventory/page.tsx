@@ -20,25 +20,25 @@ const STATUS_TABS: { value: ApplianceStatus | ""; label: string }[] = [
 const MOCK_ITEMS: UsedAppliance[] = [
   {
     id: "A001", shopId: "S1", name: "Samsung Q9 QLED 65\"", brand: "Samsung", model: "QN65Q900T",
-    category: "TV", condition: "like_new", costPrice: 14000, suggestedPrice: 18900,
+    category: "ทีวี", condition: "like_new", costPrice: 14000, suggestedPrice: 18900,
     status: "in_stock", source: { type: "purchased" }, sku: "SKU-TV-001",
     createdAt: "2026-05-10", updatedAt: "2026-05-10",
   },
   {
     id: "A002", shopId: "S1", name: "Dyson V15 Detect", brand: "Dyson", model: "V15 Detect",
-    category: "Vacuum", condition: "good", costPrice: 5500, suggestedPrice: 8500,
+    category: "เครื่องดูดฝุ่น", condition: "good", costPrice: 5500, suggestedPrice: 8500,
     status: "listed", source: { type: "acquired" }, sku: "SKU-VAC-001",
     createdAt: "2026-05-12", updatedAt: "2026-05-18",
   },
   {
     id: "A003", shopId: "S1", name: "iPhone 14 Pro 256GB", brand: "Apple", model: "iPhone 14 Pro",
-    category: "Phone", condition: "good", costPrice: 16000, suggestedPrice: 22000,
+    category: "โทรศัพท์", condition: "good", costPrice: 16000, suggestedPrice: 22000,
     status: "in_stock", source: { type: "purchased" }, sku: "SKU-PHN-003",
     createdAt: "2026-05-14", updatedAt: "2026-05-14",
   },
   {
     id: "A004", shopId: "S1", name: "Bose QC45 Headphone", brand: "Bose", model: "QC45",
-    category: "Audio", condition: "fair", costPrice: 2800, suggestedPrice: 4200,
+    category: "เสียง/หูฟัง", condition: "fair", costPrice: 2800, suggestedPrice: 4200,
     status: "sold", source: { type: "manual" }, sku: "SKU-AUD-001",
     createdAt: "2026-05-08", updatedAt: "2026-05-22",
   },

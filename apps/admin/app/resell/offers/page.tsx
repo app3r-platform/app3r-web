@@ -15,6 +15,11 @@ const STATUS_META: Record<Offer["status"], { label: string; color: string }> = {
   withdrawn: { label: "ถอน",    color: "bg-gray-100 text-gray-500" },
 };
 
+const DELIVERY_LABEL: Record<string, string> = {
+  self_pickup: "รับสินค้าเอง",
+  shipping: "จัดส่งพัสดุ",
+};
+
 const PAGE_SIZE = 25;
 
 interface OffersResponse {
@@ -84,7 +89,7 @@ function OffersInner() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">🤝 Offer Audit</h1>
+            <h1 className="text-2xl font-bold">🤝 ตรวจสอบ Offer</h1>
             <p className="text-gray-500 text-sm mt-1">
               ตรวจสอบ offers ข้าม listings — anti-fraud monitoring
             </p>
@@ -128,7 +133,7 @@ function OffersInner() {
         {/* Table */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between text-sm text-gray-500">
-            <span>พบ {total.toLocaleString()} offers</span>
+            <span>พบ {total.toLocaleString()} ข้อเสนอ</span>
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
@@ -150,9 +155,9 @@ function OffersInner() {
                 <tr className="text-gray-500 text-left border-b border-gray-200">
                   <th className="px-4 py-3">Offer ID</th>
                   <th className="px-4 py-3">Listing ID</th>
-                  <th className="px-4 py-3">Buyer</th>
+                  <th className="px-4 py-3">ผู้ซื้อ</th>
                   <th className="px-4 py-3">ราคา Offer</th>
-                  <th className="px-4 py-3">Delivery</th>
+                  <th className="px-4 py-3">วิธีจัดส่ง</th>
                   <th className="px-4 py-3">สถานะ</th>
                   <th className="px-4 py-3">หมดอายุ</th>
                   <th className="px-4 py-3">วันที่</th>
@@ -181,7 +186,7 @@ function OffersInner() {
                       <td className="px-4 py-3 text-xs font-mono text-green-600">
                         {offer.offerPrice.toLocaleString()} ฿
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-500">{offer.deliveryMethod}</td>
+                      <td className="px-4 py-3 text-xs text-gray-500">{DELIVERY_LABEL[offer.deliveryMethod] ?? offer.deliveryMethod}</td>
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${sm.color}`}>{sm.label}</span>
                       </td>

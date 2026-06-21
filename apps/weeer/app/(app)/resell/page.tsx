@@ -79,7 +79,7 @@ export default function ResellDashboardPage() {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           { label: "สินค้าในสต๊อก",   value: d.total_inventory,            color: "bg-[#FCEAE3]", text: "text-[#FF663A]" },
-          { label: "ประกาศ active",    value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
+          { label: "ประกาศที่ใช้งาน",   value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
           { label: "ข้อเสนอรอตอบ",    value: d.total_offers_pending,        color: "bg-amber-50",  text: "text-amber-700" },
           { label: "รายได้รวม (pts)", value: d.total_revenue.toLocaleString(), color: "bg-[#FFF1ED]", text: "text-[#D63B12]" },
         ].map(k => (

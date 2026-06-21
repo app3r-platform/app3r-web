@@ -452,7 +452,7 @@ export default function UsedPricingWizardPage() {
         <Link href="/resell/buy" className="text-gray-400 hover:text-gray-600 text-lg">←</Link>
         <div>
           <h1 className="text-xl font-bold text-gray-900">ประเมินราคารับซื้อ</h1>
-          <p className="text-xs text-gray-500 mt-0.5">B6 Used Pricing Wizard</p>
+          <p className="text-xs text-gray-500 mt-0.5">B6 ตีราคารับซื้อมือสอง</p>
         </div>
       </div>
 

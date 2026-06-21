@@ -96,7 +96,7 @@ function FeeCalculator() {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-      <h2 className="text-sm font-bold text-gray-700">🧮 Fee Calculator (Mock)</h2>
+      <h2 className="text-sm font-bold text-gray-700">🧮 เครื่องคำนวณค่าธรรมเนียม (Mock)</h2>
       <div className="grid grid-cols-3 gap-3">
         <div>
           <label className="text-xs text-gray-500 block mb-1">ราคาขาย (G)</label>
@@ -132,11 +132,11 @@ function FeeCalculator() {
           <span className="font-mono text-gray-700">{price.toLocaleString()} G</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-500">Platform Fee ({rate.platform_pct}%)</span>
+          <span className="text-gray-500">ค่าธรรมเนียมแพลตฟอร์ม ({rate.platform_pct}%)</span>
           <span className="font-mono text-red-600">−{platformFee.toLocaleString()} G</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-500">VAT {rate.vat_pct}% (on fee)</span>
+          <span className="text-gray-500">VAT {rate.vat_pct}% (บนค่าธรรมเนียม)</span>
           <span className="font-mono text-red-600">−{vat.toLocaleString()} G</span>
         </div>
         <div className="border-t border-gray-200 pt-2 flex justify-between text-sm font-bold">
@@ -165,7 +165,7 @@ export default function ResellFeesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">💰 Resell Fees — D-Resell-1</h1>
+            <h1 className="text-2xl font-bold">💰 ค่าธรรมเนียม Resell — D-Resell-1</h1>
             <p className="text-gray-500 text-sm mt-1">
               Fee matrix 4 คู่ (U↔U/U→R/R→U/R↔R) + Refund Tiers T1–T4
             </p>
@@ -246,7 +246,7 @@ export default function ResellFeesPage() {
 
         {/* Refund Tiers */}
         <div>
-          <h2 className="text-sm font-bold text-gray-700 mb-3">🔁 Refund Tiers — T1–T4 (กรณีผู้ขายยกเลิก / แพ้ Dispute)</h2>
+          <h2 className="text-sm font-bold text-gray-700 mb-3">🔁 ระดับการคืนเงิน — T1–T4 (กรณีผู้ขายยกเลิก / แพ้ข้อพิพาท)</h2>
           <div className="space-y-3">
             {REFUND_TIERS.map(tier => (
               <div key={tier.tier} className={`rounded-xl border p-4 ${tier.color}`}>
@@ -263,7 +263,7 @@ export default function ResellFeesPage() {
                     <p className="text-sm font-semibold text-blue-700">{tier.buyer_refund}</p>
                   </div>
                   <div className="bg-white rounded-lg p-3">
-                    <p className="text-xs text-gray-500 mb-1">🧑‍💼 Penalty ผู้ขาย</p>
+                    <p className="text-xs text-gray-500 mb-1">🧑‍💼 บทลงโทษผู้ขาย</p>
                     <p className="text-sm font-semibold text-red-600">{tier.seller_penalty}</p>
                   </div>
                 </div>
