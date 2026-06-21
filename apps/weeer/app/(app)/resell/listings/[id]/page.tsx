@@ -181,6 +181,11 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="bg-red-50 border border-red-300 rounded-xl p-4">
           <p className="text-sm font-bold text-red-700">🚫 ประกาศถูกระงับ (R2/R3 SUSPENDED)</p>
           <p className="text-xs text-red-600 mt-1">{listing.suspendReason ?? "Admin ระงับ — กรุณาตรวจสอบ"}</p>
+          {/* RSL-R03: offer-fee-refund notice (auto-suspend on expiry · mockup only · settlement = Phase D backend) */}
+          <div className="mt-3 bg-white/60 border border-red-200 rounded-lg p-2.5">
+            <p className="text-xs font-semibold text-red-700">ประกาศถูกระงับ · ระบบคืนค่ายื่นข้อเสนอให้ผู้เสนอทุกราย</p>
+            <p className="text-[11px] text-red-500 mt-0.5">(การคืนค่ายื่นดำเนินการโดยระบบหลังบ้าน)</p>
+          </div>
           <div className="flex gap-2 mt-3">
             <Link href={`/resell/listings/${id}/edit`}
               className="flex-1 text-center text-xs bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2 rounded-lg transition-colors">
