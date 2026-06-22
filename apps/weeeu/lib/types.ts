@@ -143,6 +143,43 @@ export interface MaintainJob {
   updatedAt: string;
 }
 
+// ─── REP-C11: WeeeU ปฏิเสธให้ซ่อม — Modal เหตุผล 3 กลุ่ม (SoT Gen 55, mirror WeeeT) ─
+// SoT Gen 55 "3 กลุ่มเหตุผล WeeeU ปฏิเสธ (mirror)":
+//   1. ช่างไม่ให้ความร่วมมือ / มารยาท — มาช้า, ไม่สุภาพ, ไม่ปฏิบัติตาม SOP
+//   2. ช่างบอกซ่อมไม่ได้ / ไม่คุ้มซ่อม — ลูกค้าไม่ต้องการดำเนินต่อ
+//   3. ค่าใช้จ่ายเกินงบ / ไม่ตรงข้อเสนอเดิม — ราคาที่ร้านเสนอสูงเกินไป
+// "กดปุ่ม ปฏิเสธให้ซ่อม → modal เปิด → เลือก 1 กลุ่ม + textarea + รูปประกอบ optional (≤3)"
+// บันทึก audit log สำหรับ dispute resolution. Mock-level — ไม่มี backend.
+// หมายเหตุ: นิยามในแอป WeeeU เอง (ห้าม cross-app import จาก weeet)
+export type WeeeUDeclineGroup =
+  | "technician_conduct"  // 1. ช่างไม่ให้ความร่วมมือ / มารยาท
+  | "not_worth_repair"    // 2. ช่างบอกซ่อมไม่ได้ / ไม่คุ้มซ่อม
+  | "over_budget";        // 3. ค่าใช้จ่ายเกินงบ / ไม่ตรงข้อเสนอเดิม
+
+export const WEEEU_DECLINE_GROUPS: Array<{
+  key: WeeeUDeclineGroup;
+  title: string;
+  examples: string;
+}> = [
+  {
+    key: "technician_conduct",
+    title: "ช่างไม่ให้ความร่วมมือ / มารยาท",
+    examples: "มาช้า, ไม่สุภาพ, ไม่ปฏิบัติตาม SOP",
+  },
+  {
+    key: "not_worth_repair",
+    title: "ช่างบอกซ่อมไม่ได้ / ไม่คุ้มซ่อม",
+    examples: "ประเมินแล้วไม่คุ้มซ่อม — ไม่ต้องการดำเนินต่อ",
+  },
+  {
+    key: "over_budget",
+    title: "ค่าใช้จ่ายเกินงบ / ไม่ตรงข้อเสนอเดิม",
+    examples: "ราคาที่ร้านเสนอสูงเกินไป / ไม่ตรงข้อเสนอเดิม",
+  },
+];
+
+export const DECLINE_MAX_PHOTOS = 3;
+
 // ─── MaintainOffer (Blueprint 2.1 — Offer=SoT, Decision กลาง) ────────────────
 
 export interface MaintainOfferTerms {

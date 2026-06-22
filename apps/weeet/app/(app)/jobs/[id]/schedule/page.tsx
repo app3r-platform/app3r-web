@@ -1,11 +1,21 @@
 "use client";
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
+import { SEED_AWAITING_PARTS_PRICING } from "@/lib/mock-data/repair-bforms";
 
 // Mockup-only — state-based, no backend calls.
 // T-05 "REPAIR-C3-SCHEDULE" — รออะไหล่ / นัดหมายใหม่
+// REP-C08: awaiting_parts binary choice — ช่างถามลูกค้าหน้างาน 2 ทาง (ราคา WeeeR ตั้ง):
+//   (a) ยกเครื่องกลับร้าน  (b) ช่างกลับมาใหม่ + ค่าเดินทาง. เลือก return_visit → ฟอร์มนัดหมายใหม่.
 
 type ScheduleState = "draft" | "awaiting" | "confirmed";
+
+// REP-C08 — 2 ทางเลือก awaiting_parts (per-option price จาก WeeeR seed)
+type AwaitingOption = "take_back" | "return_visit";
+const AWAITING_OPTIONS: { key: AwaitingOption; icon: string; title: string; desc: string }[] = [
+  { key: "take_back", icon: "🏠", title: "ยกเครื่องกลับร้าน", desc: "ช่างยกเครื่องไปซ่อมที่ร้าน นำกลับมาคืนเมื่อเสร็จ" },
+  { key: "return_visit", icon: "🚐", title: "ช่างกลับมาใหม่ + ค่าเดินทาง", desc: "รออะไหล่พร้อม ช่างเดินทางกลับมาซ่อมที่บ้านอีกครั้ง" },
+];
 
 const STATE_TABS: { key: ScheduleState; label: string }[] = [
   { key: "draft", label: "ฟอร์มนัดหมาย" },
@@ -18,13 +28,21 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
   const router = useRouter();
 
   const [state, setState] = useState<ScheduleState>("draft");
+  // REP-C08 — ทางเลือกที่ลูกค้าเลือกหน้างาน (null = ยังไม่เลือก)
+  const [awaitingChoice, setAwaitingChoice] = useState<AwaitingOption | null>(null);
   const [partName, setPartName] = useState("");
   const [readyDate, setReadyDate] = useState("");
   const [apptDate, setApptDate] = useState("");
   const [apptTime, setApptTime] = useState("");
   const [note, setNote] = useState("");
 
-  const canSubmit = partName.trim() && readyDate && apptDate && apptTime;
+  // นัดหมายใหม่บังคับเฉพาะ return_visit (ช่างกลับมา); take_back ไม่ต้องนัด (ยกกลับร้านเลย)
+  const needsAppointment = awaitingChoice === "return_visit";
+  const canSubmit =
+    awaitingChoice !== null &&
+    partName.trim() &&
+    readyDate &&
+    (!needsAppointment || (apptDate && apptTime));
 
   const handleSubmit = () => {
     if (!canSubmit) return;
@@ -36,6 +54,9 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
     d ? new Date(d + "T00:00:00").toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" }) : "—";
 
   // Fallbacks so the awaiting/confirmed panels are always reviewable
+  const sChoice: AwaitingOption = awaitingChoice ?? "return_visit";
+  const sChoiceMeta = AWAITING_OPTIONS.find((o) => o.key === sChoice)!;
+  const sChoicePrice = SEED_AWAITING_PARTS_PRICING[sChoice].price;
   const sPart = partName.trim() || "คอมเพรสเซอร์ตู้เย็น (รุ่น A-200)";
   const sReady = readyDate || "2026-06-10";
   const sApptDate = apptDate || "2026-06-12";
@@ -75,7 +96,38 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
         {state === "draft" && (
           <>
             <div className="bg-amber-950/30 border border-amber-800/50 rounded-xl px-4 py-3 text-xs text-amber-300">
-              🔧 ต้องสั่งอะไหล่เพิ่ม — กรอกรายละเอียดแล้วเสนอวันนัดหมายใหม่กับลูกค้า
+              🔧 ต้องสั่งอะไหล่เพิ่ม (รออะไหล่) — ถามลูกค้าหน้างานเลือก 1 ทาง แล้วกรอกรายละเอียด
+            </div>
+
+            {/* REP-C08 — binary choice + per-option price (ราคา WeeeR ตั้ง) */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-white">🙋 ลูกค้าเลือกวิธีดำเนินการ <span className="text-red-400">*</span></label>
+              {AWAITING_OPTIONS.map((opt) => {
+                const price = SEED_AWAITING_PARTS_PRICING[opt.key].price;
+                const priceNote = SEED_AWAITING_PARTS_PRICING[opt.key].note;
+                const active = awaitingChoice === opt.key;
+                return (
+                  <button
+                    key={opt.key}
+                    onClick={() => setAwaitingChoice(opt.key)}
+                    className={`w-full text-left border-2 rounded-xl p-3 flex items-start gap-3 transition-colors ${
+                      active ? "border-weeet-dark bg-weeet-surface/20" : "border-gray-700 bg-gray-800"
+                    }`}
+                  >
+                    <span className="text-xl">{opt.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-semibold text-white">{opt.title}</p>
+                        <span className={`text-sm font-semibold shrink-0 ${price > 0 ? "text-weeet-primary" : "text-gray-400"}`}>
+                          {price > 0 ? `+฿${price.toLocaleString()}` : "ฟรี"}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400">{opt.desc}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5">{priceNote}</p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             <div className="space-y-2">
@@ -98,23 +150,26 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-white">📅 เสนอวันนัดหมายใหม่ <span className="text-red-400">*</span></label>
-              <div className="flex gap-2">
-                <input
-                  type="date"
-                  value={apptDate}
-                  onChange={(e) => setApptDate(e.target.value)}
-                  className="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-weeet-primary"
-                />
-                <input
-                  type="time"
-                  value={apptTime}
-                  onChange={(e) => setApptTime(e.target.value)}
-                  className="w-32 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-weeet-primary"
-                />
+            {/* นัดหมายใหม่เฉพาะ return_visit — take_back ยกกลับร้านไม่ต้องนัด */}
+            {needsAppointment && (
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-white">📅 เสนอวันนัดหมายใหม่ <span className="text-red-400">*</span></label>
+                <div className="flex gap-2">
+                  <input
+                    type="date"
+                    value={apptDate}
+                    onChange={(e) => setApptDate(e.target.value)}
+                    className="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-weeet-primary"
+                  />
+                  <input
+                    type="time"
+                    value={apptTime}
+                    onChange={(e) => setApptTime(e.target.value)}
+                    className="w-32 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-weeet-primary"
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-white">📝 ข้อความถึงลูกค้า</label>
@@ -127,12 +182,15 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
               />
             </div>
 
+            {awaitingChoice === null && (
+              <p className="text-xs text-amber-400 text-center">⚠️ เลือกวิธีดำเนินการกับลูกค้าก่อน</p>
+            )}
             <button
               onClick={handleSubmit}
               disabled={!canSubmit}
               className="w-full bg-weeet-primary hover:bg-weeet-dark disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
             >
-              📨 ส่งคำขอนัดหมายใหม่
+              {awaitingChoice === "take_back" ? "📨 ส่งคำขอยกเครื่องกลับร้าน" : "📨 ส่งคำขอนัดหมายใหม่"}
             </button>
           </>
         )}
@@ -143,12 +201,24 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
             <div className="flex items-center gap-3 bg-yellow-950/30 border border-yellow-800/50 rounded-xl px-4 py-3">
               <span className="text-2xl">⏳</span>
               <div>
-                <p className="text-sm font-semibold text-yellow-300">รอลูกค้ายืนยันนัด</p>
-                <p className="text-xs text-yellow-200/70">ส่งคำขอนัดหมายใหม่ให้ลูกค้าแล้ว</p>
+                <p className="text-sm font-semibold text-yellow-300">รอลูกค้ายืนยัน</p>
+                <p className="text-xs text-yellow-200/70">
+                  ส่งคำขอ ({sChoiceMeta.title}) ให้ลูกค้าแล้ว
+                </p>
               </div>
             </div>
 
-            <SummaryPanel part={sPart} ready={fmtDate(sReady)} apptDate={fmtDate(sApptDate)} apptTime={sApptTime} note={sNote} />
+            <SummaryPanel
+              choiceLabel={sChoiceMeta.title}
+              choiceIcon={sChoiceMeta.icon}
+              choicePrice={sChoicePrice}
+              part={sPart}
+              ready={fmtDate(sReady)}
+              apptDate={fmtDate(sApptDate)}
+              apptTime={sApptTime}
+              note={sNote}
+              showAppt={sChoice === "return_visit"}
+            />
 
             <div className="space-y-2">
               <button
@@ -176,12 +246,25 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
               <p className="text-xs text-green-200/70">งานถูกเลื่อนไปนัดใหม่เรียบร้อย รออะไหล่พร้อมแล้วเข้าซ่อมตามวันนัด</p>
             </div>
 
-            <SummaryPanel part={sPart} ready={fmtDate(sReady)} apptDate={fmtDate(sApptDate)} apptTime={sApptTime} note={sNote} confirmed />
+            <SummaryPanel
+              choiceLabel={sChoiceMeta.title}
+              choiceIcon={sChoiceMeta.icon}
+              choicePrice={sChoicePrice}
+              part={sPart}
+              ready={fmtDate(sReady)}
+              apptDate={fmtDate(sApptDate)}
+              apptTime={sApptTime}
+              note={sNote}
+              showAppt={sChoice === "return_visit"}
+              confirmed
+            />
 
             <div className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 space-y-1.5">
               <p className="text-xs font-semibold text-gray-300">ขั้นตอนถัดไป</p>
               <p className="text-xs text-gray-400">1. ติดตามสถานะอะไหล่จนพร้อม</p>
-              <p className="text-xs text-gray-400">2. เข้าซ่อมตามวันนัดใหม่</p>
+              <p className="text-xs text-gray-400">
+                2. {sChoice === "take_back" ? "ยกเครื่องกลับร้าน ซ่อมแล้วนำมาคืน" : "เข้าซ่อมตามวันนัดใหม่"}
+              </p>
             </div>
 
             <button
@@ -198,19 +281,28 @@ export default function JobSchedulePage({ params }: { params: Promise<{ id: stri
 }
 
 function SummaryPanel({
-  part, ready, apptDate, apptTime, note, confirmed,
+  choiceLabel, choiceIcon, choicePrice, part, ready, apptDate, apptTime, note, showAppt, confirmed,
 }: {
-  part: string; ready: string; apptDate: string; apptTime: string; note: string; confirmed?: boolean;
+  choiceLabel: string; choiceIcon: string; choicePrice: number;
+  part: string; ready: string; apptDate: string; apptTime: string; note: string;
+  showAppt: boolean; confirmed?: boolean;
 }) {
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl divide-y divide-gray-800">
+      <Row
+        label={`${choiceIcon} ทางเลือกลูกค้า`}
+        value={`${choiceLabel}${choicePrice > 0 ? ` · +฿${choicePrice.toLocaleString()}` : " · ฟรี"}`}
+        valueClass="text-weeet-primary font-semibold"
+      />
       <Row label="🧩 อะไหล่ที่ต้องใช้" value={part} />
       <Row label="📦 คาดว่าอะไหล่พร้อม" value={ready} />
-      <Row
-        label="📅 นัดหมายใหม่"
-        value={`${apptDate} · ${apptTime} น.`}
-        valueClass={confirmed ? "text-green-300 font-semibold" : "text-white"}
-      />
+      {showAppt && (
+        <Row
+          label="📅 นัดหมายใหม่"
+          value={`${apptDate} · ${apptTime} น.`}
+          valueClass={confirmed ? "text-green-300 font-semibold" : "text-white"}
+        />
+      )}
       <div className="px-4 py-3">
         <p className="text-xs text-gray-500 mb-1">📝 ข้อความถึงลูกค้า</p>
         <p className="text-sm text-gray-200">{note}</p>

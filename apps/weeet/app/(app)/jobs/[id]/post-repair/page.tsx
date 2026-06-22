@@ -2,6 +2,7 @@
 import { use, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
+import { SEED_JOB_COMPLETION_OTP } from "@/lib/mock-data/repair-bforms";
 
 const MIN_PHOTOS = 3;
 const MAX_PHOTOS = 5;
@@ -25,6 +26,9 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // REP-C09 — B4 ปิดงาน + OTP (แทนลายเซ็น · SoT Gen 57). หลังส่งหลักฐานสำเร็จ
+  // ระบบ generate OTP ปิดงานให้ WeeeU กรอกตอนรับเครื่อง (mock = seed constant).
+  const [completionOtp, setCompletionOtp] = useState<string | null>(null);
 
   const addPhotos = (files: FileList | null) => {
     if (!files) return;
@@ -71,9 +75,12 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
       fd.append(`parts_used[${i}][qty]`, String(p.qty));
     });
     fd.append("notes", notes);
+    fd.append("job_completion_otp", SEED_JOB_COMPLETION_OTP);
     try {
       await repairApi.postRepair(id, fd);
-      router.replace(`/jobs/${id}`);
+      // B4: issue job-completion OTP → WeeeU กรอกตอนรับเครื่อง (แทนลายเซ็น)
+      setCompletionOtp(SEED_JOB_COMPLETION_OTP);
+      setSubmitting(false);
     } catch (e) {
       setError((e as Error).message);
       setSubmitting(false);
@@ -90,6 +97,27 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
         </div>
       </div>
 
+      {completionOtp ? (
+        /* REP-C09 — B4 ปิดงานสำเร็จ → แสดง OTP ปิดงานให้ WeeeU กรอกตอนรับเครื่อง */
+        <div className="px-4 pt-6 space-y-5">
+          <div className="bg-green-950/40 border border-green-700 rounded-2xl p-5 text-center space-y-2">
+            <p className="text-3xl">✅</p>
+            <p className="text-sm font-semibold text-green-300">ปิดงานสำเร็จ — สร้างรหัสยืนยัน (OTP)</p>
+            <p className="text-xs text-gray-400">แจ้งรหัสนี้ให้ลูกค้า (WeeeU) กรอกในแอปเพื่อยืนยันรับเครื่อง</p>
+          </div>
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-5 text-center space-y-2">
+            <p className="text-xs text-gray-400 uppercase tracking-wider">รหัสยืนยันปิดงาน (OTP)</p>
+            <p className="text-4xl font-bold tracking-[0.4em] text-weeet-primary">{completionOtp}</p>
+            <p className="text-xs text-gray-500">ลูกค้ากรอกรหัสนี้ในหน้า &quot;ใบส่งมอบเครื่อง&quot;</p>
+          </div>
+          <button
+            onClick={() => router.replace(`/jobs/${id}`)}
+            className="w-full bg-green-700 hover:bg-green-600 text-white font-semibold py-3.5 rounded-xl transition-colors"
+          >
+            กลับหน้างาน
+          </button>
+        </div>
+      ) : (
       <div className="px-4 pt-4 space-y-5">
         {/* Evidence banner — ร้านดึงหลักฐานนี้ไปใช้กับลูกค้า */}
         <div className="bg-weeet-surface/10 border border-weeet-dark/30 rounded-xl px-4 py-3 text-xs text-weeet-primary">
@@ -180,9 +208,10 @@ export default function PostRepairPage({ params }: { params: Promise<{ id: strin
           disabled={!canSubmit}
           className="w-full bg-green-700 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
-          {submitting ? <><span className="animate-spin">⏳</span> กำลังส่ง...</> : "📸 ส่งบันทึกหลังซ่อม"}
+          {submitting ? <><span className="animate-spin">⏳</span> กำลังส่ง...</> : "📸 ส่งบันทึก + ปิดงาน"}
         </button>
       </div>
+      )}
     </div>
   );
 }

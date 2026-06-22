@@ -108,12 +108,21 @@ function ActionButton({
     }
     if (status === "inspecting" || status === "awaiting_decision") {
       return (
-        <button
-          onClick={() => go("diagnose")}
-          className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
-        >
-          🛠️ วินิจฉัย / เลือกสาขา
-        </button>
+        <div className="space-y-2">
+          {/* B2→B3→B3.5 flow (SoT Gen 55 · REP-C04/05/06) */}
+          <button
+            onClick={() => go("estimate")}
+            className="w-full bg-weeet-primary hover:bg-weeet-dark text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            📝 ประเมินก่อนซ่อม (B2)
+          </button>
+          <button
+            onClick={() => go("diagnose")}
+            className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            🛠️ วินิจฉัย / เลือกสาขา
+          </button>
+        </div>
       );
     }
     if (status === "in_progress") {
