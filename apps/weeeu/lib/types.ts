@@ -112,6 +112,7 @@ export interface MaintainJob {
    * weeer_withdrawn — M6: WeeeR ถอนงานหลังยืนยัน → รอ WeeeU ตัดสินใจ (reroute/dispute)
    * terminated      — M9: WeeeU ยุติงานระหว่าง in_progress → WeeeR รับแจ้งประสาน
    * closed_for_repair — WeeeR พบความเสียหาย → ปิด Maintain, แจ้ง WeeeU ซ่อม (D-M-2)
+   * risk_reported   — M3: ช่างพบความเสี่ยงระหว่างตรวจ → รอ WeeeU ตัดสินใจ (รับความเสี่ยง/ยุติ)
    */
   status:
     | "awaiting_offer"
@@ -121,6 +122,7 @@ export interface MaintainJob {
     | "departed"
     | "arrived"
     | "in_progress"
+    | "risk_reported"
     | "terminated"
     | "completed"
     | "cancelled"

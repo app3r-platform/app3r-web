@@ -83,6 +83,7 @@ export const MAINTAIN_STAGE_ORDER: Record<MaintainStatus, number> = {
   departed:               2,
   arrived:                3,
   in_progress:            4,
+  risk_reported:          4,   // M3: ช่างพบความเสี่ยงระหว่างตรวจ — รอลูกค้าตัดสิน
   no_show:                3,   // M7: เกิดหลัง arrived — ลูกค้าไม่อยู่
   terminated_by_customer: 4,   // M9: เกิดระหว่าง in_progress — WeeeU ยุติ
   completed:              5,

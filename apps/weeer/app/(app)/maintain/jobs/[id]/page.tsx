@@ -199,6 +199,19 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         </div>
       )}
 
+      {/* M3: risk_reported banner — read-only acknowledge (รอลูกค้าตัดสิน) */}
+      {job.status === "risk_reported" && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
+          <span className="text-lg">⚠️</span>
+          <div>
+            <p className="text-sm font-semibold text-amber-800">ช่างพบความเสี่ยง — รอลูกค้าตัดสิน</p>
+            <p className="text-xs text-amber-700 mt-0.5">
+              ช่างรายงานความเสี่ยงระหว่างตรวจแล้ว — รอ WeeeU เลือกว่าจะรับความเสี่ยงเพื่อล้างต่อ หรือยุติงาน
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* M6: withdrawn banner + info */}
       {job.status === "withdrawn" && job.withdrawal && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-start gap-2">

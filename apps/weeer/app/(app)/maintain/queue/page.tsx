@@ -49,6 +49,17 @@ function freshMockQueueJobs(): MaintainJob[] {
       offerDeadlineAt: iso(18 * 3600000),
       createdAt: iso(-6 * 3600000), updatedAt: iso(-6 * 3600000),
     },
+    {
+      // M2: งานหมดเวลายื่นข้อเสนอ — แสดงเป็น state "หมดเวลา" (greyed out, ไม่หายจาก list)
+      id: "mock-mq-004", serviceCode: "M-2026-013", customerId: "C013",
+      status: "offer_expired",
+      applianceType: "WashingMachine", cleaningType: "deep", serviceMethod: "on_site",
+      scheduledAt: iso(12 * 3600000), estimatedDuration: 2,
+      address: { lat: 13.745, lng: 100.493, address: "12 ถนนพระราม 4 แขวงสีลม กรุงเทพฯ" },
+      totalPrice: 1200,
+      offerDeadlineAt: iso(-1 * 3600000), // หมดอายุไปแล้ว 1 ชม.
+      createdAt: iso(-26 * 3600000), updatedAt: iso(-1 * 3600000),
+    },
   ];
 }
 
@@ -109,8 +120,12 @@ export default function MaintainQueuePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // M2: กรองเฉพาะ pending (offer_expired หลุดออกจาก queue อัตโนมัติ)
-  const pendingJobs = jobs.filter(j => j.status === "pending");
+  // M2: แยกงาน active (pending) กับงานที่หมดเวลา (offer_expired หรือ deadline ผ่านไปแล้ว)
+  // mockup: ไม่ auto-remove งานหมดเวลา — แสดงเป็น state "หมดเวลา" greyed out ที่ท้าย list
+  const isExpired = (j: MaintainJob) =>
+    j.status === "offer_expired" || getOfferDeadline(j).getTime() - Date.now() <= 0;
+  const pendingJobs = jobs.filter(j => j.status === "pending" && !isExpired(j));
+  const expiredJobs = jobs.filter(isExpired);
 
   return (
     <div className="space-y-5">
@@ -153,7 +168,7 @@ export default function MaintainQueuePage() {
       {loading && <div className="flex items-center justify-center h-40 text-gray-400">กำลังโหลด…</div>}
       {error && <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm">{error}</div>}
 
-      {!loading && !error && pendingJobs.length === 0 && (
+      {!loading && !error && pendingJobs.length === 0 && expiredJobs.length === 0 && (
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">🛁</span>
           <p className="text-sm">ไม่มีงาน Maintain ใหม่ในขณะนี้</p>
@@ -209,6 +224,51 @@ export default function MaintainQueuePage() {
           </div>
         ))}
       </div>
+
+      {/* M2: งานหมดเวลา — greyed out, non-interactive, จัดกลุ่มไว้ท้าย list */}
+      {expiredJobs.length > 0 && (
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center gap-2">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="text-xs text-gray-400 font-medium">หมดเวลา ({expiredJobs.length})</span>
+            <div className="flex-1 h-px bg-gray-200" />
+          </div>
+          {expiredJobs.map((job) => (
+            <div
+              key={job.id}
+              className="bg-gray-50 border border-gray-100 rounded-xl p-4 opacity-60 pointer-events-none select-none"
+              aria-disabled="true"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-200 text-gray-500">
+                      หมดเวลา
+                    </span>
+                    <span className="text-xs text-gray-400">{job.serviceCode}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-base grayscale">{job.applianceType === "AC" ? "❄️" : "🫧"}</span>
+                    <p className="text-sm font-semibold text-gray-500">
+                      {APPLIANCE_LABEL[job.applianceType]} — {CLEANING_LABEL[job.cleaningType]}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1.5">
+                    <span className="text-xs text-gray-400">📍 {job.address.address}</span>
+                    <span className="text-xs text-gray-400">⏱ {job.estimatedDuration} ชม.</span>
+                    <span className="text-xs text-gray-400">💰 {job.totalPrice.toLocaleString()} pts</span>
+                  </div>
+                  <div className="mt-1.5">
+                    <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">
+                      ⏰ หมดอายุแล้ว — งานนี้จะหลุดจาก queue
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
