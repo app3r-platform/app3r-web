@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import type { WeeeUDeclineGroup } from "@/lib/types";
+import { WEEEU_DECLINE_GROUPS, DECLINE_MAX_PHOTOS } from "@/lib/types";
 
 type PartItem = { name: string; qty: number; price: number };
 
@@ -56,6 +58,30 @@ export default function DecisionB12Page() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  // REP-C11 — WeeeU ปฏิเสธให้ซ่อม: modal เหตุผล 3 กลุ่ม + textarea + รูป ≤3 (SoT Gen 55, mirror WeeeT)
+  const [declineGroup, setDeclineGroup] = useState<WeeeUDeclineGroup | null>(null);
+  const [declineReason, setDeclineReason] = useState("");
+  const [declinePhotos, setDeclinePhotos] = useState<{ file: File; previewUrl: string }[]>([]);
+  const declinePhotoRef = useRef<HTMLInputElement>(null);
+
+  const addDeclinePhotos = (files: FileList | null) => {
+    if (!files) return;
+    const toAdd: { file: File; previewUrl: string }[] = [];
+    for (const file of Array.from(files)) {
+      if (declinePhotos.length + toAdd.length >= DECLINE_MAX_PHOTOS) break;
+      toAdd.push({ file, previewUrl: URL.createObjectURL(file) });
+    }
+    setDeclinePhotos((prev) => [...prev, ...toAdd]);
+  };
+  const removeDeclinePhoto = (i: number) =>
+    setDeclinePhotos((prev) => {
+      URL.revokeObjectURL(prev[i].previewUrl);
+      return prev.filter((_, idx) => idx !== i);
+    });
+
+  // ครบเมื่อ: เลือกกลุ่ม + textarea มีข้อความ (รูป optional)
+  const declineComplete = declineGroup !== null && declineReason.trim().length > 0;
+
   useEffect(() => {
     apiFetch(`/api/v1/repair/jobs/${id}`)
       .then(r => r.ok ? r.json() : null)
@@ -86,6 +112,11 @@ export default function DecisionB12Page() {
       setError("กรุณาระบุราคาที่ต้องการต่อรอง");
       return;
     }
+    // REP-C11: decline ต้องเลือกกลุ่มเหตุผล + กรอกรายละเอียดก่อน
+    if (type === "decline" && !declineComplete) {
+      setError("กรุณาเลือก 1 กลุ่มเหตุผล และกรอกรายละเอียด");
+      return;
+    }
     setSubmitting(true);
     setError("");
     try {
@@ -93,14 +124,22 @@ export default function DecisionB12Page() {
       const body =
         type === "counter"
           ? { counter_price: parseFloat(counterPrice), round: (data?.negotiation_round ?? 1) + 1 }
-          : {};
+          : type === "decline"
+            ? {
+                // REP-C11 mirror modal — บันทึก audit log (mock-level: นับไฟล์รูปเท่านั้น)
+                decline_group: declineGroup,
+                decline_reason: declineReason.trim(),
+                decline_photo_count: declinePhotos.length,
+              }
+            : {};
 
       const res = await apiFetch(endpoint, {
         method: "POST",
         body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error(await res.text());
-      router.push(`/repair/${id}`);
+      // decline → ไปหน้า Fee Settle (เตือนมัดจำ + ค่าเดินทางตาม offer · C11/C5) | อื่นๆ → repair detail
+      router.push(type === "decline" ? `/repair/${id}/fee-settle` : `/repair/${id}`);
     } catch {
       setError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
     } finally {
@@ -237,7 +276,7 @@ export default function DecisionB12Page() {
                 disabled={submitting}
                 className="w-full border border-red-300 text-red-500 hover:bg-red-50 disabled:opacity-50 font-medium py-3 rounded-2xl text-sm transition-colors"
               >
-                ❌ ปฏิเสธ — ยกเลิกงาน
+                ❌ ปฏิเสธให้ซ่อม — ยุติงาน
               </button>
             </div>
           )}
@@ -272,26 +311,111 @@ export default function DecisionB12Page() {
             </div>
           )}
 
-          {/* Decline confirm */}
+          {/* REP-C11 — Decline modal: ปฏิเสธให้ซ่อม → เหตุผล 3 กลุ่ม + textarea + รูป ≤3 → fee-settle (SoT Gen 55, mirror WeeeT) */}
           {action === "decline" && (
-            <div className="bg-white rounded-2xl border border-red-200 p-5 space-y-4">
-              <p className="text-sm font-semibold text-red-700">ยืนยันการปฏิเสธ?</p>
-              <p className="text-xs text-red-600">
-                งานจะถูกยกเลิก —{" "}
-                {DEPOSIT_REJECT_LABEL[data.deposit_policy_when_user_rejects_change]}
-                {data.deposit_amount && ` (${data.deposit_amount.toLocaleString()} พอยต์ทอง)`}
-              </p>
-              <div className="flex gap-2">
-                <button onClick={() => setAction(null)} className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm">
-                  ยกเลิก
-                </button>
-                <button
-                  onClick={() => submit("decline")}
-                  disabled={submitting}
-                  className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white font-medium py-2.5 rounded-xl text-sm transition-colors"
-                >
-                  {submitting ? "กำลังยกเลิก..." : "ยืนยันยกเลิก"}
-                </button>
+            <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 p-0 sm:p-4">
+              <div className="w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto">
+                <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+                  <h2 className="font-bold text-gray-900 text-sm">🚫 ปฏิเสธให้ซ่อม — เลือกเหตุผล</h2>
+                  <button onClick={() => setAction(null)} className="text-gray-400 hover:text-gray-700 text-lg">✕</button>
+                </div>
+
+                <div className="px-4 py-4 space-y-4">
+                  {/* 3 reason groups (radio — เลือก 1) */}
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-gray-600">กลุ่มเหตุผล <span className="text-red-500">*</span></p>
+                    {WEEEU_DECLINE_GROUPS.map((g, idx) => (
+                      <button
+                        key={g.key}
+                        type="button"
+                        onClick={() => setDeclineGroup(g.key)}
+                        className={`w-full text-left border-2 rounded-xl p-3 transition-colors ${
+                          declineGroup === g.key ? "border-red-400 bg-red-50" : "border-gray-200 bg-white hover:border-gray-300"
+                        }`}
+                      >
+                        <div className="flex items-start gap-2">
+                          <span className={`mt-0.5 w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${
+                            declineGroup === g.key ? "border-red-500" : "border-gray-300"
+                          }`}>
+                            {declineGroup === g.key && <span className="w-2 h-2 rounded-full bg-red-500" />}
+                          </span>
+                          <div className="space-y-0.5">
+                            <p className="text-sm font-medium text-gray-900">{idx + 1}. {g.title}</p>
+                            <p className="text-xs text-gray-500">{g.examples}</p>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* required textarea */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-600">รายละเอียดเพิ่มเติม <span className="text-red-500">*</span></label>
+                    <textarea
+                      value={declineReason}
+                      onChange={e => setDeclineReason(e.target.value)}
+                      placeholder="อธิบายเหตุผลที่ปฏิเสธให้ซ่อม (ใช้เป็นหลักฐาน audit สำหรับข้อพิพาท)..."
+                      rows={3}
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-300 resize-none"
+                    />
+                  </div>
+
+                  {/* optional photos ≤3 */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-semibold text-gray-600">รูปประกอบ (ไม่บังคับ)</label>
+                      <span className="text-xs text-gray-400">{declinePhotos.length}/{DECLINE_MAX_PHOTOS}</span>
+                    </div>
+                    <input
+                      ref={declinePhotoRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={e => addDeclinePhotos(e.target.files)}
+                    />
+                    <div className="grid grid-cols-3 gap-2">
+                      {declinePhotos.map((p, i) => (
+                        <div key={i} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={p.previewUrl} alt="" className="w-full h-full object-cover" />
+                          <button onClick={() => removeDeclinePhoto(i)} className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">✕</button>
+                        </div>
+                      ))}
+                      {declinePhotos.length < DECLINE_MAX_PHOTOS && (
+                        <button
+                          onClick={() => declinePhotoRef.current?.click()}
+                          className="aspect-square bg-gray-50 border border-dashed border-gray-300 hover:border-red-400 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <span className="text-2xl">📷</span><span className="text-xs">เพิ่มรูป</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Deposit / travel-fee settle disclosure (เดิม — เตือนมัดจำ + ค่าเดินทางตาม offer · C11) */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-1">
+                    <p className="text-xs font-semibold text-amber-800">⚠️ ก่อนยุติงาน — จะมีการชำระตามข้อเสนอเดิม</p>
+                    <p className="text-xs text-amber-700">
+                      {DEPOSIT_REJECT_LABEL[data.deposit_policy_when_user_rejects_change]}
+                      {data.deposit_amount ? ` (พอยต์ทองที่ล็อก ${data.deposit_amount.toLocaleString()} พอยต์ทอง)` : ""}
+                    </p>
+                    <p className="text-xs text-amber-600">รวมค่ามัดจำและค่าเดินทางตามข้อเสนอเดิม — ดูยอดสุทธิที่หน้าชำระค่าตรวจ/ค่าเดินทาง</p>
+                  </div>
+                </div>
+
+                <div className="sticky bottom-0 bg-white border-t border-gray-100 px-4 py-3 flex gap-2">
+                  <button onClick={() => setAction(null)} className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm">
+                    ยกเลิก
+                  </button>
+                  <button
+                    onClick={() => submit("decline")}
+                    disabled={submitting || !declineComplete}
+                    className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white font-medium py-2.5 rounded-xl text-sm transition-colors"
+                  >
+                    {submitting ? "กำลังดำเนินการ..." : "ยืนยันปฏิเสธ → ชำระค่าธรรมเนียม"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
