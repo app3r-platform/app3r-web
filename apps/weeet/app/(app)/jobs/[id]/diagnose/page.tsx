@@ -1,8 +1,9 @@
 "use client";
-import { use, useState } from "react";
+import { use, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { repairApi } from "@/lib/api";
-import type { RepairBranch, DiagnosePayload } from "@/lib/types";
+import type { RepairBranch, DiagnosePayload, WeeeTDeclineGroup } from "@/lib/types";
+import { WEEET_DECLINE_GROUPS, DECLINE_MAX_PHOTOS } from "@/lib/types";
 import { MockAnno } from "@/components/MockAnno";
 
 type Branch = RepairBranch;
@@ -24,12 +25,17 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
   const [notes, setNotes] = useState("");
   const [proposedPrice, setProposedPrice] = useState("");
   const [parts, setParts] = useState<PartEntry[]>([]);
-  const [cancelReason, setCancelReason] = useState("");
-  const [cancelCategory, setCancelCategory] = useState("");
   const [scrapPrice, setScrapPrice] = useState("");
   const [scrapWeight, setScrapWeight] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // REP-C10 — ปฏิเสธรับซ่อม (B2.1): modal เหตุผล 3 กลุ่ม + textarea + รูป ≤3 (SoT Gen 55)
+  const [declineModalOpen, setDeclineModalOpen] = useState(false);
+  const [declineGroup, setDeclineGroup] = useState<WeeeTDeclineGroup | null>(null);
+  const [cancelReason, setCancelReason] = useState("");
+  const [declinePhotos, setDeclinePhotos] = useState<{ file: File; previewUrl: string }[]>([]);
+  const declinePhotoRef = useRef<HTMLInputElement>(null);
 
   const addPart = () => setParts((p) => [...p, { name: "", qty: 1, price: 0 }]);
   const updatePart = (i: number, field: keyof PartEntry, val: string | number) => {
@@ -37,10 +43,28 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
   };
   const removePart = (i: number) => setParts((prev) => prev.filter((_, idx) => idx !== i));
 
+  const addDeclinePhotos = (files: FileList | null) => {
+    if (!files) return;
+    const toAdd: { file: File; previewUrl: string }[] = [];
+    for (const file of Array.from(files)) {
+      if (declinePhotos.length + toAdd.length >= DECLINE_MAX_PHOTOS) break;
+      toAdd.push({ file, previewUrl: URL.createObjectURL(file) });
+    }
+    setDeclinePhotos((prev) => [...prev, ...toAdd]);
+  };
+  const removeDeclinePhoto = (i: number) =>
+    setDeclinePhotos((prev) => {
+      URL.revokeObjectURL(prev[i].previewUrl);
+      return prev.filter((_, idx) => idx !== i);
+    });
+
+  // B2.1 ผ่าน modal: ถือว่าครบเมื่อเลือกกลุ่ม + textarea มีข้อความ (รูป optional)
+  const declineComplete = declineGroup !== null && cancelReason.trim().length > 0;
+
   const canSubmit = () => {
     if (!branch || !notes.trim()) return false;
     if (branch === "B1.2" && (!proposedPrice || parts.length === 0)) return false;
-    if (branch === "B2.1" && !cancelReason.trim()) return false;
+    if (branch === "B2.1" && !declineComplete) return false;
     if (branch === "B2.2" && !scrapPrice) return false;
     return true;
   };
@@ -56,7 +80,8 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
       payload.proposed_price = parseFloat(proposedPrice);
     } else if (branch === "B2.1") {
       payload.cancel_reason = cancelReason.trim();
-      payload.cancel_category = cancelCategory.trim() || undefined;
+      payload.decline_group = declineGroup ?? undefined;
+      payload.decline_photo_count = declinePhotos.length;
     } else if (branch === "B2.2") {
       payload.scrap_price = parseFloat(scrapPrice);
       payload.scrap_weight_kg = scrapWeight ? parseFloat(scrapWeight) : undefined;
@@ -90,7 +115,10 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
           {BRANCHES.map((b) => (
             <button
               key={b.key}
-              onClick={() => setBranch(b.key)}
+              onClick={() => {
+                setBranch(b.key);
+                if (b.key === "B2.1") setDeclineModalOpen(true);
+              }}
               className={`w-full text-left border-2 rounded-xl p-4 transition-colors space-y-0.5 ${
                 branch === b.key ? b.color : "border-gray-700 bg-gray-800 hover:border-gray-500"
               }`}
@@ -147,27 +175,29 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
           </div>
         )}
 
-        {/* B2.1 fields */}
+        {/* B2.1 — ปฏิเสธรับซ่อม: สรุปจาก modal 3 กลุ่ม (REP-C10) */}
         {branch === "B2.1" && (
-          <div className="space-y-4 bg-amber-950/30 border border-amber-800/50 rounded-xl p-4">
-            <p className="text-sm font-semibold text-amber-300">B2.1 — เหตุผลยกเลิก</p>
-            <div className="space-y-2">
-              <label className="text-xs text-gray-300">หมวดหมู่</label>
-              <select value={cancelCategory} onChange={(e) => setCancelCategory(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                <option value="">เลือก (ถ้ามี)</option>
-                <option value="beyond_repair">เกินการซ่อม</option>
-                <option value="parts_unavailable">ไม่มีอะไหล่</option>
-                <option value="customer_cancelled">ลูกค้ายกเลิก</option>
-                <option value="other">อื่นๆ</option>
-              </select>
+          <div className="space-y-3 bg-amber-950/30 border border-amber-800/50 rounded-xl p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-amber-300">B2.1 — เหตุผลปฏิเสธรับซ่อม</p>
+              <button onClick={() => setDeclineModalOpen(true)} className="text-xs text-amber-400 hover:text-amber-300 underline">
+                {declineComplete ? "แก้ไข" : "เลือกเหตุผล"}
+              </button>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs text-gray-300">เหตุผลละเอียด <span className="text-red-400">*</span></label>
-              <textarea value={cancelReason} onChange={(e) => setCancelReason(e.target.value)}
-                placeholder="อธิบายเหตุผลที่ยกเลิก..." rows={3}
-                className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none" />
-            </div>
+            {declineComplete ? (
+              <div className="space-y-2 text-xs">
+                <p className="text-amber-200 font-medium">
+                  {WEEET_DECLINE_GROUPS.find((g) => g.key === declineGroup)?.title}
+                </p>
+                <p className="text-gray-300 whitespace-pre-wrap">{cancelReason}</p>
+                {declinePhotos.length > 0 && (
+                  <p className="text-gray-400">📷 แนบรูป {declinePhotos.length}/{DECLINE_MAX_PHOTOS}</p>
+                )}
+                <p className="text-gray-500">บันทึก audit log สำหรับการระงับข้อพิพาท</p>
+              </div>
+            ) : (
+              <p className="text-xs text-amber-400">⚠️ กรุณาเลือก 1 กลุ่มเหตุผล + กรอกรายละเอียด</p>
+            )}
           </div>
         )}
 
@@ -202,6 +232,102 @@ export default function DiagnosePage({ params }: { params: Promise<{ id: string 
           {submitting ? <><span className="animate-spin">⏳</span> กำลังส่ง...</> : "🛠️ ยืนยันวินิจฉัย"}
         </button>
       </div>
+
+      {/* REP-C10 — Modal ปฏิเสธรับซ่อม: เหตุผล 3 กลุ่ม + textarea + รูป ≤3 (SoT Gen 55) */}
+      {declineModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4">
+          <div className="w-full sm:max-w-md bg-gray-900 border border-gray-700 rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+              <h2 className="font-bold text-white text-sm">🚫 ปฏิเสธรับซ่อม — เลือกเหตุผล</h2>
+              <button onClick={() => setDeclineModalOpen(false)} className="text-gray-400 hover:text-white text-lg">✕</button>
+            </div>
+
+            <div className="px-4 py-4 space-y-4">
+              {/* 3 reason groups (radio — เลือก 1) */}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-gray-300">กลุ่มเหตุผล <span className="text-red-400">*</span></p>
+                {WEEET_DECLINE_GROUPS.map((g, idx) => (
+                  <button
+                    key={g.key}
+                    type="button"
+                    onClick={() => setDeclineGroup(g.key)}
+                    className={`w-full text-left border-2 rounded-xl p-3 transition-colors ${
+                      declineGroup === g.key ? "border-amber-500 bg-amber-950/40" : "border-gray-700 bg-gray-800 hover:border-gray-500"
+                    }`}
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className={`mt-0.5 w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${
+                        declineGroup === g.key ? "border-amber-400" : "border-gray-500"
+                      }`}>
+                        {declineGroup === g.key && <span className="w-2 h-2 rounded-full bg-amber-400" />}
+                      </span>
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium text-white">{idx + 1}. {g.title}</p>
+                        <p className="text-xs text-gray-400">{g.examples}</p>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* required textarea */}
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-gray-300">รายละเอียดเพิ่มเติม <span className="text-red-400">*</span></label>
+                <textarea
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  placeholder="อธิบายเหตุผลที่ปฏิเสธรับซ่อม (ใช้เป็นหลักฐาน audit สำหรับข้อพิพาท)..."
+                  rows={3}
+                  className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none"
+                />
+              </div>
+
+              {/* optional photos ≤3 */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-300">รูปประกอบ (ไม่บังคับ)</label>
+                  <span className="text-xs text-gray-400">{declinePhotos.length}/{DECLINE_MAX_PHOTOS}</span>
+                </div>
+                <input
+                  ref={declinePhotoRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => addDeclinePhotos(e.target.files)}
+                />
+                <div className="grid grid-cols-3 gap-2">
+                  {declinePhotos.map((p, i) => (
+                    <div key={i} className="relative aspect-square bg-gray-800 rounded-lg overflow-hidden border border-gray-600">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.previewUrl} alt="" className="w-full h-full object-cover" />
+                      <button onClick={() => removeDeclinePhoto(i)} className="absolute top-1 right-1 bg-black/70 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">✕</button>
+                    </div>
+                  ))}
+                  {declinePhotos.length < DECLINE_MAX_PHOTOS && (
+                    <button
+                      onClick={() => declinePhotoRef.current?.click()}
+                      className="aspect-square bg-gray-800 border border-dashed border-gray-600 hover:border-amber-500 rounded-lg flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-amber-400 transition-colors"
+                    >
+                      <span className="text-2xl">📷</span><span className="text-xs">เพิ่มรูป</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-gray-900 border-t border-gray-800 px-4 py-3">
+              <button
+                onClick={() => setDeclineModalOpen(false)}
+                disabled={!declineComplete}
+                className="w-full bg-amber-600 hover:bg-amber-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-semibold py-3 rounded-xl transition-colors"
+              >
+                บันทึกเหตุผล
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,6 +7,11 @@ import type {
   SmartPickerPartCard,
 } from "../types";
 
+// REP-C09 — B4 job-completion OTP (seed). WeeeT generate/display ตอนปิดงาน,
+// WeeeU กรอกตอนรับเครื่อง. Mock match เทียบกับค่านี้ (verify จริง = backend deferred).
+// ค่าเดียวกันต้อง mirror ใน apps/weeeu mock (ข้ามแอป import ไม่ได้ — Lesson #34).
+export const SEED_JOB_COMPLETION_OTP = "482913";
+
 // อาการที่ WeeeU แจ้งใน B1 (auto จาก B1 → ใช้ใน B2 section #3 ยืนยันต่อข้อ)
 export const SEED_B1_SYMPTOMS: string[] = [
   "แอร์ไม่เย็น",

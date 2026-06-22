@@ -110,12 +110,54 @@ export interface DiagnosePayload {
   // B1.2 fields
   parts_added?: Array<{ name: string; qty: number; price: number }>;
   proposed_price?: number;
-  // B2.1 fields
+  // B2.1 fields (decline → 3-group modal · REP-C10)
   cancel_reason?: string;
   cancel_category?: string;
+  decline_group?: WeeeTDeclineGroup; // 1 ใน 3 กลุ่ม (SoT Gen 55 "ปฏิเสธรับซ่อม")
+  decline_photo_count?: number;       // จำนวนรูปประกอบ (≤3) — mock-level, นับไฟล์เท่านั้น
   // B2.2 fields
   scrap_price?: number;
   scrap_weight_kg?: number;
+}
+
+// ─── REP-C10: WeeeT ปฏิเสธรับซ่อม — Modal เหตุผล 3 กลุ่ม (SoT Gen 55) ──────────
+// "กดปุ่ม ปฏิเสธรับซ่อม → modal เปิด → เลือก 1 กลุ่ม + textarea + รูปประกอบ optional (≤3)"
+// audit log สำหรับ dispute resolution. Mock-level — ไม่มี backend.
+export type WeeeTDeclineGroup =
+  | "customer_uncooperative" // 1. ลูกค้าไม่ให้ความร่วมมือ / สภาพแวดล้อมไม่อำนวย
+  | "unrepairable"           // 2. เครื่องใช้ไฟฟ้าซ่อมไม่ได้
+  | "symptom_mismatch";      // 3. อาการไม่ตรงกับที่ลูกค้าแจ้ง + ซ่อมไม่ได้
+
+export const WEEET_DECLINE_GROUPS: Array<{
+  key: WeeeTDeclineGroup;
+  title: string;
+  examples: string;
+}> = [
+  {
+    key: "customer_uncooperative",
+    title: "ลูกค้าไม่ให้ความร่วมมือ / สภาพแวดล้อมไม่อำนวย",
+    examples: "ไม่ให้เข้าสถานที่, ไม่อยู่บ้าน, ไฟดับ, ไม่มีน้ำ, พื้นที่อันตราย",
+  },
+  {
+    key: "unrepairable",
+    title: "เครื่องใช้ไฟฟ้าซ่อมไม่ได้",
+    examples: "เสียหายเกินซ่อม, ไม่มีอะไหล่ในตลาด, ต้นทุนสูงกว่าซื้อใหม่",
+  },
+  {
+    key: "symptom_mismatch",
+    title: "อาการไม่ตรงกับที่ลูกค้าแจ้ง + ซ่อมไม่ได้",
+    examples: "พบปัญหาคนละจุด + เกินขอบเขตข้อเสนอ",
+  },
+];
+
+export const DECLINE_MAX_PHOTOS = 3;
+
+// ─── REP-C09: B4 ปิดงาน + OTP (แทนลายเซ็น · SoT Gen 57) ───────────────────────
+// "ซ่อมเสร็จ → B4 report ปิดงาน + OTP → WeeeU ยืนยันรับ → เสร็จสิ้น + settle"
+// ลายเซ็นถูกตัดออก (Gen 57); OTP เฉพาะ B4 + ปฏิเสธ. Mock-level — verify จริง = backend (deferred).
+export interface B4CloseJobPayload {
+  job_completion_otp: string; // OTP ที่ WeeeT generate ให้ WeeeU กรอกตอนรับเครื่อง
+  notes?: string;
 }
 
 // ─── Repair B-forms (SoT Gen 55 · Phase D-6) ──────────────────────────────────

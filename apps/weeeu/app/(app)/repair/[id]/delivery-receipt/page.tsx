@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api-client";
+import { SEED_JOB_COMPLETION_OTP, JOB_COMPLETION_OTP_LENGTH } from "@/lib/mock-data/repair-receipt";
 
 type DeliveryReceiptData = {
   id: string;
@@ -15,7 +16,7 @@ type DeliveryReceiptData = {
   inspection_fee: number;
   post_repair_notes: string;
   post_repair_photos: { url: string }[];
-  weeet_signature_at: string | null;
+  weeet_closed_at: string | null; // B4 ปิดงาน + ออก OTP (แทนลายเซ็น · SoT Gen 57)
   customer_confirmed: boolean;
 };
 
@@ -29,7 +30,7 @@ const MOCK_DELIVERY_RECEIPT: DeliveryReceiptData = {
   inspection_fee: 150,
   post_repair_notes: "เปลี่ยนปั๊มน้ำและทำความสะอาดระบบ ทดสอบการทำงานเรียบร้อย",
   post_repair_photos: [],
-  weeet_signature_at: "2026-05-25T09:50:00.000Z",
+  weeet_closed_at: "2026-05-25T09:50:00.000Z",
   customer_confirmed: false,
 };
 
@@ -43,15 +44,14 @@ function formatDate(iso: string | null) {
 export default function DeliveryReceiptPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [receipt, setReceipt] = useState<DeliveryReceiptData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [hasSignature, setHasSignature] = useState(false);
-  const [satisfied, setSatisfied] = useState<boolean | null>(null);
+  // REP-C09 — OTP เข้ารับเครื่อง (แทนลายเซ็น · SoT Gen 57). WeeeT ออก OTP ตอนปิดงาน B4,
+  // ลูกค้ากรอกที่นี่ → mock match เทียบ SEED_JOB_COMPLETION_OTP. verify จริง = backend (deferred).
+  const [otp, setOtp] = useState("");
 
   useEffect(() => {
     apiFetch(`/api/v1/repair/jobs/${id}/delivery-receipt`)
@@ -68,7 +68,7 @@ export default function DeliveryReceiptPage() {
           inspection_fee: d.inspection_fee ?? 0,
           post_repair_notes: d.post_repair_notes ?? "",
           post_repair_photos: d.post_repair_photos ?? [],
-          weeet_signature_at: d.weeet_signature_at ?? null,
+          weeet_closed_at: d.weeet_closed_at ?? d.weeet_signature_at ?? null,
           customer_confirmed: d.customer_confirmed ?? false,
         });
         if (d.customer_confirmed) setConfirmed(true);
@@ -77,62 +77,22 @@ export default function DeliveryReceiptPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Canvas signature
-  const getPos = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
-    const rect = canvas.getBoundingClientRect();
-    if ("touches" in e) {
-      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-    }
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-  };
-
-  const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    ctx.beginPath();
-    ctx.moveTo(...Object.values(getPos(e, canvas)) as [number, number]);
-    setIsDrawing(true);
-  };
-
-  const draw = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    e.preventDefault();
-    const pos = getPos(e, canvas);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.strokeStyle = "#1e3a5f";
-    ctx.lineWidth = 2;
-    ctx.lineCap = "round";
-    ctx.stroke();
-    setHasSignature(true);
-  };
-
-  const stopDraw = () => setIsDrawing(false);
-
-  const clearSignature = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
-    setHasSignature(false);
-  };
+  const otpComplete = otp.length === JOB_COMPLETION_OTP_LENGTH;
 
   const handleConfirm = async () => {
-    if (!hasSignature) { setError("กรุณาเซ็นชื่อยืนยันรับเครื่อง"); return; }
-    if (satisfied === null) { setError("กรุณาระบุความพึงพอใจ"); return; }
-    const canvas = canvasRef.current;
-    const signatureData = canvas?.toDataURL("image/png") ?? "";
+    if (!otpComplete) { setError("กรุณากรอกรหัสยืนยัน (OTP) ให้ครบ 6 หลัก"); return; }
+    // Mock check: เทียบ OTP ที่ช่างออกตอนปิดงาน (verify จริง = backend, deferred)
+    if (otp !== SEED_JOB_COMPLETION_OTP) {
+      setError("รหัสยืนยัน (OTP) ไม่ถูกต้อง — กรุณาตรวจสอบกับช่าง");
+      return;
+    }
     setConfirming(true);
     setError("");
     try {
       const res = await apiFetch(`/api/v1/repair/jobs/${id}/delivery-receipt/confirm`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ signature_data: signatureData, satisfied }),
+        body: JSON.stringify({ job_completion_otp: otp }),
       });
       if (!res.ok) throw new Error(await res.text());
       setConfirmed(true);
@@ -235,67 +195,34 @@ export default function DeliveryReceiptPage() {
                 </div>
               )}
 
-              {/* WeeeT signed */}
-              {receipt.weeet_signature_at && (
+              {/* WeeeT closed B4 — ปิดงาน + ออก OTP (แทนลายเซ็น) */}
+              {receipt.weeet_closed_at && (
                 <div className="bg-gray-50 rounded-xl p-3 flex items-center gap-2">
                   <span className="text-green-500">✅</span>
-                  <p className="text-xs text-gray-600">ช่างเซ็นส่งแล้ว — {formatDate(receipt.weeet_signature_at)}</p>
+                  <p className="text-xs text-gray-600">ช่างปิดงานและส่งรหัสยืนยันแล้ว — {formatDate(receipt.weeet_closed_at)}</p>
                 </div>
               )}
 
-              {/* Satisfaction */}
+              {/* REP-C09 — OTP เข้ารับเครื่อง (แทนลายเซ็น · SoT Gen 57) */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ความพึงพอใจ</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSatisfied(true)}
-                    className={`py-3 rounded-xl border text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-                      satisfied === true ? "bg-green-600 border-green-600 text-white" : "border-gray-200 text-gray-600 hover:border-green-300"
-                    }`}
-                  >
-                    <span>😊</span> พึงพอใจ
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSatisfied(false)}
-                    className={`py-3 rounded-xl border text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-                      satisfied === false ? "bg-red-500 border-red-500 text-white" : "border-gray-200 text-gray-600 hover:border-red-300"
-                    }`}
-                  >
-                    <span>😞</span> ไม่พึงพอใจ
-                  </button>
-                </div>
-              </div>
-
-              {/* Customer signature */}
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">ลายเซ็นยืนยันรับเครื่อง</p>
-                <div className="border-2 border-dashed border-gray-200 rounded-xl overflow-hidden bg-gray-50">
-                  <canvas
-                    ref={canvasRef}
-                    width={400}
-                    height={150}
-                    className="w-full touch-none cursor-crosshair"
-                    onMouseDown={startDraw}
-                    onMouseMove={draw}
-                    onMouseUp={stopDraw}
-                    onMouseLeave={stopDraw}
-                    onTouchStart={startDraw}
-                    onTouchMove={draw}
-                    onTouchEnd={stopDraw}
-                  />
-                </div>
-                {hasSignature && (
-                  <button type="button" onClick={clearSignature} className="text-xs text-gray-400 hover:text-red-500">
-                    ล้างลายเซ็น
-                  </button>
-                )}
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">รหัสยืนยันรับเครื่อง (OTP)</p>
+                <p className="text-xs text-gray-500">ช่างจะแจ้งรหัส 6 หลักเมื่อปิดงาน — กรอกเพื่อยืนยันรับเครื่องคืน</p>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={JOB_COMPLETION_OTP_LENGTH}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, JOB_COMPLETION_OTP_LENGTH))}
+                  placeholder="______"
+                  aria-label="รหัสยืนยันรับเครื่อง (OTP)"
+                  className="w-full text-center text-2xl font-bold tracking-[0.5em] border-2 border-gray-200 rounded-xl py-3 text-gray-900 placeholder-gray-300 focus:outline-none focus:border-weeeu-primary"
+                />
               </div>
 
               <button
                 onClick={handleConfirm}
-                disabled={confirming || !hasSignature || satisfied === null}
+                disabled={confirming || !otpComplete}
                 className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm flex items-center justify-center gap-2"
               >
                 {confirming ? <><span className="animate-spin">⟳</span> กำลังยืนยัน...</> : "✅ ยืนยันรับเครื่องคืน"}
