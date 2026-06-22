@@ -96,7 +96,7 @@ export default function SignupAddressPage() {
       </form>
 
       <div className="flex justify-center">
-        <Link href="/signup/personal" className="text-sm text-gray-400 hover:text-gray-600">
+        <Link href="/signup/verify-email" className="text-sm text-gray-400 hover:text-gray-600">
           ‹ กลับ
         </Link>
       </div>

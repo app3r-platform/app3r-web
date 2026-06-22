@@ -21,6 +21,8 @@ const MOCK_APPLIANCES = [
 
 // ค่าลงประกาศ (mock · admin rate-by-type จริง = BE) — used_appliance ตัด Point · scrap = ฟรี
 const LISTING_FEE_POINTS = 50; // mock อัตราคงที่
+// ยอดพอยต์คงเหลือ (mock · source จริง = BE /api/v1/users/me) — ใช้เช็คพอจ่ายค่าลงประกาศ (#C5)
+const MOCK_POINT_BALANCE: Record<"gold" | "silver", number> = { gold: 350, silver: 1250 };
 const MOCK_OTP = "123456"; // mockup — provider จริง = BE
 const MAX_OTP_ATTEMPTS = 3;
 // ราคากลางอ้างอิง (reference price · mock · source จริง = BE/DB)
@@ -93,6 +95,8 @@ export default function SellNewPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  // #C5 ยอดพอยต์ไม่พอจ่ายค่าลงประกาศ → แสดงปุ่มเติมพอยต์แทนการประกาศ
+  const [insufficientFee, setInsufficientFee] = useState(false);
 
   // #2 ค่าลงประกาศ — เลือกชนิดพอยต์จ่าย (used_appliance) · scrap = ฟรี
   const [feePointType, setFeePointType] = useState<"gold" | "silver">("silver");
@@ -180,7 +184,11 @@ export default function SellNewPage() {
     }
     if (images.length < MAX_IMAGES) { setError(`กรุณาเพิ่มรูปสินค้าให้ครบ ${MAX_IMAGES} รูป`); return; }
     if (!clip) { setError("กรุณาเพิ่มคลิปวิดีโอสินค้า 1 คลิป"); return; }
-    setError("");
+    // #C5 เช็คยอดพอยต์พอจ่ายค่าลงประกาศ (เฉพาะ used_appliance · scrap = ฟรี)
+    if (listingType === "used_appliance" && MOCK_POINT_BALANCE[feePointType] < LISTING_FEE_POINTS) {
+      setError(""); setInsufficientFee(true); return;
+    }
+    setError(""); setInsufficientFee(false);
     setOtp(""); setOtpError(""); setOtpAttempts(0);
     setShowOtp(true);
   };
@@ -217,8 +225,9 @@ export default function SellNewPage() {
       }
       const res = await listingsApi.create(body);
       if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      router.push(`/sell/${data.id}`);
+      await res.json();
+      // C4: ไปหน้า success ที่มีอยู่ (เดิม unreachable) → success page นำต่อไป /sell
+      router.push("/sell/new/success");
     } catch {
       setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
     } finally {
@@ -680,6 +689,24 @@ export default function SellNewPage() {
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3">
           <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
+
+      {/* #C5 พอยต์ไม่พอจ่ายค่าลงประกาศ → ชวนเติมพอยต์ */}
+      {insufficientFee && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2">
+          <p className="text-sm font-semibold text-amber-800">
+            พอยต์ไม่พอจ่ายค่าลงประกาศ
+          </p>
+          <p className="text-xs text-amber-700">
+            ค่าลงประกาศ {LISTING_FEE_POINTS} พอยต์ — ยอด{feePointType === "gold" ? "พอยต์ทอง" : "พอยต์เงิน"}คงเหลือ {MOCK_POINT_BALANCE[feePointType].toLocaleString()} พอยต์ กรุณาเติมพอยต์ก่อนประกาศ
+          </p>
+          <Link
+            href="/wallet"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-amber-800 underline"
+          >
+            👛 เติมพอยต์ที่กระเป๋าเงิน →
+          </Link>
         </div>
       )}
 

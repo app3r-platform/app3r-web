@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ReviewsSection } from "@/components/listing/ReviewsSection";
 import { ReportButton } from "@/components/listing/ReportButton";
 import { FallbackImg } from "@/components/shared/FallbackImg";
 
@@ -53,7 +52,7 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
         </div>
 
         {/* Shop info card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-400 mb-0.5">ขายโดย</p>
@@ -64,6 +63,10 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
               <p className="text-[10px] text-gray-400">{item.shopReviews} รีวิว</p>
             </div>
           </div>
+          {/* A2: canonical — รีวิวอยู่ในโปรไฟล์ผู้ขายหลังธุรกรรม ไม่ใช่ใต้ประกาศ */}
+          <p className="text-xs text-gray-400 border-t border-gray-50 pt-3">
+            💬 ดูรีวิวผู้ขายได้ในโปรไฟล์ผู้ขายหลังทำธุรกรรม
+          </p>
         </div>
 
         {/* Action buttons */}
@@ -77,9 +80,6 @@ export default async function MarketplaceDetailPage({ params }: { params: Promis
             แชทกับร้าน
           </button>
         </div>
-
-        {/* D86 — รีวิวและคะแนน */}
-        <ReviewsSection listingId={id} />
 
         {/* D82 — รายงานประกาศ */}
         <ReportButton listingId={id} />

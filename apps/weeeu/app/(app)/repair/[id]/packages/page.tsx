@@ -79,7 +79,7 @@ export default function RepairPackagesPage({ params }: { params: Promise<{ id: s
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-1.5">
           <p className="text-sm font-semibold text-amber-800">ค่าใช้จ่ายที่ต้องชำระ</p>
           {offer.deposit_amount ? (
-            <Row label="มัดจำที่ล็อกไว้" value={`${offer.deposit_amount.toLocaleString()} พอยต์ทอง`} />
+            <Row label="พอยต์ทองที่ล็อก" value={`${offer.deposit_amount.toLocaleString()} พอยต์ทอง`} />
           ) : null}
           {offer.travel_fee_on_cancel ? (
             <Row label="ค่าเดินทาง (ตาม offer เดิม)" value={`${offer.travel_fee_on_cancel.toLocaleString()} พอยต์ทอง`} />
@@ -239,7 +239,7 @@ export default function RepairPackagesPage({ params }: { params: Promise<{ id: s
           <div className="border border-amber-300 bg-amber-50 rounded-xl p-3 space-y-2">
             <p className="text-xs text-amber-800">
               ⚠️ หากยุติงาน คุณจะถูกเรียกเก็บ
-              {offer.deposit_amount ? ` มัดจำ ${offer.deposit_amount.toLocaleString()} พอยต์ทอง` : ""}
+              {offer.deposit_amount ? ` พอยต์ทองที่ล็อก ${offer.deposit_amount.toLocaleString()} พอยต์ทอง` : ""}
               {offer.travel_fee_on_cancel ? ` + ค่าเดินทาง ${offer.travel_fee_on_cancel.toLocaleString()} พอยต์ทอง` : ""}{" "}
               ตามข้อเสนอเดิม ยืนยันหรือไม่?
             </p>

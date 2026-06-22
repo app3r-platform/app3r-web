@@ -80,9 +80,8 @@ const SCREEN_MAP: Array<{ pattern: string; info: ScreenInfo }> = [
   { pattern: "/disputes",                  info: { num: "A-17",  code: "PARTS-DISPUTES" } },
   { pattern: "/disputes/[id]",             info: { num: "A-18",  code: "PARTS-P7-DISPUTE" } },
 
-  // ── KYC (เลขเดิม A-19..A-20) ─────────────────────────────────────────────────
+  // ── KYC (เลขเดิม A-19; A-20 ลบแล้ว → ใช้ A-43 /users/weeer/[id]/kyc แทน) ──────
   { pattern: "/kyc",                       info: { num: "A-19",  code: "KYC-LIST" } },
-  { pattern: "/kyc/[id]",                  info: { num: "A-20",  code: "KYC-DETAIL" } },
 
   // ── Users (ใหม่) ─────────────────────────────────────────────────────────────
   { pattern: "/users",                     info: { num: "A-42",  code: "USERS" } },

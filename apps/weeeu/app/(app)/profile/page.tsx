@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AddressAutoFill, { AddressData } from "@/components/shared/AddressAutoFill";
 import OtpInput from "@/components/shared/OtpInput";
+
+// OTP เปลี่ยนเบอร์ (mockup — provider จริง = BE) · ผิดครบ 3 → ระงับชั่วคราว
+const MOCK_OTP = "123456";
+const MAX_OTP_ATTEMPTS = 3;
 
 // ─── Mock user data (replace with API: GET /api/v1/users/me) ─────────────────
 const MOCK_USER = {
@@ -48,6 +53,7 @@ const DEFAULT_NOTIF_PREFS: NotifPrefs = {
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [section, setSection] = useState<Section>("view");
   const [user, setUser] = useState(MOCK_USER);
   const [saving, setSaving] = useState(false);
@@ -73,6 +79,7 @@ export default function ProfilePage() {
   const [phoneOtp, setPhoneOtp] = useState("");
   const [phoneStage, setPhoneStage] = useState<"phone" | "otp">("phone");
   const [phoneError, setPhoneError] = useState("");
+  const [phoneOtpAttempts, setPhoneOtpAttempts] = useState(0); // L2: ผิดสะสม → ระงับเมื่อครบ 3
 
   // Email change
   const [newEmail, setNewEmail] = useState("");
@@ -147,10 +154,23 @@ export default function ProfilePage() {
     e.preventDefault();
     if (phoneOtp.replace(/\s/g, "").length < 6) { setPhoneError("กรุณากรอก OTP ให้ครบ 6 หลัก"); return; }
     setSaving(true);
-    await new Promise((r) => setTimeout(r, 800)); // Production: POST /api/v1/auth/verify-otp
+    await new Promise((r) => setTimeout(r, 800)); // Production: POST /api/v1/auth/verify-otp · Mockup: เทียบ 123456
+    setSaving(false);
+    if (phoneOtp.replace(/\s/g, "") !== MOCK_OTP) {
+      // L2: OTP ผิด — สะสมจำนวนครั้ง ผิดครบ 3 → ระงับชั่วคราว ก่อนเปลี่ยนเบอร์
+      const n = phoneOtpAttempts + 1;
+      setPhoneOtpAttempts(n);
+      setPhoneOtp("");
+      if (n >= MAX_OTP_ATTEMPTS) {
+        router.push("/suspended?reason=otp");
+      } else {
+        setPhoneError(`รหัส OTP ไม่ถูกต้อง — เหลือโอกาสอีก ${MAX_OTP_ATTEMPTS - n} ครั้ง`);
+      }
+      return;
+    }
     setUser((u) => ({ ...u, phone_number: newPhone.replace(/\D/g, "") }));
-    setSaving(false); setSection("view"); showSaved();
-    setPhoneStage("phone"); setNewPhone(""); setPhoneOtp("");
+    setSection("view"); showSaved();
+    setPhoneStage("phone"); setNewPhone(""); setPhoneOtp(""); setPhoneOtpAttempts(0);
   };
 
   // ─── Email change ─────────────────────────────────────────────────────────────

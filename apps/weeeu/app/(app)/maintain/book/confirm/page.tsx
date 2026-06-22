@@ -51,9 +51,11 @@ export default function MaintainBookConfirmPage() {
 
         {/* Action buttons */}
         <div className="space-y-3 pt-2">
-          <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
-            ✅ ยืนยันจอง
-          </button>
+          <Link href="/maintain/book/confirm/success">
+            <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
+              ✅ ยืนยันจอง
+            </button>
+          </Link>
           <Link href="/maintain/book">
             <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
               ยกเลิก — กลับหน้าจอง

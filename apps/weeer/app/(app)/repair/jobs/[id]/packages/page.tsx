@@ -253,7 +253,7 @@ export default function PackageComposePage({ params }: { params: Promise<{ id: s
 
       {deposit > 0 && (
         <p className="text-xs text-gray-400 text-center">
-          🔒 มัดจำที่ล็อกไว้: {deposit.toLocaleString()} pts — หากลูกค้ายุติงาน ระบบจะเตือนเรื่องมัดจำ + ค่าเดินทางตาม offer เดิม
+          🔒 พอยต์ทองที่ล็อก: {deposit.toLocaleString()} pts — หากลูกค้ายุติงาน ระบบจะเตือนเรื่องพอยต์ทองที่ล็อก + ค่าเดินทางตาม offer เดิม
         </p>
       )}
 

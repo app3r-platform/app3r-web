@@ -2,13 +2,17 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import OtpInput from "@/components/shared/OtpInput";
 
 // OTP: 6 หลัก, 5 นาที, max 5 ครั้ง/ชม, resend cooldown 60 วิ
 const OTP_DURATION = 5 * 60; // seconds
 const RESEND_COOLDOWN = 60;   // seconds
+const MOCK_OTP = "123456";    // mockup — provider จริง = BE
+const MAX_OTP_ATTEMPTS = 3;   // ผิดครบ → ระงับชั่วคราว
 
 export default function SignupOtpPage() {
+  const router = useRouter();
   const [phone, setPhone] = useState("");
   const [phoneSubmitted, setPhoneSubmitted] = useState(false);
   const [phoneError, setPhoneError] = useState("");
@@ -20,6 +24,7 @@ export default function SignupOtpPage() {
   const [secondsLeft, setSecondsLeft] = useState(OTP_DURATION);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [sendCount, setSendCount] = useState(0); // max 5/hr
+  const [otpAttempts, setOtpAttempts] = useState(0); // ผิดสะสม → ระงับเมื่อครบ 3
 
   // ─── Countdown timer ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -75,10 +80,22 @@ export default function SignupOtpPage() {
     if (secondsLeft <= 0) { setOtpError("OTP หมดอายุแล้ว — กรุณาขอ OTP ใหม่"); return; }
     setLoading(true);
     setOtpError("");
-    // Production: POST /api/v1/auth/verify-otp
+    // Production: POST /api/v1/auth/verify-otp · Mockup: เทียบกับรหัส 123456
     await new Promise((r) => setTimeout(r, 800));
     setLoading(false);
-    window.location.href = "/signup/verify-email";
+    if (otp.replace(/\s/g, "") === MOCK_OTP) {
+      window.location.href = "/signup/verify-email";
+      return;
+    }
+    // OTP ผิด — สะสมจำนวนครั้ง ผิดครบ 3 → ระงับชั่วคราว
+    const n = otpAttempts + 1;
+    setOtpAttempts(n);
+    setOtp("");
+    if (n >= MAX_OTP_ATTEMPTS) {
+      router.push("/suspended?reason=otp");
+    } else {
+      setOtpError(`รหัส OTP ไม่ถูกต้อง — เหลือโอกาสอีก ${MAX_OTP_ATTEMPTS - n} ครั้ง`);
+    }
   };
 
   const inputCls = (err: string) =>
@@ -91,10 +108,10 @@ export default function SignupOtpPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 3 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 4 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
-      <p className="text-xs text-gray-400 -mt-4">ขั้นตอนที่ 3 จาก 7</p>
+      <p className="text-xs text-gray-400 -mt-4">ขั้นตอนที่ 4 จาก 7</p>
 
       <div>
         <h2 className="text-xl font-bold text-gray-900">ยืนยันเบอร์โทรศัพท์</h2>
@@ -187,7 +204,7 @@ export default function SignupOtpPage() {
       )}
 
       <div className="flex justify-center">
-        <Link href="/signup/email" className="text-sm text-gray-400 hover:text-gray-600">
+        <Link href="/signup/personal" className="text-sm text-gray-400 hover:text-gray-600">
           ‹ กลับ
         </Link>
       </div>

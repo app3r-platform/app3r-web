@@ -350,10 +350,10 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
   "A-19": {
     origins: [
       { id: "A-01", label: "Dashboard (sidebar)" },
-      { id: "A-20", label: "กลับจาก KYC Detail" },
+      { id: "A-43", label: "กลับจาก WeeeR KYC Detail" },
     ],
     destinations: [
-      { buttonLabel: "คลิกรายการ", targetId: "A-20", targetLabel: "KYC Detail" },
+      { buttonLabel: "ตรวจสอบ", targetId: "A-43", targetLabel: "WeeeR KYC Detail" },
     ],
     xapp: [
       { app: "WeeeR", port: 3001, screenId: "R-01", label: "ร้านรอผล KYC (dashboard)" },
@@ -361,19 +361,6 @@ export const ADMIN_ANNO_MAP: Record<string, MockAnnoData> = {
     drefs: [
       { id: "D24", desc: "Signed URL · TTL 1 ชม. สำหรับเอกสาร KYC" },
       { id: "D25", desc: "KYC document retention ตาม PDPA" },
-    ],
-  },
-
-  // ── A-20 KYC Detail ── ──────────────────────────────────────────────────────
-  "A-20": {
-    origins: [{ id: "A-19", label: "KYC List" }],
-    destinations: [
-      { buttonLabel: "อนุมัติ KYC", targetId: "A-19", targetLabel: "กลับรายการ" },
-      { buttonLabel: "ปฏิเสธ KYC", targetId: "A-19", targetLabel: "กลับรายการ" },
-      { buttonLabel: "กลับ", targetId: "A-19", targetLabel: "KYC List" },
-    ],
-    xapp: [
-      { app: "WeeeR", port: 3001, screenId: "R-01", label: "ร้านได้รับแจ้ง KYC result" },
     ],
   },
 

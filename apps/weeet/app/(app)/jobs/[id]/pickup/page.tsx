@@ -110,6 +110,7 @@ export default function ScrapPickupPage({ params }: { params: Promise<{ id: stri
           </button>
         ) : (
           <button
+            onClick={() => router.push(`/jobs/${id}/complete`)}
             disabled={conditionMatch === null}
             className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-40 disabled:cursor-not-allowed"
           >

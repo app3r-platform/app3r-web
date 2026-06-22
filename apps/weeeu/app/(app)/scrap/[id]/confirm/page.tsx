@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { SuccessTrackingBanner } from "@/components/shared/SuccessTrackingBanner";
 import { MockAnnoOrigin, MockAnnoXApp } from "@/components/shared/MockAnnoBar";
@@ -8,8 +12,17 @@ const MOCK_OFFER = {
   transport: "รับไปเอง",
 };
 
-export default async function ScrapConfirmPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function ScrapConfirmPage() {
+  const { id } = useParams<{ id: string }>();
+  // L5: ใช้ข้อเสนอที่เลือกจากหน้า offers (query param) — fallback MOCK_OFFER ถ้าไม่มี (Mockup)
+  const sp = useSearchParams();
+  const offer = {
+    shop: sp.get("buyer") ?? MOCK_OFFER.shop,
+    price: sp.get("price") ? Number(sp.get("price")) : MOCK_OFFER.price,
+    transport: sp.get("transport") ?? MOCK_OFFER.transport,
+  };
+  // B3: success banner แสดงหลังกดยืนยันเท่านั้น (ไม่ใช่ก่อนยืนยัน)
+  const [confirmed, setConfirmed] = useState(false);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -30,8 +43,8 @@ export default async function ScrapConfirmPage({ params }: { params: Promise<{ i
           ← กลับดูข้อเสนอ
         </Link>
 
-        {/* Tracking ref banner */}
-        <SuccessTrackingBanner title="ยืนยันสำเร็จ" variant="weeeu" />
+        {/* Tracking ref banner — แสดงหลังยืนยันสำเร็จเท่านั้น (B3) */}
+        {confirmed && <SuccessTrackingBanner title="ยืนยันสำเร็จ" variant="weeeu" />}
 
         {/* Header */}
         <h1 className="text-xl font-bold text-weeeu-dark">ยืนยันการเลือกข้อเสนอ</h1>
@@ -41,15 +54,15 @@ export default async function ScrapConfirmPage({ params }: { params: Promise<{ i
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <p className="text-xs text-gray-400">ร้านรับซาก</p>
-              <p className="text-sm font-semibold text-weeeu-dark">{MOCK_OFFER.shop}</p>
+              <p className="text-sm font-semibold text-weeeu-dark">{offer.shop}</p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-xs text-gray-400">ราคารับซาก</p>
-              <p className="text-lg font-bold text-weeeu-primary">{MOCK_OFFER.price.toLocaleString()} ฿</p>
+              <p className="text-lg font-bold text-weeeu-primary">{offer.price.toLocaleString()} ฿</p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-xs text-gray-400">การขนส่ง</p>
-              <p className="text-sm text-gray-700">{MOCK_OFFER.transport}</p>
+              <p className="text-sm text-gray-700">{offer.transport}</p>
             </div>
           </div>
         </div>
@@ -64,17 +77,29 @@ export default async function ScrapConfirmPage({ params }: { params: Promise<{ i
         {/* Action buttons */}
         <div className="space-y-3 pt-2">
           <div>
-            <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
-              ✅ ยืนยัน
+            <button
+              onClick={() => setConfirmed(true)}
+              disabled={confirmed}
+              className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors"
+            >
+              {confirmed ? "✅ ยืนยันแล้ว" : "✅ ยืนยัน"}
             </button>
             {/* §6 Nav annotation */}
             <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono mt-0.5 text-center">→ U-55 /scrap (listing status → accepted)</p>
           </div>
-          <Link href={`/scrap/${id}/offers`}>
-            <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
-              ยกเลิก — กลับไปดูข้อเสนออื่น
-            </button>
-          </Link>
+          {confirmed ? (
+            <Link href="/scrap">
+              <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
+                กลับหน้าซากของฉัน →
+              </button>
+            </Link>
+          ) : (
+            <Link href={`/scrap/${id}/offers`}>
+              <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
+                ยกเลิก — กลับไปดูข้อเสนออื่น
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

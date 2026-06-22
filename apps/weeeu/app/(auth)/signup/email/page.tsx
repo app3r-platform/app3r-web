@@ -60,7 +60,8 @@ export default function SignupEmailPage() {
       await new Promise((r) => setTimeout(r, 800));
       // Simulate email duplicate (demo only — remove in production)
       if (form.email === "test@duplicate.com") { setDuplicateEmail(true); setLoading(false); return; }
-      window.location.href = "/signup/otp";
+      // A4: personal/phone ก่อน OTP → ไป personal (ไม่ใช่ otp)
+      window.location.href = "/signup/personal";
     } catch {
       setLoading(false);
     }

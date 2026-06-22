@@ -6,8 +6,20 @@ const MOCK_OFFER = {
   price: 4200,
 };
 
-export default async function ListingConfirmPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ListingConfirmPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ offerId?: string; buyer?: string; price?: string }>;
+}) {
   const { id } = await params;
+  // L5: ใช้ข้อเสนอที่เลือกจากหน้า offers (query param) — fallback MOCK_OFFER ถ้าไม่มี (Mockup)
+  const sp = await searchParams;
+  const offer = {
+    buyer: sp.buyer ?? MOCK_OFFER.buyer,
+    price: sp.price ? Number(sp.price) : MOCK_OFFER.price,
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -25,11 +37,11 @@ export default async function ListingConfirmPage({ params }: { params: Promise<{
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <p className="text-xs text-gray-400">ข้อเสนอจาก</p>
-              <p className="text-sm font-semibold text-weeeu-dark">{MOCK_OFFER.buyer}</p>
+              <p className="text-sm font-semibold text-weeeu-dark">{offer.buyer}</p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-xs text-gray-400">ราคา</p>
-              <p className="text-lg font-bold text-weeeu-primary">{MOCK_OFFER.price.toLocaleString()} ฿</p>
+              <p className="text-lg font-bold text-weeeu-primary">{offer.price.toLocaleString()} ฿</p>
             </div>
           </div>
         </div>
@@ -43,9 +55,11 @@ export default async function ListingConfirmPage({ params }: { params: Promise<{
 
         {/* Action buttons */}
         <div className="space-y-3 pt-2">
-          <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
-            ✅ ยืนยันขาย
-          </button>
+          <Link href={`/listings/${id}`}>
+            <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm transition-colors">
+              ✅ ยืนยันขาย
+            </button>
+          </Link>
           <Link href={`/listings/${id}/offers`}>
             <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm transition-colors">
               ยกเลิก — กลับไปดูข้อเสนออื่น

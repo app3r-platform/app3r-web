@@ -85,7 +85,7 @@ export default function B2EstimatePage({ params }: { params: Promise<{ id: strin
           <p className="text-gray-400 text-xs">ลูกค้า: คุณสุภา รักดี · ประกาศ #{id}</p>
           {/* #2 มัดจำ/รับประกัน — read-only 🔒 จาก repair_offer */}
           <p className="text-gray-400 text-xs flex items-center gap-1">
-            <span>🔒</span> มัดจำ ฿500 · รับประกันงานซ่อม 90 วัน (จากข้อเสนอ WeeeR)
+            <span>🔒</span> พอยต์ทองที่ล็อก ฿500 · รับประกันงานซ่อม 90 วัน (จากข้อเสนอ WeeeR)
           </p>
         </div>
 

@@ -67,7 +67,8 @@ export default function ListingOffersPage({ params }: { params: Promise<{ id: st
 
                 {!accepted && (
                   <div className="flex gap-2 pt-1">
-                    <Link href={`/listings/${id}/confirm`} className="flex-1">
+                    {/* L5: ส่งข้อเสนอที่เลือกไปหน้า confirm ผ่าน query param */}
+                    <Link href={`/listings/${id}/confirm?offerId=${offer.id}&buyer=${encodeURIComponent(offer.buyer)}&price=${offer.price}`} className="flex-1">
                       <button
                         onClick={() => handleAccept(offer.id)}
                         className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"

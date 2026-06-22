@@ -77,7 +77,8 @@ export default async function ScrapOffersPage({ params }: { params: Promise<{ id
                 <span>🚗 {offer.transport}</span>
               </div>
 
-              <Link href={`/scrap/${id}/confirm`}>
+              {/* L5: ส่งข้อเสนอที่เลือกไปหน้า confirm ผ่าน query param */}
+              <Link href={`/scrap/${id}/confirm?buyer=${encodeURIComponent(offer.shop)}&price=${offer.price}&transport=${encodeURIComponent(offer.transport)}`}>
                 <button className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
                   เลือกข้อเสนอนี้
                 </button>

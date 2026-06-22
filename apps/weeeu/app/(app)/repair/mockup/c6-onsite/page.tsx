@@ -74,7 +74,7 @@ const FLOW: FlowStep[] = [
     actor: "WeeeR", actorColor: "bg-orange-100 text-orange-800",
     screenId: "R-03", screenName: "REPAIR-BID",
     route: "/repair/announcements/[id]/offer", port: 3001,
-    action: `WeeeR กรอกข้อเสนอ: ราคา ${SAMPLE.quotedPrice.toLocaleString()} พอยต์ทอง · ค่าตรวจ 150 · ค่ามัดจำ 500 · รับประกัน 90 วัน → R-38`,
+    action: `WeeeR กรอกข้อเสนอ: ราคา ${SAMPLE.quotedPrice.toLocaleString()} พอยต์ทอง · ค่าตรวจ 150 · พอยต์ทองที่ล็อก 500 · รับประกัน 90 วัน → R-38`,
     stateAfter: "open (offer_count+1)",
     xapp: [
       { actor: "WeeeU", screenId: "U-05", screenName: "REPAIR-OFFERS", route: `/repair/${SAMPLE.jobId}/offers`, port: 3002 },

@@ -29,10 +29,10 @@ export default function VerifyEmailPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 4 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 5 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
-      <p className="text-xs text-gray-400 -mt-4">ขั้นตอนที่ 4 จาก 7</p>
+      <p className="text-xs text-gray-400 -mt-4">ขั้นตอนที่ 5 จาก 7</p>
 
       {/* Icon + heading */}
       <div className="text-center space-y-4">
@@ -82,9 +82,9 @@ export default function VerifyEmailPage() {
           )}
         </button>
 
-        {/* Simulate email verified (demo only) */}
+        {/* Simulate email verified (demo only) — A4: address/bank หลัง OTP verify */}
         <Link
-          href="/signup/personal"
+          href="/signup/address"
           className="block w-full bg-weeeu-primary hover:bg-weeeu-primary text-white font-semibold py-3.5 rounded-2xl text-center transition-colors text-sm"
         >
           ยืนยัน Email แล้ว → ถัดไป

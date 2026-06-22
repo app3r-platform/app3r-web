@@ -104,7 +104,7 @@ export default function RepairParcelDetailPage({ params }: { params: Promise<{ i
           {photoTaken ? "✅ ถ่ายรูปแล้ว" : "📸 ถ่ายรูปเปิดกล่อง (บันทึกสภาพ)"}
         </button>
         <Link
-          href={`/repair/jobs/c001/assign`}
+          href={`/repair/jobs/${id}/assign`}
           className="w-full block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
           🔧 มอบหมายช่าง

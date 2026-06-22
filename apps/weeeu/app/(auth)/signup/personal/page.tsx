@@ -55,7 +55,8 @@ export default function SignupPersonalPage() {
     // Production: PATCH /api/v1/users/me/profile
     await new Promise((r) => setTimeout(r, 700));
     setLoading(false);
-    window.location.href = "/signup/address";
+    // A4: เก็บข้อมูลส่วนตัวก่อน แล้วไปยืนยันเบอร์ด้วย OTP
+    window.location.href = "/signup/otp";
   };
 
   const inputCls = (field: string) =>
@@ -75,10 +76,10 @@ export default function SignupPersonalPage() {
       {/* Step indicator */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 5 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
+          <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= 3 ? "bg-weeeu-primary" : "bg-gray-200"}`} />
         ))}
       </div>
-      <p className="text-xs text-gray-400 -mt-3">ขั้นตอนที่ 5 จาก 7</p>
+      <p className="text-xs text-gray-400 -mt-3">ขั้นตอนที่ 3 จาก 7</p>
 
       <div>
         <h2 className="text-xl font-bold text-gray-900">ข้อมูลส่วนตัว</h2>
@@ -170,7 +171,7 @@ export default function SignupPersonalPage() {
       </form>
 
       <div className="flex justify-center">
-        <Link href="/signup/verify-email" className="text-sm text-gray-400 hover:text-gray-600">
+        <Link href="/signup/email" className="text-sm text-gray-400 hover:text-gray-600">
           ‹ กลับ
         </Link>
       </div>

@@ -57,8 +57,8 @@ function NewScrapForm() {
     e.preventDefault();
     setSubmitting(true);
     setTimeout(() => {
-      alert("✅ ประกาศซากเรียบร้อย — ระบบจะแจ้งเตือนเมื่อมีร้านยื่นข้อเสนอ");
-      router.push("/scrap");
+      // C4: ไปหน้า success ที่มีอยู่ (เดิม unreachable) → success page นำต่อไป /scrap
+      router.push("/scrap/new/success");
     }, 900);
   }
 

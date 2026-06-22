@@ -7,6 +7,7 @@ export default function DisputeDetailPage({ params }: { params: Promise<{ id: st
   const { id } = use(params);
   const [selectedResolution, setSelectedResolution] = useState<string | null>(null);
   const [note, setNote] = useState("");
+  const [saved, setSaved] = useState(false);
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-6">
@@ -173,6 +174,7 @@ export default function DisputeDetailPage({ params }: { params: Promise<{ id: st
           className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-admin-primary resize-none"
         />
         <button
+          onClick={() => setSaved(true)}
           disabled={!selectedResolution}
           className="mt-3 bg-admin-primary hover:bg-admin-dark text-white font-semibold py-2.5 px-5 rounded-xl text-sm disabled:opacity-40 disabled:cursor-not-allowed"
         >
@@ -185,7 +187,21 @@ export default function DisputeDetailPage({ params }: { params: Promise<{ id: st
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
           Audit Log
         </p>
-        <p className="text-xs text-gray-400 italic">บันทึกการดำเนินการ...</p>
+        {saved ? (
+          <div className="flex items-start gap-2">
+            <span className="text-green-600 mt-0.5">✅</span>
+            <div>
+              <p className="text-sm text-green-700 font-medium">
+                บันทึกคำตัดสิน ({selectedResolution}) เรียบร้อยแล้ว
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Admin · {new Date().toLocaleString("th-TH")} — ระบบจะดำเนินการตามคำตัดสินและแจ้งทั้งสองฝ่าย (mock)
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="text-xs text-gray-400 italic">บันทึกการดำเนินการ...</p>
+        )}
       </div>
     </div>
   );

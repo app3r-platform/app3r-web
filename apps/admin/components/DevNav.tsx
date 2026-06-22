@@ -51,7 +51,7 @@ const devNavLinks: DevNavLink[] = [
   { label: "→ ดูรายละเอียด dispute Parts",      href: "/disputes/p001",                            type: "next-step", forPath: "/disputes" },
 
   // ── KYC (Admin) ──────────────────────────────────────────────────────────────
-  { label: "→ ดูรายละเอียด WeeeR",              href: "/kyc/shop-001",                             type: "next-step", forPath: "/kyc" },
+  { label: "→ ดูรายละเอียด WeeeR",              href: "/users/weeer/101/kyc",                      type: "next-step", forPath: "/kyc" },
 ];
 
 const DEV_NAV_ENABLED = process.env.NEXT_PUBLIC_DEV_NAV === "true";

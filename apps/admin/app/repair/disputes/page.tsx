@@ -152,7 +152,7 @@ export default function RepairDisputesPage() {
                         {new Date(d.created_at).toLocaleDateString("th-TH")}
                       </td>
                       <td className="px-6 py-3">
-                        <Link href={`/disputes`}
+                        <Link href={`/repair/disputes/${d.id}`}
                           className="text-xs text-admin-primary hover:text-admin-dark transition-colors whitespace-nowrap">
                           จัดการ →
                         </Link>

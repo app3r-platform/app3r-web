@@ -400,7 +400,7 @@ export default function DecisionB12Page() {
                       {DEPOSIT_REJECT_LABEL[data.deposit_policy_when_user_rejects_change]}
                       {data.deposit_amount ? ` (พอยต์ทองที่ล็อก ${data.deposit_amount.toLocaleString()} พอยต์ทอง)` : ""}
                     </p>
-                    <p className="text-xs text-amber-600">รวมค่ามัดจำและค่าเดินทางตามข้อเสนอเดิม — ดูยอดสุทธิที่หน้าชำระค่าตรวจ/ค่าเดินทาง</p>
+                    <p className="text-xs text-amber-600">รวมพอยต์ทองที่ล็อกและค่าเดินทางตามข้อเสนอเดิม — ดูยอดสุทธิที่หน้าชำระค่าตรวจ/ค่าเดินทาง</p>
                   </div>
                 </div>
 

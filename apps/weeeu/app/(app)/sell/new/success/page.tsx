@@ -24,7 +24,7 @@ export default function SellNewSuccessPage() {
         <p className="text-xs font-mono text-gray-300 bg-gray-50 px-3 py-1.5 rounded-lg">{ref}</p>
       </div>
       <button
-        onClick={() => router.push("/sell/listings")}
+        onClick={() => router.push("/sell")}
         className="w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm"
       >
         ดูประกาศของฉัน →

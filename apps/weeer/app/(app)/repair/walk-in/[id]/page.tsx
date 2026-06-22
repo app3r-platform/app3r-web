@@ -121,7 +121,7 @@ export default function RepairWalkInDetailPage({ params }: { params: Promise<{ i
       {/* Actions */}
       <div className="flex gap-3">
         <Link
-          href={`/repair/jobs/c001`}
+          href={`/repair/jobs/${id}`}
           className="flex-1 block text-center bg-[#FF663A] hover:bg-[#F04E20] text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
         >
           📋 ดูรายละเอียดงาน
