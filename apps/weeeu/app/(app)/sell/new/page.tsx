@@ -22,7 +22,7 @@ const MOCK_APPLIANCES = [
 // ค่าลงประกาศ (mock · admin rate-by-type จริง = BE) — used_appliance ตัด Point · scrap = ฟรี
 const LISTING_FEE_POINTS = 50; // mock อัตราคงที่
 // ยอดพอยต์คงเหลือ (mock · source จริง = BE /api/v1/users/me) — ใช้เช็คพอจ่ายค่าลงประกาศ (#C5)
-const MOCK_POINT_BALANCE: Record<"gold" | "silver", number> = { gold: 350, silver: 1250 };
+const MOCK_POINT_BALANCE: Record<"gold" | "silver", number> = { gold: 350, silver: 30 };
 const MOCK_OTP = "123456"; // mockup — provider จริง = BE
 const MAX_OTP_ATTEMPTS = 3;
 // ราคากลางอ้างอิง (reference price · mock · source จริง = BE/DB)

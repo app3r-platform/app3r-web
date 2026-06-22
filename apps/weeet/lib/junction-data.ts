@@ -58,58 +58,8 @@ export const REPAIR_JUNCTIONS: JunctionEntry[] = [
   },
 ];
 
-// ── Maintain Flow Junctions ────────────────────────────────────────────────────
-
-export const MAINTAIN_JUNCTIONS: JunctionEntry[] = [
-  {
-    screenId: "T-39",
-    label: "ตรวจสภาพก่อนล้าง",
-    route: "/maintain/[id]/inspect",
-    role: "📋 ตรวจก่อนล้าง — pass ปกติ / M5 พบเสียหาย / M7 ลูกค้าไม่อยู่",
-    from: ["T-40 /maintain/[id]/arrive (ถึงที่แล้ว)", "T-43 /maintain/[id]/depart (ออกเดินทาง)"],
-    to: [
-      "T-41 /maintain/[id]/checklist (M4 ล้างตามปกติ)",
-      "/maintain/[id]/mockup/m5-convert-repair (M5 พบเสียหาย)",
-      "/maintain/[id]/mockup/m7-noshow (M7 ลูกค้าไม่อยู่)",
-    ],
-    xapp: [
-      "WeeeU U-16: ดู maintain job + approve M5",
-      "WeeeR R-14: closed_for_repair (M5)",
-      "Admin A-07c: damage report (M5)",
-    ],
-  },
-  {
-    screenId: "T-40",
-    label: "GPS ถึงที่",
-    route: "/maintain/[id]/arrive",
-    role: "📋 บันทึกพิกัดถึงหน้างาน + รูปแอปพลิอันซ์ก่อนล้าง",
-    from: ["T-43 /maintain/[id]/depart (ออกเดินทาง)"],
-    to: ["T-39 /maintain/[id]/inspect (ตรวจสภาพ)"],
-    xapp: ["WeeeU U-15b: เห็น status กำลังเดินทาง → ถึงแล้ว"],
-  },
-  {
-    screenId: "T-08",
-    label: "Maintain Inspect (m5 mockup)",
-    route: "/maintain/[id]/mockup/m5-convert-repair",
-    role: "📋 MOCKUP M5: ตรวจแล้วพบความเสียหาย → ส่งให้ WeeeU ตัดสินใจ",
-    from: ["T-39 /maintain/[id]/inspect (กด พบความเสียหาย)"],
-    to: ["T-39 (รอ WeeeU ตอบกลับ)"],
-    xapp: [
-      "WeeeU U-16/m5: เห็น m5-hybrid-a banner — ตัดสินใจ",
-      "WeeeR R-14: closed_for_repair status",
-      "Admin A-07c: damage report",
-    ],
-  },
-  {
-    screenId: "T-46/m7",
-    label: "ลูกค้าไม่มาตามนัด",
-    route: "/maintain/[id]/mockup/m7-noshow",
-    role: "📋 MOCKUP M7: ช่างถึงแล้ว ลูกค้าไม่อยู่ → บันทึก no-show",
-    from: ["T-39 /maintain/[id]/inspect (กด ลูกค้าไม่อยู่)"],
-    to: ["T-01 /jobs (กลับรายการงาน)"],
-    xapp: ["WeeeU U-16: เห็น no-show notification", "Admin: escalate หรือนัดใหม่"],
-  },
-];
+// ── Maintain Flow Junctions ── ลบ A3 Gen121: /maintain/* orphan ลบแล้ว · canonical = /jobs (type=maintain)
+export const MAINTAIN_JUNCTIONS: JunctionEntry[] = [];
 
 // ── Scrap Flow Junctions ───────────────────────────────────────────────────────
 

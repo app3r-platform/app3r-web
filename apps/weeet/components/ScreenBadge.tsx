@@ -49,16 +49,7 @@ const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   { pattern: "/jobs/[id]/parcel/tested",     num: "T-45", label: "ทดสอบ" },
   { pattern: "/jobs/[id]",                   num: "T-11" },
   { pattern: "/jobs",                        num: "T-01" },
-  // ── Maintain flow ──────────────────────────────────────────────────────────
-  { pattern: "/maintain/[id]/inspect",       num: "T-39" },
-  { pattern: "/maintain/[id]/arrive",        num: "T-40" },
-  { pattern: "/maintain/[id]/checklist",     num: "T-41" },
-  { pattern: "/maintain/[id]/complete",      num: "T-42" },
-  { pattern: "/maintain/[id]/depart",        num: "T-43" },
-  // maintain detail base T-46 (Gen 109 ruling · ยังไม่มี /maintain/[id] route → ฐานใหม่ 1 ตัว)
-  // หมายเหตุ: path มี segment "mockup" = dev artifact → LOG normalize เฟส 4 (ไม่แก้ route รอบนี้)
-  { pattern: "/maintain/[id]/mockup/m5-convert-repair", num: "T-46", label: "D-Maintain-2" },
-  { pattern: "/maintain/[id]/mockup/m7-noshow",         num: "T-46", label: "ไม่มาตามนัด" },
+  // ── Maintain flow: canonical = /jobs (type=maintain) · /maintain/* orphan ลบแล้ว (A3 Gen121) ──
   // ── Service listings ─────────────────────────────────────────────────────────
   { pattern: "/listings/[id]",               num: "T-16" },
   { pattern: "/listings",                    num: "T-17" },
