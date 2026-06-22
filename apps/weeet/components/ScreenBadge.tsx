@@ -15,6 +15,10 @@ const WEEET_PRIMARY = "#1696F9";
 const SCREEN_MAP: Array<{ pattern: string; num: string; label?: string }> = [
   // ── Jobs flow (repair/scrap) ───────────────────────────────────────────────
   { pattern: "/jobs/[id]/diagnose",          num: "T-02" },
+  // B2/B3/B3.5 pre-repair flow (SoT Gen 55 · REP-C04/C05/C06 · Gen78 Wave1)
+  { pattern: "/jobs/[id]/estimate",          num: "T-49" },
+  { pattern: "/jobs/[id]/checklist",         num: "T-50" },
+  { pattern: "/jobs/[id]/parts-picker",      num: "T-51" },
   { pattern: "/jobs/[id]/repair/success",    num: "T-15" },
   { pattern: "/jobs/[id]/repair/in-progress",num: "T-03", label: "กำลังซ่อม" },
   { pattern: "/jobs/[id]/repair/tested",     num: "T-03", label: "ทดสอบ" },
