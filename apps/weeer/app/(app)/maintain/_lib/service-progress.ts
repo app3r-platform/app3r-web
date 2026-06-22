@@ -86,6 +86,7 @@ export const MAINTAIN_STAGE_ORDER: Record<MaintainStatus, number> = {
   risk_reported:          4,   // M3: ช่างพบความเสี่ยงระหว่างตรวจ — รอลูกค้าตัดสิน
   no_show:                3,   // M7: เกิดหลัง arrived — ลูกค้าไม่อยู่
   terminated_by_customer: 4,   // M9: เกิดระหว่าง in_progress — WeeeU ยุติ
+  terminated_after_risk:  -1,  // terminal — M4: WeeeU ยุติหลังพบความเสี่ยง (ก่อนล้าง) → settle ค่าบริการ
   completed:              5,
   cancelled:              -1,
   withdrawn:              -1,  // terminal — M6: WeeeR ถอน

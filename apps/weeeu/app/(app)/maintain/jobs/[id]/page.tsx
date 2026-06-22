@@ -350,6 +350,13 @@ export default function MaintainJobDetailPage() {
               ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</>
               : "✅ รับความเสี่ยง — ดำเนินการล้างต่อ"}
           </button>
+          {/* M4 — ยุติงานก่อนล้าง (pre-clean) → ดู Settle ค่าบริการตาม offer */}
+          <Link
+            href={`/maintain/jobs/${id}/cancel?from=risk&settle=1`}
+            className="w-full block text-center border border-red-300 text-red-600 hover:bg-red-50 font-medium py-3 rounded-xl text-sm transition-colors"
+          >
+            🛑 ยุติงาน — รับ Settle (M4)
+          </Link>
         </div>
       )}
 

@@ -50,6 +50,7 @@ export interface MaintainJob {
     | "risk_reported"       // M3: ช่างพบความเสี่ยง → รอลูกค้าตัดสินใจ
     | "no_show"             // M7: ลูกค้าไม่อยู่ — WeeeT รายงาน → settle No-show
     | "terminated_by_customer" // M9: WeeeU ยุติระหว่างล้าง → WeeeR ตอบสนอง
+    | "terminated_after_risk"  // M4: WeeeU ยุติหลังตรวจพบความเสี่ยง (ก่อนล้าง) → WeeeR รับ settle ค่าบริการ
     | "completed"
     | "cancelled"
     | "withdrawn"           // M6: WeeeR ถอนงานหลังยืนยัน
@@ -93,6 +94,7 @@ export const MAINTAIN_STATUS_LABEL: Record<MaintainStatus, string> = {
   risk_reported:          "พบความเสี่ยง",
   no_show:                "ลูกค้าไม่อยู่",
   terminated_by_customer: "ลูกค้ายุติ",
+  terminated_after_risk:  "ยุติหลังพบเสี่ยง",
   completed:              "เสร็จแล้ว",
   cancelled:              "ยกเลิก",
   withdrawn:              "ถอนงาน",
@@ -110,6 +112,7 @@ export const MAINTAIN_STATUS_COLOR: Record<MaintainStatus, string> = {
   risk_reported:          "bg-amber-100 text-amber-800",
   no_show:                "bg-orange-100 text-orange-700",
   terminated_by_customer: "bg-red-100 text-red-700",
+  terminated_after_risk:  "bg-rose-100 text-rose-700",
   completed:              "bg-emerald-100 text-emerald-700",
   cancelled:              "bg-red-100 text-red-600",
   withdrawn:              "bg-red-100 text-red-600",

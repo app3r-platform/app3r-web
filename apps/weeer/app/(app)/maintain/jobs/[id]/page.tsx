@@ -41,6 +41,10 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
   const [respondingTermination, setRespondingTermination] = useState(false);
   const [terminationError, setTerminationError] = useState("");
 
+  // M4: settle-confirm หลังลูกค้ายุติงานจากการตรวจพบความเสี่ยง (pre-clean)
+  const [confirmingRiskSettle, setConfirmingRiskSettle] = useState(false);
+  const [riskSettleError, setRiskSettleError] = useState("");
+
   const reload = () => {
     setLoading(true);
     maintainApi.getJob(id)
@@ -77,6 +81,20 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
       setTerminationError((e as Error).message);
     } finally {
       setRespondingTermination(false);
+    }
+  }
+
+  // M4: confirm รับ settle ค่าบริการ หลังลูกค้ายุติงานจากความเสี่ยง
+  async function handleConfirmRiskSettle() {
+    setConfirmingRiskSettle(true);
+    setRiskSettleError("");
+    try {
+      const updated = await maintainApi.confirmRiskSettle(id);
+      setJob(updated);
+    } catch (e) {
+      setRiskSettleError((e as Error).message);
+    } finally {
+      setConfirmingRiskSettle(false);
     }
   }
 
@@ -196,6 +214,44 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
               {respondingTermination && terminationDecision === "terminate" ? "…" : "⛔ ยุติ + Settle"}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* M4: Terminated after risk (pre-clean) — settle-confirm ค่าบริการ ตาม offer */}
+      {job.status === "terminated_after_risk" && (
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="text-lg">🛑</span>
+            <div>
+              <p className="text-sm font-semibold text-rose-800">ลูกค้ายุติงาน — Settle ค่าบริการ</p>
+              <p className="text-xs text-rose-600 mt-0.5">
+                ยุติหลังตรวจพบความเสี่ยง (M4) — ลูกค้าเลือกไม่ล้างต่อ ก่อนเริ่มล้าง · รับ settle ค่าบริการตามข้อเสนอ
+              </p>
+            </div>
+          </div>
+          {job.offerData && (
+            <div className="bg-white rounded-xl px-3 py-2.5 space-y-1 text-sm border border-rose-100">
+              <p className="text-xs font-semibold text-rose-700 uppercase tracking-wider">settle ตาม offer</p>
+              <div className="flex justify-between text-gray-700">
+                <span>ค่าบริการ</span>
+                <span className="font-bold text-rose-700">{job.totalPrice.toLocaleString()} pts</span>
+              </div>
+              {job.offerData.travelFee.required && (
+                <div className="flex justify-between text-gray-700">
+                  <span>ค่าเดินทาง</span>
+                  <span className="font-medium">{job.offerData.travelFee.amount?.toLocaleString()} pts</span>
+                </div>
+              )}
+              <p className="text-xs text-gray-400">คิดค่าบริการตามเงื่อนไขข้อเสนอ — งานยังไม่เริ่มล้าง</p>
+            </div>
+          )}
+          {riskSettleError && <p className="text-xs text-red-500">{riskSettleError}</p>}
+          <button
+            onClick={handleConfirmRiskSettle}
+            disabled={confirmingRiskSettle}
+            className="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
+            {confirmingRiskSettle ? "กำลังดำเนินการ…" : "✅ ยืนยันรับ Settle"}
+          </button>
         </div>
       )}
 

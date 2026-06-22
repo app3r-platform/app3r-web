@@ -466,7 +466,15 @@ export default function MaintainInspectPage({
               ⏸ รอการตัดสิน — กลับหน้างาน
             </button>
 
-            {/* Outcome 3: convert to repair (D-Maintain-2) */}
+            {/* Outcome 3: M4 — ลูกค้ายุติงานหลังตรวจพบความเสี่ยง → settle ค่าบริการ */}
+            <button
+              onClick={() => router.replace(`/jobs/${id}?from=maintain&terminated=after_risk&settle=1`)}
+              className="w-full bg-rose-900/30 hover:bg-rose-900/50 border border-rose-700/60 text-rose-300 font-medium py-3 rounded-xl transition-colors text-sm"
+            >
+              🛑 ลูกค้ายุติงาน — Settle ค่าบริการ (M4)
+            </button>
+
+            {/* Outcome 4: convert to repair (D-Maintain-2) */}
             <button
               onClick={() => setShowRepairConfirm(true)}
               className="w-full bg-red-900/20 hover:bg-red-900/40 border border-red-800/40 text-red-400 font-medium py-3 rounded-xl transition-colors text-sm"
