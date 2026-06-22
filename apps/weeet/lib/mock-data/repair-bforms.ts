@@ -36,6 +36,18 @@ export const SEED_B2_PRICE_BREAKDOWN: B2PriceBreakdown = {
   total: 2700,
 };
 
+// ─── REP-C08: awaiting_parts per-option price (WeeeR ตั้งราคา · WeeeT/WeeeU เห็น) ──
+// "WeeeT ถามลูกค้าหน้างาน: (a) ยกเครื่องกลับร้าน หรือ (b) ช่างกลับมาใหม่+ค่าเดินทาง
+//  → WeeeR คำนวณราคาตามทางเลือก". ราคามาจาก WeeeR (mock seed). ช่างแสดงให้ลูกค้าเลือก.
+// mirror ของ weeer MOCK_AWAITING_PARTS_PRICING (import ข้ามแอปไม่ได้ — Lesson #34).
+export const SEED_AWAITING_PARTS_PRICING: Record<
+  "take_back" | "return_visit",
+  { price: number; note: string }
+> = {
+  take_back: { price: 0, note: "ไม่มีค่าเดินทางเพิ่ม — ช่างยกเครื่องกลับร้านเอง" },
+  return_visit: { price: 350, note: "ค่าเดินทางกลับมา 250 + ค่าแรงเดินทาง 100" },
+};
+
 // B3.5 — part cards mock (auto-load จาก B2 + check WeeeR inventory)
 export const SEED_SMARTPICKER_PARTS: SmartPickerPartCard[] = [
   {

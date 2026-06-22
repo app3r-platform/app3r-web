@@ -44,6 +44,86 @@ export interface RepairJob {
   };
 }
 
+// ─── REP-C07: B2.5 PackageOffer (WeeeR → WeeeU) — SoT Gen 55/56 ───────────────
+// "WeeeR จัด 2 packages: A อะไหล่แท้ (รับประกัน 90 วัน, badge แนะนำ) / B มือสอง (รับประกัน 30 วัน)"
+// แต่ละ package รวม: ค่าอะไหล่ + ค่าแรง + ค่าเดินทาง (ตามทางเลือก a/b) + เวลาเสร็จ + รับประกัน
+// NOT a bid-list — 2 packages พร้อมกัน, WeeeU เลือก 1 หรือ "ไม่ตกลงราคา → ยุติ".
+// Mock-level only — settle/escrow = backend (deferred).
+export type PackageKind = "genuine" | "used"; // A=อะไหล่แท้ / B=อะไหล่มือสอง
+
+// ค่ารับประกันมาตรฐานตาม SoT: แท้ 90 วัน / มือสอง 30 วัน
+export const PACKAGE_WARRANTY_DAYS: Record<PackageKind, number> = {
+  genuine: 90,
+  used: 30,
+};
+
+export const PACKAGE_KIND_META: Record<
+  PackageKind,
+  { label: string; partsLabel: string; recommended: boolean }
+> = {
+  genuine: { label: "Package A", partsLabel: "อะไหล่แท้ (มือหนึ่ง)", recommended: true },
+  used: { label: "Package B", partsLabel: "อะไหล่มือสอง", recommended: false },
+};
+
+// 1 รายการอะไหล่ใน package (WeeeR breakdown — WeeeU เห็นได้)
+export interface PackagePartLine {
+  name: string;
+  qty: number;
+  unit: string;
+  price: number;          // ราคารวม (qty × unit price) ใน package นั้น
+  genuine_only?: boolean; // part ที่ไม่มีเวอร์ชั่นมือสอง (เช่น น้ำยา/สารเคมี) → footnote *
+}
+
+export interface RepairPackage {
+  kind: PackageKind;
+  parts: PackagePartLine[];
+  parts_cost: number;     // รวมค่าอะไหล่
+  labor_cost: number;     // ค่าแรง
+  travel_cost: number;    // ค่าเดินทาง (ตามทางเลือก awaiting_parts a/b)
+  total: number;          // รวมทั้งสิ้น
+  warranty_days: number;  // 90 (แท้) / 30 (มือสอง)
+  duration_days: number;  // เวลาเสร็จ (ประมาณ)
+}
+
+export interface PackageOffer {
+  job_id: string;
+  appliance_name: string;
+  packages: RepairPackage[]; // เสมอ 2: [genuine, used]
+  note_to_customer?: string; // หมายเหตุถึงลูกค้า
+  deposit_amount?: number;   // มัดจำเดิม (เตือนตอน WeeeU ยุติ)
+  travel_fee_on_cancel?: number; // ค่าเดินทางตาม offer เดิม (เตือนตอนยุติ)
+  status: "draft" | "sent";
+}
+
+// ─── REP-C08: awaiting_parts binary choice + per-option price — SoT Gen 55 ─────
+// "WeeeT ถามลูกค้าหน้างาน: (a) ยกเครื่องกลับร้าน หรือ (b) ช่างกลับมาใหม่+ค่าเดินทาง
+//  → WeeeR คำนวณราคาตามทางเลือก". WeeeR sets price/option · WeeeT/WeeeU see+choose.
+// ค่าเดียวกันต้อง mirror ใน weeet/weeeu (import ข้ามแอปไม่ได้ — Lesson #34).
+export type AwaitingPartsOption = "take_back" | "return_visit";
+
+export const AWAITING_PARTS_OPTION_META: Record<
+  AwaitingPartsOption,
+  { label: string; desc: string; icon: string }
+> = {
+  take_back: {
+    label: "ยกเครื่องกลับร้าน",
+    desc: "ช่างยกเครื่องไปซ่อมที่ร้าน แล้วนำกลับมาคืนเมื่อเสร็จ",
+    icon: "🏠",
+  },
+  return_visit: {
+    label: "ช่างกลับมาใหม่ + ค่าเดินทาง",
+    desc: "รออะไหล่พร้อม ช่างเดินทางกลับมาซ่อมที่บ้านอีกครั้ง",
+    icon: "🚐",
+  },
+};
+
+// ราคาต่อทางเลือก — WeeeR ตั้งราคา (mock seed)
+export interface AwaitingPartsPricing {
+  job_id: string;
+  options: Record<AwaitingPartsOption, { price: number; note?: string }>;
+  selected?: AwaitingPartsOption; // ทางเลือกที่ลูกค้าเลือก (mock)
+}
+
 export interface RepairAnnouncement {
   id: string;
   weeeu_id: string;

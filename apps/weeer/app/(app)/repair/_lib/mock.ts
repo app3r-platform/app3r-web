@@ -12,7 +12,10 @@ import type {
   WeeeTStaff,
   ParcelJob,
   ParcelQueue,
+  PackageOffer,
+  AwaitingPartsPricing,
 } from "./types";
+import { PACKAGE_WARRANTY_DAYS } from "./types";
 
 const MOCK_JOB: RepairJob = {
   id: "mock-rjob-001",
@@ -166,4 +169,55 @@ export const MOCK_PARCEL_QUEUE: ParcelQueue = {
   in_transit_in: 0,
   at_shop: 0,
   ready_to_ship: 0,
+};
+
+// ─── REP-C07: B2.5 PackageOffer seed (auto-load จาก B3.5 SmartPicker) ──────────
+// WeeeR ใช้ part list จากช่าง (B3.5) → จัด 2 packages (แท้/มือสอง) ก่อนส่ง WeeeU.
+export const MOCK_PACKAGE_OFFER: PackageOffer = {
+  job_id: "mock-rjob-001",
+  appliance_name: "แอร์ Daikin 12000 BTU",
+  deposit_amount: 200,
+  travel_fee_on_cancel: 100,
+  status: "draft",
+  note_to_customer: "",
+  packages: [
+    {
+      kind: "genuine",
+      parts: [
+        { name: "คาปาซิเตอร์คอมเพรสเซอร์ 35µF", qty: 1, unit: "ตัว", price: 450 },
+        { name: "มอเตอร์พัดลมคอยล์เย็น", qty: 1, unit: "ตัว", price: 1200 },
+        { name: "น้ำยาแอร์ R32 (เติม)", qty: 1, unit: "ชุด", price: 800, genuine_only: true },
+      ],
+      parts_cost: 2450,
+      labor_cost: 600,
+      travel_cost: 250,
+      total: 3300,
+      warranty_days: PACKAGE_WARRANTY_DAYS.genuine, // 90
+      duration_days: 1,
+    },
+    {
+      kind: "used",
+      parts: [
+        { name: "คาปาซิเตอร์คอมเพรสเซอร์ 35µF (มือสอง)", qty: 1, unit: "ตัว", price: 220 },
+        { name: "มอเตอร์พัดลมคอยล์เย็น (มือสอง)", qty: 1, unit: "ตัว", price: 650 },
+        { name: "น้ำยาแอร์ R32 (เติม)", qty: 1, unit: "ชุด", price: 800, genuine_only: true },
+      ],
+      parts_cost: 1670,
+      labor_cost: 600,
+      travel_cost: 250,
+      total: 2520,
+      warranty_days: PACKAGE_WARRANTY_DAYS.used, // 30
+      duration_days: 2,
+    },
+  ],
+};
+
+// ─── REP-C08: awaiting_parts per-option pricing seed (WeeeR ตั้งราคา) ──────────
+// take_back = ยกกลับร้าน (ไม่มีค่าเดินทางเพิ่ม) / return_visit = ช่างกลับมา (+ค่าเดินทาง+แรง)
+export const MOCK_AWAITING_PARTS_PRICING: AwaitingPartsPricing = {
+  job_id: "mock-rjob-001",
+  options: {
+    take_back: { price: 0, note: "ไม่มีค่าเดินทางเพิ่ม — ช่างยกเครื่องกลับร้านเอง" },
+    return_visit: { price: 350, note: "ค่าเดินทางกลับมา 250 + ค่าแรงเดินทาง 100" },
+  },
 };
