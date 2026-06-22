@@ -16,6 +16,7 @@ import {
   updateListingStock, partsSync, usePartsSync,
 } from "../../../../../lib/utils/parts-sync";
 import { escrowRelease, escrowRefund } from "../../../../../lib/utils/parts-escrow";
+import { useModalLock } from "../../layout";
 
 // ── D-6: Inventory Import Prompt component ─────────────────────────────────────
 // แสดงหลังออเดอร์ถึง "received" — ถามผู้ขายว่าต้องการเพิ่มอะไหล่เข้าสต็อกไหม
@@ -105,6 +106,9 @@ export default function MyOrderDetailPage({
   const [cancelReason, setCancelReason] = useState("");
   const [cancelling, setCancelling] = useState(false);
   const [cancelDone, setCancelDone] = useState(false);
+
+  // P12 (Gen78): ล็อก ShopIdSwitcher ขณะ modal เปิด (เรียกก่อน early-return เสมอ)
+  useModalLock(showReceiveModal || showCancelModal);
 
   const reload = () => {
     const sid = getCurrentShopId();

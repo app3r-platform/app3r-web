@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PART_LISTINGS_MOCK } from "../_lib/mock-data";
 import type { PartListing } from "../_lib/types";
+import { isListingActive } from "../_lib/types";
 import { PartCard } from "../../../../components/parts/PartCard";
 import { PartSearchBar } from "../../../../components/parts/PartSearchBar";
 import { PartFilterPanel, defaultFilters, type PartFilters } from "../../../../components/parts/PartFilterPanel";
@@ -58,6 +59,8 @@ export default function MarketplacePage() {
   // Client-side filter + search
   const filtered = useMemo(() => {
     return listings.filter((l) => {
+      // P02 (Gen78): ซ่อนรายการที่ผู้ขายปิดขายชั่วคราว (paused) ออกจากตลาด
+      if (!isListingActive(l)) return false;
       if (search && !l.name.toLowerCase().includes(search.toLowerCase()) && !l.brand.toLowerCase().includes(search.toLowerCase())) return false;
       if (filters.category && l.category !== filters.category) return false;
       if (filters.condition && l.condition !== filters.condition) return false;

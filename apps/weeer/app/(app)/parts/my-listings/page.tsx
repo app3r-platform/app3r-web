@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PART_LISTINGS_MOCK, PART_ORDERS_MOCK } from "../_lib/mock-data";
 import type { PartListing, PartOrder } from "../_lib/types";
+import { isListingActive } from "../_lib/types";
 import { PartCard } from "../../../../components/parts/PartCard";
 import { PartListingForm } from "../../../../components/parts/PartListingForm";
 import { OrderCard } from "../../../../components/parts/OrderCard";
@@ -21,6 +22,7 @@ import {
 import { escrowRefund } from "../../../../lib/utils/parts-escrow";
 import { SHOPS_MOCK } from "../../../../lib/mock-data/shops";
 import { MockAnnoOrigin, MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
+import { useModalLock } from "../layout";
 
 type TabType = "listings" | "incoming";
 
@@ -34,6 +36,9 @@ export default function MyListingsPage() {
   const [confirmOrder, setConfirmOrder] = useState<PartOrder | null>(null);
   const [shipOrder, setShipOrder] = useState<PartOrder | null>(null);
   const [cancelOrder, setCancelOrder] = useState<PartOrder | null>(null);
+
+  // P12 (Gen78): ล็อก ShopIdSwitcher ขณะ modal ใดๆ เปิดอยู่
+  useModalLock(Boolean(showForm || confirmOrder || shipOrder || cancelOrder));
 
   const reload = () => {
     const id = getCurrentShopId();
@@ -171,7 +176,13 @@ export default function MyListingsPage() {
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {listings.map((l) => (
-                  <div key={l.id} onClick={() => router.push(`/parts/my-listings/${l.id}`)} className="cursor-pointer">
+                  <div key={l.id} onClick={() => router.push(`/parts/my-listings/${l.id}`)} className="cursor-pointer relative">
+                    {/* P02 (Gen78): ป้ายปิดขายชั่วคราว */}
+                    {!isListingActive(l) && (
+                      <span className="absolute top-1 left-1 z-10 bg-gray-700/90 text-white text-[10px] font-medium px-1.5 py-0.5 rounded-full">
+                        ⏸️ ปิดขาย
+                      </span>
+                    )}
                     <PartCard listing={l} currentShopId={shopId} />
                   </div>
                 ))}

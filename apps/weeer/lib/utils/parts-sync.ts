@@ -14,7 +14,7 @@
 //   - Migration script: migratePartsToBackend() — เรียกครั้งเดียวตอน flag เปิด
 // ────────────────────────────────────────────────────────────────────────────
 
-import type { PartListing, PartOrder } from "../../app/(app)/parts/_lib/types";
+import type { PartListing, PartOrder, ListingStatus } from "../../app/(app)/parts/_lib/types";
 
 // ── localStorage Keys ─────────────────────────────────────────────────────────
 export const PARTS_STORAGE_KEYS = {
@@ -120,6 +120,20 @@ export function updateListingStock(partId: string, delta: number): void {
   const item = all.find((l) => l.id === partId);
   if (item) {
     item.stock = Math.max(0, item.stock + delta);
+    saveListings(all);
+  }
+}
+
+/**
+ * P02 (Gen78): เปิด/ปิดขาย listing — set status active | paused
+ * paused → ซ่อนจากตลาด (/parts/marketplace filter) · กดเปิดขายอีกได้
+ * @migrate-to-backend-d2 → getAdapter().parts.updateListingStatus()
+ */
+export function setListingStatus(partId: string, status: ListingStatus): void {
+  const all = getListings();
+  const item = all.find((l) => l.id === partId);
+  if (item) {
+    item.status = status;
     saveListings(all);
   }
 }

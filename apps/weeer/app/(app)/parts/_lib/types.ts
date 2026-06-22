@@ -92,6 +92,11 @@ export type PartCategory =
   | "consumable"    // สิ้นเปลือง
   | "tool";         // เครื่องมือ
 
+// ── P02 (burn-down Gen78): listing lifecycle status ──────────────────────────
+// "active"  = ลงขายอยู่ (default — แสดงในตลาด)
+// "paused"  = ปิดขายชั่วคราว (ซ่อนจากตลาด · ผู้ขายกดเปิดขายอีกได้)
+export type ListingStatus = "active" | "paused";
+
 export interface PartListing {
   id: string;
   shopId: string;
@@ -104,6 +109,8 @@ export interface PartListing {
   stock: number;
   images: string[];           // Lorem Picsum URLs
   description?: string;
+  // P02 (Gen78): undefined = ถือเป็น "active" (backward-compat กับ seed/legacy data)
+  status?: ListingStatus;
   createdAt: string;
   // ── W-R1 Wave 2 (Ruling 2 · currency LOCKED): catalog reference fields ───────
   unitPriceThb?: number;      // ราคาอ้างอิงจาก catalog (THB) — แยกจาก pricePoints (Gold/D81)
@@ -215,3 +222,19 @@ export const DELIVERY_LABEL: Record<DeliveryMethod, string> = {
   self_pickup: "รับเอง",
   courier:     "ส่งขนส่ง",
 };
+
+// ── P02 (Gen78): listing status display + helper ─────────────────────────────
+export const LISTING_STATUS_LABEL: Record<ListingStatus, string> = {
+  active: "ลงขายอยู่",
+  paused: "ปิดขายชั่วคราว",
+};
+
+export const LISTING_STATUS_COLOR: Record<ListingStatus, string> = {
+  active: "bg-emerald-100 text-emerald-700",
+  paused: "bg-gray-200 text-gray-600",
+};
+
+/** true เมื่อ listing แสดงในตลาดได้ (status active หรือ undefined = legacy) */
+export function isListingActive(listing: Pick<PartListing, "status">): boolean {
+  return listing.status !== "paused";
+}
