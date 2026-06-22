@@ -33,9 +33,27 @@ const MOCK_ITEMS: ScrapItem[] = [
     photos: [], price: 0, isFree: true, status: "available",
     createdAt: "2026-05-18", updatedAt: "2026-05-22",
   },
+  // S5 (R-S3): mock expired entry — แสดง greyed/disabled + banner "หมดอายุ/ปิดแล้ว"
+  {
+    id: "SC004", sellerId: "U104", sellerType: "WeeeU",
+    applianceName: "ไมโครเวฟ Sharp R-219", applianceBrand: "Sharp", applianceType: "microwave",
+    conditionGrade: "grade_C", workingParts: ["จานหมุน"],
+    description: "ไมโครเวฟเก่า ประกาศหมดเวลาแล้ว ไม่มีผู้รับซื้อ",
+    photos: [], price: 150, isFree: false, status: "expired",
+    expiresAt: "2026-06-10T23:59:59+07:00",
+    createdAt: "2026-05-10", updatedAt: "2026-06-10",
+  },
 ];
 
 const GRADES = ["", "grade_A", "grade_B", "grade_C"] as const;
+
+// S5 (R-S3): passive expired check — status="expired" หรือ expiresAt ผ่านมาแล้ว
+// NOTE: ไม่ตั้ง timer/auto-remove (active-expire = backend defer) — เช็คครั้งเดียวตอน render
+function isExpired(item: ScrapItem): boolean {
+  if (item.status === "expired") return true;
+  if (item.expiresAt) return new Date(item.expiresAt).getTime() < Date.now();
+  return false;
+}
 
 export default function ScrapBrowsePage() {
   const [items, setItems] = useState<ScrapItem[]>([]);
@@ -101,32 +119,65 @@ export default function ScrapBrowsePage() {
         <div className="text-center py-12 text-gray-400 text-sm">ไม่พบซากที่วางขาย</div>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {items.map(item => (
-            <Link key={item.id} href={`/scrap/browse/${item.id}`}
-              className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-sm transition-shadow">
-              {item.photos[0] ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={item.photos[0]} alt={item.description} className="w-full h-32 object-cover" />
-              ) : (
-                <div className="w-full h-32 bg-gray-50 flex items-center justify-center text-4xl text-gray-300">♻️</div>
-              )}
-              <div className="p-3">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${CONDITION_GRADE_COLOR[item.conditionGrade]}`}>
-                    {CONDITION_GRADE_LABEL[item.conditionGrade]}
-                  </span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${SCRAP_ITEM_STATUS_COLOR[item.status]}`}>
-                    {SCRAP_ITEM_STATUS_LABEL[item.status]}
-                  </span>
+          {items.map(item => {
+            const expired = isExpired(item);
+
+            // S5: card body (shared) — greyed + grayscale เมื่อหมดอายุ
+            const body = (
+              <>
+                <div className="relative">
+                  {item.photos[0] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={item.photos[0]} alt={item.description}
+                      className={`w-full h-32 object-cover ${expired ? "grayscale opacity-60" : ""}`} />
+                  ) : (
+                    <div className={`w-full h-32 bg-gray-50 flex items-center justify-center text-4xl text-gray-300 ${expired ? "grayscale" : ""}`}>♻️</div>
+                  )}
+                  {/* S5: expired banner overlay */}
+                  {expired && (
+                    <div className="absolute inset-0 bg-gray-900/30 flex items-center justify-center">
+                      <span className="bg-gray-700/90 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                        ⏰ ประกาศหมดอายุ/ปิดแล้ว
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm font-semibold text-gray-800 truncate">{item.description}</p>
-                {item.workingParts.length > 0 && (
-                  <p className="text-xs text-gray-400 truncate mt-0.5">ชิ้นส่วนใช้ได้: {item.workingParts.join(", ")}</p>
-                )}
-                <p className="text-lg font-bold text-[#D63B12] mt-1">{item.price.toLocaleString()} pts</p>
-              </div>
-            </Link>
-          ))}
+                <div className="p-3">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${CONDITION_GRADE_COLOR[item.conditionGrade]}`}>
+                      {CONDITION_GRADE_LABEL[item.conditionGrade]}
+                    </span>
+                    <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${SCRAP_ITEM_STATUS_COLOR[expired ? "expired" : item.status]}`}>
+                      {SCRAP_ITEM_STATUS_LABEL[expired ? "expired" : item.status]}
+                    </span>
+                  </div>
+                  <p className={`text-sm font-semibold truncate ${expired ? "text-gray-400" : "text-gray-800"}`}>{item.description}</p>
+                  {item.workingParts.length > 0 && (
+                    <p className="text-xs text-gray-400 truncate mt-0.5">ชิ้นส่วนใช้ได้: {item.workingParts.join(", ")}</p>
+                  )}
+                  <p className={`text-lg font-bold mt-1 ${expired ? "text-gray-400 line-through" : "text-[#D63B12]"}`}>{item.price.toLocaleString()} pts</p>
+                </div>
+              </>
+            );
+
+            // S5: expired → non-clickable disabled card (no navigation)
+            if (expired) {
+              return (
+                <div key={item.id}
+                  aria-disabled="true"
+                  className="bg-gray-50 border border-gray-100 rounded-xl overflow-hidden cursor-not-allowed select-none">
+                  {body}
+                </div>
+              );
+            }
+
+            return (
+              <Link key={item.id} href={`/scrap/browse/${item.id}`}
+                className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-sm transition-shadow">
+                {body}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

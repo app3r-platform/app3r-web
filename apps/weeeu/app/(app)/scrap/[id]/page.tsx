@@ -50,7 +50,7 @@ interface ScrapListingDetail {
   grade: "grade_A" | "grade_B" | "grade_C";
   listingType: "sell" | "dispose";
   price: number;
-  status: "available" | "pending_offer" | "accepted" | "in_progress" | "completed" | "expired" | "cancelled";
+  status: "available" | "pending_offer" | "accepted" | "in_progress" | "mismatch_proposed" | "completed" | "expired" | "cancelled";
   createdAt: string;
   sourceRepairJobId?: string;
   offers: ScrapOffer[];
@@ -66,7 +66,7 @@ function getMockListing(id: string): ScrapListingDetail {
     grade: "grade_C",
     listingType: "sell",
     price: 350,
-    status: "in_progress",  // เปลี่ยนได้ตาม mock scenario
+    status: "mismatch_proposed",  // S8 demo — เปลี่ยนได้ตาม mock scenario (in_progress / mismatch_proposed / ...)
     createdAt: "2026-05-18",
     sourceRepairJobId: "REP-0042",
     offers: [
@@ -142,6 +142,9 @@ function ScrapListingDetailContent({
   const [declineOfferId, setDeclineOfferId] = useState<string | null>(null);
   const [declineReason, setDeclineReason] = useState("");
 
+  // S8 — Mismatch price-adjust response
+  const [mismatchDecision, setMismatchDecision] = useState<"accepted" | "rejected" | null>(null);
+
   // S9 — No-show response
   const [noShowAction, setNoShowAction] = useState<"reschedule" | "cancel" | null>(null);
 
@@ -193,6 +196,25 @@ function ScrapListingDetailContent({
       setSubmitting(false);
       alert("📅 ส่งคำขอนัดใหม่แล้ว — ช่างจะติดต่อกลับ");
     }, 700);
+  }
+
+  // S8 — ยอมรับราคาใหม่ → ดำเนินการต่อ (settle ตาม proposed price ที่ปรับแล้ว)
+  function handleAcceptMismatch() {
+    setSubmitting(true);
+    // TODO(backend): POST /scrap/{id}/mismatch/accept → settle ตาม proposedPrice (WeeeR จ่าย Gold ให้ WeeeU)
+    setTimeout(() => {
+      setListing(prev => ({ ...prev, status: "in_progress" }));
+      setMismatchDecision("accepted");
+      setSubmitting(false);
+    }, 700);
+  }
+
+  // S8 — ปฏิเสธราคาใหม่ → ยุติ + settle ตาม offer เดิม (offer = SoT)
+  function handleRejectMismatch() {
+    setMismatchDecision("rejected");
+    // route เข้า cancel/settle flow เดิม — settle ตาม "ราคา offer เดิม" ไม่ใช่ proposedPrice
+    setCancelReason("ปฏิเสธข้อเสนอปรับราคาของช่าง — ยุติและ settle ตามข้อเสนอเดิม");
+    setShowCancelDialog(true);
   }
 
   // S10 — ยกเลิก
@@ -290,6 +312,65 @@ function ScrapListingDetailContent({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* S8 — Mismatch price-adjust proposal */}
+      {listing.mismatchReport && listing.status === "mismatch_proposed" && (
+        <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="text-amber-500 text-xl">⚠️</span>
+            <div>
+              <p className="text-sm font-bold text-amber-800">ช่างพบว่าซากไม่ตรงประกาศ — เสนอปรับราคา</p>
+              <p className="text-xs text-amber-600 mt-0.5">
+                {listing.mismatchReport.weeeTName} · {new Date(listing.mismatchReport.reportedAt).toLocaleString("th-TH")}
+              </p>
+              <p className="text-xs text-amber-700 mt-1">{listing.mismatchReport.reason}</p>
+            </div>
+          </div>
+
+          {/* ราคาเดิม vs ราคาใหม่ */}
+          <div className="flex items-center gap-3 bg-white rounded-xl px-3 py-2.5 border border-amber-100">
+            <div className="flex-1">
+              <p className="text-xs text-gray-400">ราคาเดิม (ตามข้อเสนอ)</p>
+              <p className="font-mono text-sm text-gray-500 line-through">{listing.mismatchReport.originalPrice} พอยต์ทอง</p>
+            </div>
+            <span className="text-amber-400 text-lg">→</span>
+            <div className="flex-1 text-right">
+              <p className="text-xs text-amber-600">ราคาใหม่ที่ช่างเสนอ</p>
+              <p className="font-mono font-bold text-amber-700 text-lg">{listing.mismatchReport.proposedPrice} พอยต์ทอง</p>
+            </div>
+          </div>
+
+          <p className="text-xs text-amber-700 bg-amber-100 rounded-xl px-3 py-2">
+            ⚠️ หากยอมรับ คุณจะได้รับเงินตามราคาใหม่ {listing.mismatchReport.proposedPrice} พอยต์ทอง ผ่านระบบพักเงินกลาง (Escrow) <EscrowInfoIcon /> · หากปฏิเสธ ธุรกรรมจะยุติและ settle ตามข้อเสนอเดิม {listing.mismatchReport.originalPrice} พอยต์ทอง
+          </p>
+
+          <div className="flex gap-3">
+            <button
+              onClick={handleAcceptMismatch}
+              disabled={submitting}
+              className="flex-1 py-2.5 bg-[#0DC36C] hover:bg-green-600 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
+            >
+              {submitting ? "กำลังส่ง..." : "✅ ยอมรับราคาใหม่ — ดำเนินการต่อ"}
+            </button>
+            <button
+              onClick={handleRejectMismatch}
+              disabled={submitting}
+              className="flex-1 py-2.5 bg-white text-red-600 border-2 border-red-200 text-sm font-medium rounded-xl hover:bg-red-50 transition-colors disabled:opacity-50"
+            >
+              ❌ ปฏิเสธ — ยุติ/settle ตาม offer เดิม
+            </button>
+          </div>
+          {/* §6 Nav annotation */}
+          <p className="mock-anno mock-anno-nav text-[10px] text-blue-500 font-mono">→ accept: settle ตามราคาใหม่ · reject: เข้า cancel/settle flow เดิม (offer = SoT)</p>
+        </div>
+      )}
+
+      {/* S8 — ยอมรับแล้ว → ดำเนินการต่อ */}
+      {mismatchDecision === "accepted" && (
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-3 text-center">
+          <p className="text-sm text-green-700">✅ ยอมรับราคาใหม่แล้ว — ดำเนินการต่อ ช่างจะดำเนินการรับซากตามราคาที่ปรับ</p>
         </div>
       )}
 

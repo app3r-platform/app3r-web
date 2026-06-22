@@ -3,7 +3,7 @@
 // TD-04 Dev Auth: apiFetch attaches Bearer token via getDevTestToken()
 
 import { getDevTestToken } from "../../../../lib/dev-auth";
-import type { ScrapItem, ScrapJob, ScrapJobOption, EWasteCertificate } from "./types";
+import type { ScrapItem, ScrapJob, ScrapJobOption, ScrapWithdrawReason, EWasteCertificate } from "./types";
 // RC-1: Mock fallback data (dev/offline)
 import { MOCK_SCRAP_ITEMS, MOCK_SCRAP_JOBS, MOCK_SCRAP_DASHBOARD, MOCK_EWASTE_CERTIFICATE } from "./mock";
 
@@ -110,5 +110,54 @@ export const scrapApi = {
   async getCertificate(jobId: string): Promise<EWasteCertificate> {
     try { return await apiFetch(`/scrap/jobs/${jobId}/certificate`); }
     catch (err) { console.warn("[mock fallback] scrap.getCertificate", err); return { ...MOCK_EWASTE_CERTIFICATE, scrapJobId: jobId }; }
+  },
+
+  // ── S7 (R-S4): WeeeR ถอนงาน (mirror Maintain M6) ─────────────────────
+  // POST /scrap/jobs/{id}/withdraw  body: { reason }
+  // escrow REVERSE: WeeeR ถอน → escrow ที่ WeeeR ล็อกไว้ unlock คืน WeeeU
+  // Backend Phase D: คำนวณ fee settle ตาม reason. Mockup → คืน job status=withdrawn
+  async withdrawJob(id: string, reason: ScrapWithdrawReason): Promise<ScrapJob> {
+    try {
+      return await apiFetch(`/scrap/jobs/${id}/withdraw`, {
+        method: "POST",
+        body: JSON.stringify({ reason }),
+      });
+    } catch (err) {
+      // DEV fallback (mockup): สะท้อนผลแบบ optimistic — Backend จริงจะ settle escrow R→U
+      console.warn("[mock] scrap.withdrawJob", err);
+      const base = MOCK_SCRAP_JOBS.find(j => j.id === id) ?? MOCK_SCRAP_JOBS[0];
+      return {
+        ...base,
+        id,
+        status: "withdrawn",
+        withdrawReason: reason,
+        escrowStatus: "refunded",   // escrow R→U unlock (REVERSE direction)
+        updatedAt: new Date().toISOString(),
+      };
+    }
+  },
+
+  // ── S11(ii) (R-S6): เปิดข้อพิพาทจาก scrap escrow-stuck — service_type=B ──
+  // POST /dispute/initiate  body: { service_type:"B", scrapJobId, reason }
+  // (scrap มี dispute-initiate ของตัวเอง · repair/resell/parts ต่างแยก route)
+  async initiateDispute(id: string, reason: string): Promise<ScrapJob> {
+    try {
+      return await apiFetch(`/scrap/jobs/${id}/dispute`, {
+        method: "POST",
+        body: JSON.stringify({ service_type: "B", reason }),
+      });
+    } catch (err) {
+      // DEV fallback (mockup): set disputed state — escrow ค้างจน Admin ตัดสิน
+      console.warn("[mock] scrap.initiateDispute", err);
+      const base = MOCK_SCRAP_JOBS.find(j => j.id === id) ?? MOCK_SCRAP_JOBS[0];
+      return {
+        ...base,
+        id,
+        status: "disputed",
+        disputeReason: reason,
+        disputeServiceType: "B",
+        updatedAt: new Date().toISOString(),
+      };
+    }
   },
 };

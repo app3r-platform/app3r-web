@@ -72,13 +72,13 @@ const MOCK_JOBS: ScrapJob[] = [
   {
     id: "SJ005", scrapItemId: "SC005", buyerId: "S1", buyerType: "WeeeR",
     decision: "resell_as_scrap",
-    status: "cancelled",
+    status: "withdrawn",
     createdAt: "2026-05-16", updatedAt: "2026-05-18",
     scrapItemDescription: "Panasonic เครื่องซักผ้า NA-F70LG1",
     conditionGrade: "grade_A",
     offerPrice: 950, isFree: false,
     escrowStatus: "refunded",
-    withdrawReason: "ราคาสูงเกินไป ไม่คุ้มค่าซ่อม",  // S7
+    withdrawReason: "shop_fault",  // S7
   },
   {
     id: "SJ006", scrapItemId: "SC005", buyerId: "S1", buyerType: "WeeeR",
