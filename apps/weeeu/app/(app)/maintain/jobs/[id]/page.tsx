@@ -15,6 +15,7 @@ const STATUS_LABEL: Record<MaintainJob["status"], string> = {
   departed:        "ช่างออกเดินทาง",
   arrived:         "ช่างถึงแล้ว",
   in_progress:     "กำลังล้าง",
+  risk_reported:   "ช่างพบความเสี่ยง",
   terminated:      "ยุติกลางคัน",
   completed:       "เสร็จแล้ว",
   cancelled:       "ยกเลิก",
@@ -30,6 +31,7 @@ const STATUS_COLOR: Record<MaintainJob["status"], string> = {
   departed:        "bg-amber-100 text-amber-700",
   arrived:         "bg-amber-100 text-amber-700",
   in_progress:     "bg-weeeu-surface text-weeeu-dark",
+  risk_reported:   "bg-amber-100 text-amber-800",
   terminated:      "bg-gray-100 text-gray-600",
   completed:       "bg-green-100 text-green-700",
   cancelled:       "bg-gray-100 text-gray-500",
@@ -116,6 +118,9 @@ export default function MaintainJobDetailPage() {
   // M6 — WeeeR ถอนงาน action state
   const [withdrawalSubmitting, setWithdrawalSubmitting] = useState<"reroute" | "dispute" | null>(null);
 
+  // M3 — ช่างพบความเสี่ยง: WeeeU รับความเสี่ยง action state
+  const [acceptingRisk, setAcceptingRisk] = useState(false);
+
   useEffect(() => {
     apiFetch(`/api/v1/maintain/jobs/${id}/`)
       .then(r => r.ok ? r.json() : null)
@@ -181,6 +186,22 @@ export default function MaintainJobDetailPage() {
     }
   };
 
+  // M3 — ช่างพบความเสี่ยง: WeeeU เลือก "รับความเสี่ยง" → ดำเนินการล้างต่อ
+  const handleAcceptRisk = async () => {
+    setAcceptingRisk(true);
+    setError("");
+    try {
+      // Production: POST /api/v1/maintain/jobs/${id}/accept-risk → status = in_progress (ช่างล้างต่อ)
+      const res = await apiFetch(`/api/v1/maintain/jobs/${id}/accept-risk/`, { method: "POST" });
+      if (!res.ok) throw new Error();
+      setJob(j => j ? { ...j, status: "in_progress" } : j);
+    } catch {
+      setError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setAcceptingRisk(false);
+    }
+  };
+
   const currentStepIdx = job ? TIMELINE_STEPS.findIndex(s => s.status === job.status) : -1;
 
   if (loading) return <div className="text-center py-16 text-gray-400">กำลังโหลด...</div>;
@@ -233,7 +254,7 @@ export default function MaintainJobDetailPage() {
             </p>
           </div>
           <Link
-            href={`/repair/new`}
+            href={`/repair/new?from=maintain&jobId=${id}`}
             className="block w-full bg-weeeu-primary hover:bg-weeeu-dark text-white font-semibold py-3 rounded-xl text-sm text-center transition-colors"
           >
             🔧 ประกาศซ่อม — สร้างงานซ่อมใหม่
@@ -306,6 +327,36 @@ export default function MaintainJobDetailPage() {
                 : "⚖️ โต้แย้ง → Admin"}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Action banner — M3: risk_reported → WeeeU รับความเสี่ยง / ดำเนินการล้างต่อ */}
+      {job.status === "risk_reported" && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-semibold text-amber-800">⚠️ ช่างพบความเสี่ยง</p>
+            <p className="text-xs text-amber-700 mt-1">
+              ช่างตรวจพบความเสี่ยงระหว่างตรวจเครื่อง — การล้างต่ออาจมีโอกาสทำให้เครื่องเสียหายเพิ่ม
+              กรุณาตัดสินใจว่าจะให้ดำเนินการล้างต่อหรือไม่
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={acceptingRisk}
+            onClick={handleAcceptRisk}
+            className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:bg-weeeu-primary/40 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-1"
+          >
+            {acceptingRisk
+              ? <><span className="animate-spin">⟳</span> กำลังดำเนินการ...</>
+              : "✅ รับความเสี่ยง — ดำเนินการล้างต่อ"}
+          </button>
+          {/* M4 — ยุติงานก่อนล้าง (pre-clean) → ดู Settle ค่าบริการตาม offer */}
+          <Link
+            href={`/maintain/jobs/${id}/cancel?from=risk&settle=1`}
+            className="w-full block text-center border border-red-300 text-red-600 hover:bg-red-50 font-medium py-3 rounded-xl text-sm transition-colors"
+          >
+            🛑 ยุติงาน — รับ Settle (M4)
+          </Link>
         </div>
       )}
 

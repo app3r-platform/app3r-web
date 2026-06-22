@@ -41,6 +41,10 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
   const [respondingTermination, setRespondingTermination] = useState(false);
   const [terminationError, setTerminationError] = useState("");
 
+  // M4: settle-confirm หลังลูกค้ายุติงานจากการตรวจพบความเสี่ยง (pre-clean)
+  const [confirmingRiskSettle, setConfirmingRiskSettle] = useState(false);
+  const [riskSettleError, setRiskSettleError] = useState("");
+
   const reload = () => {
     setLoading(true);
     maintainApi.getJob(id)
@@ -77,6 +81,20 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
       setTerminationError((e as Error).message);
     } finally {
       setRespondingTermination(false);
+    }
+  }
+
+  // M4: confirm รับ settle ค่าบริการ หลังลูกค้ายุติงานจากความเสี่ยง
+  async function handleConfirmRiskSettle() {
+    setConfirmingRiskSettle(true);
+    setRiskSettleError("");
+    try {
+      const updated = await maintainApi.confirmRiskSettle(id);
+      setJob(updated);
+    } catch (e) {
+      setRiskSettleError((e as Error).message);
+    } finally {
+      setConfirmingRiskSettle(false);
     }
   }
 
@@ -118,13 +136,13 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         </div>
       )}
 
-      {/* closed_for_repair banner (GAP D-M-2) */}
+      {/* closed_for_repair banner (GAP D-M-2) — auto-lock declarative */}
       {job.status === "closed_for_repair" && (
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-start gap-2">
-          <span className="text-lg">🔧</span>
+          <span className="text-lg">🔒</span>
           <div>
-            <p className="text-sm font-semibold text-gray-700">ปิดงาน Maintain → ส่งต่อซ่อม</p>
-            <p className="text-xs text-gray-500 mt-0.5">งานนี้ถูกปิดและส่งต่อเป็นงานซ่อมแล้ว</p>
+            <p className="text-sm font-semibold text-gray-700">🔒 ล็อก — ปรับเป็นซ่อมแล้ว</p>
+            <p className="text-xs text-gray-500 mt-0.5">งานนี้ถูกปิดและส่งต่อเป็นงานซ่อมแล้ว — ถูกล็อค ไม่สามารถดำเนินการต่อได้</p>
           </div>
         </div>
       )}
@@ -195,6 +213,57 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
               className="bg-white border border-red-300 text-red-600 hover:bg-red-50 font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
               {respondingTermination && terminationDecision === "terminate" ? "…" : "⛔ ยุติ + Settle"}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* M4: Terminated after risk (pre-clean) — settle-confirm ค่าบริการ ตาม offer */}
+      {job.status === "terminated_after_risk" && (
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="text-lg">🛑</span>
+            <div>
+              <p className="text-sm font-semibold text-rose-800">ลูกค้ายุติงาน — Settle ค่าบริการ</p>
+              <p className="text-xs text-rose-600 mt-0.5">
+                ยุติหลังตรวจพบความเสี่ยง (M4) — ลูกค้าเลือกไม่ล้างต่อ ก่อนเริ่มล้าง · รับ settle ค่าบริการตามข้อเสนอ
+              </p>
+            </div>
+          </div>
+          {job.offerData && (
+            <div className="bg-white rounded-xl px-3 py-2.5 space-y-1 text-sm border border-rose-100">
+              <p className="text-xs font-semibold text-rose-700 uppercase tracking-wider">settle ตาม offer</p>
+              <div className="flex justify-between text-gray-700">
+                <span>ค่าบริการ</span>
+                <span className="font-bold text-rose-700">{job.totalPrice.toLocaleString()} pts</span>
+              </div>
+              {job.offerData.travelFee.required && (
+                <div className="flex justify-between text-gray-700">
+                  <span>ค่าเดินทาง</span>
+                  <span className="font-medium">{job.offerData.travelFee.amount?.toLocaleString()} pts</span>
+                </div>
+              )}
+              <p className="text-xs text-gray-400">คิดค่าบริการตามเงื่อนไขข้อเสนอ — งานยังไม่เริ่มล้าง</p>
+            </div>
+          )}
+          {riskSettleError && <p className="text-xs text-red-500">{riskSettleError}</p>}
+          <button
+            onClick={handleConfirmRiskSettle}
+            disabled={confirmingRiskSettle}
+            className="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
+            {confirmingRiskSettle ? "กำลังดำเนินการ…" : "✅ ยืนยันรับ Settle"}
+          </button>
+        </div>
+      )}
+
+      {/* M3: risk_reported banner — read-only acknowledge (รอลูกค้าตัดสิน) */}
+      {job.status === "risk_reported" && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
+          <span className="text-lg">⚠️</span>
+          <div>
+            <p className="text-sm font-semibold text-amber-800">ช่างพบความเสี่ยง — รอลูกค้าตัดสิน</p>
+            <p className="text-xs text-amber-700 mt-0.5">
+              ช่างรายงานความเสี่ยงระหว่างตรวจแล้ว — รอ WeeeU เลือกว่าจะรับความเสี่ยงเพื่อล้างต่อ หรือยุติงาน
+            </p>
           </div>
         </div>
       )}
@@ -336,11 +405,18 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         </div>
       )}
 
-      {/* Progress link */}
-      <Link href={`/maintain/jobs/${id}/progress`}
-        className="w-full block text-center bg-white border border-[#FFD5C4] text-[#FF663A] hover:bg-[#FCEAE3] font-medium py-2.5 rounded-xl transition-colors text-sm">
-        📊 ดูความคืบหน้า (Progress)
-      </Link>
+      {/* Progress link — locked when closed_for_repair (auto-lock declarative) */}
+      {job.status === "closed_for_repair" ? (
+        <div aria-disabled="true"
+          className="w-full block text-center bg-gray-50 border border-gray-200 text-gray-400 font-medium py-2.5 rounded-xl text-sm cursor-not-allowed select-none">
+          🔒 ดูความคืบหน้า (Progress) — ล็อก
+        </div>
+      ) : (
+        <Link href={`/maintain/jobs/${id}/progress`}
+          className="w-full block text-center bg-white border border-[#FFD5C4] text-[#FF663A] hover:bg-[#FCEAE3] font-medium py-2.5 rounded-xl transition-colors text-sm">
+          📊 ดูความคืบหน้า (Progress)
+        </Link>
+      )}
 
       {/* Action: assign */}
       {canAssign && (

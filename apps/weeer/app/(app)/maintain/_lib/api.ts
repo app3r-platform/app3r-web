@@ -89,4 +89,11 @@ export const maintainApi = {
       method: "POST",
       body: JSON.stringify({ decision }),
     }),
+
+  // POST /maintain/jobs/{id}/settle-after-risk/  (M4 — confirm settle ค่าบริการ post-risk termination)
+  confirmRiskSettle: (id: string) =>
+    apiFetch<MaintainJob>(`/maintain/jobs/${id}/settle-after-risk/`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    }),
 };
