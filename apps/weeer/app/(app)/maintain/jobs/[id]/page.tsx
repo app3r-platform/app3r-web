@@ -118,13 +118,13 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         </div>
       )}
 
-      {/* closed_for_repair banner (GAP D-M-2) */}
+      {/* closed_for_repair banner (GAP D-M-2) — auto-lock declarative */}
       {job.status === "closed_for_repair" && (
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-start gap-2">
-          <span className="text-lg">🔧</span>
+          <span className="text-lg">🔒</span>
           <div>
-            <p className="text-sm font-semibold text-gray-700">ปิดงาน Maintain → ส่งต่อซ่อม</p>
-            <p className="text-xs text-gray-500 mt-0.5">งานนี้ถูกปิดและส่งต่อเป็นงานซ่อมแล้ว</p>
+            <p className="text-sm font-semibold text-gray-700">🔒 ล็อก — ปรับเป็นซ่อมแล้ว</p>
+            <p className="text-xs text-gray-500 mt-0.5">งานนี้ถูกปิดและส่งต่อเป็นงานซ่อมแล้ว — ถูกล็อค ไม่สามารถดำเนินการต่อได้</p>
           </div>
         </div>
       )}
@@ -336,11 +336,18 @@ export default function MaintainJobDetailPage({ params }: { params: Promise<{ id
         </div>
       )}
 
-      {/* Progress link */}
-      <Link href={`/maintain/jobs/${id}/progress`}
-        className="w-full block text-center bg-white border border-[#FFD5C4] text-[#FF663A] hover:bg-[#FCEAE3] font-medium py-2.5 rounded-xl transition-colors text-sm">
-        📊 ดูความคืบหน้า (Progress)
-      </Link>
+      {/* Progress link — locked when closed_for_repair (auto-lock declarative) */}
+      {job.status === "closed_for_repair" ? (
+        <div aria-disabled="true"
+          className="w-full block text-center bg-gray-50 border border-gray-200 text-gray-400 font-medium py-2.5 rounded-xl text-sm cursor-not-allowed select-none">
+          🔒 ดูความคืบหน้า (Progress) — ล็อก
+        </div>
+      ) : (
+        <Link href={`/maintain/jobs/${id}/progress`}
+          className="w-full block text-center bg-white border border-[#FFD5C4] text-[#FF663A] hover:bg-[#FCEAE3] font-medium py-2.5 rounded-xl transition-colors text-sm">
+          📊 ดูความคืบหน้า (Progress)
+        </Link>
+      )}
 
       {/* Action: assign */}
       {canAssign && (

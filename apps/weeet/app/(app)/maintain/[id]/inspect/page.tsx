@@ -112,7 +112,7 @@ export default function MaintainInspectPage({
       // TODO Backend C-4.1b: POST /api/v1/maintain/jobs/:id/convert-to-repair/
       // auto-lock WeeeR เดิม per D-Maintain-2
       await new Promise((r) => setTimeout(r, 1000)); // mock — remove after backend ready
-      router.replace(`/jobs/${id}`);
+      router.replace(`/jobs/${id}?from=maintain&converted=repair`);
     } catch {
       setRepairSubmitting(false);
       setShowRepairConfirm(false);
