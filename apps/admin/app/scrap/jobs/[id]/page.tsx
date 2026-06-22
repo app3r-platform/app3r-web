@@ -32,9 +32,9 @@ const STATUS_META: Record<ScrapJob["status"], { label: string; color: string }> 
   cancelled:        { label: "ยกเลิก",      color: "bg-gray-100 text-gray-500" },
 };
 
-const OPTION_META: Record<ScrapJobOption, { label: string; desc: string; color: string; available: boolean }> = {
+const OPTION_META: Record<ScrapJobOption, { label: string; desc: string; color: string; available: boolean; backendDeferred?: string }> = {
   resell_parts:    { label: "แยกอะไหล่ขาย",    desc: "แยกชิ้นส่วนที่ใช้ได้มาขายในระบบ Parts",      color: "text-green-600",  available: true },
-  repair_and_sell: { label: "ซ่อมแล้วขาย",      desc: "ส่งซ่อม → ลงขาย Resell (C-3.3 — รอพัฒนา)",   color: "text-gray-500",   available: false },
+  repair_and_sell: { label: "ซ่อมแล้วขาย",      desc: "ส่งซ่อม → ลงขาย Resell",                     color: "text-purple-600", available: true,  backendDeferred: "C-3.3" },
   resell_as_scrap: { label: "ขายเป็นซากใหม่",   desc: "สร้าง Listing ซากใหม่บนระบบ Resell",          color: "text-blue-400",   available: true },
   dispose:         { label: "ทิ้ง/E-Waste",      desc: "กำจัดอย่างถูกต้อง ออก E-Waste Certificate",   color: "text-admin-primary", available: true },
 };
@@ -160,12 +160,12 @@ export default function ScrapJobDetailPage() {
           {/* Decision */}
           <section className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ตัดสินใจ</h2>
-            <div className={`mb-3 p-3 rounded-lg bg-gray-100 border ${om.available ? "border-gray-300" : "border-gray-200"}`}>
+            <div className="mb-3 p-3 rounded-lg bg-gray-100 border border-gray-300">
               <p className={`text-sm font-semibold ${om.color}`}>{om.label}</p>
               <p className="text-xs text-gray-500 mt-1">{om.desc}</p>
-              {!om.available && (
-                <span className="mt-2 inline-block text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
-                  🔒 รอ C-3.3
+              {om.backendDeferred && (
+                <span className="mt-2 inline-block text-xs bg-purple-50 text-purple-600 border border-purple-200 px-2 py-0.5 rounded">
+                  🧪 mockup · backend รอ {om.backendDeferred}
                 </span>
               )}
             </div>

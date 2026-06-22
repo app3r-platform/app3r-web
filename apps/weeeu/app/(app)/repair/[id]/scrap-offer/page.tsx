@@ -158,7 +158,8 @@ export default function RepairScrapOfferPage({
 
         {/* CTA */}
         <div className="space-y-2 pt-2">
-          <Link href={`/scrap/new`}>
+          {/* S12 cross-module reconcile (by HUB): carry from_repair so /scrap/new prefills (R-S1) */}
+          <Link href={`/scrap/new?from_repair=${id}`}>
             <button
               disabled={!selected}
               className="w-full bg-weeeu-primary hover:bg-weeeu-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"

@@ -63,7 +63,9 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
   if (error) return <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-yellow-700 text-sm">⚠️ {error}</div>;
   if (!item) return null;
 
-  const canBuy = item.status === "available";
+  // S5 (R-S3): passive expired check (status=expired หรือ expiresAt ผ่านแล้ว) — ไม่มี timer/auto-remove
+  const isExpired = item.status === "expired" || (!!item.expiresAt && new Date(item.expiresAt).getTime() < Date.now());
+  const canBuy = item.status === "available" && !isExpired;
 
   return (
     <div className="space-y-5 max-w-xl">
@@ -73,16 +75,30 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
         <h1 className="text-xl font-bold text-gray-900">รายละเอียดซาก</h1>
       </div>
 
-      {/* Photos */}
+      {/* S5 (R-S3): expired banner — ประกาศหมดอายุ/ปิดแล้ว (passive) */}
+      {isExpired && (
+        <div className="bg-gray-100 border border-gray-200 rounded-xl p-4 flex items-start gap-3">
+          <span className="text-xl mt-0.5">⏰</span>
+          <div>
+            <p className="text-sm font-semibold text-gray-700">ประกาศหมดอายุ/ปิดแล้ว</p>
+            <p className="text-xs text-gray-500 mt-1">
+              ประกาศซากนี้หมดเวลารับซื้อแล้ว — ไม่สามารถซื้อได้
+              {item.expiresAt && ` (หมดอายุ ${new Date(item.expiresAt).toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" })})`}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Photos — S5: grayscale เมื่อหมดอายุ */}
       {item.photos.length > 0 ? (
-        <div className="flex gap-2 overflow-x-auto">
+        <div className={`flex gap-2 overflow-x-auto ${isExpired ? "grayscale opacity-60" : ""}`}>
           {item.photos.map((url, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={i} src={url} alt={`photo-${i}`} className="h-40 w-40 object-cover rounded-xl shrink-0" />
           ))}
         </div>
       ) : (
-        <div className="w-full h-40 bg-gray-50 flex items-center justify-center rounded-xl text-5xl text-gray-300">♻️</div>
+        <div className={`w-full h-40 bg-gray-50 flex items-center justify-center rounded-xl text-5xl text-gray-300 ${isExpired ? "grayscale" : ""}`}>♻️</div>
       )}
 
       {/* Info */}
@@ -129,6 +145,7 @@ export default function ScrapItemDetailPage({ params }: { params: Promise<{ id: 
             ? "bg-[#FF663A] hover:bg-[#F04E20] text-white"
             : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}>
         {buying ? "กำลังซื้อ…"
+          : isExpired ? "⏰ ประกาศหมดอายุ/ปิดแล้ว"
           : !canBuy ? `ไม่สามารถซื้อได้ (${SCRAP_ITEM_STATUS_LABEL[item.status]})`
           : "🛒 ซื้อซากนี้"}
       </button>
