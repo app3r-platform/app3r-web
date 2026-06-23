@@ -2,8 +2,8 @@
  * dal/parts-b2b.ts — Sub-CMD-8 Wave 3: Parts B2B DAL
  *
  * Security Rule #5: ทุก order state transition → appendOrderEvent()
- * R1 Mitigation (Escrow): ใช้ pattern เดิมจาก Settlement Sub-6
- *   — escrow_ledger_id @needs-point-review (stub ไว้ก่อน)
+ * R1 Mitigation (Escrow): escrow_hold_id → escrow_holds (single-source full-lock)
+ *   — Gen 122 R1c · @needs-point-review RESOLVED · row-write logic = D2+ slice
  *
  * Business rules:
  *   - Fulfill: seller เท่านั้น (partId.ownerId)

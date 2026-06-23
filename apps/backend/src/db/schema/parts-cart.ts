@@ -31,7 +31,7 @@ export const partsCartItems = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
 
-    // ผู้ซื้อ (WeeeR หรือ WeeeT)
+    // ผู้ซื้อ (WeeeR เท่านั้น · Gen 122 R7)
     buyerId: uuid('buyer_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),

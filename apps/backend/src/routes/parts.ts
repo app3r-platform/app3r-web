@@ -27,7 +27,7 @@
  * Response shape: Part interface from FE types.ts (unitPrice: number, stockQty, etc.)
  *
  * NOTE-SUB4: escrow order routes kept (POST /order, /order/:id/confirm, /order/:id/refund)
- * escrow_ledger_id: @needs-point-review — รอ Point chat consultation
+ * escrow_hold_id → escrow_holds (single-source full-lock · Gen 122 R1c · @needs-point-review RESOLVED)
  */
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import { z } from 'zod'
