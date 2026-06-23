@@ -122,3 +122,10 @@ export * from './ads'                 // C12 ads (Gold Point D75)
 // Migration: 0030_offers_resell.sql
 export * from './used-appliance-listings' // D59 used_appliance_listings (resell/scrap)
 export * from './offers'                  // D61 offers
+
+// DB-phase D1 (Gen 122): auth/profile core — reconciled from feature/backend-d1-auth-points
+// (tables already applied to DEV via HOLD; reuse canonical .ts so app code can type-reference)
+// Migration: 0032_d1_profiles.sql + 0033_d1_otp_codes.sql
+export * from './user-profiles'  // GET/PUT /users/me profile (1:1 users)
+export * from './shop-profiles'  // GET/PUT /shops/me (WeeeR only) — closes GAP-1 shopName
+export * from './otp-codes'      // POST /auth/otp-request + /auth/otp-verify
