@@ -23,7 +23,9 @@ export function mapSettlementToDto(row: typeof settlements.$inferSelect): Settle
   return {
     id: row.id,
     serviceId: row.serviceId,
-    weeerUserId: row.weeerUserId,
+    // bridge: DB column generalized → recipient_user_id (Gen 122 C-2 · Scrap reverse).
+    // DTO field rename (weeerUserId→recipientUserId) deferred → Scrap slice (D2+) to avoid cross-chat API break.
+    weeerUserId: row.recipientUserId,
     amountThb: String(row.amountThb),
     status: row.status as SettlementStatus,
     bankAdapter: row.bankAdapter as SettlementDto['bankAdapter'],
@@ -78,7 +80,7 @@ export async function createSettlement(
     .insert(settlements)
     .values({
       serviceId: input.serviceId,
-      weeerUserId: input.weeerUserId,
+      recipientUserId: input.weeerUserId,
       amountThb: String(input.amountThb),
       status: 'pending',
       bankAdapter: adapterName,
@@ -167,7 +169,7 @@ export async function listSettlements(filters: {
   offset?: number
 }): Promise<SettlementListDto> {
   const whereClause = filters.weeerUserId
-    ? eq(settlements.weeerUserId, filters.weeerUserId)
+    ? eq(settlements.recipientUserId, filters.weeerUserId)
     : undefined
 
   const rows = await db

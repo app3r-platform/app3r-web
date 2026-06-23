@@ -129,3 +129,8 @@ export * from './offers'                  // D61 offers
 export * from './user-profiles'  // GET/PUT /users/me profile (1:1 users)
 export * from './shop-profiles'  // GET/PUT /shops/me (WeeeR only) — closes GAP-1 shopName
 export * from './otp-codes'      // POST /auth/otp-request + /auth/otp-verify
+
+// DB-phase D1 finalize (Gen 122): escrow full-lock + post-transaction profile reviews
+// Migration: 0034_d1_escrow_holds.sql + 0035_d1_profile_reviews.sql
+export * from './escrow-holds'    // R1c single-source full-lock escrow (all domains)
+export * from './profile-reviews' // R3/R4 post-transaction profile review (anchor=listing_meta)

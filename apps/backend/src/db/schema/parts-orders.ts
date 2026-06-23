@@ -12,8 +12,8 @@
  * POST   /api/parts/order/:id/confirm  — release escrow → WeeeR รับเงิน
  * POST   /api/parts/order/:id/refund   — คืน escrow → ผู้ซื้อ
  *
- * escrow_ledger_id: FK ไป point_ledger — @needs-point-review
- * (รอ Point chat ยืนยัน sync logic ก่อน implement จริง)
+ * escrow_hold_id: FK → escrow_holds.id (single-source full-lock escrow · Gen 122 R1c)
+ * (converged from escrow_ledger_id → @needs-point-review RESOLVED · Point REFINED v2)
  */
 import {
   pgTable,
@@ -29,7 +29,7 @@ import {
 import { users } from './users'
 import { partsInventory } from './parts-inventory'
 import { services } from './services'
-import { pointLedger } from './point-ledger'
+import { escrowHolds } from './escrow-holds'
 
 export const partsOrders = pgTable(
   'parts_orders',
@@ -51,9 +51,8 @@ export const partsOrders = pgTable(
     totalThb: numeric('total_thb', { precision: 12, scale: 2 }).notNull(),
     // 'pending' | 'held' | 'confirmed' | 'refunded' | 'cancelled'
     status: text('status').notNull().default('pending'),
-    // FK ไป point_ledger row ที่ hold escrow — @needs-point-review
-    // รอ Point chat ยืนยัน sync logic ก่อน finalize
-    escrowLedgerId: uuid('escrow_ledger_id').references(() => pointLedger.id),
+    // FK → escrow_holds.id (single-source full-lock escrow · Gen 122 R1c)
+    escrowHoldId: uuid('escrow_hold_id').references(() => escrowHolds.id),
     // idempotency key กัน double-order
     idempotencyKey: text('idempotency_key').notNull(),
     metadata: jsonb('metadata'),

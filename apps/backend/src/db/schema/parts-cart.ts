@@ -3,7 +3,7 @@
  *
  * parts_cart_items — ตะกร้าสินค้าชั่วคราว (expire 24 ชั่วโมง)
  *
- * ผู้ใช้: WeeeR + WeeeT (❌ WeeeU ไม่มีสิทธิ์)
+ * ผู้ใช้: WeeeR เท่านั้น (Gen 122 R7: Parts B2B = WeeeR↔WeeeR · ❌ WeeeU/WeeeT ไม่มีสิทธิ์)
  * กฎ:
  *   - max 50 ชิ้น/order (business rule ใน route layer)
  *   - 1 buyer = 1 cart (per listing, qty ปรับได้)
@@ -36,7 +36,7 @@ export const partsCartItems = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
 
-    // role ผู้ซื้อ: 'weeer' | 'weeet'
+    // role ผู้ซื้อ: 'weeer' (Gen 122 R7 — ลบ 'weeet' · ไม่มี WeeeT payment path)
     buyerRole: text('buyer_role').notNull(),
 
     // listing ที่ต้องการซื้อ
@@ -60,7 +60,7 @@ export const partsCartItems = pgTable(
     index('idx_parts_cart_expires').on(table.expiresAt),
     check(
       'chk_parts_cart_buyer_role',
-      sql`${table.buyerRole} IN ('weeer', 'weeet')`,
+      sql`${table.buyerRole} IN ('weeer')`,
     ),
     check(
       'chk_parts_cart_qty_positive',

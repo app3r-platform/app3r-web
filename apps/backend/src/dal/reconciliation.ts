@@ -43,7 +43,8 @@ export function mapStuckSettlementToDto(
   return {
     id: row.id,
     serviceId: row.serviceId,
-    weeerUserId: row.weeerUserId,
+    // bridge: DB col → recipient_user_id (Gen 122 C-2) · DTO rename deferred → Scrap slice
+    weeerUserId: row.recipientUserId,
     amountThb: String(row.amountThb),
     status: row.status as StuckSettlementDto['status'],
     bankAdapter: row.bankAdapter,

@@ -34,8 +34,9 @@ export const settlements = pgTable(
       .notNull()
       .references(() => services.id, { onDelete: 'cascade' }),
 
-    // WeeeR ผู้รับเงิน
-    weeerUserId: uuid('weeer_user_id')
+    // ผู้รับเงิน (generic · source = escrow_holds.recipient_user_id · Gen 122 R1c/C-2)
+    // generalized from weeer_user_id → รองรับ Scrap reverse (recipient = WeeeU)
+    recipientUserId: uuid('recipient_user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'restrict' }),
 
@@ -65,7 +66,7 @@ export const settlements = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    index('idx_settlements_weeer').on(table.weeerUserId, table.createdAt),
+    index('idx_settlements_recipient').on(table.recipientUserId, table.createdAt),
     index('idx_settlements_service').on(table.serviceId),
     index('idx_settlements_status').on(table.status),
   ],

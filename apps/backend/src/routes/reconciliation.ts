@@ -199,7 +199,8 @@ reconciliationRouter.openapi(resolveRoute, async (c) => {
     {
       id: updated.id,
       serviceId: updated.serviceId,
-      weeerUserId: updated.weeerUserId,
+      // bridge: DB col → recipient_user_id (Gen 122 C-2) · DTO rename deferred → Scrap slice
+      weeerUserId: updated.recipientUserId,
       amountThb: String(updated.amountThb),
       status: updated.status as 'pending' | 'processing' | 'completed' | 'failed',
       bankAdapter: updated.bankAdapter,

@@ -17,7 +17,9 @@ import {
   timestamp,
   uniqueIndex,
   index,
+  check,
 } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { users } from './users'
 
 export const pointLedger = pgTable(
@@ -53,6 +55,12 @@ export const pointLedger = pgTable(
     index('idx_point_ledger_user_id').on(table.userId),
     index('idx_point_ledger_user_point_type').on(table.userId, table.pointType),
     index('idx_point_ledger_created_at').on(table.createdAt),
+    // Gen 122 B-D3: Point frozen 7-set type + Gold/Silver point_type (LOCKED)
+    check(
+      'chk_point_ledger_type',
+      sql`${table.type} IN ('earn', 'spend', 'adjust', 'expire', 'refund', 'transfer_in', 'transfer_out')`,
+    ),
+    check('chk_point_ledger_point_type', sql`${table.pointType} IN ('cash', 'bonus')`),
   ],
 )
 

@@ -21,7 +21,9 @@ import {
   timestamp,
   uniqueIndex,
   index,
+  check,
 } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { users } from './users'
 
 export const wallets = pgTable(
@@ -42,6 +44,8 @@ export const wallets = pgTable(
     // 1 wallet per (user, point_type)
     uniqueIndex('idx_wallets_user_point_type').on(table.userId, table.pointType),
     index('idx_wallets_user_id').on(table.userId),
+    // Gen 122 B-D2: Gold='cash' · Silver='bonus' (Point LOCKED · no other point_type)
+    check('chk_wallets_point_type', sql`${table.pointType} IN ('cash', 'bonus')`),
   ],
 )
 
