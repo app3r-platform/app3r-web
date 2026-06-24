@@ -10,6 +10,7 @@
  * Security Rule #5: ทุก settlement action บันทึกใน settlement_audit_log
  *
  * Migration: 0006_settlement.sql
+ *   + 0042_d2_settlements_polymorphic.sql (D2 G4 · DRAFT): service_id nullable + source enum + transaction_ref
  * ⚠️ R2: run migration หลัง HUB approve เท่านั้น
  */
 import {
@@ -19,7 +20,9 @@ import {
   numeric,
   timestamp,
   index,
+  check,
 } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { services } from './services'
 import { users } from './users'
 
@@ -30,9 +33,15 @@ export const settlements = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
 
     // service ที่ settlement นี้เกี่ยวข้อง
-    serviceId: uuid('service_id')
-      .notNull()
-      .references(() => services.id, { onDelete: 'cascade' }),
+    // G4 (D2): nullable — resell settlement ไม่มี services row (source='resell' ใช้ transactionRef→listing_meta)
+    serviceId: uuid('service_id').references(() => services.id, { onDelete: 'cascade' }),
+
+    // G4 (D2): discriminator — 'service' (FK service_id) | 'resell' (transactionRef→listing_meta) · CHECK in DB
+    source: text('source').notNull().default('service'),
+
+    // G4 (D2): resell linkage (polymorphic · ref listing_meta · no hard FK เหมือน escrow_holds.transaction_ref)
+    //   point-layer≠THB · U↔U ไม่ over-engineer (U↔U จบใน Gold wallet · ไม่มี settlement row)
+    transactionRef: uuid('transaction_ref'),
 
     // ผู้รับเงิน (generic · source = escrow_holds.recipient_user_id · Gen 122 R1c/C-2)
     // generalized from weeer_user_id → รองรับ Scrap reverse (recipient = WeeeU)
@@ -69,6 +78,13 @@ export const settlements = pgTable(
     index('idx_settlements_recipient').on(table.recipientUserId, table.createdAt),
     index('idx_settlements_service').on(table.serviceId),
     index('idx_settlements_status').on(table.status),
+    index('idx_settlements_transaction_ref').on(table.transactionRef),
+    // G4 (D2): source enum + discriminator (service→service_id | resell→transaction_ref)
+    check('chk_settlements_source', sql`${table.source} IN ('service', 'resell')`),
+    check(
+      'chk_settlements_ref',
+      sql`(${table.source} = 'service' AND ${table.serviceId} IS NOT NULL) OR (${table.source} = 'resell' AND ${table.transactionRef} IS NOT NULL)`,
+    ),
   ],
 )
 

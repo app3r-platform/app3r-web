@@ -30,7 +30,7 @@ export interface ReconciliationRunDto {
 // settlement ที่ค้างอยู่ใน pending/processing เกิน STUCK_TIMEOUT_MINUTES
 export interface StuckSettlementDto {
   id: string
-  serviceId: string
+  serviceId: string | null   // G4 (D2): nullable — resell settlement ไม่มี service (source='resell')
   weeerUserId: string
   amountThb: string
   status: 'pending' | 'processing'

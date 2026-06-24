@@ -17,7 +17,7 @@ export type AuditAction = 'created' | 'status_changed' | 'bank_response' | 'erro
 // ── Settlement DTO ────────────────────────────────────────────────────────────
 export interface SettlementDto {
   id: string
-  serviceId: string
+  serviceId: string | null   // G4 (D2): nullable — resell settlement ไม่มี service (source='resell')
   weeerUserId: string
   amountThb: string          // numeric → string (JSON safe)
   status: SettlementStatus

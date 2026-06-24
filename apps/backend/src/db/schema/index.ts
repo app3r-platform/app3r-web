@@ -134,3 +134,7 @@ export * from './otp-codes'      // POST /auth/otp-request + /auth/otp-verify
 // Migration: 0034_d1_escrow_holds.sql + 0035_d1_profile_reviews.sql
 export * from './escrow-holds'    // R1c single-source full-lock escrow (all domains)
 export * from './profile-reviews' // R3/R4 post-transaction profile review (anchor=listing_meta)
+
+// D2 Resell Slice — Wave 1 (Advisor ruling G3 · DRAFT migration 0040/0041 — ❌ ยังไม่ apply · Advisor review ก่อน)
+export * from './resell-fulfillment' // G3: ship/deliver/inspection per transaction (anchor listing_meta 1:1)
+export * from './resell-disputes'    // G3: dispute (3-way resolution) per transaction (R6/R8/R10/R11)
