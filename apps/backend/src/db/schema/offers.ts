@@ -29,6 +29,10 @@ export const offers = pgTable(
     deliveryMethod: text('delivery_method').notNull(),
     message: text('message'),
     status: text('status').notNull().default('pending'), // CHECK in DB
+    // D2 W2 (1A funding window): seller เลือก → selectedAt set · เงินล็อกภายใน 24h (fundingDeadline) · R4 timeout
+    // Migration: 0043_d2_offer_funding_window.sql (DRAFT)
+    selectedAt: timestamp('selected_at', { withTimezone: true }),
+    fundingDeadline: timestamp('funding_deadline', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
@@ -36,6 +40,7 @@ export const offers = pgTable(
     index('idx_offers_listing').on(t.listingMetaId),
     index('idx_offers_buyer').on(t.buyerId),
     index('idx_offers_status').on(t.status),
+    index('idx_offers_funding_deadline').on(t.fundingDeadline),
   ],
 )
 

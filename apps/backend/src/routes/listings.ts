@@ -37,6 +37,7 @@ import { verifyAccessToken } from '../lib/jwt'
 import { transitionListingState, StateTransitionError } from '../lib/listing-state'
 import { recordView, incrementOfferCount, publicCounters, isListingInsider } from '../lib/listing-counters'
 import { sellerTypeFromRole, getFee, chargeFee, toListingDto, type AuthedUser } from '../lib/listing-helpers'
+import { refundOfferFee } from '../lib/escrow-service'
 
 export const listingsRouter = new OpenAPIHono()
 
@@ -278,6 +279,8 @@ const transitionRoute = createRoute({
             to: z.enum(LISTING_STATES),
             buyerUserId: z.string().uuid().optional(),
             pointAmount: z.number().int().nonnegative().optional(),
+            actorRole: z.string().optional(), // 2A audit
+            faultParty: z.enum(['seller', 'buyer', 'mutual', 'none']).optional(), // 2A bad_record
           }),
         },
       },
@@ -295,9 +298,9 @@ listingsRouter.openapi(transitionRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return unauthorized(c)
   const { id } = c.req.valid('param')
-  const { to, buyerUserId, pointAmount } = c.req.valid('json')
+  const { to, buyerUserId, pointAmount, actorRole, faultParty } = c.req.valid('json')
   try {
-    const updated = await transitionListingState({ listingId: id, to, actorUserId: user.userId, buyerUserId, pointAmount })
+    const updated = await transitionListingState({ listingId: id, to, actorUserId: user.userId, buyerUserId, pointAmount, actorRole, faultParty })
     return c.json({ listingId: updated.listingId, state: updated.state }, 200)
   } catch (err) {
     if (err instanceof StateTransitionError) {
@@ -346,28 +349,36 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
     return c.json({ error: { code: 'NOT_FOUND', message: 'Offer not found on this listing' } }, 404)
   }
 
+  // 1A funding window: เลือก → buyer มี 24h ยืนยัน+เติม (เงินล็อก@buyer_confirmed · ❌ ยังไม่ล็อกที่นี่)
+  const FUNDING_WINDOW_MS = 24 * 60 * 60 * 1000
+  const now = new Date()
+  const fundingDeadline = new Date(now.getTime() + FUNDING_WINDOW_MS)
   try {
-    const updated = await db.transaction(async (tx) => {
-      // mark selected + reject อื่น ๆ ที่ยัง pending
-      await tx.update(offers).set({ status: 'selected', updatedAt: new Date() }).where(eq(offers.id, offerId))
+    await db.transaction(async (tx) => {
+      // selected offer + funding window (1A)
       await tx
         .update(offers)
-        .set({ status: 'rejected', updatedAt: new Date() })
+        .set({ status: 'selected', selectedAt: now, fundingDeadline, updatedAt: now })
+        .where(eq(offers.id, offerId))
+      // reject pending อื่น + คืน offer_fee (faultParty≠buyer · ruling 5)
+      const others = await tx
+        .select()
+        .from(offers)
         .where(and(eq(offers.listingMetaId, id), eq(offers.status, 'pending')))
-      // escrow hold via state machine (ภายใน transaction เดียวกัน — เรียกผ่าน lib ที่เปิด tx ใหม่)
-      return tx
+      for (const o of others) {
+        await tx.update(offers).set({ status: 'rejected', updatedAt: now }).where(eq(offers.id, o.id))
+        await refundOfferFee(tx, o.id, o.buyerId)
+      }
     })
-    // transition (เปิด transaction ของตัวเอง — escrow debit + audit)
+    // transition → offer_selected (matched · ❌ ยังไม่ล็อกเงิน · เงินล็อกตอน confirm-funding · 1A)
     const res = await transitionListingState({
       listingId: id,
       to: 'offer_selected',
       actorUserId: user.userId,
-      buyerUserId: offer.buyerId,
-      pointAmount: Math.round(Number(offer.offerPrice)),
+      actorRole: 'seller',
     })
-    void updated
     return c.json(
-      { listingId: res.listingId, state: res.state, offerId, heldAmount: Math.round(Number(offer.offerPrice)) },
+      { listingId: res.listingId, state: res.state, offerId, fundingDeadline: fundingDeadline.toISOString() },
       200,
     )
   } catch (err) {
@@ -376,6 +387,66 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
     }
     const msg = err instanceof Error ? err.message : 'SELECT_OFFER_FAILED'
     return c.json({ error: { code: 'SELECT_OFFER_FAILED', message: msg } }, 400)
+  }
+})
+
+// ── POST /{id}/confirm-funding — buyer ยืนยัน+เติม → buyer_confirmed + escrow LOCK (1A) ──
+const confirmFundingRoute = createRoute({
+  method: 'post',
+  path: '/{id}/confirm-funding',
+  tags: ['Listings'],
+  summary: 'Buyer confirms funding → buyer_confirmed + escrow lock (1A · authoritative selected offer)',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Funded + escrow locked' },
+    400: { description: 'Invalid transition / insufficient Gold' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not the selected buyer' },
+    404: { description: 'Listing not found' },
+    409: { description: 'No selected offer / funding window expired' },
+  },
+})
+
+listingsRouter.openapi(confirmFundingRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // selected offer = authoritative buyer + amount (ไม่เชื่อ body · security rule 5)
+  const [sel] = await db
+    .select()
+    .from(offers)
+    .where(and(eq(offers.listingMetaId, id), eq(offers.status, 'selected')))
+    .limit(1)
+  if (!sel) return c.json({ error: { code: 'NO_SELECTED_OFFER', message: 'No selected offer to fund' } }, 409)
+  if (sel.buyerId !== user.userId) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only the selected buyer can confirm funding' } }, 403)
+  }
+  // R4: funding window หมดอายุ → ปฏิเสธ (รอ timeout job revert)
+  if (sel.fundingDeadline && sel.fundingDeadline.getTime() < Date.now()) {
+    return c.json({ error: { code: 'FUNDING_WINDOW_EXPIRED', message: 'Funding window expired' } }, 409)
+  }
+  try {
+    const res = await transitionListingState({
+      listingId: id,
+      to: 'buyer_confirmed',
+      actorUserId: user.userId,
+      actorRole: 'buyer',
+      buyerUserId: sel.buyerId,
+      pointAmount: Math.round(Number(sel.offerPrice)),
+    })
+    return c.json(
+      { listingId: res.listingId, state: res.state, lockedAmount: Math.round(Number(sel.offerPrice)) },
+      200,
+    )
+  } catch (err) {
+    if (err instanceof StateTransitionError) {
+      return c.json({ error: { code: 'INVALID_TRANSITION', message: err.message } }, 400)
+    }
+    const msg = err instanceof Error ? err.message : 'CONFIRM_FUNDING_FAILED'
+    return c.json({ error: { code: 'CONFIRM_FUNDING_FAILED', message: msg } }, 400)
   }
 })
 
