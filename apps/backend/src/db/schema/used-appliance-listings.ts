@@ -36,6 +36,7 @@ export const usedApplianceListings = pgTable(
     warranty: jsonb('warranty'), // { sourceWarranty, additionalWarranty } | null
     scrapItemId: uuid('scrap_item_id'), // no FK — scrap module pending
     conditionGrade: text('condition_grade'), // grade_A | grade_B | grade_C | null
+    description: text('description'), // user content · nullable · migration 0046 (W4-pre)
     workingParts: jsonb('working_parts'), // string[] | null
     price: numeric('price', { precision: 12, scale: 2 }).notNull().default('0'),
     deliveryMethods: jsonb('delivery_methods').notNull().default('[]'),

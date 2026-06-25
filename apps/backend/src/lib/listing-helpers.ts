@@ -79,6 +79,7 @@ export function toListingDto(
     warranty: used?.warranty ?? null,
     scrapItemId: used?.scrapItemId ?? null,
     conditionGrade: used?.conditionGrade ?? null,
+    description: used?.description ?? null, // 0046 (W4-pre)
     workingParts: used?.workingParts ?? null,
     price: used ? Number(used.price) : null,
     deliveryMethods: used?.deliveryMethods ?? [],

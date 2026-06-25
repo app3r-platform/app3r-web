@@ -98,3 +98,34 @@ describe('C — warranty (nested) + expiresAt round-trip', () => {
     expect(new Date(dto.expiresAt!).getTime()).toBe(new Date(expiresAt).getTime())
   })
 })
+
+// ⚠️ migration 0046 (description column) — RED จนกว่า HUB apply DEV (setup.ts ไม่ auto-migrate · คาดไว้)
+describe('0046 — description round-trip (pending HUB apply)', () => {
+  it('POST description → GET คืน description ตรง (≠ null · no silent data-loss)', async () => {
+    const cr = await authed('POST', '/api/v1/listings', seller.token, {
+      listingType: 'used_appliance',
+      price: 3000,
+      deliveryMethods: ['parcel'],
+      description: 'สภาพดีมาก ใช้งาน 1 ปี กล่องครบ',
+      status: 'announced',
+    })
+    expect(cr.status).toBe(201)
+    const id = ((await cr.json()) as { id: string }).id
+    listingIds.push(id)
+    const r = await app.request(`/api/v1/listings/${id}`)
+    expect(r.status).toBe(200)
+    const dto = (await r.json()) as { description: string | null }
+    expect(dto.description).toBe('สภาพดีมาก ใช้งาน 1 ปี กล่องครบ')
+  })
+
+  it('description > 2000 chars → 400 (zod bound · Advisor)', async () => {
+    const cr = await authed('POST', '/api/v1/listings', seller.token, {
+      listingType: 'used_appliance',
+      price: 3000,
+      deliveryMethods: ['parcel'],
+      description: 'x'.repeat(2001),
+      status: 'announced',
+    })
+    expect(cr.status).toBe(400)
+  })
+})

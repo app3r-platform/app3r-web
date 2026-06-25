@@ -77,6 +77,7 @@ const createListingRoute = createRoute({
             //   คง flat sourceWarranty/additionalWarranty = backward-compat
             warranty: z.object({ sourceWarranty: z.number(), additionalWarranty: z.number() }).optional(),
             expiresAt: z.string().optional(),
+            description: z.string().max(2000).optional(), // 0046 · user content (Advisor: bound 2000)
             sourceWarranty: z.number().optional(),
             additionalWarranty: z.number().optional(),
             scrapItemId: z.string().uuid().optional(),
@@ -127,6 +128,7 @@ listingsRouter.openapi(createListingRoute, async (c) => {
         warranty,
         scrapItemId: b.scrapItemId ?? null,
         conditionGrade: b.conditionGrade ?? null,
+        description: b.description ?? null, // 0046 (W4-pre)
         workingParts: b.workingParts ?? null,
         price: String(b.price),
         deliveryMethods: b.deliveryMethods,
