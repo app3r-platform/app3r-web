@@ -38,7 +38,7 @@ import {
 } from '../db/schema'
 import { verifyAccessToken } from '../lib/jwt'
 import { transitionListingState, StateTransitionError, isEscrowMutatingTransition } from '../lib/listing-state'
-import { recordView, incrementOfferCount, publicCounters, isListingInsider } from '../lib/listing-counters'
+import { recordView, incrementOfferCount, isListingInsider } from '../lib/listing-counters'
 import { sellerTypeFromRole, getFee, chargeFee, toListingDto, isResellListingType, type AuthedUser } from '../lib/listing-helpers'
 import { refundOfferFee } from '../lib/escrow-service'
 
@@ -73,6 +73,10 @@ const createListingRoute = createRoute({
             workingParts: z.array(z.string()).optional(),
             price: z.number().nonnegative(),
             deliveryMethods: z.array(z.string()).default([]),
+            // HUB Gen85 (C · warranty contract-align): FE ส่ง nested warranty + expiresAt (column มีอยู่ · no-migration)
+            //   คง flat sourceWarranty/additionalWarranty = backward-compat
+            warranty: z.object({ sourceWarranty: z.number(), additionalWarranty: z.number() }).optional(),
+            expiresAt: z.string().optional(),
             sourceWarranty: z.number().optional(),
             additionalWarranty: z.number().optional(),
             scrapItemId: z.string().uuid().optional(),
@@ -93,8 +97,10 @@ listingsRouter.openapi(createListingRoute, async (c) => {
   const user = await getAuthUser(c)
   if (!user) return unauthorized(c)
   const b = c.req.valid('json')
-  const warranty =
-    b.sourceWarranty != null || b.additionalWarranty != null
+  // warranty: prefer nested (FE contract · HUB Gen85 C) → flat fallback (backward-compat) → null
+  const warranty = b.warranty
+    ? { sourceWarranty: b.warranty.sourceWarranty ?? 0, additionalWarranty: b.warranty.additionalWarranty ?? 0 }
+    : b.sourceWarranty != null || b.additionalWarranty != null
       ? { sourceWarranty: b.sourceWarranty ?? 0, additionalWarranty: b.additionalWarranty ?? 0 }
       : null
 
@@ -125,6 +131,7 @@ listingsRouter.openapi(createListingRoute, async (c) => {
         price: String(b.price),
         deliveryMethods: b.deliveryMethods,
         status: b.status,
+        expiresAt: b.expiresAt ? new Date(b.expiresAt) : null, // HUB Gen85 C (column มีอยู่ · no-migration)
       })
       .returning()
     // 3) backlink domain_ref_id (integrity 2 ทาง)
@@ -245,25 +252,19 @@ const getRoute = createRoute({
 
 listingsRouter.openapi(getRoute, async (c) => {
   const { id } = c.req.valid('param')
-  const [row] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  // HUB Gen85 (cutover step-4 fix): join used_appliance_listings + return full toListingDto
+  //   (pattern เดียวกับ /mine, /browse) — เดิม hand-build object ขาด price/status/deliveryMethods/id
+  //   → 3 detail page (price.toLocaleString) white-screen ตอน canonical-live. envelope = bare object (casing FINAL).
+  const [row] = await db
+    .select()
+    .from(listingMeta)
+    .leftJoin(usedApplianceListings, eq(usedApplianceListings.listingMetaId, listingMeta.listingId))
+    .where(eq(listingMeta.listingId, id))
+    .limit(1)
   if (!row) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
   const user = await getAuthUser(c)
-  const insider = isListingInsider(row, { userId: user?.userId ?? null, role: user?.role ?? null })
-  const counters = publicCounters(row, insider)
-  return c.json(
-    {
-      listingId: row.listingId,
-      listingType: row.listingType,
-      state: row.state,
-      ownerId: row.ownerId,
-      tambonId: row.tambonId,
-      viewCount: counters.viewCount,
-      offerCount: counters.offerCount,
-      createdAt: row.createdAt.toISOString(),
-      updatedAt: row.updatedAt.toISOString(),
-    },
-    200,
-  )
+  const insider = isListingInsider(row.listing_meta, { userId: user?.userId ?? null, role: user?.role ?? null })
+  return c.json(toListingDto(row.listing_meta, row.used_appliance_listings, insider), 200)
 })
 
 // ── POST /{id}/transition — D59 state machine + Escrow (existing) ─────────────
