@@ -15,7 +15,7 @@ import { and, eq, desc } from 'drizzle-orm'
 import { db } from '../db/client'
 import { offers, listingMeta } from '../db/schema'
 import { verifyAccessToken } from '../lib/jwt'
-import { sellerTypeFromRole, getFee, chargeFee } from '../lib/listing-helpers'
+import { sellerTypeFromRole, getFee, chargeFee, isResellListingType } from '../lib/listing-helpers'
 
 export const offersRouter = new OpenAPIHono()
 
@@ -94,6 +94,10 @@ offersRouter.openapi(createRoute_, async (c) => {
   const b = c.req.valid('json')
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, b.listingId)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // W2.1-addon (Advisor ③): offer flow เฉพาะ resell/scrap (กัน parts/repair/maintain เข้า escrow → stranded Gold)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Offers apply only to resell/scrap listings' } }, 403)
+  }
   // S5 (W2.1): กัน self-deal — owner ยื่น offer ใส่ประกาศตัวเองไม่ได้ (path คู่ขนานกับ listings POST /{id}/offers)
   if (listing.ownerId === user.userId) {
     return c.json({ error: { code: 'FORBIDDEN', message: 'Owner cannot bid on own listing' } }, 403)

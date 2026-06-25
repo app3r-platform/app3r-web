@@ -37,7 +37,7 @@ import {
 import { verifyAccessToken } from '../lib/jwt'
 import { transitionListingState, StateTransitionError, isEscrowMutatingTransition } from '../lib/listing-state'
 import { recordView, incrementOfferCount, publicCounters, isListingInsider } from '../lib/listing-counters'
-import { sellerTypeFromRole, getFee, chargeFee, toListingDto, type AuthedUser } from '../lib/listing-helpers'
+import { sellerTypeFromRole, getFee, chargeFee, toListingDto, isResellListingType, type AuthedUser } from '../lib/listing-helpers'
 import { refundOfferFee } from '../lib/escrow-service'
 
 export const listingsRouter = new OpenAPIHono()
@@ -368,6 +368,10 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
 
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // W2.1-addon (Advisor ③): select/escrow flow เฉพาะ resell/scrap (defense-in-depth)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Select-offer applies only to resell/scrap listings' } }, 403)
+  }
   const isAdmin = user.role === 'admin' || user.role === 'super_admin'
   if (listing.ownerId !== user.userId && !isAdmin) {
     return c.json({ error: { code: 'FORBIDDEN', message: 'Only listing owner can select offer' } }, 403)
@@ -463,6 +467,10 @@ listingsRouter.openapi(confirmFundingRoute, async (c) => {
   const { id } = c.req.valid('param')
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // W2.1-addon (Advisor ③): confirm/escrow flow เฉพาะ resell/scrap (defense-in-depth)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Confirm-funding applies only to resell/scrap listings' } }, 403)
+  }
   // S6 (W2.1 · defense-in-depth): ต้องอยู่ offer_selected เท่านั้น (state machine กันอีกชั้น)
   if (listing.state !== 'offer_selected') {
     return c.json({ error: { code: 'INVALID_STATE', message: `Listing is ${listing.state}, expected offer_selected` } }, 409)
@@ -539,6 +547,10 @@ listingsRouter.openapi(createOfferRoute, async (c) => {
   const b = c.req.valid('json')
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // W2.1-addon (Advisor ③): offer flow เฉพาะ resell/scrap (กัน parts/repair/maintain เข้า escrow → stranded Gold)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Offers apply only to resell/scrap listings' } }, 403)
+  }
   // S5 (W2.1): กัน self-deal — owner ยื่น offer ใส่ประกาศตัวเองไม่ได้
   if (listing.ownerId === user.userId) {
     return c.json({ error: { code: 'FORBIDDEN', message: 'Owner cannot bid on own listing' } }, 403)

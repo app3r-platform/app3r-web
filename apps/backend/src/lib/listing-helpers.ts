@@ -23,6 +23,13 @@ export function sellerTypeFromRole(role?: string): 'WeeeU' | 'WeeeR' {
   return role === 'weeer' ? 'WeeeR' : 'WeeeU'
 }
 
+// W2.1-addon (Advisor verdict ③): offer/escrow flow รับเฉพาะ listingType resell|scrap
+//   กัน parts/repair/maintain ถูกขับเข้า escrow → parts DELETE cancel ไม่ refund → Gold stranded
+export const RESELL_LISTING_TYPES = ['resell', 'scrap'] as const
+export function isResellListingType(t: string | null | undefined): boolean {
+  return t === 'resell' || t === 'scrap'
+}
+
 /**
  * อ่านค่า fee จาก admin_config (Gold Point/ครั้ง) — default 0 ถ้าไม่ตั้ง
  * (ไม่เดา amount — admin กำหนดผ่าน admin_config key: listing_fee / offer_fee)
