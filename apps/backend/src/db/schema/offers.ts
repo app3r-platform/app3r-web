@@ -7,7 +7,7 @@
  *
  * Migration: 0030_offers_resell.sql
  */
-import { pgTable, uuid, text, numeric, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, numeric, timestamp, index, uniqueIndex, check } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { users } from './users'
 import { listingMeta } from './listing-meta'
@@ -44,6 +44,11 @@ export const offers = pgTable(
     index('idx_offers_funding_deadline').on(t.fundingDeadline),
     // S2 (W2.1 · migration 0044): DB safety net — ≤1 selected offer ต่อ listing (กัน double-select split-brain)
     uniqueIndex('idx_offers_one_selected').on(t.listingMetaId).where(sql`${t.status} = 'selected'`),
+    // W3c (F7 · migration 0045 DRAFT): GAP-2 offer_price > 0 · GAP-4 ≤1 pending offer ต่อ (listing, buyer)
+    check('chk_offers_price_positive', sql`${t.offerPrice} > 0`),
+    uniqueIndex('idx_offers_one_pending_per_buyer')
+      .on(t.listingMetaId, t.buyerId)
+      .where(sql`${t.status} = 'pending'`),
   ],
 )
 

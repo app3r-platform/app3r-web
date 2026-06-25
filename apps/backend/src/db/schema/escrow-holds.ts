@@ -69,6 +69,8 @@ export const escrowHolds = pgTable(
     check('chk_escrow_holds_point_type', sql`${t.pointType} = 'cash'`),
     // W2.1 (migration 0044): DB safety net — ≤1 active locked hold ต่อ transaction (กัน double-lock)
     uniqueIndex('idx_escrow_holds_one_locked').on(t.transactionRef).where(sql`${t.state} = 'locked'`),
+    // W3c (F7 · migration 0045 DRAFT): GAP-2 money positivity — total_amount > 0
+    check('chk_escrow_holds_total_positive', sql`${t.totalAmount} > 0`),
   ],
 )
 

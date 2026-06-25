@@ -19,6 +19,11 @@ import { schedule } from 'node-cron'
 import { db } from '../db/client'
 import { paymentIntents } from '../db/schema'
 import { and, eq, lt, or } from 'drizzle-orm'
+import {
+  revertExpiredFundingWindows,
+  autoCompleteExpiredInspections,
+  autoDisputeNoShip,
+} from './resell-funding'
 
 // ---------------------------------------------------------------------------
 // NOTE-M3: Reconciliation job โ€” daily 02:00 ICT (UTC+7 = 19:00 UTC prev day)
@@ -75,10 +80,34 @@ export function startScanWorker(): void {
 }
 
 // ---------------------------------------------------------------------------
+// D2 Resell timeout jobs (W3c) — every 5 min · server-time only (GAP-3 · ไม่เชื่อ client clock)
+//   R4 funding-timeout (24h) · R7 inspection-deadline (72h auto-complete) · no-ship SLA (7d auto-dispute)
+// ---------------------------------------------------------------------------
+export function startResellTimeoutCron(): void {
+  schedule('*/5 * * * *', async () => {
+    const now = new Date() // server-time (GAP-3)
+    try {
+      const r4 = await revertExpiredFundingWindows(now)
+      const r7 = await autoCompleteExpiredInspections(now)
+      const ns = await autoDisputeNoShip(now)
+      if (r4.reverted.length || r7.completed.length || ns.disputed.length) {
+        console.log(
+          `[ResellTimeout] R4 revert=${r4.reverted.length} · R7 complete=${r7.completed.length} · no-ship=${ns.disputed.length}`,
+        )
+      }
+    } catch (err) {
+      console.error('[ResellTimeout] Error:', err)
+    }
+  })
+  console.log('[Cron] Resell timeout jobs scheduled: every 5 min (R4/R7/no-ship · server-time)')
+}
+
+// ---------------------------------------------------------------------------
 // Start all cron jobs
 // ---------------------------------------------------------------------------
 export function startAllCronJobs(): void {
   startReconciliationCron()
   startScanWorker()
+  startResellTimeoutCron()
 }
 

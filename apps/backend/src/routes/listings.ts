@@ -847,7 +847,13 @@ const disputeRoute = createRoute({
   },
 })
 
-const DISPUTABLE_STATES: ReadonlySet<ListingState> = new Set(['in_progress', 'delivered', 'inspection_period'])
+// W3c: +buyer_confirmed — R6 seller no-ship (เปิด not_shipped ก่อนส่งได้) · post-ship states = เคสคุณภาพ
+const DISPUTABLE_STATES: ReadonlySet<ListingState> = new Set([
+  'buyer_confirmed',
+  'in_progress',
+  'delivered',
+  'inspection_period',
+])
 
 listingsRouter.openapi(disputeRoute, async (c) => {
   const user = await getAuthUser(c)
@@ -861,6 +867,10 @@ listingsRouter.openapi(disputeRoute, async (c) => {
   }
   if (!DISPUTABLE_STATES.has(listing.state as ListingState)) {
     return c.json({ error: { code: 'INVALID_STATE', message: `Cannot dispute from ${listing.state}` } }, 409)
+  }
+  // W3c: ก่อนส่ง (buyer_confirmed) เปิดได้เฉพาะ not_shipped (R6) · เคสคุณภาพต้องหลังส่ง
+  if (listing.state === 'buyer_confirmed' && b.disputeType !== 'not_shipped') {
+    return c.json({ error: { code: 'INVALID_DISPUTE_TYPE', message: 'Only not_shipped dispute allowed before shipping' } }, 400)
   }
   // authz: party only (seller=owner OR selected buyer)
   const [sel] = await db
@@ -981,6 +991,55 @@ listingsRouter.openapi(createOfferRoute, async (c) => {
     return row!
   })
   return c.json(offerDto(created), 201)
+})
+
+// ── POST /{id}/offers/{offerId}/reject — seller rejects one pending offer (+refund offer_fee) ──
+//   W3c re-point: canonical สำหรับ WeeeR `rejectOffer` (faultParty≠buyer → คืน offer_fee · ruling 5)
+const rejectOfferRoute = createRoute({
+  method: 'post',
+  path: '/{id}/offers/{offerId}/reject',
+  tags: ['Offers'],
+  summary: 'Seller rejects a pending offer (+refund offer_fee · canonical for WeeeR rejectOffer)',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid(), offerId: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Rejected + offer_fee refunded' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not seller / not resell listing' },
+    404: { description: 'Not found' },
+    409: { description: 'Offer not pending' },
+  },
+})
+
+listingsRouter.openapi(rejectOfferRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id, offerId } = c.req.valid('param')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Reject applies only to resell/scrap listings' } }, 403)
+  }
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  if (listing.ownerId !== user.userId && !isAdmin) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only the seller can reject an offer' } }, 403)
+  }
+  const [offer] = await db.select().from(offers).where(eq(offers.id, offerId)).limit(1)
+  if (!offer || offer.listingMetaId !== id) {
+    return c.json({ error: { code: 'NOT_FOUND', message: 'Offer not found on this listing' } }, 404)
+  }
+  if (offer.status !== 'pending') {
+    return c.json({ error: { code: 'OFFER_NOT_PENDING', message: `Offer is ${offer.status}` } }, 409)
+  }
+  await db.transaction(async (tx) => {
+    // CAS: reject เฉพาะถ้ายัง pending จริง (กัน double) + refund offer_fee (seller reject · faultParty≠buyer)
+    await tx
+      .update(offers)
+      .set({ status: 'rejected', updatedAt: new Date() })
+      .where(and(eq(offers.id, offerId), eq(offers.status, 'pending')))
+    await refundOfferFee(tx, offerId, offer.buyerId)
+  })
+  return c.json({ offerId, status: 'rejected' }, 200)
 })
 
 // ── GET /{id}/offers — offers บน listing (seller view) ─────────────────────────
