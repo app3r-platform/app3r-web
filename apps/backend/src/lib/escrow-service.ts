@@ -160,6 +160,16 @@ export async function refundOfferFee(tx: Tx, offerId: string, buyerId: string): 
     .limit(1)
   const amount = orig?.amount ?? 0
   if (amount <= 0) return 0
+  // idempotent re-fire guard (W3a): ถ้าเคย refund แล้ว (credit key มีอยู่) → no-op
+  //   กัน double-credit + UNIQUE(idempotency_key,point_type) violation เมื่อยิงซ้ำ
+  const [already] = await tx
+    .select({ id: pointLedger.id })
+    .from(pointLedger)
+    .where(
+      and(eq(pointLedger.idempotencyKey, `offer_fee-refund:offer:${offerId}`), eq(pointLedger.direction, 'credit')),
+    )
+    .limit(1)
+  if (already) return 0
   await creditGold(tx, {
     userId: buyerId,
     amount,

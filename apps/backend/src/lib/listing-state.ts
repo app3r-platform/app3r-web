@@ -14,12 +14,12 @@
  *
  * กฎ: ห้ามเปลี่ยน state ตรง — ผ่าน transitionListingState() เสมอ + audit ทุกครั้ง (2A: actorRole/faultParty/badRecord)
  */
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { db } from '../db/client'
-import { listingMeta, adminConfigAudit, LISTING_STATES } from '../db/schema'
+import { listingMeta, offers, adminConfigAudit, LISTING_STATES } from '../db/schema'
 import type { ListingState } from '../db/schema'
 import { type Tx } from './point-service'
-import { lockEscrow, releaseEscrow, refundEscrow, getPlatformFeePercent } from './escrow-service'
+import { lockEscrow, releaseEscrow, refundEscrow, refundOfferFee, getPlatformFeePercent } from './escrow-service'
 
 // allowed transitions — D59 canonical (Ruling 1B) · single source of truth
 const TRANSITIONS: Record<ListingState, ListingState[]> = {
@@ -59,6 +59,26 @@ export function isEscrowMutatingTransition(from: ListingState, to: ListingState)
   if (to === 'completed') return true // release
   if (to === 'cancelled' && ESCROW_LOCKED.has(from)) return true // refund
   return false
+}
+
+/**
+ * F3 (W3a · ruling 5): cancel จาก receiving_offers (ยังไม่ lock escrow) → คืน offer_fee
+ *   ของ pending offers ทุกคน. centralize ที่นี่ (ไม่ใช่ route) → cancel ทุก path (รวม generic
+ *   /transition) คืนให้อัตโนมัติ = กัน bypass. เฉพาะ resell|scrap · faultParty≠buyer
+ *   (buyer ผิด=ริบ · ไม่ใช่ buyer=คืน). pure → unit-testable.
+ */
+export function shouldRefundOfferFeesOnCancel(
+  from: ListingState,
+  to: ListingState,
+  listingType: string,
+  faultParty?: 'seller' | 'buyer' | 'mutual' | 'none',
+): boolean {
+  return (
+    to === 'cancelled' &&
+    from === 'receiving_offers' &&
+    (listingType === 'resell' || listingType === 'scrap') &&
+    faultParty !== 'buyer'
+  )
 }
 
 export class StateTransitionError extends Error {
@@ -121,6 +141,21 @@ export async function transitionListingState(args: TransitionArgs, externalTx?: 
     } else if (args.to === 'cancelled' && ESCROW_LOCKED.has(from)) {
       // refund คืน payer เต็มจำนวน (เฉพาะ state ที่ล็อกเงินไว้แล้ว)
       await refundEscrow(tx, args.listingId)
+    }
+
+    // ── F3 (W3a): cancel จาก receiving_offers (ยังไม่ lock) → bulk refund offer_fee ────
+    // pending offers ทุกคน (faultParty≠buyer). idempotent: refundOfferFee มี re-fire guard +
+    // terminal-state กัน re-entry. centralize ที่นี่ → generic /transition cancel ก็คืนให้ (กัน bypass).
+    if (shouldRefundOfferFeesOnCancel(from, args.to, listing.listingType, args.faultParty)) {
+      const pendings = await tx
+        .select({ id: offers.id, buyerId: offers.buyerId })
+        .from(offers)
+        .where(and(eq(offers.listingMetaId, args.listingId), eq(offers.status, 'pending')))
+      const now = new Date()
+      for (const o of pendings) {
+        await tx.update(offers).set({ status: 'rejected', updatedAt: now }).where(eq(offers.id, o.id))
+        await refundOfferFee(tx, o.id, o.buyerId)
+      }
     }
 
     // ── apply state ──────────────────────────────────────────────────────────────

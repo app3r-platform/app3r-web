@@ -29,6 +29,7 @@ import {
   listingMeta,
   usedApplianceListings,
   offers,
+  resellFulfillment,
   LISTING_STATES,
   type ListingState,
   type ListingMeta,
@@ -508,6 +509,308 @@ listingsRouter.openapi(confirmFundingRoute, async (c) => {
     }
     const msg = err instanceof Error ? err.message : 'CONFIRM_FUNDING_FAILED'
     return c.json({ error: { code: 'CONFIRM_FUNDING_FAILED', message: msg } }, 400)
+  }
+})
+
+// ════════════════════════════════════════════════════════════════════════════
+// D2 Resell Wave 3a — guarded endpoints (RELEASE + REFUND · money path)
+//   RELEASE: ship → deliver → inspect-confirm (release escrow)
+//   REFUND : cancel (refundEscrow จาก locked · offer_fee bulk จาก receiving_offers · F3)
+//   เงินเคลื่อนผ่าน guarded endpoint เท่านั้น (S1 ยังคง block generic /transition)
+// ════════════════════════════════════════════════════════════════════════════
+
+const INSPECTION_WINDOW_MS = 72 * 60 * 60 * 1000 // D5: inspection window 72h (ค่าคงที่ · timeout job = W3c)
+
+// helper: map transition error → response (ใช้ร่วม guarded endpoints)
+function mapTransitionError(
+  c: { json: (b: unknown, s: 400 | 404) => Response },
+  err: unknown,
+): Response {
+  if (err instanceof StateTransitionError) {
+    return c.json({ error: { code: 'INVALID_TRANSITION', message: err.message } }, 400)
+  }
+  const msg = err instanceof Error ? err.message : 'OPERATION_FAILED'
+  if (msg === 'LISTING_NOT_FOUND') return c.json({ error: { code: 'NOT_FOUND', message: msg } }, 404)
+  return c.json({ error: { code: 'OPERATION_FAILED', message: msg } }, 400)
+}
+
+// ── POST /{id}/ship — seller ส่ง → in_progress + fulfillment (R1/R6) ───────────
+const shipRoute = createRoute({
+  method: 'post',
+  path: '/{id}/ship',
+  tags: ['Listings'],
+  summary: 'Seller ships → in_progress + fulfillment (carrier/tracking/evidence · R1/R6)',
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            deliveryMethod: z.enum(['parcel', 'on_site']).optional(),
+            carrier: z.string().optional(),
+            trackingNo: z.string().optional(),
+            shipEvidence: z.array(z.string()).optional(), // file_uploads ref[] (R6 pre-ship)
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: { description: 'Shipped' },
+    400: { description: 'Invalid transition' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not seller / not resell listing' },
+    404: { description: 'Not found' },
+    409: { description: 'Wrong state' },
+  },
+})
+
+listingsRouter.openapi(shipRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const b = c.req.valid('json')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Ship applies only to resell/scrap listings' } }, 403)
+  }
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  if (listing.ownerId !== user.userId && !isAdmin) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only the seller can ship' } }, 403)
+  }
+  if (listing.state !== 'buyer_confirmed') {
+    return c.json({ error: { code: 'INVALID_STATE', message: `Listing is ${listing.state}, expected buyer_confirmed` } }, 409)
+  }
+  try {
+    const res = await db.transaction(async (tx) => {
+      const now = new Date()
+      await tx
+        .insert(resellFulfillment)
+        .values({
+          listingId: id,
+          deliveryMethod: b.deliveryMethod ?? null,
+          carrier: b.carrier ?? null,
+          trackingNo: b.trackingNo ?? null,
+          shipAt: now,
+          shipEvidence: b.shipEvidence ?? null,
+        })
+        .onConflictDoUpdate({
+          target: resellFulfillment.listingId,
+          set: {
+            deliveryMethod: b.deliveryMethod ?? null,
+            carrier: b.carrier ?? null,
+            trackingNo: b.trackingNo ?? null,
+            shipAt: now,
+            shipEvidence: b.shipEvidence ?? null,
+            updatedAt: now,
+          },
+        })
+      // buyer_confirmed → in_progress (ไม่ใช่ escrow-mutating · เงินยัง locked)
+      return transitionListingState({ listingId: id, to: 'in_progress', actorUserId: user.userId, actorRole: 'seller' }, tx)
+    })
+    return c.json({ listingId: res.listingId, state: res.state }, 200)
+  } catch (err) {
+    return mapTransitionError(c, err)
+  }
+})
+
+// ── POST /{id}/deliver — ถึงผู้ซื้อ → delivered → inspection_period (R1) ───────
+const deliverRoute = createRoute({
+  method: 'post',
+  path: '/{id}/deliver',
+  tags: ['Listings'],
+  summary: 'Mark delivered → inspection_period + inspection deadline (72h · R1)',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Delivered → inspection_period' },
+    400: { description: 'Invalid transition' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not party / not resell listing' },
+    404: { description: 'Not found' },
+    409: { description: 'Wrong state' },
+  },
+})
+
+listingsRouter.openapi(deliverRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Deliver applies only to resell/scrap listings' } }, 403)
+  }
+  if (listing.state !== 'in_progress') {
+    return c.json({ error: { code: 'INVALID_STATE', message: `Listing is ${listing.state}, expected in_progress` } }, 409)
+  }
+  // authz: seller(owner) OR selected buyer OR admin (parcel arrive / on_site hand-off)
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  const isOwner = listing.ownerId === user.userId
+  let allowed = isOwner || isAdmin
+  if (!allowed) {
+    const [sel] = await db
+      .select({ buyerId: offers.buyerId })
+      .from(offers)
+      .where(and(eq(offers.listingMetaId, id), eq(offers.status, 'selected')))
+      .limit(1)
+    allowed = !!sel && sel.buyerId === user.userId
+  }
+  if (!allowed) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only seller, selected buyer, or admin can mark delivered' } }, 403)
+  }
+  const now = new Date()
+  const inspectionDeadline = new Date(now.getTime() + INSPECTION_WINDOW_MS)
+  try {
+    const res = await db.transaction(async (tx) => {
+      await tx
+        .update(resellFulfillment)
+        .set({ deliverAt: now, inspectionDeadline, updatedAt: now })
+        .where(eq(resellFulfillment.listingId, id))
+      // in_progress → delivered → inspection_period (atomic · เปิด countdown ตรวจรับ · ไม่ใช่ escrow-mutating)
+      await transitionListingState(
+        { listingId: id, to: 'delivered', actorUserId: user.userId, actorRole: isOwner ? 'seller' : 'buyer' },
+        tx,
+      )
+      return transitionListingState(
+        { listingId: id, to: 'inspection_period', actorUserId: user.userId, actorRole: isOwner ? 'seller' : 'buyer' },
+        tx,
+      )
+    })
+    return c.json({ listingId: res.listingId, state: res.state, inspectionDeadline: inspectionDeadline.toISOString() }, 200)
+  } catch (err) {
+    return mapTransitionError(c, err)
+  }
+})
+
+// ── POST /{id}/inspect-confirm — buyer ยืนยันรับ → completed = releaseEscrow (R1) ──
+const inspectConfirmRoute = createRoute({
+  method: 'post',
+  path: '/{id}/inspect-confirm',
+  tags: ['Listings'],
+  summary: 'Buyer confirms receipt → completed + release escrow (net−fee D75 · guarded · S1)',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Completed + escrow released' },
+    400: { description: 'Invalid transition' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not the selected buyer / not resell listing' },
+    404: { description: 'Not found' },
+    409: { description: 'Wrong state / no selected offer' },
+  },
+})
+
+listingsRouter.openapi(inspectConfirmRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Inspect-confirm applies only to resell/scrap listings' } }, 403)
+  }
+  if (listing.state !== 'inspection_period') {
+    return c.json({ error: { code: 'INVALID_STATE', message: `Listing is ${listing.state}, expected inspection_period` } }, 409)
+  }
+  // release authoritative: derive buyer (payer) จาก selected offer (S1 pattern · ไม่เชื่อ body · กัน Gold theft)
+  const [sel] = await db
+    .select({ buyerId: offers.buyerId })
+    .from(offers)
+    .where(and(eq(offers.listingMetaId, id), eq(offers.status, 'selected')))
+    .limit(1)
+  if (!sel) return c.json({ error: { code: 'NO_SELECTED_OFFER', message: 'No selected offer to complete' } }, 409)
+  if (sel.buyerId !== user.userId) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only the buyer can confirm receipt' } }, 403)
+  }
+  try {
+    // inspection_period → completed → releaseEscrow (credit seller net−fee · A1 pct=0→fee=0 · reference=escrow:{holdId})
+    const res = await transitionListingState({ listingId: id, to: 'completed', actorUserId: user.userId, actorRole: 'buyer' })
+    return c.json({ listingId: res.listingId, state: res.state }, 200)
+  } catch (err) {
+    return mapTransitionError(c, err)
+  }
+})
+
+// ── POST /{id}/cancel — REFUND: refundEscrow(locked) / offer_fee bulk(receiving_offers · F3) ──
+const cancelRoute = createRoute({
+  method: 'post',
+  path: '/{id}/cancel',
+  tags: ['Listings'],
+  summary: 'Cancel → refund escrow (locked) / refund offer_fee (receiving_offers · F3) · faultParty single-source',
+  security: [{ bearerAuth: [] }],
+  request: { params: z.object({ id: z.string().uuid() }) },
+  responses: {
+    200: { description: 'Cancelled + refunded' },
+    400: { description: 'Invalid transition' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not authorized / not resell listing' },
+    404: { description: 'Not found' },
+    409: { description: 'Not cancellable in W3a (post-ship → dispute/mutual)' },
+  },
+})
+
+// W3a cancel-able states (pre-ship): post-ship (in_progress+) → dispute/mutual = W3b
+const W3A_CANCELLABLE: ReadonlySet<ListingState> = new Set([
+  'draft',
+  'announced',
+  'receiving_offers',
+  'buyer_confirmed',
+])
+
+listingsRouter.openapi(cancelRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Cancel applies only to resell/scrap listings' } }, 403)
+  }
+  const state = listing.state as ListingState
+  if (!W3A_CANCELLABLE.has(state)) {
+    return c.json(
+      { error: { code: 'CANCEL_NOT_ALLOWED', message: `Cannot cancel from ${state} (post-ship → dispute/mutual-cancel)` } },
+      409,
+    )
+  }
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  const isOwner = listing.ownerId === user.userId
+  // selected buyer = buyer-initiated cancel จาก buyer_confirmed (pre-ship withdraw)
+  let isSelectedBuyer = false
+  if (state === 'buyer_confirmed') {
+    const [sel] = await db
+      .select({ buyerId: offers.buyerId })
+      .from(offers)
+      .where(and(eq(offers.listingMetaId, id), eq(offers.status, 'selected')))
+      .limit(1)
+    isSelectedBuyer = !!sel && sel.buyerId === user.userId
+  }
+  if (!isOwner && !isAdmin && !isSelectedBuyer) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only owner, admin, or the selected buyer can cancel' } }, 403)
+  }
+  // faultParty single-source (F6 prep · bad_record derive จาก faultParty)
+  let faultParty: 'seller' | 'buyer' | 'mutual' | 'none'
+  let actorRole: string
+  if (isSelectedBuyer && !isOwner) {
+    faultParty = 'buyer' // buyer ถอนก่อนส่ง
+    actorRole = 'buyer'
+  } else if (isOwner) {
+    faultParty = state === 'draft' || state === 'announced' ? 'none' : 'seller'
+    actorRole = 'seller'
+  } else {
+    faultParty = 'none' // admin neutral
+    actorRole = 'admin'
+  }
+  try {
+    // cancel จาก buyer_confirmed = escrow-mutating → guarded endpoint นี้คือ path ที่อนุญาต (refundEscrow)
+    // cancel จาก receiving_offers → F3 bulk offer_fee refund (centralize ใน transitionListingState)
+    const res = await transitionListingState({ listingId: id, to: 'cancelled', actorUserId: user.userId, actorRole, faultParty })
+    return c.json({ listingId: res.listingId, state: res.state, faultParty }, 200)
+  } catch (err) {
+    return mapTransitionError(c, err)
   }
 })
 
