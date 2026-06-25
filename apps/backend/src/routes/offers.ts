@@ -83,6 +83,7 @@ const createRoute_ = createRoute({
   responses: {
     201: { description: 'Offer created' },
     401: { description: 'Unauthorized' },
+    403: { description: 'Owner cannot bid on own listing' },
     404: { description: 'Listing not found' },
   },
 })
@@ -93,6 +94,10 @@ offersRouter.openapi(createRoute_, async (c) => {
   const b = c.req.valid('json')
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, b.listingId)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // S5 (W2.1): กัน self-deal — owner ยื่น offer ใส่ประกาศตัวเองไม่ได้ (path คู่ขนานกับ listings POST /{id}/offers)
+  if (listing.ownerId === user.userId) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Owner cannot bid on own listing' } }, 403)
+  }
 
   const created = await db.transaction(async (tx) => {
     const [row] = await tx

@@ -30,11 +30,12 @@ import {
   usedApplianceListings,
   offers,
   LISTING_STATES,
+  type ListingState,
   type ListingMeta,
   type UsedApplianceListing,
 } from '../db/schema'
 import { verifyAccessToken } from '../lib/jwt'
-import { transitionListingState, StateTransitionError } from '../lib/listing-state'
+import { transitionListingState, StateTransitionError, isEscrowMutatingTransition } from '../lib/listing-state'
 import { recordView, incrementOfferCount, publicCounters, isListingInsider } from '../lib/listing-counters'
 import { sellerTypeFromRole, getFee, chargeFee, toListingDto, type AuthedUser } from '../lib/listing-helpers'
 import { refundOfferFee } from '../lib/escrow-service'
@@ -290,6 +291,7 @@ const transitionRoute = createRoute({
     200: { description: 'Transitioned' },
     400: { description: 'Invalid transition / missing args' },
     401: { description: 'Unauthorized' },
+    403: { description: 'Escrow-mutating transition blocked (use guarded endpoint)' },
     404: { description: 'Not found' },
   },
 })
@@ -299,6 +301,31 @@ listingsRouter.openapi(transitionRoute, async (c) => {
   if (!user) return unauthorized(c)
   const { id } = c.req.valid('param')
   const { to, buyerUserId, pointAmount, actorRole, faultParty } = c.req.valid('json')
+  // S1 (W2.1 · B1 blocker): BLOCK escrow-mutating transitions ออกจาก generic route (Gold theft vector).
+  //   buyer_confirmed=lock / completed=release / cancel-from-locked=refund ต้องผ่าน guarded endpoint
+  //   ที่ derive payer/amount จาก selected offer (ไม่เชื่อ body buyerUserId/pointAmount).
+  const [cur] = await db
+    .select({ state: listingMeta.state, ownerId: listingMeta.ownerId })
+    .from(listingMeta)
+    .where(eq(listingMeta.listingId, id))
+    .limit(1)
+  if (!cur) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // GAP-1 (W2.1 · adversarial · authz): เฉพาะ owner/admin เปลี่ยน state ประกาศได้ (กัน griefing — hostile cancel/dispute/revert)
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  if (cur.ownerId !== user.userId && !isAdmin) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only listing owner or admin can transition' } }, 403)
+  }
+  if (isEscrowMutatingTransition(cur.state as ListingState, to)) {
+    return c.json(
+      {
+        error: {
+          code: 'ESCROW_TRANSITION_BLOCKED',
+          message: 'Escrow-affecting transition must use its dedicated guarded endpoint (confirm-funding / receipt / cancel)',
+        },
+      },
+      403,
+    )
+  }
   try {
     const updated = await transitionListingState({ listingId: id, to, actorUserId: user.userId, buyerUserId, pointAmount, actorRole, faultParty })
     return c.json({ listingId: updated.listingId, state: updated.state }, 200)
@@ -329,6 +356,7 @@ const selectOfferRoute = createRoute({
     401: { description: 'Unauthorized' },
     403: { description: 'Not listing owner' },
     404: { description: 'Listing/offer not found' },
+    409: { description: 'Offer not pending' },
   },
 })
 
@@ -348,18 +376,32 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
   if (!offer || offer.listingMetaId !== id) {
     return c.json({ error: { code: 'NOT_FOUND', message: 'Offer not found on this listing' } }, 404)
   }
+  // S2 (W2.1): select ได้เฉพาะ offer ที่ยัง pending (กัน re-select offer ที่ buyer ถอน/rejected/selected แล้ว)
+  if (offer.status !== 'pending') {
+    return c.json({ error: { code: 'OFFER_NOT_PENDING', message: `Offer is ${offer.status}` } }, 409)
+  }
 
   // 1A funding window: เลือก → buyer มี 24h ยืนยัน+เติม (เงินล็อก@buyer_confirmed · ❌ ยังไม่ล็อกที่นี่)
   const FUNDING_WINDOW_MS = 24 * 60 * 60 * 1000
   const now = new Date()
   const fundingDeadline = new Date(now.getTime() + FUNDING_WINDOW_MS)
   try {
-    await db.transaction(async (tx) => {
-      // selected offer + funding window (1A)
-      await tx
+    // S2 (W2.1 · adversarial): ทุกอย่างใน 1 txn (atomic) + listing FOR UPDATE + CAS offer (กัน TOCTOU re-select/double-select)
+    const res = await db.transaction(async (tx) => {
+      const [lst] = await tx
+        .select()
+        .from(listingMeta)
+        .where(eq(listingMeta.listingId, id))
+        .for('update')
+      if (!lst) throw new Error('LISTING_NOT_FOUND')
+      if (lst.state !== 'receiving_offers') throw new Error('LISTING_NOT_RECEIVING_OFFERS')
+      // CAS: select เฉพาะถ้า offer ยัง pending จริง ณ จุดเขียน (กัน re-select offer ที่ถอน/rejected)
+      const selUpd = await tx
         .update(offers)
         .set({ status: 'selected', selectedAt: now, fundingDeadline, updatedAt: now })
-        .where(eq(offers.id, offerId))
+        .where(and(eq(offers.id, offerId), eq(offers.status, 'pending')))
+        .returning({ id: offers.id })
+      if (selUpd.length === 0) throw new Error('OFFER_NOT_PENDING')
       // reject pending อื่น + คืน offer_fee (faultParty≠buyer · ruling 5)
       const others = await tx
         .select()
@@ -369,13 +411,11 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
         await tx.update(offers).set({ status: 'rejected', updatedAt: now }).where(eq(offers.id, o.id))
         await refundOfferFee(tx, o.id, o.buyerId)
       }
-    })
-    // transition → offer_selected (matched · ❌ ยังไม่ล็อกเงิน · เงินล็อกตอน confirm-funding · 1A)
-    const res = await transitionListingState({
-      listingId: id,
-      to: 'offer_selected',
-      actorUserId: user.userId,
-      actorRole: 'seller',
+      // transition → offer_selected (atomic · ไม่ล็อกเงิน · เงินล็อกตอน confirm-funding · 1A)
+      return transitionListingState(
+        { listingId: id, to: 'offer_selected', actorUserId: user.userId, actorRole: 'seller' },
+        tx,
+      )
     })
     return c.json(
       { listingId: res.listingId, state: res.state, offerId, fundingDeadline: fundingDeadline.toISOString() },
@@ -386,6 +426,15 @@ listingsRouter.openapi(selectOfferRoute, async (c) => {
       return c.json({ error: { code: 'INVALID_TRANSITION', message: err.message } }, 400)
     }
     const msg = err instanceof Error ? err.message : 'SELECT_OFFER_FAILED'
+    if (msg === 'OFFER_NOT_PENDING') {
+      return c.json({ error: { code: 'OFFER_NOT_PENDING', message: 'Offer is no longer pending' } }, 409)
+    }
+    if (msg === 'LISTING_NOT_RECEIVING_OFFERS') {
+      return c.json({ error: { code: 'INVALID_STATE', message: 'Listing is not receiving offers' } }, 409)
+    }
+    if (msg === 'LISTING_NOT_FOUND') {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+    }
     return c.json({ error: { code: 'SELECT_OFFER_FAILED', message: msg } }, 400)
   }
 })
@@ -414,6 +463,10 @@ listingsRouter.openapi(confirmFundingRoute, async (c) => {
   const { id } = c.req.valid('param')
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // S6 (W2.1 · defense-in-depth): ต้องอยู่ offer_selected เท่านั้น (state machine กันอีกชั้น)
+  if (listing.state !== 'offer_selected') {
+    return c.json({ error: { code: 'INVALID_STATE', message: `Listing is ${listing.state}, expected offer_selected` } }, 409)
+  }
   // selected offer = authoritative buyer + amount (ไม่เชื่อ body · security rule 5)
   const [sel] = await db
     .select()
@@ -424,9 +477,9 @@ listingsRouter.openapi(confirmFundingRoute, async (c) => {
   if (sel.buyerId !== user.userId) {
     return c.json({ error: { code: 'FORBIDDEN', message: 'Only the selected buyer can confirm funding' } }, 403)
   }
-  // R4: funding window หมดอายุ → ปฏิเสธ (รอ timeout job revert)
-  if (sel.fundingDeadline && sel.fundingDeadline.getTime() < Date.now()) {
-    return c.json({ error: { code: 'FUNDING_WINDOW_EXPIRED', message: 'Funding window expired' } }, 409)
+  // R4 + GAP-5 (W2.1): funding window หมดอายุ/ไม่มี → ปฏิเสธ (treat null = invalid · defense-in-depth)
+  if (!sel.fundingDeadline || sel.fundingDeadline.getTime() < Date.now()) {
+    return c.json({ error: { code: 'FUNDING_WINDOW_EXPIRED', message: 'Funding window expired or missing' } }, 409)
   }
   try {
     const res = await transitionListingState({
@@ -474,6 +527,7 @@ const createOfferRoute = createRoute({
   responses: {
     201: { description: 'Offer created' },
     401: { description: 'Unauthorized' },
+    403: { description: 'Owner cannot bid on own listing' },
     404: { description: 'Listing not found' },
   },
 })
@@ -485,6 +539,10 @@ listingsRouter.openapi(createOfferRoute, async (c) => {
   const b = c.req.valid('json')
   const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
   if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  // S5 (W2.1): กัน self-deal — owner ยื่น offer ใส่ประกาศตัวเองไม่ได้
+  if (listing.ownerId === user.userId) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Owner cannot bid on own listing' } }, 403)
+  }
 
   const created = await db.transaction(async (tx) => {
     const [row] = await tx

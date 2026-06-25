@@ -46,6 +46,8 @@ export const wallets = pgTable(
     index('idx_wallets_user_id').on(table.userId),
     // Gen 122 B-D2: Gold='cash' · Silver='bonus' (Point LOCKED · no other point_type)
     check('chk_wallets_point_type', sql`${table.pointType} IN ('cash', 'bonus')`),
+    // W2.1 (B3 · migration 0044): money-safety — balance ห้ามติดลบ (DB net กัน TOCTOU mint Gold)
+    check('chk_wallets_balance_nonneg', sql`${table.balance} >= 0`),
   ],
 )
 

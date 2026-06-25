@@ -27,6 +27,7 @@ import {
   jsonb,
   timestamp,
   index,
+  uniqueIndex,
   check,
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
@@ -66,6 +67,8 @@ export const escrowHolds = pgTable(
     index('idx_escrow_holds_state').on(t.state),
     check('chk_escrow_holds_state', sql`${t.state} IN ('locked', 'released', 'refunded')`),
     check('chk_escrow_holds_point_type', sql`${t.pointType} = 'cash'`),
+    // W2.1 (migration 0044): DB safety net — ≤1 active locked hold ต่อ transaction (กัน double-lock)
+    uniqueIndex('idx_escrow_holds_one_locked').on(t.transactionRef).where(sql`${t.state} = 'locked'`),
   ],
 )
 

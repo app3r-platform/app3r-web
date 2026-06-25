@@ -48,6 +48,19 @@ export function canTransition(from: ListingState, to: ListingState): boolean {
   return TRANSITIONS[from]?.includes(to) ?? false
 }
 
+/**
+ * S1 (W2.1 · B1): transition นี้มี escrow side-effect (เคลื่อนเงิน) หรือไม่
+ *   buyer_confirmed = lock · completed = release · cancelled-จาก-locked = refund
+ * generic transition route ต้อง BLOCK อันที่ true → บังคับผ่าน guarded endpoint
+ * (confirm-funding / receipt / cancel) ที่ derive payer/amount จาก selected offer (กัน Gold theft).
+ */
+export function isEscrowMutatingTransition(from: ListingState, to: ListingState): boolean {
+  if (to === 'buyer_confirmed') return true // lock
+  if (to === 'completed') return true // release
+  if (to === 'cancelled' && ESCROW_LOCKED.has(from)) return true // refund
+  return false
+}
+
 export class StateTransitionError extends Error {
   constructor(public from: ListingState, public to: ListingState) {
     super(`INVALID_TRANSITION: ${from} → ${to}`)
@@ -76,8 +89,8 @@ export interface TransitionArgs {
  * - completed       → releaseEscrow (credit recipient net − fee · D75)
  * - cancelled       → refundEscrow (ถ้า from ∈ locked states)
  */
-export async function transitionListingState(args: TransitionArgs) {
-  return db.transaction(async (tx: Tx) => {
+export async function transitionListingState(args: TransitionArgs, externalTx?: Tx) {
+  const run = async (tx: Tx) => {
     const [listing] = await tx
       .select()
       .from(listingMeta)
@@ -135,5 +148,7 @@ export async function transitionListingState(args: TransitionArgs) {
     })
 
     return updated
-  })
+  }
+  // S2 (W2.1): รองรับ compose ใน txn ภายนอก (atomic กับ select-offer) — ไม่ส่ง externalTx = เปิด txn เอง
+  return externalTx ? run(externalTx) : db.transaction(run)
 }

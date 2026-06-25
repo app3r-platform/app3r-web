@@ -7,7 +7,8 @@
  *
  * Migration: 0030_offers_resell.sql
  */
-import { pgTable, uuid, text, numeric, timestamp, index } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, numeric, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { users } from './users'
 import { listingMeta } from './listing-meta'
 
@@ -41,6 +42,8 @@ export const offers = pgTable(
     index('idx_offers_buyer').on(t.buyerId),
     index('idx_offers_status').on(t.status),
     index('idx_offers_funding_deadline').on(t.fundingDeadline),
+    // S2 (W2.1 · migration 0044): DB safety net — ≤1 selected offer ต่อ listing (กัน double-select split-brain)
+    uniqueIndex('idx_offers_one_selected').on(t.listingMetaId).where(sql`${t.status} = 'selected'`),
   ],
 )
 
