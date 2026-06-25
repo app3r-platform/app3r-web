@@ -84,25 +84,25 @@ const maintenanceApi: IMaintenanceDAL = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Resell Listing API (รายการขายต่อ)
+// Resell Listing API (รายการขายต่อ) — W3c: re-point → canonical /listings/*
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const resellListingApi: IResellListingDAL = {
-  /** GET /api/v1/resell/listings?shopId= */
-  async getListings(shopId) {
-    return apiGet<ResellListingRecord[]>(`/api/v1/resell/listings?shopId=${encodeURIComponent(shopId)}`);
+  /** GET /api/v1/listings/mine (canonical · shopId from auth) */
+  async getListings(_shopId) {
+    return apiGet<ResellListingRecord[]>(`/api/v1/listings/mine`);
   },
-  /** GET /api/v1/resell/listings/:id */
+  /** GET /api/v1/listings/:id */
   async getListing(id) {
-    return apiGet<ResellListingRecord>(`/api/v1/resell/listings/${encodeURIComponent(id)}`);
+    return apiGet<ResellListingRecord>(`/api/v1/listings/${encodeURIComponent(id)}`);
   },
-  /** POST /api/v1/resell/listings */
+  /** POST /api/v1/listings */
   async createListing(data) {
-    return apiPost<ResellListingRecord>("/api/v1/resell/listings", data);
+    return apiPost<ResellListingRecord>("/api/v1/listings", { listingType: "used_appliance", ...data });
   },
-  /** PATCH /api/v1/resell/listings/:id */
+  /** PATCH /api/v1/listings/:id */
   async updateListing(id, data) {
-    return apiPatch<ResellListingRecord>(`/api/v1/resell/listings/${encodeURIComponent(id)}`, data);
+    return apiPatch<ResellListingRecord>(`/api/v1/listings/${encodeURIComponent(id)}`, data);
   },
 };
 
