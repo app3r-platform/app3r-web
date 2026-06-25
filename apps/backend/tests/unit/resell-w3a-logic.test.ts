@@ -22,27 +22,32 @@ describe('W3a S1 boundary — isEscrowMutatingTransition', () => {
     expect(isEscrowMutatingTransition('receiving_offers', 'cancelled')).toBe(false) // F3 offer_fee only
     expect(isEscrowMutatingTransition('announced', 'cancelled')).toBe(false)
   })
+
+  it('F1 (W3b): disputed exits = escrow-mutating → generic /transition 403 → admin-resolve เท่านั้น (กัน deadlock)', () => {
+    expect(isEscrowMutatingTransition('disputed', 'cancelled')).toBe(true) // buyer-win refund
+    expect(isEscrowMutatingTransition('disputed', 'completed')).toBe(true) // seller-win/split release
+  })
 })
 
-describe('W3a F3 gate — shouldRefundOfferFeesOnCancel', () => {
-  it('fires: receiving_offers → cancelled · resell/scrap · faultParty≠buyer', () => {
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'cancelled', 'resell', 'seller')).toBe(true)
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'cancelled', 'scrap', 'none')).toBe(true)
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'cancelled', 'resell', undefined)).toBe(true)
+describe('offer_fee refund-on-cancel gate — shouldRefundOfferFeesOnCancel (W3a F3 + W3b carry#1)', () => {
+  it('fires: cancelled · resell/scrap · faultParty≠buyer (รวม selected-offer post-confirm · carry#1)', () => {
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'resell', 'seller')).toBe(true)
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'scrap', 'none')).toBe(true)
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'resell', 'mutual')).toBe(true)
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'resell', undefined)).toBe(true)
   })
 
-  it('does NOT fire: faultParty=buyer (ริบ · ruling 5)', () => {
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'cancelled', 'resell', 'buyer')).toBe(false)
+  it('does NOT fire: faultParty=buyer (FORFEIT · R9/R4 · ruling 5)', () => {
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'resell', 'buyer')).toBe(false)
   })
 
-  it('does NOT fire: from≠receiving_offers (locked = refundEscrow path) / to≠cancelled', () => {
-    expect(shouldRefundOfferFeesOnCancel('buyer_confirmed', 'cancelled', 'resell', 'seller')).toBe(false)
-    expect(shouldRefundOfferFeesOnCancel('offer_selected', 'cancelled', 'resell', 'seller')).toBe(false)
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'receiving_offers', 'resell', 'seller')).toBe(false)
+  it('does NOT fire: to≠cancelled (completed = seller-win/settle · ไม่คืน offer_fee)', () => {
+    expect(shouldRefundOfferFeesOnCancel('completed', 'resell', 'seller')).toBe(false)
+    expect(shouldRefundOfferFeesOnCancel('disputed', 'resell', 'seller')).toBe(false)
   })
 
   it('does NOT fire: non-resell listingType (parts/repair/maintain)', () => {
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'cancelled', 'parts', 'seller')).toBe(false)
-    expect(shouldRefundOfferFeesOnCancel('receiving_offers', 'cancelled', 'repair', 'none')).toBe(false)
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'parts', 'seller')).toBe(false)
+    expect(shouldRefundOfferFeesOnCancel('cancelled', 'repair', 'none')).toBe(false)
   })
 })

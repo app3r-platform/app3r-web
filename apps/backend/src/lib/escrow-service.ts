@@ -19,14 +19,17 @@ import { debitGold, creditGold, roundD75, type Tx } from './point-service'
 
 const PLATFORM_FEE_KEY = 'platform_fee_percent'
 
-/** อ่าน platform fee % จาก admin_config — default 0 (A1 LOCKED จน Resell-real · G5 wire path) */
+/**
+ * อ่าน platform fee % จาก admin_config — default 0 (A1 LOCKED จน Resell-real · G5 wire path)
+ * W3b hardening: clamp [0,100] — กัน fee% > 100 (fee > total → net ติดลบ = mint Gold)
+ */
 export async function getPlatformFeePercent(tx: Tx): Promise<number> {
+  const clamp = (n: number) => Math.min(Math.max(n, 0), 100)
   const [cfg] = await tx.select().from(adminConfig).where(eq(adminConfig.key, PLATFORM_FEE_KEY)).limit(1)
   const v = cfg?.value as unknown
-  if (typeof v === 'number' && v >= 0) return v
+  if (typeof v === 'number') return clamp(v)
   if (v && typeof v === 'object' && typeof (v as { percent?: unknown }).percent === 'number') {
-    const p = (v as { percent: number }).percent
-    return p >= 0 ? p : 0
+    return clamp((v as { percent: number }).percent)
   }
   return 0
 }
@@ -146,6 +149,85 @@ export async function refundEscrow(
     metadata: { escrow: true, phase: 'refund' },
   })
   return { holdId: hold.id, amount: hold.totalAmount }
+}
+
+/**
+ * splitEscrow (W3b · F2 · dispute resolution 'split') — แบ่งเงิน escrow buyer/seller.
+ *   no schema (reuse escrow_holds state='released' terminal + point_ledger 2 credit).
+ *   conservation: buyerRefund + sellerCredit + fee = total (D75 · mirror releaseEscrow).
+ *   fee = seller-bound (Q1) จาก sellerShare เท่านั้น · A1 pct=0 → fee=0.
+ *   GUARDS: (a) null-guard (re-fire safe) · (b) skip leg ≤0 (creditGold ไม่ guard 0/negative)
+ *           (c) sellerShare integer + 0≤share≤total (remainder→buyer · conservation)
+ *           (d) B2: platformFeeAmount set + fee leg → platform wallet (pre-A1/CF1 pct=0→fee=0 · wire-ready)
+ */
+export async function splitEscrow(
+  tx: Tx,
+  transactionRef: string,
+  sellerShare: number,
+): Promise<{ holdId: string; buyerRefund: number; sellerCredit: number; fee: number } | null> {
+  const hold = await findLockedHold(tx, transactionRef)
+  if (!hold) return null // (a) re-fire safe (state≠locked → null → no-op)
+  const total = hold.totalAmount
+  const share = Math.round(sellerShare) // (c) integer
+  if (share < 0 || share > total) {
+    throw new Error(`INVALID_SPLIT_SHARE: ${share} not in [0, ${total}]`)
+  }
+  // fee = seller-bound (Q1) จาก sellerShare · pct จาก snapshot@lock · A1 pct=0 → fee=0
+  const snap = (hold.feeConfigSnapshot ?? {}) as { platform_fee_percent?: number }
+  const pct = typeof snap.platform_fee_percent === 'number' ? snap.platform_fee_percent : 0
+  const rawFee = share * (pct / 100)
+  const fee = roundD75(rawFee) // D75
+  const sellerCredit = share - fee
+  const buyerRefund = total - share // remainder → buyer · conservation: buyerRefund+sellerCredit+fee = total
+  // (d) platformFeeAmount set (B2 wire-ready · fee leg → platform wallet เมื่อ B2 seed · pct=0→fee=0 ตอนนี้)
+  await tx
+    .update(escrowHolds)
+    .set({ state: 'released', platformFeeAmount: fee, updatedAt: new Date() })
+    .where(eq(escrowHolds.id, hold.id))
+  // (b) skip leg ≤0 — กัน creditGold phantom 0-row / negative
+  if (buyerRefund > 0) {
+    await creditGold(tx, {
+      userId: hold.payerUserId,
+      amount: buyerRefund,
+      reference: `escrow:${hold.id}`,
+      idempotencyKey: `escrow-split-buyer:${hold.id}`,
+      type: 'refund',
+      metadata: { escrow: true, phase: 'split', side: 'buyer' },
+    })
+  }
+  if (sellerCredit > 0) {
+    await creditGold(tx, {
+      userId: hold.recipientUserId,
+      amount: sellerCredit,
+      reference: `escrow:${hold.id}`,
+      idempotencyKey: `escrow-split-seller:${hold.id}`,
+      type: 'earn',
+      metadata: { escrow: true, phase: 'split', side: 'seller', fee, pct },
+    })
+  }
+  // (d) B2 fee leg → platform revenue wallet — OPEN (mirror releaseEscrow: fee บันทึกที่ hold.platformFeeAmount
+  //     · ยัง NOT credit wallet จน B2 seed platform user/wallet · pre-A1 pct=0→fee=0 → conservation exact)
+  // D75 audit (เฉพาะมี fee จริง — mirror releaseEscrow)
+  if (rawFee !== 0) {
+    const [led] = await tx
+      .select({ id: pointLedger.id })
+      .from(pointLedger)
+      .where(eq(pointLedger.idempotencyKey, `escrow-split-seller:${hold.id}`))
+      .limit(1)
+    if (led) {
+      await tx.insert(pointRoundingLog).values({
+        originalValue: String(rawFee),
+        roundedValue: fee,
+        delta: String(fee - rawFee),
+        direction: fee >= rawFee ? 'up' : 'down',
+        ledgerId: led.id,
+        feeType: 'platform_fee',
+        app: 'weeer',
+        formula: `Math.round(${share} * ${pct} / 100)`,
+      })
+    }
+  }
+  return { holdId: hold.id, buyerRefund, sellerCredit, fee }
 }
 
 /**

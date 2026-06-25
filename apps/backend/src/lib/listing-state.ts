@@ -14,7 +14,7 @@
  *
  * กฎ: ห้ามเปลี่ยน state ตรง — ผ่าน transitionListingState() เสมอ + audit ทุกครั้ง (2A: actorRole/faultParty/badRecord)
  */
-import { and, eq } from 'drizzle-orm'
+import { and, eq, inArray } from 'drizzle-orm'
 import { db } from '../db/client'
 import { listingMeta, offers, adminConfigAudit, LISTING_STATES } from '../db/schema'
 import type { ListingState } from '../db/schema'
@@ -37,11 +37,15 @@ const TRANSITIONS: Record<ListingState, ListingState[]> = {
 }
 
 // D2 W2 (1A): states ที่เงินถูกล็อกแล้ว → cancel = refund ผู้ซื้อ. เงินล็อก@buyer_confirmed (ไม่ใช่ offer_selected)
+// W3b (F1): +disputed — เงินยัง locked ระหว่างพิพาท → disputed→cancelled (admin buyer-win) ต้อง fire refundEscrow
+//   (กัน stranded Gold) + ทำให้ disputed→cancelled/completed = escrow-mutating → generic /transition 403
+//   → ผ่าน admin-resolve guarded เท่านั้น. refundEscrow no-op ถ้าไม่มี hold (offer_selected→disputed safe).
 const ESCROW_LOCKED: ReadonlySet<ListingState> = new Set([
   'buyer_confirmed',
   'in_progress',
   'delivered',
   'inspection_period',
+  'disputed',
 ])
 
 export function canTransition(from: ListingState, to: ListingState): boolean {
@@ -62,23 +66,19 @@ export function isEscrowMutatingTransition(from: ListingState, to: ListingState)
 }
 
 /**
- * F3 (W3a · ruling 5): cancel จาก receiving_offers (ยังไม่ lock escrow) → คืน offer_fee
- *   ของ pending offers ทุกคน. centralize ที่นี่ (ไม่ใช่ route) → cancel ทุก path (รวม generic
- *   /transition) คืนให้อัตโนมัติ = กัน bypass. เฉพาะ resell|scrap · faultParty≠buyer
- *   (buyer ผิด=ริบ · ไม่ใช่ buyer=คืน). pure → unit-testable.
+ * offer_fee refund-on-cancel (W3a F3 + W3b carry#1 · ruling 5):
+ *   FORFEIT ⟺ faultParty=buyer (R9 ถอน · R4 ไม่เติม 24h) · REFUND เมื่อ faultParty∈{seller,mutual,none,system}.
+ *   W3b carry#1: ครอบ active offer ทั้ง pending (cancel-from-receiving_offers · F3) และ selected
+ *   (seller-cancel-post-buyer_confirmed → คืน offer_fee selected buyer คู่กับ refundEscrow).
+ *   centralize ที่นี่ (ไม่ใช่ route) → cancel ทุก path (รวม generic /transition + admin buyer-win) คืนอัตโนมัติ = กัน bypass.
+ *   เฉพาะ resell|scrap. pure → unit-testable.
  */
 export function shouldRefundOfferFeesOnCancel(
-  from: ListingState,
   to: ListingState,
   listingType: string,
   faultParty?: 'seller' | 'buyer' | 'mutual' | 'none',
 ): boolean {
-  return (
-    to === 'cancelled' &&
-    from === 'receiving_offers' &&
-    (listingType === 'resell' || listingType === 'scrap') &&
-    faultParty !== 'buyer'
-  )
+  return to === 'cancelled' && (listingType === 'resell' || listingType === 'scrap') && faultParty !== 'buyer'
 }
 
 export class StateTransitionError extends Error {
@@ -143,16 +143,17 @@ export async function transitionListingState(args: TransitionArgs, externalTx?: 
       await refundEscrow(tx, args.listingId)
     }
 
-    // ── F3 (W3a): cancel จาก receiving_offers (ยังไม่ lock) → bulk refund offer_fee ────
-    // pending offers ทุกคน (faultParty≠buyer). idempotent: refundOfferFee มี re-fire guard +
-    // terminal-state กัน re-entry. centralize ที่นี่ → generic /transition cancel ก็คืนให้ (กัน bypass).
-    if (shouldRefundOfferFeesOnCancel(from, args.to, listing.listingType, args.faultParty)) {
-      const pendings = await tx
+    // ── offer_fee refund-on-cancel (W3a F3 + W3b carry#1) ────────────────────────────
+    // คืน offer_fee ของ active offers (pending=F3 receiving_offers · selected=seller-cancel-post-confirm)
+    // เมื่อ faultParty≠buyer. idempotent: refundOfferFee มี re-fire guard + terminal-state กัน re-entry.
+    // centralize ที่นี่ → cancel ทุก path (generic /transition + admin buyer-win) คืนอัตโนมัติ = กัน bypass.
+    if (shouldRefundOfferFeesOnCancel(args.to, listing.listingType, args.faultParty)) {
+      const activeOffers = await tx
         .select({ id: offers.id, buyerId: offers.buyerId })
         .from(offers)
-        .where(and(eq(offers.listingMetaId, args.listingId), eq(offers.status, 'pending')))
+        .where(and(eq(offers.listingMetaId, args.listingId), inArray(offers.status, ['pending', 'selected'])))
       const now = new Date()
-      for (const o of pendings) {
+      for (const o of activeOffers) {
         await tx.update(offers).set({ status: 'rejected', updatedAt: now }).where(eq(offers.id, o.id))
         await refundOfferFee(tx, o.id, o.buyerId)
       }

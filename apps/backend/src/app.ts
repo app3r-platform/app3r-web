@@ -60,6 +60,7 @@ import { listingQuestionsRouter } from './routes/listing-questions'
 import { moderationRouter } from './routes/moderation'
 import { adsRouter } from './routes/ads'
 import { offersRouter } from './routes/offers' // Wave 2.x Part1 (D61)
+import { resellDisputesRouter } from './routes/resell-disputes' // D2 W3b: admin dispute resolution (3-way)
 
 export const app = new OpenAPIHono()
 
@@ -194,6 +195,9 @@ app.route('/api/v1/ads/', adsRouter)
 // Wave 2.x Part1: D61 offers (buyer offers API)
 app.route('/api/v1/offers', offersRouter)
 app.route('/api/v1/offers/', offersRouter)
+// D2 W3b: admin dispute resolution (3-way · guarded · admin-only)
+app.route('/api/v1/admin/resell/disputes', resellDisputesRouter)
+app.route('/api/v1/admin/resell/disputes/', resellDisputesRouter)
 
 // ── OpenAPI Spec ─────────────────────────────────────────────────────────────
 // D85: auto-generated OpenAPI 3.1 spec (DAL contract for P3/P4/P5)

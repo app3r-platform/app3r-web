@@ -30,6 +30,7 @@ import {
   usedApplianceListings,
   offers,
   resellFulfillment,
+  resellDisputes,
   LISTING_STATES,
   type ListingState,
   type ListingMeta,
@@ -814,6 +815,99 @@ listingsRouter.openapi(cancelRoute, async (c) => {
   }
 })
 
+// ── POST /{id}/dispute — raise dispute (party-only · in_progress/delivered/inspection_period) ──
+//   W3b · R6/R8/R11 → disputed (เงินค้าง locked รอ admin-resolve) · admin 3-way = routes/resell-disputes.ts
+const disputeRoute = createRoute({
+  method: 'post',
+  path: '/{id}/dispute',
+  tags: ['Listings'],
+  summary: 'Raise dispute (party-only · in_progress/delivered/inspection_period → disputed · R6/R8/R11)',
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            disputeType: z.enum(['not_as_described', 'damaged', 'not_shipped', 'parcel_damage', 'other']),
+            reason: z.string().min(1),
+            evidence: z.array(z.string()).optional(), // file_uploads ref[]
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: { description: 'Dispute raised → disputed' },
+    400: { description: 'Invalid transition' },
+    401: { description: 'Unauthorized' },
+    403: { description: 'Not a party / not resell listing' },
+    404: { description: 'Not found' },
+    409: { description: 'Wrong state / dispute already open' },
+  },
+})
+
+const DISPUTABLE_STATES: ReadonlySet<ListingState> = new Set(['in_progress', 'delivered', 'inspection_period'])
+
+listingsRouter.openapi(disputeRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { id } = c.req.valid('param')
+  const b = c.req.valid('json')
+  const [listing] = await db.select().from(listingMeta).where(eq(listingMeta.listingId, id)).limit(1)
+  if (!listing) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
+  if (!isResellListingType(listing.listingType)) {
+    return c.json({ error: { code: 'NOT_RESELL_LISTING', message: 'Dispute applies only to resell/scrap listings' } }, 403)
+  }
+  if (!DISPUTABLE_STATES.has(listing.state as ListingState)) {
+    return c.json({ error: { code: 'INVALID_STATE', message: `Cannot dispute from ${listing.state}` } }, 409)
+  }
+  // authz: party only (seller=owner OR selected buyer)
+  const [sel] = await db
+    .select({ buyerId: offers.buyerId })
+    .from(offers)
+    .where(and(eq(offers.listingMetaId, id), eq(offers.status, 'selected')))
+    .limit(1)
+  const isOwner = listing.ownerId === user.userId
+  const isBuyer = !!sel && sel.buyerId === user.userId
+  if (!isOwner && !isBuyer) {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Only the seller or buyer can raise a dispute' } }, 403)
+  }
+  // one open dispute per listing
+  const [existing] = await db
+    .select({ id: resellDisputes.id })
+    .from(resellDisputes)
+    .where(and(eq(resellDisputes.listingId, id), inArray(resellDisputes.status, ['open', 'under_review'])))
+    .limit(1)
+  if (existing) {
+    return c.json({ error: { code: 'DISPUTE_ALREADY_OPEN', message: 'An open dispute already exists' } }, 409)
+  }
+  try {
+    const res = await db.transaction(async (tx) => {
+      const [d] = await tx
+        .insert(resellDisputes)
+        .values({
+          listingId: id,
+          raisedByUserId: user.userId,
+          disputeType: b.disputeType,
+          reason: b.reason,
+          evidence: b.evidence ?? null,
+          status: 'open',
+        })
+        .returning({ id: resellDisputes.id })
+      // → disputed (ไม่ใช่ escrow-mutating · เงินค้าง locked รอ admin) · fault กำหนดตอน resolve
+      await transitionListingState(
+        { listingId: id, to: 'disputed', actorUserId: user.userId, actorRole: isOwner ? 'seller' : 'buyer' },
+        tx,
+      )
+      return d!
+    })
+    return c.json({ disputeId: res.id, listingId: id, state: 'disputed' }, 201)
+  } catch (err) {
+    return mapTransitionError(c, err)
+  }
+})
+
 // ── POST /{id}/offers — buyer ยื่น offer (D61) ─────────────────────────────────
 const createOfferRoute = createRoute({
   method: 'post',
@@ -827,7 +921,7 @@ const createOfferRoute = createRoute({
       content: {
         'application/json': {
           schema: z.object({
-            offerPrice: z.number().nonnegative(),
+            offerPrice: z.number().int().positive(), // W3b GAP-2: Gold integer > 0 (กัน 0/เศษ → price drift @lock)
             deliveryMethod: z.string(),
             message: z.string().optional(),
           }),

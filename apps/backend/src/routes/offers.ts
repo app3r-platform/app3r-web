@@ -72,7 +72,7 @@ const createRoute_ = createRoute({
         'application/json': {
           schema: z.object({
             listingId: z.string().uuid(),
-            offerPrice: z.number().nonnegative(),
+            offerPrice: z.number().int().positive(), // W3b GAP-2: Gold integer > 0 (กัน 0/เศษ → price drift @lock)
             deliveryMethod: z.string(),
             message: z.string().optional(),
           }),
