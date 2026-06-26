@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../_lib/api";
 import type { ResellTransaction, ListingStatus } from "../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../_lib/types";
+import { pointsLabel } from "../_lib/format";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const ACTIVE_STATUSES: ListingStatus[] = ["in_progress", "delivered", "inspection_period"];
@@ -122,7 +123,7 @@ export default function ResellTransactionsPage() {
                 </span>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{tx.price.toLocaleString()} พอยต์</p>
+                <p className="text-sm font-bold text-[#FF663A]">{pointsLabel(tx.price)}</p>
                 <p className="text-xs text-gray-400">
                   {new Date(tx.updatedAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
                 </p>

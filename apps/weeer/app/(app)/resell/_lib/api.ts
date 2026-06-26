@@ -54,6 +54,20 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// ── W0-followup-2: mapper-normalize raw backend → FE-safe shape ─────────────
+// price=null คงเป็น null (ห้าม → 0 · money-display constraint) · deliveryMethods=null → []
+function normalizeListing(l: Listing): Listing {
+  return {
+    ...l,
+    price: l.price ?? null,
+    deliveryMethods: l.deliveryMethods ?? [],
+  };
+}
+function normalizeOffer(o: Offer): Offer {
+  // offerPrice คงค่าจริง (guard null ที่ render · ห้าม → 0) · deliveryMethod=null → ""
+  return { ...o, deliveryMethod: o.deliveryMethod ?? "" };
+}
+
 // ── W3c: Phantom /resell/* → canonical (§A/C) · §B WeeeR-specific kept ──────
 
 export const resellApi = {
@@ -90,12 +104,12 @@ export const resellApi = {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    try { return await apiFetch<Listing[]>(`/listings/mine${qs ? `?${qs}` : ""}`); }
+    try { return (await apiFetch<Listing[]>(`/listings/mine${qs ? `?${qs}` : ""}`)).map(normalizeListing); }
     catch (err) { console.warn("[mock fallback] resell.listingsList", err); return MOCK_RESELL_LISTINGS; }
   },
 
   listingsGet: async (id: string) => {
-    try { return await apiFetch<Listing>(`/listings/${id}`); }
+    try { return normalizeListing(await apiFetch<Listing>(`/listings/${id}`)); }
     catch (err) { console.warn("[mock fallback] resell.listingsGet", err); return MOCK_RESELL_LISTINGS.find(l => l.id === id) ?? MOCK_RESELL_LISTINGS[0]; }
   },
 
@@ -138,13 +152,13 @@ export const resellApi = {
     ).toString();
     try {
       const res = await apiFetch<{ results: Listing[]; count: number }>(`/listings/browse${qs ? `?${qs}` : ""}`);
-      return res.results;
+      return res.results.map(normalizeListing);
     }
     catch (err) { console.warn("[mock fallback] resell.marketplaceList", err); return MOCK_MARKETPLACE_LISTINGS; }
   },
 
   marketplaceGet: async (id: string) => {
-    try { return await apiFetch<Listing>(`/listings/${id}`); }
+    try { return normalizeListing(await apiFetch<Listing>(`/listings/${id}`)); }
     catch (err) { console.warn("[mock fallback] resell.marketplaceGet", err); return MOCK_MARKETPLACE_LISTINGS.find(l => l.id === id) ?? MOCK_MARKETPLACE_LISTINGS[0]; }
   },
 
@@ -153,7 +167,7 @@ export const resellApi = {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    try { return await apiFetch<Offer[]>(`/offers/mine${qs ? `?${qs}` : ""}`); }
+    try { return (await apiFetch<Offer[]>(`/offers/mine${qs ? `?${qs}` : ""}`)).map(normalizeOffer); }
     catch (err) { console.warn("[mock fallback] resell.myOffers", err); return MOCK_MY_OFFERS; }
   },
 
@@ -168,7 +182,7 @@ export const resellApi = {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params ?? {}).filter(([, v]) => v)) as Record<string, string>
     ).toString();
-    const listings = await apiFetch<Listing[]>(`/listings/mine${qs ? `?${qs}` : ""}`);
+    const listings = (await apiFetch<Listing[]>(`/listings/mine${qs ? `?${qs}` : ""}`)).map(normalizeListing);
     return listings.map(l => ({
       id: l.id,
       listingId: l.id,
@@ -185,7 +199,7 @@ export const resellApi = {
   },
 
   transactionsGet: async (id: string) => {
-    const l = await apiFetch<Listing>(`/listings/${id}`);
+    const l = normalizeListing(await apiFetch<Listing>(`/listings/${id}`));
     return {
       id: l.id,
       listingId: l.id,

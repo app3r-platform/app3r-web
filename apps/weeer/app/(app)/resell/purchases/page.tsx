@@ -81,7 +81,7 @@ export default function ResellPurchasesPage() {
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-800 truncate">{p.name}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">ราคา: {p.price.toLocaleString()} ฿</p>
+                  <p className="text-xs text-gray-400 mt-0.5">ราคา: {p.price != null ? `${p.price.toLocaleString()} ฿` : "ไม่ระบุ"}</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0 ml-3">
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${p.statusColor}`}>

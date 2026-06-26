@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import type { Listing } from "../../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../../_lib/types";
+import { pointsLabel } from "../../_lib/format";
 
 const DELIVERY_OPTIONS = ["ส่ง Kerry", "ส่ง Flash", "รับเอง", "ส่งเอง (ช่างไปส่ง)"];
 
@@ -121,18 +122,25 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
         <img src={listing.imageUrl} alt={listing.applianceName ?? ""} className="w-full max-h-56 object-cover rounded-xl border border-gray-100" />
       )}
 
+      {/* detail-check (W0-followup-2): listing ไม่ใช่ used_appliance หรือราคาไม่ระบุ → แจ้ง ไม่ render money บน null */}
+      {(listing.listingType !== "used_appliance" || listing.price == null) && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-700">
+          ⚠️ รายการนี้ไม่ใช่สินค้ามือสอง หรือยังไม่ระบุราคา — ข้อมูลบางส่วนอาจไม่ครบถ้วน
+        </div>
+      )}
+
       {/* Info */}
       <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3 text-sm">
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ราคา</p>
-            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} พอยต์</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{pointsLabel(listing.price)}</p>
           </div>
           <div>
             <p className="text-xs text-gray-400">ผู้ขาย</p>
             <p className="font-medium">{listing.sellerType === "WeeeR" ? "🏪 ร้านค้า" : "👤 บุคคล"}</p>
           </div>
-          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{listing.deliveryMethods.join(", ")}</p></div>
+          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{(listing.deliveryMethods ?? []).join(", ")}</p></div>
           {listing.warranty && (
             <div><p className="text-xs text-gray-400">รับประกัน</p>
               <p className="font-medium">{listing.warranty.sourceWarranty + listing.warranty.additionalWarranty} เดือน</p>

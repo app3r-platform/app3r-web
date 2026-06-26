@@ -7,6 +7,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
+import { pointsNumber } from "../../../_lib/format";
 
 // ── Mock listing (อ้างอิง shape จากหน้า detail) ─────────────────────────────
 const MOCK_LISTING = {
@@ -149,7 +150,7 @@ export default function ResellMarketplaceOfferPage({ params }: { params: Promise
           </div>
           <div className="text-right shrink-0">
             <p className="text-xs text-gray-400">ราคาตั้ง</p>
-            <p className="text-lg font-bold text-[#FF663A]">{listing.price.toLocaleString()}</p>
+            <p className="text-lg font-bold text-[#FF663A]">{pointsNumber(listing.price)}</p>
             <p className="text-[10px] text-gray-400">พอยต์ทอง (Gold Point)</p>
           </div>
         </div>

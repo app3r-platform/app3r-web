@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../_lib/api";
 import type { Offer, OfferStatus } from "../_lib/types";
 import { OFFER_STATUS_LABEL, OFFER_STATUS_COLOR } from "../_lib/types";
+import { pointsLabel } from "../_lib/format";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
 const TABS: { value: OfferStatus | ""; label: string }[] = [
@@ -138,7 +139,7 @@ export default function ResellOffersPage() {
                   {o.message && <p className="text-xs text-gray-500 italic mt-0.5">"{o.message}"</p>}
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="text-sm font-bold text-[#FF663A]">{o.offerPrice.toLocaleString()} พอยต์</p>
+                  <p className="text-sm font-bold text-[#FF663A]">{pointsLabel(o.offerPrice)}</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${OFFER_STATUS_COLOR[o.status]}`}>
                     {OFFER_STATUS_LABEL[o.status]}
                   </span>

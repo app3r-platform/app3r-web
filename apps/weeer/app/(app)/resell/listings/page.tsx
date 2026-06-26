@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../_lib/api";
 import type { Listing, ListingStatus } from "../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../_lib/types";
+import { pointsLabel } from "../_lib/format";
 
 const TABS: { value: ListingStatus | ""; label: string }[] = [
   { value: "", label: "ทั้งหมด" },
@@ -127,7 +128,7 @@ export default function ResellListingsPage() {
                 </div>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{l.price.toLocaleString()} พอยต์</p>
+                <p className="text-sm font-bold text-[#FF663A]">{pointsLabel(l.price)}</p>
                 <p className="text-xs text-gray-400">
                   {new Date(l.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
                 </p>

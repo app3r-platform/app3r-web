@@ -7,6 +7,7 @@ import { resellApi } from "../_lib/api";
 import { getApiBase } from "../../../../lib/api-client";
 import type { Listing } from "../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../_lib/types";
+import { pointsLabel } from "../_lib/format";
 
 const CATEGORIES = ["", "เครื่องปรับอากาศ", "ตู้เย็น", "เครื่องซักผ้า", "ทีวี", "อื่นๆ"];
 const SELLER_TYPES: { value: string; label: string }[] = [
@@ -179,13 +180,13 @@ export default function ResellMarketplacePage() {
               <div className="p-3">
                 <p className="text-sm font-semibold text-gray-800 truncate">{l.applianceName ?? "ไม่ระบุ"}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-lg font-bold text-[#D63B12]">{(l.price ?? 0).toLocaleString()} พอยต์</p>
+                  <p className="text-lg font-bold text-[#D63B12]">{pointsLabel(l.price)}</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>
                 </div>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  {l.sellerType === "WeeeR" ? "🏪 ร้านค้า" : "👤 บุคคล"} · {l.deliveryMethods.join(", ")}
+                  {l.sellerType === "WeeeR" ? "🏪 ร้านค้า" : "👤 บุคคล"} · {(l.deliveryMethods ?? []).join(", ")}
                 </p>
               </div>
             </Link>

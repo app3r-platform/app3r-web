@@ -12,6 +12,7 @@ import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import { createAd, estimateGoldCost, AD_POSITION_OPTIONS, type AdPosition } from "../../../../../lib/ads-api";
 import type { Listing, Offer } from "../../_lib/types";
+import { pointsLabel } from "../../_lib/format";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, OFFER_STATUS_LABEL, OFFER_STATUS_COLOR, LISTING_TERMINAL } from "../../_lib/types";
 
 // RC-B: relative date helper
@@ -260,9 +261,9 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ราคา</p>
-            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} พอยต์</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{pointsLabel(listing.price)}</p>
           </div>
-          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{listing.deliveryMethods.join(", ")}</p></div>
+          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{(listing.deliveryMethods ?? []).join(", ")}</p></div>
           {listing.warranty && (
             <div className="col-span-2">
               <p className="text-xs text-gray-400">การรับประกัน</p>
@@ -302,7 +303,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
               <div key={o.id} className="border border-gray-100 rounded-xl p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="text-sm font-bold text-gray-800">{o.offerPrice.toLocaleString()} พอยต์</p>
+                    <p className="text-sm font-bold text-gray-800">{pointsLabel(o.offerPrice)}</p>
                     <p className="text-xs text-gray-500">{o.buyerName ?? o.buyerId} · {o.buyerType}</p>
                     <p className="text-xs text-gray-400">{o.deliveryMethod}</p>
                     {o.message && <p className="text-xs text-gray-500 mt-1 italic">"{o.message}"</p>}

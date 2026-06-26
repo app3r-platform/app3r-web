@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "./_lib/api";
 import type { Listing } from "./_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "./_lib/types";
+import { pointsLabel } from "./_lib/format";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
 interface Dashboard {
@@ -132,7 +133,7 @@ export default function ResellDashboardPage() {
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>
-                  <span className="text-sm font-bold text-[#FF663A]">{l.price.toLocaleString()} พอยต์</span>
+                  <span className="text-sm font-bold text-[#FF663A]">{pointsLabel(l.price)}</span>
                 </div>
               </Link>
             ))}
