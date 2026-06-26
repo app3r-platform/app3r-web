@@ -3,6 +3,7 @@ import type { UsedAppliance, Listing, Offer, ResellTransaction, ListingStatus } 
 // ── Thin write-response shapes (backend คืน thin ไม่ใช่ full entity · §2 discipline) ──
 // reject-offer → {offerId,status} · transition (select/ship/deliver/inspect/dispute/cancel) → {listingId,state,...}
 export interface ThinRejectResponse { offerId: string; status: string }
+export interface ThinSelectResponse { listingId: string; state: ListingStatus; offerId: string; fundingDeadline: string }
 export interface ThinTransitionResponse {
   listingId: string;
   state: ListingStatus;
@@ -136,8 +137,9 @@ export const resellApi = {
     catch (err) { console.warn("[mock fallback] resell.listingOffers", err); return MOCK_LISTING_OFFERS.filter(o => o.listingId === listingId); }
   },
 
+  // type-fix: select-offer คืน THIN {listingId,state,offerId,fundingDeadline} ไม่ใช่ full Listing
   acceptOffer: (listingId: string, offerId: string) =>
-    apiFetch<Listing>(`/listings/${listingId}/select-offer`, { method: "POST", body: JSON.stringify({ offerId }) }),
+    apiFetch<ThinSelectResponse>(`/listings/${listingId}/select-offer`, { method: "POST", body: JSON.stringify({ offerId }) }),
 
   // type-fix: backend คืน thin {offerId,status:'rejected'} ไม่ใช่ full Offer
   rejectOffer: (listingId: string, offerId: string) =>

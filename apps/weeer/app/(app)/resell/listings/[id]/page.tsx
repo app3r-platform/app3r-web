@@ -145,29 +145,40 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
 
   async function handleAccept(offerId: string) {
     setActionLoading(offerId);
+    setError("");
     try {
-      // post-select shape-fix(b) / §2 discipline: acceptOffer คืน THIN select-offer response
-      // ({listingId,state,offerId,fundingDeadline}) — ห้าม setListing(thin) ทับ entity (clobber price/desc).
-      await resellApi.acceptOffer(id, offerId).catch(() => null);
       if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
-        // mock: merge สถานะอย่างเดียว (คง entity เดิม + offers ของ mock)
+        // mock demo (no backend): merge สถานะ + offers ของ mock
         setListing(prev => (prev ? { ...prev, status: "offer_selected" } : prev));
-      } else {
-        // real: re-fetch canonical (backend คืน field state → toListingDto map เป็น status)
-        const refreshed = await resellApi.listingsGet(id).catch(() => null);
-        setListing(prev => refreshed ?? (prev ? { ...prev, status: "offer_selected" } : prev));
+        setOffers(prev => prev.map(o => ({ ...o, status: o.id === offerId ? "selected" : "rejected" })));
+        return;
       }
+      // §5: select-offer write — non-2xx throws → typed error (ห้าม swallow .catch(()=>null))
+      // §2: คืน THIN {listingId,state,offerId,fundingDeadline} → ห้าม setListing(thin) → re-fetch canonical
+      await resellApi.acceptOffer(id, offerId);
+      // optimistic + re-fetch เฉพาะหลัง 2xx สำเร็จ
+      const refreshed = await resellApi.listingsGet(id).catch(() => null);
+      setListing(prev => refreshed ?? (prev ? { ...prev, status: "offer_selected" } : prev));
       setOffers(prev => prev.map(o => ({ ...o, status: o.id === offerId ? "selected" : "rejected" })));
-    } catch { /**/ } finally { setActionLoading(null); }
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "เลือกข้อเสนอไม่สำเร็จ");
+    } finally { setActionLoading(null); }
   }
 
   async function handleReject(offerId: string) {
     setActionLoading(offerId);
+    setError("");
     try {
-      // reject คืน THIN {offerId,status} → update offer row เท่านั้น (ไม่ทับ listing entity · §2)
-      await resellApi.rejectOffer(id, offerId).catch(() => null);
-      setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));
-    } catch { /**/ } finally { setActionLoading(null); }
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));
+        return;
+      }
+      // §5: reject-offer write — non-2xx throws → typed error · คืน THIN {offerId,status} (ไม่ทับ entity)
+      await resellApi.rejectOffer(id, offerId);
+      setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));  // optimistic หลัง 2xx
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "ปฏิเสธข้อเสนอไม่สำเร็จ");
+    } finally { setActionLoading(null); }
   }
 
   // ── W1 seller transitions (ship/deliver) ────────────────────────────────────
