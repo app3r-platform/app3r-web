@@ -62,11 +62,18 @@ export async function chargeFee(
   })
 }
 
-/** listing DTO — camelCase API contract (HUB Gen 37 casing FINAL) · join listing_meta + used_appliance_listings */
+/**
+ * listing DTO — camelCase API contract (HUB Gen 37 casing FINAL) · join listing_meta + used_appliance_listings
+ *
+ * applianceName (HUB Gen86): denormalized product name for display (FE `Listing.applianceName`).
+ *   appliance_id has no FK (appliance module pending) → callers leftJoin appliance_models and pass
+ *   its `name` here (null if listing has no appliance / model row absent). Keeps this fn pure (no DB).
+ */
 export function toListingDto(
   meta: ListingMeta,
   used: UsedApplianceListing | null,
   insider: boolean,
+  applianceName: string | null = null,
 ) {
   const counters = publicCounters(meta, insider)
   return {
@@ -76,6 +83,7 @@ export function toListingDto(
     sellerType: used?.sellerType ?? null,
     listingType: used?.listingType ?? meta.listingType,
     applianceId: used?.applianceId ?? null,
+    applianceName, // HUB Gen86: from appliance_models.name (caller join · null if none)
     warranty: used?.warranty ?? null,
     scrapItemId: used?.scrapItemId ?? null,
     conditionGrade: used?.conditionGrade ?? null,
