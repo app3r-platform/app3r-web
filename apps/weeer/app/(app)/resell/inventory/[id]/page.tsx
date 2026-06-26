@@ -10,10 +10,11 @@ import { MockAnnoOrigin } from "@/components/MockAnno";
 export default function ResellInventoryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [item, setItem] = useState<UsedAppliance | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.inventoryGet(id)
       .then(setItem)
       .catch((e: Error) => setError(e.message))
@@ -53,8 +54,8 @@ export default function ResellInventoryDetailPage({ params }: { params: Promise<
           </span>
         </div>
         <div><p className="text-xs text-gray-400">แหล่งที่มา</p><p className="font-medium">{item.source?.type === "purchased" ? "ซื้อมา" : item.source?.type === "acquired" ? "ได้รับมา" : "กรอกเอง"}</p></div>
-        <div><p className="text-xs text-gray-400">ราคาทุน</p><p className="font-bold text-gray-700">{item.costPrice.toLocaleString()} pts</p></div>
-        <div><p className="text-xs text-gray-400">ราคาขายแนะนำ</p><p className="font-bold text-blue-700">{item.suggestedPrice.toLocaleString()} pts</p></div>
+        <div><p className="text-xs text-gray-400">ราคาทุน</p><p className="font-bold text-gray-700">{item.costPrice.toLocaleString()} พอยต์</p></div>
+        <div><p className="text-xs text-gray-400">ราคาขายแนะนำ</p><p className="font-bold text-blue-700">{item.suggestedPrice.toLocaleString()} พอยต์</p></div>
         {item.notes && <div className="col-span-2"><p className="text-xs text-gray-400">หมายเหตุ</p><p className="text-gray-700">{item.notes}</p></div>}
       </div>
 

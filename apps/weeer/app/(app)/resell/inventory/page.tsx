@@ -45,12 +45,15 @@ const MOCK_ITEMS: UsedAppliance[] = [
 ];
 
 export default function ResellInventoryPage() {
-  const [items, setItems] = useState<UsedAppliance[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<UsedAppliance[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_ITEMS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<ApplianceStatus | "">("");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.inventoryList({ status: statusFilter || undefined, search: search || undefined })
       .then(setItems)
       .catch(() => setItems(MOCK_ITEMS))  // Mockup fallback
@@ -102,7 +105,7 @@ export default function ResellInventoryPage() {
       <div className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl px-4 py-3 flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-[#4A1B0C]">📥 รับซื้อมือสองจากลูกค้า</p>
-          <p className="text-xs text-[#FF9C80] mt-0.5">ใช้ B6 wizard ตีราคา + สแกน Barcode เพิ่มเข้าสต๊อก</p>
+          <p className="text-xs text-[#FF9C80] mt-0.5">ใช้ตัวช่วย B6 (Wizard) ตีราคา + สแกนบาร์โค้ด (Barcode) เพิ่มเข้าสต๊อก</p>
         </div>
         <Link href="/resell/buy"
           className="bg-[#FF663A] hover:bg-[#D8491F] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shrink-0 ml-3">
@@ -136,7 +139,7 @@ export default function ResellInventoryPage() {
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="text-sm font-bold text-[#FF663A]">{item.suggestedPrice.toLocaleString()} pts</p>
+                  <p className="text-sm font-bold text-[#FF663A]">{item.suggestedPrice.toLocaleString()} พอยต์</p>
                   <p className="text-xs text-gray-400">ทุน {item.costPrice.toLocaleString()}</p>
                 </div>
               </Link>

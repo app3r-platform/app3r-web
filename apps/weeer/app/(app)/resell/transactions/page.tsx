@@ -51,11 +51,14 @@ const MOCK_TRANSACTIONS: ResellTransaction[] = [
 ];
 
 export default function ResellTransactionsPage() {
-  const [transactions, setTransactions] = useState<ResellTransaction[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState<ResellTransaction[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_TRANSACTIONS : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [statusFilter, setStatusFilter] = useState<ListingStatus | "">("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.transactionsList({ status: statusFilter || undefined })
       .then(setTransactions)
       .catch(() => setTransactions(MOCK_TRANSACTIONS))  // Mockup fallback
@@ -119,7 +122,7 @@ export default function ResellTransactionsPage() {
                 </span>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-sm font-bold text-[#FF663A]">{tx.price.toLocaleString()} pts</p>
+                <p className="text-sm font-bold text-[#FF663A]">{tx.price.toLocaleString()} พอยต์</p>
                 <p className="text-xs text-gray-400">
                   {new Date(tx.updatedAt).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}
                 </p>

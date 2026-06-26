@@ -68,8 +68,10 @@ const MOCK_TRANSACTIONS: Record<string, ResellTransaction> = {
 
 export default function ResellTransactionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [tx, setTx] = useState<ResellTransaction | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [tx, setTx] = useState<ResellTransaction | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_TRANSACTIONS[id] ?? null) : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
 
   // Mock local state (Mockup)
   const [mockStatus, setMockStatus] = useState<ListingStatus | null>(null);
@@ -81,9 +83,15 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [claimNote, setClaimNote] = useState("");
   const [claimSubmitted, setClaimSubmitted] = useState(false);
-  const [role, setRole] = useState<"seller" | "buyer">("seller");
+  const [role, setRole] = useState<"seller" | "buyer">(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+      return (MOCK_TRANSACTIONS[id]?.role ?? "seller");
+    }
+    return "seller";
+  });
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     const mock = MOCK_TRANSACTIONS[id];
     resellApi.transactionsGet(id)
       .then(t => { setTx(t); setRole(t.role ?? "seller"); })
@@ -131,9 +139,9 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
         <div className="grid grid-cols-2 gap-3">
           <div><p className="text-xs text-gray-400">ผู้ขาย</p><p className="font-medium">{tx.sellerName}</p></div>
           <div><p className="text-xs text-gray-400">ผู้ซื้อ</p><p className="font-medium">{tx.buyerName}</p></div>
-          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-xl font-bold text-[#FF663A]">{tx.price.toLocaleString()} pts</p></div>
+          <div><p className="text-xs text-gray-400">ราคา</p><p className="text-xl font-bold text-[#FF663A]">{tx.price.toLocaleString()} พอยต์</p></div>
           <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{tx.deliveryMethod}</p></div>
-          {tx.trackingNumber && <div className="col-span-2"><p className="text-xs text-gray-400">Tracking</p><p className="font-medium font-mono">{tx.trackingNumber}</p></div>}
+          {tx.trackingNumber && <div className="col-span-2"><p className="text-xs text-gray-400">การติดตามพัสดุ (Tracking)</p><p className="font-medium font-mono">{tx.trackingNumber}</p></div>}
           {tx.disputeReason && (
             <div className="col-span-2">
               <p className="text-xs text-gray-400">สาเหตุพิพาท</p>
@@ -238,7 +246,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
           </button>
           <button onClick={() => setShowDisputeModal(true)}
             className="w-full bg-red-50 hover:bg-red-100 text-red-700 font-semibold py-3 rounded-xl transition-colors border border-red-200">
-            ⚠️ R8: ปฏิเสธ — เปิด Dispute
+            ⚠️ R8: ปฏิเสธ — เปิดข้อพิพาท (Dispute)
           </button>
         </div>
       )}
@@ -247,7 +255,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
       {!isTerminal && STEP_ORDER[effectiveStatus] >= 4 && (
         <button onClick={() => setShowDisputeModal(true)}
           className="w-full border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium py-2.5 rounded-xl transition-colors">
-          🚨 R10: เปิด Dispute
+          🚨 R10: เปิดข้อพิพาท (Dispute)
         </button>
       )}
 
@@ -278,7 +286,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
                   </div>
                 </>
               ) : (
-                <p className="text-sm text-orange-700 font-medium">✅ ส่ง Claim แล้ว — Admin กำลังตรวจสอบ</p>
+                <p className="text-sm text-orange-700 font-medium">✅ ส่งเคลม (Claim) แล้ว — Admin กำลังตรวจสอบ</p>
               )}
             </div>
           )}
@@ -297,7 +305,8 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
       {showDisputeModal && (
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">เปิด Dispute (R8/R10)</h2>
+            {/* §7 เคส R8/R10 */}
+            <h2 className="text-base font-bold text-gray-900">เปิด ข้อพิพาท (Dispute)</h2>
             <textarea value={disputeNote} onChange={e => setDisputeNote(e.target.value)} rows={3}
               placeholder="อธิบายปัญหา + แนบ URL หลักฐาน (คลิปตอนรับ/รูปสินค้า)…"
               className="w-full border border-red-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-300 resize-none" />
@@ -310,7 +319,7 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
               <button onClick={() => { setMockStatus("disputed"); setShowDisputeModal(false); }}
                 disabled={!disputeNote}
                 className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-sm disabled:opacity-60">
-                ยืนยันเปิด Dispute
+                ยืนยันเปิดข้อพิพาท (Dispute)
               </button>
             </div>
           </div>
@@ -321,7 +330,8 @@ export default function ResellTransactionDetailPage({ params }: { params: Promis
       {showCancelModal && (
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">ขอยกเลิกร่วม (R12)</h2>
+            {/* §7 เคส R12 */}
+            <h2 className="text-base font-bold text-gray-900">ขอยกเลิกร่วม</h2>
             <p className="text-sm text-gray-600">ส่งคำขอให้อีกฝ่ายยืนยัน — ถ้ายืนยันทั้งคู่ ธุรกรรมยกเลิก · คืนพักเงินกลาง (Escrow) ตามข้อตกลง</p>
             <div className="flex gap-3">
               <button onClick={() => setShowCancelModal(false)}

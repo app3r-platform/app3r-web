@@ -10,7 +10,7 @@ export default async function ResellPurchaseDisputePage({ params }: { params: Pr
         <Link href={`/resell/purchases/${id}`} className="text-gray-400 hover:text-gray-600">←</Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900">⚠️ Dispute R-08 — ไม่ตรงปก</h1>
+            <h1 className="text-xl font-bold text-gray-900">⚠️ ข้อพิพาท (Dispute) R-08 — ไม่ตรงปก</h1>
           </div>
         </div>
         <span className="shrink-0 text-xs font-medium px-2.5 py-1 rounded-full bg-yellow-100 text-yellow-700">
@@ -39,7 +39,7 @@ export default async function ResellPurchaseDisputePage({ params }: { params: Pr
 
       {/* Dispute reason */}
       <div className="bg-red-50 border border-red-100 rounded-xl p-4 space-y-3">
-        <p className="text-xs font-semibold text-red-400 uppercase tracking-wider">เหตุผลการ Dispute</p>
+        <p className="text-xs font-semibold text-red-400 uppercase tracking-wider">เหตุผลการเปิดข้อพิพาท (Dispute)</p>
         <div>
           <p className="text-xs text-gray-400">รายละเอียด</p>
           <p className="text-sm font-medium text-gray-800">
@@ -68,7 +68,7 @@ export default async function ResellPurchaseDisputePage({ params }: { params: Pr
           <div className="flex items-start gap-3">
             <div className="mt-0.5 w-2 h-2 rounded-full bg-red-500 shrink-0" />
             <div>
-              <p className="text-sm font-medium text-gray-800">ยื่น Dispute แล้ว</p>
+              <p className="text-sm font-medium text-gray-800">ยื่นข้อพิพาท (Dispute) แล้ว</p>
               <p className="text-xs text-gray-400">25 พ.ค. 2569</p>
             </div>
           </div>

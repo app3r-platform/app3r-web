@@ -75,7 +75,7 @@ export default function ResellPurchasesPage() {
           filtered.map((p) => (
             <Link
               key={p.id}
-              href={`/resell/purchases/${p.id}`}
+              href={`/resell/purchases/r001`}
               className="block bg-white border border-gray-100 rounded-xl p-4 hover:border-gray-200 transition-colors"
             >
               <div className="flex items-center justify-between">
