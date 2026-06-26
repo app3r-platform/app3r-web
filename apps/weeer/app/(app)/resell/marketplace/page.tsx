@@ -78,6 +78,9 @@ export default function ResellMarketplacePage() {
     if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     setLoading(true);
     resellApi.marketplaceList({
+      // W0-followup fix(a): จำกัด listingType=used_appliance — browse คืนทุก type (parts/scrap)
+      // ที่ price=null → กัน null-price crash ใน list (type-set รอ Advisor ยืนยัน · ใช้ used_appliance ก่อน)
+      listingType: "used_appliance",
       category: category || undefined,
       sellerType: sellerType || undefined,
       minPrice: minPrice || undefined,
@@ -176,7 +179,7 @@ export default function ResellMarketplacePage() {
               <div className="p-3">
                 <p className="text-sm font-semibold text-gray-800 truncate">{l.applianceName ?? "ไม่ระบุ"}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-lg font-bold text-[#D63B12]">{l.price.toLocaleString()} พอยต์</p>
+                  <p className="text-lg font-bold text-[#D63B12]">{(l.price ?? 0).toLocaleString()} พอยต์</p>
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>
