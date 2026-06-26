@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+import { listingsApi } from "@/lib/api/listings";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type OrderState =
@@ -127,6 +128,7 @@ export default function ResellOrderPage() {
   const [state, setState] = useState<OrderState>(order.state);
   const [notice, setNotice] = useState<{ type: "info" | "success" | "warn"; msg: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // R8 inspection reject form
   const [showRejectForm, setShowRejectForm] = useState(false);
@@ -150,6 +152,25 @@ export default function ResellOrderPage() {
     setShowRejectForm(false);
     setShowDamageForm(false);
     setShowMutualConfirm(false);
+  };
+
+  // §2 thin: inspectConfirm คืน {listingId,state} → merge state→status (ไม่ทับ entity ทั้งก้อน)
+  const handleInspectConfirm = async () => {
+    if (!id) return;
+    setSubmitting(true);
+    setApiError(null);
+    try {
+      const thin = await listingsApi.inspectConfirm(id);
+      setState(thin.state as OrderState);
+      setNotice({ type: "success", msg: "✅ ยืนยันรับสินค้าเรียบร้อย — ธุรกรรมเสร็จสมบูรณ์! ระบบพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว" });
+    } catch (err: unknown) {
+      const e = err as { status?: number };
+      if (e?.status === 403) setApiError("ไม่มีสิทธิ์ยืนยัน — ตรวจสอบสถานะผู้ซื้อ");
+      else if (e?.status === 400) setApiError("ไม่สามารถยืนยันได้ในสถานะนี้ — รีเฟรชหน้า");
+      else setApiError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const noticeColor = {
@@ -176,6 +197,11 @@ export default function ResellOrderPage() {
       {notice && (
         <div className={`border rounded-xl p-3 ${noticeColor[notice.type]}`}>
           <p className="text-sm font-medium">{notice.msg}</p>
+        </div>
+      )}
+      {apiError && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+          <p className="text-sm text-red-700">{apiError}</p>
         </div>
       )}
 
@@ -262,9 +288,7 @@ export default function ResellOrderPage() {
           {!showRejectForm ? (
             <div className="flex gap-2">
               <button
-                onClick={() =>
-                  doTransition("completed", "✅ ยืนยันรับสินค้าเรียบร้อย — ธุรกรรมเสร็จสมบูรณ์! ระบบพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว", "success")
-                }
+                onClick={handleInspectConfirm}
                 disabled={submitting}
                 className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3.5 rounded-2xl text-sm transition-colors"
               >

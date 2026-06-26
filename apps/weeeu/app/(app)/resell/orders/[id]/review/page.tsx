@@ -12,6 +12,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+import { reviewsApi } from "@/lib/api/reviews";
 
 const MOCK_ORDER = {
   id: "ord-001",
@@ -62,16 +63,36 @@ export default function ResellOrderReviewPage() {
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const toggleTag = (t: string) =>
     setSelectedTags((prev) => { const s = new Set(prev); s.has(t) ? s.delete(t) : s.add(t); return s; });
 
   const handleSubmit = async () => {
-    if (rating === 0) return;
+    if (rating === 0 || !id) return;
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitting(false);
-    setDone(true);
+    setSubmitError(null);
+    // รวม tags + comment เป็น comment เดียว
+    const tagText = Array.from(selectedTags).join(", ");
+    const fullComment = [tagText, comment.trim()].filter(Boolean).join(". ") || undefined;
+    try {
+      const res = await reviewsApi.create(id, { rating, comment: fullComment });
+      if (!res.ok) {
+        if (res.status === 409) {
+          // 409 ALREADY_REVIEWED — แสดง graceful ไม่ crash
+          setSubmitError("คุณรีวิวธุรกรรมนี้ไปแล้ว");
+          return;
+        }
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error?.message ?? "review failed");
+      }
+      setDone(true);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setSubmitError(e?.message ?? "เกิดข้อผิดพลาด กรุณาลองใหม่");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   // ─── Success screen ──────────────────────────────────────────────────────
@@ -128,7 +149,7 @@ export default function ResellOrderReviewPage() {
           {order.is_buyer ? "ผู้ขาย" : "ผู้ซื้อ"}: {order.counterparty_name}
         </p>
         <p className="text-lg font-bold text-green-700">
-          {order.agreed_price.toLocaleString()} Gold ✅ ปลดล็อก Escrow แล้ว
+          {order.agreed_price.toLocaleString()} พอยต์ทอง ✅ ปลดล็อก ระบบพักเงินกลาง แล้ว
         </p>
       </div>
 
@@ -187,6 +208,11 @@ export default function ResellOrderReviewPage() {
 
       {/* Submit */}
       <div className="space-y-2">
+        {submitError && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+            <p className="text-sm text-red-700">{submitError}</p>
+          </div>
+        )}
         <button
           onClick={handleSubmit}
           disabled={rating === 0 || submitting}
