@@ -83,16 +83,23 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
     setSubmitting(true);
     setOfferError("");
     try {
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        // mock demo (no backend) → ถือว่าสำเร็จ
+        setOfferSuccess(true);
+        setShowOfferForm(false);
+        return;
+      }
+      // offer-submit คืน FULL offerDto (201 · ไม่ thin · §2 ไม่บังคับ) · §5 ห้าม swallow
       await resellApi.submitOffer({
         listingId: id,
         offerPrice: Number(offerPrice),
         deliveryMethod,
         message: message.trim() || undefined,
-      }).catch(() => null);  // Mockup: ignore API error
+      });
       setOfferSuccess(true);
       setShowOfferForm(false);
-    } catch (err) {
-      setOfferError((err as Error).message);
+    } catch (err: unknown) {
+      setOfferError(err instanceof Error ? err.message : "ส่งข้อเสนอไม่สำเร็จ");
     } finally {
       setSubmitting(false);
     }

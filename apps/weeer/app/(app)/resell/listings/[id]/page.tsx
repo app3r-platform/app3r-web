@@ -11,7 +11,7 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import { createAd, estimateGoldCost, AD_POSITION_OPTIONS, type AdPosition } from "../../../../../lib/ads-api";
-import type { Listing, Offer } from "../../_lib/types";
+import type { Listing, Offer, ListingStatus } from "../../_lib/types";
 import { pointsLabel } from "../../_lib/format";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, OFFER_STATUS_LABEL, OFFER_STATUS_COLOR, LISTING_TERMINAL } from "../../_lib/types";
 
@@ -97,12 +97,14 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  // Mock state (R2/R3/R4/R5/R6)
+  // Mock state (R2/R3/R4/R5)
   const [mockCancelled, setMockCancelled] = useState(false);
   const [r5Withdrawn, setR5Withdrawn] = useState(false);
   const [showR5Confirm, setShowR5Confirm] = useState(false);
+  // W1 ship form (R6 evidence + carrier/tracking · ส่งใน POST /ship body)
   const [evidenceUrl, setEvidenceUrl] = useState("");
-  const [evidenceSubmitted, setEvidenceSubmitted] = useState(false);
+  const [carrier, setCarrier] = useState("");
+  const [trackingNo, setTrackingNo] = useState("");
 
   // ── C12 Ad (Backend ads API · POST /api/v1/ads — ตัด Gold D75 → pending → admin approve) ──
   const [showAd, setShowAd] = useState(false);
@@ -162,9 +164,48 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   async function handleReject(offerId: string) {
     setActionLoading(offerId);
     try {
+      // reject คืน THIN {offerId,status} → update offer row เท่านั้น (ไม่ทับ listing entity · §2)
       await resellApi.rejectOffer(id, offerId).catch(() => null);
       setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));
     } catch { /**/ } finally { setActionLoading(null); }
+  }
+
+  // ── W1 seller transitions (ship/deliver) ────────────────────────────────────
+  // §2: write คืน THIN {listingId,state,...} → ห้าม setListing(thin) → re-fetch canonical
+  // §5: non-2xx → typed error (setError) · ห้าม swallow/white-screen
+  async function sellerTransition(
+    action: "ship" | "confirm_delivery",
+    body: Record<string, unknown> | undefined,
+    mockNextStatus: ListingStatus,
+  ) {
+    setActionLoading(action);
+    setError("");
+    try {
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        // mock demo path (no backend) — local transition เท่านั้น
+        setListing(prev => (prev ? { ...prev, status: mockNextStatus } : prev));
+        return;
+      }
+      await resellApi.transitionStatus(id, action, body);   // thin response (ไม่ใช้ทับ entity)
+      const refreshed = await resellApi.listingsGet(id);    // §2 re-fetch canonical
+      setListing(refreshed);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "ดำเนินการไม่สำเร็จ");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  function handleShip() {
+    void sellerTransition("ship", {
+      ...(carrier ? { carrier } : {}),
+      ...(trackingNo ? { trackingNo } : {}),
+      ...(evidenceUrl ? { shipEvidence: [evidenceUrl] } : {}),
+    }, "in_progress");
+  }
+
+  function handleDeliver() {
+    void sellerTransition("confirm_delivery", undefined, "delivered");
   }
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;
@@ -232,27 +273,42 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         </div>
       )}
 
-      {/* R6: Evidence upload (in_progress) */}
-      {effectiveStatus === "in_progress" && !evidenceSubmitted && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
-          <p className="text-sm font-bold text-orange-800">📸 R6: แนบหลักฐานก่อนส่งสินค้า (บังคับ)</p>
-          <p className="text-xs text-orange-600 mt-0.5">ถ่ายรูป+คลิปสินค้าก่อนแพ็คและส่ง — หลักฐานป้องกันข้อพิพาท</p>
-          <div className="flex gap-2 mt-3">
-            <input type="url" value={evidenceUrl} onChange={e => setEvidenceUrl(e.target.value)}
-              placeholder="URL รูป/คลิป (mock)…"
-              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            <button onClick={() => evidenceUrl && setEvidenceSubmitted(true)}
-              disabled={!evidenceUrl}
-              className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors disabled:opacity-50">
-              ส่ง
-            </button>
+      {/* W1/GAP-2: ship form ที่ buyer_confirmed (ก่อน ship · ตรง backend guard state=buyer_confirmed) */}
+      {effectiveStatus === "buyer_confirmed" && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-bold text-orange-800">📦 R6: จัดส่งสินค้า (Ship)</p>
+            <p className="text-xs text-orange-600 mt-0.5">แนบหลักฐานก่อนส่ง + ข้อมูลขนส่ง — ป้องกันข้อพิพาท</p>
           </div>
+          <input type="url" value={evidenceUrl} onChange={e => setEvidenceUrl(e.target.value)}
+            placeholder="URL รูป/คลิปหลักฐานก่อนส่ง…"
+            className="w-full border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+          <div className="flex gap-2">
+            <input type="text" value={carrier} onChange={e => setCarrier(e.target.value)}
+              placeholder="ขนส่ง (เช่น Kerry)…"
+              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <input type="text" value={trackingNo} onChange={e => setTrackingNo(e.target.value)}
+              placeholder="เลขพัสดุ…"
+              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+          </div>
+          <button onClick={handleShip} disabled={actionLoading === "ship"}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50">
+            {actionLoading === "ship" ? "กำลังส่ง…" : "ยืนยันการจัดส่ง (Ship)"}
+          </button>
         </div>
       )}
-      {effectiveStatus === "in_progress" && evidenceSubmitted && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
-          <span>✅</span>
-          <p className="text-sm text-green-700 font-medium">ส่งหลักฐานแล้ว — กรุณาจัดส่งสินค้าตาม delivery method</p>
+
+      {/* W1: in_progress (shipped) → deliver */}
+      {effectiveStatus === "in_progress" && (
+        <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-bold text-teal-800">🚚 จัดส่งแล้ว — ยืนยันส่งมอบ (Deliver)</p>
+            <p className="text-xs text-teal-600 mt-0.5">เมื่อพัสดุถึงผู้ซื้อ กดยืนยันส่งมอบเพื่อเข้าสู่ช่วงตรวจรับ</p>
+          </div>
+          <button onClick={handleDeliver} disabled={actionLoading === "confirm_delivery"}
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50">
+            {actionLoading === "confirm_delivery" ? "กำลังยืนยัน…" : "ยืนยันส่งมอบ (Deliver)"}
+          </button>
         </div>
       )}
 
