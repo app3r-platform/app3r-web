@@ -165,9 +165,16 @@ export default function ResellOrderPage() {
       setNotice({ type: "success", msg: "✅ ยืนยันรับสินค้าเรียบร้อย — ธุรกรรมเสร็จสมบูรณ์! ระบบพักเงินกลาง (Escrow) โอนให้ผู้ขายแล้ว" });
     } catch (err: unknown) {
       const e = err as { status?: number };
-      if (e?.status === 403) setApiError("ไม่มีสิทธิ์ยืนยัน — ตรวจสอบสถานะผู้ซื้อ");
-      else if (e?.status === 400) setApiError("ไม่สามารถยืนยันได้ในสถานะนี้ — รีเฟรชหน้า");
-      else setApiError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      if (e?.status === 403) {
+        setApiError("ไม่มีสิทธิ์ยืนยัน — ตรวจสอบสถานะผู้ซื้อ");
+      } else if (e?.status === 409) {
+        // INVALID_STATE / NO_SELECTED_OFFER — สถานะไม่ตรง รีเฟรชดูสถานะใหม่
+        setApiError("สถานะการตรวจสอบไม่ถูกต้อง — รีเฟรชหน้าเพื่อดูสถานะล่าสุด");
+      } else if (e?.status === 400) {
+        setApiError("ไม่สามารถยืนยันได้ในสถานะนี้ — รีเฟรชหน้า");
+      } else {
+        setApiError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      }
     } finally {
       setSubmitting(false);
     }

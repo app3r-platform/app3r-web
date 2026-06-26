@@ -83,11 +83,24 @@ export default function AwaitingPaymentPage() {
       await listingsApi.confirmFunding(id);
       router.push(`/resell/orders/${id}`);
     } catch (err: unknown) {
-      const e = err as { status?: number; code?: string; message?: string };
-      if (e?.status === 403) setPayError("ไม่มีสิทธิ์ชำระ — ตรวจสอบสถานะผู้ซื้อ");
-      else if (e?.status === 400) setPayError("ไม่สามารถชำระได้ในสถานะนี้ — รีเฟรชหน้า");
-      else if (e?.status === 402) setPayError("พอยต์ทองไม่เพียงพอ — กรุณาเติมก่อน");
-      else setPayError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      const e = err as { status?: number; code?: string };
+      if (e?.status === 403) {
+        setPayError("ไม่มีสิทธิ์ชำระ — ตรวจสอบสถานะผู้ซื้อ");
+      } else if (e?.status === 409) {
+        // FUNDING_WINDOW_EXPIRED / NO_SELECTED_OFFER / INVALID_STATE
+        setPayError("หน้าต่างชำระเงินหมดเวลา — กรุณาติดต่อผู้ขาย");
+      } else if (e?.status === 400) {
+        // INSUFFICIENT_GOLD / CONFIRM_FUNDING_FAILED → แนะนำเติม Gold
+        // INVALID_TRANSITION (อื่นๆ) → refresh
+        const insufficientCodes = ["INSUFFICIENT_GOLD", "CONFIRM_FUNDING_FAILED"];
+        if (e?.code && insufficientCodes.includes(e.code)) {
+          setPayError("พอยต์ทองไม่เพียงพอ — กรุณาเติมก่อน");
+        } else {
+          setPayError("ไม่สามารถชำระได้ในสถานะนี้ — รีเฟรชหน้า");
+        }
+      } else {
+        setPayError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      }
       setPaying(false);
     }
   };
