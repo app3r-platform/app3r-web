@@ -16,6 +16,7 @@ import { useParams, useRouter } from "next/navigation";
 import OtpInput from "@/components/shared/OtpInput";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+import { offersApi } from "@/lib/api/offers";
 
 const MOCK_OTP = "123456";
 const MAX_OTP_ATTEMPTS = 3;
@@ -51,6 +52,7 @@ export default function MarketplaceOfferPage() {
   const [otpAttempts, setOtpAttempts] = useState(0);
   const [otpError, setOtpError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [offerApiError, setOfferApiError] = useState("");
 
   const priceNum = Number(offerPrice);
 
@@ -66,21 +68,46 @@ export default function MarketplaceOfferPage() {
     setShowOtp(true);
   };
 
-  const handleVerifyOtp = () => {
+  const handleVerifyOtp = async () => {
     setOtpError("");
-    if (otp === MOCK_OTP) {
-      setSubmitting(true);
-      // mock — ส่งข้อเสนอแล้วไปหน้า success (U-42) ไม่ค้าง error
-      setTimeout(() => router.push(`/marketplace/${id}/offer/success`), 600);
+    setOfferApiError("");
+    if (otp !== MOCK_OTP) {
+      const n = otpAttempts + 1;
+      setOtpAttempts(n);
+      setOtp("");
+      if (n >= MAX_OTP_ATTEMPTS) {
+        router.push("/suspended?reason=otp&from=ยื่นข้อเสนอซื้อ");
+      } else {
+        setOtpError(`รหัส OTP ไม่ถูกต้อง — เหลือโอกาสอีก ${MAX_OTP_ATTEMPTS - n} ครั้ง`);
+      }
       return;
     }
-    const n = otpAttempts + 1;
-    setOtpAttempts(n);
-    setOtp("");
-    if (n >= MAX_OTP_ATTEMPTS) {
-      router.push("/suspended?reason=otp&from=ยื่นข้อเสนอซื้อ");
-    } else {
-      setOtpError(`รหัส OTP ไม่ถูกต้อง — เหลือโอกาสอีก ${MAX_OTP_ATTEMPTS - n} ครั้ง`);
+    // OTP ผ่าน → POST /offers full offerDto
+    setSubmitting(true);
+    try {
+      const res = await offersApi.create({
+        listingId: id ?? "",
+        offerPrice: priceNum,
+        deliveryMethod: "parcel",
+        message: message.trim() || undefined,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        const msg = body?.error?.message ?? "ยื่นข้อเสนอไม่สำเร็จ";
+        if (res.status === 409) {
+          setOfferApiError("คุณมีข้อเสนอที่รอการตอบรับสำหรับสินค้านี้อยู่แล้ว");
+        } else if (res.status === 403) {
+          setOfferApiError("ไม่มีสิทธิ์ยื่นข้อเสนอ — ตรวจสอบสถานะบัญชี");
+        } else {
+          setOfferApiError(msg);
+        }
+        setSubmitting(false);
+        return;
+      }
+      router.push(`/marketplace/${id}/offer/success`);
+    } catch {
+      setOfferApiError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      setSubmitting(false);
     }
   };
 
@@ -101,6 +128,7 @@ export default function MarketplaceOfferPage() {
           <p className="text-xs text-gray-400">(Mockup — ใช้รหัส <span className="font-bold text-weeeu-primary">123456</span> · ผู้ให้บริการ OTP จริง = BE)</p>
           <OtpInput value={otp} onChange={setOtp} />
           {otpError && <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">{otpError}</p>}
+          {offerApiError && <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">{offerApiError}</p>}
           <p className="text-xs text-gray-400">กรอกได้ {MAX_OTP_ATTEMPTS} ครั้ง — หากผิดครบจะถูกระงับและต้องติดต่อผู้ดูแลระบบ</p>
           <button
             onClick={handleVerifyOtp}

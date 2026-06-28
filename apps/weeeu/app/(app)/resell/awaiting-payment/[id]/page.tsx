@@ -10,9 +10,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+import { listingsApi } from "@/lib/api/listings";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 const MOCK_ORDER = {
@@ -52,25 +53,56 @@ function formatCountdown(ms: number) {
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function AwaitingPaymentPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const order = MOCK_ORDER;
 
   const remaining = useCountdown(order.payment_deadline);
   const totalMs = 24 * 60 * 60 * 1000;
   const pct = Math.min(100, (remaining / totalMs) * 100);
-  const isLow = remaining > 0 && remaining < 3 * 60 * 60 * 1000; // < 3h
+  const isLow = remaining > 0 && remaining < 3 * 60 * 60 * 1000;
   const expired = remaining === 0;
 
-  const shortfall = Math.max(0, order.required_gold - order.gold_balance);
-  const canPay = shortfall === 0 && !expired;
+  // money-safe: null guard (ห้าม ??0 บน money)
+  const requiredGold = order.required_gold != null ? order.required_gold : null;
+  const goldBalance = order.gold_balance != null ? order.gold_balance : null;
+  const shortfall = requiredGold != null && goldBalance != null
+    ? Math.max(0, requiredGold - goldBalance)
+    : null;
 
   const [paying, setPaying] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
 
   const handlePay = async () => {
+    if (!id) return;
     setPaying(true);
-    await new Promise((r) => setTimeout(r, 900));
-    setPaying(false);
-    setPaid(true);
+    setPayError(null);
+    try {
+      // §2 thin: confirmFunding คืน {listingId,state,lockedAmount} — ห้าม setState(thin)
+      // navigate ไป orders/[id] ทันที (re-fetch state จาก page นั้น)
+      await listingsApi.confirmFunding(id);
+      router.push(`/resell/orders/${id}`);
+    } catch (err: unknown) {
+      const e = err as { status?: number; code?: string };
+      if (e?.status === 403) {
+        setPayError("ไม่มีสิทธิ์ชำระ — ตรวจสอบสถานะผู้ซื้อ");
+      } else if (e?.status === 409) {
+        // FUNDING_WINDOW_EXPIRED / NO_SELECTED_OFFER / INVALID_STATE
+        setPayError("หน้าต่างชำระเงินหมดเวลา — กรุณาติดต่อผู้ขาย");
+      } else if (e?.status === 400) {
+        // INSUFFICIENT_GOLD / CONFIRM_FUNDING_FAILED → แนะนำเติม Gold
+        // INVALID_TRANSITION (อื่นๆ) → refresh
+        const insufficientCodes = ["INSUFFICIENT_GOLD", "CONFIRM_FUNDING_FAILED"];
+        if (e?.code && insufficientCodes.includes(e.code)) {
+          setPayError("พอยต์ทองไม่เพียงพอ — กรุณาเติมก่อน");
+        } else {
+          setPayError("ไม่สามารถชำระได้ในสถานะนี้ — รีเฟรชหน้า");
+        }
+      } else {
+        setPayError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      }
+      setPaying(false);
+    }
   };
 
   // ─── Seller View ─────────────────────────────────────────────────────────
@@ -253,16 +285,16 @@ export default function AwaitingPaymentPage() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">ยอดปัจจุบัน</span>
               <span className="font-bold text-yellow-600">
-                🪙 {order.gold_balance.toLocaleString()} พอยต์ทอง
+                🪙 {goldBalance != null ? goldBalance.toLocaleString() : "—"} พอยต์ทอง
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">ต้องใช้ระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></span>
               <span className="font-bold text-weeeu-primary">
-                {order.required_gold.toLocaleString()} พอยต์ทอง
+                {requiredGold != null ? requiredGold.toLocaleString() : "ราคาไม่ระบุ"} พอยต์ทอง
               </span>
             </div>
-            {shortfall > 0 && (
+            {shortfall != null && shortfall > 0 && (
               <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 flex items-center justify-between">
                 <p className="text-sm text-orange-700 font-medium">
                   พอยต์ทอง ไม่พอ — ขาดอีก
@@ -279,19 +311,22 @@ export default function AwaitingPaymentPage() {
       {/* Actions */}
       {!expired && (
         <div className="space-y-2.5">
-          {shortfall > 0 ? (
-            <>
-              <Link
-                href="/wallet/deposit"
-                className="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
-              >
-                🪙 เติม พอยต์ทอง ก่อนชำระ (ขาด {shortfall.toLocaleString()})
-              </Link>
-            </>
+          {payError && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+              <p className="text-sm text-red-700">{payError}</p>
+            </div>
+          )}
+          {shortfall != null && shortfall > 0 ? (
+            <Link
+              href="/wallet/deposit"
+              className="w-full block text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-2xl text-sm transition-colors"
+            >
+              🪙 เติม พอยต์ทอง ก่อนชำระ (ขาด {shortfall.toLocaleString()})
+            </Link>
           ) : (
             <button
               onClick={handlePay}
-              disabled={paying}
+              disabled={paying || shortfall == null}
               className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-4 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2"
             >
               {paying ? (
@@ -299,7 +334,7 @@ export default function AwaitingPaymentPage() {
                   <span className="animate-spin inline-block">⟳</span> กำลังชำระ...
                 </>
               ) : (
-                <>✅ ชำระ {order.agreed_price.toLocaleString()} พอยต์ทอง เข้าระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></>
+                <>✅ ชำระ {requiredGold != null ? requiredGold.toLocaleString() : "—"} พอยต์ทอง เข้าระบบพักเงินกลาง <EscrowInfoIcon className="inline-flex" /></>
               )}
             </button>
           )}
