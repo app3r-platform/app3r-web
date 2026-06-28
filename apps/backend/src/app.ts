@@ -9,6 +9,7 @@ import { swaggerUI } from '@hono/swagger-ui'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+import { devRouteGuard } from './middleware/dev-guard'
 
 // D-1 routes
 import { healthRouter } from './routes/health'
@@ -66,6 +67,9 @@ export const app = new OpenAPIHono()
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use('*', logger())
+
+// SECURITY (HUB Gen86): hard-fail any `_dev` route in production (dev backdoor must not leak)
+app.use('*', devRouteGuard)
 
 // D-5 Assets: serve static files from public/ directory
 // parts/ symptoms/ checklist/ pricing-samples/ ui/
