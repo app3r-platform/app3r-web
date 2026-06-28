@@ -9,13 +9,15 @@
  *                          (G5 wire path · A1 LOCKED จน Resell-real → config ว่าง → pct=0)
  *
  * Conservation: payer debit total @lock → recipient credit (total−fee) + platform fee = total @release.
- * ⚠️ platform revenue account = OPEN decision (derive §6 G · ยังไม่ถูกนิยาม).
- *    ตอนนี้ pct=0 → fee=0 → recipient ได้ total เต็ม → conservation ครบ.
- *    ★ ก่อน A1 unlock (pct>0): ต้องนิยาม revenue account + credit ส่วน fee ไม่งั้น fee จะหายจาก ledger.
+ * ✅ B2 (STEP 2/2 · HUB Gen89 · Advisor ruling 38d813ec-7277-8145): platform revenue account =
+ *    seeded platform-revenue user 'cash' wallet (pool · STEP 1 migration 0047). fee-leg credited via
+ *    getPlatformRevenueUserId (idemKey 'escrow-fee:{holdId}') → CF1 fee-leak CLOSED.
+ *    pct=0 (A1 locked) → fee=0 → fee-leg skipped → conservation exact (เดิม) · pct>0 → fee → pool (no leak).
  */
 import { and, eq } from 'drizzle-orm'
 import { escrowHolds, pointLedger, pointRoundingLog, adminConfig } from '../db/schema'
 import { debitGold, creditGold, roundD75, type Tx } from './point-service'
+import { getPlatformRevenueUserId } from './platform-account'
 
 const PLATFORM_FEE_KEY = 'platform_fee_percent'
 
@@ -106,6 +108,19 @@ export async function releaseEscrow(
     type: 'earn',
     metadata: { escrow: true, phase: 'release', fee, pct },
   })
+  // B2 (STEP 2 · CF1 close): credit fee-leg → platform revenue pool.
+  //   fee>0 only (pct=0 → fee=0 → skip → conservation เดิม exact · ไม่เรียก resolver ตอน A1)
+  //   idemKey 'escrow-fee:{holdId}' distinct จาก 'escrow-release' → release retry ไม่ double-credit fee
+  if (fee > 0) {
+    await creditGold(tx, {
+      userId: await getPlatformRevenueUserId(tx),
+      amount: fee,
+      reference: `escrow:${hold.id}`,
+      idempotencyKey: `escrow-fee:${hold.id}`,
+      type: 'earn',
+      metadata: { escrow: true, phase: 'fee', pct },
+    })
+  }
   // D75 audit (point_rounding_log) — เฉพาะเมื่อมีการคำนวณ fee จริง (A1 locked → pct=0 → skip)
   if (rawFee !== 0) {
     const [led] = await tx
@@ -205,8 +220,19 @@ export async function splitEscrow(
       metadata: { escrow: true, phase: 'split', side: 'seller', fee, pct },
     })
   }
-  // (d) B2 fee leg → platform revenue wallet — OPEN (mirror releaseEscrow: fee บันทึกที่ hold.platformFeeAmount
-  //     · ยัง NOT credit wallet จน B2 seed platform user/wallet · pre-A1 pct=0→fee=0 → conservation exact)
+  // (d) B2 (STEP 2 · CF1 close): credit fee-leg → platform revenue pool (seller-bound fee · Q1).
+  //     fee>0 only (pct=0 → fee=0 → skip → conservation exact) · idemKey 'escrow-fee:{holdId}'
+  //     distinct จาก 'escrow-split-seller' → split retry ไม่ double-credit fee (mirror releaseEscrow)
+  if (fee > 0) {
+    await creditGold(tx, {
+      userId: await getPlatformRevenueUserId(tx),
+      amount: fee,
+      reference: `escrow:${hold.id}`,
+      idempotencyKey: `escrow-fee:${hold.id}`,
+      type: 'earn',
+      metadata: { escrow: true, phase: 'fee', pct },
+    })
+  }
   // D75 audit (เฉพาะมี fee จริง — mirror releaseEscrow)
   if (rawFee !== 0) {
     const [led] = await tx
