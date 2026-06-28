@@ -10,22 +10,23 @@
  * mockup — provider OTP จริง / ตัดพอยต์ / persist = BE จังหวะ2
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import OtpInput from "@/components/shared/OtpInput";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 import { offersApi } from "@/lib/api/offers";
+import { listingsApi } from "@/lib/api/listings";
 
 const MOCK_OTP = "123456";
 const MAX_OTP_ATTEMPTS = 3;
 
-// Mock listing (fallback — marketplace detail ใช้ MOCK เดียวกัน)
-const MOCK_LISTING = {
-  name: "แอร์ Daikin 12000 BTU มือสอง",
-  askingPrice: 4500,
-  shop: "ร้านดีเจริญ",
+// Fallback display ระหว่าง fetch (ห้าม hardcode ตัวเลขจริงใน prod)
+const FALLBACK_LISTING = {
+  name: "กำลังโหลด...",
+  askingPrice: null as number | null,
+  shop: "",
 };
 
 // เงื่อนไขยกเลิก/คืนพอยต์ (offer terms · DECISION จุด1) — ผู้ซื้อเลือกก่อนยื่น
@@ -38,7 +39,22 @@ const CANCEL_TERMS_OPTIONS = [
 export default function MarketplaceOfferPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const listing = MOCK_LISTING;
+
+  // Fetch real listing display data (ห้ามโชว์เลขปลอม)
+  const [listing, setListing] = useState(FALLBACK_LISTING);
+  useEffect(() => {
+    if (!id) return;
+    listingsApi.get(id).then((data) => {
+      setListing({
+        name: data.appliance_name ?? "สินค้ามือสอง",
+        // money-safe: null → null (ห้าม ??0)
+        askingPrice: typeof data.price === "number" ? data.price : null,
+        shop: data.seller_name ?? "",
+      });
+    }).catch(() => {
+      setListing({ name: "สินค้ามือสอง", askingPrice: null, shop: "" });
+    });
+  }, [id]);
 
   const [offerPrice, setOfferPrice] = useState("");
   const [message, setMessage] = useState("");
@@ -156,8 +172,13 @@ export default function MarketplaceOfferPage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-1">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">สินค้าที่จะเสนอซื้อ</p>
         <p className="font-semibold text-gray-900">{listing.name}</p>
-        <p className="text-sm text-gray-600">ผู้ขาย: {listing.shop}</p>
-        <p className="text-sm text-gray-500">ราคาตั้งขาย: <span className="font-bold text-weeeu-primary">{listing.askingPrice.toLocaleString()} ฿</span></p>
+        {listing.shop && <p className="text-sm text-gray-600">ผู้ขาย: {listing.shop}</p>}
+        <p className="text-sm text-gray-500">
+          ราคาตั้งขาย:{" "}
+          <span className="font-bold text-weeeu-primary">
+            {listing.askingPrice != null ? listing.askingPrice.toLocaleString() + " พอยต์ทอง" : "ราคาไม่ระบุ"}
+          </span>
+        </p>
       </div>
 
       {/* Offer price */}
@@ -170,24 +191,27 @@ export default function MarketplaceOfferPage() {
           min="1"
           value={offerPrice}
           onChange={e => setOfferPrice(e.target.value)}
-          placeholder={`เช่น ${listing.askingPrice.toLocaleString()}`}
+          placeholder={listing.askingPrice != null ? `เช่น ${listing.askingPrice.toLocaleString()}` : "ระบุราคา"}
           className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-weeeu-primary/40"
         />
-        <div className="flex gap-1.5">
-          {[1, 0.95, 0.9].map(f => {
-            const v = Math.round(listing.askingPrice * f);
-            return (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setOfferPrice(String(v))}
-                className="text-xs px-2.5 py-1 rounded-lg border border-gray-200 text-gray-500 hover:border-weeeu-primary/40 hover:text-weeeu-primary transition-colors"
-              >
-                {f === 1 ? "เต็มราคา" : `-${Math.round((1 - f) * 100)}%`} ({v.toLocaleString()})
-              </button>
-            );
-          })}
-        </div>
+        {/* quick-select เฉพาะเมื่อมีราคาจริง (ห้าม ??0) */}
+        {listing.askingPrice != null && (
+          <div className="flex gap-1.5">
+            {[1, 0.95, 0.9].map(f => {
+              const v = Math.round(listing.askingPrice! * f);
+              return (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setOfferPrice(String(v))}
+                  className="text-xs px-2.5 py-1 rounded-lg border border-gray-200 text-gray-500 hover:border-weeeu-primary/40 hover:text-weeeu-primary transition-colors"
+                >
+                  {f === 1 ? "เต็มราคา" : `-${Math.round((1 - f) * 100)}%`} ({v.toLocaleString()})
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* เงื่อนไขยกเลิก/คืนพอยต์ (offer terms · DECISION จุด1) */}
