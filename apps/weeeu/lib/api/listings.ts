@@ -80,4 +80,28 @@ export const listingsApi = {
   // List offers on a listing (seller view) — Hono GET /{id}/offers → Offer[]
   listOffers: (listingId: string) =>
     apiFetch(`/api/v1/listings/${listingId}/offers`).then(r => r.json()) as Promise<unknown[]>,
+
+  // Buyer confirms funding — POST /{id}/confirm-funding {} → thin {listingId,state,lockedAmount} [LOCK escrow]
+  // guard: selected buyer + funding window + balance≥0 (BE enforces · FE checks non-2xx)
+  confirmFunding: (listingId: string) =>
+    apiFetch(`/api/v1/listings/${listingId}/confirm-funding`, { method: "POST" })
+      .then(async r => {
+        if (!r.ok) {
+          const body = await r.json().catch(() => ({}));
+          throw Object.assign(new Error(body?.error?.message ?? "confirm-funding failed"), { status: r.status, code: body?.error?.code });
+        }
+        return r.json() as Promise<{ listingId: string; state: string; lockedAmount: number | null }>;
+      }),
+
+  // Buyer confirms inspection — POST /{id}/inspect-confirm {} → thin {listingId,state} [RELEASE escrow]
+  // guard: selected buyer + state=inspection_period (BE enforces)
+  inspectConfirm: (listingId: string) =>
+    apiFetch(`/api/v1/listings/${listingId}/inspect-confirm`, { method: "POST" })
+      .then(async r => {
+        if (!r.ok) {
+          const body = await r.json().catch(() => ({}));
+          throw Object.assign(new Error(body?.error?.message ?? "inspect-confirm failed"), { status: r.status, code: body?.error?.code });
+        }
+        return r.json() as Promise<{ listingId: string; state: string }>;
+      }),
 };

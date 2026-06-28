@@ -62,3 +62,46 @@ jobs:
           name: jest-coverage-weeer
           path: apps/weeer/coverage/
           retention-days: 7
+
+  # ── W0 SECURITY GREP-GATE (Resell FE-integration) ───────────────────────────
+  # ล้ม prod build ถ้า dev-auth bypass หลุดเข้า prod bundle.
+  # double-guard ใน resell/_lib/api.ts (NODE_ENV==='development' && NEXT_PUBLIC_DEV_NAV==='true')
+  # ต้องทำให้ DCE ตัด dev branch ทิ้งใน prod → token เหล่านี้ต้องหายจาก .next
+  prod-bundle-security:
+    name: prod bundle security gate (dev-auth leak)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build weeer (prod · NODE_ENV=production · DEV_NAV unset)
+        working-directory: apps/weeer
+        run: pnpm exec next build
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_WS_URL: ws://localhost:8000
+
+      - name: Grep-gate — fail if dev-auth bypass leaked into prod bundle
+        working-directory: apps/weeer
+        run: |
+          set -e
+          echo "Scanning .next for dev-auth bypass tokens…"
+          if grep -rIl -e 'getDevTestToken' -e '_dev/get-test-token' -e 'dev-jwt-bypass' .next/ ; then
+            echo "::error::dev-auth bypass leaked into prod bundle — DCE failed (double-guard regression)"
+            exit 1
+          fi
+          echo "OK — no dev-auth bypass tokens in prod bundle"

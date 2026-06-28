@@ -11,7 +11,8 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import { createAd, estimateGoldCost, AD_POSITION_OPTIONS, type AdPosition } from "../../../../../lib/ads-api";
-import type { Listing, Offer } from "../../_lib/types";
+import type { Listing, Offer, ListingStatus } from "../../_lib/types";
+import { pointsLabel } from "../../_lib/format";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR, OFFER_STATUS_LABEL, OFFER_STATUS_COLOR, LISTING_TERMINAL } from "../../_lib/types";
 
 // RC-B: relative date helper
@@ -86,18 +87,24 @@ function EscrowCountdown() {
 
 export default function ResellListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [listing, setListing] = useState<Listing | null>(null);
-  const [offers, setOffers] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [listing, setListing] = useState<Listing | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_LISTINGS[id] ?? null) : null
+  );
+  const [offers, setOffers] = useState<Offer[]>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? (MOCK_LISTINGS[id]?.offers ?? []) : []
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  // Mock state (R2/R3/R4/R5/R6)
+  // Mock state (R2/R3/R4/R5)
   const [mockCancelled, setMockCancelled] = useState(false);
   const [r5Withdrawn, setR5Withdrawn] = useState(false);
   const [showR5Confirm, setShowR5Confirm] = useState(false);
+  // W1 ship form (R6 evidence + carrier/tracking · ส่งใน POST /ship body)
   const [evidenceUrl, setEvidenceUrl] = useState("");
-  const [evidenceSubmitted, setEvidenceSubmitted] = useState(false);
+  const [carrier, setCarrier] = useState("");
+  const [trackingNo, setTrackingNo] = useState("");
 
   // ── C12 Ad (Backend ads API · POST /api/v1/ads — ตัด Gold D75 → pending → admin approve) ──
   const [showAd, setShowAd] = useState(false);
@@ -122,6 +129,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
   }
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     const mock = MOCK_LISTINGS[id];
     Promise.all([
       resellApi.listingsGet(id).catch(() => mock ?? null),
@@ -137,21 +145,78 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
 
   async function handleAccept(offerId: string) {
     setActionLoading(offerId);
+    setError("");
     try {
-      const updated = await resellApi.acceptOffer(id, offerId).catch(() => ({
-        ...listing!, status: "offer_selected" as const,
-      }));
-      setListing(updated);
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        // mock demo (no backend): merge สถานะ + offers ของ mock
+        setListing(prev => (prev ? { ...prev, status: "offer_selected" } : prev));
+        setOffers(prev => prev.map(o => ({ ...o, status: o.id === offerId ? "selected" : "rejected" })));
+        return;
+      }
+      // §5: select-offer write — non-2xx throws → typed error (ห้าม swallow .catch(()=>null))
+      // §2: คืน THIN {listingId,state,offerId,fundingDeadline} → ห้าม setListing(thin) → re-fetch canonical
+      await resellApi.acceptOffer(id, offerId);
+      // optimistic + re-fetch เฉพาะหลัง 2xx สำเร็จ
+      const refreshed = await resellApi.listingsGet(id).catch(() => null);
+      setListing(prev => refreshed ?? (prev ? { ...prev, status: "offer_selected" } : prev));
       setOffers(prev => prev.map(o => ({ ...o, status: o.id === offerId ? "selected" : "rejected" })));
-    } catch { /**/ } finally { setActionLoading(null); }
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "เลือกข้อเสนอไม่สำเร็จ");
+    } finally { setActionLoading(null); }
   }
 
   async function handleReject(offerId: string) {
     setActionLoading(offerId);
+    setError("");
     try {
-      await resellApi.rejectOffer(id, offerId).catch(() => null);
-      setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));
-    } catch { /**/ } finally { setActionLoading(null); }
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));
+        return;
+      }
+      // §5: reject-offer write — non-2xx throws → typed error · คืน THIN {offerId,status} (ไม่ทับ entity)
+      await resellApi.rejectOffer(id, offerId);
+      setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status: "rejected" } : o));  // optimistic หลัง 2xx
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "ปฏิเสธข้อเสนอไม่สำเร็จ");
+    } finally { setActionLoading(null); }
+  }
+
+  // ── W1 seller transitions (ship/deliver) ────────────────────────────────────
+  // §2: write คืน THIN {listingId,state,...} → ห้าม setListing(thin) → re-fetch canonical
+  // §5: non-2xx → typed error (setError) · ห้าม swallow/white-screen
+  async function sellerTransition(
+    action: "ship" | "confirm_delivery",
+    body: Record<string, unknown> | undefined,
+    mockNextStatus: ListingStatus,
+  ) {
+    setActionLoading(action);
+    setError("");
+    try {
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        // mock demo path (no backend) — local transition เท่านั้น
+        setListing(prev => (prev ? { ...prev, status: mockNextStatus } : prev));
+        return;
+      }
+      await resellApi.transitionStatus(id, action, body);   // thin response (ไม่ใช้ทับ entity)
+      const refreshed = await resellApi.listingsGet(id);    // §2 re-fetch canonical
+      setListing(refreshed);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "ดำเนินการไม่สำเร็จ");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  function handleShip() {
+    void sellerTransition("ship", {
+      ...(carrier ? { carrier } : {}),
+      ...(trackingNo ? { trackingNo } : {}),
+      ...(evidenceUrl ? { shipEvidence: [evidenceUrl] } : {}),
+    }, "in_progress");
+  }
+
+  function handleDeliver() {
+    void sellerTransition("confirm_delivery", undefined, "delivered");
   }
 
   if (loading) return <div className="flex items-center justify-center h-48 text-gray-400">กำลังโหลด…</div>;
@@ -181,11 +246,6 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="bg-red-50 border border-red-300 rounded-xl p-4">
           <p className="text-sm font-bold text-red-700">🚫 ประกาศถูกระงับ (R2/R3 SUSPENDED)</p>
           <p className="text-xs text-red-600 mt-1">{listing.suspendReason ?? "Admin ระงับ — กรุณาตรวจสอบ"}</p>
-          {/* RSL-R03: offer-fee-refund notice (auto-suspend on expiry · mockup only · settlement = Phase D backend) */}
-          <div className="mt-3 bg-white/60 border border-red-200 rounded-lg p-2.5">
-            <p className="text-xs font-semibold text-red-700">ประกาศถูกระงับ · ระบบคืนค่ายื่นข้อเสนอให้ผู้เสนอทุกราย</p>
-            <p className="text-[11px] text-red-500 mt-0.5">(การคืนค่ายื่นดำเนินการโดยระบบหลังบ้าน)</p>
-          </div>
           <div className="flex gap-2 mt-3">
             <Link href={`/resell/listings/${id}/edit`}
               className="flex-1 text-center text-xs bg-[#FF663A] hover:bg-[#D8491F] text-white font-semibold py-2 rounded-lg transition-colors">
@@ -204,8 +264,8 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="bg-[#FFF1ED] border border-[#FFD0BF] rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติม Gold เข้าพักเงินกลาง (Escrow)</p>
-              <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติม Gold ≤24ชม. มิฉะนั้น offer จะถูกปลด</p>
+              <p className="text-sm font-bold text-[#D63B12]">⏳ รอผู้ซื้อเติมพอยต์ทอง เข้าพักเงินกลาง (Escrow)</p>
+              <p className="text-xs text-[#F04E20] mt-0.5">ผู้ซื้อต้องเติมพอยต์ทอง ≤24ชม. มิฉะนั้นข้อเสนอ (offer) จะถูกปลด</p>
             </div>
             <EscrowCountdown />
           </div>
@@ -224,27 +284,42 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         </div>
       )}
 
-      {/* R6: Evidence upload (in_progress) */}
-      {effectiveStatus === "in_progress" && !evidenceSubmitted && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
-          <p className="text-sm font-bold text-orange-800">📸 R6: แนบหลักฐานก่อนส่งสินค้า (บังคับ)</p>
-          <p className="text-xs text-orange-600 mt-0.5">ถ่ายรูป+คลิปสินค้าก่อนแพ็คและส่ง — หลักฐานป้องกันข้อพิพาท</p>
-          <div className="flex gap-2 mt-3">
-            <input type="url" value={evidenceUrl} onChange={e => setEvidenceUrl(e.target.value)}
-              placeholder="URL รูป/คลิป (mock)…"
-              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            <button onClick={() => evidenceUrl && setEvidenceSubmitted(true)}
-              disabled={!evidenceUrl}
-              className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors disabled:opacity-50">
-              ส่ง
-            </button>
+      {/* W1/GAP-2: ship form ที่ buyer_confirmed (ก่อน ship · ตรง backend guard state=buyer_confirmed) */}
+      {effectiveStatus === "buyer_confirmed" && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-bold text-orange-800">📦 R6: จัดส่งสินค้า (Ship)</p>
+            <p className="text-xs text-orange-600 mt-0.5">แนบหลักฐานก่อนส่ง + ข้อมูลขนส่ง — ป้องกันข้อพิพาท</p>
           </div>
+          <input type="url" value={evidenceUrl} onChange={e => setEvidenceUrl(e.target.value)}
+            placeholder="URL รูป/คลิปหลักฐานก่อนส่ง…"
+            className="w-full border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+          <div className="flex gap-2">
+            <input type="text" value={carrier} onChange={e => setCarrier(e.target.value)}
+              placeholder="ขนส่ง (เช่น Kerry)…"
+              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <input type="text" value={trackingNo} onChange={e => setTrackingNo(e.target.value)}
+              placeholder="เลขพัสดุ…"
+              className="flex-1 border border-orange-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+          </div>
+          <button onClick={handleShip} disabled={actionLoading === "ship"}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50">
+            {actionLoading === "ship" ? "กำลังส่ง…" : "ยืนยันการจัดส่ง (Ship)"}
+          </button>
         </div>
       )}
-      {effectiveStatus === "in_progress" && evidenceSubmitted && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
-          <span>✅</span>
-          <p className="text-sm text-green-700 font-medium">ส่งหลักฐานแล้ว — กรุณาจัดส่งสินค้าตาม delivery method</p>
+
+      {/* W1: in_progress (shipped) → deliver */}
+      {effectiveStatus === "in_progress" && (
+        <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-bold text-teal-800">🚚 จัดส่งแล้ว — ยืนยันส่งมอบ (Deliver)</p>
+            <p className="text-xs text-teal-600 mt-0.5">เมื่อพัสดุถึงผู้ซื้อ กดยืนยันส่งมอบเพื่อเข้าสู่ช่วงตรวจรับ</p>
+          </div>
+          <button onClick={handleDeliver} disabled={actionLoading === "confirm_delivery"}
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50">
+            {actionLoading === "confirm_delivery" ? "กำลังยืนยัน…" : "ยืนยันส่งมอบ (Deliver)"}
+          </button>
         </div>
       )}
 
@@ -253,9 +328,9 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ราคา</p>
-            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} pts</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{pointsLabel(listing.price)}</p>
           </div>
-          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{listing.deliveryMethods.join(", ")}</p></div>
+          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{(listing.deliveryMethods ?? []).join(", ")}</p></div>
           {listing.warranty && (
             <div className="col-span-2">
               <p className="text-xs text-gray-400">การรับประกัน</p>
@@ -295,7 +370,7 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
               <div key={o.id} className="border border-gray-100 rounded-xl p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="text-sm font-bold text-gray-800">{o.offerPrice.toLocaleString()} pts</p>
+                    <p className="text-sm font-bold text-gray-800">{pointsLabel(o.offerPrice)}</p>
                     <p className="text-xs text-gray-500">{o.buyerName ?? o.buyerId} · {o.buyerType}</p>
                     <p className="text-xs text-gray-400">{o.deliveryMethod}</p>
                     {o.message && <p className="text-xs text-gray-500 mt-1 italic">"{o.message}"</p>}
@@ -405,12 +480,9 @@ export default function ResellListingDetailPage({ params }: { params: Promise<{ 
       {showR5Confirm && (
         <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50 px-4 pb-6">
           <div className="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4">
-            <h2 className="text-base font-bold text-gray-900">ยืนยันถอนการเลือก (R5)</h2>
+            {/* §7 เคส R5 */}
+            <h2 className="text-base font-bold text-gray-900">ยืนยันถอนการเลือก</h2>
             <p className="text-sm text-gray-600">ถอนการเลือก — ประกาศจะกลับสู่ "รับข้อเสนอ" และผู้ซื้อรายนี้จะไม่ถูกเลือกอีก</p>
-            {/* RSL-R05: seller-fault penalty notice (mockup · aligns with Admin fees T2/T3) */}
-            <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-              <p className="text-xs font-semibold text-red-700">⚠️ การถอนการเลือกหลังเลือกผู้ซื้อแล้ว ถือเป็นความผิดฝั่งผู้ขาย · มีค่าปรับ (seller-fault fee)</p>
-            </div>
             <div className="flex gap-3">
               <button onClick={() => setShowR5Confirm(false)}
                 className="flex-1 border border-gray-200 text-gray-600 font-medium py-2.5 rounded-xl text-sm hover:bg-gray-50">

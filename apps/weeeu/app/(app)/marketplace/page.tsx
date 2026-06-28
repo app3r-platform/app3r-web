@@ -1,17 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { NearMeFilter, type NearbyTambonDto } from "@app3r/ui";
+import { listingsApi } from "@/lib/api/listings";
+import type { Listing } from "@/lib/types";
 
-const MOCK_ITEMS = [
-  { id: "r001", name: "แอร์ Daikin 12000 BTU มือสอง", price: 4500, condition: "ดี", category: "เครื่องปรับอากาศ", shop: "ร้านดีเจริญ", image: "https://picsum.photos/seed/r001/300/200" },
-  { id: "r002", name: "ตู้เย็น Samsung 2 ประตู 14 คิว", price: 3200, condition: "ดีมาก", category: "ตู้เย็น", shop: "ร้านอิเล็กทรอ", image: "https://picsum.photos/seed/r002/300/200" },
-  { id: "r003", name: "เครื่องซักผ้า LG 8 kg", price: 2800, condition: "พอใช้", category: "เครื่องซักผ้า", shop: "ร้านช่างเย็น จำกัด", image: "https://picsum.photos/seed/r003/300/200" },
-  { id: "r004", name: "ทีวี Sony 43\" Smart TV", price: 5500, condition: "ดีมาก", category: "โทรทัศน์", shop: "ร้านดีเจริญ", image: "https://picsum.photos/seed/r004/300/200" },
-  { id: "r005", name: "ไมโครเวฟ Sharp 25L", price: 900, condition: "ดี", category: "ไมโครเวฟ", shop: "ร้านอิเล็กทรอ", image: "https://picsum.photos/seed/r005/300/200" },
-  { id: "r006", name: "เครื่องทำน้ำอุ่น Panasonic", price: 650, condition: "พอใช้", category: "เครื่องทำน้ำอุ่น", shop: "ร้านช่างเย็น จำกัด", image: "https://picsum.photos/seed/r006/300/200" },
-];
+// backend browse อาจ return display fields เพิ่มเติม (applianceName, sellerName)
+type BrowseListing = Listing & {
+  applianceName?: string;
+  sellerName?: string;
+};
+
+const CONDITION_LABEL: Record<string, string> = {
+  grade_A: "ดีมาก",
+  grade_B: "ดี",
+  grade_C: "พอใช้",
+};
 
 const CONDITION_COLORS: Record<string, string> = {
   "ดีมาก": "bg-green-100 text-green-700",
@@ -19,8 +24,6 @@ const CONDITION_COLORS: Record<string, string> = {
   "พอใช้": "bg-yellow-100 text-yellow-700",
 };
 
-// A4: filter options
-const CATEGORY_FILTERS = ["เครื่องปรับอากาศ", "ตู้เย็น", "เครื่องซักผ้า", "โทรทัศน์", "ไมโครเวฟ"] as const;
 const CONDITION_FILTERS = ["ดีมาก", "ดี", "พอใช้"] as const;
 const PRICE_RANGES = [
   { label: "ทุกราคา", min: 0, max: Infinity },
@@ -31,14 +34,41 @@ const PRICE_RANGES = [
 ] as const;
 
 export default function MarketplacePage() {
-  // GR-10 near-me — ผลตำบลใกล้เคียงจาก shared NearMeFilter (@app3r/ui)
   const [nearby, setNearby] = useState<NearbyTambonDto[] | null>(null);
-  // A4: local filter state (UI mockup — server-side filter = BE จังหวะ2)
-  const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [conditionFilter, setConditionFilter] = useState<string>("");
-  const [priceRange, setPriceRange] = useState(0); // index into PRICE_RANGES
+  const [priceRange, setPriceRange] = useState(0);
   const [searchText, setSearchText] = useState("");
-  const [pageSize, setPageSize] = useState<number | "all">(20); // (c) pagination
+  const [pageSize, setPageSize] = useState<number | "all">(20);
+
+  const [items, setItems] = useState<BrowseListing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setFetchError(null);
+    listingsApi
+      .browse({ listingType: "used_appliance" })
+      .then(res => setItems((res.results ?? []) as BrowseListing[]))
+      .catch(() => setFetchError("โหลดสินค้าไม่สำเร็จ กรุณารีเฟรชหน้า"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = items.filter(item => {
+    const condLabel = CONDITION_LABEL[item.conditionGrade ?? ""] ?? "";
+    const displayName = item.applianceName ?? "";
+    if (searchText && !displayName.includes(searchText)) return false;
+    if (conditionFilter && condLabel !== conditionFilter) return false;
+    // money-safe: ห้าม ??0 — null price ไม่นับเข้า price filter
+    const price = typeof item.price === "number" ? item.price : null;
+    if (price !== null) {
+      const range = PRICE_RANGES[priceRange];
+      if (price < range.min || price >= range.max) return false;
+    }
+    return true;
+  });
+
+  const visible = pageSize === "all" ? filtered : filtered.slice(0, pageSize);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -73,22 +103,8 @@ export default function MarketplacePage() {
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 text-lg">🔍</span>
         </div>
 
-        {/* A4: Filter chips — ประเภท / เงื่อนไข / ราคา + ล้างตัวกรอง */}
+        {/* Filters */}
         <div className="space-y-2">
-          {/* ประเภท */}
-          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
-            <button type="button" onClick={() => setCategoryFilter("")}
-              className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 border transition-colors ${!categoryFilter ? "bg-weeeu-primary text-white border-weeeu-primary" : "bg-white text-gray-500 border-gray-200 hover:border-weeeu-primary"}`}>
-              ทุกประเภท
-            </button>
-            {CATEGORY_FILTERS.map(c => (
-              <button key={c} type="button" onClick={() => setCategoryFilter(c === categoryFilter ? "" : c)}
-                className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 border transition-colors ${categoryFilter === c ? "bg-weeeu-primary text-white border-weeeu-primary" : "bg-white text-gray-500 border-gray-200 hover:border-weeeu-primary"}`}>
-                {c}
-              </button>
-            ))}
-          </div>
-          {/* เงื่อนไขสภาพ */}
           <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
             <span className="text-xs text-gray-400 flex-shrink-0 self-center">สภาพ:</span>
             {CONDITION_FILTERS.map(c => (
@@ -98,7 +114,6 @@ export default function MarketplacePage() {
               </button>
             ))}
           </div>
-          {/* ราคา */}
           <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
             <span className="text-xs text-gray-400 flex-shrink-0 self-center">ราคา:</span>
             {PRICE_RANGES.map((r, i) => (
@@ -108,69 +123,68 @@ export default function MarketplacePage() {
               </button>
             ))}
           </div>
-          {/* Clear filters */}
-          {(categoryFilter || conditionFilter || priceRange > 0 || searchText) && (
+          {(conditionFilter || priceRange > 0 || searchText) && (
             <button type="button"
-              onClick={() => { setCategoryFilter(""); setConditionFilter(""); setPriceRange(0); setSearchText(""); }}
+              onClick={() => { setConditionFilter(""); setPriceRange(0); setSearchText(""); }}
               className="text-xs text-weeeu-primary font-medium hover:underline">
               ✕ ล้างตัวกรองทั้งหมด
             </button>
           )}
         </div>
 
-        {/* GR-10 NearMeFilter (shared @app3r/ui · roleTheme weeeu · proxy /api → backend) */}
+        {/* GR-10 NearMeFilter */}
         <div className="space-y-2">
           <NearMeFilter
             roleTheme={{ primary: "#0DC36C" }}
             backendUrl=""
             defaultRadiusKm={20}
-            onResults={(items) => setNearby(items)}
+            onResults={(its) => setNearby(its)}
           />
           {nearby && nearby.length > 0 && (
             <div className="bg-weeeu-surface border border-weeeu-primary/20 rounded-xl px-3 py-2 flex items-center justify-between">
               <span className="text-xs text-weeeu-text">📍 กรองตามตำบลใกล้คุณ ({nearby.length} ตำบล)</span>
-              <button
-                type="button"
-                onClick={() => setNearby(null)}
-                className="text-xs text-weeeu-primary font-medium hover:underline"
-              >
-                ล้างตัวกรอง
-              </button>
+              <button type="button" onClick={() => setNearby(null)} className="text-xs text-weeeu-primary font-medium hover:underline">ล้างตัวกรอง</button>
             </div>
           )}
         </div>
 
-        {/* Grid — filtered */}
-        <div className="grid grid-cols-2 gap-3">
-          {MOCK_ITEMS.filter(item =>
-            (!searchText || item.name.includes(searchText) || item.shop.includes(searchText)) &&
-            (!categoryFilter || item.category === categoryFilter) &&
-            (!conditionFilter || item.condition === conditionFilter) &&
-            (item.price >= PRICE_RANGES[priceRange].min && item.price < PRICE_RANGES[priceRange].max)
-          ).slice(0, pageSize === "all" ? undefined : pageSize).map((item) => (
-            <Link key={item.id} href={`/marketplace/${item.id}`}>
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                {/* D1 media fallback */}
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-32 object-cover bg-gray-100"
-                  onError={(e) => { const t = e.target as HTMLImageElement; t.onerror = null; t.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='128'%3E%3Crect fill='%23f3f4f6' width='300' height='128'/%3E%3Ctext fill='%239ca3af' font-size='12' font-family='sans-serif' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3Eรูปภาพ%3C/text%3E%3C/svg%3E"; }}
-                />
-                <div className="p-3 space-y-1.5">
-                  <p className="text-xs font-semibold text-weeeu-dark leading-snug line-clamp-2">{item.name}</p>
-                  <p className="text-sm font-bold text-weeeu-primary">{item.price.toLocaleString()} ฿</p>
-                  <div className="flex items-center justify-between gap-1 flex-wrap">
-                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${CONDITION_COLORS[item.condition] ?? "bg-gray-100 text-gray-500"}`}>
-                      {item.condition}
-                    </span>
+        {/* Grid */}
+        {loading ? (
+          <div className="py-16 text-center text-gray-400 text-sm">⟳ กำลังโหลด...</div>
+        ) : fetchError ? (
+          <div className="py-8 text-center text-red-500 text-sm">{fetchError}</div>
+        ) : visible.length === 0 ? (
+          <div className="py-16 text-center text-gray-400 text-sm">ไม่พบสินค้า</div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {visible.map((item) => {
+              const condLabel = CONDITION_LABEL[item.conditionGrade ?? ""] ?? "";
+              const displayName = item.applianceName ?? "สินค้ามือสอง";
+              // money-safe: null/undefined price → ราคาไม่ระบุ (ห้าม ??0)
+              const priceDisplay = typeof item.price === "number"
+                ? item.price.toLocaleString() + " พอยต์ทอง"
+                : "ราคาไม่ระบุ";
+              return (
+                <Link key={item.id} href={`/marketplace/${item.id}`}>
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="w-full h-32 bg-gray-100 flex items-center justify-center">
+                      <span className="text-3xl">📦</span>
+                    </div>
+                    <div className="p-3 space-y-1.5">
+                      <p className="text-xs font-semibold text-weeeu-dark leading-snug line-clamp-2">{displayName}</p>
+                      <p className="text-sm font-bold text-weeeu-primary">{priceDisplay}</p>
+                      {condLabel && (
+                        <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full inline-block ${CONDITION_COLORS[condLabel] ?? "bg-gray-100 text-gray-500"}`}>
+                          {condLabel}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-[10px] text-gray-400 truncate">{item.shop}</p>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

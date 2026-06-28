@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "./_lib/api";
 import type { Listing } from "./_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "./_lib/types";
+import { pointsLabel } from "./_lib/format";
 import { MockAnnoOrigin } from "@/components/MockAnno";
 
 interface Dashboard {
@@ -44,10 +45,13 @@ const MOCK_DASHBOARD: Dashboard = {
 };
 
 export default function ResellDashboardPage() {
-  const [data, setData] = useState<Dashboard | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Dashboard | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true" ? MOCK_DASHBOARD : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.dashboard()
       .then(setData)
       .catch(() => setData(MOCK_DASHBOARD))  // Mockup fallback
@@ -79,9 +83,9 @@ export default function ResellDashboardPage() {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           { label: "สินค้าในสต๊อก",   value: d.total_inventory,            color: "bg-[#FCEAE3]", text: "text-[#FF663A]" },
-          { label: "ประกาศ active",    value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
+          { label: "ประกาศใช้งาน",     value: d.total_listings_active,       color: "bg-orange-50", text: "text-orange-700" },
           { label: "ข้อเสนอรอตอบ",    value: d.total_offers_pending,        color: "bg-amber-50",  text: "text-amber-700" },
-          { label: "รายได้รวม (pts)", value: d.total_revenue.toLocaleString(), color: "bg-[#FFF1ED]", text: "text-[#D63B12]" },
+          { label: "รายได้รวม (พอยต์)", value: d.total_revenue.toLocaleString(), color: "bg-[#FFF1ED]", text: "text-[#D63B12]" },
         ].map(k => (
           <div key={k.label} className={`${k.color} rounded-xl p-4 text-center`}>
             <p className={`text-2xl font-bold ${k.text}`}>{k.value}</p>
@@ -95,7 +99,7 @@ export default function ResellDashboardPage() {
         {[
           { href: "/resell/inventory",   icon: "📦", label: "คลังสินค้า" },
           { href: "/resell/listings",    icon: "📢", label: "ประกาศของฉัน" },
-          { href: "/resell/marketplace", icon: "🛒", label: "Marketplace" },
+          { href: "/resell/marketplace", icon: "🛒", label: "ตลาดซื้อขาย" },
           { href: "/resell/offers",      icon: "🤝", label: "ข้อเสนอ" },
           { href: "/resell/transactions",icon: "🔄", label: "รายการซื้อขาย" },
           { href: "/resell/buy",         icon: "📥", label: "รับซื้อ B6" },
@@ -129,7 +133,7 @@ export default function ResellDashboardPage() {
                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${LISTING_STATUS_COLOR[l.status]}`}>
                     {LISTING_STATUS_LABEL[l.status]}
                   </span>
-                  <span className="text-sm font-bold text-[#FF663A]">{l.price.toLocaleString()} pts</span>
+                  <span className="text-sm font-bold text-[#FF663A]">{pointsLabel(l.price)}</span>
                 </div>
               </Link>
             ))}

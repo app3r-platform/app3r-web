@@ -14,10 +14,13 @@ export async function apiFetch(
   path: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  // TODO: REMOVE BEFORE PROD — dev auth bypass
+  // dev bypass — เฉพาะ DEV_NAV=true เท่านั้น (mock walkthrough) · integration/prod ใช้ localStorage
   let token: string | null = null;
-  if (process.env.NODE_ENV === "development") {
-    token = await getDevTestToken();
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+  ) {
+    token = await getDevTestToken().catch(() => null);
   } else {
     token =
       typeof window !== "undefined"

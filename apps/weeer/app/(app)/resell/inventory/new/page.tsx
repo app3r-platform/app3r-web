@@ -124,10 +124,10 @@ export default function ResellInventoryNewPage() {
 
         {/* SKU + Barcode */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">SKU / Barcode</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">SKU / บาร์โค้ด (Barcode)</label>
           <div className="flex gap-2">
             <input type="text" value={sku} onChange={e => setSku(e.target.value)}
-              placeholder="กรอก SKU หรือสแกน Barcode"
+              placeholder="กรอก SKU หรือสแกนบาร์โค้ด (Barcode)"
               className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#FF663A]" />
             {supported ? (
               <button type="button"
@@ -230,7 +230,7 @@ export default function ResellInventoryNewPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              ราคาทุน (pts) <span className="text-red-500">*</span>
+              ราคาทุน (พอยต์) <span className="text-red-500">*</span>
             </label>
             <input type="number" min={0} value={costPrice}
               onChange={e => { setCostPrice(e.target.value); setFormErrors(f => ({ ...f, costPrice: "" })); }}
@@ -239,7 +239,7 @@ export default function ResellInventoryNewPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              ราคาขาย (pts) <span className="text-red-500">*</span>
+              ราคาขาย (พอยต์) <span className="text-red-500">*</span>
             </label>
             <input type="number" min={0} value={suggestedPrice}
               onChange={e => { setSuggestedPrice(e.target.value); setFormErrors(f => ({ ...f, suggestedPrice: "" })); }}

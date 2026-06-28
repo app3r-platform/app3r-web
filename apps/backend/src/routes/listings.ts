@@ -28,6 +28,7 @@ import { db } from '../db/client'
 import {
   listingMeta,
   usedApplianceListings,
+  applianceModels,
   offers,
   resellFulfillment,
   resellDisputes,
@@ -51,6 +52,18 @@ async function getAuthUser(c: { req: { header: (k: string) => string | undefined
 }
 const unauthorized = (c: { json: (b: unknown, s: 401) => Response }) =>
   c.json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } }, 401)
+
+// HUB Gen86: resolve denormalized appliance name (single row · used by create response).
+//   Read paths (mine/browse/get/purchases) leftJoin appliance_models inline to avoid N+1.
+async function applianceNameOf(applianceId: string | null): Promise<string | null> {
+  if (!applianceId) return null
+  const [m] = await db
+    .select({ name: applianceModels.name })
+    .from(applianceModels)
+    .where(eq(applianceModels.id, applianceId))
+    .limit(1)
+  return m?.name ?? null
+}
 
 // states ที่ public browse แสดงได้ (live — รับ offer อยู่)
 const PUBLIC_BROWSE_STATES = ['announced', 'receiving_offers'] as const
@@ -148,7 +161,8 @@ listingsRouter.openapi(createListingRoute, async (c) => {
     }
     return { meta: { ...m!, domainRefId: u!.id }, used: u! }
   })
-  return c.json(toListingDto(meta, used, true), 201)
+  const applianceName = await applianceNameOf(used.applianceId)
+  return c.json(toListingDto(meta, used, true, applianceName), 201)
 })
 
 // ── GET /mine — seller's listings (array · ตรง WeeeU fetch) ────────────────────
@@ -177,10 +191,52 @@ listingsRouter.openapi(mineRoute, async (c) => {
     .select()
     .from(listingMeta)
     .leftJoin(usedApplianceListings, eq(usedApplianceListings.listingMetaId, listingMeta.listingId))
+    .leftJoin(applianceModels, eq(applianceModels.id, usedApplianceListings.applianceId))
     .where(and(...conds))
     .orderBy(desc(listingMeta.updatedAt))
   return c.json(
-    rows.map((r) => toListingDto(r.listing_meta, r.used_appliance_listings, true)),
+    rows.map((r) => toListingDto(r.listing_meta, r.used_appliance_listings, true, r.appliance_models?.name ?? null)),
+    200,
+  )
+})
+
+// ── GET /purchases — buyer's transactions (array · buyer-perspective) ─────────
+//   HUB Gen86: /mine is seller-only (listingMeta.ownerId) → buyers could not see their own
+//   transactions. Buyer-view = listings whose SELECTED offer belongs to the caller. The selected
+//   offer is authoritative (≤1 per listing · unique idx) and its status stays 'selected' through the
+//   whole lifecycle (offer_selected → in_progress → … → completed/cancelled/disputed), so this returns
+//   both active and closed deals. Same array + DTO shape as /mine (FE reuses the projection).
+const purchasesRoute = createRoute({
+  method: 'get',
+  path: '/purchases',
+  tags: ['Listings'],
+  summary: "Buyer's transactions (listings where caller is the selected buyer · array)",
+  security: [{ bearerAuth: [] }],
+  request: {
+    query: z.object({
+      status: z.enum(LISTING_STATES).optional(),
+    }),
+  },
+  responses: { 200: { description: 'My purchases' }, 401: { description: 'Unauthorized' } },
+})
+
+listingsRouter.openapi(purchasesRoute, async (c) => {
+  const user = await getAuthUser(c)
+  if (!user) return unauthorized(c)
+  const { status } = c.req.valid('query')
+  const conds = [eq(offers.buyerId, user.userId), eq(offers.status, 'selected')]
+  if (status) conds.push(eq(listingMeta.state, status))
+  const rows = await db
+    .select()
+    .from(offers)
+    .innerJoin(listingMeta, eq(listingMeta.listingId, offers.listingMetaId))
+    .leftJoin(usedApplianceListings, eq(usedApplianceListings.listingMetaId, listingMeta.listingId))
+    .leftJoin(applianceModels, eq(applianceModels.id, usedApplianceListings.applianceId))
+    .where(and(...conds))
+    .orderBy(desc(listingMeta.updatedAt))
+  // insider=true — buyer is a transaction party (full counters)
+  return c.json(
+    rows.map((r) => toListingDto(r.listing_meta, r.used_appliance_listings, true, r.appliance_models?.name ?? null)),
     200,
   )
 })
@@ -217,6 +273,7 @@ listingsRouter.openapi(browseRoute, async (c) => {
     .select()
     .from(listingMeta)
     .leftJoin(usedApplianceListings, eq(usedApplianceListings.listingMetaId, listingMeta.listingId))
+    .leftJoin(applianceModels, eq(applianceModels.id, usedApplianceListings.applianceId))
     .where(and(...conds))
     .orderBy(desc(listingMeta.createdAt))
   // filter (type/price) ในชั้น app — domain fields อยู่ใน used_appliance_listings (nullable)
@@ -235,6 +292,7 @@ listingsRouter.openapi(browseRoute, async (c) => {
         r.listing_meta,
         r.used_appliance_listings,
         isListingInsider(r.listing_meta, { userId: user?.userId ?? null, role: user?.role ?? null }),
+        r.appliance_models?.name ?? null,
       ),
     )
   const count = results.length
@@ -261,12 +319,13 @@ listingsRouter.openapi(getRoute, async (c) => {
     .select()
     .from(listingMeta)
     .leftJoin(usedApplianceListings, eq(usedApplianceListings.listingMetaId, listingMeta.listingId))
+    .leftJoin(applianceModels, eq(applianceModels.id, usedApplianceListings.applianceId))
     .where(eq(listingMeta.listingId, id))
     .limit(1)
   if (!row) return c.json({ error: { code: 'NOT_FOUND', message: 'Listing not found' } }, 404)
   const user = await getAuthUser(c)
   const insider = isListingInsider(row.listing_meta, { userId: user?.userId ?? null, role: user?.role ?? null })
-  return c.json(toListingDto(row.listing_meta, row.used_appliance_listings, insider), 200)
+  return c.json(toListingDto(row.listing_meta, row.used_appliance_listings, insider, row.appliance_models?.name ?? null), 200)
 })
 
 // ── POST /{id}/transition — D59 state machine + Escrow (existing) ─────────────

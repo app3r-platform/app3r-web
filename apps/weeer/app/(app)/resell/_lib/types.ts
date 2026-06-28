@@ -83,7 +83,7 @@ export interface Listing {
   workingParts?: string[];
 
   // shared
-  price: number;
+  price: number | null;        // W0-followup-2: backend อาจคืน null (parts/scrap) → ห้าม coalesce → 0
   deliveryMethods: string[];
   status: ListingStatus;
   expiresAt: string;
@@ -179,7 +179,7 @@ export interface ResellTransaction {
   applianceName: string;
   sellerName: string;
   buyerName: string;
-  price: number;
+  price: number | null;        // W0-followup-2: derive จาก Listing.price (อาจ null)
   status: ListingStatus;
   deliveryMethod: string;
   createdAt: string;

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { resellApi } from "../../_lib/api";
 import type { Listing } from "../../_lib/types";
 import { LISTING_STATUS_LABEL, LISTING_STATUS_COLOR } from "../../_lib/types";
+import { pointsLabel } from "../../_lib/format";
 
 const DELIVERY_OPTIONS = ["ส่ง Kerry", "ส่ง Flash", "รับเอง", "ส่งเอง (ช่างไปส่ง)"];
 
@@ -47,8 +48,12 @@ const MOCK_RESELL_ITEMS: Listing[] = [
 
 export default function MarketplaceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [listing, setListing] = useState<Listing | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [listing, setListing] = useState<Listing | null>(() =>
+    process.env.NEXT_PUBLIC_DEV_NAV === "true"
+      ? (MOCK_RESELL_ITEMS.find(l => l.id === id) ?? MOCK_RESELL_ITEMS[0])
+      : null
+  );
+  const [loading, setLoading] = useState(() => process.env.NEXT_PUBLIC_DEV_NAV !== "true");
   const [error, setError] = useState("");
 
   // Offer form
@@ -61,6 +66,7 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
   const [offerError, setOfferError] = useState("");
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV_NAV === "true") return;
     resellApi.marketplaceGet(id)
       .then(setListing)
       .catch(() => {
@@ -77,16 +83,23 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
     setSubmitting(true);
     setOfferError("");
     try {
+      if (process.env.NEXT_PUBLIC_DEV_NAV === "true") {
+        // mock demo (no backend) → ถือว่าสำเร็จ
+        setOfferSuccess(true);
+        setShowOfferForm(false);
+        return;
+      }
+      // offer-submit คืน FULL offerDto (201 · ไม่ thin · §2 ไม่บังคับ) · §5 ห้าม swallow
       await resellApi.submitOffer({
         listingId: id,
         offerPrice: Number(offerPrice),
         deliveryMethod,
         message: message.trim() || undefined,
-      }).catch(() => null);  // Mockup: ignore API error
+      });
       setOfferSuccess(true);
       setShowOfferForm(false);
-    } catch (err) {
-      setOfferError((err as Error).message);
+    } catch (err: unknown) {
+      setOfferError(err instanceof Error ? err.message : "ส่งข้อเสนอไม่สำเร็จ");
     } finally {
       setSubmitting(false);
     }
@@ -116,18 +129,25 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
         <img src={listing.imageUrl} alt={listing.applianceName ?? ""} className="w-full max-h-56 object-cover rounded-xl border border-gray-100" />
       )}
 
+      {/* detail-check (W0-followup-2): listing ไม่ใช่ used_appliance หรือราคาไม่ระบุ → แจ้ง ไม่ render money บน null */}
+      {(listing.listingType !== "used_appliance" || listing.price == null) && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-700">
+          ⚠️ รายการนี้ไม่ใช่สินค้ามือสอง หรือยังไม่ระบุราคา — ข้อมูลบางส่วนอาจไม่ครบถ้วน
+        </div>
+      )}
+
       {/* Info */}
       <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3 text-sm">
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-xs text-gray-400">ราคา</p>
-            <p className="text-2xl font-bold text-[#FF663A]">{listing.price.toLocaleString()} pts</p>
+            <p className="text-2xl font-bold text-[#FF663A]">{pointsLabel(listing.price)}</p>
           </div>
           <div>
             <p className="text-xs text-gray-400">ผู้ขาย</p>
             <p className="font-medium">{listing.sellerType === "WeeeR" ? "🏪 ร้านค้า" : "👤 บุคคล"}</p>
           </div>
-          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{listing.deliveryMethods.join(", ")}</p></div>
+          <div><p className="text-xs text-gray-400">จัดส่ง</p><p className="font-medium">{(listing.deliveryMethods ?? []).join(", ")}</p></div>
           {listing.warranty && (
             <div><p className="text-xs text-gray-400">รับประกัน</p>
               <p className="font-medium">{listing.warranty.sourceWarranty + listing.warranty.additionalWarranty} เดือน</p>
@@ -181,7 +201,7 @@ export default function MarketplaceDetailPage({ params }: { params: Promise<{ id
             <form onSubmit={handleOffer} className="bg-[#FCEAE3] border border-[#FFD5C4] rounded-xl p-4 space-y-3">
               <p className="text-sm font-semibold text-[#4A1B0C]">ยื่นข้อเสนอ</p>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">ราคาที่เสนอ (pts)</label>
+                <label className="block text-xs text-gray-600 mb-1">ราคาที่เสนอ (พอยต์)</label>
                 <input type="number" min={1} value={offerPrice} onChange={e => setOfferPrice(e.target.value)}
                   required
                   className="w-full border border-[#FFD5C4] rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF663A]/30" />
