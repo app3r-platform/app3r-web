@@ -8,11 +8,13 @@
  * mock-anno: ลบ class mock-anno* ทั้งหมดก่อนใช้ production
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 import { reviewsApi } from "@/lib/api/reviews";
+import { listingsApi } from "@/lib/api/listings";
+import { offersApi } from "@/lib/api/offers";
 
 const MOCK_ORDER = {
   id: "ord-001",
@@ -54,7 +56,38 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
 export default function ResellOrderReviewPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const order = { ...MOCK_ORDER, id: id ?? MOCK_ORDER.id };
+
+  // Fetch real display data — fallback เป็น MOCK_ORDER ระหว่าง load
+  const [order, setOrder] = useState({ ...MOCK_ORDER, id: id ?? MOCK_ORDER.id });
+
+  useEffect(() => {
+    if (!id) return;
+    Promise.all([
+      listingsApi.get(id),
+      offersApi.mine() as Promise<Array<{ listingId: string; offerPrice: number; status: string }>>,
+    ]).then(([listing, myOffers]) => {
+      const myOffer = myOffers.find(
+        (o) => o.listingId === id && o.status === "selected"
+      );
+      // money-safe: ห้าม ??0 · null = fallback ไปค่า mock เดิม
+      const agreedPrice =
+        myOffer?.offerPrice != null
+          ? myOffer.offerPrice
+          : typeof listing.price === "number"
+          ? listing.price
+          : order.agreed_price;
+      setOrder((prev) => ({
+        ...prev,
+        listing_title: listing.appliance_name ?? prev.listing_title,
+        agreed_price: agreedPrice,
+        counterparty_name: listing.seller_name ?? prev.counterparty_name,
+        counterparty_type: "seller" as const,
+        is_buyer: true,
+      }));
+    }).catch(() => {
+      // โหลดล้มเหลว — คง fallback mock (review submit ยังใช้งานได้)
+    });
+  }, [id]);
 
   const tags = order.is_buyer ? REVIEW_TAGS_BUYER : REVIEW_TAGS_SELLER;
 
