@@ -41,10 +41,17 @@ export default function LoginPage() {
     setErrors({});
     setLoading(true);
     try {
-      // Production: POST /api/v1/auth/login
-      await new Promise((r) => setTimeout(r, 800));
-      // Simulate failed login (demo)
-      if (form.password !== "Correct1") {
+      const resp = await fetch("/api/v1/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email, password: form.password }),
+      });
+      if (!resp.ok) {
+        if (resp.status === 429) {
+          setErrors({ general: "ลองใหม่ภายหลัง — คำขอเข้าสู่ระบบมากเกินไป" });
+          return;
+        }
+        // 401 or other → count attempts + client-side lockout as UX guard
         const newAttempts = attempts + 1;
         setAttempts(newAttempts);
         if (newAttempts >= MAX_ATTEMPTS) {
@@ -52,13 +59,13 @@ export default function LoginPage() {
           setLockedUntil(until);
           setErrors({ general: `เข้าสู่ระบบผิดพลาดเกิน ${MAX_ATTEMPTS} ครั้ง — บัญชีถูกล็อคชั่วคราว ${LOCKOUT_MINUTES} นาที` });
         } else {
-          setErrors({
-            general: `อีเมลหรือรหัสผ่านไม่ถูกต้อง (ครั้งที่ ${newAttempts}/${MAX_ATTEMPTS})`,
-          });
+          setErrors({ general: `อีเมล/รหัสผ่านไม่ถูกต้อง (ครั้งที่ ${newAttempts}/${MAX_ATTEMPTS})` });
         }
         return;
       }
-      // Success → redirect
+      const data = await resp.json() as { access_token?: string; accessToken?: string; token?: string };
+      const token = data.access_token ?? data.accessToken ?? data.token ?? "";
+      if (token) localStorage.setItem("access_token", token);
       window.location.href = "/dashboard";
     } finally {
       setLoading(false);
