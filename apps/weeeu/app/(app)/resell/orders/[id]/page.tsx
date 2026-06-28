@@ -15,12 +15,13 @@
  * mock-anno: ลบ class mock-anno* ก่อน production (grep mock-anno)
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
 import { listingsApi } from "@/lib/api/listings";
+import { offersApi } from "@/lib/api/offers";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 type OrderState =
@@ -123,9 +124,43 @@ function EvidenceUploader({
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function ResellOrderPage() {
   const { id } = useParams<{ id: string }>();
-  const order = { ...MOCK_ORDER, id: id ?? MOCK_ORDER.id };
 
-  const [state, setState] = useState<OrderState>(order.state);
+  // Real display data — fallback เป็น MOCK_ORDER ระหว่าง load
+  const [order, setOrder] = useState<MockOrder>({ ...MOCK_ORDER, id: id ?? MOCK_ORDER.id });
+
+  const [state, setState] = useState<OrderState>(MOCK_ORDER.state);
+
+  useEffect(() => {
+    if (!id) return;
+    Promise.all([
+      listingsApi.get(id),
+      offersApi.mine() as Promise<Array<{ listingId: string; offerPrice: number; status: string; deliveryMethod?: string }>>,
+    ]).then(([listing, myOffers]) => {
+      const myOffer = myOffers.find(
+        (o) => o.listingId === id && o.status === "selected"
+      );
+      const realState = (listing.status as OrderState) ?? MOCK_ORDER.state;
+      // money-safe: ห้าม ??0 — ใช้ค่าเดิม (agreed_price จาก mock) ถ้า API ไม่คืน
+      const agreedPrice =
+        myOffer?.offerPrice != null
+          ? myOffer.offerPrice
+          : typeof listing.price === "number"
+          ? listing.price
+          : order.agreed_price;
+      setOrder((prev) => ({
+        ...prev,
+        listing_title: listing.appliance_name ?? prev.listing_title,
+        seller_name: listing.seller_name ?? prev.seller_name,
+        agreed_price: agreedPrice,
+        delivery_method: (myOffer?.deliveryMethod as "parcel" | "on_site") ?? prev.delivery_method,
+        state: realState,
+        is_buyer: true,
+      }));
+      setState(realState);
+    }).catch(() => {
+      // โหลดล้มเหลว — คง fallback mock (จะ fail gracefully ตอน handleInspectConfirm)
+    });
+  }, [id]);
   const [notice, setNotice] = useState<{ type: "info" | "success" | "warn"; msg: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -220,7 +255,7 @@ export default function ResellOrderPage() {
           {order.is_buyer ? `ผู้ขาย: ${order.seller_name}` : `ผู้ซื้อ: ${order.buyer_name}`}
         </p>
         <p className="text-xl font-bold text-weeeu-primary">
-          {order.agreed_price.toLocaleString()} ฿
+          {order.agreed_price.toLocaleString()} พอยต์ทอง
         </p>
         <p className="text-sm text-gray-500">
           จัดส่ง: {order.delivery_method === "parcel" ? "ส่งพัสดุ (ขนส่ง)" : "ส่งเอง / นัดรับ"}
