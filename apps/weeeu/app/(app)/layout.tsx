@@ -90,13 +90,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex-1" />
 
           {/* 💎🥇 Point summary chips — ย้ายจากการ์ดใหญ่ใน dashboard มา top-bar (U-01 · แยกประเภท แสดงเฉพาะคงเหลือ) */}
+          {/* ไม่มี gold-balance read endpoint → ห้ามโชว์เลขปลอม · แสดง "ดูพอยต์" แทน */}
           <Link
             href="/wallet?tab=silver"
             aria-label="พอยต์เงิน (Silver Point)"
             className="flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded-lg transition-colors"
           >
             <span className="text-sm">💎</span>
-            <span className="text-xs font-semibold text-gray-700">1,250</span>
+            <span className="text-xs text-gray-500">ดูพอยต์</span>
           </Link>
           <Link
             href="/wallet?tab=gold"
@@ -104,7 +105,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-1 bg-weeeu-surface hover:bg-green-100 px-2 py-1 rounded-lg transition-colors"
           >
             <span className="text-sm">🥇</span>
-            <span className="text-xs font-semibold text-weeeu-primary">350</span>
+            <span className="text-xs text-gray-500">ดูพอยต์</span>
           </Link>
 
           {/* 🔔 Notification bell — ไอคอนมุมขวาบน (A2 ข้อ 4) */}
