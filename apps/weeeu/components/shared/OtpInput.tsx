@@ -10,7 +10,7 @@ interface OtpInputProps {
 
 export default function OtpInput({ value, onChange, disabled = false }: OtpInputProps) {
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
-  const digits = value.padEnd(6, "").split("").slice(0, 6);
+  const digits = Array.from({ length: 6 }, (_, i) => value[i] ?? "");
 
   const focus = (i: number) => {
     inputs.current[i]?.focus();
