@@ -6,9 +6,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { ScreenBadge } from "@/components/ScreenBadge";
 import { MockAnnoBar } from "@/components/shared/MockAnnoBar";
+import { walletApi } from "@/lib/api/wallet";
 
 // ── 5 Bottom tabs (A2 spec — icon + label + active prefix matching) ────────────
 const BOTTOM_TABS = [
@@ -55,6 +57,13 @@ type Tab = (typeof BOTTOM_TABS)[number];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [goldBalance, setGoldBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    walletApi.goldBalance()
+      .then(d => setGoldBalance(d.balance))
+      .catch(() => {});
+  }, []);
 
   // ── Suspended: ซ่อน nav bar เพื่อป้องกัน bypass (U-65) ──────────────────────
   const isSuspended = pathname.startsWith("/suspended");
@@ -89,8 +98,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           <div className="flex-1" />
 
-          {/* 💎🥇 Point summary chips — ย้ายจากการ์ดใหญ่ใน dashboard มา top-bar (U-01 · แยกประเภท แสดงเฉพาะคงเหลือ) */}
-          {/* ไม่มี gold-balance read endpoint → ห้ามโชว์เลขปลอม · แสดง "ดูพอยต์" แทน */}
+          {/* 💎🥇 Point summary chips — top-bar (U-01 · Gold: real balance via GET /wallet/gold-balance · Silver: wallet link) */}
           <Link
             href="/wallet?tab=silver"
             aria-label="พอยต์เงิน (Silver Point)"
@@ -105,7 +113,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-1 bg-weeeu-surface hover:bg-green-100 px-2 py-1 rounded-lg transition-colors"
           >
             <span className="text-sm">🥇</span>
-            <span className="text-xs text-gray-500">ดูพอยต์</span>
+            <span className="text-xs text-gray-500">
+              {goldBalance != null ? goldBalance.toLocaleString() : "ดูพอยต์"}
+            </span>
           </Link>
 
           {/* 🔔 Notification bell — ไอคอนมุมขวาบน (A2 ข้อ 4) */}

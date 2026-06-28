@@ -16,6 +16,7 @@ import { useParams, useRouter } from "next/navigation";
 import { EscrowInfoIcon } from "@/components/shared/EscrowInfo";
 import { listingsApi } from "@/lib/api/listings";
 import { offersApi } from "@/lib/api/offers";
+import { walletApi } from "@/lib/api/wallet";
 
 type MyOffer = {
   listingId: string;
@@ -64,8 +65,16 @@ export default function AwaitingPaymentPage() {
   const [order, setOrder] = useState<OrderData | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [goldBalance, setGoldBalance] = useState<number | null>(null);
 
   useEffect(() => setMounted(true), []);
+
+  // UX hint only — balance fetch failure = graceful (no block)
+  useEffect(() => {
+    walletApi.goldBalance()
+      .then(d => setGoldBalance(d.balance))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -258,9 +267,21 @@ export default function AwaitingPaymentPage() {
         </div>
       )}
 
-      {/* Actions — Option A: แสดงปุ่มจ่ายเสมอ · backend enforce balance · 400 INSUFFICIENT_GOLD → catch แสดง error */}
+      {/* Actions — ปุ่มจ่ายแสดงเสมอ · backend enforce balance (INSUFFICIENT_GOLD 400) */}
       {!expired && (
         <div className="space-y-2.5">
+          {/* UX hint — แสดงเมื่อรู้ balance + ไม่เพียงพอ · ห้าม block ปุ่ม · graceful ถ้า fetch ล้ม */}
+          {goldBalance != null && order?.agreed_price != null && goldBalance < order.agreed_price && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 space-y-1">
+              <p className="text-sm text-yellow-800 font-medium">⚠️ พอยต์ทองอาจไม่เพียงพอ</p>
+              <p className="text-xs text-yellow-700">
+                ยอดปัจจุบัน {goldBalance.toLocaleString()} / ต้องการ {order.agreed_price.toLocaleString()} พอยต์ทอง
+              </p>
+              <Link href="/wallet/deposit" className="text-xs text-yellow-600 font-medium underline">
+                🪙 เติม พอยต์ทองก่อนชำระ
+              </Link>
+            </div>
+          )}
           {payError && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-3 space-y-1">
               <p className="text-sm text-red-700">{payError}</p>
