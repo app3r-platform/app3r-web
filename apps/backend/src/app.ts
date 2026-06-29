@@ -14,6 +14,7 @@ import { devRouteGuard } from './middleware/dev-guard'
 // D-1 routes
 import { healthRouter } from './routes/health'
 import { authRouter } from './routes/auth'
+import { walletRouter } from './routes/wallet'
 
 // D-2 routes
 import { filesRouter } from './routes/files'
@@ -95,6 +96,9 @@ app.use(
 // ── Routes D-1 ───────────────────────────────────────────────────────────────
 app.route('/health', healthRouter)
 app.route('/api/v1', authRouter)
+
+// Go-live P0 (HUB Gen89): authenticated Gold (cash) balance — self only
+app.route('/api/v1/wallet', walletRouter)
 
 // ── Routes D-2 ───────────────────────────────────────────────────────────────
 // D87: File Upload (R2 + ClamAV)

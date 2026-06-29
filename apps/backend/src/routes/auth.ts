@@ -15,11 +15,21 @@ import {
   revokeRefreshToken,
 } from '../lib/refresh-token'
 import { jwtAuth, type AuthVariables } from '../middleware/jwt-auth'
+import { rateLimit } from '../middleware/rate-limit'
 import { env } from '../env'
 
 export const authRouter = new OpenAPIHono<{ Variables: AuthVariables }>()
 
 const REFRESH_COOKIE = 'refresh_token'
+
+// P1 SECURITY BAR (HUB Gen89): brute-force guard on credential endpoints — 10/IP/15min per route → 429.
+//   Disabled under NODE_ENV=test (see middleware/rate-limit.ts) so the existing auth suite isn't throttled.
+export const AUTH_RATE_LIMIT = 10
+const AUTH_RATE_WINDOW_MS = 15 * 60 * 1000
+const authRateLimit = rateLimit({ limit: AUTH_RATE_LIMIT, windowMs: AUTH_RATE_WINDOW_MS, key: 'auth' })
+authRouter.use('/auth/signin', authRateLimit)
+authRouter.use('/auth/signup', authRateLimit)
+authRouter.use('/auth/refresh', authRateLimit)
 
 const cookieOptions = () => ({
   httpOnly: true,
