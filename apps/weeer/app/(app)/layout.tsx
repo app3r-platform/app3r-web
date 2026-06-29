@@ -3,6 +3,7 @@ import Link from "next/link";
 import Footer from "../../components/Footer";
 import DevNav, { type DevNavLink } from "../../components/DevNav";
 import { ScreenBadge } from "../../components/ScreenBadge";
+import { LogoutButton } from "../../components/LogoutButton";
 
 // ── Dev Navigator link map ────────────────────────────────────────────────────
 // Phase 3 Sign-off: ครอบคลุม Repair / Maintain / Resell / Scrap / Parts
@@ -176,9 +177,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Logout */}
         <div className="px-3 py-4 border-t border-gray-100">
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all">
-            <span>🚪</span>ออกจากระบบ
-          </button>
+          <LogoutButton />
         </div>
       </aside>
 
