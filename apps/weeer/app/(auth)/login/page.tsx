@@ -17,25 +17,53 @@ export default function LoginPage() {
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (lockout) return;
     if (!form.email || !form.password) { setError("กรุณากรอกอีเมลและรหัสผ่าน"); return; }
     setLoading(true);
     setError("");
-    // POST /api/v1/auth/login
-    setTimeout(() => {
-      setLoading(false);
-      const newAttempts = attempts + 1;
-      setAttempts(newAttempts);
-      if (newAttempts >= 5) {
-        setLockout(true);
-        setError("ล็อคบัญชีชั่วคราว 30 นาที — ลองใหม่อีกครั้งในภายหลัง");
-      } else {
-        setError(`อีเมลหรือรหัสผ่านไม่ถูกต้อง (เหลือ ${5 - newAttempts} ครั้ง)`);
+    try {
+      // Real auth — POST /api/v1/auth/signin (proxied to backend via next.config rewrites)
+      const resp = await fetch("/api/v1/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email, password: form.password }),
+      });
+
+      if (!resp.ok) {
+        if (resp.status === 429) {
+          // rate-limited (security bar P1) — surface ชัด · ห้าม swallow · ไม่นับ attempt
+          setError("คำขอเข้าสู่ระบบมากเกินไป — กรุณาลองใหม่อีกครั้งในภายหลัง");
+          return;
+        }
+        // 401 / credential ผิด → นับ attempt + lockout (no-swallow: surface error เสมอ)
+        const newAttempts = attempts + 1;
+        setAttempts(newAttempts);
+        if (newAttempts >= 5) {
+          setLockout(true);
+          setError("ล็อคบัญชีชั่วคราว 30 นาที — ลองใหม่อีกครั้งในภายหลัง");
+        } else {
+          setError(`อีเมลหรือรหัสผ่านไม่ถูกต้อง (เหลือ ${5 - newAttempts} ครั้ง)`);
+        }
+        return;
       }
-      // router.push("/dashboard"); // on success
-    }, 800);
+
+      const data = (await resp.json()) as { access_token?: string; accessToken?: string; token?: string };
+      const token = data.access_token ?? data.accessToken ?? data.token ?? "";
+      if (!token) {
+        // 2xx แต่ไม่มี token → ห้าม optimistic-success (D-FE-NO-SWALLOW-OPTIMISTIC)
+        setError("เข้าสู่ระบบไม่สำเร็จ — ไม่ได้รับ token จากเซิร์ฟเวอร์");
+        return;
+      }
+      localStorage.setItem("access_token", token);
+      router.push("/dashboard");
+    } catch {
+      // network error — surface · ห้าม false-success
+      setError("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — กรุณาลองใหม่อีกครั้ง");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

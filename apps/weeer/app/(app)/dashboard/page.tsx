@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MultiJobDashboard } from "../../../components/service-progress/MultiJobDashboard";
 import { MockAnnoNav, MockAnnoXApp } from "@/components/MockAnno";
+import { GoldBalance } from "@/components/wallet/GoldBalance";
 
 export const metadata: Metadata = { title: "Dashboard — WeeeR" };
 
+// พอยต์เงิน (Silver) มี fake เดิม → suppress (ไม่มี real endpoint) · พอยต์ทอง = real via <GoldBalance/>
 const STATS = [
-  { label: "พอยต์เงิน",   value: "350",    suffix: "point", icon: "🪙",  bg: "bg-gray-50",   text: "text-gray-700" },
-  { label: "พอยต์ทอง",   value: "2,055",  suffix: "point", icon: "⭐",  bg: "bg-yellow-50",  text: "text-yellow-700" },
   { label: "งานเดือนนี้",  value: "37",     suffix: "งาน",  icon: "📋",  bg: "bg-blue-50",    text: "text-blue-700" },
   { label: "WeeeT Active", value: "3",      suffix: "คน",   icon: "👷",  bg: "bg-[#FFF1ED]",   text: "text-[#D63B12]" },
 ];
@@ -87,8 +87,9 @@ export default function DashboardPage() {
         </MockAnnoNav>
       </div>
 
-      {/* Stats */}
+      {/* Stats — พอยต์ทอง = real balance (suppress if unavailable) · พอยต์เงิน suppressed (no endpoint) */}
       <div className="grid grid-cols-2 gap-3">
+        <GoldBalance variant="stat" />
         {STATS.map((s) => (
           <div key={s.label} className={`${s.bg} rounded-2xl p-4`}>
             <div className="text-2xl mb-1">{s.icon}</div>

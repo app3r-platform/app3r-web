@@ -3,6 +3,8 @@ import Link from "next/link";
 import Footer from "../../components/Footer";
 import DevNav, { type DevNavLink } from "../../components/DevNav";
 import { ScreenBadge } from "../../components/ScreenBadge";
+import { LogoutButton } from "../../components/LogoutButton";
+import { GoldBalance } from "../../components/wallet/GoldBalance";
 
 // ── Dev Navigator link map ────────────────────────────────────────────────────
 // Phase 3 Sign-off: ครอบคลุม Repair / Maintain / Resell / Scrap / Parts
@@ -176,9 +178,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Logout */}
         <div className="px-3 py-4 border-t border-gray-100">
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all">
-            <span>🚪</span>ออกจากระบบ
-          </button>
+          <LogoutButton />
         </div>
       </aside>
 
@@ -191,10 +191,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="text-xl">🔔</span>
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
           </Link>
-          <Link href="/wallet" className="flex items-center gap-2 bg-[#FFF1ED] hover:bg-[#FFE0D6] px-3 py-1.5 rounded-xl transition-colors">
-            <span>🪙</span>
-            <span className="text-sm font-semibold text-[#D63B12]">4,250 Silver</span>
-          </Link>
+          <GoldBalance variant="chip" />
         </header>
         {/* Page */}
         <main className="flex-1 p-6 max-w-5xl w-full mx-auto">{children}</main>
