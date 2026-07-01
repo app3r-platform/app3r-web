@@ -6,23 +6,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { MockAnnoOrigin, MockAnnoNav } from "@/components/MockAnno";
 import { HelpTip } from "@app3r/ui";
+import { GoldBalance } from "@/components/wallet/GoldBalance";
 
 export const metadata: Metadata = { title: "กระเป๋าเงิน — WeeeR" };
-
-const TX = [
-  { type: "credit", currency: "gold",   amount: 500,  desc: "ค่าบริการซ่อมแอร์ (JOB-0421) — WeeeU ปลดพักเงินกลาง (Escrow)", date: "2026-05-02", source: "escrow" },
-  { type: "credit", currency: "gold",   amount: 1455, desc: "ค่าอะไหล่ B2B Parts — ORDER-0089 (net หลังหัก 3%)",       date: "2026-05-01", source: "parts" },
-  { type: "debit",  currency: "silver", amount: 50,   desc: "ค่าลงประกาศ (LIST-092)",                                  date: "2026-05-01", source: "fee" },
-  { type: "credit", currency: "gold",   amount: 200,  desc: "โบนัสรีวิว 5 ดาว",                                       date: "2026-04-30", source: "bonus" },
-  { type: "debit",  currency: "gold",   amount: 100,  desc: "ค่าสมัคร WeeeT Mode 2",                                   date: "2026-04-28", source: "fee" },
-];
-
-const sourceIcon: Record<string, string> = {
-  escrow: "🔓",
-  parts:  "📦",
-  fee:    "🧾",
-  bonus:  "⭐",
-};
 
 export default function WalletPage() {
   return (
@@ -31,20 +17,9 @@ export default function WalletPage() {
       <MockAnnoOrigin from="R-01" />
       <h1 className="text-xl font-bold text-gray-900">กระเป๋าเงิน</h1>
 
-      {/* ยอดคงเหลือ */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-5 border border-gray-200">
-          <div className="text-2xl mb-1">🪙</div>
-          <div className="text-3xl font-bold text-gray-900">350</div>
-          <div className="text-sm text-gray-600 mt-1">พอยต์เงิน</div>
-          <div className="text-xs text-gray-500 mt-2">โปรโมชัน + สิทธิ์ลงประกาศ</div>
-        </div>
-        <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl p-5 border border-yellow-200">
-          <div className="text-2xl mb-1">⭐</div>
-          <div className="text-3xl font-bold text-gray-900">2,055</div>
-          <div className="text-sm text-yellow-800 mt-1">พอยต์ทอง</div>
-          <div className="text-xs text-yellow-700 mt-2">รับจากงานบริการ + B2B Parts (1 พอยต์ทอง = 1 บาท)</div>
-        </div>
+      {/* ยอดคงเหลือ — พอยต์ทอง = real balance (suppress ถ้าไม่พร้อม) · พอยต์เงิน suppressed (ไม่มี real endpoint) */}
+      <div className="grid grid-cols-1 gap-4">
+        <GoldBalance variant="headline" />
       </div>
 
       {/* Payment Earner Info (D-2) */}
@@ -95,25 +70,10 @@ export default function WalletPage() {
         </MockAnnoNav>
       </div>
 
-      {/* ประวัติธุรกรรม */}
+      {/* ประวัติธุรกรรม — suppress fake list (ยังไม่มี transactions endpoint · D-FE-NO-FAKE-DISPLAY) */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">ประวัติธุรกรรม</h3>
-        <div className="space-y-2">
-          {TX.map((tx, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50">
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm ${tx.type === "credit" ? "bg-green-100" : "bg-red-100"}`}>
-                {sourceIcon[tx.source] ?? (tx.type === "credit" ? "↓" : "↑")}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-800 truncate">{tx.desc}</div>
-                <div className="text-xs text-gray-400">{tx.date} · {tx.currency === "silver" ? "🪙 พอยต์เงิน" : "⭐ พอยต์ทอง"}</div>
-              </div>
-              <div className={`text-sm font-bold tabular-nums ${tx.type === "credit" ? "text-green-600" : "text-red-600"}`}>
-                {tx.type === "credit" ? "+" : "-"}{tx.amount.toLocaleString()}
-              </div>
-            </div>
-          ))}
-        </div>
+        <p className="text-sm text-gray-400 text-center py-6">ยังไม่มีประวัติธุรกรรม</p>
       </div>
     </div>
   );
