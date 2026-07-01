@@ -52,25 +52,9 @@ type FeeSettleData = {
   confirmed_at: string | null;
 };
 
-// ── Mock fallback ─────────────────────────────────────────────────────────────
-const MOCK_FEE_SETTLE: FeeSettleData = {
-  job_id: "mock-job-001",
-  appliance_name: "แอร์ Daikin 12000 BTU",
-  weeer_name: "ร้านซ่อมแอร์สมศักดิ์",
-  settle_mode: "normal",
-  axes: [
-    { axis: 2, label: "ค่าตรวจสอบ",  amount: 150,  note: null,                          locked: true  },
-    { axis: 3, label: "ค่าแรงซ่อม",  amount: 800,  note: "ซ่อมคอมเพรสเซอร์ + ล้างแผง", locked: true  },
-    { axis: 5, label: "ค่าอะไหล่",   amount: 400,  note: "น้ำยาแอร์ R32 + ฟิลเตอร์",   locked: true  },
-    { axis: 6, label: "รับประกัน",   amount: 0,    note: "รับประกัน 30 วัน",             locked: true  },
-  ],
-  subtotal: 1350,
-  total_due: 1350,
-  customer_point_balance: 1500,
-  can_confirm: true,
-  status: "pending_confirm",
-  confirmed_at: null,
-};
+// W2-MS money-safety: the fake fee/balance fallback was REMOVED. On load failure the page
+// surfaces an error and keeps data null — it must never show a fabricated fee/balance or a
+// fake-enabled confirm button (D-FE-NO-FAKE-DISPLAY + D-FE-NO-SWALLOW).
 
 const SETTLE_MODE_LABEL: Record<SettleMode, { label: string; color: string; icon: string }> = {
   normal:   { label: "ชำระค่าซ่อมปกติ",     color: "bg-weeeu-surface border-weeeu-primary", icon: "🔧" },
@@ -135,7 +119,9 @@ export default function FeeSettlePage() {
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(setData)
       .catch(() => {
-        setData(prev => prev ?? MOCK_FEE_SETTLE);
+        // D-FE-NO-FAKE-DISPLAY: no fake fee/balance on failure — surface error, keep data null
+        // (so no fabricated numbers and no fake-enabled confirm button).
+        setError("ไม่สามารถโหลดข้อมูลการชำระได้ — กรุณาลองใหม่อีกครั้ง");
       })
       .finally(() => setLoading(false));
   }, [id]);
@@ -149,10 +135,12 @@ export default function FeeSettlePage() {
         body: JSON.stringify({}),
       });
       if (!res.ok) throw new Error(await res.text());
+      // Success ONLY after a real 2xx from the confirm endpoint.
       router.push(`/repair/${id}/review`);
     } catch {
-      // mock fallback (#6) — ไม่มี backend ยังไป success/next ไม่ค้าง error
-      router.push(`/repair/${id}/review`);
+      // D-FE-NO-SWALLOW-OPTIMISTIC: money confirm failed → surface error, DO NOT navigate to
+      // a success state. Previously this swallowed the error and pushed /review anyway (false-success).
+      setConfirmErr("ยืนยันการชำระไม่สำเร็จ — กรุณาลองใหม่อีกครั้ง");
     } finally {
       setConfirming(false);
     }
