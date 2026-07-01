@@ -1,25 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HelpTip } from "@app3r/ui";
 import { FileUpload } from "@/components/upload/FileUpload";
+import { walletApi } from "@/lib/api/wallet";
 
 type WalletTab = "all" | "gold" | "silver";
 
-// Mock data (Mockup — ไม่ fetch API จริง)
-const MOCK_GOLD_BALANCE = 350;
-const MOCK_SILVER_BALANCE = 1250;
-
-const MOCK_TRANSACTIONS = [
-  { type: "credit",  icon: "🥇", label: "เติมพอยต์ทอง (admin อนุมัติ)", amount: "+500",   date: "23 พ.ค. 69", wallet: "gold"   },
-  { type: "debit",   icon: "🔒", label: "ล็อกพอยต์ทอง — พักเงินกลาง (Escrow) ธุรกรรม TX-001", amount: "-350", date: "22 พ.ค. 69", wallet: "gold"   },
-  { type: "credit",  icon: "💎", label: "เติมพอยต์เงิน",                 amount: "+500",   date: "2 พ.ค. 69",  wallet: "silver" },
-  { type: "debit",   icon: "🔧", label: "ชำระค่าบำรุงรักษา",                 amount: "-200",   date: "1 พ.ค. 69",  wallet: "silver" },
-  { type: "credit",  icon: "🥇", label: "รับพอยต์ทองจากระบบพักเงินกลาง (ธุรกรรมจบ)", amount: "+1,200", date: "30 เม.ย. 69", wallet: "gold"   },
-  { type: "debit",   icon: "💳", label: "ถอนพอยต์ทอง → บัญชีธนาคาร",           amount: "-300",   date: "28 เม.ย. 69", wallet: "gold"   },
-  { type: "credit",  icon: "💎", label: "โบนัสสมัคร พอยต์เงิน",               amount: "+100",   date: "25 เม.ย. 69", wallet: "silver" },
-];
+// W1 remediation (D-FE-NO-FAKE-DISPLAY): fake Gold/Silver balances and the fabricated
+// ledger were removed. Gold wires the real GET /api/v1/wallet/gold-balance and SUPPRESSES
+// on error; Silver has no endpoint yet → suppressed; history has no endpoint → empty-state.
+type Tx = { type: string; icon: string; label: string; amount: string; date: string; wallet: string };
 
 // Mock top-up amounts for Gold (U-57#3 — sync wallet/deposit:161 = [3000,4000,5000])
 const GOLD_TOPUP_PRESETS = [3000, 4000, 5000];
@@ -36,8 +28,19 @@ const PLATFORM_BANK_INFO = {
 
 export default function WalletPage() {
   const [tab, setTab] = useState<WalletTab>("all");
-  const [goldBalance] = useState(MOCK_GOLD_BALANCE);
-  const [silverBalance] = useState(MOCK_SILVER_BALANCE);
+  // Real Gold balance (null = unavailable → suppressed, never a fake/0-placeholder).
+  const [goldBalance, setGoldBalance] = useState<number | null>(null);
+  // Silver has no backend endpoint yet → always suppressed.
+  const [silverBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    walletApi
+      .goldBalance()
+      .then((d) => { if (alive) setGoldBalance(d.balance); })
+      .catch(() => { /* suppress — no fake value shown */ });
+    return () => { alive = false; };
+  }, []);
 
   // Mock top-up Gold state (R4 scenario)
   const [goldTopUpAmount, setGoldTopUpAmount] = useState("");
@@ -66,7 +69,9 @@ export default function WalletPage() {
     }, 1000); // Mock delay
   };
 
-  const filteredTx = MOCK_TRANSACTIONS.filter(t =>
+  // No ledger endpoint yet → empty (never fabricated rows). Tab still filters when real data lands.
+  const transactions: Tx[] = [];
+  const filteredTx = transactions.filter(t =>
     tab === "all" ? true : t.wallet === tab
   );
 
@@ -91,8 +96,10 @@ export default function WalletPage() {
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-sm font-medium opacity-80">พอยต์ทอง (Gold Point)</p>
-              <p className="text-4xl font-bold mt-1">{goldBalance.toLocaleString()}</p>
-              <p className="text-sm opacity-70 mt-1">≈ ฿{goldBalance.toLocaleString()}</p>
+              <p className="text-4xl font-bold mt-1">{goldBalance != null ? goldBalance.toLocaleString() : "—"}</p>
+              {goldBalance != null
+                ? <p className="text-sm opacity-70 mt-1">≈ ฿{goldBalance.toLocaleString()}</p>
+                : <p className="text-sm opacity-70 mt-1">ยังไม่พร้อมแสดงยอด</p>}
             </div>
             <div className="text-4xl opacity-80">🥇</div>
           </div>
@@ -123,8 +130,8 @@ export default function WalletPage() {
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-sm font-medium opacity-80">พอยต์เงิน (Silver Point)</p>
-              <p className="text-4xl font-bold mt-1">{silverBalance.toLocaleString()}</p>
-              <p className="text-sm opacity-70 mt-1">ใช้ค่าประกาศ/offer ได้</p>
+              <p className="text-4xl font-bold mt-1">{silverBalance != null ? silverBalance.toLocaleString() : "—"}</p>
+              <p className="text-sm opacity-70 mt-1">{silverBalance != null ? "ใช้ค่าประกาศ/offer ได้" : "ยังไม่พร้อมแสดงยอด"}</p>
             </div>
             <div className="text-4xl opacity-80">💎</div>
           </div>
@@ -300,6 +307,9 @@ export default function WalletPage() {
         </div>
 
         <div className="space-y-3">
+          {filteredTx.length === 0 && (
+            <p className="text-sm text-gray-400 text-center py-8">ยังไม่มีประวัติการทำรายการ</p>
+          )}
           {filteredTx.map((tx, i) => (
             <div key={i} className="flex items-center gap-4 py-2 border-b border-gray-50 last:border-0">
               <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-xl flex-shrink-0">

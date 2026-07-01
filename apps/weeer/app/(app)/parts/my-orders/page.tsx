@@ -157,7 +157,8 @@ export default function MyOrdersPage() {
       {/* คะแนนยอดเงิน */}
       {shop && (
         <PointsBalanceCard
-          balance={shop.pointsBalance}
+          // W1 remediation: no real Parts-points endpoint yet → suppress (null), never the SHOPS_MOCK fake balance.
+          balance={null}
           escrowHeld={escrowHeld}
           shopName={shop.name}
         />
