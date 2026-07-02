@@ -1,140 +1,121 @@
-'use client'
-// Sub-5a D80 list + Sub-5b drawer/CRUD — points
-// MOCK_POINTS_TRANSACTIONS — reference data (mock provided via useAdminPointsStore / lib/mocks/points.seed.ts)
-// const MOCK_POINTS_TRANSACTIONS = [
-//   { id: "pt-001", user_name: "สมชาย ใจดี",   points: 500,  type: "topup",    created_at: "2026-05-25T10:00:00Z" },
-//   { id: "pt-002", user_name: "สมหญิง รักดี",  points: -200, type: "withdraw", created_at: "2026-05-24T11:00:00Z" },
-//   { id: "pt-003", user_name: "ร้านซ่อม A+",   points: 1000, type: "topup",    created_at: "2026-05-23T09:00:00Z" },
-// ];
-import { useMemo, useState } from 'react'
-import { Sidebar } from '@/components/sidebar'
-import { AdminListPage } from '@/components/admin-list/AdminListPage'
-import { AdminDrawer, type DrawerMode } from '@/components/admin-list/AdminDrawer'
-import { DeleteConfirmDialog } from '@/components/admin-list/DeleteConfirmDialog'
-import { useAdminPointsStore } from '@/lib/stores/points.store'
-import type { PointRecord } from '@/lib/mocks/points.seed'
+"use client";
+// Sub-5a D80 list — points
+// D-FE-NO-FAKE-DISPLAY: the previous implementation rendered a 100% fabricated
+// point ledger from useAdminPointsStore (seeded by lib/mocks/points.seed.ts,
+// 100 synthetic rows) and offered create/update/delete CRUD that mutated only
+// local mock state (a false impression of editing a real ledger). Removed.
+// Now wired to the canonical admin api.get pattern. No admin point-ledger LIST
+// endpoint is mounted yet, so the fetch will fail and the page honestly renders
+// an ERROR/EMPTY state instead of fake money — never seed data.
+// TODO(backend-expose): admin point-ledger list endpoint not mounted
 
-const STATUS_OPTIONS = [
-  { value: 'pending',   label: 'รอดำเนินการ' },
-  { value: 'completed', label: 'เสร็จแล้ว' },
-  { value: 'reversed',  label: 'ยกเลิก/คืน' },
-]
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { isAuthenticated } from "@/lib/auth";
+import { api } from "@/lib/api";
+import { Sidebar } from "@/components/sidebar";
+
+interface PointRecord {
+  id: string;
+  userName: string;
+  type: string;
+  amount: number;
+  status: string;
+  transactedAt: string;
+}
+interface PointList {
+  items: PointRecord[];
+  total: number;
+}
 
 export default function PointsPage() {
-  const { filters, pagination, setFilters, setPage, resetMockData, filteredItems, createItem, updateItem, removeItem } = useAdminPointsStore()
-  const items = filteredItems()
+  const router = useRouter();
+  const [items, setItems] = useState<PointRecord[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const paged = useMemo(() => {
-    const start = (pagination.page - 1) * pagination.pageSize
-    return items.slice(start, start + pagination.pageSize)
-  }, [items, pagination.page, pagination.pageSize])
+  const fetchData = useCallback(async () => {
+    try {
+      // Intended admin point-ledger list endpoint — NOT mounted yet.
+      // TODO(backend-expose): admin point-ledger list endpoint not mounted
+      const d = await api.get<PointList>("/admin/platform/points");
+      setItems(d.items);
+      setTotal(d.total);
+      setError(null);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const [open, setOpen] = useState(false)
-  const [mode, setMode] = useState<DrawerMode>('closed')
-  const [selected, setSelected] = useState<PointRecord | null>(null)
-  const [deleteId, setDeleteId] = useState<string | null>(null)
-
-  const openCreate = () => { setSelected(null); setMode('create'); setOpen(true) }
-  const openView = (row: PointRecord) => { setSelected(row); setMode('view'); setOpen(true) }
-
-  const handleSubmit = async (data: unknown) => {
-    if (mode === 'create') createItem(data as Omit<PointRecord, 'id' | 'transactedAt'>)
-    else if (selected) setSelected(updateItem(selected.id, data as Partial<PointRecord>))
-  }
+  useEffect(() => {
+    if (!isAuthenticated()) { router.push("/login"); return; }
+    fetchData();
+  }, [router, fetchData]);
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
-      <main className="flex-1 min-w-0">
-        <AdminListPage
-          title="Point Transactions"
-          totalCount={items.length}
-          page={pagination.page}
-          pageSize={pagination.pageSize}
-          search={filters.search}
-          status={filters.status}
-          statusOptions={STATUS_OPTIONS}
-          onSearchChange={(s) => setFilters({ search: s })}
-          onStatusChange={(s) => setFilters({ status: s })}
-          onPageChange={setPage}
-          onReset={resetMockData}
-        >
-          <div className="flex justify-end p-3 bg-white/40 border-b border-gray-200">
-            <button
-              onClick={openCreate}
-              className="px-4 py-2 text-sm rounded bg-brand-success hover:bg-brand-success/90 text-white"
-            >
-              + เพิ่มธุรกรรม
-            </button>
-          </div>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-gray-500 text-left border-b border-gray-200">
-                <th className="px-4 py-3">ID</th>
-                <th className="px-4 py-3">ผู้ใช้</th>
-                <th className="px-4 py-3">ประเภท</th>
-                <th className="px-4 py-3 text-right">จำนวน</th>
-                <th className="px-4 py-3">สถานะ</th>
-                <th className="px-4 py-3">วันที่</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {paged.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center text-gray-600">
-                    ไม่พบรายการ
-                  </td>
-                </tr>
-              ) : (
-                paged.map((row) => (
-                  <tr
-                    key={row.id}
-                    onClick={() => openView(row)}
-                    className="hover:bg-gray-100/40 cursor-pointer"
-                  >
-                    <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
-                    <td className="px-4 py-3">{row.userName}</td>
-                    <td className="px-4 py-3 text-xs text-gray-500">{row.type}</td>
-                    <td className="px-4 py-3 text-right font-mono">
-                      {row.amount.toLocaleString()}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">
-                      {new Date(row.transactedAt).toLocaleDateString('th-TH')}
-                    </td>
+      <main className="flex-1 p-8">
+        <h1 className="text-2xl font-bold mb-1">Point Transactions</h1>
+        <p className="text-gray-500 text-sm mb-6">
+          ประวัติธุรกรรมพอยต์ระดับ Platform
+        </p>
+
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          {loading ? (
+            <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
+          ) : error ? (
+            <div className="px-6 py-8">
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
+                {error}
+              </div>
+            </div>
+          ) : items.length === 0 ? (
+            <p className="px-6 py-10 text-center text-gray-600">ไม่พบรายการ</p>
+          ) : (
+            <>
+              <div className="px-6 py-3 border-b border-gray-200 text-sm text-gray-500">
+                ทั้งหมด {total.toLocaleString()} รายการ
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-gray-500 text-left border-b border-gray-200">
+                    <th className="px-4 py-3">ID</th>
+                    <th className="px-4 py-3">ผู้ใช้</th>
+                    <th className="px-4 py-3">ประเภท</th>
+                    <th className="px-4 py-3 text-right">จำนวน</th>
+                    <th className="px-4 py-3">สถานะ</th>
+                    <th className="px-4 py-3">วันที่</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </AdminListPage>
-
-        <AdminDrawer<PointRecord>
-          module="points"
-          open={open}
-          mode={mode}
-          item={selected}
-          onOpenChange={setOpen}
-          onModeChange={setMode}
-          onSubmit={handleSubmit}
-          onDelete={async (id) => setDeleteId(id)}
-        />
-
-        <DeleteConfirmDialog
-          open={deleteId !== null}
-          entityLabel={deleteId ?? ''}
-          onOpenChange={(o) => !o && setDeleteId(null)}
-          onConfirm={() => {
-            if (deleteId) removeItem(deleteId)
-            setDeleteId(null)
-            setOpen(false)
-          }}
-        />
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {items.map((row) => (
+                    <tr key={row.id} className="hover:bg-gray-100/40">
+                      <td className="px-4 py-3 text-gray-500 text-xs font-mono">{row.id}</td>
+                      <td className="px-4 py-3">{row.userName}</td>
+                      <td className="px-4 py-3 text-xs text-gray-500">{row.type}</td>
+                      <td className="px-4 py-3 text-right font-mono">
+                        {row.amount.toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                          {row.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-gray-500 text-xs">
+                        {new Date(row.transactedAt).toLocaleDateString("th-TH")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+        </div>
       </main>
     </div>
-  )
+  );
 }

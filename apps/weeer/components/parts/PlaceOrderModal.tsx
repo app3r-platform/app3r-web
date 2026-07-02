@@ -8,7 +8,8 @@ import { FeeBreakdown } from "./FeeBreakdown";
 
 interface PlaceOrderModalProps {
   listing: PartListing;
-  buyerBalance: number;
+  // null = ไม่มี per-shop balance source จริง → ไม่โชว์เลข + ไม่บล็อกฝั่ง client (Backend ตัดสินขั้นสุดท้าย)
+  buyerBalance: number | null;
   onConfirm: (qty: number, delivery: DeliveryMethod) => void;
   onClose: () => void;
 }
@@ -19,7 +20,8 @@ export function PlaceOrderModal({ listing, buyerBalance, onConfirm, onClose }: P
   const [loading, setLoading] = useState(false);
 
   const total = qty * listing.pricePoints;
-  const enough = hasEnoughBalance(buyerBalance, total);
+  // NON-BLOCKING: มี balance จริงเท่านั้นจึงเช็ก; null = ไม่รู้ยอด → ไม่บล็อก (ให้ Backend ตัดสิน)
+  const enough = buyerBalance == null ? true : hasEnoughBalance(buyerBalance, total);
   const maxQty = Math.min(listing.stock, 99);
 
   const handleConfirm = async () => {
@@ -64,13 +66,15 @@ export function PlaceOrderModal({ listing, buyerBalance, onConfirm, onClose }: P
         {/* สรุปค่าใช้จ่าย */}
         <FeeBreakdown totalPoints={total} quantity={qty} pricePerUnit={listing.pricePoints} />
 
-        {/* ยอดคงเหลือ */}
-        <div className="flex justify-between text-xs text-gray-500">
-          <span>คะแนนของคุณ</span>
-          <span className={enough ? "text-green-700 font-medium" : "text-red-600 font-medium"}>
-            {buyerBalance.toLocaleString()} pts {!enough && "⚠️ ไม่พอ"}
-          </span>
-        </div>
+        {/* ยอดคงเหลือ — SUPPRESS เมื่อไม่มี balance จริง (null) เลิกโชว์เลขปลอม/สถานะพอ-ไม่พอ */}
+        {buyerBalance != null && (
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>คะแนนของคุณ</span>
+            <span className={enough ? "text-green-700 font-medium" : "text-red-600 font-medium"}>
+              {buyerBalance.toLocaleString()} pts {!enough && "⚠️ ไม่พอ"}
+            </span>
+          </div>
+        )}
 
         <button
           onClick={handleConfirm}
