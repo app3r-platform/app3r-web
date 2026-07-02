@@ -43,13 +43,6 @@ const STATUS_TABS = [
 
 const PAGE_SIZE = 20;
 
-// MOCK_RESELL_LISTINGS — fallback เมื่อ API ไม่พร้อม (dev/staging)
-const MOCK_RESELL_LISTINGS = [
-  { id: "lst-001", listingType: "used_appliance" as const, sellerId: "u-001",    sellerType: "WeeeU" as const, status: "receiving_offers"  as const, price: 3500, expiresAt: "2026-06-01T00:00:00Z", createdAt: "2026-05-20T00:00:00Z" },
-  { id: "lst-002", listingType: "used_appliance" as const, sellerId: "shop-001", sellerType: "WeeeR" as const, status: "completed"          as const, price: 5000, expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-18T00:00:00Z" },
-  { id: "lst-003", listingType: "scrap"          as const, sellerId: "u-003",    sellerType: "WeeeU" as const, status: "announced"          as const, price: 500,  expiresAt: "2026-05-30T00:00:00Z", createdAt: "2026-05-22T00:00:00Z" },
-] as unknown as Listing[];
-
 interface ListingsResponse {
   results: Listing[];
   count: number;
@@ -70,6 +63,7 @@ export default function ResellListingsPage() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams({
         limit: String(PAGE_SIZE),
@@ -83,12 +77,10 @@ export default function ResellListingsPage() {
       const d = await api.get<ListingsResponse>("/admin/listings/?" + params);
       setItems(d.results);
       setTotal(d.count);
-      setError(null);
-    } catch {
-      // API ไม่พร้อม → ใช้ mock fallback
-      setItems(MOCK_RESELL_LISTINGS);
-      setTotal(MOCK_RESELL_LISTINGS.length);
-      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "โหลดข้อมูลไม่สำเร็จ");
+      setItems([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
@@ -179,7 +171,9 @@ export default function ResellListingsPage() {
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-600">ระบบ Resell กำลังพัฒนา — {error}</div>
+            <div className="mx-6 my-6 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+              โหลดข้อมูลไม่สำเร็จ — {error}
+            </div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
