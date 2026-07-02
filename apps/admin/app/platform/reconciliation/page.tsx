@@ -34,7 +34,11 @@ export default function ReconciliationPage() {
   const [histPage, setHistPage] = useState(1);
   const [histTotal, setHistTotal] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
-  const isSuper = isSuperAdmin();
+  // mounted-guard: read localStorage-backed role only after mount to avoid
+  // SSR/client hydration mismatch (server has no localStorage → isSuper=false).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const isSuper = mounted && isSuperAdmin();
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
