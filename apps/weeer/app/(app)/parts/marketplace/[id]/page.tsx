@@ -71,13 +71,8 @@ export default function MarketplaceDetailPage({
   // Sub-CMD-8: ส่ง order ผ่าน real Backend API (fallback → localStorage mock)
   const handleOrder = (qty: number, delivery: DeliveryMethod) => {
     if (!listing || ordering) return;
-    // P11 (Gen78): บล็อกการสั่งซื้อเมื่อ Gold ไม่พอ (short-circuit guard)
-    const shopBalance = SHOPS_MOCK.find((s) => s.id === shopId)?.pointsBalance ?? 0;
-    if (listing.pricePoints > 0 && shopBalance < qty * listing.pricePoints) {
-      setShowModal(false);
-      setOrderError("Gold ไม่เพียงพอสำหรับคำสั่งซื้อนี้ — กรุณาเติม Gold ก่อนสั่งซื้อ");
-      return;
-    }
+    // NON-BLOCKING: ไม่ตัดสิน Gold ฝั่ง client (ไม่มี per-shop balance endpoint จริง)
+    // ให้ Backend createPartsOrder เป็นผู้ตัดสินขั้นสุดท้าย — error จะโผล่ผ่าน orderError banner
     setOrdering(true);
     setOrderError(null);
 
@@ -140,10 +135,7 @@ export default function MarketplaceDetailPage({
   }
 
   const isOwn = listing.shopId === shopId;
-  const shop = SHOPS_MOCK.find((s) => s.id === shopId);
-  const balance = shop?.pointsBalance ?? 0;
-  // P11 (Gen78): Gold ไม่พอสำหรับราคา/ชิ้น → บล็อกปุ่มซื้อ (เทียบ pattern stock===0)
-  const insufficientGold = listing.pricePoints > 0 && balance < listing.pricePoints;
+  // TODO(backend-expose): no per-shop balance endpoint; wire real self-balance pending shop-model confirm
 
   return (
     <div className="space-y-5">
@@ -179,11 +171,7 @@ export default function MarketplaceDetailPage({
       {/* Header */}
       <PartDetailHeader listing={listing} isOwn={isOwn} />
 
-      {/* คะแนนของร้าน */}
-      <div className="flex justify-between text-xs text-gray-500 bg-gray-50 rounded-xl px-3 py-2">
-        <span>คะแนนของร้านคุณ</span>
-        <span className="font-medium text-gray-700">{balance.toLocaleString()} pts</span>
-      </div>
+      {/* คะแนนของร้าน — SUPPRESSED: ไม่มี per-shop balance endpoint จริง (เลิกโชว์เลขปลอม) */}
 
       {/* P4 แจ้งเตือนสั่งซื้อสำเร็จ */}
       {ordered && (
@@ -262,38 +250,22 @@ export default function MarketplaceDetailPage({
       {/* ปุ่มซื้อ (เฉพาะ stock > 0) */}
       {!isOwn && !ordered && listing.stock > 0 && (
         <div className="space-y-2">
-          {/* P11: แสดง balance check — A7 sample data */}
-          {listing.pricePoints > 0 && (
-            <div className={`flex items-center justify-between text-xs rounded-lg px-3 py-2 border ${
-              balance >= listing.pricePoints
-                ? "bg-green-50 border-green-100 text-green-700"
-                : "bg-red-50 border-red-100 text-red-700"
-            }`}>
-              <span>
-                {balance >= listing.pricePoints
-                  ? "✅ Gold เพียงพอ"
-                  : "⚠️ P11: Gold ไม่เพียงพอ (ต้องการ " + listing.pricePoints.toLocaleString() + " pts)"}
-              </span>
-              <span className="font-medium">คงเหลือ {balance.toLocaleString()} pts</span>
-            </div>
-          )}
+          {/* P11 affordability chip — SUPPRESSED: ไม่มี per-shop balance จริง (เลิกโชว์เลขปลอม/สถานะพอ-ไม่พอ) */}
 
           {/* §6 → R-33 เมื่อสำเร็จ (P4) */}
           <MockAnnoNav to="R-33" style={{ display: "block" }}>
             <button
               onClick={() => setShowModal(true)}
-              disabled={ordering || insufficientGold}
+              disabled={ordering}
               className="w-full bg-[#FF663A] hover:bg-[#F04E20] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
             >
               {ordering
                 ? "กำลังสั่งซื้อ…"
-                : insufficientGold
-                  ? "🔒 Gold ไม่พอ — เติม Gold ก่อนสั่งซื้อ"
-                  : listing.pricePoints > 0
-                    ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
-                    : listing.unitPriceThb != null
-                      ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
-                      : "🛒 สั่งซื้อ"}
+                : listing.pricePoints > 0
+                  ? `🛒 สั่งซื้อ — ${listing.pricePoints.toLocaleString()} pts/ชิ้น`
+                  : listing.unitPriceThb != null
+                    ? `🛒 สั่งซื้อ — ฿${listing.unitPriceThb.toLocaleString()}/ชิ้น (อ้างอิง THB)`
+                    : "🛒 สั่งซื้อ"}
             </button>
           </MockAnnoNav>
         </div>
@@ -317,7 +289,8 @@ export default function MarketplaceDetailPage({
       {showModal && (
         <PlaceOrderModal
           listing={listing}
-          buyerBalance={balance}
+          // SUPPRESS: no real per-shop balance source → null (never fake 0); modal hides readout + skips client gate
+          buyerBalance={null}
           onConfirm={handleOrder}
           onClose={() => setShowModal(false)}
         />

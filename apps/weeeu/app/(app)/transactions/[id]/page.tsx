@@ -64,23 +64,7 @@ const COURIER_LABEL: Record<string, string> = {
   jandt: "J&T Express",
 };
 
-// Mock TransactionData สำหรับ demo (Mockup — ถ้า API ไม่มีข้อมูล)
-const MOCK_TX: TransactionData = {
-  id: "mock-tx-001",
-  listing_id: "mock-listing-001",
-  buyer_id: "current-user",
-  seller_id: "seller-01",
-  appliance_name: "แอร์ Mitsubishi 12000 BTU (เกรด A)",
-  buyer_name: "คุณสมหวัง",
-  seller_name: "คุณสมศักดิ์",
-  agreed_price: 8500,
-  delivery_method: "parcel",
-  status: "inspection_period",
-  tracking_number: "TH123456789",
-  courier: "kerry",
-  inspection_deadline: new Date(Date.now() + 86400000 * 2).toISOString(),
-  is_buyer: true,
-};
+// TODO(backend-expose): GET /transactions/:id + confirm-received not mounted
 
 function useCountdown(deadline: string | undefined) {
   const [remaining, setRemaining] = useState(() =>
@@ -108,7 +92,6 @@ export default function TransactionPage() {
   const [confirmed, setConfirmed] = useState(false);
 
   // Mock states สำหรับ R4-R12 (Mockup — local state)
-  const [mockR4Shortfall] = useState(1200); // Gold ขาด
   const [mockR4Deadline] = useState(() => new Date(Date.now() + 3600000 * 18).toISOString());
   const r4Countdown = useCountdown(tx?.status === "awaiting_payment" ? mockR4Deadline : undefined);
   const inspectCountdown = useCountdown(tx?.inspection_deadline);
@@ -131,19 +114,17 @@ export default function TransactionPage() {
   const [cancelRequested, setCancelRequested] = useState(false);
 
   const load = () => {
+    // TODO(backend-expose): GET /transactions/:id not mounted — surface honest error, no fake data
     apiFetch(`/api/v1/transactions/${id}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (!d) {
-          // Mockup: ถ้า API ไม่มี transaction ใช้ mock data
-          setTx(MOCK_TX);
-          return;
-        }
+      .then(async r => {
+        if (!r.ok) throw new Error("โหลดข้อมูลธุรกรรมไม่สำเร็จ (ยังไม่พร้อมใช้งาน)");
+        const d = await r.json();
+        if (!d) throw new Error("ไม่พบข้อมูลธุรกรรม");
         setTx(d);
         if (d.status === "completed") setConfirmed(true);
       })
-      .catch(() => {
-        setTx(MOCK_TX);
+      .catch((e: unknown) => {
+        setError(e instanceof Error ? e.message : "โหลดข้อมูลธุรกรรมไม่สำเร็จ");
       })
       .finally(() => setLoading(false));
   };
@@ -158,14 +139,14 @@ export default function TransactionPage() {
     setConfirming(true);
     setError("");
     try {
+      // TODO(backend-expose): POST /transactions/:id/confirm-received not mounted
       const res = await apiFetch(`/api/v1/transactions/${id}/confirm-received/`, { method: "POST" });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) throw new Error((await res.text()) || "ยืนยันรับสินค้าไม่สำเร็จ");
       setConfirmed(true);
       load();
-    } catch {
-      // Mockup: อัพเดต state เอง
-      setConfirmed(true);
-      setTx(prev => prev ? { ...prev, status: "completed" } : prev);
+    } catch (e: unknown) {
+      // ห้าม fake completion — surface error จริง
+      setError(e instanceof Error ? e.message : "ยืนยันรับสินค้าไม่สำเร็จ กรุณาลองใหม่");
     } finally {
       setConfirming(false);
     }
@@ -244,7 +225,7 @@ export default function TransactionPage() {
           <p className="text-sm font-bold text-orange-900">💰 รอยืนยัน Gold พักเงินกลาง (Escrow) <EscrowInfoIcon /> (R4)</p>
           <p className="text-xs text-orange-700">
             {isBuyer
-              ? `Gold ของคุณขาดอีก ${mockR4Shortfall.toLocaleString()} — เติมให้ครบใน 24 ชม.`
+              ? "กรุณาเติม Gold ให้ครบเพื่อยืนยันการพักเงินกลาง (Escrow) ภายใน 24 ชม."
               : "รอผู้ซื้อยืนยัน Gold — ถ้าหมดเวลา ข้อเสนอจะถูกปลด"}
           </p>
           {isBuyer && (

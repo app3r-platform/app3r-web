@@ -2,7 +2,7 @@
 // ── Wallet History — WeeeR (Transfer History) ─────────────────────────────────
 // Decision Record C: 360813ec-7277-8143-9011-ca6cd91b621d
 // แสดงประวัติการเติม/ถอนแต้มทั้งหมด
-// GET /api/v1/transfers/history/ — @needs-backend-sync (ใช้ mock data ในระยะนี้)
+// GET /api/v1/transfers/history/
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -22,14 +22,18 @@ interface TransferRecord {
   note?:      string;
 }
 
-// Placeholder data — แทนที่ด้วย API call เมื่อ backend พร้อม
-const MOCK_HISTORY: TransferRecord[] = [
-  { id: "t001", type: "deposit",  amount: 500,  status: "approved",   createdAt: "2026-05-13T10:30:00Z", refCode: "DEP-001" },
-  { id: "t002", type: "withdraw", amount: 200,  status: "pending",    createdAt: "2026-05-13T09:00:00Z", refCode: "WDR-002" },
-  { id: "t003", type: "deposit",  amount: 1000, status: "approved",   createdAt: "2026-05-12T15:00:00Z", refCode: "DEP-003" },
-  { id: "t004", type: "withdraw", amount: 500,  status: "processing", createdAt: "2026-05-11T08:00:00Z", refCode: "WDR-004" },
-  { id: "t005", type: "deposit",  amount: 200,  status: "rejected",   createdAt: "2026-05-10T12:00:00Z", refCode: "DEP-005", note: "สลิปไม่ชัดเจน" },
-];
+// Backend response shape (GET /api/v1/transfers/history/)
+interface TransferHistoryDto {
+  id:        string;
+  userId:    string;
+  type:      string;   // "deposit" | "withdraw" (free-string from backend)
+  amountThb: string;   // decimal string
+  refNo?:    string | null;
+  adminNote?: string | null;
+  status:    string;   // free-string — guard before lookup
+  bankName?: string | null;
+  createdAt: string;
+}
 
 const STATUS_LABEL: Record<TransferStatus, string> = {
   pending:    "รอตรวจสอบ",
@@ -44,6 +48,29 @@ const STATUS_COLOR: Record<TransferStatus, string> = {
   rejected:   "bg-red-100 text-red-600",
   processing: "bg-blue-100 text-blue-700",
 };
+
+const KNOWN_STATUSES: readonly TransferStatus[] = ["pending", "approved", "rejected", "processing"];
+
+// Guard free-string backend status → known TransferStatus (default "pending" for unmapped).
+function normalizeStatus(raw: string): TransferStatus {
+  return KNOWN_STATUSES.includes(raw as TransferStatus) ? (raw as TransferStatus) : "pending";
+}
+
+function normalizeType(raw: string): TransferType {
+  return raw === "withdraw" ? "withdraw" : "deposit";
+}
+
+function mapTransfer(dto: TransferHistoryDto): TransferRecord {
+  return {
+    id:        dto.id,
+    type:      normalizeType(dto.type),
+    amount:    Number(dto.amountThb) || 0,
+    status:    normalizeStatus(dto.status),
+    createdAt: dto.createdAt,
+    refCode:   dto.refNo ?? undefined,
+    note:      dto.adminNote ?? undefined,
+  };
+}
 
 function formatDate(iso: string): string {
   try {
@@ -64,19 +91,15 @@ export default function TransferHistoryPage() {
       setLoading(true);
       setError(null);
       try {
-        // @needs-backend-sync GET /api/v1/transfers/history/
-        // ใช้ mock data จนกว่า backend Sub-CMD-P1 จะพร้อม
         const res = await apiFetch("/api/v1/transfers/history/");
         if (res.ok) {
-          const data = (await res.json()) as TransferRecord[];
-          setRecords(data);
+          const data = (await res.json()) as TransferHistoryDto[];
+          setRecords(data.map(mapTransfer));
         } else {
-          // Fallback to mock data (backend ยังไม่พร้อม)
-          setRecords(MOCK_HISTORY);
+          setError("ไม่สามารถโหลดประวัติได้ กรุณาลองใหม่อีกครั้ง");
         }
       } catch {
-        // Fallback to mock data
-        setRecords(MOCK_HISTORY);
+        setError("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
       } finally {
         setLoading(false);
       }

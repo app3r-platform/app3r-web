@@ -30,43 +30,18 @@ function formatDate(iso: string): string {
   } catch { return iso; }
 }
 
-// Fallback mock — aligned กับ SettlementDto (Backend Sub-6)
-const MOCK_SETTLEMENTS: SettlementDto[] = [
-  {
-    id: "stl-mock-001",
-    serviceId: "svc-mock-001",
-    weeerUserId: "usr-mock-001",
-    amountThb: "500.00",
-    status: "completed",
-    bankAdapter: "mock",
-    bankRef: "MOCK-TXN-001",
-    initiatedBy: "usr-mock-001",
-    createdAt: "2026-05-14T10:00:00Z",
-    updatedAt: "2026-05-14T12:00:00Z",
-  },
-  {
-    id: "stl-mock-002",
-    serviceId: "svc-mock-002",
-    weeerUserId: "usr-mock-001",
-    amountThb: "200.00",
-    status: "pending",
-    bankAdapter: "mock",
-    bankRef: null,
-    initiatedBy: "usr-mock-001",
-    createdAt: "2026-05-14T14:00:00Z",
-    updatedAt: "2026-05-14T14:00:00Z",
-  },
-];
-
 export default function SettlementsPage() {
   const [items, setItems]               = useState<SettlementDto[]>([]);
   const [total, setTotal]               = useState(0);
   const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<SettlementStatus | "all">("all");
+  const [reloadNonce, setReloadNonce]   = useState(0);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
+      setError(null);
       try {
         const result = await listSettlements({
           status: statusFilter === "all" ? undefined : statusFilter,
@@ -74,19 +49,17 @@ export default function SettlementsPage() {
         });
         setItems(result.items);
         setTotal(result.total);
-      } catch {
-        // Fallback — Backend Sub-6 อาจยังไม่ deploy
-        const filtered = statusFilter === "all"
-          ? MOCK_SETTLEMENTS
-          : MOCK_SETTLEMENTS.filter((s) => s.status === statusFilter);
-        setItems(filtered);
-        setTotal(filtered.length);
+      } catch (err) {
+        // ห้าม fallback เป็น mock — โหลดล้มเหลวต้องแสดง error state จริง ไม่แสร้งเป็น "ไม่มีประวัติ"
+        setItems([]);
+        setTotal(0);
+        setError(err instanceof Error ? err.message : "โหลดประวัติการถอนเงินไม่สำเร็จ");
       } finally {
         setLoading(false);
       }
     }
     void load();
-  }, [statusFilter]);
+  }, [statusFilter, reloadNonce]);
 
   return (
     <div className="space-y-5 max-w-2xl">
@@ -125,7 +98,7 @@ export default function SettlementsPage() {
         ))}
       </div>
 
-      {!loading && (
+      {!loading && !error && (
         <p className="text-xs text-gray-400">{total} รายการ</p>
       )}
 
@@ -133,7 +106,22 @@ export default function SettlementsPage() {
         <div className="flex items-center justify-center h-40 text-gray-400">กำลังโหลด…</div>
       )}
 
-      {!loading && items.length === 0 && (
+      {!loading && error && (
+        <div className="flex flex-col items-center justify-center h-48 text-center">
+          <span className="text-4xl mb-3">⚠️</span>
+          <p className="text-sm font-medium text-red-600">โหลดประวัติการถอนเงินไม่สำเร็จ</p>
+          <p className="text-xs text-gray-400 mt-1">{error}</p>
+          <button
+            type="button"
+            onClick={() => setReloadNonce((n) => n + 1)}
+            className="mt-3 text-xs text-[#F04E20] hover:underline font-medium"
+          >
+            ลองใหม่อีกครั้ง →
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && items.length === 0 && (
         <div className="flex flex-col items-center justify-center h-48 text-gray-400">
           <span className="text-4xl mb-3">💸</span>
           <p className="text-sm">ยังไม่มีประวัติการถอนเงิน</p>

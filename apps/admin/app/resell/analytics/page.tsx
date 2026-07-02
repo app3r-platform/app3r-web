@@ -1,9 +1,13 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { isAuthenticated } from "@/lib/auth";
+import { api } from "@/lib/api";
 import { Sidebar } from "@/components/sidebar";
 
-/* ─── local types (Mockup — Lesson #33) ─── */
+/* ─── local types ─── */
 interface TopUser {
   id:         string;
   name:       string;
@@ -12,8 +16,7 @@ interface TopUser {
   totalValue: number;
 }
 
-/* ─── Mock analytics data (12 เคส R1-R12) ─── */
-const MOCK: {
+interface ResellAnalytics {
   total_listings:           number;
   active_listings:          number;
   completed_transactions:   number;
@@ -33,60 +36,7 @@ const MOCK: {
   escrow_locked_value: number;
   top_sellers: TopUser[];
   top_buyers:  TopUser[];
-} = {
-  total_listings:          12,
-  active_listings:          7,
-  completed_transactions:   1,
-  cancelled_count:          1,
-  total_gmv:            8500,
-  total_gp:              425,
-  avg_transaction_value: 8500,
-  conversion_rate:       0.083,
-  offer_acceptance_rate: 0.25,
-  disputed_count:        2,
-  dispute_rate:          0.167,
-  dispute_resolution: {
-    to_buyer:  1,
-    to_seller: 0,
-    split:     1,
-    pending:   0,
-  },
-  by_status: {
-    announced:         1,
-    receiving_offers:  1,
-    offer_selected:    1,
-    awaiting_payment:  1,
-    buyer_confirmed:   1,
-    in_progress:       1,
-    delivered:         1,
-    inspection_period: 1,
-    completed:         1,
-    cancelled:         1,
-    disputed:          2,
-  },
-  by_seller_type: { WeeeU: 7, WeeeR: 5 },
-  by_pair: {
-    "U→U": 4,
-    "U→R": 2,
-    "R→U": 4,
-    "R→R": 2,
-  },
-  escrow_locked_count: 4,
-  escrow_locked_value: 31700,
-  top_sellers: [
-    { id: "s1", name: "ร้าน ColdAir",      userType: "WeeeR", count: 2, totalValue: 26700 },
-    { id: "s2", name: "ร้าน CoolPro",       userType: "WeeeR", count: 1, totalValue: 18000 },
-    { id: "s3", name: "นายสมชาย ใจดี",     userType: "WeeeU", count: 1, totalValue: 8500  },
-    { id: "s4", name: "นายวิชัย มีทรัพย์",  userType: "WeeeU", count: 1, totalValue: 12000 },
-    { id: "s5", name: "ร้าน AirPower",      userType: "WeeeR", count: 1, totalValue: 7200  },
-  ],
-  top_buyers: [
-    { id: "b1", name: "นายวิฑูรย์ ใจเย็น", userType: "WeeeU", count: 1, totalValue: 14500 },
-    { id: "b2", name: "นางมาลี สุขสวัสดิ์", userType: "WeeeU", count: 1, totalValue: 18000 },
-    { id: "b3", name: "ร้าน TechFix",       userType: "WeeeR", count: 1, totalValue: 12000 },
-    { id: "b4", name: "นางสาวอรุณ แสงทอง", userType: "WeeeU", count: 1, totalValue: 8500  },
-  ],
-};
+}
 
 /* ─── shared components ─── */
 function StatCard({ label, value, sub, accent }: {
@@ -147,7 +97,28 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default function ResellAnalyticsPage() {
-  const d = MOCK;
+  const router = useRouter();
+  const [d, setD] = useState<ResellAnalytics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      // TODO(backend-expose): GET /admin/resell/analytics not mounted — escalated to Backend
+      const data = await api.get<ResellAnalytics>("/admin/resell/analytics");
+      setD(data);
+      setError(null);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated()) { router.push("/login"); return; }
+    fetchData();
+  }, [router, fetchData]);
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -162,7 +133,7 @@ export default function ResellAnalyticsPage() {
               ภาพรวม Resell — 12 เคส (R1-R12) / 4 คู่ / dispute 3-way
             </p>
             <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-full">
-              🔶 Mockup — ข้อมูลจำลอง 12 เคส
+              🔶 ยังไม่มีข้อมูลจริง — GET /admin/resell/analytics ยังไม่ถูก mount
             </span>
           </div>
           <div className="flex gap-2">
@@ -176,6 +147,19 @@ export default function ResellAnalyticsPage() {
             </Link>
           </div>
         </div>
+
+        {loading ? (
+          <p className="text-gray-500">กำลังโหลด...</p>
+        ) : error ? (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600">
+            โหลดข้อมูลไม่สำเร็จ: {error}
+          </div>
+        ) : !d ? (
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-500">
+            ยังไม่มีข้อมูล Resell Analytics
+          </div>
+        ) : (
+        <>
 
         {/* KPI Row 1 */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -353,6 +337,9 @@ export default function ResellAnalyticsPage() {
           </section>
 
         </div>
+
+        </>
+        )}
 
       </main>
     </div>

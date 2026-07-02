@@ -10,8 +10,8 @@ import OtpInput from "@/components/shared/OtpInput";
 
 const QUICK_AMOUNTS = [100, 200, 500, 1000];
 
-// Mock Gold balance
-const MOCK_GOLD_BALANCE = 350;
+// หมายเหตุ: ไม่แสดง/ไม่อิงยอด Gold คงเหลือ — ยังไม่มี adapter/endpoint จริงสำหรับหน้าถอน
+// (ห้าม fabricate ตัวเลข · ห้ามใช้ 0 แทนค่าจริง) — money-gate ยอดคงเหลือถูกถอดออก
 
 // บัญชีธนาคารดึงจากฐานข้อมูล (ที่ผู้ใช้บันทึกตอนสมัคร) — mock · ไม่ให้เลือกเอง · แก้ที่หน้าจัดการข้อมูลผู้ใช้ (U-45#2)
 const MOCK_USER_BANK = {
@@ -36,13 +36,13 @@ export default function WithdrawPage() {
   const [otpError, setOtpError] = useState("");
 
   const parsedAmount = parseInt(amount, 10) || 0;
-  const canSubmit = parsedAmount > 0 && parsedAmount <= MOCK_GOLD_BALANCE;
+  // ไม่มี gate ยอดคงเหลือ (ยังไม่เชื่อมยอดจริง) — ตรวจแค่จำนวน > 0
+  const canSubmit = parsedAmount > 0;
 
   // form → OTP gate (ยืนยันตัวตนเจ้าของบัญชีก่อนถอน · U-45#1)
   const handleSubmit = () => {
     setFieldError("");
     if (parsedAmount <= 0) { setFieldError("กรุณาระบุจำนวนพอยต์ทองที่ต้องการถอน"); return; }
-    if (parsedAmount > MOCK_GOLD_BALANCE) { setFieldError(`พอยต์ทองไม่พอ — คงเหลือ ${MOCK_GOLD_BALANCE} พอยต์ทอง`); return; }
     setFlowState("otp");
   };
 
@@ -196,14 +196,14 @@ export default function WithdrawPage() {
         <h1 className="text-xl font-bold text-gray-900">ถอน Gold Point</h1>
       </div>
 
-      {/* Gold balance banner */}
-      <div className="wallet-gold rounded-2xl p-4 text-white flex items-center justify-between">
+      {/* ตัวอย่าง — ยังไม่เชื่อมยอดจริง (ไม่แสดงยอด Gold คงเหลือที่ fabricate) */}
+      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center justify-between">
         <div>
-          <p className="text-xs font-medium opacity-80">พอยต์ทอง (Gold Point) คงเหลือ</p>
-          <p className="text-2xl font-bold">{MOCK_GOLD_BALANCE.toLocaleString()}</p>
-          <p className="text-xs opacity-70">≈ ฿{MOCK_GOLD_BALANCE.toLocaleString("th-TH")}</p>
+          <p className="text-xs font-medium text-gray-500">พอยต์ทอง (Gold Point) คงเหลือ</p>
+          <p className="text-sm font-semibold text-gray-400">ยังไม่เชื่อมยอดจริง</p>
+          <p className="text-xs text-gray-400">ตัวอย่าง (Mockup) — ระบบถอนยังไม่เปิดใช้งาน</p>
         </div>
-        <span className="text-4xl">🥇</span>
+        <span className="text-4xl opacity-40">🥇</span>
       </div>
 
       {/* Flow info */}
@@ -234,7 +234,6 @@ export default function WithdrawPage() {
               onChange={e => setAmount(e.target.value)}
               placeholder="0"
               min="1"
-              max={MOCK_GOLD_BALANCE}
               step="1"
               className="w-full pl-9 pr-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-weeeu-primary/30"
             />
@@ -242,9 +241,7 @@ export default function WithdrawPage() {
           {parsedAmount > 0 && (
             <p className="text-xs text-weeeu-primary">≈ ฿{parsedAmount.toLocaleString("th-TH")}</p>
           )}
-          {parsedAmount > MOCK_GOLD_BALANCE && (
-            <p className="text-xs text-red-500">พอยต์ทองไม่พอ — คงเหลือ {MOCK_GOLD_BALANCE} พอยต์ทอง</p>
-          )}
+          {/* ไม่มี insufficient-message — ยังไม่เชื่อมยอดจริง จึงไม่รู้ยอดคงเหลือ */}
           {/* Quick presets */}
           <div className="grid grid-cols-4 gap-2">
             {QUICK_AMOUNTS.map(amt => (
@@ -252,11 +249,10 @@ export default function WithdrawPage() {
                 key={amt}
                 type="button"
                 onClick={() => setAmount(String(amt))}
-                disabled={amt > MOCK_GOLD_BALANCE}
                 className={`border text-xs py-1.5 rounded-xl transition-colors ${
                   amount === String(amt)
                     ? "border-weeeu-primary bg-weeeu-surface text-weeeu-primary font-semibold"
-                    : "border-gray-200 text-gray-500 hover:border-gray-300 disabled:opacity-40"
+                    : "border-gray-200 text-gray-500 hover:border-gray-300"
                 }`}
               >
                 {amt.toLocaleString()}
