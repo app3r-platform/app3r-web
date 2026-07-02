@@ -37,18 +37,10 @@ interface PaginatedDisputes {
 
 type Resolution = "to_buyer" | "to_seller" | "split" | "";
 
-// mock fallback — ลบตอน Phase 4 (TD-06)
-const MOCK_RESELL_DISPUTES: PaginatedDisputes = {
-  items: [
-    { listing_id: 101, title: "iPhone 14 Pro 256GB สภาพดี", service_type: "A", poster_id: 1001, poster_name: "ร้านไอทีสุขุมวิท", buyer_id: 2001, buyer_name: "WeeeU ธนา", seller_id: 1001, seller_name: "ร้านไอทีสุขุมวิท", final_price: 28000, escrow_amount: 28000, transaction_id: 5001, disputed_at: "2026-05-20T10:00:00Z" },
-    { listing_id: 102, title: "Samsung Galaxy S23+ 512GB", service_type: "A", poster_id: 1002, poster_name: "ร้านโฟนเซ็นเตอร์", buyer_id: 2002, buyer_name: "WeeeU สมใจ", seller_id: 1002, seller_name: "ร้านโฟนเซ็นเตอร์", final_price: 22000, escrow_amount: 22000, transaction_id: 5002, disputed_at: "2026-05-22T14:30:00Z" },
-  ],
-  total: 2, page: 1, pages: 1,
-};
-
 export default function ResellDisputesPage() {
   const router = useRouter();
   const [data,          setData]          = useState<PaginatedDisputes | null>(null);
+  const [error,         setError]         = useState<string | null>(null);
   const [loading,       setLoading]       = useState(true);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [toast,         setToast]         = useState<{ msg: string; type: "ok" | "err" } | null>(null);
@@ -60,14 +52,15 @@ export default function ResellDisputesPage() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams({ page: String(page), limit: "20", service_type: "A" });
       const result = await api.get<PaginatedDisputes>(`/admin/disputes?${params}`);
       setData(result);
     } catch (e) {
-      // API ไม่พร้อม → ใช้ mock fallback
-      console.warn("[mock fallback]", e);
-      setData(MOCK_RESELL_DISPUTES);
+      console.warn("[disputes load failed]", e);
+      setError(e instanceof Error ? e.message : "โหลดข้อมูลไม่สำเร็จ");
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -138,7 +131,7 @@ export default function ResellDisputesPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            {data && (
+            {!error && data && (
               <span className={`text-sm font-semibold px-3 py-1 rounded-full ${
                 data.total > 0
                   ? "bg-red-50 text-red-700 border border-red-200"
@@ -178,6 +171,17 @@ export default function ResellDisputesPage() {
           {loading ? (
             <div className="flex items-center justify-center py-20 text-gray-500">
               <span className="mr-3">⟳</span> กำลังโหลด...
+            </div>
+          ) : error ? (
+            <div className="m-5 flex flex-col items-center justify-center gap-3 rounded-xl border border-red-300 bg-red-50 px-6 py-12 text-center">
+              <div className="text-4xl">⚠️</div>
+              <p className="text-base font-semibold text-red-700">โหลดข้อมูลไม่สำเร็จ — {error}</p>
+              <p className="text-sm text-red-600">ไม่สามารถแสดงข้อพิพาท Resell ได้ในขณะนี้</p>
+              <button
+                onClick={fetchData}
+                className="mt-1 rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100">
+                ลองใหม่อีกครั้ง
+              </button>
             </div>
           ) : !data || data.items.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-gray-500">

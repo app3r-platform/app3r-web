@@ -24,27 +24,12 @@ interface RecHistory {
   created_at: string;
 }
 
-// mock fallback — ลบตอน Phase 4 (TD-06)
-const MOCK_REC_STATUS: ReconciliationStatus = {
-  status: "PENDING",
-  total_minted: 1250000,
-  reserve_pool: 500000,
-  fee_pools_total: 125000,
-  escrow_pool: 87500,
-  written_off: 2500,
-  difference: 0,
-  last_run_at: null,
-};
-const MOCK_REC_HISTORY: RecHistory[] = [
-  { id: "REC-001", status: "BALANCED", difference: 0, ran_by: "admin@app3r.co", created_at: "2026-05-01T02:00:00Z" },
-  { id: "REC-002", status: "DISCREPANCY", difference: -150, ran_by: "admin@app3r.co", created_at: "2026-04-01T02:00:00Z" },
-];
-
 export default function ReconciliationPage() {
   const router = useRouter();
   const [status, setStatus] = useState<ReconciliationStatus | null>(null);
   const [history, setHistory] = useState<RecHistory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
   const [histPage, setHistPage] = useState(1);
   const [histTotal, setHistTotal] = useState(0);
@@ -68,13 +53,14 @@ export default function ReconciliationPage() {
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push("/login"); return; }
+    setError(null);
     Promise.all([fetchStatus(), fetchHistory()])
       .catch((e: unknown) => {
-        // API ไม่พร้อม → ใช้ mock fallback
-        console.warn("[mock fallback]", e);
-        setStatus(MOCK_REC_STATUS);
-        setHistory(MOCK_REC_HISTORY);
-        setHistTotal(MOCK_REC_HISTORY.length);
+        console.warn("[reconciliation load failed]", e);
+        setError(e instanceof Error ? e.message : "โหลดข้อมูลไม่สำเร็จ");
+        setStatus(null);
+        setHistory([]);
+        setHistTotal(0);
       })
       .finally(() => setLoading(false));
   }, [router, fetchStatus, fetchHistory]);
@@ -120,6 +106,11 @@ export default function ReconciliationPage() {
 
         {loading ? (
           <p className="text-gray-500">กำลังโหลด...</p>
+        ) : error ? (
+          <div className="rounded-xl border border-red-300 bg-red-50 p-6 text-red-700">
+            <p className="text-lg font-bold mb-1">🚨 โหลดข้อมูลไม่สำเร็จ</p>
+            <p className="text-sm">โหลดข้อมูลไม่สำเร็จ — {error}</p>
+          </div>
         ) : status && (
           <>
             {/* Status Card */}

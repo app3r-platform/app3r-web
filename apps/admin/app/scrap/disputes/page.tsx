@@ -36,19 +36,11 @@ interface PaginatedDisputes {
   pages: number;
 }
 
-// mock fallback — ลบตอน Phase 4 (TD-06)
-const MOCK_SCRAP_DISPUTES: PaginatedDisputes = {
-  items: [
-    { listing_id: 201, title: "เครื่องซักผ้า Samsung 10kg เสียหาย", service_type: "B", poster_id: 1003, poster_name: "WeeeU กิตติ", buyer_id: 3001, buyer_name: "WeeeR ซากดี", seller_id: 1003, seller_name: "WeeeU กิตติ", final_price: 1200, escrow_amount: 1200, transaction_id: 6001, disputed_at: "2026-05-18T09:00:00Z" },
-    { listing_id: 202, title: "แอร์ Mitsubishi 18000BTU ชำรุด", service_type: "B", poster_id: 1004, poster_name: "WeeeU สุภา", buyer_id: 3002, buyer_name: "WeeeR อีโค", seller_id: 1004, seller_name: "WeeeU สุภา", final_price: 2500, escrow_amount: 2500, transaction_id: 6002, disputed_at: "2026-05-21T11:00:00Z" },
-  ],
-  total: 2, page: 1, pages: 1,
-};
-
 export default function ScrapDisputesPage() {
   const router = useRouter();
   const [data, setData] = useState<PaginatedDisputes | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: "ok" | "err" } | null>(null);
   const [page, setPage] = useState(1);
@@ -58,15 +50,16 @@ export default function ScrapDisputesPage() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       // Pre-filter service_type=B (Scrap only)
       const params = new URLSearchParams({ page: String(page), limit: "20", service_type: "B" });
       const result = await api.get<PaginatedDisputes>(`/admin/disputes?${params}`);
       setData(result);
     } catch (e) {
-      // API ไม่พร้อม → ใช้ mock fallback
-      console.warn("[mock fallback]", e);
-      setData(MOCK_SCRAP_DISPUTES);
+      console.warn("[scrap disputes load failed]", e);
+      setError(e instanceof Error ? e.message : "โหลดข้อมูลไม่สำเร็จ");
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -148,7 +141,16 @@ export default function ScrapDisputesPage() {
           </div>
         </div>
 
+        {/* Error banner */}
+        {error && !loading && (
+          <div className="bg-red-50 border border-red-300 text-red-700 rounded-xl p-4 mb-5 text-sm">
+            <p className="font-semibold mb-1">⚠ โหลดข้อมูลไม่สำเร็จ</p>
+            <p>โหลดข้อมูลไม่สำเร็จ — {error}</p>
+          </div>
+        )}
+
         {/* Table */}
+        {!error && (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-20 text-gray-500">
@@ -218,6 +220,7 @@ export default function ScrapDisputesPage() {
             </table>
           )}
         </div>
+        )}
 
         {/* Pagination */}
         {data && data.pages > 1 && (

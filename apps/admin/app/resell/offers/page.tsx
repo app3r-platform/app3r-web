@@ -22,16 +22,6 @@ interface OffersResponse {
   count: number;
 }
 
-// mock fallback — ลบตอน Phase 4 (TD-06)
-const MOCK_OFFERS_DATA: OffersResponse = {
-  results: [
-    { id: "OFR-001", listingId: "LST-001", buyerId: "WEEEU-001", buyerType: "WeeeU", offerPrice: 11000, deliveryMethod: "self_pickup", message: "ขอซื้อด้วยครับ", status: "pending", expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-10T11:00:00Z" },
-    { id: "OFR-002", listingId: "LST-001", buyerId: "WEEER-002", buyerType: "WeeeR", offerPrice: 11500, deliveryMethod: "shipping", status: "selected", expiresAt: "2026-06-15T00:00:00Z", createdAt: "2026-05-11T09:00:00Z" },
-    { id: "OFR-003", listingId: "LST-002", buyerId: "WEEEU-003", buyerType: "WeeeU", offerPrice: 9800, deliveryMethod: "self_pickup", status: "rejected", expiresAt: "2026-06-10T00:00:00Z", createdAt: "2026-05-08T14:00:00Z" },
-  ] as unknown as Offer[],
-  count: 3,
-};
-
 function OffersInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,6 +36,7 @@ function OffersInner() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams({
         limit: String(PAGE_SIZE),
@@ -57,13 +48,10 @@ function OffersInner() {
       const d = await api.get<OffersResponse>("/admin/offers/?" + params);
       setItems(d.results);
       setTotal(d.count);
-      setError(null);
     } catch (e) {
-      // API ไม่พร้อม → ใช้ mock fallback
-      console.warn("[mock fallback]", e);
-      setItems(MOCK_OFFERS_DATA.results);
-      setTotal(MOCK_OFFERS_DATA.count);
-      setError(null);
+      setError(e instanceof Error ? e.message : "โหลดข้อมูลไม่สำเร็จ");
+      setItems([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
@@ -141,7 +129,9 @@ function OffersInner() {
           </div>
 
           {error ? (
-            <div className="px-6 py-8 text-red-600">ระบบ Resell กำลังพัฒนา — {error}</div>
+            <div className="px-6 py-8 m-6 rounded-lg border border-red-300 bg-red-50 text-red-700 font-medium">
+              โหลดข้อมูล offers ไม่สำเร็จ — {error}
+            </div>
           ) : loading ? (
             <p className="px-6 py-8 text-gray-500">กำลังโหลด...</p>
           ) : (
